@@ -1,0 +1,14 @@
+name: postgres_python
+dependencies:
+  - python=3.10
+  - postgresql-plpython=15.1
+  - pip
+  - pip:
+    - pandas
+    - numpy
+    - scipy
+    - requests
+    - matplotlib
+    - seaborn
+    - networkx
+
