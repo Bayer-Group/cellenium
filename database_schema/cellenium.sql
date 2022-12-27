@@ -1,6 +1,6 @@
 create extension if not exists plpython3u;
 drop table if exists ontology, concept, concept_synonym, concept_hierarchy;
-drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample, expression;
+drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample, study_layer, expression;
 drop table if exists omics, omics_region_gene;
 
 create table ontology
@@ -225,12 +225,24 @@ CREATE TABLE differential_expression
 );
 create unique index differential_expression_i1 on differential_expression (study_id, sample_annotation_id, sample_annotation_value_id, omics_id);
 
-CREATE TABLE expression
+CREATE TABLE study_layer
 (
-    study_id         int       not null,
+    study_layer_id serial primary key,
+    study_id       int  not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
+    layer          text not null
+);
+create unique index study_layer_ui1 on study_layer (study_id, layer);
+
+
+CREATE TABLE expression
+(
+    study_layer_id   int       not null,
+    constraint fk_study_layer_id
+        FOREIGN KEY (study_layer_id)
+            REFERENCES study_layer (study_layer_id) ON DELETE CASCADE,
     omics_id         int       not null,
     constraint fk_omics_element_region_index
         FOREIGN KEY (omics_id)
@@ -239,7 +251,7 @@ CREATE TABLE expression
     study_sample_ids integer[] not null,
     values           real[]    not null
 
-) partition by list (study_id);
+) partition by list (study_layer_id);
 
 
 do
@@ -250,7 +262,7 @@ $$
                 EXECUTE format('create table expression_%s
                     partition of expression
                     (
-                        study_id,
+                        study_layer_id,
                         omics_id,
                         study_sample_ids,
                         values
