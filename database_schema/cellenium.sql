@@ -1,6 +1,7 @@
-create
-extension if not exists plpython3u;
-
+create extension if not exists plpython3u;
+drop table if exists ontology, concept, concept_synonym, concept_hierarchy;
+drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample;
+drop table if exists omics, omics_region_gene;
 
 create table ontology
 (
@@ -73,10 +74,10 @@ CREATE TABLE study
 CREATE TABLE omics
 (
     omics_id         serial primary key,
-    omics_type       text not null,
+    omics_type       text  not null,
 
-    tax_id           int  not null,
-    display_symbol   text not null,
+    tax_id           int   not null,
+    display_symbol   text  not null,
     display_name     text,
 
     -- if omics_type=='gene'
@@ -85,7 +86,7 @@ CREATE TABLE omics
     hgnc_symbol      text,
 
     -- references omics_element, used if omics_type=='transcription_factor' or 'region' or 'CITE-seq'
-    linked_genes     int[] not null default array[]:: int [],
+    linked_genes     int[] not null default array []:: int[],
 
     -- if omics_type=='CITE-seq' (protein antibody tag)
     antibody_symbol  text,
@@ -102,17 +103,17 @@ CREATE TABLE omics
     region_start     int,
     region_end       int
 );
-create unique index omics_element_uq_gene on omics_element (tax_id, ensembl_gene_id);
-create unique index omics_element_uq_antibody on omics_element (tax_id, antibody_symbol);
-create unique index omics_element_uq_promoter on omics_element (tax_id, jaspar_matrix_id);
-create unique index omics_element_uq_region on omics_element (tax_id, build, region_chr, region_start, region_end);
+create unique index omics_element_uq_gene on omics (tax_id, ensembl_gene_id);
+create unique index omics_element_uq_antibody on omics (tax_id, antibody_symbol);
+create unique index omics_element_uq_promoter on omics (tax_id, jaspar_matrix_id);
+create unique index omics_element_uq_region on omics (tax_id, build, region_chr, region_start, region_end);
 
 CREATE TABLE omics_region_gene
 (
     omics_id        int not null,
     constraint fk_omics_element_region_index
-        FOREIGN KEY (omics_element_id)
-            REFERENCES omics_element (id) ON DELETE CASCADE,
+        FOREIGN KEY (omics_id)
+            REFERENCES omics (omics_id) ON DELETE CASCADE,
     gene            text,
     ensembl_gene_id text,
     evidence        text,
@@ -124,22 +125,22 @@ create unique index omics_region_uq on omics_region_gene (omics_id, gene, eviden
 -- e.g. in annotation category 'cell ontology name'
 CREATE TABLE sample_annotation
 (
-    sample_annotation_id serial not null,
-    h5ad_column          text   not null,
-    display              text   not null
+    sample_annotation_id serial primary key,
+    h5ad_column          text not null,
+    display              text not null
 );
 
 -- e.g. in annotation category value 'lymphocyte'
 CREATE TABLE sample_annotation_value
 (
-    sample_annotation_value_id serial not null,
-    sample_annotation_id       int    not null,
+    sample_annotation_value_id serial primary key,
+    sample_annotation_id       int  not null,
     constraint fk_sample_annotation
         FOREIGN KEY (sample_annotation_id)
             REFERENCES sample_annotation (sample_annotation_id),
 
-    h5ad_value                 text   not null,
-    display                    text   not null,
+    h5ad_value                 text not null,
+    display                    text not null,
     color                      text
 );
 
@@ -169,30 +170,30 @@ CREATE TABLE study_sample
 
     study_sample_id     int     not null,
     h5ad_obs_index      int     not null,
-    display_subsampling boolean not null,
+    display_subsampling boolean not null
 );
 create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
 
 CREATE TABLE study_omics
 (
-    study_id         int not null,
+    study_id       int not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    omics_element_id int not null,
+    omics_id       int not null,
     constraint fk_omics_element_region_index
-        FOREIGN KEY (omics_element_id)
-            REFERENCES omics_element (id) ON DELETE CASCADE,
+        FOREIGN KEY (omics_id)
+            REFERENCES omics (omics_id) ON DELETE CASCADE,
 
     -- indexing the h5ad .uns['protein_X'] matrix in this study
-    h5ad_var_index   int not null,
+    h5ad_var_index int not null,
     -- TODO add another h5ad_col_index for second h5ad file (ATAC-seq)?
 
     -- region as seen in the actual study data before 'fuzzy' region matching with bedtools (expect same build, chromosome)
-    region_start     int,
-    region_end       int
+    region_start   int,
+    region_end     int
 );
 
 CREATE TABLE differential_expression
@@ -200,11 +201,11 @@ CREATE TABLE differential_expression
     study_id                   int not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
-            REFERENCES study (id) ON DELETE CASCADE,
+            REFERENCES study (study_id) ON DELETE CASCADE,
     omics_id                   int,
     constraint fk_omics_element
         FOREIGN KEY (omics_id)
-            REFERENCES omics_element (id),
+            REFERENCES omics (omics_id),
 
     sample_annotation_id       int not null,
     constraint fk_sample_annotation
