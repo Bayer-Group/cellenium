@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# This is the content of
+# https://github.com/docker-library/postgres/blob/75d0c1135e1cfd183bf7ee0970b7031986b0710d/15/bullseye/docker-entrypoint.sh
+# with a patch for conda, see the two lines added at the bottom. We need to run postgres in the activated conda
+# environment in order to use the installed python packages in python stored procedures.
+
 set -Eeo pipefail
 # TODO swap to -Eeuo pipefail above (after handling all potentially-unset variables)
 
