@@ -261,22 +261,3 @@ CREATE TABLE expression
     values           real[]    not null
 
 ) partition by list (study_layer_id);
-
-
-do
-$$
-    begin
-        FOR i IN 1..10
-            LOOP
-                EXECUTE format('create table expression_%s
-                    partition of expression
-                    (
-                        study_layer_id,
-                        omics_id,
-                        study_sample_ids,
-                        values
-                        )
-                    for values in ( %s )', i || '', i || '');
-            end loop;
-    end
-$$;
