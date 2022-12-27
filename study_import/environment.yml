@@ -1,0 +1,19 @@
+name: cellenium_import
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - pandas
+    - numpy
+    - scipy
+    - requests
+    - matplotlib
+    - seaborn
+    - scanpy
+    - sqlalchemy
+    - psycopg2-binary
+    - jupyterlab
+    - 'dramatiq[watch]'
+    - dramatiq-pg
