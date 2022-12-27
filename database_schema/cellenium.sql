@@ -1,6 +1,8 @@
 create extension if not exists plpython3u;
 drop table if exists ontology, concept, concept_synonym, concept_hierarchy;
-drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample, study_layer, expression;
+drop table if exists sample_annotation, sample_annotation_value cascade;
+drop table if exists study, annotation, annotation_value, study_sample_annotation_ui, study_omics,
+    differential_expression, study_sample, study_sample_annotation, study_layer, expression;
 drop table if exists omics, omics_region_gene;
 
 create table ontology
@@ -132,26 +134,28 @@ CREATE TABLE omics_region_gene
 create unique index omics_region_uq on omics_region_gene (omics_id, gene, evidence, evidence_source);
 
 -- e.g. in annotation category 'cell ontology name'
-CREATE TABLE sample_annotation
+CREATE TABLE annotation
 (
-    sample_annotation_id serial primary key,
-    h5ad_column          text not null,
-    display              text not null
+    annotation_id serial primary key,
+    h5ad_column   text not null,
+    display_group text not null
 );
+create unique index annotation_1 on annotation (h5ad_column);
 
 -- e.g. in annotation category value 'lymphocyte'
-CREATE TABLE sample_annotation_value
+CREATE TABLE annotation_value
 (
-    sample_annotation_value_id serial primary key,
-    sample_annotation_id       int  not null,
-    constraint fk_sample_annotation
-        FOREIGN KEY (sample_annotation_id)
-            REFERENCES sample_annotation (sample_annotation_id),
+    annotation_value_id serial primary key,
+    annotation_id       int  not null,
+    constraint fk_annotation
+        FOREIGN KEY (annotation_id)
+            REFERENCES annotation (annotation_id),
 
-    h5ad_value                 text not null,
-    display                    text not null,
-    color                      text
+    h5ad_value          text not null,
+    display_value       text not null,
+    color               text
 );
+create unique index annotation_value_1 on annotation_value (annotation_id, h5ad_value);
 
 CREATE TABLE study_sample_annotation_ui
 (
@@ -160,10 +164,10 @@ CREATE TABLE study_sample_annotation_ui
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    sample_annotation_id               int     not null,
-    constraint fk_sample_annotation
-        FOREIGN KEY (sample_annotation_id)
-            REFERENCES sample_annotation (sample_annotation_id),
+    annotation_id                      int     not null,
+    constraint fk_annotation
+        FOREIGN KEY (annotation_id)
+            REFERENCES annotation (annotation_id),
 
     is_primary                         boolean not null,
     ordering                           int     not null,
@@ -178,11 +182,31 @@ CREATE TABLE study_sample
             REFERENCES study (study_id) ON DELETE CASCADE,
 
     study_sample_id     int     not null,
+    constraint pk_study_sample primary key (study_id, study_sample_id),
+
     h5ad_obs_index      int     not null,
     display_subsampling boolean not null
 );
-create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
+--create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
+CREATE TABLE study_sample_annotation
+(
+    study_id            int not null,
+    constraint fk_study_id
+        FOREIGN KEY (study_id)
+            REFERENCES study (study_id) ON DELETE CASCADE,
+
+    study_sample_id     int not null,
+    constraint fk_study_sample
+        FOREIGN KEY (study_id, study_sample_id)
+            REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
+
+
+    annotation_value_id int not null,
+    constraint fk_sample_annotation_value
+        FOREIGN KEY (annotation_value_id)
+            REFERENCES annotation_value (annotation_value_id)
+);
 
 CREATE TABLE study_omics
 (
@@ -207,32 +231,34 @@ CREATE TABLE study_omics
 
 CREATE TABLE differential_expression
 (
-    study_id                   int not null,
+    study_id            int not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
-    omics_id                   int,
+    omics_id            int,
     constraint fk_omics_element
         FOREIGN KEY (omics_id)
             REFERENCES omics (omics_id),
 
-    sample_annotation_id       int not null,
-    constraint fk_sample_annotation
-        FOREIGN KEY (sample_annotation_id)
-            REFERENCES sample_annotation (sample_annotation_id),
+    /* can add this, but its redundant
+    annotation_id       int not null,
+    constraint fk_annotation
+        FOREIGN KEY (annotation_id)
+            REFERENCES annotation (annotation_id),
+     */
 
--- differential expression of this group (sample_annotation_value_id) vs. all other groups
-    sample_annotation_value_id int not null,
+    -- differential expression of this group (sample's annotation_value_id) vs. all other groups
+    annotation_value_id int not null,
     constraint fk_sample_annotation_value
-        FOREIGN KEY (sample_annotation_value_id)
-            REFERENCES sample_annotation_value (sample_annotation_value_id),
+        FOREIGN KEY (annotation_value_id)
+            REFERENCES annotation_value (annotation_value_id),
 
-    pvalue                     float,
-    pvalue_adj                 float,
-    score                      float,
-    log2_foldchange            float
+    pvalue              float,
+    pvalue_adj          float,
+    score               float,
+    log2_foldchange     float
 );
-create unique index differential_expression_i1 on differential_expression (study_id, sample_annotation_id, sample_annotation_value_id, omics_id);
+create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
 
 CREATE TABLE study_layer
 (
