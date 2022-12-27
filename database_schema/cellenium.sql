@@ -82,8 +82,8 @@ CREATE TABLE omics
 
     -- if omics_type=='gene'
     ensembl_gene_id  text,
-    entrez_gene_id   text,
-    hgnc_symbol      text,
+    entrez_gene_ids  text[],
+    hgnc_symbols     text[],
 
     -- references omics_element, used if omics_type=='transcription_factor' or 'region' or 'CITE-seq'
     linked_genes     int[] not null default array []:: int[],
@@ -107,6 +107,15 @@ create unique index omics_element_uq_gene on omics (tax_id, ensembl_gene_id);
 create unique index omics_element_uq_antibody on omics (tax_id, antibody_symbol);
 create unique index omics_element_uq_promoter on omics (tax_id, jaspar_matrix_id);
 create unique index omics_element_uq_region on omics (tax_id, build, region_chr, region_start, region_end);
+
+-- TODO remove dummy data once we have an initial import of genes
+insert into omics(omics_type, tax_id, display_symbol, display_name, ensembl_gene_id, entrez_gene_ids, hgnc_symbols)
+values ('gene', 9606, 'ACP5', 'acid phosphatase 5, tartrate resistant', 'ENSG00000102575', ARRAY ['54'],
+        ARRAY ['ACP5']);
+insert into omics(omics_type, tax_id, display_symbol, display_name, ensembl_gene_id, entrez_gene_ids, hgnc_symbols)
+values ('gene', 9606, 'VCAN', 'versican', 'ENSG00000038427', ARRAY ['1462'], ARRAY ['VCAN']);
+
+
 
 CREATE TABLE omics_region_gene
 (
