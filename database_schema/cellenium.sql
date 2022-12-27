@@ -1,6 +1,6 @@
 create extension if not exists plpython3u;
 drop table if exists ontology, concept, concept_synonym, concept_hierarchy;
-drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample;
+drop table if exists study, sample_annotation, sample_annotation_value, study_sample_annotation_ui, study_omics, differential_expression, study_sample, expression;
 drop table if exists omics, omics_region_gene;
 
 create table ontology
@@ -227,5 +227,35 @@ create unique index differential_expression_i1 on differential_expression (study
 
 CREATE TABLE expression
 (
+    study_id         int       not null,
+    constraint fk_study_id
+        FOREIGN KEY (study_id)
+            REFERENCES study (study_id) ON DELETE CASCADE,
+    omics_id         int       not null,
+    constraint fk_omics_element_region_index
+        FOREIGN KEY (omics_id)
+            REFERENCES omics (omics_id) ON DELETE CASCADE,
 
-)
+    study_sample_ids integer[] not null,
+    values           real[]    not null
+
+) partition by list (study_id);
+
+
+do
+$$
+    begin
+        FOR i IN 1..10
+            LOOP
+                EXECUTE format('create table expression_%s
+                    partition of expression
+                    (
+                        study_id,
+                        omics_id,
+                        study_sample_ids,
+                        values
+                        )
+                    for values in ( %s )', i || '', i || '');
+            end loop;
+    end
+$$;
