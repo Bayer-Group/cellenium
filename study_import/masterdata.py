@@ -1,6 +1,7 @@
 import logging
 import os
 from collections import defaultdict
+from dataclasses import dataclass, field
 
 import pandas as pd
 import requests
@@ -26,6 +27,12 @@ def download(url, fn):
             bar.update(size)
 
 
+@dataclass
+class Node:
+    id: str
+    children: list[str] = field(default_factory=list)
+
+
 def parse_mesh_ascii_diseases(fn):
     records = list(filter(None, open(fn).read().split('*NEWRECORD')))
     collect = []
@@ -43,6 +50,46 @@ def parse_mesh_ascii_diseases(fn):
     return df
 
 
+def walk_down_tree(children):
+    result = [nd.id for nd in children]
+    for nd in children:
+        if len(nd.children):
+            result.extend(walk_down_tree(nd.children))
+    return result
+
+
+def get_all_ncit_codes_below(df, ont_code):
+    nodes = dict([(id, Node(id)) for id in df.ont_code.drop_duplicates().tolist()])
+    hierarchy = df[['ont_code', 'parent_ont_code']].drop_duplicates()
+    all_relations = hierarchy.to_dict(orient='records')
+    for nd in all_relations:
+        try:
+            nodes[nd.get('parent_ont_code')].children.append(nodes[nd.get('ont_code')])
+        except KeyError:
+            pass  # print("parent_ont_code {} does not exist".format(nd.get('parent_ont_code')))
+    cur_node = nodes[ont_code]
+    all_nodes_below = walk_down_tree(cur_node.children)
+
+    return list(set(all_nodes_below))
+
+
+def parse_ncit(fn):
+    df = pd.read_csv(fn)
+    df = df.loc[pd.isnull(df.Concept_Status), :]
+    df = df.query('Obsolete == False')
+    df['label'] = df['Preferred Label']
+    df['ont_code'] = df['Class ID'].str.split('#', expand=True)[1]
+    df['Parents'] = df.Parents.str.split('|')
+    df = df.explode(['Parents'])
+    df['parent_ont_code'] = df.Parents.str.split('#', expand=True)[1]
+    df['synonym'] = df.Synonyms.str.split('|')
+
+    nodes_below = get_all_ncit_codes_below(df, 'C12219')
+    df = df.loc[(df.ont_code.isin(['C12219', *nodes_below]) & df.parent_ont_code.isin(
+        ['Thing', 'C12219', *nodes_below])), :]
+    return df
+
+
 class Dataimport(object):
     def __init__(self, db_config):
         self.db_config = db_config
@@ -50,6 +97,7 @@ class Dataimport(object):
         self.engine = None
         self.cursor = None
         self.meshfn = '../scratch/d2023.txt'
+        self.ncitfn = '../scratch/ncit.csv.gz'
 
     def __enter__(self):
         self.engine = sqlalchemy.create_engine(
@@ -67,7 +115,51 @@ class Dataimport(object):
         df = pd.DataFrame(pd.DataFrame({'ontid': [ontid], 'name': [name]}))
         df.to_sql('ontology', con=self.engine, index=False, if_exists='append')
 
+    def import_ncit(self):
+        logging.info('importing NCIT')
+        # download
+        url = 'https://data.bioontology.org/ontologies/NCIT/download?apikey=8b5b7825-538d-40e0-9e9e-5ab9274a9aeb&download_format=csv'
+        if not os.path.exists(self.ncitfn):
+            download(url, self.ncitfn)
+        # make entry into ontology table
+        try:
+            self.add_ontology(name='NCIT', ontid=2)
+        except sqlalchemy.exc.IntegrityError:
+            logging.warning('NCIT already imported into ontology table')
+
+        # parse and prepare the datatable
+        df = parse_ncit(self.ncitfn)
+
+        # fill concept table
+        logging.info('import the NCIT concepts')
+        concept = df[['ont_code', 'label']].drop_duplicates()
+        concept['ontid'] = 2
+        concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
+        # get ids
+        cids = pd.read_sql('SELECT cid, ont_code from concept where ontid = 2', con=self.engine)
+
+        # construct the synonym table
+        logging.info('import the NCIT concept_synonyms')
+        synonyms = df[['ont_code', 'synonym']].explode('synonym').drop_duplicates()
+        synonyms = synonyms.merge(cids, on='ont_code')
+        synonyms[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
+
+        # construct the hierarchy table
+        logging.info('import the NCIT concept_hierarchy')
+        hierarchy = df[['ont_code', 'parent_ont_code']].drop_duplicates()
+        hierarchy = hierarchy.merge(cids, left_on='parent_ont_code', right_on='ont_code').rename(
+            columns={'cid': 'parent_cid'}).drop(['ont_code_y'], axis=1).rename(columns={'ont_code_x': 'ont_code'})
+
+        hierarchy = hierarchy.merge(cids, on='ont_code')
+
+        hierarchy = hierarchy.dropna(subset=['parent_cid'])
+        hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
+        hierarchy = hierarchy[['cid', 'parent_cid']].drop_duplicates()
+        hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
+                         con=self.engine)
+
     def import_mesh(self):
+        logging.info('importint MeSH')
         # download
         url = 'https://nlmpubs.nlm.nih.gov/projects/mesh/MESH_FILES/asciimesh/d2023.bin'
         if not os.path.exists(self.meshfn):
@@ -83,14 +175,15 @@ class Dataimport(object):
         df = parse_mesh_ascii_diseases(self.meshfn)
 
         # fill concept table
-        self.engine.execute('DELETE FROM concept WHERE ontid = 1')
+        # self.engine.execute('DELETE FROM concept WHERE ontid = 1')
+        logging.info('import the MeSH concepts')
         concept = df.explode(['MH'])[['ontid', 'UI', 'MH']].rename(
             columns={'MH': 'label', 'UI': 'ont_code'}).drop_duplicates().reset_index(drop=True)
         concept = concept[['ontid', 'ont_code', 'label']]
         concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
 
         # get ids
-        cids = pd.read_sql('SELECT cid, ont_code from concept', con=self.engine)
+        cids = pd.read_sql('SELECT cid, ont_code from concept where ontid = 1', con=self.engine)
 
         # construct the synonym table
         logging.info('import the MeSH concept_synonyms')
@@ -115,8 +208,8 @@ class Dataimport(object):
                          con=self.engine)
 
     def import_masterdata(self):
-        logging.info('importing MeSH...')
         self.import_mesh()
+        self.import_ncit()
 
 
 if __name__ == '__main__':
