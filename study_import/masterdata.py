@@ -278,8 +278,8 @@ class Dataimport(object):
                          con=self.engine)
 
     def import_masterdata(self):
-        # self.import_mesh()
-        # self.import_ncit()
+        self.import_mesh()
+        self.import_ncit()
         self.import_ncbi_taxonomy()
 
 
