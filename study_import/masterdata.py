@@ -2,6 +2,8 @@ import logging
 import os
 from collections import defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
+from zipfile import ZipFile
 
 import pandas as pd
 import requests
@@ -90,6 +92,19 @@ def parse_ncit(fn):
     return df
 
 
+def parse_ncbi_taxonomy(filesdir):
+    tax = pd.read_csv(filesdir / 'nodes.dmp', sep='\t\|\t', header=None, engine='python')
+    names = pd.read_csv(filesdir / 'names.dmp', sep='\t\|\t', header=None, engine='python')
+    names[3] = names[3].str.split('\t', expand=True)[0]
+    pref = names.loc[names[3] == 'scientific name', [0, 1]].reset_index(drop=True).rename(
+        columns={0: 'ont_code', 1: 'label'})
+    synonyms = names.loc[names[3] != 'scientific name', [0, 1]].drop_duplicates().reset_index(drop=True)
+    synonyms = synonyms.groupby(0).apply(
+        lambda x: pd.Series({'synonym': x[1].tolist()})).reset_index().rename(columns={0: 'ont_code'})
+    tax = tax[[0, 1]].rename(columns={0: 'ont_code', 1: 'parent_ont_code'})
+    tax_joined = tax.merge(pref.merge(synonyms, on='ont_code'))
+    return tax_joined
+
 class Dataimport(object):
     def __init__(self, db_config):
         self.db_config = db_config
@@ -98,6 +113,7 @@ class Dataimport(object):
         self.cursor = None
         self.meshfn = '../scratch/d2023.txt'
         self.ncitfn = '../scratch/ncit.csv.gz'
+        self.ncbitaxonomyfn = '../scratch/taxdmp.zip'
 
     def __enter__(self):
         self.engine = sqlalchemy.create_engine(
@@ -114,6 +130,54 @@ class Dataimport(object):
     def add_ontology(self, name, ontid):
         df = pd.DataFrame(pd.DataFrame({'ontid': [ontid], 'name': [name]}))
         df.to_sql('ontology', con=self.engine, index=False, if_exists='append')
+
+    def import_ncbi_taxonomy(self):
+        logging.info('importing NCBI taxonomy')
+        # download
+        url = 'https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip'
+        if not os.path.exists(self.ncbitaxonomyfn):
+            download(url, self.ncbitaxonomyfn)
+            with ZipFile(self.ncbitaxonomyfn, 'r') as zipObject:
+                for fn in ['names.dmp', 'nodes.dmp']:
+                    zipObject.extract(fn, Path(self.ncbitaxonomyfn).parent)
+
+        # make entry into ontology table
+        try:
+            self.add_ontology(name='NCBI_taxonomy', ontid=3)
+        except sqlalchemy.exc.IntegrityError:
+            logging.warning('NCBI taxonomy already imported into ontology table')
+
+        # parse and prepare the datatable
+        logging.info('parse the NCBI taxonomy files')
+        df = parse_ncbi_taxonomy(Path(self.ncbitaxonomyfn).parent)
+
+        # fill concept table
+        logging.info('import the NCBI taxonomy concepts')
+        concept = df[['ont_code', 'label']].drop_duplicates()
+        concept['ontid'] = 3
+        concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
+        # get ids
+        cids = pd.read_sql('SELECT cid, ont_code from concept where ontid = 3', con=self.engine)
+
+        # construct the synonym table
+        logging.info('import the NCBI taxonomy concept_synonyms')
+        synonyms = df[['ont_code', 'synonym']].explode('synonym').drop_duplicates()
+        synonyms = synonyms.merge(cids, on='ont_code')
+        synonyms[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
+
+        # construct the hierarchy table
+        logging.info('import the NCIT concept_hierarchy')
+        hierarchy = df[['ont_code', 'parent_ont_code']].drop_duplicates()
+        hierarchy = hierarchy.merge(cids, left_on='parent_ont_code', right_on='ont_code').rename(
+            columns={'cid': 'parent_cid'}).drop(['ont_code_y'], axis=1).rename(columns={'ont_code_x': 'ont_code'})
+
+        hierarchy = hierarchy.merge(cids, on='ont_code')
+
+        hierarchy = hierarchy.dropna(subset=['parent_cid'])
+        hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
+        hierarchy = hierarchy[['cid', 'parent_cid']].drop_duplicates()
+        hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
+                         con=self.engine)
 
     def import_ncit(self):
         logging.info('importing NCIT')
@@ -208,8 +272,9 @@ class Dataimport(object):
                          con=self.engine)
 
     def import_masterdata(self):
-        self.import_mesh()
-        self.import_ncit()
+        # self.import_mesh()
+        # self.import_ncit()
+        self.import_ncbi_taxonomy()
 
 
 if __name__ == '__main__':
