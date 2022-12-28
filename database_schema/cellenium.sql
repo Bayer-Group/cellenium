@@ -8,23 +8,17 @@ drop table if exists omics, omics_region_gene;
 
 create table ontology
 (
-    ontid    int primary key,
-    name     text,
-    umls_sab text
-    --cid_range_lower int, -- unused, could be used to filter concept based on ontology, to speed things up
-    --cid_range_upper int
+    ontid int primary key,
+    name  text
 );
 
 create table concept
 (
-    cid                  serial primary key,
-    ontid                int references ontology,
-    ont_code             text,
-    label                text,
-    label_tsvector       tsvector,
-    umls_disease         boolean,
-    umls_semantic_types  text[],
-    umls_semantic_groups text[]
+    cid            serial primary key,
+    ontid          int references ontology,
+    ont_code       text,
+    label          text,
+    label_tsvector tsvector generated always as ( to_tsvector('english', label) ) stored
 );
 create unique index concept_i1 on concept (ontid, ont_code);
 create index concept_i2 on concept (lower(label), ontid, cid);
@@ -33,7 +27,7 @@ create table concept_synonym
 (
     cid              int not null references concept,
     synonym          text,
-    synonym_tsvector tsvector
+    synonym_tsvector tsvector generated always as ( to_tsvector('english', synonym) ) stored
 );
 create index concept_synonym_i1 on concept_synonym (cid);
 
