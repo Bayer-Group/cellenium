@@ -4,6 +4,16 @@ CREATE TABLE study
     study_name              text not null,
     description             text,
     cluster_color_map       jsonb,
+    tissue_ncit_ids         text[] default array['C12393'],
+    --tissue_ncit_labels      text[],
+    disease_mesh_ids        text[],
+    --disease_mesh_labels     text[],
+    cell_ontology_ids       text[],
+    --cell_ontology_labels    text[],
+    organism_tax_id         text,
+    --organism_label          text,
+    --ontology_ids_with_parents text[]   for search
+
 
     --attributes              text[],
 
