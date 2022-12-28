@@ -59,5 +59,5 @@ def import_df(df, schema_and_table: str):
         connection.connection.commit()
 
 
-url = f"postgresql://postgres:postgres@localhost:5432/postgres"
+url = f"postgresql://postgres:postgres@localhost:5001/postgres"
 engine = create_engine(url)
