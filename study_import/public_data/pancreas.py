@@ -6,6 +6,7 @@ def add_cellenium_settings(adata):
     prep.cellenium_settings(
         adata,
         main_sample_attributes=['celltype']
+        # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
     )
     
 
@@ -15,7 +16,8 @@ def download_prepare_h5ad():
     adata = sc.read("../scratch/pancreas_original.h5ad", backup_url=url)
     
     # TODO make sure this is a sparse matrix. We're creating a 2.5GB file out of 316MB input.
-    # TODO log scale the data (anyway, 'counts' data doesn't look like counts...)    
+    # TODO log scale the data (anyway, 'counts' data doesn't look like counts...) 
+    # TODO we need a study with UMAP projection or calculate one here
     
     add_cellenium_settings(adata)
     prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'counts')
