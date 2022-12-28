@@ -98,10 +98,16 @@ def parse_ncbi_taxonomy(filesdir):
     names[3] = names[3].str.split('\t', expand=True)[0]
     pref = names.loc[names[3] == 'scientific name', [0, 1]].reset_index(drop=True).rename(
         columns={0: 'ont_code', 1: 'label'})
+    pref.ont_code = pref.ont_code.astype(str)
+
     synonyms = names.loc[names[3] != 'scientific name', [0, 1]].drop_duplicates().reset_index(drop=True)
     synonyms = synonyms.groupby(0).apply(
         lambda x: pd.Series({'synonym': x[1].tolist()})).reset_index().rename(columns={0: 'ont_code'})
+    synonyms.ont_code = synonyms.ont_code.astype(str)
+
     tax = tax[[0, 1]].rename(columns={0: 'ont_code', 1: 'parent_ont_code'})
+    tax = tax.applymap(str)
+
     tax_joined = tax.merge(pref.merge(synonyms, on='ont_code'))
     return tax_joined
 
