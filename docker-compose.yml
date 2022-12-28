@@ -4,11 +4,12 @@ services:
   postgres:
     build:
       context: ./postgres
-    command: postgres -c 'temp_buffers=200MB' -c 'work_mem=200MB'
+    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB'
     environment:
+      - PGPORT=5001
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5432:5432"
+      - "5001:5001"
     volumes:
       - postgresdata:/var/lib/postgresql/data
 
@@ -16,7 +17,7 @@ services:
     build:
       context: ./postgraphile
     command: >-
-      --connection postgres://postgres:postgres@postgres:5432/postgres
+      --connection postgres://postgres:postgres@postgres:5001/postgres
       --schema public
       --watch
       --retry-on-init-fail
