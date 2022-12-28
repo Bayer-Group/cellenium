@@ -177,6 +177,12 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
         inplace=True)
     import_df(df[['study_id', 'omics_id', 'annotation_value_id', 'pvalue', 'pvalue_adj', 'score', 'log2_foldchange']],
               'differential_expression')
+    with engine.connect() as connection:
+        connection.execute(text("""UPDATE study_sample_annotation_ui SET differential_expression_calculated=True
+                                    WHERE study_id = :study_id and annotation_id = any (:annotation_ids)"""), {
+            'study_id': study_id,
+            'annotation_ids': df['annotation_id'].unique().tolist()
+        })
 
 
 def import_study(study_name: str, adata: AnnData) -> int:
