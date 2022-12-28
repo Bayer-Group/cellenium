@@ -10,7 +10,7 @@ def add_cellenium_settings(adata):
 def download_prepare_h5ad():
     # pancreas data from here: https://www.nature.com/articles/s41592-021-01336-8
     url = "https://figshare.com/ndownloader/files/24539828"
-    adata = sc.read("pancreas.h5ad", backup_url=url)
+    adata = sc.read("../scratch/pancreas_original.h5ad", backup_url=url)
     add_cellenium_settings(adata)
     adata.write('../scratch/pancreas.h5ad')
 
