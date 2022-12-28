@@ -8,7 +8,7 @@ import numpy as np
 import scanpy as sc
 import scipy.sparse as sparse
 
-from cellenium.study_import.postgres_utils import engine, import_df
+from postgres_utils import engine, import_df
 
 
 def import_study_omics(study_id: int, adata: AnnData):

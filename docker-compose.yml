@@ -12,6 +12,7 @@ services:
       - "5001:5001"
     volumes:
       - postgresdata:/var/lib/postgresql/data
+      - ./database_schema:/database_schema
 
   postgraphile:
     build:
