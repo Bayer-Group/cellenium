@@ -126,7 +126,9 @@ def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df
                         study_sample_ids,
                         values
                         )
-                    for values in ( {study_layer_id} )"""))
+                    for values in ( {study_layer_id} );
+                    comment on table expression_{study_layer_id} is '@omit';
+                    """))
 
         sparse_X = sparse.csc_matrix(adata.layers[layer_name])
 
