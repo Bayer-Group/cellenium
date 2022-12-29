@@ -7,7 +7,7 @@ import os
 
 
 #download a dataset from the sfaira zoo, see here for a list of available datasets: https://theislab.github.io/sfaira-portal/Datasets
-def get_sfaira_h5ad(sfaira_id, basedirectory):
+def get_sfaira_h5ad(sfaira_id, basedir):
     
     datadir = os.path.join(basedir, 'sfaira/data/')
     metadir = os.path.join(basedir, 'sfaira/meta/')
@@ -99,11 +99,11 @@ add_cellenium_settings(adata)
 
 
 # for testing, subsample the dataset
-query = np.array([s in ["celseq"] for s in adata.obs.tech])
-sc.pp.highly_variable_genes(adata, n_top_genes=200, batch_key="tech", subset=True)
-adata = adata[query].copy()
-adata = adata[:, adata.var_names].copy()
+#query = np.array([s in ["celseq"] for s in adata.obs.tech])
+#sc.pp.highly_variable_genes(adata, n_top_genes=200, batch_key="tech", subset=True)
+#adata = adata[query].copy()
+#adata = adata[:, adata.var_names].copy()
 
 
-prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'norm_log_expression')
-adata.write('../scratch/pancreas_subset.h5ad')
+#prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'norm_log_expression')
+#adata.write('../scratch/pancreas_subset.h5ad')
