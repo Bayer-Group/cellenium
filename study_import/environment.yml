@@ -17,3 +17,5 @@ dependencies:
     - jupyterlab
     - 'dramatiq[watch]'
     - dramatiq-pg
+    - pybiomart
+    - pyjaspar

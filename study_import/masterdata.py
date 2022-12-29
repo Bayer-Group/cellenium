@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 import sqlalchemy
 import tqdm
+from pybiomart import Dataset
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -27,6 +28,29 @@ def download(url, fn):
         for data in resp.iter_content(chunk_size=1024):
             size = file.write(data)
             bar.update(size)
+
+
+def walk_down_tree(children):
+    result = [nd.id for nd in children]
+    for nd in children:
+        if len(nd.children):
+            result.extend(walk_down_tree(nd.children))
+    return result
+
+
+def get_all_ncit_codes_below(df, ont_code):
+    nodes = dict([(id, Node(id)) for id in df.ont_code.drop_duplicates().tolist()])
+    hierarchy = df[['ont_code', 'parent_ont_code']].drop_duplicates()
+    all_relations = hierarchy.to_dict(orient='records')
+    for nd in all_relations:
+        try:
+            nodes[nd.get('parent_ont_code')].children.append(nodes[nd.get('ont_code')])
+        except KeyError:
+            pass  # print("parent_ont_code {} does not exist".format(nd.get('parent_ont_code')))
+    cur_node = nodes[ont_code]
+    all_nodes_below = walk_down_tree(cur_node.children)
+
+    return list(set(all_nodes_below))
 
 
 @dataclass
@@ -52,27 +76,25 @@ def parse_mesh_ascii_diseases(fn):
     return df
 
 
-def walk_down_tree(children):
-    result = [nd.id for nd in children]
-    for nd in children:
-        if len(nd.children):
-            result.extend(walk_down_tree(nd.children))
-    return result
-
-
-def get_all_ncit_codes_below(df, ont_code):
-    nodes = dict([(id, Node(id)) for id in df.ont_code.drop_duplicates().tolist()])
-    hierarchy = df[['ont_code', 'parent_ont_code']].drop_duplicates()
-    all_relations = hierarchy.to_dict(orient='records')
-    for nd in all_relations:
-        try:
-            nodes[nd.get('parent_ont_code')].children.append(nodes[nd.get('ont_code')])
-        except KeyError:
-            pass  # print("parent_ont_code {} does not exist".format(nd.get('parent_ont_code')))
-    cur_node = nodes[ont_code]
-    all_nodes_below = walk_down_tree(cur_node.children)
-
-    return list(set(all_nodes_below))
+def get_gene_mappings(dataset_name, attributes, tax_id):
+    dataset = Dataset(name=dataset_name,
+                      host='http://www.ensembl.org',
+                      use_cache=True)
+    df = dataset.query(attributes=attributes)
+    df = df.dropna().rename(columns={'Gene description': 'display_name',
+                                     'HGNC symbol': 'hgnc_symbols',
+                                     'Gene name': 'hgnc_symbols',
+                                     'Gene stable ID': 'ensembl_gene_id',
+                                     'NCBI gene (formerly Entrezgene) ID': 'entrez_gene_ids'})
+    df.display_name = df.display_name.str.split('\[Source', expand=True)[0].str.strip()
+    df.entrez_gene_ids = df.entrez_gene_ids.astype(int).astype(str)
+    df = df.groupby(['ensembl_gene_id', 'display_name']).agg(set).reset_index()
+    df.hgnc_symbols = df.hgnc_symbols.apply(list)
+    df.entrez_gene_ids = df.entrez_gene_ids.apply(list)
+    df['tax_id'] = tax_id
+    df['display_symbol'] = df.hgnc_symbols.str.join(';')
+    df['omics_type'] = 'gene'
+    return df
 
 
 def parse_ncit(fn):
@@ -110,6 +132,7 @@ def parse_ncbi_taxonomy(filesdir):
 
     tax_joined = tax.merge(pref.merge(synonyms, on='ont_code'))
     return tax_joined
+
 
 class Dataimport(object):
     def __init__(self, db_config):
@@ -229,7 +252,7 @@ class Dataimport(object):
                          con=self.engine)
 
     def import_mesh(self):
-        logging.info('importint MeSH')
+        logging.info('importing MeSH')
         # download
         url = 'https://nlmpubs.nlm.nih.gov/projects/mesh/MESH_FILES/asciimesh/d2023.bin'
         if not os.path.exists(self.meshfn):
@@ -277,10 +300,40 @@ class Dataimport(object):
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
 
+    def import_gene_mappings(self):
+        # impart gene mappings
+        logging.info('importing gene mappings')
+
+        # human
+        logging.info('importing human mappings')
+        human = get_gene_mappings('hsapiens_gene_ensembl',
+                                  ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id', 'description'],
+                                  9606)
+        human.to_sql('omics', if_exists='append', index=False,
+                     con=self.engine)
+
+        # mus musculus
+        logging.info('importing mouse mappings')
+
+        mus = get_gene_mappings('mmusculus_gene_ensembl',
+                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+                                10090)
+        mus.to_sql('omics', if_exists='append', index=False,
+                   con=self.engine)
+        # rattus norvegicus
+        logging.info('importing rat mappings')
+        rat = get_gene_mappings('rnorvegicus_gene_ensembl',
+                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+                                10116)
+        rat.to_sql('omics', if_exists='append', index=False,
+                   con=self.engine)
+        # jasper
+
     def import_masterdata(self):
         self.import_mesh()
         self.import_ncit()
         self.import_ncbi_taxonomy()
+        self.import_gene_mappings()
 
 
 if __name__ == '__main__':
