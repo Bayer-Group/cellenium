@@ -18,10 +18,20 @@ def add_cellenium_settings(adata):
         # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
     )
     
-
+#check if an integer but not simply using the type
+def isinteger(x):
+    return np.equal(np.mod(x, 1), 0)    
+        
+#basic umap calculation, doesn't take batch effect into account
+def calculate_umap(adata):
+    sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer="norm_log_expression", inplace=True)
+    pca = sc.pp.scale(adata.layers["norm_log_expression"][:,adata.var.highly_variable])
+    adata.obsm["X_pca"] = sc.pp.pca(pca)
+    sc.pp.neighbors(adata, n_pcs=20, copy=False)
+    adata = sc.tl.umap(adata, copy=True)
+    return adata
 
     
-# TODO we need a study with UMAP projection or calculate one here
 
 #download file
 adata = download_h5ad()
@@ -48,14 +58,25 @@ else:
         adata.layers["norm_log_expression"] = adata.layers["counts"]
 
 
-add_cellenium_settings(adata)
-prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'counts')
-adata.write('../scratch/pancreas.h5ad')
+        
+# TODO we need a study with UMAP projection or calculate one here        
+if adata.obsm is None:
+    adata = calculate_umap(adata)
+else:
+    if not "X_umap" in adata.obsm:
+        adata = calculate_umap(adata)
 
+        
+# harmonize cellenium metadata        
+add_cellenium_settings(adata)
+
+
+# for testing, subsample the dataset
 query = np.array([s in ["celseq"] for s in adata.obs.tech])
-sc.pp.highly_variable_genes(adata, n_top_genes=200, batch_key="tech",  subset=True)
+sc.pp.highly_variable_genes(adata, n_top_genes=200, batch_key="tech", subset=True)
 adata = adata[query].copy()
 adata = adata[:, adata.var_names].copy()
-add_cellenium_settings(adata)
-prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'counts')
+
+
+prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'norm_log_expression')
 adata.write('../scratch/pancreas_subset.h5ad')
