@@ -1,20 +1,17 @@
-schema: "../server/celllenium_schema.graphql"
+schema:
+  - "http://localhost:5000/postgraphile/graphiql"
 overwrite: true
+documents: "./src/**/!(*.d).{ts,tsx}"
 generates:
- # Creates the TypeScript types from the schema and any .graphql file
  src/generated/types.ts:
-   schema: "./chemogenomics_cellenium_schema.json"
    plugins:
-     - typescript
-     - typescript-operations
-     - typescript-react-apollo
+     - add:
+         content: '/* eslint-disable */'
+     - "typescript"
+     - "typescript-operations"
+     - "typescript-react-apollo"
    config:
      withHOC: false
      withHooks: true
      withComponent: false
      withMutationFn: false
-documents: "src/**/!(*.d).{ts,tsx}"
-config:
- scalars:
-   DateTime: "string"
-   JSON: "{ [key: string]: any }"
