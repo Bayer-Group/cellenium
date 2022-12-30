@@ -9,7 +9,7 @@ function SearchBar(props: TextInputProps) {
             variant='default'
             label="filter studies by disease, tissue, species, title/description"
             styles={{
-                label: {fontWeight:100, fontSize: '0.8rem', display: 'inline-block'}
+                label: {fontWeight:500, fontSize: '0.8rem', display: 'inline-block'}
             }}
             icon={<IconSearch size={18} stroke={1.5}/>}
 
