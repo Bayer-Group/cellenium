@@ -1,9 +1,11 @@
 name: cellenium_import
 channels:
   - conda-forge
+  - bioconda
 dependencies:
   - python=3.10
   - pip
+  - pyjaspar
   - pip:
     - pandas
     - numpy
@@ -18,4 +20,4 @@ dependencies:
     - 'dramatiq[watch]'
     - dramatiq-pg
     - pybiomart
-    - pyjaspar
+    - lxml

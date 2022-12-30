@@ -134,6 +134,27 @@ def parse_ncbi_taxonomy(filesdir):
     return tax_joined
 
 
+def get_antibody_mappings_from_biolegend():
+    tables = pd.read_html('https://www.biolegend.com/en-us/totalseq/barcode-lookup', encoding="utf-8")
+    ab = pd.concat([df[['Description', 'Ensembl Gene Id']] for df in tables if
+                    len(set(['Description', 'Ensembl Gene Id']).intersection(df.columns)) == 2], axis=0).rename(
+        columns={'Description': 'antibody_symbol', 'Ensembl Gene Id': 'ensembl_gene_id'})
+    ab['antibody_name'] = ab['antibody_symbol']
+    ab['display_name'] = ab['antibody_symbol']
+    ab['display_symbol'] = ab['antibody_symbol']
+    ab.ensembl_gene_id = ab.ensembl_gene_id.str.split(',')
+    ab = ab.explode('ensembl_gene_id')
+    ab.ensembl_gene_id = ab.ensembl_gene_id.str.strip()
+    ab.ensembl_gene_id = ab.ensembl_gene_id.str.replace(':', '')
+    ab = ab.dropna()
+    ab.ensembl_gene_id = ab.ensembl_gene_id.str.replace(r'^NSG', 'ENSG')
+    ab = ab.drop_duplicates().reset_index(drop=True)
+    ab['omics_type'] = 'CITE-seq'
+    ab.loc[ab.ensembl_gene_id.str.startswith('ENSMUSG'), 'tax_id'] = 10090
+    ab.loc[ab.ensembl_gene_id.str.startswith('ENSRNOG'), 'tax_id'] = 10116
+    return ab
+
+
 class Dataimport(object):
     def __init__(self, db_config):
         self.db_config = db_config
@@ -320,6 +341,7 @@ class Dataimport(object):
                                 10090)
         mus.to_sql('omics', if_exists='append', index=False,
                    con=self.engine)
+
         # rattus norvegicus
         logging.info('importing rat mappings')
         rat = get_gene_mappings('rnorvegicus_gene_ensembl',
@@ -327,12 +349,20 @@ class Dataimport(object):
                                 10116)
         rat.to_sql('omics', if_exists='append', index=False,
                    con=self.engine)
+
+        # CITE-Seq antibodies
+        logging.info('importing CITE-Seq antibodies')
+        ab = get_antibody_mappings_from_biolegend()
+        ab.to_sql('omics', if_exists='append', index=False,
+                  con=self.engine)
+        # TODO(CJ) --> unclear unique contraint
         # jasper
+        # TODO(CJ) --> unclear table structure
 
     def import_masterdata(self):
-        self.import_mesh()
-        self.import_ncit()
-        self.import_ncbi_taxonomy()
+        # self.import_mesh()
+        # self.import_ncit()
+        # self.import_ncbi_taxonomy()
         self.import_gene_mappings()
 
 
