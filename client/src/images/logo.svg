@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="29px" viewBox="0 0 33 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>projectionplot</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="projectionplot" fill-rule="nonzero">
+            <circle id="Oval" fill="#2277B4" cx="27.75" cy="7.75" r="5"></circle>
+            <circle id="Oval" fill="#26A122" cx="5.25" cy="12.75" r="5"></circle>
+            <circle id="Oval" fill="#8D5549" cx="20.25" cy="25.25" r="3.75"></circle>
+            <circle id="Oval" fill="#D9241E" cx="17.125" cy="15.25" r="2.188"></circle>
+            <circle id="Oval" fill="#9563BF" cx="9" cy="22.75" r="2.813"></circle>
+            <circle id="Oval" fill="#FF7F00" cx="15.25" cy="4" r="3.75"></circle>
+        </g>
+    </g>
+</svg>

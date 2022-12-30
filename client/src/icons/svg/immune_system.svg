@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 52 53" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 2</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-110.000000, -104.000000)" stroke="#000000">
+            <g id="Group-2" transform="translate(111.000000, 105.000000)">
+                <circle id="Oval" stroke-width="1" cx="25" cy="26" r="17"></circle>
+                <circle id="Oval" stroke-width="1" cx="25" cy="28" r="3"></circle>
+                <circle id="Oval-Copy" cx="26.5" cy="19.5" r="1"></circle>
+                <circle id="Oval-Copy-2" cx="33.5" cy="28.5" r="1"></circle>
+                <g id="Group" transform="translate(20.000000, 0.000000)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.5" y1="3.78444444" x2="5.5" y2="12.6822222" id="Line"></line>
+                    <line x1="0.423076923" y1="0.30952381" x2="5.5" y2="4.02380952" id="Line-2"></line>
+                    <line x1="5.5" y1="0.30952381" x2="10.5769231" y2="4.02380952" id="Line-2" transform="translate(8.038462, 2.166667) scale(-1, 1) translate(-8.038462, -2.166667) "></line>
+                </g>
+                <g id="Group-Copy" transform="translate(25.500000, 44.500000) scale(1, -1) translate(-25.500000, -44.500000) translate(20.000000, 38.000000)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.5" y1="3.78444444" x2="5.5" y2="12.6822222" id="Line"></line>
+                    <line x1="0.423076923" y1="0.30952381" x2="5.5" y2="4.02380952" id="Line-2"></line>
+                    <line x1="5.5" y1="0.30952381" x2="10.5769231" y2="4.02380952" id="Line-2" transform="translate(8.038462, 2.166667) scale(-1, 1) translate(-8.038462, -2.166667) "></line>
+                </g>
+                <g id="Group-Copy-4" transform="translate(43.500000, 23.500000) scale(1, -1) rotate(90.000000) translate(-43.500000, -23.500000) translate(38.000000, 17.000000)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.5" y1="3.78444444" x2="5.5" y2="12.6822222" id="Line"></line>
+                    <line x1="0.423076923" y1="0.30952381" x2="5.5" y2="4.02380952" id="Line-2"></line>
+                    <line x1="5.5" y1="0.30952381" x2="10.5769231" y2="4.02380952" id="Line-2" transform="translate(8.038462, 2.166667) scale(-1, 1) translate(-8.038462, -2.166667) "></line>
+                </g>
+                <g id="Group-Copy-5" transform="translate(6.500000, 23.500000) scale(-1, -1) rotate(90.000000) translate(-6.500000, -23.500000) translate(1.000000, 17.000000)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.5" y1="3.78444444" x2="5.5" y2="12.6822222" id="Line"></line>
+                    <line x1="0.423076923" y1="0.30952381" x2="5.5" y2="4.02380952" id="Line-2"></line>
+                    <line x1="5.5" y1="0.30952381" x2="10.5769231" y2="4.02380952" id="Line-2" transform="translate(8.038462, 2.166667) scale(-1, 1) translate(-8.038462, -2.166667) "></line>
+                </g>
+                <g id="Group-Copy-2" transform="translate(38.613306, 38.674730) scale(1, -1) rotate(54.000000) translate(-38.613306, -38.674730) translate(33.113306, 32.174730)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.41666667" y1="3.65081967" x2="5.41666667" y2="12.2344262" id="Line"></line>
+                    <line x1="0.416666667" y1="0.298594848" x2="5.41666667" y2="3.88173302" id="Line-2"></line>
+                    <line x1="5.41666667" y1="0.298594848" x2="10.4166667" y2="3.88173302" id="Line-2" transform="translate(7.916667, 2.090164) scale(-1, 1) translate(-7.916667, -2.090164) "></line>
+                </g>
+                <g id="Group-Copy-6" transform="translate(37.779973, 11.489205) rotate(54.000000) translate(-37.779973, -11.489205) translate(32.279973, 4.989205)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.41666667" y1="3.65081967" x2="5.41666667" y2="12.2344262" id="Line"></line>
+                    <line x1="0.416666667" y1="0.298594848" x2="5.41666667" y2="3.88173302" id="Line-2"></line>
+                    <line x1="5.41666667" y1="0.298594848" x2="10.4166667" y2="3.88173302" id="Line-2" transform="translate(7.916667, 2.090164) scale(-1, 1) translate(-7.916667, -2.090164) "></line>
+                </g>
+                <g id="Group-Copy-3" transform="translate(12.220027, 38.674730) scale(-1, -1) rotate(54.000000) translate(-12.220027, -38.674730) translate(6.720027, 32.174730)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.41666667" y1="3.65081967" x2="5.41666667" y2="12.2344262" id="Line"></line>
+                    <line x1="0.416666667" y1="0.298594848" x2="5.41666667" y2="3.88173302" id="Line-2"></line>
+                    <line x1="5.41666667" y1="0.298594848" x2="10.4166667" y2="3.88173302" id="Line-2" transform="translate(7.916667, 2.090164) scale(-1, 1) translate(-7.916667, -2.090164) "></line>
+                </g>
+                <g id="Group-Copy-7" transform="translate(11.386694, 11.489205) scale(-1, 1) rotate(54.000000) translate(-11.386694, -11.489205) translate(5.886694, 4.989205)" stroke-linecap="round" stroke-width="1">
+                    <line x1="5.41666667" y1="3.65081967" x2="5.41666667" y2="12.2344262" id="Line"></line>
+                    <line x1="0.416666667" y1="0.298594848" x2="5.41666667" y2="3.88173302" id="Line-2"></line>
+                    <line x1="5.41666667" y1="0.298594848" x2="10.4166667" y2="3.88173302" id="Line-2" transform="translate(7.916667, 2.090164) scale(-1, 1) translate(-7.916667, -2.090164) "></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
