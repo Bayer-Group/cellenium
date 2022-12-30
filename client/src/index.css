@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Exo-Bold';
+  src: local('Exo-Bold'), url('./fonts/Exo-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik'), url('./fonts/Rubik-VariableFont_wght.ttf') format('truetype');
+}
