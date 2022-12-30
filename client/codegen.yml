@@ -1,5 +1,5 @@
 schema:
-  - "http://localhost:5000/postgraphile/graphiql"
+  - "http://localhost:5000/postgraphile/"
 overwrite: true
 documents: "./src/**/!(*.d).{ts,tsx}"
 generates:
