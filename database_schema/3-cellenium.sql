@@ -89,13 +89,15 @@ CREATE TABLE omics_transcription_factor_gene
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
 
 
-create view omics_element as
+create view omics_all as
 select b.omics_id,
        b.omics_type,
        b.tax_id,
        b.display_symbol,
        b.display_name,
        og.ensembl_gene_id,
+       og.entrez_gene_ids,
+       og.hgnc_symbols,
        coalesce(
                array_agg(opatg.gene_id),
                array_agg(otfg.gene_id)
@@ -105,7 +107,7 @@ from omics_base b
          left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
 group by b.omics_id, b.omics_type, b.tax_id, b.display_symbol, b.display_name,
-         og.ensembl_gene_id;
+         og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols;
 
 /*
 -- TODO add omics_region... tables, same style
@@ -281,5 +283,24 @@ CREATE TABLE expression
 
 ) partition by list (study_layer_id);
 
--- TODO procedure for creating new partition, and unique index omics_id inside
 
+CREATE OR REPLACE PROCEDURE add_studylayer_partition(study_layer_id int)
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    EXECUTE format(
+            'create table expression_%1$s
+            partition of expression
+            (
+                study_layer_id,
+                omics_id,
+                study_sample_ids,
+                values
+                )
+            for values in ( %1$s );
+            comment on table expression_%1$s is ''@omit'';
+            create unique index  expression_%1$s_omics_uq on expression_%1$s(omics_id);
+            ', study_layer_id);
+END ;
+$$;
