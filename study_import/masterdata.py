@@ -324,45 +324,39 @@ class Dataimport(object):
     def import_gene_mappings(self):
         # impart gene mappings
         logging.info('importing gene mappings')
-
-        # human
-        logging.info('importing human mappings')
         human = get_gene_mappings('hsapiens_gene_ensembl',
                                   ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id', 'description'],
                                   9606)
-        human.to_sql('omics', if_exists='append', index=False,
-                     con=self.engine)
-
-        # mus musculus
-        logging.info('importing mouse mappings')
-
         mus = get_gene_mappings('mmusculus_gene_ensembl',
                                 ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
                                 10090)
-        mus.to_sql('omics', if_exists='append', index=False,
-                   con=self.engine)
-
-        # rattus norvegicus
-        logging.info('importing rat mappings')
         rat = get_gene_mappings('rnorvegicus_gene_ensembl',
                                 ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
                                 10116)
-        rat.to_sql('omics', if_exists='append', index=False,
-                   con=self.engine)
+        genes = pd.concat([human, mus, rat]).reset_index(drop=True)
+        genes[['omics_type', 'tax_id', 'display_symbol', 'display_name']].to_sql('omics_base',
+                                                                                 if_exists='append', index=False,
+                                                                                 con=self.engine)
+        omics_ids = pd.read_sql("SELECT omics_id from omics_base where omics_type = 'gene' order by omics_id",
+                                con=self.engine)
+        genes['gene_id'] = omics_ids.omics_id
+        genes[['gene_id', 'ensembl_gene_id', 'entrez_gene_ids', 'hgnc_symbols']].to_sql('omics_gene',
+                                                                                        if_exists='append', index=False,
+                                                                                        con=self.engine)
 
-        # CITE-Seq antibodies
-        logging.info('importing CITE-Seq antibodies')
-        ab = get_antibody_mappings_from_biolegend()
-        ab.to_sql('omics', if_exists='append', index=False,
-                  con=self.engine)
-        # TODO(CJ) --> unclear unique contraint
-        # jasper
-        # TODO(CJ) --> unclear table structure
+        # TODO CITE-Seq antibodies
+        # logging.info('importing CITE-Seq antibodies')
+        # ab = get_antibody_mappings_from_biolegend()
+        # ab.to_sql('omics', if_exists='append', index=False,
+        #           con=self.engine)
+        # ...
+
+        # TODO jasper
 
     def import_masterdata(self):
-        # self.import_mesh()
-        # self.import_ncit()
-        # self.import_ncbi_taxonomy()
+        self.import_mesh()
+        self.import_ncit()
+        self.import_ncbi_taxonomy()
         self.import_gene_mappings()
 
 
