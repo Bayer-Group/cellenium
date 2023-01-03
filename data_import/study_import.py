@@ -52,6 +52,16 @@ def import_study_sample(study_id: int, adata: AnnData):
     adata_samples_df['display_subsampling'] = True
     adata_samples_df
     import_df(adata_samples_df, 'study_sample')
+
+    if 'X_umap' in adata.obsm:
+        projection_df = pd.DataFrame({
+            'study_id': study_id,
+            'study_sample_id': adata_samples_df.study_sample_id,
+            'projection_type': 'umap',
+            'projection': adata.obsm['X_umap'].tolist()
+        })
+        import_df(projection_df, 'study_sample_projection')
+
     return adata_samples_df
 
 
@@ -207,5 +217,9 @@ def import_study(study_name: str, adata: AnnData) -> int:
 
 
 if __name__ == "__main__":
-    adata = sc.read_h5ad('../scratch/pancreas_subset.h5ad')
-    import_study('pancreas', adata)
+    # adata = sc.read_h5ad('../scratch/pancreas_subset.h5ad')
+    # import_study('pancreas', adata)
+    adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
+    import_study('heart_failure_reichart2022_subset', adata)
+    # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022.h5ad')
+    # import_study('heart_failure_reichart2022', adata)
