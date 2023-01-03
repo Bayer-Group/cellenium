@@ -368,13 +368,13 @@ class Dataimport(object):
         ab_gene[['protein_antibody_tag_id', 'gene_id']].to_sql('omics_protein_antibody_tag_gene', if_exists='append',
                                                                index=False, con=self.engine)
 
-        def import_masterdata(self):
-            # self.import_mesh()
-            # self.import_ncit()
-            # self.import_ncbi_taxonomy()
-            self.import_genes()
-            self.import_antibodies()
-            # TODO jasper
+    def import_masterdata(self):
+        self.import_mesh()
+        self.import_ncit()
+        self.import_ncbi_taxonomy()
+        self.import_genes()
+        self.import_antibodies()
+        # TODO jasper
 
 
 if __name__ == '__main__':

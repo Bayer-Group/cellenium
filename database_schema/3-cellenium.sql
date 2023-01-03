@@ -192,6 +192,19 @@ CREATE TABLE study_sample
 );
 --create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
+
+CREATE TYPE projection_type AS ENUM ('umap', 'tsne', 'pca');
+CREATE TABLE study_sample_projection
+(
+    study_id        int             not null,
+    study_sample_id int             not null,
+    constraint fk_study_sample
+        FOREIGN KEY (study_id, study_sample_id)
+            REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
+    projection_type projection_type not null,
+    projection      real[]          not null
+);
+
 CREATE TABLE study_sample_annotation
 (
     study_id            int not null,
