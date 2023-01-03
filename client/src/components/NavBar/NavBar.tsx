@@ -1,6 +1,4 @@
 import {ReactComponent as ProjPlotIcon} from "../../images/logo.svg";
-
-
 import {useState} from 'react';
 import {Anchor, Burger, Container, createStyles, Group, Title, Header} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
