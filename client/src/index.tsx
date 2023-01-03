@@ -11,7 +11,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
-import StudyAnalysis from "./pages/StudyAnalysis";
+import StudyAnalysis from "./pages/DifferentialExpressionAnalysis";
 
 export const apolloCache = new InMemoryCache();
 

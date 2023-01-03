@@ -6,8 +6,8 @@
   "dependencies": {
     "@apollo/client": "^3.7.3",
     "@emotion/react": "^11.10.5",
-    "@mantine/core": "^5.9.5",
-    "@mantine/hooks": "^5.9.5",
+    "@mantine/core": "^5.10.0",
+    "@mantine/hooks": "^5.10.0",
     "@tabler/icons": "^1.119.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",

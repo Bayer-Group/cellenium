@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {createStyles, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
-import {ReactComponent as StudyAnalysisIcon} from "../../icons/study_analysis.svg";
+import {createStyles, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
+import {ReactComponent as CellTypeMarkerIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
 import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
 import {ReactComponent as CompareAnnotationsIcon} from "../../icons/annotation_comparison.svg";
@@ -29,6 +29,10 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
     },
 
+    navigation: {
+        padding: theme.spacing.md,
+
+    },
     mainLink: {
         width: 44,
         height: 44,
@@ -54,7 +58,7 @@ const useStyles = createStyles((theme) => ({
         boxSizing: 'border-box',
         fontFamily: `Exo-bold, ${theme.fontFamily}`,
         fontSize: '1.8rem',
-        marginBottom: theme.spacing.xl,
+        marginBottom: theme.spacing.md,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
         paddingTop: 10,
         paddingLeft: 15,
@@ -71,31 +75,34 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'center',
         height: 60,
         paddingTop: theme.spacing.md,
+        marginBottom: theme.spacing.md + 4,
+
         borderBottom: `1px solid ${
             theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
         }`,
-        marginBottom: theme.spacing.xl,
+
     },
 
 }));
 
-const mainLinksMockdata = [
-    {icon: StudyAnalysisIcon, label: 'Marker analysis'},
+const viewLinks = [
+    {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis'},
     {icon: ExpressionAnalysisIcon, label: 'Expression analysis'},
     {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis'},
     {icon: CompareAnnotationsIcon, label: 'Compare annotations'},
     {icon: UserAnnotationIcon, label: 'User annotations'},
-
-
 ];
 
+type Props = {
+    children?: JSX.Element[];
+}
 
-function LeftSidePanel() {
+function LeftSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
     const [active, setActive] = useState('asdf');
     const [activeLink, setActiveLink] = useState('Settings');
 
-    const mainLinks = mainLinksMockdata.map((link) => (
+    const mainLinks = viewLinks.map((link) => (
         <Tooltip label={link.label} position="right" withArrow transitionDuration={0} key={link.label}>
             <UnstyledButton
                 onClick={() => setActive(link.label)}
@@ -120,7 +127,9 @@ function LeftSidePanel() {
                     <Title order={4} className={classes.title}>
                         cellenium
                     </Title>
-                    {}
+                    <Group className={classes.navigation} spacing={'md'}>
+                        {children}
+                    </Group>
                 </div>
             </Navbar.Section>
         </Navbar>
