@@ -11,7 +11,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
-import StudyAnalysis from "./pages/StudyAnalysis";
+import StudyAnalysis from "./pages/DifferentialExpressionAnalysis";
 import TestPage from "./pages/TestPage";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
