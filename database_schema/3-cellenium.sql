@@ -58,12 +58,11 @@ create unique index omics_gene_1 on omics_gene (ensembl_gene_id);
 -- cite-seq
 CREATE TABLE omics_protein_antibody_tag
 (
-    protein_antibody_tag_id int not null references omics_base primary key,
-    -- kinda duplicated to display_symbol etc., but lets have it for now:
-    antibody_symbol         text,
-    antibody_name           text
+    protein_antibody_tag_id int  not null references omics_base primary key,
+    tax_id                  int  not null,
+    antibody_symbol         text not null
 );
-create unique index omics_protein_antibody_tag_1 on omics_protein_antibody_tag (antibody_symbol);
+create unique index omics_protein_antibody_tag_1 on omics_protein_antibody_tag (tax_id, antibody_symbol);
 
 
 CREATE TABLE omics_protein_antibody_tag_gene
@@ -87,6 +86,9 @@ CREATE TABLE omics_transcription_factor_gene
     gene_id                 int not null references omics_gene
 );
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
+
+-- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
+-- insert into omics_gene (gene_id, ensembl_gene_id, hgnc_symbols) values (1000000, 'ENSG00000102575', ARRAY ['ACP5']);
 
 
 create view omics_all as

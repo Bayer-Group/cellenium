@@ -11,7 +11,8 @@ import sqlalchemy
 import tqdm
 from pybiomart import Dataset
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
+                    datefmt='%Y%m%d-%H%M%S', level=logging.DEBUG)
 
 
 # utils
@@ -139,8 +140,6 @@ def get_antibody_mappings_from_biolegend():
     ab = pd.concat([df[['Description', 'Ensembl Gene Id']] for df in tables if
                     len(set(['Description', 'Ensembl Gene Id']).intersection(df.columns)) == 2], axis=0).rename(
         columns={'Description': 'antibody_symbol', 'Ensembl Gene Id': 'ensembl_gene_id'})
-    ab['antibody_name'] = ab['antibody_symbol']
-    ab['display_name'] = ab['antibody_symbol']
     ab['display_symbol'] = ab['antibody_symbol']
     ab.ensembl_gene_id = ab.ensembl_gene_id.str.split(',')
     ab = ab.explode('ensembl_gene_id')
@@ -149,9 +148,10 @@ def get_antibody_mappings_from_biolegend():
     ab = ab.dropna()
     ab.ensembl_gene_id = ab.ensembl_gene_id.str.replace(r'^NSG', 'ENSG')
     ab = ab.drop_duplicates().reset_index(drop=True)
-    ab['omics_type'] = 'CITE-seq'
+    ab['omics_type'] = 'protein_antibody_tag'
     ab.loc[ab.ensembl_gene_id.str.startswith('ENSMUSG'), 'tax_id'] = 10090
     ab.loc[ab.ensembl_gene_id.str.startswith('ENSRNOG'), 'tax_id'] = 10116
+    ab.loc[ab.ensembl_gene_id.str.startswith('ENSG'), 'tax_id'] = 9606
     return ab
 
 
@@ -321,8 +321,8 @@ class Dataimport(object):
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
 
-    def import_gene_mappings(self):
-        # impart gene mappings
+    def import_genes(self):
+        # import gene mappings
         logging.info('importing gene mappings')
         human = get_gene_mappings('hsapiens_gene_ensembl',
                                   ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id', 'description'],
@@ -344,20 +344,36 @@ class Dataimport(object):
                                                                                         if_exists='append', index=False,
                                                                                         con=self.engine)
 
-        # TODO CITE-Seq antibodies
-        # logging.info('importing CITE-Seq antibodies')
-        # ab = get_antibody_mappings_from_biolegend()
-        # ab.to_sql('omics', if_exists='append', index=False,
-        #           con=self.engine)
-        # ...
+    def import_antibodies(self):
+        logging.info('importing CITE-Seq antibodies')
+        ab = get_antibody_mappings_from_biolegend()
+        ab_distinct = ab[['omics_type', 'tax_id', 'display_symbol', 'antibody_symbol']].drop_duplicates().reset_index(
+            drop=True)
 
-        # TODO jasper
+        ab_distinct[['omics_type', 'tax_id', 'display_symbol']].to_sql('omics_base', if_exists='append',
+                                                                       index=False, con=self.engine)
+        omics_ids = pd.read_sql(
+            "SELECT omics_id from omics_base where omics_type = 'protein_antibody_tag' order by omics_id",
+            con=self.engine)
+        ab_distinct['protein_antibody_tag_id'] = omics_ids.omics_id
+        ab_distinct[['protein_antibody_tag_id', 'tax_id', 'antibody_symbol']].to_sql('omics_protein_antibody_tag',
+                                                                                     if_exists='append', index=False,
+                                                                                     con=self.engine)
+        gene_omics_ids = pd.read_sql(
+            "SELECT gene_id, ensembl_gene_id from omics_gene",
+            con=self.engine, index_col='ensembl_gene_id')
+        ab_gene = ab[['tax_id', 'display_symbol', 'ensembl_gene_id']].explode('ensembl_gene_id') \
+            .merge(ab_distinct, left_on=['tax_id', 'display_symbol'], right_on=['tax_id', 'display_symbol']) \
+            .merge(gene_omics_ids, left_on='ensembl_gene_id', right_index=True)
+        ab_gene[['protein_antibody_tag_id', 'gene_id']].to_sql('omics_protein_antibody_tag_gene', if_exists='append',
 
-    def import_masterdata(self):
-        self.import_mesh()
-        self.import_ncit()
-        self.import_ncbi_taxonomy()
-        self.import_gene_mappings()
+        def import_masterdata(self):
+            # self.import_mesh()
+            # self.import_ncit()
+            # self.import_ncbi_taxonomy()
+            self.import_genes()
+            self.import_antibodies()
+            # TODO jasper
 
 
 if __name__ == '__main__':
