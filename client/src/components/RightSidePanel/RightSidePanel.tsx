@@ -21,16 +21,18 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+type Props = {
+    children?: JSX.Element[];
+}
 
-
-function RightSidePanel() {
+function RightSidePanel({children}:Props) {
     const {classes, cx} = useStyles();
 
     return (
         <Navbar height={'100vh'} width={{sm: 300}}>
             <Navbar.Section grow className={classes.wrapper}>
                 <div className={classes.main}>
-                    test
+                    {children}
                 </div>
             </Navbar.Section>
         </Navbar>
