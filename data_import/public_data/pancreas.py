@@ -1,5 +1,6 @@
 import scanpy as sc
 from anndata import AnnData
+import numpy as np
 import h5ad_preparation as prep
 
 
