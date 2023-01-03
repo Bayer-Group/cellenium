@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://0.0.0.0:5000",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@apollo/client": "^3.7.3",
     "@emotion/react": "^11.10.5",
@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.2",
-    "@graphql-codegen/client-preset": "^1.2.4"
+    "@graphql-codegen/client-preset": "^1.2.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7"
   }
 }
