@@ -1,11 +1,14 @@
 import React from 'react';
-import {LeftSideNavBar} from "../components";
+import {LeftSidePanel, RightSidePanel} from "../components";
+import {Group} from "@mantine/core";
 
 const StudyAnalysis = () => {
     return (
-        <div>
-            <LeftSideNavBar />
-        </div>
+        <Group position={'apart'}>
+            <LeftSidePanel />
+
+            <RightSidePanel />
+        </Group>
     );
 };
 

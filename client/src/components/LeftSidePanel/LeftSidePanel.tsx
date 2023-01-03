@@ -7,7 +7,6 @@ import {ReactComponent as CompareAnnotationsIcon} from "../../icons/annotation_c
 import {ReactComponent as UserAnnotationIcon} from "../../icons/user_annotation.svg";
 
 import {ReactComponent as CelleniumLogo} from "../../images/logo.svg";
-import {IconEdit} from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -78,35 +77,6 @@ const useStyles = createStyles((theme) => ({
         marginBottom: theme.spacing.xl,
     },
 
-    link: {
-        boxSizing: 'border-box',
-        display: 'block',
-        textDecoration: 'none',
-        borderTopRightRadius: theme.radius.md,
-        borderBottomRightRadius: theme.radius.md,
-        color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-        padding: `0 ${theme.spacing.md}px`,
-        fontSize: theme.fontSizes.sm,
-        marginRight: theme.spacing.md,
-        fontWeight: 500,
-        height: 44,
-        lineHeight: '44px',
-
-        '&:hover': {
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1],
-            color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-        },
-    },
-
-    linkActive: {
-        '&, &:hover': {
-            borderLeftColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor})
-                .background,
-            backgroundColor: theme.fn.variant({variant: 'filled', color: theme.primaryColor})
-                .background,
-            color: theme.white,
-        },
-    },
 }));
 
 const mainLinksMockdata = [
@@ -119,21 +89,8 @@ const mainLinksMockdata = [
 
 ];
 
-const linksMockdata = [
-    'Security',
-    'Settings',
-    'Dashboard',
-    'Releases',
-    'Account',
-    'Orders',
-    'Clients',
-    'Databases',
-    'Pull Requests',
-    'Open Issues',
-    'Wiki pages',
-];
 
-function LeftSideNavBar() {
+function LeftSidePanel() {
     const {classes, cx} = useStyles();
     const [active, setActive] = useState('asdf');
     const [activeLink, setActiveLink] = useState('Settings');
@@ -149,19 +106,6 @@ function LeftSideNavBar() {
         </Tooltip>
     ));
 
-    const links = linksMockdata.map((link) => (
-        <a
-            className={cx(classes.link, {[classes.linkActive]: activeLink === link})}
-            href="/"
-            onClick={(event) => {
-                event.preventDefault();
-                setActiveLink(link);
-            }}
-            key={link}
-        >
-            {link}
-        </a>
-    ));
 
     return (
         <Navbar height={'100vh'} width={{sm: 300}}>
@@ -176,12 +120,11 @@ function LeftSideNavBar() {
                     <Title order={4} className={classes.title}>
                         cellenium
                     </Title>
-
-                    {links}
+                    {}
                 </div>
             </Navbar.Section>
         </Navbar>
     );
 }
 
-export {LeftSideNavBar}
+export {LeftSidePanel}
