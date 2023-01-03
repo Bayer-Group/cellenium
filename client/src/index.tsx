@@ -11,6 +11,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
+import StudyAnalysis from "./pages/StudyAnalysis";
 
 export const apolloCache = new InMemoryCache();
 
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <SearchResults/>,
+  },
+    {
+    path: "/study_analysis",
+    element: <StudyAnalysis/>,
   },
 ]);
 const root = ReactDOM.createRoot(
