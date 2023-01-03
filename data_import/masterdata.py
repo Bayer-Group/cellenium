@@ -366,6 +366,7 @@ class Dataimport(object):
             .merge(ab_distinct, left_on=['tax_id', 'display_symbol'], right_on=['tax_id', 'display_symbol']) \
             .merge(gene_omics_ids, left_on='ensembl_gene_id', right_index=True)
         ab_gene[['protein_antibody_tag_id', 'gene_id']].to_sql('omics_protein_antibody_tag_gene', if_exists='append',
+                                                               index=False, con=self.engine)
 
         def import_masterdata(self):
             # self.import_mesh()
