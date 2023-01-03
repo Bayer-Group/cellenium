@@ -2,7 +2,8 @@ import scanpy as sc
 import numpy as np
 import os
 import scipy
-#import h5ad_preparation as prep
+import sfaira
+import h5ad_preparation as prep
 
 
 # downloads an H5AD file and returns the file handle
@@ -77,45 +78,48 @@ def make_umap(adata):
         if not "X_umap" in adata.obsm:
             adata = calculate_umap(adata)
     return adata
-
-        
+     
 # add cellenium stuff to hormonize metadata
-def add_cellenium_settings(adata):
-    prep.cellenium_settings(
-        adata,
-        main_sample_attributes=['celltype']
-        # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
-    )
+def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
+    prep.cellenium_settings(adata, main_sample_attributes=main_attributes)
+    # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
+    return adata
     
-        
+# add differential expression table to the anndata object
+def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
+    diff_exp = prep.calculate_differentially_expressed_genes(adata, attributes, layer)
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+    d['differentially_expressed_genes'] = diff_exp
+    return adata
+
+
 
 
 # pancreas url example
-adata = get_h5ad_from_url("https://figshare.com/ndownloader/files/24539828", "cellenium/scratch", "pancreas_atlas")
-adata = make_sparse(adata)
-adata = make_norm_expression(adata)
-adata = make_umap(adata)
+basedir = "cellenium/scratch"
+dat = get_h5ad_from_url("https://figshare.com/ndownloader/files/24539828", basedir, "pancreas_atlas")
 
 # lung sfaira example
-#basedir = ""
+#basedir = "cellenium/scratch/sfaira"
 #sfaira_id = "homosapiens_lungparenchyma_2019_10x3v2_madissoon_001_10.1186/s13059-019-1906-x"
-#adata = get_sfaira_h5ad(sfaira_id, "cellenium/scratch")
-#adata = make_sparse(adata)
-#adata = make_norm_expression(adata)
-#adata = make_umap(adata)
+#adata = get_sfaira_h5ad(sfaira_id, basedir)
 
+# process the file to make sure expression, umap and metadata exist
+dat = make_sparse(dat)
+dat = make_norm_expression(dat)
+dat = make_umap(dat)
+dat = add_cellenium_settings(dat, ["celltype","tech"])
 
+# for testing, subsample the dataset & calculate differential expression
+query = np.array([s in ["celseq","smarter"] for s in dat.obs.tech])
+sc.pp.highly_variable_genes(dat, n_top_genes=200, batch_key="tech", subset=True)
+dat_sub = dat[query].copy()
+dat_sub = dat_sub[:, dat.var_names].copy()
 
-# harmonize cellenium metadata        
-add_cellenium_settings(adata)
+# calculate differential expression
+dat_sub = add_differential_expression_tables(dat_sub, ['celltype',"tech"], 'norm_log_expression')
 
-
-# for testing, subsample the dataset
-query = np.array([s in ["celseq"] for s in adata.obs.tech])
-sc.pp.highly_variable_genes(adata, n_top_genes=200, batch_key="tech", subset=True)
-adata = adata[query].copy()
-adata = adata[:, adata.var_names].copy()
-
-
-prep.calculate_differentially_expressed_genes(adata, ['celltype'], 'norm_log_expression')
-adata.write('../scratch/pancreas_subset.h5ad')
+# write the final test file
+write_path = basedir + "/pancreas_subset.h5ad"
+dat_sub.write(write_path)
