@@ -7,11 +7,14 @@ import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheOb
 import {MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import {
-  createBrowserRouter,
-  RouterProvider,
+    createBrowserRouter,
+    RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
 import StudyAnalysis from "./pages/DifferentialExpressionAnalysis";
+import TestPage from "./pages/TestPage";
+import {GlobalLoading} from "./pages/GlobalLoading";
+import {RecoilRoot} from "recoil";
 
 export const apolloCache = new InMemoryCache();
 
@@ -21,17 +24,22 @@ const link = new HttpLink({
 
 const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache: apolloCache,
+    link
 });
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <SearchResults/>,
-  },
     {
-    path: "/study_analysis",
-    element: <StudyAnalysis/>,
-  },
+        path: "/",
+        element: <SearchResults/>,
+    },
+    {
+        path: "/study_analysis",
+        element: <StudyAnalysis/>,
+    },
+    {
+        path: "/test",
+        element: <TestPage/>,
+    },
 ]);
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -45,12 +53,19 @@ root.render(
                 fontFamily: 'Exo-bold, sans-serif'
             }
         }}>
-            <RouterProvider router={router} />
+            <RecoilRoot>
+                <React.Suspense fallback={<GlobalLoading/>}>
+                    <RouterProvider router={router}/>
+                </React.Suspense>
+            </RecoilRoot>
         </MantineProvider>
     </ApolloProvider>
-);
+)
+;
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+export {apolloClient};
