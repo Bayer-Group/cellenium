@@ -6,6 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject} from '@apollo/client';
 import {MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import SearchResults from "./pages/SearchResults";
 
 export const apolloCache = new InMemoryCache();
 
@@ -16,9 +21,17 @@ const link = new HttpLink({
 const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache: apolloCache,
 });
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <SearchResults/>,
+  },
+]);
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
+
 root.render(
     <ApolloProvider client={apolloClient}>
         <MantineProvider theme={{
@@ -27,7 +40,7 @@ root.render(
                 fontFamily: 'Exo-bold, sans-serif'
             }
         }}>
-            <App/>
+            <RouterProvider router={router} />
         </MantineProvider>
     </ApolloProvider>
 );
