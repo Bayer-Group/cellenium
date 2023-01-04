@@ -26,19 +26,27 @@ query StudyBasics {
         displayName
       }
     }
-    studySampleAnnotationUisList {
-      annotation {
+    studyAnnotationGroupUisList {
+      annotationGroup {
+        annotationGroupId
+        displayGroup
         annotationValuesList {
           annotationValueId
           displayValue
           color
-        }
-        annotationId
-        displayGroup
+        }        
       }
       isPrimary
       ordering
       differentialExpressionCalculated
+    }
+    studySamplesList {
+      studySampleId
+      displaySubsampling
+      studySampleProjectionsByStudyIdAndStudySampleIdList {
+        projectionType
+        projection
+      }
     }
   }
 }

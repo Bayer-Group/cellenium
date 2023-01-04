@@ -112,26 +112,26 @@ CREATE AGGREGATE boxplot(real) (
     );
 
 
--- box plot or violin plot:
+-- box plot calculated in the database:
 drop view if exists expression_by_annotation_boxplot;
 create view expression_by_annotation_boxplot
 as
+with sample_annotation as (select ssa.study_id, av.annotation_group_id, ssa.annotation_value_id, study_sample_id
+                           from study_sample_annotation ssa
+                                    join annotation_value av on ssa.annotation_value_id = av.annotation_value_id
+                                    cross join unnest(ssa.study_sample_ids) as study_sample_id)
 select e.study_layer_id,
        e.omics_id,
-       av.annotation_id,
-       av.annotation_value_id,
-       av.display_value,
-       av.color,
+       sa.annotation_group_id,
+       sa.annotation_value_id,
        array_agg(val_value) values,
        boxplot(val_value)
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
          cross join unnest(e.values) with ordinality as val(val_value, val_i)
          cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
-         join study_sample s on s.study_id = sl.study_id and s.study_sample_id = val_i
-         join study_sample_annotation ssa on s.study_id = ssa.study_id and s.study_sample_id = ssa.study_sample_id
-         join annotation_value av on ssa.annotation_value_id = av.annotation_value_id
+         join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sampleid_v
 where val_i = sampleid_i
-group by e.study_layer_id, e.omics_id, av.annotation_id, av.annotation_value_id;
+group by e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
 
--- select * from expression_by_annotation_boxplot where study_layer_id = 1 and omics_id = 2 and annotation_id = 1;
+-- select * from expression_by_annotation_boxplot where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;

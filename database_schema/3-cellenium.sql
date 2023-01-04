@@ -136,41 +136,35 @@ create unique index omics_region_uq on omics_region_gene (omics_id, gene, eviden
 
  */
 
--- e.g. in annotation category 'cell ontology name'
-CREATE TABLE annotation
+-- e.g. an annotation category, like 'cell ontology name'
+CREATE TABLE annotation_group
 (
-    annotation_id serial primary key,
-    h5ad_column   text not null,
-    display_group text not null
+    annotation_group_id serial primary key,
+    h5ad_column         text not null,
+    display_group       text not null
 );
-create unique index annotation_1 on annotation (h5ad_column);
+create unique index annotation_group_1 on annotation_group (h5ad_column);
 
--- e.g. in annotation category value 'lymphocyte'
+-- e.g. an annotation category value, like 'lymphocyte'
 CREATE TABLE annotation_value
 (
     annotation_value_id serial primary key,
-    annotation_id       int  not null,
-    constraint fk_annotation
-        FOREIGN KEY (annotation_id)
-            REFERENCES annotation (annotation_id),
+    annotation_group_id int  not null references annotation_group,
 
     h5ad_value          text not null,
     display_value       text not null,
     color               text
 );
-create unique index annotation_value_1 on annotation_value (annotation_id, h5ad_value);
+create unique index annotation_value_1 on annotation_value (annotation_group_id, h5ad_value);
 
-CREATE TABLE study_sample_annotation_ui
+CREATE TABLE study_annotation_group_ui
 (
     study_id                           int     not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    annotation_id                      int     not null,
-    constraint fk_annotation
-        FOREIGN KEY (annotation_id)
-            REFERENCES annotation (annotation_id),
+    annotation_group_id                int     not null references annotation_group,
 
     is_primary                         boolean not null,
     ordering                           int     not null,
@@ -207,21 +201,18 @@ CREATE TABLE study_sample_projection
 
 CREATE TABLE study_sample_annotation
 (
-    study_id            int not null,
+    study_id            int   not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    study_sample_id     int not null,
-    constraint fk_study_sample
-        FOREIGN KEY (study_id, study_sample_id)
-            REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
-
-
-    annotation_value_id int not null,
+    annotation_value_id int   not null,
     constraint fk_sample_annotation_value
         FOREIGN KEY (annotation_value_id)
-            REFERENCES annotation_value (annotation_value_id)
+            REFERENCES annotation_value (annotation_value_id),
+
+    -- the samples that are annotated with that value, e.g. that specific cell type
+    study_sample_ids    int[] not null
 );
 
 CREATE TABLE study_omics

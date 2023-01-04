@@ -18,21 +18,21 @@ export type Scalars = {
   JSON: any;
 };
 
-export type Annotation = Node & {
-  __typename?: 'Annotation';
-  annotationId: Scalars['Int'];
+export type AnnotationGroup = Node & {
+  __typename?: 'AnnotationGroup';
+  annotationGroupId: Scalars['Int'];
   /** Reads and enables pagination through a set of `AnnotationValue`. */
   annotationValuesList: Array<AnnotationValue>;
   displayGroup: Scalars['String'];
   h5AdColumn: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
-  /** Reads and enables pagination through a set of `StudySampleAnnotationUi`. */
-  studySampleAnnotationUisList: Array<StudySampleAnnotationUi>;
+  /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
+  studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
 };
 
 
-export type AnnotationAnnotationValuesListArgs = {
+export type AnnotationGroupAnnotationValuesListArgs = {
   condition?: InputMaybe<AnnotationValueCondition>;
   filter?: InputMaybe<AnnotationValueFilter>;
   first?: InputMaybe<Scalars['Int']>;
@@ -41,62 +41,75 @@ export type AnnotationAnnotationValuesListArgs = {
 };
 
 
-export type AnnotationStudySampleAnnotationUisListArgs = {
-  condition?: InputMaybe<StudySampleAnnotationUiCondition>;
-  filter?: InputMaybe<StudySampleAnnotationUiFilter>;
+export type AnnotationGroupStudyAnnotationGroupUisListArgs = {
+  condition?: InputMaybe<StudyAnnotationGroupUiCondition>;
+  filter?: InputMaybe<StudyAnnotationGroupUiFilter>;
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationUisOrderBy>>;
+  orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
 /**
- * A condition to be used against `Annotation` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
+ * A condition to be used against `AnnotationGroup` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
  */
-export type AnnotationCondition = {
-  /** Checks for equality with the object’s `annotationId` field. */
-  annotationId?: InputMaybe<Scalars['Int']>;
+export type AnnotationGroupCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `displayGroup` field. */
   displayGroup?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `h5AdColumn` field. */
   h5AdColumn?: InputMaybe<Scalars['String']>;
 };
 
-/** A filter to be used against `Annotation` object types. All fields are combined with a logical ‘and.’ */
-export type AnnotationFilter = {
+/** A filter to be used against `AnnotationGroup` object types. All fields are combined with a logical ‘and.’ */
+export type AnnotationGroupFilter = {
   /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<AnnotationFilter>>;
-  /** Filter by the object’s `annotationId` field. */
-  annotationId?: InputMaybe<IntFilter>;
+  and?: InputMaybe<Array<AnnotationGroupFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `displayGroup` field. */
   displayGroup?: InputMaybe<StringFilter>;
   /** Filter by the object’s `h5AdColumn` field. */
   h5AdColumn?: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not?: InputMaybe<AnnotationFilter>;
+  not?: InputMaybe<AnnotationGroupFilter>;
   /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<AnnotationFilter>>;
+  or?: InputMaybe<Array<AnnotationGroupFilter>>;
 };
 
-/** An input for mutations affecting `Annotation` */
-export type AnnotationInput = {
-  annotationId?: InputMaybe<Scalars['Int']>;
+/** An input for mutations affecting `AnnotationGroup` */
+export type AnnotationGroupInput = {
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
   displayGroup: Scalars['String'];
   h5AdColumn: Scalars['String'];
 };
 
-/** Represents an update to a `Annotation`. Fields that are set will be updated. */
-export type AnnotationPatch = {
-  annotationId?: InputMaybe<Scalars['Int']>;
+/** Represents an update to a `AnnotationGroup`. Fields that are set will be updated. */
+export type AnnotationGroupPatch = {
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
   displayGroup?: InputMaybe<Scalars['String']>;
   h5AdColumn?: InputMaybe<Scalars['String']>;
 };
 
+/** Methods to use when ordering `AnnotationGroup`. */
+export enum AnnotationGroupsOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
+  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
+  H5AdColumnAsc = 'H5AD_COLUMN_ASC',
+  H5AdColumnDesc = 'H5AD_COLUMN_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
+
 export type AnnotationValue = Node & {
   __typename?: 'AnnotationValue';
-  /** Reads a single `Annotation` that is related to this `AnnotationValue`. */
-  annotation?: Maybe<Annotation>;
-  annotationId: Scalars['Int'];
+  /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
+  annotationGroupId: Scalars['Int'];
   annotationValueId: Scalars['Int'];
   color?: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
@@ -132,8 +145,8 @@ export type AnnotationValueStudySampleAnnotationsListArgs = {
  * tested for equality and combined with a logical ‘and.’
  */
 export type AnnotationValueCondition = {
-  /** Checks for equality with the object’s `annotationId` field. */
-  annotationId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
   annotationValueId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `color` field. */
@@ -148,8 +161,8 @@ export type AnnotationValueCondition = {
 export type AnnotationValueFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<AnnotationValueFilter>>;
-  /** Filter by the object’s `annotationId` field. */
-  annotationId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `annotationValueId` field. */
   annotationValueId?: InputMaybe<IntFilter>;
   /** Filter by the object’s `color` field. */
@@ -166,7 +179,7 @@ export type AnnotationValueFilter = {
 
 /** An input for mutations affecting `AnnotationValue` */
 export type AnnotationValueInput = {
-  annotationId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
   annotationValueId?: InputMaybe<Scalars['Int']>;
   color?: InputMaybe<Scalars['String']>;
   displayValue: Scalars['String'];
@@ -175,7 +188,7 @@ export type AnnotationValueInput = {
 
 /** Represents an update to a `AnnotationValue`. Fields that are set will be updated. */
 export type AnnotationValuePatch = {
-  annotationId?: InputMaybe<Scalars['Int']>;
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
   annotationValueId?: InputMaybe<Scalars['Int']>;
   color?: InputMaybe<Scalars['String']>;
   displayValue?: InputMaybe<Scalars['String']>;
@@ -184,8 +197,8 @@ export type AnnotationValuePatch = {
 
 /** Methods to use when ordering `AnnotationValue`. */
 export enum AnnotationValuesOrderBy {
-  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
-  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
   AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
   ColorAsc = 'COLOR_ASC',
@@ -194,19 +207,6 @@ export enum AnnotationValuesOrderBy {
   DisplayValueDesc = 'DISPLAY_VALUE_DESC',
   H5AdValueAsc = 'H5AD_VALUE_ASC',
   H5AdValueDesc = 'H5AD_VALUE_DESC',
-  Natural = 'NATURAL',
-  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
-}
-
-/** Methods to use when ordering `Annotation`. */
-export enum AnnotationsOrderBy {
-  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
-  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
-  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
-  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
-  H5AdColumnAsc = 'H5AD_COLUMN_ASC',
-  H5AdColumnDesc = 'H5AD_COLUMN_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
@@ -276,41 +276,6 @@ export type BoxplotValue = {
   q1Whisker?: Maybe<Scalars['Float']>;
   q3?: Maybe<Scalars['Float']>;
   q3Whisker?: Maybe<Scalars['Float']>;
-};
-
-/** A filter to be used against `BoxplotValue` object types. All fields are combined with a logical ‘and.’ */
-export type BoxplotValueFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<BoxplotValueFilter>>;
-  /** Filter by the object’s `median` field. */
-  median?: InputMaybe<FloatFilter>;
-  /** Filter by the object’s `n` field. */
-  n?: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<BoxplotValueFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<BoxplotValueFilter>>;
-  /** Filter by the object’s `outliers` field. */
-  outliers?: InputMaybe<FloatListFilter>;
-  /** Filter by the object’s `q1` field. */
-  q1?: InputMaybe<FloatFilter>;
-  /** Filter by the object’s `q1Whisker` field. */
-  q1Whisker?: InputMaybe<FloatFilter>;
-  /** Filter by the object’s `q3` field. */
-  q3?: InputMaybe<FloatFilter>;
-  /** Filter by the object’s `q3Whisker` field. */
-  q3Whisker?: InputMaybe<FloatFilter>;
-};
-
-/** An input for mutations affecting `BoxplotValue` */
-export type BoxplotValueInput = {
-  median?: InputMaybe<Scalars['Float']>;
-  n?: InputMaybe<Scalars['Int']>;
-  outliers?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
-  q1?: InputMaybe<Scalars['Float']>;
-  q1Whisker?: InputMaybe<Scalars['Float']>;
-  q3?: InputMaybe<Scalars['Float']>;
-  q3Whisker?: InputMaybe<Scalars['Float']>;
 };
 
 export type Concept = Node & {
@@ -724,10 +689,10 @@ export enum ConceptsOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
-/** All input for the create `Annotation` mutation. */
-export type CreateAnnotationInput = {
-  /** The `Annotation` to be created by this mutation. */
-  annotation: AnnotationInput;
+/** All input for the create `AnnotationGroup` mutation. */
+export type CreateAnnotationGroupInput = {
+  /** The `AnnotationGroup` to be created by this mutation. */
+  annotationGroup: AnnotationGroupInput;
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
@@ -735,11 +700,11 @@ export type CreateAnnotationInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
-/** The output of our create `Annotation` mutation. */
-export type CreateAnnotationPayload = {
-  __typename?: 'CreateAnnotationPayload';
-  /** The `Annotation` that was created by this mutation. */
-  annotation?: Maybe<Annotation>;
+/** The output of our create `AnnotationGroup` mutation. */
+export type CreateAnnotationGroupPayload = {
+  __typename?: 'CreateAnnotationGroupPayload';
+  /** The `AnnotationGroup` that was created by this mutation. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
@@ -763,8 +728,8 @@ export type CreateAnnotationValueInput = {
 /** The output of our create `AnnotationValue` mutation. */
 export type CreateAnnotationValuePayload = {
   __typename?: 'CreateAnnotationValuePayload';
-  /** Reads a single `Annotation` that is related to this `AnnotationValue`. */
-  annotation?: Maybe<Annotation>;
+  /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was created by this mutation. */
   annotationValue?: Maybe<AnnotationValue>;
   /**
@@ -1079,6 +1044,35 @@ export type CreateOntologyPayload = {
   query?: Maybe<Query>;
 };
 
+/** All input for the create `StudyAnnotationGroupUi` mutation. */
+export type CreateStudyAnnotationGroupUiInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `StudyAnnotationGroupUi` to be created by this mutation. */
+  studyAnnotationGroupUi: StudyAnnotationGroupUiInput;
+};
+
+/** The output of our create `StudyAnnotationGroupUi` mutation. */
+export type CreateStudyAnnotationGroupUiPayload = {
+  __typename?: 'CreateStudyAnnotationGroupUiPayload';
+  /** Reads a single `AnnotationGroup` that is related to this `StudyAnnotationGroupUi`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Study` that is related to this `StudyAnnotationGroupUi`. */
+  study?: Maybe<Study>;
+  /** The `StudyAnnotationGroupUi` that was created by this mutation. */
+  studyAnnotationGroupUi?: Maybe<StudyAnnotationGroupUi>;
+};
+
 /** All input for the create `Study` mutation. */
 export type CreateStudyInput = {
   /**
@@ -1187,37 +1181,6 @@ export type CreateStudySampleAnnotationPayload = {
   study?: Maybe<Study>;
   /** The `StudySampleAnnotation` that was created by this mutation. */
   studySampleAnnotation?: Maybe<StudySampleAnnotation>;
-  /** Reads a single `StudySample` that is related to this `StudySampleAnnotation`. */
-  studyStudySample?: Maybe<StudySample>;
-};
-
-/** All input for the create `StudySampleAnnotationUi` mutation. */
-export type CreateStudySampleAnnotationUiInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  /** The `StudySampleAnnotationUi` to be created by this mutation. */
-  studySampleAnnotationUi: StudySampleAnnotationUiInput;
-};
-
-/** The output of our create `StudySampleAnnotationUi` mutation. */
-export type CreateStudySampleAnnotationUiPayload = {
-  __typename?: 'CreateStudySampleAnnotationUiPayload';
-  /** Reads a single `Annotation` that is related to this `StudySampleAnnotationUi`. */
-  annotation?: Maybe<Annotation>;
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-  /** Reads a single `Study` that is related to this `StudySampleAnnotationUi`. */
-  study?: Maybe<Study>;
-  /** The `StudySampleAnnotationUi` that was created by this mutation. */
-  studySampleAnnotationUi?: Maybe<StudySampleAnnotationUi>;
 };
 
 /** All input for the create `StudySample` mutation. */
@@ -1247,6 +1210,33 @@ export type CreateStudySamplePayload = {
   studySample?: Maybe<StudySample>;
 };
 
+/** All input for the create `StudySampleProjection` mutation. */
+export type CreateStudySampleProjectionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `StudySampleProjection` to be created by this mutation. */
+  studySampleProjection: StudySampleProjectionInput;
+};
+
+/** The output of our create `StudySampleProjection` mutation. */
+export type CreateStudySampleProjectionPayload = {
+  __typename?: 'CreateStudySampleProjectionPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `StudySampleProjection` that was created by this mutation. */
+  studySampleProjection?: Maybe<StudySampleProjection>;
+  /** Reads a single `StudySample` that is related to this `StudySampleProjection`. */
+  studyStudySample?: Maybe<StudySample>;
+};
+
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -1273,20 +1263,20 @@ export type DatetimeFilter = {
   notIn?: InputMaybe<Array<Scalars['Datetime']>>;
 };
 
-/** All input for the `deleteAnnotationByNodeId` mutation. */
-export type DeleteAnnotationByNodeIdInput = {
+/** All input for the `deleteAnnotationGroupByNodeId` mutation. */
+export type DeleteAnnotationGroupByNodeIdInput = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** The globally unique `ID` which will identify a single `Annotation` to be deleted. */
+  /** The globally unique `ID` which will identify a single `AnnotationGroup` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
-/** All input for the `deleteAnnotation` mutation. */
-export type DeleteAnnotationInput = {
-  annotationId: Scalars['Int'];
+/** All input for the `deleteAnnotationGroup` mutation. */
+export type DeleteAnnotationGroupInput = {
+  annotationGroupId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
@@ -1294,17 +1284,17 @@ export type DeleteAnnotationInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
-/** The output of our delete `Annotation` mutation. */
-export type DeleteAnnotationPayload = {
-  __typename?: 'DeleteAnnotationPayload';
-  /** The `Annotation` that was deleted by this mutation. */
-  annotation?: Maybe<Annotation>;
+/** The output of our delete `AnnotationGroup` mutation. */
+export type DeleteAnnotationGroupPayload = {
+  __typename?: 'DeleteAnnotationGroupPayload';
+  /** The `AnnotationGroup` that was deleted by this mutation. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
   clientMutationId?: Maybe<Scalars['String']>;
-  deletedAnnotationNodeId?: Maybe<Scalars['ID']>;
+  deletedAnnotationGroupNodeId?: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -1333,8 +1323,8 @@ export type DeleteAnnotationValueInput = {
 /** The output of our delete `AnnotationValue` mutation. */
 export type DeleteAnnotationValuePayload = {
   __typename?: 'DeleteAnnotationValuePayload';
-  /** Reads a single `Annotation` that is related to this `AnnotationValue`. */
-  annotation?: Maybe<Annotation>;
+  /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was deleted by this mutation. */
   annotationValue?: Maybe<AnnotationValue>;
   /**
@@ -1776,88 +1766,6 @@ export enum DifferentialExpressionsOrderBy {
   StudyIdDesc = 'STUDY_ID_DESC'
 }
 
-export type ExpressionByAnnotationBoxplot = {
-  __typename?: 'ExpressionByAnnotationBoxplot';
-  annotationId?: Maybe<Scalars['Int']>;
-  annotationValueId?: Maybe<Scalars['Int']>;
-  boxplot?: Maybe<BoxplotValue>;
-  color?: Maybe<Scalars['String']>;
-  displayValue?: Maybe<Scalars['String']>;
-  omicsId?: Maybe<Scalars['Int']>;
-  studyLayerId?: Maybe<Scalars['Int']>;
-  values?: Maybe<Array<Maybe<Scalars['Float']>>>;
-};
-
-/**
- * A condition to be used against `ExpressionByAnnotationBoxplot` object types. All
- * fields are tested for equality and combined with a logical ‘and.’
- */
-export type ExpressionByAnnotationBoxplotCondition = {
-  /** Checks for equality with the object’s `annotationId` field. */
-  annotationId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `boxplot` field. */
-  boxplot?: InputMaybe<BoxplotValueInput>;
-  /** Checks for equality with the object’s `color` field. */
-  color?: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `displayValue` field. */
-  displayValue?: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `omicsId` field. */
-  omicsId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyLayerId` field. */
-  studyLayerId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `values` field. */
-  values?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
-};
-
-/** A filter to be used against `ExpressionByAnnotationBoxplot` object types. All fields are combined with a logical ‘and.’ */
-export type ExpressionByAnnotationBoxplotFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
-  /** Filter by the object’s `annotationId` field. */
-  annotationId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `annotationValueId` field. */
-  annotationValueId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `boxplot` field. */
-  boxplot?: InputMaybe<BoxplotValueFilter>;
-  /** Filter by the object’s `color` field. */
-  color?: InputMaybe<StringFilter>;
-  /** Filter by the object’s `displayValue` field. */
-  displayValue?: InputMaybe<StringFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
-  /** Filter by the object’s `omicsId` field. */
-  omicsId?: InputMaybe<IntFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
-  /** Filter by the object’s `studyLayerId` field. */
-  studyLayerId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `values` field. */
-  values?: InputMaybe<FloatListFilter>;
-};
-
-/** Methods to use when ordering `ExpressionByAnnotationBoxplot`. */
-export enum ExpressionByAnnotationBoxplotsOrderBy {
-  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
-  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
-  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
-  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
-  BoxplotAsc = 'BOXPLOT_ASC',
-  BoxplotDesc = 'BOXPLOT_DESC',
-  ColorAsc = 'COLOR_ASC',
-  ColorDesc = 'COLOR_DESC',
-  DisplayValueAsc = 'DISPLAY_VALUE_ASC',
-  DisplayValueDesc = 'DISPLAY_VALUE_DESC',
-  Natural = 'NATURAL',
-  OmicsIdAsc = 'OMICS_ID_ASC',
-  OmicsIdDesc = 'OMICS_ID_DESC',
-  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
-  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
-  ValuesAsc = 'VALUES_ASC',
-  ValuesDesc = 'VALUES_DESC'
-}
-
 export type ExpressionByOmic = {
   __typename?: 'ExpressionByOmic';
   omicsId?: Maybe<Scalars['Int']>;
@@ -2059,8 +1967,8 @@ export type MinimumTreesResult = {
 export type Mutation = {
   __typename?: 'Mutation';
   conceptAllChildrenPaths?: Maybe<ConceptAllChildrenPathsPayload>;
-  /** Creates a single `Annotation`. */
-  createAnnotation?: Maybe<CreateAnnotationPayload>;
+  /** Creates a single `AnnotationGroup`. */
+  createAnnotationGroup?: Maybe<CreateAnnotationGroupPayload>;
   /** Creates a single `AnnotationValue`. */
   createAnnotationValue?: Maybe<CreateAnnotationValuePayload>;
   /** Creates a single `Concept`. */
@@ -2087,6 +1995,8 @@ export type Mutation = {
   createOntology?: Maybe<CreateOntologyPayload>;
   /** Creates a single `Study`. */
   createStudy?: Maybe<CreateStudyPayload>;
+  /** Creates a single `StudyAnnotationGroupUi`. */
+  createStudyAnnotationGroupUi?: Maybe<CreateStudyAnnotationGroupUiPayload>;
   /** Creates a single `StudyLayer`. */
   createStudyLayer?: Maybe<CreateStudyLayerPayload>;
   /** Creates a single `StudyOmic`. */
@@ -2095,12 +2005,12 @@ export type Mutation = {
   createStudySample?: Maybe<CreateStudySamplePayload>;
   /** Creates a single `StudySampleAnnotation`. */
   createStudySampleAnnotation?: Maybe<CreateStudySampleAnnotationPayload>;
-  /** Creates a single `StudySampleAnnotationUi`. */
-  createStudySampleAnnotationUi?: Maybe<CreateStudySampleAnnotationUiPayload>;
-  /** Deletes a single `Annotation` using a unique key. */
-  deleteAnnotation?: Maybe<DeleteAnnotationPayload>;
-  /** Deletes a single `Annotation` using its globally unique id. */
-  deleteAnnotationByNodeId?: Maybe<DeleteAnnotationPayload>;
+  /** Creates a single `StudySampleProjection`. */
+  createStudySampleProjection?: Maybe<CreateStudySampleProjectionPayload>;
+  /** Deletes a single `AnnotationGroup` using a unique key. */
+  deleteAnnotationGroup?: Maybe<DeleteAnnotationGroupPayload>;
+  /** Deletes a single `AnnotationGroup` using its globally unique id. */
+  deleteAnnotationGroupByNodeId?: Maybe<DeleteAnnotationGroupPayload>;
   /** Deletes a single `AnnotationValue` using a unique key. */
   deleteAnnotationValue?: Maybe<DeleteAnnotationValuePayload>;
   /** Deletes a single `AnnotationValue` using its globally unique id. */
@@ -2141,10 +2051,10 @@ export type Mutation = {
   deleteStudySample?: Maybe<DeleteStudySamplePayload>;
   /** Deletes a single `StudySample` using its globally unique id. */
   deleteStudySampleByNodeId?: Maybe<DeleteStudySamplePayload>;
-  /** Updates a single `Annotation` using a unique key and a patch. */
-  updateAnnotation?: Maybe<UpdateAnnotationPayload>;
-  /** Updates a single `Annotation` using its globally unique id and a patch. */
-  updateAnnotationByNodeId?: Maybe<UpdateAnnotationPayload>;
+  /** Updates a single `AnnotationGroup` using a unique key and a patch. */
+  updateAnnotationGroup?: Maybe<UpdateAnnotationGroupPayload>;
+  /** Updates a single `AnnotationGroup` using its globally unique id and a patch. */
+  updateAnnotationGroupByNodeId?: Maybe<UpdateAnnotationGroupPayload>;
   /** Updates a single `AnnotationValue` using a unique key and a patch. */
   updateAnnotationValue?: Maybe<UpdateAnnotationValuePayload>;
   /** Updates a single `AnnotationValue` using its globally unique id and a patch. */
@@ -2195,8 +2105,8 @@ export type MutationConceptAllChildrenPathsArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreateAnnotationArgs = {
-  input: CreateAnnotationInput;
+export type MutationCreateAnnotationGroupArgs = {
+  input: CreateAnnotationGroupInput;
 };
 
 
@@ -2279,6 +2189,12 @@ export type MutationCreateStudyArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateStudyAnnotationGroupUiArgs = {
+  input: CreateStudyAnnotationGroupUiInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyLayerArgs = {
   input: CreateStudyLayerInput;
 };
@@ -2303,20 +2219,20 @@ export type MutationCreateStudySampleAnnotationArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreateStudySampleAnnotationUiArgs = {
-  input: CreateStudySampleAnnotationUiInput;
+export type MutationCreateStudySampleProjectionArgs = {
+  input: CreateStudySampleProjectionInput;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationDeleteAnnotationArgs = {
-  input: DeleteAnnotationInput;
+export type MutationDeleteAnnotationGroupArgs = {
+  input: DeleteAnnotationGroupInput;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationDeleteAnnotationByNodeIdArgs = {
-  input: DeleteAnnotationByNodeIdInput;
+export type MutationDeleteAnnotationGroupByNodeIdArgs = {
+  input: DeleteAnnotationGroupByNodeIdInput;
 };
 
 
@@ -2441,14 +2357,14 @@ export type MutationDeleteStudySampleByNodeIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationUpdateAnnotationArgs = {
-  input: UpdateAnnotationInput;
+export type MutationUpdateAnnotationGroupArgs = {
+  input: UpdateAnnotationGroupInput;
 };
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationUpdateAnnotationByNodeIdArgs = {
-  input: UpdateAnnotationByNodeIdInput;
+export type MutationUpdateAnnotationGroupByNodeIdArgs = {
+  input: UpdateAnnotationGroupByNodeIdInput;
 };
 
 
@@ -3243,6 +3159,38 @@ export type OntologyPatch = {
   ontid?: InputMaybe<Scalars['Int']>;
 };
 
+export enum ProjectionType {
+  Pca = 'PCA',
+  Tsne = 'TSNE',
+  Umap = 'UMAP'
+}
+
+/** A filter to be used against ProjectionType fields. All fields are combined with a logical ‘and.’ */
+export type ProjectionTypeFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<ProjectionType>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<ProjectionType>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<ProjectionType>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<ProjectionType>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<ProjectionType>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<ProjectionType>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<ProjectionType>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<ProjectionType>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<ProjectionType>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<ProjectionType>>;
+};
+
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
   __typename?: 'Query';
@@ -3251,16 +3199,16 @@ export type Query = Node & {
   _conceptHierarchyMinimumTreesImpl?: Maybe<MinimumTreesResult>;
   _finalBoxplot?: Maybe<BoxplotValue>;
   _semanticOrderImpl?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  annotation?: Maybe<Annotation>;
-  /** Reads a single `Annotation` using its globally unique `ID`. */
-  annotationByNodeId?: Maybe<Annotation>;
+  annotationGroup?: Maybe<AnnotationGroup>;
+  /** Reads a single `AnnotationGroup` using its globally unique `ID`. */
+  annotationGroupByNodeId?: Maybe<AnnotationGroup>;
+  /** Reads a set of `AnnotationGroup`. */
+  annotationGroupsList?: Maybe<Array<AnnotationGroup>>;
   annotationValue?: Maybe<AnnotationValue>;
   /** Reads a single `AnnotationValue` using its globally unique `ID`. */
   annotationValueByNodeId?: Maybe<AnnotationValue>;
   /** Reads a set of `AnnotationValue`. */
   annotationValuesList?: Maybe<Array<AnnotationValue>>;
-  /** Reads a set of `Annotation`. */
-  annotationsList?: Maybe<Array<Annotation>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
   autocompleteList?: Maybe<Array<AutocompleteResult>>;
   concept?: Maybe<Concept>;
@@ -3278,8 +3226,6 @@ export type Query = Node & {
   conceptsList?: Maybe<Array<Concept>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList?: Maybe<Array<DifferentialExpression>>;
-  /** Reads a set of `ExpressionByAnnotationBoxplot`. */
-  expressionByAnnotationBoxplotsList?: Maybe<Array<ExpressionByAnnotationBoxplot>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList?: Maybe<Array<ExpressionByOmic>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -3326,6 +3272,8 @@ export type Query = Node & {
   /** Reads a set of `Study`. */
   studiesList?: Maybe<Array<Study>>;
   study?: Maybe<Study>;
+  /** Reads a set of `StudyAnnotationGroupUi`. */
+  studyAnnotationGroupUisList?: Maybe<Array<StudyAnnotationGroupUi>>;
   /** Reads a single `Study` using its globally unique `ID`. */
   studyByNodeId?: Maybe<Study>;
   studyLayer?: Maybe<StudyLayer>;
@@ -3338,12 +3286,12 @@ export type Query = Node & {
   /** Reads a set of `StudyOverview`. */
   studyOverviewsList?: Maybe<Array<StudyOverview>>;
   studySample?: Maybe<StudySample>;
-  /** Reads a set of `StudySampleAnnotationUi`. */
-  studySampleAnnotationUisList?: Maybe<Array<StudySampleAnnotationUi>>;
   /** Reads a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList?: Maybe<Array<StudySampleAnnotation>>;
   /** Reads a single `StudySample` using its globally unique `ID`. */
   studySampleByNodeId?: Maybe<StudySample>;
+  /** Reads a set of `StudySampleProjection`. */
+  studySampleProjectionsList?: Maybe<Array<StudySampleProjection>>;
   /** Reads a set of `StudySample`. */
   studySamplesList?: Maybe<Array<StudySample>>;
   /** Reads a set of `TreeDisease`. */
@@ -3384,14 +3332,24 @@ export type Query_SemanticOrderImplArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryAnnotationArgs = {
-  annotationId: Scalars['Int'];
+export type QueryAnnotationGroupArgs = {
+  annotationGroupId: Scalars['Int'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryAnnotationByNodeIdArgs = {
+export type QueryAnnotationGroupByNodeIdArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryAnnotationGroupsListArgs = {
+  condition?: InputMaybe<AnnotationGroupCondition>;
+  filter?: InputMaybe<AnnotationGroupFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<AnnotationGroupsOrderBy>>;
 };
 
 
@@ -3414,16 +3372,6 @@ export type QueryAnnotationValuesListArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<AnnotationValuesOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryAnnotationsListArgs = {
-  condition?: InputMaybe<AnnotationCondition>;
-  filter?: InputMaybe<AnnotationFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<AnnotationsOrderBy>>;
 };
 
 
@@ -3511,16 +3459,6 @@ export type QueryDifferentialExpressionsListArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryExpressionByAnnotationBoxplotsListArgs = {
-  condition?: InputMaybe<ExpressionByAnnotationBoxplotCondition>;
-  filter?: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ExpressionByAnnotationBoxplotsOrderBy>>;
 };
 
 
@@ -3708,6 +3646,16 @@ export type QueryStudyArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyAnnotationGroupUisListArgs = {
+  condition?: InputMaybe<StudyAnnotationGroupUiCondition>;
+  filter?: InputMaybe<StudyAnnotationGroupUiFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
@@ -3763,16 +3711,6 @@ export type QueryStudySampleArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryStudySampleAnnotationUisListArgs = {
-  condition?: InputMaybe<StudySampleAnnotationUiCondition>;
-  filter?: InputMaybe<StudySampleAnnotationUiFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationUisOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationsListArgs = {
   condition?: InputMaybe<StudySampleAnnotationCondition>;
   filter?: InputMaybe<StudySampleAnnotationFilter>;
@@ -3785,6 +3723,16 @@ export type QueryStudySampleAnnotationsListArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleByNodeIdArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryStudySampleProjectionsListArgs = {
+  condition?: InputMaybe<StudySampleProjectionCondition>;
+  filter?: InputMaybe<StudySampleProjectionFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
 
 
@@ -3996,14 +3944,14 @@ export type Study = Node & {
   plotCoords?: Maybe<Scalars['JSON']>;
   projectionCellCoords?: Maybe<Scalars['JSON']>;
   projectionCellIndices?: Maybe<Scalars['JSON']>;
+  /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
+  studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
   studyId: Scalars['Int'];
   /** Reads and enables pagination through a set of `StudyLayer`. */
   studyLayersList: Array<StudyLayer>;
   studyName: Scalars['String'];
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsList: Array<StudyOmic>;
-  /** Reads and enables pagination through a set of `StudySampleAnnotationUi`. */
-  studySampleAnnotationUisList: Array<StudySampleAnnotationUi>;
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
   /** Reads and enables pagination through a set of `StudySample`. */
@@ -4018,6 +3966,15 @@ export type StudyDifferentialExpressionsListArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
+};
+
+
+export type StudyStudyAnnotationGroupUisListArgs = {
+  condition?: InputMaybe<StudyAnnotationGroupUiCondition>;
+  filter?: InputMaybe<StudyAnnotationGroupUiFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
 
@@ -4039,15 +3996,6 @@ export type StudyStudyOmicsListArgs = {
 };
 
 
-export type StudyStudySampleAnnotationUisListArgs = {
-  condition?: InputMaybe<StudySampleAnnotationUiCondition>;
-  filter?: InputMaybe<StudySampleAnnotationUiFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationUisOrderBy>>;
-};
-
-
 export type StudyStudySampleAnnotationsListArgs = {
   condition?: InputMaybe<StudySampleAnnotationCondition>;
   filter?: InputMaybe<StudySampleAnnotationFilter>;
@@ -4064,6 +4012,80 @@ export type StudyStudySamplesListArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudySamplesOrderBy>>;
 };
+
+export type StudyAnnotationGroupUi = {
+  __typename?: 'StudyAnnotationGroupUi';
+  /** Reads a single `AnnotationGroup` that is related to this `StudyAnnotationGroupUi`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
+  annotationGroupId: Scalars['Int'];
+  differentialExpressionCalculated: Scalars['Boolean'];
+  isPrimary: Scalars['Boolean'];
+  ordering: Scalars['Int'];
+  /** Reads a single `Study` that is related to this `StudyAnnotationGroupUi`. */
+  study?: Maybe<Study>;
+  studyId: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `StudyAnnotationGroupUi` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyAnnotationGroupUiCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
+  differentialExpressionCalculated?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `isPrimary` field. */
+  isPrimary?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `ordering` field. */
+  ordering?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyAnnotationGroupUi` object types. All fields are combined with a logical ‘and.’ */
+export type StudyAnnotationGroupUiFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<StudyAnnotationGroupUiFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `differentialExpressionCalculated` field. */
+  differentialExpressionCalculated?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `isPrimary` field. */
+  isPrimary?: InputMaybe<BooleanFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<StudyAnnotationGroupUiFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<StudyAnnotationGroupUiFilter>>;
+  /** Filter by the object’s `ordering` field. */
+  ordering?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId?: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `StudyAnnotationGroupUi` */
+export type StudyAnnotationGroupUiInput = {
+  annotationGroupId: Scalars['Int'];
+  differentialExpressionCalculated: Scalars['Boolean'];
+  isPrimary: Scalars['Boolean'];
+  ordering: Scalars['Int'];
+  studyId: Scalars['Int'];
+};
+
+/** Methods to use when ordering `StudyAnnotationGroupUi`. */
+export enum StudyAnnotationGroupUisOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
+  IsPrimaryAsc = 'IS_PRIMARY_ASC',
+  IsPrimaryDesc = 'IS_PRIMARY_DESC',
+  Natural = 'NATURAL',
+  OrderingAsc = 'ORDERING_ASC',
+  OrderingDesc = 'ORDERING_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
 
 /** A condition to be used against `Study` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type StudyCondition = {
@@ -4437,18 +4459,18 @@ export type StudySample = Node & {
   /** Reads a single `Study` that is related to this `StudySample`. */
   study?: Maybe<Study>;
   studyId: Scalars['Int'];
-  /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
-  studySampleAnnotationsByStudyIdAndStudySampleIdList: Array<StudySampleAnnotation>;
   studySampleId: Scalars['Int'];
+  /** Reads and enables pagination through a set of `StudySampleProjection`. */
+  studySampleProjectionsByStudyIdAndStudySampleIdList: Array<StudySampleProjection>;
 };
 
 
-export type StudySampleStudySampleAnnotationsByStudyIdAndStudySampleIdListArgs = {
-  condition?: InputMaybe<StudySampleAnnotationCondition>;
-  filter?: InputMaybe<StudySampleAnnotationFilter>;
+export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdListArgs = {
+  condition?: InputMaybe<StudySampleProjectionCondition>;
+  filter?: InputMaybe<StudySampleProjectionFilter>;
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
+  orderBy?: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
 
 export type StudySampleAnnotation = {
@@ -4459,9 +4481,7 @@ export type StudySampleAnnotation = {
   /** Reads a single `Study` that is related to this `StudySampleAnnotation`. */
   study?: Maybe<Study>;
   studyId: Scalars['Int'];
-  studySampleId: Scalars['Int'];
-  /** Reads a single `StudySample` that is related to this `StudySampleAnnotation`. */
-  studyStudySample?: Maybe<StudySample>;
+  studySampleIds: Array<Maybe<Scalars['Int']>>;
 };
 
 /**
@@ -4473,8 +4493,8 @@ export type StudySampleAnnotationCondition = {
   annotationValueId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studySampleId` field. */
-  studySampleId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studySampleIds` field. */
+  studySampleIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** A filter to be used against `StudySampleAnnotation` object types. All fields are combined with a logical ‘and.’ */
@@ -4489,90 +4509,16 @@ export type StudySampleAnnotationFilter = {
   or?: InputMaybe<Array<StudySampleAnnotationFilter>>;
   /** Filter by the object’s `studyId` field. */
   studyId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studySampleId` field. */
-  studySampleId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studySampleIds` field. */
+  studySampleIds?: InputMaybe<IntListFilter>;
 };
 
 /** An input for mutations affecting `StudySampleAnnotation` */
 export type StudySampleAnnotationInput = {
   annotationValueId: Scalars['Int'];
   studyId: Scalars['Int'];
-  studySampleId: Scalars['Int'];
+  studySampleIds: Array<InputMaybe<Scalars['Int']>>;
 };
-
-export type StudySampleAnnotationUi = {
-  __typename?: 'StudySampleAnnotationUi';
-  /** Reads a single `Annotation` that is related to this `StudySampleAnnotationUi`. */
-  annotation?: Maybe<Annotation>;
-  annotationId: Scalars['Int'];
-  differentialExpressionCalculated: Scalars['Boolean'];
-  isPrimary: Scalars['Boolean'];
-  ordering: Scalars['Int'];
-  /** Reads a single `Study` that is related to this `StudySampleAnnotationUi`. */
-  study?: Maybe<Study>;
-  studyId: Scalars['Int'];
-};
-
-/**
- * A condition to be used against `StudySampleAnnotationUi` object types. All
- * fields are tested for equality and combined with a logical ‘and.’
- */
-export type StudySampleAnnotationUiCondition = {
-  /** Checks for equality with the object’s `annotationId` field. */
-  annotationId?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated?: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `isPrimary` field. */
-  isPrimary?: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `ordering` field. */
-  ordering?: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId?: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `StudySampleAnnotationUi` object types. All fields are combined with a logical ‘and.’ */
-export type StudySampleAnnotationUiFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<StudySampleAnnotationUiFilter>>;
-  /** Filter by the object’s `annotationId` field. */
-  annotationId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `isPrimary` field. */
-  isPrimary?: InputMaybe<BooleanFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<StudySampleAnnotationUiFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<StudySampleAnnotationUiFilter>>;
-  /** Filter by the object’s `ordering` field. */
-  ordering?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId?: InputMaybe<IntFilter>;
-};
-
-/** An input for mutations affecting `StudySampleAnnotationUi` */
-export type StudySampleAnnotationUiInput = {
-  annotationId: Scalars['Int'];
-  differentialExpressionCalculated: Scalars['Boolean'];
-  isPrimary: Scalars['Boolean'];
-  ordering: Scalars['Int'];
-  studyId: Scalars['Int'];
-};
-
-/** Methods to use when ordering `StudySampleAnnotationUi`. */
-export enum StudySampleAnnotationUisOrderBy {
-  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
-  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
-  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
-  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
-  IsPrimaryAsc = 'IS_PRIMARY_ASC',
-  IsPrimaryDesc = 'IS_PRIMARY_DESC',
-  Natural = 'NATURAL',
-  OrderingAsc = 'ORDERING_ASC',
-  OrderingDesc = 'ORDERING_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC'
-}
 
 /** Methods to use when ordering `StudySampleAnnotation`. */
 export enum StudySampleAnnotationsOrderBy {
@@ -4581,8 +4527,8 @@ export enum StudySampleAnnotationsOrderBy {
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
-  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
-  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
+  StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC'
 }
 
 /**
@@ -4633,6 +4579,70 @@ export type StudySamplePatch = {
   studyId?: InputMaybe<Scalars['Int']>;
   studySampleId?: InputMaybe<Scalars['Int']>;
 };
+
+export type StudySampleProjection = {
+  __typename?: 'StudySampleProjection';
+  projection: Array<Maybe<Scalars['Float']>>;
+  projectionType: ProjectionType;
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
+  /** Reads a single `StudySample` that is related to this `StudySampleProjection`. */
+  studyStudySample?: Maybe<StudySample>;
+};
+
+/**
+ * A condition to be used against `StudySampleProjection` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type StudySampleProjectionCondition = {
+  /** Checks for equality with the object’s `projection` field. */
+  projection?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
+  /** Checks for equality with the object’s `projectionType` field. */
+  projectionType?: InputMaybe<ProjectionType>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studySampleId` field. */
+  studySampleId?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudySampleProjection` object types. All fields are combined with a logical ‘and.’ */
+export type StudySampleProjectionFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<StudySampleProjectionFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<StudySampleProjectionFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<StudySampleProjectionFilter>>;
+  /** Filter by the object’s `projection` field. */
+  projection?: InputMaybe<FloatListFilter>;
+  /** Filter by the object’s `projectionType` field. */
+  projectionType?: InputMaybe<ProjectionTypeFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studySampleId` field. */
+  studySampleId?: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `StudySampleProjection` */
+export type StudySampleProjectionInput = {
+  projection: Array<InputMaybe<Scalars['Float']>>;
+  projectionType: ProjectionType;
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
+};
+
+/** Methods to use when ordering `StudySampleProjection`. */
+export enum StudySampleProjectionsOrderBy {
+  Natural = 'NATURAL',
+  ProjectionAsc = 'PROJECTION_ASC',
+  ProjectionDesc = 'PROJECTION_DESC',
+  ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
+  ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
+}
 
 /** Methods to use when ordering `StudySample`. */
 export enum StudySamplesOrderBy {
@@ -4771,36 +4781,36 @@ export enum TreeTissuesOrderBy {
   ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC'
 }
 
-/** All input for the `updateAnnotationByNodeId` mutation. */
-export type UpdateAnnotationByNodeIdInput = {
+/** All input for the `updateAnnotationGroupByNodeId` mutation. */
+export type UpdateAnnotationGroupByNodeIdInput = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** The globally unique `ID` which will identify a single `Annotation` to be updated. */
+  /** The globally unique `ID` which will identify a single `AnnotationGroup` to be updated. */
   nodeId: Scalars['ID'];
-  /** An object where the defined keys will be set on the `Annotation` being updated. */
-  patch: AnnotationPatch;
+  /** An object where the defined keys will be set on the `AnnotationGroup` being updated. */
+  patch: AnnotationGroupPatch;
 };
 
-/** All input for the `updateAnnotation` mutation. */
-export type UpdateAnnotationInput = {
-  annotationId: Scalars['Int'];
+/** All input for the `updateAnnotationGroup` mutation. */
+export type UpdateAnnotationGroupInput = {
+  annotationGroupId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** An object where the defined keys will be set on the `Annotation` being updated. */
-  patch: AnnotationPatch;
+  /** An object where the defined keys will be set on the `AnnotationGroup` being updated. */
+  patch: AnnotationGroupPatch;
 };
 
-/** The output of our update `Annotation` mutation. */
-export type UpdateAnnotationPayload = {
-  __typename?: 'UpdateAnnotationPayload';
-  /** The `Annotation` that was updated by this mutation. */
-  annotation?: Maybe<Annotation>;
+/** The output of our update `AnnotationGroup` mutation. */
+export type UpdateAnnotationGroupPayload = {
+  __typename?: 'UpdateAnnotationGroupPayload';
+  /** The `AnnotationGroup` that was updated by this mutation. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
@@ -4838,8 +4848,8 @@ export type UpdateAnnotationValueInput = {
 /** The output of our update `AnnotationValue` mutation. */
 export type UpdateAnnotationValuePayload = {
   __typename?: 'UpdateAnnotationValuePayload';
-  /** Reads a single `Annotation` that is related to this `AnnotationValue`. */
-  annotation?: Maybe<Annotation>;
+  /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
+  annotationGroup?: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was updated by this mutation. */
   annotationValue?: Maybe<AnnotationValue>;
   /**
@@ -5260,14 +5270,14 @@ export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StudiesQuery = { __typename?: 'Query', studiesList?: Array<{ __typename?: 'Study', attributeValueFreq?: any | null, cellCount?: number | null, clusterColorMap?: any | null, clusterHulls?: any | null, description?: string | null }> | null };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studySampleAnnotationUisList: Array<{ __typename?: 'StudySampleAnnotationUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotation?: { __typename?: 'Annotation', annotationId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> };
 
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study?: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studySampleAnnotationUisList: Array<{ __typename?: 'StudySampleAnnotationUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotation?: { __typename?: 'Annotation', annotationId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> } | null };
+export type StudyBasicsQuery = { __typename?: 'Query', study?: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> } | null };
 
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
@@ -5284,15 +5294,15 @@ export const StudyBasicsFragmentDoc = gql`
       displayName
     }
   }
-  studySampleAnnotationUisList {
-    annotation {
+  studyAnnotationGroupUisList {
+    annotationGroup {
+      annotationGroupId
+      displayGroup
       annotationValuesList {
         annotationValueId
         displayValue
         color
       }
-      annotationId
-      displayGroup
     }
     isPrimary
     ordering
