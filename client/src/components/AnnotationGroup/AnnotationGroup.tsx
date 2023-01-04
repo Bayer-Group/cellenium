@@ -8,7 +8,7 @@ type Props = {
 function AnnotationGroup({annotations}:Props) {
     const [selected, setSelected] = useState<string>(annotations[0].label)
     return (
-        <Stack>
+        <Stack spacing={'xs'}>
             {annotations.map((annot)=>{
                 return <Annotation onSelect={setSelected} label={annot.label} color={annot.color} selected={annot.label===selected}/>
             })}
