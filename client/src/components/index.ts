@@ -7,6 +7,7 @@ import {AnnotationGroupSelectBox} from "./AnnotationGroupSelectBox/AnnotationGro
 import {AnnotationGroup} from "./AnnotationGroup/AnnotationGroup";
 import {Annotation} from "./Annotation/Annotation";
 import {DEGTable} from "./DEGTable/DEGTable";
+import {AddGene} from "./AddGene/AddGene";
 
 export {
     DEGTable,
@@ -18,4 +19,5 @@ export {
     AnnotationGroupSelectBox,
     AnnotationGroup,
     Annotation,
+    AddGene
 }
