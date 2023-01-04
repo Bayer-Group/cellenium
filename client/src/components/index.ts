@@ -6,8 +6,10 @@ import {RightSidePanel} from "./RightSidePanel/RightSidePanel";
 import {AnnotationGroupSelectBox} from "./AnnotationGroupSelectBox/AnnotationGroupSelectBox";
 import {AnnotationGroup} from "./AnnotationGroup/AnnotationGroup";
 import {Annotation} from "./Annotation/Annotation";
+import {DEGTable} from "./DEGTable/DEGTable";
 
 export {
+    DEGTable,
     NavBar,
     StudyCard,
     SearchBar,
