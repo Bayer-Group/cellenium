@@ -94,7 +94,7 @@ const viewLinks = [
 ];
 
 type Props = {
-    children?: JSX.Element[];
+    children?: JSX.Element[]|JSX.Element;
 }
 
 function LeftSidePanel({children}: Props) {

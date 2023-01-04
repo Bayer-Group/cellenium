@@ -1,6 +1,6 @@
 import React from 'react';
 import {AnnotationGroup, AnnotationGroupSelectBox, DEGTable, LeftSidePanel, RightSidePanel} from "../components";
-import {Group} from "@mantine/core";
+import {Group, Stack} from "@mantine/core";
 
 const ANNOTATIONS = [
     {label: "bone cell", color: "#1f77b4"},
@@ -12,95 +12,52 @@ const ANNOTATIONS = [
     {label: "pericyte cell", color: "#e377c2"}
 ]
 
-const DEG = [
+const DEG: object[] = [
     {
-        "name": "Athena Weissnat",
-        "company": "Little - Rippin",
-        "email": "Elouise.Prohaska@yahoo.com"
+        symbol: 'BRD4',
+        padj: 0.001342,
+        log2fc: 2132.23
     },
-    {
-        "name": "Deangelo Runolfsson",
-        "company": "Greenfelder - Krajcik",
-        "email": "Kadin_Trantow87@yahoo.com"
+        {
+        symbol: 'PTK2',
+        padj: 0.001342,
+        log2fc: 2.23
     },
-    {
-        "name": "Danny Carter",
-        "company": "Kohler and Sons",
-        "email": "Marina3@hotmail.com"
+        {
+        symbol: 'CDK2',
+        padj: 0.001342,
+        log2fc: 24
     },
-    {
-        "name": "Trace Tremblay PhD",
-        "company": "Crona, Aufderhar and Senger",
-        "email": "Antonina.Pouros@yahoo.com"
+        {
+        symbol: 'EGFR',
+        padj: 0.001342,
+        log2fc: 1
     },
-    {
-        "name": "Derek Dibbert",
-        "company": "Gottlieb LLC",
-        "email": "Abagail29@hotmail.com"
+        {
+        symbol: 'KRAS',
+        padj: 0.001342,
+        log2fc: 3.324
     },
-    {
-        "name": "Viola Bernhard",
-        "company": "Funk, Rohan and Kreiger",
-        "email": "Jamie23@hotmail.com"
+        {
+        symbol: 'KLK3',
+        padj: 0.00000000000000001342,
+        log2fc: 432.3231322
     },
-    {
-        "name": "Austin Jacobi",
-        "company": "Botsford - Corwin",
-        "email": "Genesis42@yahoo.com"
+        {
+        symbol: 'PLK1',
+        padj: 0.001342,
+        log2fc: 2132.23
     },
-    {
-        "name": "Hershel Mosciski",
-        "company": "Okuneva, Farrell and Kilback",
-        "email": "Idella.Stehr28@yahoo.com"
-    },
-    {
-        "name": "Mylene Ebert",
-        "company": "Kirlin and Sons",
-        "email": "Hildegard17@hotmail.com"
-    },
-    {
-        "name": "Lou Trantow",
-        "company": "Parisian - Lemke",
-        "email": "Hillard.Barrows1@hotmail.com"
-    },
-    {
-        "name": "Dariana Weimann",
-        "company": "Schowalter - Donnelly",
-        "email": "Colleen80@gmail.com"
-    },
-    {
-        "name": "Dr. Christy Herman",
-        "company": "VonRueden - Labadie",
-        "email": "Lilyan98@gmail.com"
-    },
-    {
-        "name": "Katelin Schuster",
-        "company": "Jacobson - Smitham",
-        "email": "Erich_Brekke76@gmail.com"
-    },
-    {
-        "name": "Melyna Macejkovic",
-        "company": "Schuster LLC",
-        "email": "Kylee4@yahoo.com"
-    },
-    {
-        "name": "Pinkie Rice",
-        "company": "Wolf, Trantow and Zulauf",
-        "email": "Fiona.Kutch@hotmail.com"
-    },
-    {
-        "name": "Brain Kreiger",
-        "company": "Lueilwitz Group",
-        "email": "Rico98@hotmail.com"
-    }
-];
+]
 
 function DifferentialExpressionAnalysis() {
     return (
         <Group position={'apart'}>
             <LeftSidePanel>
-                <AnnotationGroupSelectBox/>
-                <AnnotationGroup annotations={ANNOTATIONS}/>
+                <Stack>
+                    <AnnotationGroupSelectBox/>
+                    <AnnotationGroup annotations={ANNOTATIONS}/>
+                </Stack>
             </LeftSidePanel>
 
             <RightSidePanel>

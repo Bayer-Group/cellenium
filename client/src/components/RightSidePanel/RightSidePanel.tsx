@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-    children?: JSX.Element[];
+    children?: JSX.Element[]|JSX.Element;
 }
 
 function RightSidePanel({children}:Props) {
