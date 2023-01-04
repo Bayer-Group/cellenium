@@ -2,7 +2,7 @@ import {atom, selector} from "recoil";
 import {Study} from "./model";
 import {apolloClient} from "./index";
 import {
-    StudyBasicsDocument,
+    StudyBasicsDocument, StudyBasicsFragment,
     StudyBasicsQuery,
     StudyBasicsQueryVariables,
     StudySampleProjectionSubsamplingTransposed
@@ -23,6 +23,22 @@ function buildSampleProjectionTable(d: { studySampleId: number[], projection: nu
     });
 }
 
+function buildSampleAnnotationTable(s: StudyBasicsFragment) {
+    const samplesTable = aq.from(s.studySampleAnnotationsList).select(aq.not(['__typename']))
+        .unroll('studySampleIds')
+        .select({studySampleIds: 'studySampleId', annotationValueId: 'annotationValueId'});
+    // samplesTable.print();
+    const annotationGroupsValuesTable = aq.from(s.studyAnnotationGroupUisList.map(e => e.annotationGroup))
+        .unroll('annotationValuesList')
+        // @ts-ignore
+        .derive({annotationValueId: r => r.annotationValuesList.annotationValueId})
+        .select('annotationGroupId', 'annotationValueId');
+    // annotationGroupsValuesTable.print();
+    const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
+    annotatedSamplesTable.print();
+    return annotatedSamplesTable;
+}
+
 export const studyState = selector<Study | undefined>({
     key: "studyState",
     get: async ({get}) => {
@@ -41,7 +57,8 @@ export const studyState = selector<Study | undefined>({
                 // do some computations, e.g. generate arquero table of a received record list...
                 const s: Study = {
                     ...response.data.study,
-                    samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0])
+                    samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0]),
+                    samplesAnnotationTable: buildSampleAnnotationTable(response.data.study)
                 };
                 return s;
             }

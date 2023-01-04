@@ -38,6 +38,11 @@ fragment StudyBasics on Study {
       ordering
       differentialExpressionCalculated
     }
+    studySampleAnnotationsList {
+      # subsampling?
+      studySampleIds
+      annotationValueId
+    }
     studySampleProjectionSubsamplingTransposedList {
       projectionType
       studySampleId

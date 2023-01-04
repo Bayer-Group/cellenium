@@ -14,7 +14,7 @@ interface PreparedPlot {
     plotlyLayout: Partial<Plotly.Layout>;
 }
 
-const TestPage = () => {
+const SingleGeneExpressionInUmapScatterplotTestPage = () => {
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     useEffect(() => {
         setStudyId(1)
@@ -89,4 +89,4 @@ const TestPage = () => {
     );
 };
 
-export default TestPage;
+export default SingleGeneExpressionInUmapScatterplotTestPage;
