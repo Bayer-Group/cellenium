@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {createStyles, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
+import React, {useState} from 'react';
+import {createStyles, Anchor, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
 import {ReactComponent as CellTypeMarkerIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
 import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
@@ -94,7 +94,7 @@ const viewLinks = [
 ];
 
 type Props = {
-    children?: JSX.Element[]|JSX.Element;
+    children?: React.ReactNode;
 }
 
 function LeftSidePanel({children}: Props) {
@@ -119,7 +119,7 @@ function LeftSidePanel({children}: Props) {
             <Navbar.Section grow className={classes.wrapper}>
                 <div className={classes.aside}>
                     <div className={classes.logo}>
-                        <CelleniumLogo/>
+                        <Anchor href={'/'}><CelleniumLogo/></Anchor>
                     </div>
                     {mainLinks}
                 </div>

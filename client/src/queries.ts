@@ -3,11 +3,13 @@ import gql from 'graphql-tag';
 gql`
 query studies {
   studiesList {
-    attributeValueFreq
+    studyId
+    studyName
     cellCount
-    clusterColorMap
-    clusterHulls
     description
+    organismTaxId
+    tissueNcitIds
+    diseaseMeshIds
   }
 }
 

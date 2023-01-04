@@ -5587,7 +5587,7 @@ export enum _AllUsedOntologyIdsOrderBy {
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', attributeValueFreq: any, cellCount: number, clusterColorMap: any, clusterHulls: any, description: string }> };
+export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }> };
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
@@ -5648,11 +5648,13 @@ export const StudyBasicsFragmentDoc = gql`
 export const StudiesDocument = gql`
     query studies {
   studiesList {
-    attributeValueFreq
+    studyId
+    studyName
     cellCount
-    clusterColorMap
-    clusterHulls
     description
+    organismTaxId
+    tissueNcitIds
+    diseaseMeshIds
   }
 }
     `;

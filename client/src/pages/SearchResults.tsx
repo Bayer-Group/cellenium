@@ -1,9 +1,11 @@
 import React from 'react';
 import {NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
-import STUDIES from '../data/studies.json';
+import {useStudiesQuery} from "../generated/types";
 
 const SearchResults = () => {
+    const {data, error, loading} = useStudiesQuery()
+
     return (
         <Container fluid={true}>
             <NavBar mainLinks={[{link: 'single_studies', label: 'Single study analysis'},
@@ -16,8 +18,14 @@ const SearchResults = () => {
             </Container>
             <Container size={'md'}>
                 <Grid>
-                    {STUDIES.map((study: any) => {
-                        return <Grid.Col span={12}><StudyCard content={study}/></Grid.Col>
+                    {data && data.studiesList && data.studiesList.map((study) => {
+                        return <Grid.Col span={12}><StudyCard studyId={study.studyId} studyName={study.studyName}
+                                                              cellCount={study.cellCount}
+                                                              description={study.description}
+                                                              tissueNcitIds={study.tissueNcitIds}
+                                                              diseaseMeshIds={study.diseaseMeshIds}
+
+                        /></Grid.Col>
                     })}
                 </Grid>
             </Container>

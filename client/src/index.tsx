@@ -11,7 +11,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
-import StudyAnalysis from "./pages/DifferentialExpressionAnalysis";
+import DifferentialExpressionAnalysis from "./pages/DifferentialExpressionAnalysis";
 import AnnotationsInUmapScatterplotTestPage from "./pages/AnnotationsInUmapScatterplotTestPage";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
         element: <SearchResults/>,
     },
     {
-        path: "/study_analysis",
-        element: <StudyAnalysis/>,
+        path: "/deg",
+        element: <DifferentialExpressionAnalysis/>,
     },
     {
         path: "/AnnotationsInUmapScatterplotTestPage",
