@@ -173,16 +173,15 @@ CREATE TABLE study_annotation_group_ui
 
 CREATE TABLE study_sample
 (
-    study_id            int     not null,
+    study_id        int not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    study_sample_id     int     not null,
+    study_sample_id int not null,
     constraint pk_study_sample primary key (study_id, study_sample_id),
 
-    h5ad_obs_index      int     not null,
-    display_subsampling boolean not null
+    h5ad_obs_index  int not null
 );
 --create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
@@ -190,14 +189,28 @@ CREATE TABLE study_sample
 CREATE TYPE projection_type AS ENUM ('umap', 'tsne', 'pca');
 CREATE TABLE study_sample_projection
 (
-    study_id        int             not null,
-    study_sample_id int             not null,
+    study_id            int             not null,
+    study_sample_id     int             not null,
     constraint fk_study_sample
         FOREIGN KEY (study_id, study_sample_id)
             REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
-    projection_type projection_type not null,
-    projection      real[]          not null
+    projection_type     projection_type not null,
+    projection          real[]          not null,
+    -- subsampling reduces overlapping points in a projection
+    display_subsampling boolean         not null
 );
+
+CREATE VIEW study_sample_projection_subsampling_transposed
+as
+select study_id,
+       projection_type,
+       array_agg(study_sample_id order by study_sample_id) study_sample_id,
+       array_agg(projection order by study_sample_id)      projection
+from study_sample_projection
+where display_subsampling = True
+group by study_id, projection_type;
+comment on view study_sample_projection_subsampling_transposed is
+    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
 
 CREATE TABLE study_sample_annotation
 (
@@ -232,6 +245,20 @@ CREATE TABLE study_omics
     region_start   int,
     region_end     int
 );
+
+CREATE VIEW study_omics_transposed
+as
+select study_id,
+       array_agg(ob.omics_id order by ob.omics_id)       omics_id,
+       array_agg(ob.omics_type order by ob.omics_id)     omics_type,
+       array_agg(ob.display_symbol order by ob.omics_id) display_symbol,
+       array_agg(ob.display_name order by ob.omics_id)   display_name
+from study_omics
+         join omics_base ob on study_omics.omics_id = ob.omics_id
+group by study_id;
+comment on view study_omics_transposed is
+    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
+
 
 CREATE TABLE differential_expression
 (

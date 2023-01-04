@@ -18,12 +18,11 @@ fragment StudyBasics on Study {
       layer
       studyLayerId
     }
-    studyOmicsList {
-      omics {
-        omicsId
-        displaySymbol
-        displayName
-      }
+    studyOmicsTransposedList {
+      omicsId
+      omicsType
+      displayName
+      displaySymbol
     }
     studyAnnotationGroupUisList {
       annotationGroup {
@@ -38,6 +37,11 @@ fragment StudyBasics on Study {
       isPrimary
       ordering
       differentialExpressionCalculated
+    }
+    studySampleProjectionSubsamplingTransposedList {
+      projectionType
+      studySampleId
+      projection
     }
 }
 

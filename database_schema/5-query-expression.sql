@@ -7,7 +7,8 @@ create type expression_by_omics as
 );
 
 drop function if exists expression_by_omics_ids;
-create function expression_by_omics_ids(p_study_layer_id int, p_omics_ids int[], p_subsampling boolean)
+create function expression_by_omics_ids(p_study_layer_id int, p_omics_ids int[],
+                                        p_subsampling_projection projection_type)
     returns setof expression_by_omics
     language plpgsql
     immutable
@@ -18,7 +19,7 @@ $$
 begin
     -- we could use a study-level flag that determines if display_subsampling is False for any sample,
     -- and use the else branch in this case
-    if p_subsampling then
+    if p_subsampling_projection is not null then
         return query select e.omics_id,
                             array_agg(sampleid_v order by val_i) study_sample_ids,
                             array_agg(val_value order by val_i)  values
@@ -26,11 +27,12 @@ begin
                               join study_layer sl on sl.study_layer_id = e.study_layer_id
                               cross join unnest(e.values) with ordinality as val(val_value, val_i)
                               cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
-                              join study_sample s on s.study_id = sl.study_id and s.study_sample_id = val_i
+                              join study_sample_projection sp
+                                   on sp.study_id = sl.study_id and sp.study_sample_id = val_i and
+                                      sp.projection_type = p_subsampling_projection and sp.display_subsampling = True
                      where val_i = sampleid_i
                        and e.study_layer_id = p_study_layer_id
                        and e.omics_id = any (p_omics_ids)
-                       and s.display_subsampling = True
                      group by e.study_layer_id, e.omics_id;
     else
         return query select e.omics_id,
@@ -46,10 +48,9 @@ $$;
 
 
 /*
-select * from expression_by_omics_ids(1, array [1], False);
-select * from expression_by_omics_ids(1, array [1], True);
+select * from expression_by_omics_ids(1, array [1,116], null);
+select * from expression_by_omics_ids(1, array [1,116], 'umap');
 */
-
 
 DROP AGGREGATE IF EXISTS boxplot(real) CASCADE;
 DROP FUNCTION IF EXISTS _final_boxplot(a real[]);

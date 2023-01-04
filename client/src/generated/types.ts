@@ -278,6 +278,41 @@ export type BoxplotValue = {
   q3Whisker?: Maybe<Scalars['Float']>;
 };
 
+/** A filter to be used against `BoxplotValue` object types. All fields are combined with a logical ‘and.’ */
+export type BoxplotValueFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<BoxplotValueFilter>>;
+  /** Filter by the object’s `median` field. */
+  median?: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `n` field. */
+  n?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<BoxplotValueFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<BoxplotValueFilter>>;
+  /** Filter by the object’s `outliers` field. */
+  outliers?: InputMaybe<FloatListFilter>;
+  /** Filter by the object’s `q1` field. */
+  q1?: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `q1Whisker` field. */
+  q1Whisker?: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `q3` field. */
+  q3?: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `q3Whisker` field. */
+  q3Whisker?: InputMaybe<FloatFilter>;
+};
+
+/** An input for mutations affecting `BoxplotValue` */
+export type BoxplotValueInput = {
+  median?: InputMaybe<Scalars['Float']>;
+  n?: InputMaybe<Scalars['Int']>;
+  outliers?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
+  q1?: InputMaybe<Scalars['Float']>;
+  q1Whisker?: InputMaybe<Scalars['Float']>;
+  q3?: InputMaybe<Scalars['Float']>;
+  q3Whisker?: InputMaybe<Scalars['Float']>;
+};
+
 export type Concept = Node & {
   __typename?: 'Concept';
   /** Reads and enables pagination through a set of `Concept`. */
@@ -1766,6 +1801,74 @@ export enum DifferentialExpressionsOrderBy {
   StudyIdDesc = 'STUDY_ID_DESC'
 }
 
+export type ExpressionByAnnotationBoxplot = {
+  __typename?: 'ExpressionByAnnotationBoxplot';
+  annotationGroupId?: Maybe<Scalars['Int']>;
+  annotationValueId?: Maybe<Scalars['Int']>;
+  boxplot?: Maybe<BoxplotValue>;
+  omicsId?: Maybe<Scalars['Int']>;
+  studyLayerId?: Maybe<Scalars['Int']>;
+  values?: Maybe<Array<Maybe<Scalars['Float']>>>;
+};
+
+/**
+ * A condition to be used against `ExpressionByAnnotationBoxplot` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type ExpressionByAnnotationBoxplotCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `boxplot` field. */
+  boxplot?: InputMaybe<BoxplotValueInput>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyLayerId` field. */
+  studyLayerId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `values` field. */
+  values?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
+};
+
+/** A filter to be used against `ExpressionByAnnotationBoxplot` object types. All fields are combined with a logical ‘and.’ */
+export type ExpressionByAnnotationBoxplotFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `boxplot` field. */
+  boxplot?: InputMaybe<BoxplotValueFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId?: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
+  /** Filter by the object’s `studyLayerId` field. */
+  studyLayerId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `values` field. */
+  values?: InputMaybe<FloatListFilter>;
+};
+
+/** Methods to use when ordering `ExpressionByAnnotationBoxplot`. */
+export enum ExpressionByAnnotationBoxplotsOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  BoxplotAsc = 'BOXPLOT_ASC',
+  BoxplotDesc = 'BOXPLOT_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
+  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
+  ValuesAsc = 'VALUES_ASC',
+  ValuesDesc = 'VALUES_DESC'
+}
+
 export type ExpressionByOmic = {
   __typename?: 'ExpressionByOmic';
   omicsId?: Maybe<Scalars['Int']>;
@@ -3071,6 +3174,46 @@ export type OmicsTypeFilter = {
   notIn?: InputMaybe<Array<OmicsType>>;
 };
 
+/** A filter to be used against OmicsType List fields. All fields are combined with a logical ‘and.’ */
+export type OmicsTypeListFilter = {
+  /** Any array item is equal to the specified value. */
+  anyEqualTo?: InputMaybe<OmicsType>;
+  /** Any array item is greater than the specified value. */
+  anyGreaterThan?: InputMaybe<OmicsType>;
+  /** Any array item is greater than or equal to the specified value. */
+  anyGreaterThanOrEqualTo?: InputMaybe<OmicsType>;
+  /** Any array item is less than the specified value. */
+  anyLessThan?: InputMaybe<OmicsType>;
+  /** Any array item is less than or equal to the specified value. */
+  anyLessThanOrEqualTo?: InputMaybe<OmicsType>;
+  /** Any array item is not equal to the specified value. */
+  anyNotEqualTo?: InputMaybe<OmicsType>;
+  /** Contained by the specified list of values. */
+  containedBy?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Contains the specified list of values. */
+  contains?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Overlaps the specified list of values. */
+  overlaps?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+};
+
 /** The return type of our `ontCodesInfo` query. */
 export type OntCodesInfoRecord = {
   __typename?: 'OntCodesInfoRecord';
@@ -3226,6 +3369,8 @@ export type Query = Node & {
   conceptsList?: Maybe<Array<Concept>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList?: Maybe<Array<DifferentialExpression>>;
+  /** Reads a set of `ExpressionByAnnotationBoxplot`. */
+  expressionByAnnotationBoxplotsList?: Maybe<Array<ExpressionByAnnotationBoxplot>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList?: Maybe<Array<ExpressionByOmic>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -3283,6 +3428,8 @@ export type Query = Node & {
   studyLayersList?: Maybe<Array<StudyLayer>>;
   /** Reads a set of `StudyOmic`. */
   studyOmicsList?: Maybe<Array<StudyOmic>>;
+  /** Reads a set of `StudyOmicsTransposed`. */
+  studyOmicsTransposedsList?: Maybe<Array<StudyOmicsTransposed>>;
   /** Reads a set of `StudyOverview`. */
   studyOverviewsList?: Maybe<Array<StudyOverview>>;
   studySample?: Maybe<StudySample>;
@@ -3290,6 +3437,8 @@ export type Query = Node & {
   studySampleAnnotationsList?: Maybe<Array<StudySampleAnnotation>>;
   /** Reads a single `StudySample` using its globally unique `ID`. */
   studySampleByNodeId?: Maybe<StudySample>;
+  /** Reads a set of `StudySampleProjectionSubsamplingTransposed`. */
+  studySampleProjectionSubsamplingTransposedsList?: Maybe<Array<StudySampleProjectionSubsamplingTransposed>>;
   /** Reads a set of `StudySampleProjection`. */
   studySampleProjectionsList?: Maybe<Array<StudySampleProjection>>;
   /** Reads a set of `StudySample`. */
@@ -3463,13 +3612,23 @@ export type QueryDifferentialExpressionsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryExpressionByAnnotationBoxplotsListArgs = {
+  condition?: InputMaybe<ExpressionByAnnotationBoxplotCondition>;
+  filter?: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ExpressionByAnnotationBoxplotsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryExpressionByOmicsIdsListArgs = {
   filter?: InputMaybe<ExpressionByOmicFilter>;
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   pOmicsIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pStudyLayerId?: InputMaybe<Scalars['Int']>;
-  pSubsampling?: InputMaybe<Scalars['Boolean']>;
+  pSubsamplingProjection?: InputMaybe<ProjectionType>;
 };
 
 
@@ -3694,6 +3853,16 @@ export type QueryStudyOmicsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyOmicsTransposedsListArgs = {
+  condition?: InputMaybe<StudyOmicsTransposedCondition>;
+  filter?: InputMaybe<StudyOmicsTransposedFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewsListArgs = {
   condition?: InputMaybe<StudyOverviewCondition>;
   filter?: InputMaybe<StudyOverviewFilter>;
@@ -3723,6 +3892,16 @@ export type QueryStudySampleAnnotationsListArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleByNodeIdArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryStudySampleProjectionSubsamplingTransposedsListArgs = {
+  condition?: InputMaybe<StudySampleProjectionSubsamplingTransposedCondition>;
+  filter?: InputMaybe<StudySampleProjectionSubsamplingTransposedFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
 
 
@@ -3952,8 +4131,12 @@ export type Study = Node & {
   studyName: Scalars['String'];
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsList: Array<StudyOmic>;
+  /** Reads and enables pagination through a set of `StudyOmicsTransposed`. */
+  studyOmicsTransposedList: Array<StudyOmicsTransposed>;
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
+  /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed`. */
+  studySampleProjectionSubsamplingTransposedList: Array<StudySampleProjectionSubsamplingTransposed>;
   /** Reads and enables pagination through a set of `StudySample`. */
   studySamplesList: Array<StudySample>;
   tissueNcitIds?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -3996,12 +4179,30 @@ export type StudyStudyOmicsListArgs = {
 };
 
 
+export type StudyStudyOmicsTransposedListArgs = {
+  condition?: InputMaybe<StudyOmicsTransposedCondition>;
+  filter?: InputMaybe<StudyOmicsTransposedFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
+};
+
+
 export type StudyStudySampleAnnotationsListArgs = {
   condition?: InputMaybe<StudySampleAnnotationCondition>;
   filter?: InputMaybe<StudySampleAnnotationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
+};
+
+
+export type StudyStudySampleProjectionSubsamplingTransposedListArgs = {
+  condition?: InputMaybe<StudySampleProjectionSubsamplingTransposedCondition>;
+  filter?: InputMaybe<StudySampleProjectionSubsamplingTransposedFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
 
 
@@ -4340,6 +4541,69 @@ export enum StudyOmicsOrderBy {
   StudyIdDesc = 'STUDY_ID_DESC'
 }
 
+export type StudyOmicsTransposed = {
+  __typename?: 'StudyOmicsTransposed';
+  displayName?: Maybe<Array<Maybe<Scalars['String']>>>;
+  displaySymbol?: Maybe<Array<Maybe<Scalars['String']>>>;
+  omicsId?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  omicsType?: Maybe<Array<Maybe<OmicsType>>>;
+  /** Reads a single `Study` that is related to this `StudyOmicsTransposed`. */
+  study?: Maybe<Study>;
+  studyId?: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `StudyOmicsTransposed` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyOmicsTransposedCondition = {
+  /** Checks for equality with the object’s `displayName` field. */
+  displayName?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `displaySymbol` field. */
+  displaySymbol?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** Checks for equality with the object’s `omicsType` field. */
+  omicsType?: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyOmicsTransposed` object types. All fields are combined with a logical ‘and.’ */
+export type StudyOmicsTransposedFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<StudyOmicsTransposedFilter>>;
+  /** Filter by the object’s `displayName` field. */
+  displayName?: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `displaySymbol` field. */
+  displaySymbol?: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<StudyOmicsTransposedFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId?: InputMaybe<IntListFilter>;
+  /** Filter by the object’s `omicsType` field. */
+  omicsType?: InputMaybe<OmicsTypeListFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<StudyOmicsTransposedFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId?: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `StudyOmicsTransposed`. */
+export enum StudyOmicsTransposedsOrderBy {
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
 export type StudyOverview = {
   __typename?: 'StudyOverview';
   description?: Maybe<Scalars['String']>;
@@ -4452,7 +4716,6 @@ export type StudyPatch = {
 
 export type StudySample = Node & {
   __typename?: 'StudySample';
-  displaySubsampling: Scalars['Boolean'];
   h5AdObsIndex: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
@@ -4536,8 +4799,6 @@ export enum StudySampleAnnotationsOrderBy {
  * for equality and combined with a logical ‘and.’
  */
 export type StudySampleCondition = {
-  /** Checks for equality with the object’s `displaySubsampling` field. */
-  displaySubsampling?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `h5AdObsIndex` field. */
   h5AdObsIndex?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -4550,8 +4811,6 @@ export type StudySampleCondition = {
 export type StudySampleFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<StudySampleFilter>>;
-  /** Filter by the object’s `displaySubsampling` field. */
-  displaySubsampling?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `h5AdObsIndex` field. */
   h5AdObsIndex?: InputMaybe<IntFilter>;
   /** Negates the expression. */
@@ -4566,7 +4825,6 @@ export type StudySampleFilter = {
 
 /** An input for mutations affecting `StudySample` */
 export type StudySampleInput = {
-  displaySubsampling: Scalars['Boolean'];
   h5AdObsIndex: Scalars['Int'];
   studyId: Scalars['Int'];
   studySampleId: Scalars['Int'];
@@ -4574,7 +4832,6 @@ export type StudySampleInput = {
 
 /** Represents an update to a `StudySample`. Fields that are set will be updated. */
 export type StudySamplePatch = {
-  displaySubsampling?: InputMaybe<Scalars['Boolean']>;
   h5AdObsIndex?: InputMaybe<Scalars['Int']>;
   studyId?: InputMaybe<Scalars['Int']>;
   studySampleId?: InputMaybe<Scalars['Int']>;
@@ -4582,6 +4839,7 @@ export type StudySamplePatch = {
 
 export type StudySampleProjection = {
   __typename?: 'StudySampleProjection';
+  displaySubsampling: Scalars['Boolean'];
   projection: Array<Maybe<Scalars['Float']>>;
   projectionType: ProjectionType;
   studyId: Scalars['Int'];
@@ -4595,6 +4853,8 @@ export type StudySampleProjection = {
  * are tested for equality and combined with a logical ‘and.’
  */
 export type StudySampleProjectionCondition = {
+  /** Checks for equality with the object’s `displaySubsampling` field. */
+  displaySubsampling?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `projection` field. */
   projection?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Checks for equality with the object’s `projectionType` field. */
@@ -4609,6 +4869,8 @@ export type StudySampleProjectionCondition = {
 export type StudySampleProjectionFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<StudySampleProjectionFilter>>;
+  /** Filter by the object’s `displaySubsampling` field. */
+  displaySubsampling?: InputMaybe<BooleanFilter>;
   /** Negates the expression. */
   not?: InputMaybe<StudySampleProjectionFilter>;
   /** Checks for any expressions in this list. */
@@ -4625,14 +4887,73 @@ export type StudySampleProjectionFilter = {
 
 /** An input for mutations affecting `StudySampleProjection` */
 export type StudySampleProjectionInput = {
+  displaySubsampling: Scalars['Boolean'];
   projection: Array<InputMaybe<Scalars['Float']>>;
   projectionType: ProjectionType;
   studyId: Scalars['Int'];
   studySampleId: Scalars['Int'];
 };
 
+export type StudySampleProjectionSubsamplingTransposed = {
+  __typename?: 'StudySampleProjectionSubsamplingTransposed';
+  projection?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  projectionType?: Maybe<ProjectionType>;
+  /** Reads a single `Study` that is related to this `StudySampleProjectionSubsamplingTransposed`. */
+  study?: Maybe<Study>;
+  studyId?: Maybe<Scalars['Int']>;
+  studySampleId?: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+/**
+ * A condition to be used against `StudySampleProjectionSubsamplingTransposed`
+ * object types. All fields are tested for equality and combined with a logical ‘and.’
+ */
+export type StudySampleProjectionSubsamplingTransposedCondition = {
+  /** Checks for equality with the object’s `projection` field. */
+  projection?: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
+  /** Checks for equality with the object’s `projectionType` field. */
+  projectionType?: InputMaybe<ProjectionType>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studySampleId` field. */
+  studySampleId?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+/** A filter to be used against `StudySampleProjectionSubsamplingTransposed` object types. All fields are combined with a logical ‘and.’ */
+export type StudySampleProjectionSubsamplingTransposedFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<StudySampleProjectionSubsamplingTransposedFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedFilter>>;
+  /** Filter by the object’s `projection` field. */
+  projection?: InputMaybe<FloatListFilter>;
+  /** Filter by the object’s `projectionType` field. */
+  projectionType?: InputMaybe<ProjectionTypeFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studySampleId` field. */
+  studySampleId?: InputMaybe<IntListFilter>;
+};
+
+/** Methods to use when ordering `StudySampleProjectionSubsamplingTransposed`. */
+export enum StudySampleProjectionSubsamplingTransposedsOrderBy {
+  Natural = 'NATURAL',
+  ProjectionAsc = 'PROJECTION_ASC',
+  ProjectionDesc = 'PROJECTION_DESC',
+  ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
+  ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
+}
+
 /** Methods to use when ordering `StudySampleProjection`. */
 export enum StudySampleProjectionsOrderBy {
+  DisplaySubsamplingAsc = 'DISPLAY_SUBSAMPLING_ASC',
+  DisplaySubsamplingDesc = 'DISPLAY_SUBSAMPLING_DESC',
   Natural = 'NATURAL',
   ProjectionAsc = 'PROJECTION_ASC',
   ProjectionDesc = 'PROJECTION_DESC',
@@ -4646,8 +4967,6 @@ export enum StudySampleProjectionsOrderBy {
 
 /** Methods to use when ordering `StudySample`. */
 export enum StudySamplesOrderBy {
-  DisplaySubsamplingAsc = 'DISPLAY_SUBSAMPLING_ASC',
-  DisplaySubsamplingDesc = 'DISPLAY_SUBSAMPLING_DESC',
   H5AdObsIndexAsc = 'H5AD_OBS_INDEX_ASC',
   H5AdObsIndexDesc = 'H5AD_OBS_INDEX_DESC',
   Natural = 'NATURAL',
@@ -5270,14 +5589,14 @@ export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StudiesQuery = { __typename?: 'Query', studiesList?: Array<{ __typename?: 'Study', attributeValueFreq?: any | null, cellCount?: number | null, clusterColorMap?: any | null, clusterHulls?: any | null, description?: string | null }> | null };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId?: Array<number | null> | null, omicsType?: Array<OmicsType | null> | null, displayName?: Array<string | null> | null, displaySymbol?: Array<string | null> | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType?: ProjectionType | null, studySampleId?: Array<number | null> | null, projection?: Array<number | null> | null }> };
 
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study?: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsList: Array<{ __typename?: 'StudyOmic', omics?: { __typename?: 'OmicsBase', omicsId: number, displaySymbol: string, displayName?: string | null } | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }> } | null };
+export type StudyBasicsQuery = { __typename?: 'Query', study?: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId?: Array<number | null> | null, omicsType?: Array<OmicsType | null> | null, displayName?: Array<string | null> | null, displaySymbol?: Array<string | null> | null }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup?: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color?: string | null }> } | null }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType?: ProjectionType | null, studySampleId?: Array<number | null> | null, projection?: Array<number | null> | null }> } | null };
 
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
@@ -5287,12 +5606,11 @@ export const StudyBasicsFragmentDoc = gql`
     layer
     studyLayerId
   }
-  studyOmicsList {
-    omics {
-      omicsId
-      displaySymbol
-      displayName
-    }
+  studyOmicsTransposedList {
+    omicsId
+    omicsType
+    displayName
+    displaySymbol
   }
   studyAnnotationGroupUisList {
     annotationGroup {
@@ -5307,6 +5625,11 @@ export const StudyBasicsFragmentDoc = gql`
     isPrimary
     ordering
     differentialExpressionCalculated
+  }
+  studySampleProjectionSubsamplingTransposedList {
+    projectionType
+    studySampleId
+    projection
   }
 }
     `;
