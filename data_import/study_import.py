@@ -217,9 +217,9 @@ def import_study(study_name: str, adata: AnnData) -> int:
 
 
 if __name__ == "__main__":
-    # adata = sc.read_h5ad('../scratch/pancreas_subset.h5ad')
-    # import_study('pancreas', adata)
-    adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
-    import_study('heart_failure_reichart2022_subset', adata)
+    adata = sc.read_h5ad('../scratch/pancreas_atlas_subset.h5ad')
+    import_study('pancreas_atlas_subset', adata)
+    # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
+    # import_study('heart_failure_reichart2022_subset', adata)
     # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022.h5ad')
     # import_study('heart_failure_reichart2022', adata)

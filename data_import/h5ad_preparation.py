@@ -5,25 +5,32 @@ import pandas as pd
 import numpy as np
 import os
 import scipy
-import sfaira
 from anndata import AnnData
 import logging
+from pathlib import Path
 
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
+                    datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
+
+# default to the .gitignore-d scratch directory in this repo
+basedir = Path(__file__).parent.parent.joinpath('scratch').resolve()
+logging.info('local study files stored in: %s', basedir)
 
 
 # downloads an H5AD file and returns the file handle
-def get_h5ad_from_url(url: str, basedir: str, filename: str):
-    datadir = basedir + "/" + filename + ".h5ad"
-    adata = sc.read(datadir, backup_url=url)
+def get_h5ad_from_url(url: str, filename: str) -> AnnData:
+    localfile = basedir.joinpath(f"{filename}.h5ad")
+    adata = sc.read(localfile, backup_url=url)
     return adata
 
 # downloads a dataset from the sfaira zoo and returns file handle, see here for a list of available datasets: https://theislab.github.io/sfaira-portal/Datasets
-def get_sfaira_h5ad(sfaira_id: str, basedir: str):
-    
-    datadir = os.path.join(basedir, 'sfaira/data/')
-    metadir = os.path.join(basedir, 'sfaira/meta/')
-    cachedir = os.path.join(basedir, 'sfaira/cache/')
+def get_sfaira_h5ad(sfaira_id: str) -> AnnData:
+    # sfaira depends on tensorflow, we haven't included it in environment.yml, install when needed
+    import sfaira
+    datadir = basedir.joinpath('sfaira/data/')
+    metadir = basedir.joinpath('sfaira/meta/')
+    cachedir = basedir.joinpath('sfaira/cache/')
 
     ds = sfaira.data.Universe(data_path=datadir, meta_path=metadir, cache_path=cachedir)
     ds.subset(key="id", values=[sfaira_id])
@@ -42,7 +49,7 @@ def make_sparse(adata: AnnData, layer = "counts"):
     return adata
 
 # check if an integer for a layer in anndata but not simply using the type
-def isinteger(adata: AnnData, layer: str):
+def isinteger(adata: AnnData, layer: str) -> bool:
     expression_vals = scipy.sparse.find(adata.layers[layer])[2]
     return all(np.equal(np.mod(expression_vals, 1), 0))
 

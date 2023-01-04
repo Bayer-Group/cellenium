@@ -8,6 +8,6 @@ docker exec -it cellenium_postgres_1 bash -c 'set -e; for f in /database_schema/
 conda env create -f data_import/environment.yml
 conda activate cellenium_import
 (cd data_import && python masterdata.py)
-# Run the public_data_run_scripts.ipynb notebook now.
+(cd data_import && python study_preparation.py)
 (cd data_import && python cellenium_import.py)
 ```
