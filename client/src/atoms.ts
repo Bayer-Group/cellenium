@@ -17,19 +17,13 @@ export const studyIdState = atom<number | undefined>({
 
 function buildSampleProjectionTable(d: { studySampleId: number[], projection: number[] }) {
     return aq.table({
-        sampleId: d.studySampleId,
+        studySampleId: d.studySampleId,
         projectionX: Array.from(Array(d.projection?.length / 2).keys()).map(i => d.projection[i * 2]),
         projectionY: Array.from(Array(d.projection?.length / 2).keys()).map(i => d.projection[i * 2 + 1])
     });
 }
 
-function dummyStudy(): Study {
-    return {
-        samplesProjectionTable: aq.table({})
-    } as Study;
-}
-
-export const studyState = selector<Study>({
+export const studyState = selector<Study | undefined>({
     key: "studyState",
     get: async ({get}) => {
         const studyId = get(studyIdState);
@@ -51,9 +45,8 @@ export const studyState = selector<Study>({
                 };
                 return s;
             }
-            return dummyStudy();
-        } else {
-            return dummyStudy();
         }
-    }
+    },
+    // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
+    dangerouslyAllowMutability: true
 });
