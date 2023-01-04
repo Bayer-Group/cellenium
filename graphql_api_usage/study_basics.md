@@ -19,12 +19,11 @@ query StudyBasics {
       layer
       studyLayerId
     }
-    studyOmicsList {
-      omics {
-        omicsId
-        displaySymbol
-        displayName
-      }
+    studyOmicsTransposedList {
+      omicsId
+      omicsType
+      displayName
+      displaySymbol
     }
     studyAnnotationGroupUisList {
       annotationGroup {
@@ -40,13 +39,10 @@ query StudyBasics {
       ordering
       differentialExpressionCalculated
     }
-    studySamplesList {
+    studySampleProjectionSubsamplingTransposedList {
+      projectionType
       studySampleId
-      displaySubsampling
-      studySampleProjectionsByStudyIdAndStudySampleIdList {
-        projectionType
-        projection
-      }
+      projection
     }
   }
 }

@@ -49,8 +49,6 @@ def import_study_sample(study_id: int, adata: AnnData):
     adata_samples_df['study_sample_id'] = range(1, len(adata_samples_df) + 1)
     adata_samples_df = adata_samples_df[['study_sample_id', 'h5ad_obs_index']]
     adata_samples_df['study_id'] = study_id
-    adata_samples_df['display_subsampling'] = True
-    adata_samples_df
     import_df(adata_samples_df, 'study_sample')
 
     if 'X_umap' in adata.obsm:
@@ -58,7 +56,8 @@ def import_study_sample(study_id: int, adata: AnnData):
             'study_id': study_id,
             'study_sample_id': adata_samples_df.study_sample_id,
             'projection_type': 'umap',
-            'projection': adata.obsm['X_umap'].tolist()
+            'projection': adata.obsm['X_umap'].tolist(),
+            'display_subsampling': True
         })
         import_df(projection_df, 'study_sample_projection')
 
