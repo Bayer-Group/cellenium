@@ -12,9 +12,10 @@ import {
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
 import StudyAnalysis from "./pages/DifferentialExpressionAnalysis";
-import TestPage from "./pages/TestPage";
+import AnnotationsInUmapScatterplotTestPage from "./pages/AnnotationsInUmapScatterplotTestPage";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
+import SingleGeneExpressionInUmapScatterplotTestPage from "./pages/SingleGeneExpressionInUmapScatterplotTestPage";
 
 export const apolloCache = new InMemoryCache();
 
@@ -37,8 +38,12 @@ const router = createBrowserRouter([
         element: <StudyAnalysis/>,
     },
     {
-        path: "/test",
-        element: <TestPage/>,
+        path: "/AnnotationsInUmapScatterplotTestPage",
+        element: <AnnotationsInUmapScatterplotTestPage/>,
+    },
+    {
+        path: "/SingleGeneExpressionInUmapScatterplotTestPage",
+        element: <SingleGeneExpressionInUmapScatterplotTestPage/>,
     },
 ]);
 const root = ReactDOM.createRoot(
