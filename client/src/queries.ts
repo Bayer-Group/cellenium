@@ -51,4 +51,12 @@ query StudyBasics($studyId: Int!) {
   }
 }
 
+query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
+  expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:null) {
+    omicsId
+    studySampleIds
+    values
+  }
+}
+
 `;

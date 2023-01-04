@@ -4,6 +4,7 @@ import {Group, Stack} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {studyIdState, studyState} from "../atoms";
 import {useStudyBasicsQuery} from "../generated/types";
+import {useExpressionValues} from "../hooks";
 
 const TestPage = () => {
     const [studyId, setStudyId] = useRecoilState(studyIdState);
@@ -12,9 +13,12 @@ const TestPage = () => {
     });
     const study = useRecoilValue(studyState);
     console.log('study', study);
+    study.samplesProjectionTable.print();
 
-    const {data} = useStudyBasicsQuery({variables: {studyId: 1}});
-    console.log('data', data);
+    const {table, loading} = useExpressionValues();
+    if(table) {
+        table.print();
+    }
 
 
     return (

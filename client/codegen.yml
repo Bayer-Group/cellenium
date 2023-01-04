@@ -15,3 +15,8 @@ generates:
      withHooks: true
      withComponent: false
      withMutationFn: false
+     # These two hacks modify the resulting typescript types to
+     # not have the "?" optional syntax on attributes and effectively
+     # disable the Maybe type. E.g. postgres views have nullable columns.
+     avoidOptionals: true
+     maybeValue: T
