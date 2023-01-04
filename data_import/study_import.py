@@ -66,9 +66,9 @@ def import_study_sample(study_id: int, adata: AnnData):
 
 
 def get_annotation_definition_df(h5ad_columns: List[str]):
-    annotation_definition_df = pd.read_sql("""select a.annotation_id, a.h5ad_column, av.annotation_value_id, av.h5ad_value
-            from annotation a
-            join annotation_value av on av.annotation_id = a.annotation_id
+    annotation_definition_df = pd.read_sql("""select a.annotation_group_id, a.h5ad_column, av.annotation_value_id, av.h5ad_value
+            from annotation_group a
+            join annotation_value av on av.annotation_group_id = a.annotation_group_id
             where a.h5ad_column = any( %(h5ad_columns)s )""", engine,
                                            params={'h5ad_columns': h5ad_columns})
     return annotation_definition_df
@@ -81,37 +81,38 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
 
     with engine.connect() as connection:
         for annotation_col in import_sample_annotations:
-            r = connection.execute(text("SELECT annotation_id FROM annotation WHERE h5ad_column=:h5ad_column"), {
-                'h5ad_column': annotation_col
-            }).fetchone()
-            if r is None:
-                r = connection.execute(text("""INSERT INTO annotation (h5ad_column, display_group)
-                            VALUES (:h5ad_column, :h5ad_column)
-                            RETURNING annotation_id"""), {
+            r = connection.execute(
+                text("SELECT annotation_group_id FROM annotation_group WHERE h5ad_column=:h5ad_column"), {
                     'h5ad_column': annotation_col
                 }).fetchone()
-            annotation_id = r[0]
+            if r is None:
+                r = connection.execute(text("""INSERT INTO annotation_group (h5ad_column, display_group)
+                            VALUES (:h5ad_column, :h5ad_column)
+                            RETURNING annotation_group_id"""), {
+                    'h5ad_column': annotation_col
+                }).fetchone()
+            annotation_group_id = r[0]
 
-            connection.execute(text("""INSERT INTO study_sample_annotation_ui (study_id, annotation_id, is_primary, ordering, differential_expression_calculated)
-                                                                    VALUES (:study_id, :annotation_id, True, :ordering, False)"""),
+            connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
+                                                                    VALUES (:study_id, :annotation_group_id, True, :ordering, False)"""),
                                {
                                    'study_id': study_id,
-                                   'annotation_id': annotation_id,
+                                   'annotation_group_id': annotation_group_id,
                                    'ordering': import_sample_annotations.index(annotation_col)
                                })
 
             values = adata.obs[annotation_col].unique().tolist()
             for value in values:
                 r = connection.execute(text(
-                    "SELECT annotation_value_id FROM annotation_value WHERE annotation_id=:annotation_id AND h5ad_value=:h5ad_value"),
+                    "SELECT annotation_value_id FROM annotation_value WHERE annotation_group_id=:annotation_group_id AND h5ad_value=:h5ad_value"),
                     {
-                        'annotation_id': annotation_id,
+                        'annotation_group_id': annotation_group_id,
                         'h5ad_value': value
                     }).fetchone()
                 if r is None:
-                    r = connection.execute(text("""INSERT INTO annotation_value (annotation_id, h5ad_value, display_value)
-                                            VALUES (:annotation_id, :h5ad_value, :h5ad_value)"""), {
-                        'annotation_id': annotation_id,
+                    r = connection.execute(text("""INSERT INTO annotation_value (annotation_group_id, h5ad_value, display_value)
+                                            VALUES (:annotation_group_id, :h5ad_value, :h5ad_value)"""), {
+                        'annotation_group_id': annotation_group_id,
                         'h5ad_value': value
                     })
 
@@ -129,6 +130,8 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
                                                          left_on=h5ad_column, right_on='h5ad_value')
             annotation_df = annotation_df[['study_sample_id', 'annotation_value_id']].copy()
             annotation_df['study_id'] = study_id
+            annotation_df = annotation_df.groupby(['study_id', 'annotation_value_id'])['study_sample_id'].apply(
+                list).reset_index().rename(columns={'study_sample_id': 'study_sample_ids'})
             import_df(annotation_df, 'study_sample_annotation')
 
 
@@ -189,11 +192,12 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
     import_df(df[['study_id', 'omics_id', 'annotation_value_id', 'pvalue', 'pvalue_adj', 'score', 'log2_foldchange']],
               'differential_expression')
     with engine.connect() as connection:
-        connection.execute(text("""UPDATE study_sample_annotation_ui SET differential_expression_calculated=True
-                                    WHERE study_id = :study_id and annotation_id = any (:annotation_ids)"""), {
-            'study_id': study_id,
-            'annotation_ids': df['annotation_id'].unique().tolist()
-        })
+        connection.execute(text("""UPDATE study_annotation_group_ui SET differential_expression_calculated=True
+                                    WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids)"""),
+                           {
+                               'study_id': study_id,
+                               'annotation_group_ids': df['annotation_group_id'].unique().tolist()
+                           })
 
 
 def import_study(study_name: str, adata: AnnData) -> int:
@@ -217,9 +221,9 @@ def import_study(study_name: str, adata: AnnData) -> int:
 
 
 if __name__ == "__main__":
-    # adata = sc.read_h5ad('../scratch/pancreas_subset.h5ad')
-    # import_study('pancreas', adata)
-    adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
-    import_study('heart_failure_reichart2022_subset', adata)
+    adata = sc.read_h5ad('../scratch/pancreas_atlas_subset.h5ad')
+    import_study('pancreas_atlas_subset', adata)
+    # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
+    # import_study('heart_failure_reichart2022_subset', adata)
     # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022.h5ad')
     # import_study('heart_failure_reichart2022', adata)

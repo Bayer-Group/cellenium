@@ -34,7 +34,7 @@ As an alternative, the list of values can be retrieved.
 ```gql
 query ExpressionByAnnotation {
   expressionByAnnotationBoxplotsList(
-    filter: {omicsId: {in: [1, 2]}, studyLayerId: {equalTo: 1}, annotationId: {equalTo: 1}}
+    filter: {omicsId: {in: [1, 2]}, studyLayerId: {equalTo: 1}, annotationGroupId: {equalTo: 1}}
   ) {
     annotationValueId
     boxplot {

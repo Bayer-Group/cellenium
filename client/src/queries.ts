@@ -25,15 +25,15 @@ fragment StudyBasics on Study {
         displayName
       }
     }
-    studySampleAnnotationUisList {
-      annotation {
+    studyAnnotationGroupUisList {
+      annotationGroup {
+        annotationGroupId
+        displayGroup
         annotationValuesList {
           annotationValueId
           displayValue
           color
-        }
-        annotationId
-        displayGroup
+        }        
       }
       isPrimary
       ordering
