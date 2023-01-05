@@ -4,7 +4,7 @@ import {studyIdState, studyState} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
-import ColumnTable from "arquero/dist/types/table/column-table";
+import {ExpressionTable} from "../../model";
 
 interface PreparedPlot {
     message?: string;
@@ -14,7 +14,7 @@ interface PreparedPlot {
 
 type Props = {
     colorBy: 'annotation' | 'expression';
-    expressionTable?: ColumnTable;
+    expressionTable?: ExpressionTable;
 }
 
 const ProjectionPlot = ({
