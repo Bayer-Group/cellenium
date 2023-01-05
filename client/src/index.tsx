@@ -1,22 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject} from '@apollo/client';
 import {MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
+import {createBrowserRouter, RouterProvider,} from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
-import DifferentialExpressionAnalysis from "./pages/CellMarkerAnalysis";
+import CellMarkerAnalysis from "./pages/CellMarkerAnalysis";
 import AnnotationsInUmapScatterplotTestPage from "./pages/AnnotationsInUmapScatterplotTestPage";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
 import SingleGeneExpressionInUmapScatterplotTestPage from "./pages/SingleGeneExpressionInUmapScatterplotTestPage";
-import CellMarkerAnalysis from "./pages/CellMarkerAnalysis";
+import ExpressionAnalysis from "./pages/ExpressionAnalysis";
 
 export const apolloCache = new InMemoryCache();
 
@@ -37,6 +33,10 @@ const router = createBrowserRouter([
     {
         path: "/cellmarkeranalysis",
         element: <CellMarkerAnalysis/>,
+    },
+    {
+        path: "/expressionanalysis",
+        element: <ExpressionAnalysis/>,
     },
     {
         path: "/AnnotationsInUmapScatterplotTestPage",
