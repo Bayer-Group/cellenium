@@ -10,6 +10,7 @@ import scipy.sparse as sparse
 import tqdm
 import logging
 
+from huge_palette import huge_palette
 from postgres_utils import engine, import_df
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
@@ -81,16 +82,19 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
     with engine.connect() as connection:
         for annotation_col in import_sample_annotations:
             r = connection.execute(
-                text("SELECT annotation_group_id FROM annotation_group WHERE h5ad_column=:h5ad_column"), {
+                text("""SELECT annotation_group_id,
+                    (select count(1) from annotation_value v where v.annotation_group_id=annotation_group.annotation_group_id) cnt_values
+                    FROM annotation_group WHERE h5ad_column=:h5ad_column"""), {
                     'h5ad_column': annotation_col
                 }).fetchone()
             if r is None:
                 r = connection.execute(text("""INSERT INTO annotation_group (h5ad_column, display_group)
                             VALUES (:h5ad_column, :h5ad_column)
-                            RETURNING annotation_group_id"""), {
+                            RETURNING annotation_group_id, 0"""), {
                     'h5ad_column': annotation_col
                 }).fetchone()
             annotation_group_id = r[0]
+            color_index = r[1]
 
             connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
                                                                     VALUES (:study_id, :annotation_group_id, True, :ordering, False)"""),
@@ -109,11 +113,13 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
                         'h5ad_value': value
                     }).fetchone()
                 if r is None:
-                    r = connection.execute(text("""INSERT INTO annotation_value (annotation_group_id, h5ad_value, display_value)
-                                            VALUES (:annotation_group_id, :h5ad_value, :h5ad_value)"""), {
+                    connection.execute(text("""INSERT INTO annotation_value (annotation_group_id, h5ad_value, display_value, color)
+                                            VALUES (:annotation_group_id, :h5ad_value, :h5ad_value, :color)"""), {
                         'annotation_group_id': annotation_group_id,
-                        'h5ad_value': value
+                        'h5ad_value': value,
+                        'color': huge_palette[color_index]
                     })
+                    color_index += 1
 
     annotation_definition_df = get_annotation_definition_df(import_sample_annotations)
 
