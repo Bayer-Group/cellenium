@@ -18,7 +18,7 @@ interface PreparedPlot {
 const AnnotationsInUmapScatterplotTestPage = () => {
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     useEffect(() => {
-        setStudyId(2)
+        setStudyId(1)
     });
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useState(0);
