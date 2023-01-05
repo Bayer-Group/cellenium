@@ -1,0 +1,18 @@
+https://covid19.cog.sanger.ac.uk/submissions/release2/20210217_NasalSwab_Broad_BCH_UMMC_to_CZI.h5ad https://www.biorxiv.org/content/10.1101/2021.02.20.431155v1.abstract	Nasal Epithelia	Human
+https://hosted-matrices-prod.s3-us-west-2.amazonaws.com/Single_cell_atlas_of_peripheral_immune_response_to_SARS_CoV_2_infection-25/Single_cell_atlas_of_peripheral_immune_response_to_SARS_CoV_2_infection.h5ad	https://www.nature.com/articles/s41591-020-0944-y	PBMC	Human
+https://covid19.cog.sanger.ac.uk/vieira19_Alveoli_and_parenchyma_anonymised.processed.h5ad 	https://www.ncbi.nlm.nih.gov/pubmed/31209336	Lung and Upper Airway	Human
+https://covid19.cog.sanger.ac.uk/cheng18.processed.h5ad	https://www.ncbi.nlm.nih.gov/pubmed/30355494	Skin	Human
+https://covid19.cog.sanger.ac.uk/guo18_donor.processed.h5ad	https://www.ncbi.nlm.nih.gov/pubmed/30315278	Testis	Human
+https://covid19.cog.sanger.ac.uk/lako_cornea.processed.h5ad	unpublished	Cornea	Human
+https://covid19.cog.sanger.ac.uk/macparland18.processed.h5ad	https://www.ncbi.nlm.nih.gov/pubmed/30348985	Liver	Human
+https://covid19.cog.sanger.ac.uk/warner20_salivary_gland.processed.h5ad	https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7605572/	Salivary Gland	Human
+https://covid19.cog.sanger.ac.uk/stewart19_adult.processed.h5ad	https://www.ncbi.nlm.nih.gov/pubmed/31604275	Kidney	Human
+https://www.ncbi.nlm.nih.gov/pubmed/30429548	https://www.ncbi.nlm.nih.gov/pubmed/30429548	Placenta	Human
+https://covid19.cog.sanger.ac.uk/park20.processed.h5ad	https://www.ncbi.nlm.nih.gov/pubmed/32079746	Fetal Thymus	Human
+https://cellgeni.cog.sanger.ac.uk/heartcellatlas/data/hca_heart_immune_download.h5ad		Heart Immune Cells	Human
+https://cellgeni.cog.sanger.ac.uk/gutcellatlas/Full_obj_log_counts_soupx_v2.h5ad	https://www.nature.com/articles/s41586-021-03852-1	Gut	Human
+https://cellgeni.cog.sanger.ac.uk/tissue-stability/spleen.cellxgene.h5ad	Madisoon	Spleen	Human
+https://figshare.com/ndownloader/files/23872484	Tabula muris senis	Kidney	Mouse
+https://figshare.com/ndownloader/files/23872526	Tabula muris senis	Liver	Mouse
+https://figshare.com/ndownloader/files/23872838	Tabula muris senis	Heart	Mouse
+https://plus.figshare.com/ndownloader/files/35774443	PERTURB-Seq	K562	Human
