@@ -1,5 +1,5 @@
 import {atom, selector} from "recoil";
-import {Study} from "./model";
+import {Study, SamplesProjectionTable, SamplesAnnotationTable} from "./model";
 import {apolloClient} from "./index";
 import {
     StudyBasicsDocument, StudyBasicsFragment,
@@ -8,7 +8,6 @@ import {
     StudySampleProjectionSubsamplingTransposed
 } from "./generated/types";
 import * as aq from 'arquero';
-import ColumnTable from 'arquero/dist/types/table/column-table';
 
 export const studyIdState = atom<number | undefined>({
     key: "studyId",
@@ -16,11 +15,11 @@ export const studyIdState = atom<number | undefined>({
 });
 
 function buildSampleProjectionTable(d: { studySampleId: number[], projection: number[] }) {
-    return aq.table({
+    return SamplesProjectionTable.definedTable(aq.table({
         studySampleId: d.studySampleId,
         projectionX: Array.from(Array(d.projection?.length / 2).keys()).map(i => d.projection[i * 2]),
         projectionY: Array.from(Array(d.projection?.length / 2).keys()).map(i => d.projection[i * 2 + 1])
-    });
+    }));
 }
 
 function buildSampleAnnotationTable(s: StudyBasicsFragment) {
@@ -35,8 +34,7 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
         .select('annotationGroupId', 'annotationValueId');
     // annotationGroupsValuesTable.print();
     const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
-    // annotatedSamplesTable.print();
-    return annotatedSamplesTable;
+    return SamplesAnnotationTable.definedTable(annotatedSamplesTable);
 }
 
 export const studyState = selector<Study | undefined>({

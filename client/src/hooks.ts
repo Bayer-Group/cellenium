@@ -1,8 +1,7 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
 import * as aq from 'arquero';
-import ColumnTable from 'arquero/dist/types/table/column-table';
 import {useExpressionByOmicsIdsQuery} from "./generated/types";
-import Table from "arquero/dist/types/table/table";
+import {ExpressionTable} from "./model";
 
 export function useExpressionValues() {
 
@@ -20,7 +19,7 @@ export function useExpressionValues() {
         t = t.unroll('values').select({values: 'value', omicsId: 'omicsId'});
         t = t.assign(sampleIds).reify()
         return {
-            table: t,
+            table: ExpressionTable.definedTable(t),
             loading
         };
     }
