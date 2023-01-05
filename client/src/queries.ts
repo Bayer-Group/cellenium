@@ -1,8 +1,7 @@
 import gql from 'graphql-tag';
 
 gql`
-query studies {
-  studiesList {
+fragment StudyOverview on Study {
     studyId
     studyName
     cellCount
@@ -10,6 +9,33 @@ query studies {
     organismTaxId
     tissueNcitIds
     diseaseMeshIds
+}
+fragment TreeTissueOverview on TreeTissue {
+    cid
+    label
+    ontCode
+    parentCids
+    parentOntCodePath
+}
+
+fragment TreeDiseaseOverview on TreeDisease {
+    cid
+    label
+    ontCode
+    parentCids
+    parentOntCodePath
+}
+
+
+query studies {
+  studiesList {
+    ...StudyOverview
+  }
+  treeTissuesList {
+    ...TreeTissueOverview
+  }
+  treeDiseasesList {
+    ...TreeDiseaseOverview
   }
 }
 

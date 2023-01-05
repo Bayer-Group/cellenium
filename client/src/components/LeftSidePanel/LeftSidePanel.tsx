@@ -49,8 +49,8 @@ const useStyles = createStyles((theme) => ({
 
     mainLinkActive: {
         '&, &:hover': {
-            backgroundColor: theme.fn.variant({variant: 'light', color: theme.primaryColor}).background,
-            color: theme.fn.variant({variant: 'light', color: theme.primaryColor}).color,
+            backgroundColor: theme.fn.variant({variant: 'light', color: theme.colors.gray[4]}).background,
+            color: theme.fn.variant({variant: 'light', color: theme.colors.gray[4]}).color,
         },
     },
 
@@ -99,8 +99,7 @@ type Props = {
 
 function LeftSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
-    const [active, setActive] = useState('asdf');
-    const [activeLink, setActiveLink] = useState('Settings');
+    const [active, setActive] = useState('Cell type marker analysis');
 
     const mainLinks = viewLinks.map((link) => (
         <Tooltip label={link.label} position="right" withArrow transitionDuration={0} key={link.label}>
