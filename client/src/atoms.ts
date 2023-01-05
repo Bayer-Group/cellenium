@@ -52,6 +52,13 @@ export const studyState = selector<Study | undefined>({
             const response = await responsePromise;
 
             if (response?.data?.study) {
+                if( response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0 ) {
+                    throw Error('no projection data');
+                }
+                if( response.data.study.studySampleAnnotationsList.length === 0 ) {
+                    throw Error('no study annotations');
+                }
+
                 // do some computations, e.g. generate arquero table of a received record list...
                 const s: Study = {
                     ...response.data.study,
