@@ -31,27 +31,29 @@ const AnnotationsInUmapScatterplotTestPage = () => {
         // @ts-ignore
         let t = study.samplesAnnotationTable.filter(r => r.annotationGroupId === 1);
         t = t.join(study.samplesProjectionTable, 'studySampleId').reify();
+        const rangeX = [aq.agg(t, aq.op.min('projectionX')) * 1.05, aq.agg(t, aq.op.max('projectionX')) * 1.05];
+        const rangeY = [aq.agg(t, aq.op.min('projectionY')) * 1.05, aq.agg(t, aq.op.max('projectionY')) * 1.05];
         const distinctAnnotationValueIds: number[] = t.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
         // one plotly data track per category, so that we can assign categorical colors
         const plotlyData = distinctAnnotationValueIds.map(annotationValueId => {
-            const color = study.annotationValueMap.get(annotationValueId)?.color || '';
             const tableForAnnotation = t.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
             const samplesTrace = {
                 type: 'scattergl',
                 x: tableForAnnotation.array('projectionX', Float32Array),
                 y: tableForAnnotation.array('projectionY', Float32Array),
                 customdata: tableForAnnotation.array('annotationValueId', Int32Array),
+                text: study.annotationValueMap.get(annotationValueId)?.displayValue,
                 mode: 'markers',
                 marker: {
                     size: 3,
                     opacity: 0.7,
-                    color,
+                    color: study.annotationValueMap.get(annotationValueId)?.color,
                 },
                 showlegend: false,
+                hoverinfo: "text"
             } as Partial<Plotly.PlotData>;
             if (highlightAnnotation === annotationValueId) {
-                console.log('highlight', color, annotationValueId)
                 return [
                     samplesTrace,
                     {
@@ -62,7 +64,7 @@ const AnnotationsInUmapScatterplotTestPage = () => {
                         marker: {
                             size: 30,
                             opacity: 0.02,
-                            color,
+                            color: study.annotationValueMap.get(annotationValueId)?.color,
                         },
                         showlegend: false,
                     } as Partial<Plotly.PlotData>
@@ -82,10 +84,12 @@ const AnnotationsInUmapScatterplotTestPage = () => {
                 xaxis: {
                     visible: false,
                     fixedrange: true,
+                    range: rangeX,
                 },
                 yaxis: {
                     visible: false,
                     fixedrange: true,
+                    range: rangeY,
                 },
             },
         }
@@ -93,10 +97,12 @@ const AnnotationsInUmapScatterplotTestPage = () => {
 
     const onHover = (event: Readonly<Plotly.PlotHoverEvent>) => {
         if (event.points.length > 0 && event.points[0].customdata) {
-            const an = event.points[0].customdata as number;
-            setHighlightAnnotation(an);
+            const annotationValueId = event.points[0].customdata as number;
+            setHighlightAnnotation(annotationValueId);
         }
     };
+
+    console.log(preparedPlot?.plotlyLayout)
 
     return (
         <Group position={'apart'}>
