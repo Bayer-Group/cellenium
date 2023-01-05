@@ -5,16 +5,21 @@ import {AnnotationGroup} from "../../generated/types";
 
 type Props = {
     annotationGroup: AnnotationGroup|undefined;
+    handleSelection: Function;
+    selectedAnnotation: string|undefined;
 }
 
-function AnnotationGroupDisplay({annotationGroup}: Props) {
-    const [selected, setSelected] = useState<string>()
+function AnnotationGroupDisplay({annotationGroup,handleSelection, selectedAnnotation}: Props) {
 
     return (
         <Stack spacing={'xs'}>
             {annotationGroup && annotationGroup.annotationValuesList.map((annot) => {
-                return <Annotation onSelect={setSelected} label={annot.displayValue} color={annot.color}
-                                   selected={annot.displayValue === selected}/>
+                return <Annotation onSelect={()=>{
+                    annot.displayValue===selectedAnnotation?handleSelection():handleSelection(annot.displayValue);
+                }
+
+                } label={annot.displayValue} color={annot.color}
+                                   selected={annot.displayValue === selectedAnnotation}/>
             })}
         </Stack>
     );

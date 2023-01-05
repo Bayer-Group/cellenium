@@ -78,6 +78,7 @@ interface PreparedPlot {
 
 function DifferentialExpressionAnalysis() {
     const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
+    const [selectedAnnotation, setSelectedAnnotation] = useState<string|undefined>();
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     useEffect(() => {
@@ -114,9 +115,14 @@ function DifferentialExpressionAnalysis() {
                 {annotationGroups.length > 0 &&
                     <Stack>
                         <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                  changeHandler={setSelectedAnnotationGroup}/>
+                                                  changeHandler={(value:number)=>{
+                                                      setSelectedAnnotationGroup(value);
+                                                      setSelectedAnnotation(undefined);
+                                                  }}/>
                         {selectedAnnotationGroup && study?.annotationGroupMap.get(selectedAnnotationGroup) !== undefined &&
                             <AnnotationGroupDisplay
+                                handleSelection={setSelectedAnnotation}
+                                selectedAnnotation={selectedAnnotation}
                                 annotationGroup={study.annotationGroupMap.get(selectedAnnotationGroup)}/>}
                     </Stack>
                 }
