@@ -5584,10 +5584,16 @@ export enum _AllUsedOntologyIdsOrderBy {
   Natural = 'NATURAL'
 }
 
+export type StudyOverviewFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> };
+
+export type TreeTissueOverviewFragment = { __typename?: 'TreeTissue', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
+
+export type TreeDiseaseOverviewFragment = { __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
+
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }> };
+export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }>, treeTissuesList: Array<{ __typename?: 'TreeTissue', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> }>, treeDiseasesList: Array<{ __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> }> };
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
@@ -5606,6 +5612,35 @@ export type ExpressionByOmicsIdsQueryVariables = Exact<{
 
 export type ExpressionByOmicsIdsQuery = { __typename?: 'Query', expressionByOmicsIdsList: Array<{ __typename?: 'ExpressionByOmic', omicsId: number, studySampleIds: Array<number>, values: Array<number> }> };
 
+export const StudyOverviewFragmentDoc = gql`
+    fragment StudyOverview on Study {
+  studyId
+  studyName
+  cellCount
+  description
+  organismTaxId
+  tissueNcitIds
+  diseaseMeshIds
+}
+    `;
+export const TreeTissueOverviewFragmentDoc = gql`
+    fragment TreeTissueOverview on TreeTissue {
+  cid
+  label
+  ontCode
+  parentCids
+  parentOntCodePath
+}
+    `;
+export const TreeDiseaseOverviewFragmentDoc = gql`
+    fragment TreeDiseaseOverview on TreeDisease {
+  cid
+  label
+  ontCode
+  parentCids
+  parentOntCodePath
+}
+    `;
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
   studyId
@@ -5648,16 +5683,18 @@ export const StudyBasicsFragmentDoc = gql`
 export const StudiesDocument = gql`
     query studies {
   studiesList {
-    studyId
-    studyName
-    cellCount
-    description
-    organismTaxId
-    tissueNcitIds
-    diseaseMeshIds
+    ...StudyOverview
+  }
+  treeTissuesList {
+    ...TreeTissueOverview
+  }
+  treeDiseasesList {
+    ...TreeDiseaseOverview
   }
 }
-    `;
+    ${StudyOverviewFragmentDoc}
+${TreeTissueOverviewFragmentDoc}
+${TreeDiseaseOverviewFragmentDoc}`;
 
 /**
  * __useStudiesQuery__

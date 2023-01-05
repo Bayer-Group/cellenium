@@ -1,17 +1,19 @@
 import React from 'react';
 import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from '@mantine/core';
 import {IconExternalLink} from "@tabler/icons";
-import { Study} from "../../generated/types";
+import {StudyOverviewFragment, TreeDiseaseOverviewFragment, TreeTissueOverviewFragment} from "../../generated/types";
 
-type Props = {
-    studyId: number;
-    studyName: string;
-    cellCount: number;
-    description: string;
-    tissueNcitIds: string[];
-    diseaseMeshIds: string[];
+
+function getTissueLabel(ontcode:string, ontlist:TreeTissueOverviewFragment[]):string|undefined {
+    const fragment = ontlist.filter((e)=>e.ontCode === ontcode).pop()
+    return fragment?.label
 }
-const StudyCard = ({studyId, studyName, cellCount, description, tissueNcitIds, diseaseMeshIds}: Props) => {
+function getDiseaseLabel(ontcode:string, ontlist:TreeDiseaseOverviewFragment[]):string|undefined {
+    const fragment = ontlist.filter((e)=>e.ontCode === ontcode).pop()
+    return fragment?.label
+}
+
+const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, diseases: TreeDiseaseOverviewFragment[], tissues: TreeTissueOverviewFragment[]}) => {
     return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
             <Card.Section withBorder inheritPadding py="xs">
@@ -19,12 +21,12 @@ const StudyCard = ({studyId, studyName, cellCount, description, tissueNcitIds, d
                     <Grid.Col span={8}>
                         <Anchor href={'deg'} color={'dark'}>
                             <Text align='left' lineClamp={1} sx={{textOverflow: 'ellipsis', overflow: 'hidden'}}
-                                  weight={800}>{studyName}</Text>
+                                  weight={800}>{study.studyName}</Text>
                         </Anchor>
                     </Grid.Col>
                     <Grid.Col span={4}>
                         <Group position={'right'}>
-                            <Badge variant={'light'} color={'gray'}>{Math.round(cellCount / 1000)}k
+                            <Badge variant={'light'} color={'gray'}>{Math.round(study.cellCount / 1000)}k
                                 cells</Badge>
                             {/* eslint-disable-next-line react/jsx-no-undef */}
                             <ActionIcon variant={'subtle'} onClick={() => {
@@ -37,21 +39,21 @@ const StudyCard = ({studyId, studyName, cellCount, description, tissueNcitIds, d
                 </Grid>
             </Card.Section>
             <Text mt="sm" mb='sm' color="dimmed" size="sm" lineClamp={3} align={'left'}>
-                {description}
+                {study.description}
             </Text>
             <Card.Section withBorder inheritPadding py="xs">
                 <Spoiler maxHeight={19} showLabel={"Show more"} hideLabel={'hide'} style={{
                     fontSize: 12,
                 }}>
                     <Group position={'left'} spacing={3}>
-                        {tissueNcitIds && tissueNcitIds.map((tissue: string) => {
+                        {study.tissueNcitIds && study.tissueNcitIds.map((tissue: string) => {
                             return (<Badge size='sm' color="primary" variant="outline">
-                                {tissue}
+                                {getTissueLabel(tissue, tissues)}
                             </Badge>)
                         })}
-                        {diseaseMeshIds && diseaseMeshIds.map((disease: string) => {
+                        {study.diseaseMeshIds && study.diseaseMeshIds.map((disease: string) => {
                             if (disease.length > 0) return (<Badge size='sm' color="red" variant="outline">
-                                {disease}
+                                {getDiseaseLabel(disease,diseases)}
                             </Badge>)
                         })}
                     </Group>
