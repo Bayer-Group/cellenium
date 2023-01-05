@@ -35,7 +35,7 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
         .select('annotationGroupId', 'annotationValueId');
     // annotationGroupsValuesTable.print();
     const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
-    annotatedSamplesTable.print();
+    // annotatedSamplesTable.print();
     return annotatedSamplesTable;
 }
 
@@ -58,7 +58,9 @@ export const studyState = selector<Study | undefined>({
                 const s: Study = {
                     ...response.data.study,
                     samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0]),
-                    samplesAnnotationTable: buildSampleAnnotationTable(response.data.study)
+                    samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
+                    annotationGroupMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => [g.annotationGroup.annotationGroupId, g.annotationGroup])),
+                    annotationValueMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => g.annotationGroup.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };
                 return s;
             }

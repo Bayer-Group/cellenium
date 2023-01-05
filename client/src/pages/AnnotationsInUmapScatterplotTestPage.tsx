@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LeftSidePanel, RightSidePanel} from "../components";
 import {Group, Stack} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -7,6 +7,7 @@ import {useStudyBasicsQuery} from "../generated/types";
 import {useExpressionValues} from "../hooks";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
+import * as Plotly from "plotly.js";
 
 interface PreparedPlot {
     message?: string;
@@ -20,7 +21,7 @@ const AnnotationsInUmapScatterplotTestPage = () => {
         setStudyId(1)
     });
     const study = useRecoilValue(studyState);
-
+    const [highlightAnnotation, setHighlightAnnotation] = useState(0);
 
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
         if (!study) {
@@ -30,37 +31,54 @@ const AnnotationsInUmapScatterplotTestPage = () => {
         // @ts-ignore
         let t = study.samplesAnnotationTable.filter(r => r.annotationGroupId === 1);
         t = t.join(study.samplesProjectionTable, 'studySampleId').reify();
+        const distinctAnnotationValueIds: number[] = t.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
-        const plotlyData = [
-            {
+        // one plotly data track per category, so that we can assign categorical colors
+        const plotlyData = distinctAnnotationValueIds.map(annotationValueId => {
+            const color = study.annotationValueMap.get(annotationValueId)?.color || '';
+            const tableForAnnotation = t.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
+            const samplesTrace = {
                 type: 'scattergl',
-                x: t.array('projectionX', Float32Array),
-                y: t.array('projectionY', Float32Array),
-                customdata: t.array('studySampleId', Int32Array),
+                x: tableForAnnotation.array('projectionX', Float32Array),
+                y: tableForAnnotation.array('projectionY', Float32Array),
+                customdata: tableForAnnotation.array('annotationValueId', Int32Array),
                 mode: 'markers',
                 marker: {
                     size: 3,
                     opacity: 0.7,
-                    color: t.array('annotationValueId', Int32Array),
-                    cmin: 1.0,
-                    cmax: 15.0,
-
-                    // TODO we need to provide the color strings in color:, plotly doesn't support a categorical palette yet.
-                    colorscale: [[0.0, 'rgb(0,0,255)'], [1.0, 'rgb(255,0,255)']],
+                    color,
                 },
-            } as Partial<Plotly.PlotData>
-        ];
+                showlegend: false,
+            } as Partial<Plotly.PlotData>;
+            if (highlightAnnotation === annotationValueId) {
+                console.log('highlight', color, annotationValueId)
+                return [
+                    samplesTrace,
+                    {
+                        type: 'scattergl',
+                        x: tableForAnnotation.array('projectionX', Float32Array),
+                        y: tableForAnnotation.array('projectionY', Float32Array),
+                        mode: 'markers',
+                        marker: {
+                            size: 30,
+                            opacity: 0.02,
+                            color,
+                        },
+                        showlegend: false,
+                    } as Partial<Plotly.PlotData>
+                ];
+            } else {
+                return [samplesTrace];
+            }
+        }).flat(2);
+
+
         return {
             plotlyData,
             plotlyLayout: {
                 width: 850,
                 height: 700,
                 margin: {l: 0, r: 0, t: 0, b: 0},
-                legend: {
-                    // Make the legend marker size larger
-                    // @ts-ignore
-                    itemsizing: 'constant',
-                },
                 xaxis: {
                     visible: false,
                     fixedrange: true,
@@ -71,15 +89,23 @@ const AnnotationsInUmapScatterplotTestPage = () => {
                 },
             },
         }
+    }, [study, highlightAnnotation]);
 
-    }, [study]);
-
+    const onHover = (event: Readonly<Plotly.PlotHoverEvent>) => {
+        if (event.points.length > 0 && event.points[0].customdata) {
+            const an = event.points[0].customdata as number;
+            setHighlightAnnotation(an);
+        }
+    };
 
     return (
         <Group position={'apart'}>
             <LeftSidePanel/>
             <Stack>
-                {preparedPlot && <Plot data={preparedPlot.plotlyData} layout={preparedPlot.plotlyLayout}/>}
+                {preparedPlot && <Plot data={preparedPlot.plotlyData}
+                                       layout={preparedPlot.plotlyLayout}
+                                       onHover={onHover}
+                />}
             </Stack>
             <RightSidePanel/>
         </Group>
