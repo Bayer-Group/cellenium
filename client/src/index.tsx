@@ -11,11 +11,12 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
-import DifferentialExpressionAnalysis from "./pages/DifferentialExpressionAnalysis";
+import DifferentialExpressionAnalysis from "./pages/CellMarkerAnalysis";
 import AnnotationsInUmapScatterplotTestPage from "./pages/AnnotationsInUmapScatterplotTestPage";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
 import SingleGeneExpressionInUmapScatterplotTestPage from "./pages/SingleGeneExpressionInUmapScatterplotTestPage";
+import CellMarkerAnalysis from "./pages/CellMarkerAnalysis";
 
 export const apolloCache = new InMemoryCache();
 
@@ -34,8 +35,8 @@ const router = createBrowserRouter([
         element: <SearchResults/>,
     },
     {
-        path: "/deg",
-        element: <DifferentialExpressionAnalysis/>,
+        path: "/cellmarkeranalysis",
+        element: <CellMarkerAnalysis/>,
     },
     {
         path: "/AnnotationsInUmapScatterplotTestPage",

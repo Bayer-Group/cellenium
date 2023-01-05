@@ -20,7 +20,7 @@ function Annotation({onSelect, label, color, selected}: Props) {
     const {classes, cx} = useStyles();
 
     return (
-        <Grid sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'} onClick={() => onSelect(label)}
+        <Grid pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'} onClick={() => onSelect(label)}
         className={classes.main}
         onMouseOver={()=>console.log(`hovering over ${label}`)}>
             <Grid.Col span={10}>

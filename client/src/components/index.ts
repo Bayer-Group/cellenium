@@ -4,7 +4,7 @@ import {SearchBar} from './SearchBar/SearchBar'
 import {LeftSidePanel} from "./LeftSidePanel/LeftSidePanel";
 import {RightSidePanel} from "./RightSidePanel/RightSidePanel";
 import {AnnotationGroupSelectBox} from "./AnnotationGroupSelectBox/AnnotationGroupSelectBox";
-import {AnnotationGroup} from "./AnnotationGroup/AnnotationGroup";
+import {AnnotationGroupDisplay} from "./AnnotationGroupDisplay/AnnotationGroupDisplay";
 import {Annotation} from "./Annotation/Annotation";
 import {DEGTable} from "./DEGTable/DEGTable";
 import {AddGene} from "./AddGene/AddGene";
@@ -17,7 +17,7 @@ export {
     LeftSidePanel,
     RightSidePanel,
     AnnotationGroupSelectBox,
-    AnnotationGroup,
+    AnnotationGroupDisplay,
     Annotation,
     AddGene
 }

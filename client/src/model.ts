@@ -7,3 +7,8 @@ export type Study = StudyBasicsFragment & {
     annotationGroupMap: Map<number, AnnotationGroup>;
     annotationValueMap: Map<number, AnnotationValue>;
 };
+
+export type SelectBoxItem = {
+    value:string,
+    label:string
+}

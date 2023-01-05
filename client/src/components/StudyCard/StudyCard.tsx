@@ -19,7 +19,7 @@ const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, di
             <Card.Section withBorder inheritPadding py="xs">
                 <Grid columns={12}>
                     <Grid.Col span={8}>
-                        <Anchor href={'deg'} color={'dark'}>
+                        <Anchor href={'cellmarkeranalysis'} color={'dark'}>
                             <Text align='left' lineClamp={1} sx={{textOverflow: 'ellipsis', overflow: 'hidden'}}
                                   weight={800}>{study.studyName}</Text>
                         </Anchor>
@@ -47,12 +47,12 @@ const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, di
                 }}>
                     <Group position={'left'} spacing={3}>
                         {study.tissueNcitIds && study.tissueNcitIds.map((tissue: string) => {
-                            return (<Badge size='sm' color="primary" variant="outline">
+                            return (<Badge key={tissue} size='sm' color="primary" variant="outline">
                                 {getTissueLabel(tissue, tissues)}
                             </Badge>)
                         })}
                         {study.diseaseMeshIds && study.diseaseMeshIds.map((disease: string) => {
-                            if (disease.length > 0) return (<Badge size='sm' color="red" variant="outline">
+                            if (disease.length > 0) return (<Badge key={disease} size='sm' color="red" variant="outline">
                                 {getDiseaseLabel(disease,diseases)}
                             </Badge>)
                         })}

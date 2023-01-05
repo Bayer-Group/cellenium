@@ -3,8 +3,6 @@ import {LeftSidePanel, RightSidePanel} from "../components";
 import {Group, Stack} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {studyIdState, studyState} from "../atoms";
-import {useStudyBasicsQuery} from "../generated/types";
-import {useExpressionValues} from "../hooks";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -21,6 +19,7 @@ const AnnotationsInUmapScatterplotTestPage = () => {
         setStudyId(1)
     });
     const study = useRecoilValue(studyState);
+
     const [highlightAnnotation, setHighlightAnnotation] = useState(0);
 
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
