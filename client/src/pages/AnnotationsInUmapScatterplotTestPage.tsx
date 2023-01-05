@@ -30,37 +30,32 @@ const AnnotationsInUmapScatterplotTestPage = () => {
         // @ts-ignore
         let t = study.samplesAnnotationTable.filter(r => r.annotationGroupId === 1);
         t = t.join(study.samplesProjectionTable, 'studySampleId').reify();
+        const distinctAnnotationValueIds: number[] = t.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
-        const plotlyData = [
-            {
+        // one plotly data track per category, so that we can assign categorical colors
+        const plotlyData = distinctAnnotationValueIds.map(annotationValueId => {
+            const color = study.annotationValueMap.get(annotationValueId);
+            const tableForAnnotation = t.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
+            return {
                 type: 'scattergl',
-                x: t.array('projectionX', Float32Array),
-                y: t.array('projectionY', Float32Array),
-                customdata: t.array('studySampleId', Int32Array),
+                x: tableForAnnotation.array('projectionX', Float32Array),
+                y: tableForAnnotation.array('projectionY', Float32Array),
+                customdata: tableForAnnotation.array('studySampleId', Int32Array),
                 mode: 'markers',
                 marker: {
                     size: 3,
                     opacity: 0.7,
-                    color: t.array('annotationValueId', Int32Array),
-                    cmin: 1.0,
-                    cmax: 15.0,
-
-                    // TODO we need to provide the color strings in color:, plotly doesn't support a categorical palette yet.
-                    colorscale: [[0.0, 'rgb(0,0,255)'], [1.0, 'rgb(255,0,255)']],
+                    color, //: t.array('annotationValueId', Int32Array),
                 },
-            } as Partial<Plotly.PlotData>
-        ];
+                showlegend: false,
+            } as Partial<Plotly.PlotData>;
+        });
         return {
             plotlyData,
             plotlyLayout: {
                 width: 850,
                 height: 700,
                 margin: {l: 0, r: 0, t: 0, b: 0},
-                legend: {
-                    // Make the legend marker size larger
-                    // @ts-ignore
-                    itemsizing: 'constant',
-                },
                 xaxis: {
                     visible: false,
                     fixedrange: true,
@@ -71,7 +66,6 @@ const AnnotationsInUmapScatterplotTestPage = () => {
                 },
             },
         }
-
     }, [study]);
 
 
