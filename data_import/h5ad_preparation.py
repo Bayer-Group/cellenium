@@ -123,6 +123,8 @@ def add_cellenium_settings(adata: AnnData,
     pubmed_id: str,
     data_source: str
 ):
+    ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(',')]
+    mesh_disease_id = [x.strip() for x in mesh_disease_id.split(',')]
     cellenium_settings(adata, title, description, taxonomy_id, ncit_tissue_id, mesh_disease_id, pubmed_id, data_source)
     # TODO: add fuzzy matching to detect main cell type attributes
     # TODO: add fuzzy matching of cell types to cell ontology
@@ -177,3 +179,5 @@ def calculate_differentially_expressed_genes(
     #adata.uns['cellenium'] = d
     #d['differentially_expressed_genes'] = result_dataframe.copy()
     return result_dataframe
+
+# TODO subsampling function for testing
