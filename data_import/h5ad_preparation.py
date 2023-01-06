@@ -161,10 +161,18 @@ def add_differential_expression_tables(adata: AnnData, attributes: List[str], la
     return adata
 
 
-def cellenium_settings_OLD(
+def set_cellenium_metadata(
         adata: AnnData,
+        title: str,
+        description: str,
+        taxonomy_id: int,
+        ncit_tissue_ids: List[str],
+        mesh_disease_ids: List[str],
+        X_pseudolayer_name: str,
         main_sample_attributes: List[str]
 ):
+    # lets keep this stable for the jupyter way of h5ad generation
+
     d = adata.uns.get('cellenium', {})
     adata.uns['cellenium'] = d
 
@@ -173,6 +181,19 @@ def cellenium_settings_OLD(
         if a not in adata.obs.columns:
             raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
     d['main_sample_attributes'] = main_sample_attributes
+
+    assert title is not None
+    d['title'] = title
+    d['description'] = description
+    assert isinstance(taxonomy_id, int)
+    d['taxonomy_id'] = taxonomy_id
+    assert isinstance(ncit_tissue_ids, list)
+    assert len(ncit_tissue_ids) > 0
+    d['ncit_tissue_ids'] = ncit_tissue_ids
+    assert isinstance(mesh_disease_ids, list)
+    d['mesh_disease_ids'] = mesh_disease_ids
+    assert X_pseudolayer_name is not None
+    d['X_pseudolayer_name'] = X_pseudolayer_name
 
 
 # cellenium meta data
