@@ -9,7 +9,6 @@ from anndata import AnnData
 import logging
 from pathlib import Path
 
-
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
 
@@ -24,6 +23,7 @@ def get_h5ad_from_url(url: str, filename: str) -> AnnData:
     adata = sc.read(localfile, backup_url=url)
     return adata
 
+
 # downloads a dataset from the sfaira zoo and returns file handle, see here for a list of available datasets: https://theislab.github.io/sfaira-portal/Datasets
 def get_sfaira_h5ad(sfaira_id: str) -> AnnData:
     # sfaira depends on tensorflow, we haven't included it in environment.yml, install when needed
@@ -36,75 +36,165 @@ def get_sfaira_h5ad(sfaira_id: str) -> AnnData:
     ds.subset(key="id", values=[sfaira_id])
     ds.download(verbose=1)
     ds.load(verbose=1)
-    ds.datasets[sfaira_id].streamline_metadata(schema="sfaira")  # convert the metadata annotation to the sfaira standard
+    ds.datasets[sfaira_id].streamline_metadata(
+        schema="sfaira")  # convert the metadata annotation to the sfaira standard
     adata = ds.datasets[sfaira_id].adata  # get the anndata object
     return adata
 
-# checks if the matrix at .X is sparse, if not make it so. Stores matrix in specified layer
-def make_sparse(adata: AnnData, layer = "counts"):
-    if not scipy.sparse.issparse(adata.X):
-        adata.layers[layer] = scipy.sparse.csr_matrix(adata.X)
+
+def jupyter_h5ad_overview(adata: AnnData):
+    from IPython.display import display, HTML, display_pretty
+    pd.set_option("display.max_columns", 100)
+
+    def _header(h):
+        display(HTML(f'<h2>{h}</h2>'))
+
+    def _df(title, df):
+        _header(title)
+        display(HTML(df._repr_html_()))
+
+    def _matrix(title, m):
+        _header(title)
+        display(m.shape)
+        display_pretty(m)
+
+    _df('obs', adata.obs)
+    _df('var', adata.var)
+    _matrix('X', adata.X)
+    if adata.raw is not None:
+        _matrix('raw', adata.raw)
+    for layer in adata.layers:
+        _matrix(f'layer "{layer}"', adata.layers[layer])
+    _header('uns')
+    display_pretty(adata.uns)
+
+
+def remove_raw_and_layers(adata: AnnData):
+    adata.raw = None
+    for layer in list(adata.layers.keys()):
+        adata.layers.pop(layer)
+
+
+def _get_X_or_layer(adata: AnnData, layer):
+    return adata.layers[layer] if layer else adata.X
+
+
+def _set_X_or_layer(adata: AnnData, layer, m):
+    if layer:
+        adata.layers[layer] = m
     else:
-        adata.layers[layer] = adata.X
-    return adata
+        adata.X = m
+
+
+# checks if the matrix at .X (or layer) is sparse, if not make it so
+def make_sparse(adata: AnnData, layer=None):
+    if not scipy.sparse.issparse(_get_X_or_layer(adata, layer)):
+        _set_X_or_layer(adata, layer, scipy.sparse.csr_matrix(_get_X_or_layer(adata, layer)))
+        logging.info('make_sparse: conversion to sparse matrix done')
+
+
+def filter_outliers(adata: AnnData):
+    sc.pp.filter_cells(adata, min_genes=200)
+    sc.pp.filter_genes(adata, min_cells=3)
+
 
 # check if an integer for a layer in anndata but not simply using the type
-def isinteger(adata: AnnData, layer: str) -> bool:
-    expression_vals = scipy.sparse.find(adata.layers[layer])[2]
+def isinteger(adata: AnnData, layer=None) -> bool:
+    expression_vals = scipy.sparse.find(_get_X_or_layer(adata, layer))[2]
     return all(np.equal(np.mod(expression_vals, 1), 0))
 
-# make sure final data is in log space with normalized expression, layer to check is layer_from, layer to normalize to is layer_to
-def make_norm_expression(adata: AnnData, layer_from = "counts", layer_to = "norm_log_expression"):
-    if isinteger(adata, layer_from):
-        adata.layers[layer_to] = adata.layers[layer_from]
-        adata = sc.pp.normalize_total(adata, target_sum=1e4, layer=layer_to, inplace=True)
-        sc.pp.log1p(adata, layer=layer_to)
+
+# make sure final data is in log space with normalized expression, use .X (or layer)
+def make_norm_expression(adata: AnnData, layer=None):
+    if isinteger(adata, layer):
+        sc.pp.normalize_total(adata, target_sum=1e4, layer=layer, inplace=True)
+        sc.pp.log1p(adata, layer=layer)
+        logging.info('make_norm_expression: integer values detected - applied normalize_total and log')
     else:
-        if np.max(scipy.sparse.find(adata.layers[layer_from])[2]) > 1000:
-            adata.layers[layer_to] = adata.layers[layer_from]
-            sc.pp.log1p(adata, layer=layer_to)
+        if np.max(scipy.sparse.find(_get_X_or_layer(adata, layer))[2]) > 1000:
+            sc.pp.log1p(adata, layer=layer)
+            logging.info('make_norm_expression: high values detected - applied log')
         else:
-            adata.layers[layer_to] = adata.layers[layer_from]
-    return adata
+            logging.info('make_norm_expression: no transformations necessary')
+
+
+def adata_subset_for_testing(adata, cells_filter_attribute, cells_filter_values, n_top_genes):
+    query = np.array([s in cells_filter_values for s in adata.obs[cells_filter_attribute]])
+    sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes, batch_key=cells_filter_attribute, subset=True)
+    adata_sub = adata[query].copy()
+    adata_sub = adata_sub[:, adata.var_names].copy()
+    return adata_sub
+
 
 # basic umap calculation, doesn't take batch effect into account
-def calculate_umap(adata: AnnData, layer = "norm_log_expression"):
+def calculate_umap(adata: AnnData, layer=None):
     sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer=layer, inplace=True)
-    pca = sc.pp.scale(adata.layers[layer][:,adata.var.highly_variable])
+    pca = sc.pp.scale(_get_X_or_layer(adata, layer)[:, adata.var.highly_variable])
     adata.obsm["X_pca"] = sc.pp.pca(pca)
     sc.pp.neighbors(adata, n_pcs=20, copy=False)
-    adata = sc.tl.umap(adata, copy=True)
-    return adata
+    sc.tl.umap(adata)
 
-# check if there is a umap or calculate one here        
-def add_umap(adata: AnnData, layer = "norm_log_expression"):
+
+# check if there is a umap or calculate one here
+def add_umap(adata: AnnData, layer=None):
     if adata.obsm is None:
-        adata = calculate_umap(adata)
+        calculate_umap(adata, layer)
     else:
         if not "X_umap" in adata.obsm:
             adata = calculate_umap(adata)
+
+
+# add cellenium stuff to hormonize metadata
+def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
+    cellenium_settings(adata, main_sample_attributes=main_attributes)
+    # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
     return adata
-     
-# cellenium meta data
-def cellenium_settings(
-    adata: AnnData,
-    title: str,
-    description: str,
-    taxonomy_id: str,
-    ncit_tissue_id: List[str],
-    mesh_disease_id: List[str],
-    pubmed_id: str,
-    data_source: str
+
+
+# add differential expression table to the anndata object
+# TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
+def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
+    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+    d['differentially_expressed_genes'] = diff_exp
+    return adata
+
+
+def cellenium_settings_OLD(
+        adata: AnnData,
+        main_sample_attributes: List[str]
 ):
     d = adata.uns.get('cellenium', {})
     adata.uns['cellenium'] = d
 
-    #assert isinstance(main_sample_attributes, list)
-    #for a in main_sample_attributes:
+    assert isinstance(main_sample_attributes, list)
+    for a in main_sample_attributes:
+        if a not in adata.obs.columns:
+            raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
+    d['main_sample_attributes'] = main_sample_attributes
+
+
+# cellenium meta data
+def cellenium_settings(
+        adata: AnnData,
+        title: str,
+        description: str,
+        taxonomy_id: str,
+        ncit_tissue_id: List[str],
+        mesh_disease_id: List[str],
+        pubmed_id: str,
+        data_source: str
+):
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+
+    # assert isinstance(main_sample_attributes, list)
+    # for a in main_sample_attributes:
     #    if a not in adata.obs.columns:
     #        raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
-    
-    #d['main_sample_attributes'] = main_sample_attributes
+
+    # d['main_sample_attributes'] = main_sample_attributes
     d['title'] = title
     d['description'] = description
     d['taxonomy_id'] = taxonomy_id
@@ -113,37 +203,29 @@ def cellenium_settings(
     d['pubmed_id'] = pubmed_id
     d['data_source'] = data_source
 
+
 # add cellenium meta data to AnnData.uns,
 def add_cellenium_settings(adata: AnnData,
-    title: str,
-    description: str,
-    taxonomy_id: str,
-    ncit_tissue_id: List[str],
-    mesh_disease_id: List[str],
-    pubmed_id: str,
-    data_source: str
-):
+                           title: str,
+                           description: str,
+                           taxonomy_id: str,
+                           ncit_tissue_id: List[str],
+                           mesh_disease_id: List[str],
+                           pubmed_id: str,
+                           data_source: str
+                           ):
     ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(',')]
     mesh_disease_id = [x.strip() for x in mesh_disease_id.split(',')]
     cellenium_settings(adata, title, description, taxonomy_id, ncit_tissue_id, mesh_disease_id, pubmed_id, data_source)
     # TODO: add fuzzy matching to detect main cell type attributes
     # TODO: add fuzzy matching of cell types to cell ontology
     return adata
-    
-# add differential expression table to the anndata object
-# TODO detect automatically which attributes to do differential expression for by fuzzy matching
-def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
-    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
-    d['differentially_expressed_genes'] = diff_exp
-    return adata
+
 
 # calculate differentially expressed genes using rank_genes_groups from scanpy
 def calculate_differentially_expressed_genes(
         adata: AnnData,
         diffexp_attributes: List[str],
-        layer: str,
         ngenes=100,
         diff_exp_min_group_expr=0.1,
         diff_exp_min_group_fc=0.5,
@@ -154,7 +236,7 @@ def calculate_differentially_expressed_genes(
         valid_attribute_group_check = (adata.obs[diffexp_attribute].value_counts() > 1)
         attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
 
-        sc.tl.rank_genes_groups(adata, diffexp_attribute, groups=attr_values, method='wilcoxon', layer=layer,
+        sc.tl.rank_genes_groups(adata, diffexp_attribute, groups=attr_values, method='wilcoxon',
                                 use_raw=False,
                                 n_genes=ngenes)
         sc.tl.filter_rank_genes_groups(adata, min_in_group_fraction=diff_exp_min_group_expr,
@@ -175,9 +257,7 @@ def calculate_differentially_expressed_genes(
     logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
                  result_dataframe['attribute_name'].unique().tolist())
 
-    #d = adata.uns.get('cellenium', {})
-    #adata.uns['cellenium'] = d
-    #d['differentially_expressed_genes'] = result_dataframe.copy()
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+    d['differentially_expressed_genes'] = result_dataframe.copy()
     return result_dataframe
-
-# TODO subsampling function for testing
