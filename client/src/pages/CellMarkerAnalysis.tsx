@@ -10,8 +10,9 @@ import {
 import {Group, Space, Stack} from "@mantine/core";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyIdState, studyState} from "../atoms";
+import {annotationGroupIdState, studyIdState, studyState} from "../atoms";
 import {SelectBoxItem} from '../model';
+import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 
 const ANNOTATIONS = [
     {label: "bone cell", color: "#1f77b4"},
@@ -77,8 +78,10 @@ interface PreparedPlot {
 }
 
 function DifferentialExpressionAnalysis() {
-    const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
-    const [selectedAnnotation, setSelectedAnnotation] = useState<string|undefined>();
+    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+
+    //const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
+    const [selectedAnnotation, setSelectedAnnotation] = useState<string | undefined>();
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     useEffect(() => {
@@ -96,18 +99,13 @@ function DifferentialExpressionAnalysis() {
             })
             if (anns.length > 0) {
                 setAnnotationGroups(anns)
-                setSelectedAnnotationGroup(parseInt(anns[0].value))
+                setAnnotationGroupId(parseInt(anns[0].value))
             }
 
         }
 
     }, [study])
-    useEffect(() => {
-        if (selectedAnnotationGroup && study) {
-            console.log(selectedAnnotationGroup);
-            console.log(study.annotationGroupMap.get(selectedAnnotationGroup))
-        }
-    }, [selectedAnnotationGroup])
+
     return (
         <Group position={'apart'}>
             <LeftSidePanel>
@@ -115,20 +113,22 @@ function DifferentialExpressionAnalysis() {
                 {annotationGroups.length > 0 &&
                     <Stack>
                         <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                  changeHandler={(value:number)=>{
-                                                      setSelectedAnnotationGroup(value);
+                                                  changeHandler={(value: number) => {
+                                                      setAnnotationGroupId(value);
                                                       setSelectedAnnotation(undefined);
                                                   }}/>
-                        {selectedAnnotationGroup && study?.annotationGroupMap.get(selectedAnnotationGroup) !== undefined &&
+                        {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
                             <AnnotationGroupDisplay
                                 handleSelection={setSelectedAnnotation}
                                 selectedAnnotation={selectedAnnotation}
-                                annotationGroup={study.annotationGroupMap.get(selectedAnnotationGroup)}/>}
+                                annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
                     </Stack>
                 }
 
             </LeftSidePanel>
-
+            <main>
+                <ProjectionPlot colorBy={'annotation'}/>
+            </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
                     <div style={{width: '80%'}}>
