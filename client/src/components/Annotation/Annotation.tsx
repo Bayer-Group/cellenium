@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {ColorSwatch, createStyles, Grid, Text} from "@mantine/core";
 import {useRecoilState} from "recoil";
 import {highlightAnnotationState, selectedAnnotationState} from "../../atoms";
-import {inspect} from "util";
 
 
 const useStyles = createStyles((theme) => ({
@@ -30,18 +29,26 @@ function Annotation({label, color, annotationId}: Props) {
     return (
         <Grid pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
-              onClick={()=>setSelected(annotationId)}
-              className={cx({[classes.hovered]:annotationId===highlight,
-                [classes.clicked]:annotationId=== selected
+              onClick={() => {
+                  if (highlight === selected) {
+                      setSelected(0)
+                  } else {
+                      setSelected(annotationId)
+                  }
+              }}
+              className={cx({
+                  [classes.hovered]: annotationId === highlight,
+                  [classes.clicked]: annotationId === selected
               })}
         >
             <Grid.Col span={10}>
-                <Text size={'md'} fw={selected===annotationId ? 800 : "md"} truncate>
+                <Text size={'md'} fw={selected === annotationId ? 800 : "md"} truncate>
                     {label}
                 </Text>
             </Grid.Col>
             <Grid.Col span={2} style={{justifyContent: 'center'}}>
-                <ColorSwatch key={color} color={color} size={selected===annotationId ? 12 : 15} style={{border: selected===annotationId ? '2px solid black' : ''}}/>
+                <ColorSwatch key={color} color={color} size={selected === annotationId ? 12 : 15}
+                             style={{border: selected === annotationId ? '2px solid black' : ''}}/>
             </Grid.Col>
         </Grid>
     );

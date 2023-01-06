@@ -7,7 +7,7 @@ import {
     LeftSidePanel,
     RightSidePanel
 } from "../components";
-import {Group, Space, Stack} from "@mantine/core";
+import {Center, Group, Space, Stack} from "@mantine/core";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {annotationGroupIdState, studyIdState, studyState} from "../atoms";
@@ -107,39 +107,39 @@ function DifferentialExpressionAnalysis() {
     }, [study])
 
     return (
-        <Group position={'apart'}>
-            <LeftSidePanel>
+            <Group position={'apart'} spacing={'xs'}>
+                <LeftSidePanel>
 
-                {annotationGroups.length > 0 &&
-                    <Stack>
-                        <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                  changeHandler={(value: number) => {
-                                                      setAnnotationGroupId(value);
-                                                      setSelectedAnnotation(undefined);
-                                                  }}/>
-                        {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
-                            <AnnotationGroupDisplay
-                                annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
-                    </Stack>
-                }
+                    {annotationGroups.length > 0 &&
+                        <Stack>
+                            <AnnotationGroupSelectBox annotations={annotationGroups}
+                                                      changeHandler={(value: number) => {
+                                                          setAnnotationGroupId(value);
+                                                          setSelectedAnnotation(undefined);
+                                                      }}/>
+                            {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
+                                <AnnotationGroupDisplay
+                                    annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
+                        </Stack>
+                    }
 
-            </LeftSidePanel>
-            <main>
-                <ProjectionPlot colorBy={'annotation'}/>
-            </main>
-            <RightSidePanel>
-                <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div style={{width: '80%'}}>
-                        <AddGene/>
-                    </div>
-                    <Stack style={{width: '100%'}} spacing={'xs'}>
-                        {genes.map((gene) => <UserGene key={`ug_${gene.display_symbol}`} gene={gene}/>)}
+                </LeftSidePanel>
+                <div  >
+                    <ProjectionPlot colorBy={'annotation'}/>
+                </div>
+                <RightSidePanel>
+                    <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
+                        <div style={{width: '80%'}}>
+                            <AddGene/>
+                        </div>
+                        <Stack style={{width: '100%'}} spacing={'xs'}>
+                            {genes.map((gene) => <UserGene key={`ug_${gene.display_symbol}`} gene={gene}/>)}
+                        </Stack>
+                        <Space h={'md'}/>
+                        <DEGTable data={DEG}/>
                     </Stack>
-                    <Space h={'md'}/>
-                    <DEGTable data={DEG}/>
-                </Stack>
-            </RightSidePanel>
-        </Group>
+                </RightSidePanel>
+            </Group>
     );
 };
 

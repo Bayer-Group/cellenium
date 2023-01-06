@@ -170,6 +170,9 @@ const ProjectionPlot = ({
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
+                      config={{
+                          responsive: true
+                      }}
                       onHover={onHover}
                       onClick={onClick}
         />);

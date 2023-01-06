@@ -2,6 +2,7 @@ import React from 'react';
 import DataTable from "react-data-table-component";
 import {Space, Stack, Text} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
+import { ActionIcon } from '@mantine/core';
 
 
 const customStyles = {
@@ -9,6 +10,7 @@ const customStyles = {
         style: {
             backgroundColor: 'transparent',
             marginRight: '10',
+            overflow: 'hidden'
         }
     },
     header: {
@@ -59,24 +61,24 @@ const columns = [
         name: 'gene',
         selector: (row: any) => row.symbol,
         sortable: true,
-        width: '4rem'
+        width: '80px'
     },
     {
         name: 'padj',
         selector: (row: any) => row.padj.toExponential(2),
         sortable: true,
-        width: '4rem'
+        width: '80px'
     },
     {
         name: 'log2FC',
-        selector: (row: any) =>+row.log2fc.toFixed(2),
+        selector: (row: any) => +row.log2fc.toFixed(2),
         sortable: true,
-        width: '6rem'
+        width: '80px'
     },
     {
         name: '',
-        cell: ()=><IconPlus size={15}/>,
-        width: '1rem'
+        cell: () => <ActionIcon size='xs' variant={"default"}><IconPlus size={12}/></ActionIcon>,
+        width: '20px',
     }
 ];
 
@@ -86,7 +88,7 @@ type Props = {
 
 const DEGTable = ({data}: Props) => {
     return (
-        <Stack justify={'flex-start'} align={'center'}>
+        <Stack justify={'flex-start'} align={'center'} w={'100%'}>
             <div>
                 <Text weight={800} size={'xs'}>Differentially expressed genes</Text>
                 <Space h={'xs'}/>

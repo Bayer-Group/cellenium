@@ -288,6 +288,10 @@ CREATE TABLE differential_expression
 );
 create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
 
+CREATE VIEW differential_expression_v AS
+    SELECT de.*, ob.display_symbol, ob.display_name FROM differential_expression de
+JOIN omics_base ob on de.omics_id = ob.omics_id;
+
 CREATE TABLE study_layer
 (
     study_layer_id serial primary key,
