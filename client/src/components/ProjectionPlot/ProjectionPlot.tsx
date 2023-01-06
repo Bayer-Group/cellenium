@@ -1,6 +1,6 @@
 import React from 'react';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, highlightAnnotationState, studyState} from "../../atoms";
+import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -28,6 +28,7 @@ const ProjectionPlot = ({
 
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
+    const [selected, setSelected] = useRecoilState(selectedAnnotationState);
 
 
     const annotationProjectionData = React.useMemo(() => {
@@ -159,8 +160,11 @@ const ProjectionPlot = ({
         }
     };
 
-    function onClick(event: Readonly<Plotly.ButtonClickEvent>) {
-
+    function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
+            if (event.points.length > 0 && event.points[0].customdata) {
+            const annotationValueId = event.points[0].customdata as number;
+            setSelected(annotationValueId);
+        }
     }
 
     if (preparedPlot) {

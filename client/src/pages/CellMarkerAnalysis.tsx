@@ -119,8 +119,6 @@ function DifferentialExpressionAnalysis() {
                                                   }}/>
                         {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
                             <AnnotationGroupDisplay
-                                handleSelection={setSelectedAnnotation}
-                                selectedAnnotation={selectedAnnotation}
                                 annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
                     </Stack>
                 }
