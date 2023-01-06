@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import {createStyles, Anchor, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
+import {Anchor, createStyles, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
 import {ReactComponent as CellTypeMarkerIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
 import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
 import {ReactComponent as CompareAnnotationsIcon} from "../../icons/annotation_comparison.svg";
 import {ReactComponent as UserAnnotationIcon} from "../../icons/user_annotation.svg";
+import {useNavigate} from "react-router-dom";
 
 import {ReactComponent as CelleniumLogo} from "../../images/logo.svg";
+import {useRecoilState} from "recoil";
+import { useLocation } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -86,11 +89,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const viewLinks = [
-    {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis'},
-    {icon: ExpressionAnalysisIcon, label: 'Expression analysis'},
-    {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis'},
-    {icon: CompareAnnotationsIcon, label: 'Compare annotations'},
-    {icon: UserAnnotationIcon, label: 'User annotations'},
+    {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis', link: '/cellmarkeranalysis'},
+    {icon: ExpressionAnalysisIcon, label: 'Expression analysis', link: '/expressionanalysis'},
+    {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis', link: '/coexpressionanalysis'},
+    {icon: CompareAnnotationsIcon, label: 'Compare annotations', link: '/annotationcomparison'},
+    {icon: UserAnnotationIcon, label: 'User annotations', link: '/userannotation'},
 ];
 
 type Props = {
@@ -100,12 +103,18 @@ type Props = {
 function LeftSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
     const [active, setActive] = useState('Cell type marker analysis');
+    const navigate = useNavigate();
+    const location = useLocation()
+    console.log(location.pathname)
 
     const mainLinks = viewLinks.map((link) => (
         <Tooltip label={link.label} position="right" withArrow transitionDuration={0} key={link.label}>
             <UnstyledButton
-                onClick={() => setActive(link.label)}
-                className={cx(classes.mainLink, {[classes.mainLinkActive]: link.label === active})}
+                onClick={() => {
+                    setActive(link.label)
+                    navigate(link.link)
+                }}
+                className={cx(classes.mainLink, {[classes.mainLinkActive]: link.link === location.pathname})}
             >
                 <link.icon/>
             </UnstyledButton>
