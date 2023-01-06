@@ -13,6 +13,10 @@ import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
 import SingleGeneExpressionInUmapScatterplotTestPage from "./pages/SingleGeneExpressionInUmapScatterplotTestPage";
 import ExpressionAnalysis from "./pages/ExpressionAnalysis";
+import ErrorPage from "./pages/ErrorPage";
+import CoexpressionAnalysis from "./pages/CoexpressionAnalysis";
+import AnnotationComparison from "./pages/AnnotationComparison";
+import UserAnnotation from "./pages/UserAnnotation";
 
 export const apolloCache = new InMemoryCache();
 
@@ -29,6 +33,8 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <SearchResults/>,
+        errorElement: <ErrorPage/>,
+
     },
     {
         path: "/cellmarkeranalysis",
@@ -37,6 +43,18 @@ const router = createBrowserRouter([
     {
         path: "/expressionanalysis",
         element: <ExpressionAnalysis/>,
+    },
+    {
+        path: "/coexpressionanalysis",
+        element: <CoexpressionAnalysis/>,
+    },
+    {
+        path: "/annotationcomparison",
+        element: <AnnotationComparison/>,
+    },
+    {
+        path: "/userannotation",
+        element: <UserAnnotation/>,
     },
     {
         path: "/AnnotationsInUmapScatterplotTestPage",
