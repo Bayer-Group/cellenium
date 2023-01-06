@@ -85,13 +85,53 @@ def add_umap(adata: AnnData, layer = "norm_log_expression"):
             adata = calculate_umap(adata)
     return adata
      
-# add cellenium stuff to hormonize metadata
-def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
-    cellenium_settings(adata, main_sample_attributes=main_attributes)
-    # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
+# cellenium meta data
+def cellenium_settings(
+    adata: AnnData,
+    title: str,
+    description: str,
+    taxonomy_id: str,
+    ncit_tissue_id: List[str],
+    mesh_disease_id: List[str],
+    pubmed_id: str,
+    data_source: str
+):
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+
+    #assert isinstance(main_sample_attributes, list)
+    #for a in main_sample_attributes:
+    #    if a not in adata.obs.columns:
+    #        raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
+    
+    #d['main_sample_attributes'] = main_sample_attributes
+    d['title'] = title
+    d['description'] = description
+    d['taxonomy_id'] = taxonomy_id
+    d['ncit_tissue_id'] = ncit_tissue_id
+    d['mesh_disease_id'] = mesh_disease_id
+    d['pubmed_id'] = pubmed_id
+    d['data_source'] = data_source
+
+# add cellenium meta data to AnnData.uns,
+def add_cellenium_settings(adata: AnnData,
+    title: str,
+    description: str,
+    taxonomy_id: str,
+    ncit_tissue_id: List[str],
+    mesh_disease_id: List[str],
+    pubmed_id: str,
+    data_source: str
+):
+    ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(',')]
+    mesh_disease_id = [x.strip() for x in mesh_disease_id.split(',')]
+    cellenium_settings(adata, title, description, taxonomy_id, ncit_tissue_id, mesh_disease_id, pubmed_id, data_source)
+    # TODO: add fuzzy matching to detect main cell type attributes
+    # TODO: add fuzzy matching of cell types to cell ontology
     return adata
     
 # add differential expression table to the anndata object
+# TODO detect automatically which attributes to do differential expression for by fuzzy matching
 def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
     diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
     d = adata.uns.get('cellenium', {})
@@ -99,21 +139,7 @@ def add_differential_expression_tables(adata: AnnData, attributes: List[str], la
     d['differentially_expressed_genes'] = diff_exp
     return adata
 
-
-def cellenium_settings(
-        adata: AnnData,
-        main_sample_attributes: List[str]
-):
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
-
-    assert isinstance(main_sample_attributes, list)
-    for a in main_sample_attributes:
-        if a not in adata.obs.columns:
-            raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
-    d['main_sample_attributes'] = main_sample_attributes
-
-
+# calculate differentially expressed genes using rank_genes_groups from scanpy
 def calculate_differentially_expressed_genes(
         adata: AnnData,
         diffexp_attributes: List[str],
@@ -149,7 +175,9 @@ def calculate_differentially_expressed_genes(
     logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
                  result_dataframe['attribute_name'].unique().tolist())
 
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
-    d['differentially_expressed_genes'] = result_dataframe.copy()
+    #d = adata.uns.get('cellenium', {})
+    #adata.uns['cellenium'] = d
+    #d['differentially_expressed_genes'] = result_dataframe.copy()
     return result_dataframe
+
+# TODO subsampling function for testing
