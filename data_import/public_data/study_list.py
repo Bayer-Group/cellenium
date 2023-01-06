@@ -3,13 +3,15 @@ from anndata import AnnData
 import numpy as np
 import pandas as pd
 import h5ad_preparation as prep
+from pathlib import Path
 
-#from pathlib import Path
-#basedir = Path().parent.parent.joinpath('public_data').resolve()
-#study_list_filename = "public_data_links.txt"
-#localfile = basedir.joinpath(f"{study_list_filename}")
 
-def create_study_files(path_to_study_table, sep = "\t"):
+def create_study_files(sep = "\t"):
+    
+    study_list_filename = "public_data_links.txt"
+    
+    filedir = Path().parent.parent.joinpath('public_data').resolve()
+    localfile = file.joinpath(f"{study_list_filename}")
     ll = pd.read_csv(path_to_study_table, sep = sep)
     
     for index, row in ll.head().iterrows():
