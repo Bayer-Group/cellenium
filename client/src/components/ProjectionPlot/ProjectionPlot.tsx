@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, highlightAnnotationState, studyIdState, studyState} from "../../atoms";
+import {annotationGroupIdState, highlightAnnotationState, studyState} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -87,8 +87,8 @@ const ProjectionPlot = ({
             mode: 'markers',
             text: study.annotationValueMap.get(highlightAnnotation)?.displayValue,
             marker: {
-                size: 30,
-                opacity: 0.02,
+                size: 20,
+                opacity: 0.4,
                 color: colorBy === 'annotation'
                     ? study.annotationValueMap.get(highlightAnnotation)?.color
                     : '#dddddd',
@@ -152,17 +152,23 @@ const ProjectionPlot = ({
         }
     }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace]);
 
-    const onHover = (event: Readonly<Plotly.PlotHoverEvent>) => {
+    function onHover(event: Readonly<Plotly.PlotHoverEvent>) {
         if (event.points.length > 0 && event.points[0].customdata) {
             const annotationValueId = event.points[0].customdata as number;
             setHighlightAnnotation(annotationValueId);
         }
     };
 
+    function onClick(event: Readonly<Plotly.ButtonClickEvent>) {
+
+    }
+
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
-                      onHover={onHover}/>);
+                      onHover={onHover}
+                      onClick={onClick}
+        />);
     } else {
         return (<div>no plot</div>)
     }

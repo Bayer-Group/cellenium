@@ -9,6 +9,11 @@ import {
 } from "./generated/types";
 import * as aq from 'arquero';
 
+export const annotationState = atom<number|undefined>({
+    key: "annotation",
+    default: undefined
+})
+
 export const highlightAnnotationState = atom<number>({
     key: "highlightAnnotation",
     default: 0
