@@ -4,10 +4,10 @@ a FAIR and scalable interactive visual analytics app for scRNA-Seq data
 ## Setting up
 ```bash
 docker-compose up
-docker exec -it cellenium-postgres-1 bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$f; done'
 conda env create -f data_import/environment.yml
 conda activate cellenium_import
-(cd data_import && python masterdata.py)
-(cd data_import && python study_preparation.py)
-(cd data_import && python study_import.py)
+# 'test_studydata' should contain data to cover all application features, but is small enough to be imported in a few minutes
+make reset_database test_studydata_import
+# 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
+make normal_studydata_import
 ```

@@ -1,3 +1,4 @@
+import argparse
 from typing import List
 
 import pandas as pd
@@ -141,7 +142,13 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
 
 
 def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df, adata_samples_df, adata: AnnData):
-    logging.info('importing expression matrix')
+    if layer_name is None:
+        layer_name = adata.uns['cellenium']['X_pseudolayer_name']
+        X = adata.X
+    else:
+        X = adata.layers[layer_name]
+    logging.info(f'importing expression matrix {layer_name}')
+
     with engine.connect() as connection:
         r = connection.execute(text("""INSERT INTO study_layer (study_id, layer, omics_type)
                                 VALUES (:study_id, :layer, 'gene')
@@ -154,7 +161,7 @@ def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df
         connection.execute(text("call add_studylayer_partition(:study_layer_id)"),
                            {'study_layer_id': study_layer_id})
 
-        sparse_X = sparse.csc_matrix(adata.layers[layer_name])
+        sparse_X = sparse.csc_matrix(X)
 
         map_h5ad_var_index_to_omics_index = np.zeros(shape=[sparse_X.shape[1]], dtype=np.uint32)
         for i, row in adata_genes_df.iterrows():
@@ -219,6 +226,7 @@ def import_study(study_name: str, adata: AnnData) -> int:
         import_study_sample_annotation(study_id, adata_samples_df, adata)
         import_differential_expression(study_id, adata_genes_df, adata)
 
+        import_study_layer_expression(study_id, None, adata_genes_df, adata_samples_df, adata)
         for layer_name in adata.layers.keys():
             import_study_layer_expression(study_id, layer_name, adata_genes_df, adata_samples_df, adata)
 
@@ -226,9 +234,10 @@ def import_study(study_name: str, adata: AnnData) -> int:
 
 
 if __name__ == "__main__":
-    adata = sc.read_h5ad('../scratch/pancreas_atlas_subset.h5ad')
-    import_study('pancreas_atlas_subset', adata)
-    # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022_subset.h5ad')
-    # import_study('heart_failure_reichart2022_subset', adata)
-    # adata = sc.read_h5ad('../scratch/heart_failure_reichart2022.h5ad')
-    # import_study('heart_failure_reichart2022', adata)
+    parser = argparse.ArgumentParser(description="cellenium study import tool")
+    parser.add_argument('filename', help='h5ad file created for cellenium (e.g. study_preparation.py scripts)',
+                        type=str)
+    args = parser.parse_args()
+    adata = sc.read_h5ad(args.filename)
+    import_study(adata.uns['cellenium']['title'], adata)
+
