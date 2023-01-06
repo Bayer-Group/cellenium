@@ -1,9 +1,13 @@
 import React from 'react';
 import DataTable from "react-data-table-component";
-import {Space, Stack, Text} from "@mantine/core";
+import {ActionIcon, Stack, Text} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
-import { ActionIcon } from '@mantine/core';
-
+import {useDegQuery} from "../../generated/types";
+import memoize from 'memoize-one';
+import {useRecoilState} from "recoil";
+import {userGenesState} from "../../atoms";
+import {Gene} from "../../model";
+import _ from 'lodash';
 
 const customStyles = {
     table: {
@@ -56,45 +60,69 @@ const customStyles = {
         },
     },
 };
-const columns = [
+const columns = memoize((clickHandler) => [
     {
         name: 'gene',
-        selector: (row: any) => row.symbol,
+        selector: (row: any) => row.displaySymbol,
         sortable: true,
         width: '80px'
     },
     {
         name: 'padj',
-        selector: (row: any) => row.padj.toExponential(2),
+        selector: (row: any) => row.pvalueAdj.toFixed(2),
         sortable: true,
-        width: '80px'
+        width: '70px'
     },
     {
         name: 'log2FC',
-        selector: (row: any) => +row.log2fc.toFixed(2),
+        selector: (row: any) => +row.log2Foldchange.toFixed(2),
         sortable: true,
-        width: '80px'
+        width: '70px'
     },
     {
         name: '',
-        cell: () => <ActionIcon size='xs' variant={"default"}><IconPlus size={12}/></ActionIcon>,
+        cell: (row: any) => {
+            let gene = {
+                omicsId: row.omicsId,
+                displayName: row.displayName,
+                displaySymbol: row.displaySymbol
+            }
+            return (
+                <ActionIcon onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
+                    size={12}/></ActionIcon>)
+        },
         width: '20px',
     }
-];
+]);
 
 type Props = {
-    data: object[];
+    annotationId: number;
 }
 
-const DEGTable = ({data}: Props) => {
+const DEGTable = ({annotationId}: Props) => {
+    const [userGenes, setUserGenes] = useRecoilState(userGenesState)
+    const {data, error, loading} = useDegQuery({
+        variables: {
+            annotationValueId: annotationId
+        }
+    })
+
+    function handleClick(gene: Gene) {
+        let check = userGenes.filter((g)=>g.omicsId===gene.omicsId)
+        if (check.length===0)
+            setUserGenes(_.union(userGenes, [gene]))
+    }
+
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
-            <div>
-                <Text weight={800} size={'xs'}>Differentially expressed genes</Text>
-                <Space h={'xs'}/>
-                <DataTable dense columns={columns} data={data} defaultSortFieldId={1}
-                           customStyles={customStyles}/>
-            </div>
+            {data && data.differentialExpressionVsList.length>0 &&
+                <DataTable dense columns={columns(handleClick)} data={data.differentialExpressionVsList}
+                           defaultSortFieldId={3}
+                           defaultSortAsc={false}
+                           customStyles={customStyles} fixedHeader
+                           fixedHeaderScrollHeight="500px"
+                           noDataComponent={<Text>Select one or more cysteine(s) </Text>}/>
+            }
         </Stack>
     );
 };

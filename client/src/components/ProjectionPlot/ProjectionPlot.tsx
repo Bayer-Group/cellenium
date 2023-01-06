@@ -21,14 +21,13 @@ const ProjectionPlot = ({
                             colorBy,
                             expressionTable
                         }: Props) => {
-    // TODO from recoil
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
     const selectedOmicsIds = [116, 264];
 
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
-    const [selected, setSelected] = useRecoilState(selectedAnnotationState);
+    const [selected, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
 
 
     const annotationProjectionData = React.useMemo(() => {
@@ -163,7 +162,7 @@ const ProjectionPlot = ({
     function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
             if (event.points.length > 0 && event.points[0].customdata) {
             const annotationValueId = event.points[0].customdata as number;
-            setSelected(annotationValueId);
+            setSelectedAnnotation(annotationValueId);
         }
     }
 

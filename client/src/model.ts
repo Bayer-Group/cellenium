@@ -1,6 +1,12 @@
 import {AnnotationGroup, AnnotationValue, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
+export type Gene = {
+    omicsId: number;
+    displayName: string;
+    displaySymbol: string;
+}
+
 export type Study = StudyBasicsFragment & {
     samplesProjectionTable: SamplesProjectionTable;
     samplesAnnotationTable: SamplesAnnotationTable;

@@ -105,7 +105,6 @@ function LeftSidePanel({children}: Props) {
     const [active, setActive] = useState('Cell type marker analysis');
     const navigate = useNavigate();
     const location = useLocation()
-    console.log(location.pathname)
 
     const mainLinks = viewLinks.map((link) => (
         <Tooltip label={link.label} position="right" withArrow transitionDuration={0} key={link.label}>

@@ -5,8 +5,10 @@ import {Group, Space, Stack} from "@mantine/core";
 import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyIdState, studyState} from "../atoms";
+import {studyIdState, studyState, userGenesState} from "../atoms";
 import {SelectBoxItem} from "../model";
+import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
+import {useExpressionValues} from "../hooks";
 
 const analysisTypes = [
     {value: 'violinplot', label: 'Violinplot'},
@@ -26,6 +28,8 @@ const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value)
     const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
     const [studyId, setStudyId] = useRecoilState(studyIdState);
+    const userGenes = useRecoilValue(userGenesState);
+    const {table, loading} = useExpressionValues();
 
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     useEffect(() => {
@@ -70,14 +74,16 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-
+            <main>
+                <ProjectionPlot colorBy={'expression'} expressionTable={table}/>
+            </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
                     <div style={{width: '80%'}}>
                         <AddGene/>
                     </div>
                     <Stack style={{width: '100%'}} spacing={'xs'}>
-                        {genes.map((gene) => <UserGene key={`ug_${gene.display_symbol}`} gene={gene}/>)}
+                        {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
                     </Stack>
                     <Space h={'md'}/>
 

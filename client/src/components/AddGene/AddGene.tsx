@@ -1,11 +1,13 @@
-import {ActionIcon, TextInput, TextInputProps, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Text, TextInput, TextInputProps, useMantineTheme} from '@mantine/core';
 import {IconPlus, IconSearch} from '@tabler/icons';
+import React from "react";
 
- function AddGene(props: TextInputProps) {
+function AddGene(props: TextInputProps) {
     const theme = useMantineTheme();
 
     return (
         <TextInput
+            label={<Text weight={800} size={'xs'}>User genes</Text>}
             icon={<IconSearch size={18} stroke={1.5}/>}
             radius="md"
             size="xs"
@@ -20,4 +22,5 @@ import {IconPlus, IconSearch} from '@tabler/icons';
         />
     );
 }
+
 export {AddGene}

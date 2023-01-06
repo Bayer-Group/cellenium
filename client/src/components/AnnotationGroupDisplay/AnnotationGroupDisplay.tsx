@@ -12,7 +12,7 @@ type Props = {
 function AnnotationGroupDisplay({annotationGroup}: Props) {
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} onMouseLeave={()=>setHighlightAnnotation(0)}>
             {annotationGroup && annotationGroup.annotationValuesList.map((annot) => {
                 return <Annotation label={annot.displayValue} color={annot.color} annotationId={annot.annotationValueId}/>
             })}

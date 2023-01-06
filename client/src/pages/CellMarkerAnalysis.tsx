@@ -7,10 +7,10 @@ import {
     LeftSidePanel,
     RightSidePanel
 } from "../components";
-import {Center, Group, Space, Stack} from "@mantine/core";
+import {Group, Space, Stack, Text} from "@mantine/core";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, studyIdState, studyState} from "../atoms";
+import {annotationGroupIdState, selectedAnnotationState, studyIdState, studyState, userGenesState} from "../atoms";
 import {SelectBoxItem} from '../model';
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 
@@ -81,8 +81,9 @@ function DifferentialExpressionAnalysis() {
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
 
     //const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
-    const [selectedAnnotation, setSelectedAnnotation] = useState<string | undefined>();
     const [studyId, setStudyId] = useRecoilState(studyIdState);
+    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
+    const userGenes = useRecoilValue(userGenesState);
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     useEffect(() => {
         setStudyId(1)
@@ -107,39 +108,44 @@ function DifferentialExpressionAnalysis() {
     }, [study])
 
     return (
-            <Group position={'apart'} spacing={'xs'}>
-                <LeftSidePanel>
+        <Group position={'apart'} spacing={'xs'}>
+            <LeftSidePanel>
 
-                    {annotationGroups.length > 0 &&
-                        <Stack>
-                            <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                      changeHandler={(value: number) => {
-                                                          setAnnotationGroupId(value);
-                                                          setSelectedAnnotation(undefined);
-                                                      }}/>
-                            {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
-                                <AnnotationGroupDisplay
-                                    annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
-                        </Stack>
-                    }
-
-                </LeftSidePanel>
-                <div  >
-                    <ProjectionPlot colorBy={'annotation'}/>
-                </div>
-                <RightSidePanel>
-                    <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                        <div style={{width: '80%'}}>
-                            <AddGene/>
-                        </div>
-                        <Stack style={{width: '100%'}} spacing={'xs'}>
-                            {genes.map((gene) => <UserGene key={`ug_${gene.display_symbol}`} gene={gene}/>)}
-                        </Stack>
-                        <Space h={'md'}/>
-                        <DEGTable data={DEG}/>
+                {annotationGroups.length > 0 &&
+                    <Stack>
+                        <AnnotationGroupSelectBox annotations={annotationGroups}
+                                                  changeHandler={(value: number) => {
+                                                      setAnnotationGroupId(value);
+                                                      setSelectedAnnotation(undefined);
+                                                  }}/>
+                        {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
+                            <AnnotationGroupDisplay
+                                annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
                     </Stack>
-                </RightSidePanel>
-            </Group>
+                }
+
+            </LeftSidePanel>
+            <div>
+                <ProjectionPlot colorBy={'annotation'}/>
+            </div>
+            <RightSidePanel>
+                <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
+                    <div style={{width: '80%'}}>
+                        <AddGene/>
+                    </div>
+                    <Stack style={{width: '100%'}} spacing={'xs'}>
+                        {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
+                    </Stack>
+                    <Space h={'md'}/>
+                    <Stack>
+                        <Text weight={800} size={'xs'}>Differentially expressed genes</Text>
+                        {selectedAnnotation ? <DEGTable annotationId={selectedAnnotation}/> :
+                            <Text size='xs' color='gray'> Nothing selected.</Text>}
+
+                    </Stack>
+                </Stack>
+            </RightSidePanel>
+        </Group>
     );
 };
 

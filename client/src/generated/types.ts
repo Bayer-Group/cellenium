@@ -1782,6 +1782,95 @@ export type DifferentialExpressionInput = {
   studyId: Scalars['Int'];
 };
 
+export type DifferentialExpressionV = {
+  __typename?: 'DifferentialExpressionV';
+  annotationValueId: Maybe<Scalars['Int']>;
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `DifferentialExpressionV` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type DifferentialExpressionVCondition = {
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `displayName` field. */
+  displayName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `pvalue` field. */
+  pvalue: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `score` field. */
+  score: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `DifferentialExpressionV` object types. All fields are combined with a logical ‘and.’ */
+export type DifferentialExpressionVFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<DifferentialExpressionVFilter>>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `displayName` field. */
+  displayName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<StringFilter>;
+  /** Filter by the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<DifferentialExpressionVFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<DifferentialExpressionVFilter>>;
+  /** Filter by the object’s `pvalue` field. */
+  pvalue: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `score` field. */
+  score: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `DifferentialExpressionV`. */
+export enum DifferentialExpressionVsOrderBy {
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
 /** Methods to use when ordering `DifferentialExpression`. */
 export enum DifferentialExpressionsOrderBy {
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
@@ -3367,6 +3456,8 @@ export type Query = Node & {
   conceptsInSemanticOrderList: Maybe<Array<Concept>>;
   /** Reads a set of `Concept`. */
   conceptsList: Maybe<Array<Concept>>;
+  /** Reads a set of `DifferentialExpressionV`. */
+  differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
   /** Reads a set of `ExpressionByAnnotationBoxplot`. */
@@ -3598,6 +3689,16 @@ export type QueryConceptsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDifferentialExpressionVsListArgs = {
+  condition: InputMaybe<DifferentialExpressionVCondition>;
+  filter: InputMaybe<DifferentialExpressionVFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<DifferentialExpressionVsOrderBy>>;
 };
 
 
@@ -5590,6 +5691,13 @@ export type TreeTissueOverviewFragment = { __typename?: 'TreeTissue', cid: numbe
 
 export type TreeDiseaseOverviewFragment = { __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
 
+export type DegQueryVariables = Exact<{
+  annotationValueId: Scalars['Int'];
+}>;
+
+
+export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number }> };
+
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5680,6 +5788,49 @@ export const StudyBasicsFragmentDoc = gql`
   }
 }
     `;
+export const DegDocument = gql`
+    query deg($annotationValueId: Int!) {
+  differentialExpressionVsList(
+    filter: {annotationValueId: {equalTo: $annotationValueId}}
+  ) {
+    omicsId
+    studyId
+    annotationValueId
+    displayName
+    displaySymbol
+    pvalueAdj
+    log2Foldchange
+  }
+}
+    `;
+
+/**
+ * __useDegQuery__
+ *
+ * To run a query within a React component, call `useDegQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDegQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDegQuery({
+ *   variables: {
+ *      annotationValueId: // value for 'annotationValueId'
+ *   },
+ * });
+ */
+export function useDegQuery(baseOptions: Apollo.QueryHookOptions<DegQuery, DegQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DegQuery, DegQueryVariables>(DegDocument, options);
+      }
+export function useDegLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DegQuery, DegQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DegQuery, DegQueryVariables>(DegDocument, options);
+        }
+export type DegQueryHookResult = ReturnType<typeof useDegQuery>;
+export type DegLazyQueryHookResult = ReturnType<typeof useDegLazyQuery>;
+export type DegQueryResult = Apollo.QueryResult<DegQuery, DegQueryVariables>;
 export const StudiesDocument = gql`
     query studies {
   studiesList {

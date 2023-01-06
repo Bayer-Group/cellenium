@@ -26,6 +26,19 @@ fragment TreeDiseaseOverview on TreeDisease {
     parentOntCodePath
 }
 
+query deg($annotationValueId: Int!) {
+  differentialExpressionVsList(
+    filter: {annotationValueId: {equalTo: $annotationValueId}}
+  ) {
+    omicsId
+    studyId
+    annotationValueId
+    displayName
+    displaySymbol
+    pvalueAdj
+    log2Foldchange
+  }
+}
 
 query studies {
   studiesList {

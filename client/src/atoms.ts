@@ -1,5 +1,5 @@
 import {atom, selector} from "recoil";
-import {Study, SamplesProjectionTable, SamplesAnnotationTable} from "./model";
+import {Gene, Study, SamplesProjectionTable, SamplesAnnotationTable} from "./model";
 import {apolloClient} from "./index";
 import {
     StudyBasicsDocument, StudyBasicsFragment,
@@ -9,6 +9,15 @@ import {
 } from "./generated/types";
 import * as aq from 'arquero';
 
+export const selectedGenesState = atom<Gene[]>({
+    key: "selectedGenes",
+    default: []
+})
+
+export const userGenesState = atom<Gene[]>({
+    key: "userGenes",
+    default: []
+})
 export const selectedAnnotationState = atom<number|undefined>({
     key: "selectedAnnotation",
     default: undefined

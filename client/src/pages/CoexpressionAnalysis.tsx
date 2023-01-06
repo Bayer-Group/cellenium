@@ -76,9 +76,7 @@ const CoexpressionAnalysis = () => {
                     <div style={{width: '80%'}}>
                         <AddGene/>
                     </div>
-                    <Stack style={{width: '100%'}} spacing={'xs'}>
-                        {genes.map((gene) => <UserGene key={`ug_${gene.display_symbol}`} gene={gene}/>)}
-                    </Stack>
+
                     <Space h={'md'}/>
 
                 </Stack>
