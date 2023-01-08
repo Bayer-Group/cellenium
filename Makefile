@@ -18,3 +18,4 @@ test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported
 
 normal_studydata_import: scratch/pancreas_atlas.h5ad.imported
 
+huge_studydata_import: scratch/heart_failure_reichart2022.h5ad.imported
