@@ -79,12 +79,12 @@ function DifferentialExpressionAnalysis() {
                 }
 
             </LeftSidePanel>
-            <div>
+            <main>
                 <ProjectionPlot colorBy={'annotation'}/>
-            </div>
+            </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div style={{width: '80%'}}>
+                    <div >
                         <AddGene/>
                     </div>
                     <Stack style={{width: '100%'}} spacing={'xs'}>

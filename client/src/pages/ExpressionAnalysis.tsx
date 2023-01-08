@@ -87,8 +87,6 @@ const ExpressionAnalysis = () => {
                     <Stack style={{width: '100%'}} spacing={'xs'}>
                         {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
                     </Stack>
-                    <Space h={'md'}/>
-
                 </Stack>
             </RightSidePanel>
         </Group>

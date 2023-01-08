@@ -113,7 +113,6 @@ function AddGene(props: TextInputProps) {
     }
 
     return (
-
         <Stack spacing={0}>
             <Text weight={800} size={'xs'}>
                 Enter gene(s)
