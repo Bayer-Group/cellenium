@@ -17,6 +17,7 @@ import ErrorPage from "./pages/ErrorPage";
 import CoexpressionAnalysis from "./pages/CoexpressionAnalysis";
 import AnnotationComparison from "./pages/AnnotationComparison";
 import UserAnnotation from "./pages/UserAnnotation";
+import { NotificationsProvider } from '@mantine/notifications';
 
 export const apolloCache = new InMemoryCache();
 
@@ -79,7 +80,9 @@ root.render(
         }}>
             <RecoilRoot>
                 <React.Suspense fallback={<GlobalLoading/>}>
-                    <RouterProvider router={router}/>
+                    <NotificationsProvider zIndex={10000000}>
+                        <RouterProvider router={router}/>
+                    </NotificationsProvider>
                 </React.Suspense>
             </RecoilRoot>
         </MantineProvider>

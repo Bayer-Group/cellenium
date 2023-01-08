@@ -8,7 +8,7 @@ export function useExpressionValues() {
     const {data, loading} = useExpressionByOmicsIdsQuery({
         variables: {
             studyLayerId: 1,
-            omicsIds: 116
+            omicsIds: [116]
         }
     });
     if (data?.expressionByOmicsIdsList) {

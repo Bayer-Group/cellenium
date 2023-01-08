@@ -30,12 +30,16 @@ const ExpressionAnalysis = () => {
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     const userGenes = useRecoilValue(userGenesState);
     const {table, loading} = useExpressionValues();
+    useEffect(() => {
+        console.log({table})
+    }, [table])
 
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     useEffect(() => {
         setStudyId(1)
     });
     const study = useRecoilValue(studyState);
+    console.log({study})
     useEffect(() => {
         if (study) {
             const anns: SelectBoxItem[] = []
@@ -79,9 +83,7 @@ const ExpressionAnalysis = () => {
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div style={{width: '80%'}}>
-                        <AddGene/>
-                    </div>
+                    <AddGene/>
                     <Stack style={{width: '100%'}} spacing={'xs'}>
                         {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
                     </Stack>

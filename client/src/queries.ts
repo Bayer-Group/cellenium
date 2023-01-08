@@ -91,6 +91,16 @@ fragment StudyBasics on Study {
     }
 }
 
+query studyOmics($studyId: Int!) {
+    studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {
+        omics{
+            omicsId
+            displayName
+            displaySymbol
+        }
+    }
+}
+
 query StudyBasics($studyId: Int!) {
   study(studyId: $studyId) {
      ...StudyBasics

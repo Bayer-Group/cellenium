@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActionIcon, CloseButton, Group, Text} from "@mantine/core";
+import {ActionIcon, CloseButton, createStyles, Group, Text} from "@mantine/core";
 import {IconDroplet} from "@tabler/icons";
 import {Gene} from "../../model";
 import {useRecoilState} from "recoil";
@@ -9,26 +9,56 @@ import {useNavigate} from "react-router-dom";
 type Props = {
     gene: Gene
 }
+const useStyles = createStyles((theme) => ({
+    active: {
+        backgroundColor: theme.colors.blue[3]
+
+    },
+    main: {
+        "&:hover": {
+            backgroundColor: theme.colors.blue[1]
+        }
+    }
+}));
+
 const UserGene = ({gene}: Props) => {
+    const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
     const navigate = useNavigate()
+
     function handleRemove(gene: Gene) {
-        let removed = geneStore.filter((g)=>g.omicsId!==gene.omicsId)
+        // remove from geneStore
+        let removed = geneStore.filter((g) => g.omicsId !== gene.omicsId)
         setGeneStore(removed)
+        // remove from Selection
+        removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId)
+        setSelectedGenesStore(removed)
     }
+
     function handleColorClick(gene: Gene) {
-        setSelectedGenesStore([...selectedGenes,gene])
-        navigate('/expressionanalysis?plotType=projectionplot')
+        if (selectedGenes.filter((g) => g.omicsId === gene.omicsId).length > 0) {
+            // remove
+            let removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId)
+            setSelectedGenesStore(removed)
+        } else {
+            // add
+            setSelectedGenesStore([...selectedGenes, gene])
+            navigate('/expressionanalysis?plotType=projectionplot')
+        }
+
     }
+
     return (
         <Group position={'apart'}>
             <Group>
-                <CloseButton onClick={()=>handleRemove(gene)} size={'xs'} iconSize={15}/>
+                <CloseButton onClick={() => handleRemove(gene)} size={'xs'} iconSize={15}/>
                 <Text size={'xs'}>{gene.displaySymbol}</Text>
             </Group>
             {/* eslint-disable-next-line react/jsx-no-undef */}
-            <ActionIcon onClick={()=>handleColorClick(gene)} variant="default" size={'xs'} mr={5}>
+            <ActionIcon
+                className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId == gene.omicsId).length !== 0})}
+                onClick={() => handleColorClick(gene)} variant="default" size={'xs'} mr={5}>
                 <IconDroplet/>
             </ActionIcon>
         </Group>
