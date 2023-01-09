@@ -33,7 +33,7 @@ const OntologySelect = ({ontologies, handleChange}: OSProps) => {
 
     )
 }
-const OntologyBrowser = () => {
+const OntologyBrowser = ({handleAddOntologyItem}:{handleAddOntologyItem: Function}) => {
     const {data, error, loading} = useOntologiesQuery()
     const [ontology, setOntology] = useState<string | undefined>();
     const theme = useMantineTheme()
@@ -41,7 +41,7 @@ const OntologyBrowser = () => {
         <Stack>
             {data && data.ontologiesList &&
                 <OntologySelect handleChange={setOntology} ontologies={data.ontologiesList}/>}
-            {ontology ? <OntologyTree ontid={parseInt(ontology)}/> :
+            {ontology ? <OntologyTree ontid={parseInt(ontology)} handleAddOntologyItem={handleAddOntologyItem}/> :
                 <Text color={theme.colors.gray[3]}>Please select an ontology for browsing!</Text>}
         </Stack>
     );

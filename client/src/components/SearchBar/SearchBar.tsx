@@ -1,9 +1,9 @@
-import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, TextInputProps, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {useEffect, useState} from "react";
 import SearchBadge from "../SearchBadge/SearchBadge";
-import {IconBinaryTree, IconFilter, IconSearch, IconX} from "@tabler/icons";
+import {IconBinaryTree, IconSearch, IconX} from "@tabler/icons";
 import {TreeDiseaseOverviewFragment, TreeTissueOverviewFragment, useAutocompleteLazyQuery} from "../../generated/types";
-import {openModal} from "@mantine/modals";
+import {closeModal, openModal} from "@mantine/modals";
 import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
 
 type OfferingItem = {
@@ -12,9 +12,10 @@ type OfferingItem = {
     ontology: string;
 }
 type Props = {
-  diseases: TreeDiseaseOverviewFragment[];
-  tissues: TreeTissueOverviewFragment[];
+    diseases: TreeDiseaseOverviewFragment[];
+    tissues: TreeTissueOverviewFragment[];
 }
+
 function SearchBar({diseases, tissues}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
@@ -65,15 +66,24 @@ function SearchBar({diseases, tissues}: Props) {
 
     function showOntologyBrowser() {
         openModal({
-            title: 'Select terms from ontology',
-            children: <OntologyBrowser />
+
+            modalId: 'ontologyBrowser',
+            title: 'Ontology browser',
+            children: <OntologyBrowser handleAddOntologyItem={(item: string) => {
+                setSelectedFilters([...selectedFilters, {
+                    value: item,
+                    ontcode: "string",
+                    ontology: "string"
+                }]);
+
+                closeModal('ontologyBrowser');
+            }}/>
         })
+
     }
+
     return (
         <Group position={'left'} align={'flex-end'} spacing={4}>
-            <ActionIcon title={'Filter by frequency'} size='xl' variant={'light'}>
-                <IconFilter/>
-            </ActionIcon>
             <ActionIcon onClick={showOntologyBrowser} size={'xl'} variant={'light'}>
                 <IconBinaryTree/>
             </ActionIcon>

@@ -6,15 +6,16 @@ import OntologyBranch from "./OntologyBranch";
 
 type Props = {
     ontid: number;
+    handleAddOntologyItem: Function;
 }
 
 
-const OntologyTree = ({ontid}: Props) => {
+const OntologyTree = ({ontid, handleAddOntologyItem}: Props) => {
     return (
         <Group position={'center'} align={'center'} grow>
             <Stack spacing={0} justify={'center'} align={'flex-start'}>
                 <Text>Ontology Browser</Text>
-                {DATA.map((item: OntologyItem) => <OntologyBranch key={item.id} item={item} level={0}></OntologyBranch>)}
+                {DATA.map((item: OntologyItem) => <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={item.id} item={item} level={0}></OntologyBranch>)}
             </Stack>
         </Group>
     );
