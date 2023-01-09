@@ -5705,12 +5705,12 @@ export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typena
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
-export type OmicsAutomcompleteQueryVariables = Exact<{
-  startswith: Scalars['String'];
+export type StudyOmicsQueryVariables = Exact<{
+  studyId: Scalars['Int'];
 }>;
 
 
-export type OmicsAutomcompleteQuery = { __typename?: 'Query', omicsAllsList: Array<{ __typename?: 'OmicsAll', omicsId: number, displaySymbol: string, displayName: string }> };
+export type StudyOmicsQuery = { __typename?: 'Query', studyOmicsList: Array<{ __typename?: 'StudyOmic', omics: { __typename?: 'OmicsBase', omicsId: number, displayName: string, displaySymbol: string } }> };
 
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -5726,6 +5726,13 @@ export type ExpressionByOmicsIdsQueryVariables = Exact<{
 
 
 export type ExpressionByOmicsIdsQuery = { __typename?: 'Query', expressionByOmicsIdsList: Array<{ __typename?: 'ExpressionByOmic', omicsId: number, studySampleIds: Array<number>, values: Array<number> }> };
+
+export type AutocompleteQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type AutocompleteQuery = { __typename?: 'Query', autocompleteList: Array<{ __typename?: 'AutocompleteResult', isSynonymOfPreferredTerm: string, label: string, labelHighlight: string, ontCode: string, ontology: string }> };
 
 export const StudyOverviewFragmentDoc = gql`
     fragment StudyOverview on Study {
@@ -5880,46 +5887,45 @@ export function useStudiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StudiesQueryHookResult = ReturnType<typeof useStudiesQuery>;
 export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
 export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
-export const OmicsAutomcompleteDocument = gql`
-    query omicsAutomcomplete($startswith: String!) {
-  omicsAllsList(
-    filter: {displaySymbol: {startsWithInsensitive: $startswith}, taxId: {equalTo: 9606}}
-    orderBy: DISPLAY_SYMBOL_ASC
-  ) {
-    omicsId
-    displaySymbol
-    displayName
+export const StudyOmicsDocument = gql`
+    query studyOmics($studyId: Int!) {
+  studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {
+    omics {
+      omicsId
+      displayName
+      displaySymbol
+    }
   }
 }
     `;
 
 /**
- * __useOmicsAutomcompleteQuery__
+ * __useStudyOmicsQuery__
  *
- * To run a query within a React component, call `useOmicsAutomcompleteQuery` and pass it any options that fit your needs.
- * When your component renders, `useOmicsAutomcompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useStudyOmicsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudyOmicsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useOmicsAutomcompleteQuery({
+ * const { data, loading, error } = useStudyOmicsQuery({
  *   variables: {
- *      startswith: // value for 'startswith'
+ *      studyId: // value for 'studyId'
  *   },
  * });
  */
-export function useOmicsAutomcompleteQuery(baseOptions: Apollo.QueryHookOptions<OmicsAutomcompleteQuery, OmicsAutomcompleteQueryVariables>) {
+export function useStudyOmicsQuery(baseOptions: Apollo.QueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OmicsAutomcompleteQuery, OmicsAutomcompleteQueryVariables>(OmicsAutomcompleteDocument, options);
+        return Apollo.useQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
       }
-export function useOmicsAutomcompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OmicsAutomcompleteQuery, OmicsAutomcompleteQueryVariables>) {
+export function useStudyOmicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OmicsAutomcompleteQuery, OmicsAutomcompleteQueryVariables>(OmicsAutomcompleteDocument, options);
+          return Apollo.useLazyQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
         }
-export type OmicsAutomcompleteQueryHookResult = ReturnType<typeof useOmicsAutomcompleteQuery>;
-export type OmicsAutomcompleteLazyQueryHookResult = ReturnType<typeof useOmicsAutomcompleteLazyQuery>;
-export type OmicsAutomcompleteQueryResult = Apollo.QueryResult<OmicsAutomcompleteQuery, OmicsAutomcompleteQueryVariables>;
+export type StudyOmicsQueryHookResult = ReturnType<typeof useStudyOmicsQuery>;
+export type StudyOmicsLazyQueryHookResult = ReturnType<typeof useStudyOmicsLazyQuery>;
+export type StudyOmicsQueryResult = Apollo.QueryResult<StudyOmicsQuery, StudyOmicsQueryVariables>;
 export const StudyBasicsDocument = gql`
     query StudyBasics($studyId: Int!) {
   study(studyId: $studyId) {
@@ -5997,3 +6003,42 @@ export function useExpressionByOmicsIdsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsQuery>;
 export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
 export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
+export const AutocompleteDocument = gql`
+    query autocomplete($query: String!) {
+  autocompleteList(searchQuery: $query, first: 20) {
+    isSynonymOfPreferredTerm
+    label
+    labelHighlight
+    ontCode
+    ontology
+  }
+}
+    `;
+
+/**
+ * __useAutocompleteQuery__
+ *
+ * To run a query within a React component, call `useAutocompleteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAutocompleteQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useAutocompleteQuery(baseOptions: Apollo.QueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
+      }
+export function useAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
+        }
+export type AutocompleteQueryHookResult = ReturnType<typeof useAutocompleteQuery>;
+export type AutocompleteLazyQueryHookResult = ReturnType<typeof useAutocompleteLazyQuery>;
+export type AutocompleteQueryResult = Apollo.QueryResult<AutocompleteQuery, AutocompleteQueryVariables>;

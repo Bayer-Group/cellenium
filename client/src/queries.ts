@@ -115,4 +115,14 @@ query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   }
 }
 
+query autocomplete($query:String!) {
+  autocompleteList(searchQuery:$query, first: 20) {
+    isSynonymOfPreferredTerm
+    label
+    labelHighlight
+    ontCode
+    ontology
+  }
+}
+
 `;

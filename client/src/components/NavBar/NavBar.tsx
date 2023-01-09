@@ -84,8 +84,8 @@ function NavBar({mainLinks}: DoubleHeaderProps) {
 
 
     return (
-        <Header height={HEADER_HEIGHT}>
-            <Container className={classes.inner}>
+        <Header height={HEADER_HEIGHT} >
+            <Container className={classes.inner} fluid={true}>
                 <Group spacing={5}>
                     <ProjPlotIcon/>
                     <Title >cellenium</Title>

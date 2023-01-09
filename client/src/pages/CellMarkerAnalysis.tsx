@@ -84,17 +84,18 @@ function DifferentialExpressionAnalysis() {
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div >
+                    <div>
                         <AddGene/>
                     </div>
-                    <Stack style={{width: '100%'}} spacing={'xs'}>
-                        {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
+                    <Stack spacing={'xs'}>
+                        {userGenes.length>0?userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>):
+                            <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
                     </Stack>
                     <Space h={'md'}/>
                     <Stack>
                         <Text weight={800} size={'xs'}>Differentially expressed genes</Text>
                         {selectedAnnotation ? <DEGTable annotationId={selectedAnnotation}/> :
-                            <Text size='xs' color='gray'> Nothing selected.</Text>}
+                            <Text size='xs' color='gray'>Nothing selected yet.</Text>}
 
                     </Stack>
                 </Stack>

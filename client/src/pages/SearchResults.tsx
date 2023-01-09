@@ -13,10 +13,10 @@ const SearchResults = () => {
                 {link: 'marker_gene', label: 'Marker gene search'}
             ]}/>
             <Space h="xl"/>
-            <Container size={'md'} style={{paddingBottom: '2rem'}}>
+            <Container size={'xl'} style={{paddingBottom: '2rem'}}>
                 <SearchBar/>
             </Container>
-            <Container size={'md'}>
+            <Container size={'xl'}>
                 <Grid>
                     {data && data.studiesList && data.studiesList.map((study:StudyOverviewFragment) => {
                         return <Grid.Col span={12}><StudyCard study={study} tissues={data.treeTissuesList} diseases={data.treeDiseasesList}/></Grid.Col>

@@ -8,6 +8,7 @@ import {AnnotationGroupDisplay} from "./AnnotationGroupDisplay/AnnotationGroupDi
 import {Annotation} from "./Annotation/Annotation";
 import {DEGTable} from "./DEGTable/DEGTable";
 import {AddGene} from "./AddGene/AddGene";
+import {DropdownItem} from "./DropdownItem/DropdownItem";
 
 export {
     DEGTable,
@@ -19,5 +20,6 @@ export {
     AnnotationGroupSelectBox,
     AnnotationGroupDisplay,
     Annotation,
-    AddGene
+    AddGene,
+    DropdownItem
 }

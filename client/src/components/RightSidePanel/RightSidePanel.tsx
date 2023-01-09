@@ -16,7 +16,8 @@ const useStyles = createStyles((theme) => ({
     main: {
         flex: 1,
         borderLeft: '1px solid #e9efef',
-        padding: theme.spacing.md,
+        paddingLeft: theme.spacing.md,
+        paddingTop: theme.spacing.md,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
     },
 }));

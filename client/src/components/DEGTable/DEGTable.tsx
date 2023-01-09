@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTable from "react-data-table-component";
-import {ActionIcon, Stack, Text} from "@mantine/core";
+import {ActionIcon, Stack, Text, useMantineTheme} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
@@ -88,8 +88,8 @@ const columns = memoize((clickHandler) => [
                 displaySymbol: row.displaySymbol
             }
             return (
-                <ActionIcon onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
-                    size={12}/></ActionIcon>)
+                <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
+                    size={12} color={'black'} /></ActionIcon>)
         },
         width: '20px',
     }

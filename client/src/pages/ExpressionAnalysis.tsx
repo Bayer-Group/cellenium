@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Group, Space, Stack} from "@mantine/core";
+import {Group, Stack, Text} from "@mantine/core";
 import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -84,8 +84,10 @@ const ExpressionAnalysis = () => {
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
                     <AddGene/>
-                    <Stack style={{width: '100%'}} spacing={'xs'}>
-                        {userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>)}
+                    <Stack spacing={'xs'}>
+                        {userGenes.length > 0 ? userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`}
+                                                                                  gene={gene}/>) :
+                            <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
                     </Stack>
                 </Stack>
             </RightSidePanel>
