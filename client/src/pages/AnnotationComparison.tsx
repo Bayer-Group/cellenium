@@ -25,12 +25,8 @@ const genes = [
 const AnnotationComparison = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value)
     const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
-    const [studyId, setStudyId] = useRecoilState(studyIdState);
 
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
-    useEffect(() => {
-        setStudyId(1)
-    });
     const study = useRecoilValue(studyState);
     useEffect(() => {
         if (study) {

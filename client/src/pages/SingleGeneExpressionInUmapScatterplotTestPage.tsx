@@ -8,9 +8,7 @@ import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 
 const SingleGeneExpressionInUmapScatterplotTestPage = () => {
     const [studyId, setStudyId] = useRecoilState(studyIdState);
-    useEffect(() => {
-        setStudyId(1)
-    });
+    console.log('studyId', studyId);
     const {table, loading} = useExpressionValues();
 
     return (
