@@ -8,6 +8,8 @@ import {
     StudySampleProjectionSubsamplingTransposed
 } from "./generated/types";
 import * as aq from 'arquero';
+import {syncEffect, urlSyncEffect} from "recoil-sync";
+import {number, optional} from "@recoiljs/refine";
 
 export const selectedGenesState = atom<Gene[]>({
     key: "selectedGenes",
@@ -32,9 +34,11 @@ export const annotationGroupIdState = atom<number|undefined>({
     key: "annotationGroupId",
     default: undefined
 })
-export const studyIdState = atom<number | undefined>({
+
+export const studyIdState = atom<number>({
     key: "studyId",
     default: undefined,
+    effects: [syncEffect({refine: number()})]
 });
 
 function buildSampleProjectionTable(d: { studySampleId: number[], projection: number[] }) {

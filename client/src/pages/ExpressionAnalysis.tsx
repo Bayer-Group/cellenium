@@ -27,7 +27,6 @@ const genes = [
 const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value)
     const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
-    const [studyId, setStudyId] = useRecoilState(studyIdState);
     const userGenes = useRecoilValue(userGenesState);
     const {table, loading} = useExpressionValues();
     useEffect(() => {
@@ -35,9 +34,6 @@ const ExpressionAnalysis = () => {
     }, [table])
 
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
-    useEffect(() => {
-        setStudyId(1)
-    });
     const study = useRecoilValue(studyState);
     console.log({study})
     useEffect(() => {

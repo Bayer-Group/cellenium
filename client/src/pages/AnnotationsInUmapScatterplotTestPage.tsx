@@ -8,11 +8,6 @@ import * as Plotly from "plotly.js";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 
 const AnnotationsInUmapScatterplotTestPage = () => {
-    const [studyId, setStudyId] = useRecoilState(studyIdState);
-    useEffect(() => {
-        setStudyId(1)
-    });
-
     return (
         <Group position={'apart'}>
             <LeftSidePanel/>

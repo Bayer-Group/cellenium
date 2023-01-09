@@ -4,8 +4,8 @@ import {ActionIcon, Stack, Text, useMantineTheme} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
-import {useRecoilState} from "recoil";
-import {userGenesState} from "../../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {studyState, userGenesState} from "../../atoms";
 import {Gene} from "../../model";
 import _ from 'lodash';
 
@@ -101,9 +101,11 @@ type Props = {
 
 const DEGTable = ({annotationId}: Props) => {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState)
+    const study = useRecoilValue(studyState);
     const {data, error, loading} = useDegQuery({
         variables: {
-            annotationValueId: annotationId
+            annotationValueId: annotationId,
+            studyId: study?.studyId || 0
         }
     })
 

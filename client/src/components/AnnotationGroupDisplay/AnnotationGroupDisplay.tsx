@@ -14,7 +14,7 @@ function AnnotationGroupDisplay({annotationGroup}: Props) {
     return (
         <Stack spacing={2} onMouseLeave={()=>setHighlightAnnotation(0)}>
             {annotationGroup && annotationGroup.annotationValuesList.map((annot) => {
-                return <Annotation label={annot.displayValue} color={annot.color} annotationId={annot.annotationValueId}/>
+                return <Annotation key={annot.annotationValueId} label={annot.displayValue} color={annot.color} annotationId={annot.annotationValueId}/>
             })}
         </Stack>
     );

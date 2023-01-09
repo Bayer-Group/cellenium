@@ -5692,6 +5692,7 @@ export type TreeTissueOverviewFragment = { __typename?: 'TreeTissue', cid: numbe
 export type TreeDiseaseOverviewFragment = { __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
 
 export type DegQueryVariables = Exact<{
+  studyId: Scalars['Int'];
   annotationValueId: Scalars['Int'];
 }>;
 
@@ -5803,9 +5804,9 @@ export const StudyBasicsFragmentDoc = gql`
 }
     `;
 export const DegDocument = gql`
-    query deg($annotationValueId: Int!) {
+    query deg($studyId: Int!, $annotationValueId: Int!) {
   differentialExpressionVsList(
-    filter: {annotationValueId: {equalTo: $annotationValueId}}
+    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}
   ) {
     omicsId
     studyId
@@ -5830,6 +5831,7 @@ export const DegDocument = gql`
  * @example
  * const { data, loading, error } = useDegQuery({
  *   variables: {
+ *      studyId: // value for 'studyId'
  *      annotationValueId: // value for 'annotationValueId'
  *   },
  * });

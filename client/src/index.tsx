@@ -17,7 +17,8 @@ import ErrorPage from "./pages/ErrorPage";
 import CoexpressionAnalysis from "./pages/CoexpressionAnalysis";
 import AnnotationComparison from "./pages/AnnotationComparison";
 import UserAnnotation from "./pages/UserAnnotation";
-import { NotificationsProvider } from '@mantine/notifications';
+import {NotificationsProvider} from '@mantine/notifications';
+import {RecoilURLSyncJSON} from "recoil-sync";
 
 export const apolloCache = new InMemoryCache();
 
@@ -79,11 +80,13 @@ root.render(
             }
         }}>
             <RecoilRoot>
-                <React.Suspense fallback={<GlobalLoading/>}>
-                    <NotificationsProvider zIndex={10000000}>
-                        <RouterProvider router={router}/>
-                    </NotificationsProvider>
-                </React.Suspense>
+                <RecoilURLSyncJSON location={{part: 'queryParams'}}>
+                    <React.Suspense fallback={<GlobalLoading/>}>
+                        <NotificationsProvider zIndex={10000000}>
+                            <RouterProvider router={router}/>
+                        </NotificationsProvider>
+                    </React.Suspense>
+                </RecoilURLSyncJSON>
             </RecoilRoot>
         </MantineProvider>
     </ApolloProvider>

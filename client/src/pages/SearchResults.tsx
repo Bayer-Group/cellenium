@@ -19,7 +19,7 @@ const SearchResults = () => {
             <Container size={'xl'}>
                 <Grid>
                     {data && data.studiesList && data.studiesList.map((study:StudyOverviewFragment) => {
-                        return <Grid.Col span={12}><StudyCard study={study} tissues={data.treeTissuesList} diseases={data.treeDiseasesList}/></Grid.Col>
+                        return <Grid.Col span={12} key={study.studyId}><StudyCard study={study} tissues={data.treeTissuesList} diseases={data.treeDiseasesList}/></Grid.Col>
                     })}
                 </Grid>
             </Container>
