@@ -3,14 +3,48 @@ import React, {useEffect, useState} from "react";
 import SearchBadge from "../SearchBadge/SearchBadge";
 import {IconSearch, IconX} from "@tabler/icons";
 import {useAutocompleteLazyQuery} from "../../generated/types";
-import {DropdownItem} from "../../components";
+
+type OfferingItem = {
+    value: string;
+    isSynonymOfPreferredTerm: string | null;
+    label: string;
+    labelHighlight: string;
+    ontCode: string;
+    ontology: string;
+}
 
 function SearchBar(props: TextInputProps) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
-    const [offerings, setOfferings] = useState<string[]>([]);
-    const [selectedFilters, setSelectedFilters] = useState<string[]>(['Lung', 'Cough']);
+    const [offerings, setOfferings] = useState<OfferingItem[]>([]);
+    const [selectedFilters, setSelectedFilters] = useState<OfferingItem[]>([]);
     const [getAutocomplete, {data: autocompleteSuggestions, error, loading}] = useAutocompleteLazyQuery()
+
+
+    useEffect(() => {
+        if (autocompleteSuggestions) {
+            let newOfferings: OfferingItem[] = autocompleteSuggestions.autocompleteList.map((e) => {
+                    return {
+                        ...e,
+                        value: e.label
+                    }
+                }
+            )
+            setOfferings(newOfferings);
+        }
+    }, [autocompleteSuggestions])
+
+    function handleSubmit(item: OfferingItem) {
+        let check = selectedFilters.filter((e) => ((e.ontology === item.ontology) && (e.ontCode === item.ontCode)))
+        console.log({check})
+        console.log({selectedFilters})
+        console.log({item})
+        if (check.length === 0) {
+            setSelectedFilters([...selectedFilters, item])
+        }
+        setValue('')
+        setOfferings([])
+    }
 
     function handleChange(input: string) {
         setOfferings([])
@@ -22,20 +56,12 @@ function SearchBar(props: TextInputProps) {
         })
     }
 
-    useEffect(() => {
-        if (autocompleteSuggestions) {
-            let newOfferings:string[] = autocompleteSuggestions.autocompleteList.map((e) => e.label)
-            setOfferings(newOfferings);
-        }
-    }, [autocompleteSuggestions])
-
-    function handleFilterRemove(filter: string) {
-        let newFilters = selectedFilters.filter((f) => f !== filter)
+    function handleFilterRemove(filter: OfferingItem) {
+        let newFilters = selectedFilters.filter((f) => !((f.ontCode === filter.ontCode) && (f.ontology === f.ontology)))
         setSelectedFilters(newFilters)
     }
-    const dropdownStyled = ()=>{
-        return <DropdownItem/>
-    }
+
+
     return (
         <Stack spacing={0}>
             <Text size={'xs'} weight={800}>
@@ -49,7 +75,8 @@ function SearchBar(props: TextInputProps) {
                 <Group spacing={2}>
                     {selectedFilters.map((filter) => {
                         return (
-                            <SearchBadge key={filter} onRemove={() => handleFilterRemove(filter)} label={filter}
+                            <SearchBadge key={`${filter.ontology}_${filter.ontCode}`} onRemove={handleFilterRemove}
+                                         item={filter}
                                          color={'blue'}/>
                         )
 
@@ -57,8 +84,9 @@ function SearchBar(props: TextInputProps) {
                 </Group>
                 <div style={{flexGrow: 1}}>
                     <Autocomplete
-                        value={value}
                         onChange={handleChange}
+                        onItemSubmit={handleSubmit}
+                        value={value}
                         variant='unstyled'
                         styles={{
                             label: {fontWeight: 500, fontSize: '0.8rem', display: 'inline-block'},
@@ -83,3 +111,4 @@ function SearchBar(props: TextInputProps) {
 }
 
 export {SearchBar};
+export type {OfferingItem};
