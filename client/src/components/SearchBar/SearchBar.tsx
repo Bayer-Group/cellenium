@@ -6,10 +6,7 @@ import {useAutocompleteLazyQuery} from "../../generated/types";
 
 type OfferingItem = {
     value: string;
-    isSynonymOfPreferredTerm: string | null;
-    label: string;
-    labelHighlight: string;
-    ontCode: string;
+    ontcode: string;
     ontology: string;
 }
 
@@ -25,7 +22,8 @@ function SearchBar(props: TextInputProps) {
         if (autocompleteSuggestions) {
             let newOfferings: OfferingItem[] = autocompleteSuggestions.autocompleteList.map((e) => {
                     return {
-                        ...e,
+                        ontcode: e.ontCode,
+                        ontology: e.ontology,
                         value: e.label
                     }
                 }
@@ -35,15 +33,13 @@ function SearchBar(props: TextInputProps) {
     }, [autocompleteSuggestions])
 
     function handleSubmit(item: OfferingItem) {
-        let check = selectedFilters.filter((e) => ((e.ontology === item.ontology) && (e.ontCode === item.ontCode)))
-        console.log({check})
-        console.log({selectedFilters})
-        console.log({item})
+        setValue('');
+
+        let check = selectedFilters.filter((e) => ((e.ontology === item.ontology) && (e.ontcode === item.ontcode)))
         if (check.length === 0) {
             setSelectedFilters([...selectedFilters, item])
         }
-        setValue('')
-        setOfferings([])
+        setOfferings([]);
     }
 
     function handleChange(input: string) {
@@ -57,8 +53,9 @@ function SearchBar(props: TextInputProps) {
     }
 
     function handleFilterRemove(filter: OfferingItem) {
-        let newFilters = selectedFilters.filter((f) => !((f.ontCode === filter.ontCode) && (f.ontology === f.ontology)))
+        let newFilters = selectedFilters.filter((f) => !((f.ontcode === filter.ontcode) && (f.ontology === f.ontology)))
         setSelectedFilters(newFilters)
+        setOfferings([])
     }
 
 
@@ -71,13 +68,13 @@ function SearchBar(props: TextInputProps) {
             <Group spacing={4} position={'left'} align={'center'}
                    style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
             >
-                <IconSearch color={theme.colors.gray[3]}/>
+                {loading ? <Loader size={25} color={theme.colors.blue[5]}/> :
+                    <IconSearch size={25} color={theme.colors.gray[3]}/>}
                 <Group spacing={2}>
                     {selectedFilters.map((filter) => {
                         return (
-                            <SearchBadge key={`${filter.ontology}_${filter.ontCode}`} onRemove={handleFilterRemove}
-                                         item={filter}
-                                         color={'blue'}/>
+                            <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove}
+                                         item={filter}/>
                         )
 
                     })}
@@ -94,7 +91,7 @@ function SearchBar(props: TextInputProps) {
                         data={offerings}
                         size="md"
                         placeholder='lung, "multiple myelome", heart, mouse'
-                        rightSection={loading ? <Loader size={'xs'} color={theme.colors.blue[3]}/> :
+                        rightSection={
                             <ActionIcon onClick={() => {
                                 setValue('');
                                 setOfferings([]);
