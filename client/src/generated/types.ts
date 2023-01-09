@@ -5735,6 +5735,13 @@ export type AutocompleteQueryVariables = Exact<{
 
 export type AutocompleteQuery = { __typename?: 'Query', autocompleteList: Array<{ __typename?: 'AutocompleteResult', isSynonymOfPreferredTerm: string, label: string, labelHighlight: string, ontCode: string, ontology: string }> };
 
+export type OntologyOverviewFragment = { __typename?: 'Ontology', name: string, ontid: number, nodeId: string };
+
+export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
+
 export const StudyOverviewFragmentDoc = gql`
     fragment StudyOverview on Study {
   studyId
@@ -5801,6 +5808,13 @@ export const StudyBasicsFragmentDoc = gql`
     studySampleId
     projection
   }
+}
+    `;
+export const OntologyOverviewFragmentDoc = gql`
+    fragment ontologyOverview on Ontology {
+  name
+  ontid
+  nodeId
 }
     `;
 export const DegDocument = gql`
@@ -6044,3 +6058,37 @@ export function useAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type AutocompleteQueryHookResult = ReturnType<typeof useAutocompleteQuery>;
 export type AutocompleteLazyQueryHookResult = ReturnType<typeof useAutocompleteLazyQuery>;
 export type AutocompleteQueryResult = Apollo.QueryResult<AutocompleteQuery, AutocompleteQueryVariables>;
+export const OntologiesDocument = gql`
+    query ontologies {
+  ontologiesList {
+    ...ontologyOverview
+  }
+}
+    ${OntologyOverviewFragmentDoc}`;
+
+/**
+ * __useOntologiesQuery__
+ *
+ * To run a query within a React component, call `useOntologiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOntologiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOntologiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOntologiesQuery(baseOptions?: Apollo.QueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
+      }
+export function useOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
+        }
+export type OntologiesQueryHookResult = ReturnType<typeof useOntologiesQuery>;
+export type OntologiesLazyQueryHookResult = ReturnType<typeof useOntologiesLazyQuery>;
+export type OntologiesQueryResult = Apollo.QueryResult<OntologiesQuery, OntologiesQueryVariables>;

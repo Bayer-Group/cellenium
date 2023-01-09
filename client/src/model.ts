@@ -1,6 +1,13 @@
 import {AnnotationGroup, AnnotationValue, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
+export type OntologyItem = {
+    id: string;
+    label: string;
+    children?: OntologyItem[];
+}
+
+
 export type Gene = {
     omicsId: number;
     displayName: string;
@@ -15,9 +22,10 @@ export type Study = StudyBasicsFragment & {
 };
 
 export type SelectBoxItem = {
-    value:string,
-    label:string
+    value: string,
+    label: string
 }
+
 class DefinedTable extends internal.ColumnTable {
     static checkTable(t: internal.ColumnTable, expectedColumns: string[]) {
         expectedColumns.forEach((c) => {

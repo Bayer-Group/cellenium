@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
-import {StudyOverview, StudyOverviewFragment, useStudiesQuery} from "../generated/types";
+import {StudyOverviewFragment, useStudiesQuery} from "../generated/types";
 
 const SearchResults = () => {
     const {data, error, loading} = useStudiesQuery()
@@ -14,12 +14,14 @@ const SearchResults = () => {
             ]}/>
             <Space h="xl"/>
             <Container size={'xl'} style={{paddingBottom: '2rem'}}>
-                <SearchBar/>
+                {data && data.treeDiseasesList && data.treeTissuesList && <SearchBar diseases={data.treeDiseasesList} tissues={data.treeTissuesList}/>}
             </Container>
             <Container size={'xl'}>
                 <Grid>
-                    {data && data.studiesList && data.studiesList.map((study:StudyOverviewFragment) => {
-                        return <Grid.Col span={12} key={study.studyId}><StudyCard study={study} tissues={data.treeTissuesList} diseases={data.treeDiseasesList}/></Grid.Col>
+                    {data && data.studiesList && data.studiesList.map((study: StudyOverviewFragment) => {
+                        return <Grid.Col span={12} key={study.studyId}><StudyCard study={study}
+                                                                                  tissues={data.treeTissuesList}
+                                                                                  diseases={data.treeDiseasesList}/></Grid.Col>
                     })}
                 </Grid>
             </Container>

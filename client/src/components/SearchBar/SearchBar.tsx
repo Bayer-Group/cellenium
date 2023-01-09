@@ -1,16 +1,21 @@
 import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, TextInputProps, useMantineTheme} from '@mantine/core';
 import React, {useEffect, useState} from "react";
 import SearchBadge from "../SearchBadge/SearchBadge";
-import {IconSearch, IconX} from "@tabler/icons";
-import {useAutocompleteLazyQuery} from "../../generated/types";
+import {IconBinaryTree, IconFilter, IconSearch, IconX} from "@tabler/icons";
+import {TreeDiseaseOverviewFragment, TreeTissueOverviewFragment, useAutocompleteLazyQuery} from "../../generated/types";
+import {openModal} from "@mantine/modals";
+import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
 
 type OfferingItem = {
     value: string;
     ontcode: string;
     ontology: string;
 }
-
-function SearchBar(props: TextInputProps) {
+type Props = {
+  diseases: TreeDiseaseOverviewFragment[];
+  tissues: TreeTissueOverviewFragment[];
+}
+function SearchBar({diseases, tissues}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<OfferingItem[]>([]);
@@ -58,52 +63,66 @@ function SearchBar(props: TextInputProps) {
         setOfferings([])
     }
 
-
+    function showOntologyBrowser() {
+        openModal({
+            title: 'Select terms from ontology',
+            children: <OntologyBrowser />
+        })
+    }
     return (
-        <Stack spacing={0}>
-            <Text size={'xs'} weight={800}>
-                Filter studies by disease, tissue, species, title/description
-            </Text>
+        <Group position={'left'} align={'flex-end'} spacing={4}>
+            <ActionIcon title={'Filter by frequency'} size='xl' variant={'light'}>
+                <IconFilter/>
+            </ActionIcon>
+            <ActionIcon onClick={showOntologyBrowser} size={'xl'} variant={'light'}>
+                <IconBinaryTree/>
+            </ActionIcon>
 
-            <Group spacing={4} position={'left'} align={'center'}
-                   style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
-            >
-                {loading ? <Loader size={25} color={theme.colors.blue[5]}/> :
-                    <IconSearch size={25} color={theme.colors.gray[3]}/>}
-                <Group spacing={2}>
-                    {selectedFilters.map((filter) => {
-                        return (
-                            <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove}
-                                         item={filter}/>
-                        )
+            <Stack spacing={0} style={{flexGrow: 1}}>
+                <Text size={'xs'} weight={800}>
+                    Filter studies by disease, tissue, species, title/description
+                </Text>
 
-                    })}
+                <Group spacing={4} position={'left'} align={'center'}
+                       style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
+                >
+                    {loading ? <Loader size={25} color={theme.colors.blue[5]}/> :
+                        <IconSearch size={25} color={theme.colors.gray[3]}/>}
+                    <Group spacing={2}>
+                        {selectedFilters.map((filter) => {
+                            return (
+                                <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove}
+                                             item={filter}/>
+                            )
+
+                        })}
+                    </Group>
+                    <div style={{flexGrow: 1}}>
+                        <Autocomplete
+                            onChange={handleChange}
+                            onItemSubmit={handleSubmit}
+                            value={value}
+                            variant='unstyled'
+                            styles={{
+                                label: {fontWeight: 500, fontSize: '0.8rem', display: 'inline-block'},
+                            }}
+                            data={offerings}
+                            size="md"
+                            placeholder='lung, "multiple myelome", heart, mouse'
+                            rightSection={
+                                <ActionIcon onClick={() => {
+                                    setValue('');
+                                    setOfferings([]);
+                                    setSelectedFilters([]);
+                                }
+                                }>
+                                    <IconX/>
+                                </ActionIcon>}
+                        />
+                    </div>
                 </Group>
-                <div style={{flexGrow: 1}}>
-                    <Autocomplete
-                        onChange={handleChange}
-                        onItemSubmit={handleSubmit}
-                        value={value}
-                        variant='unstyled'
-                        styles={{
-                            label: {fontWeight: 500, fontSize: '0.8rem', display: 'inline-block'},
-                        }}
-                        data={offerings}
-                        size="md"
-                        placeholder='lung, "multiple myelome", heart, mouse'
-                        rightSection={
-                            <ActionIcon onClick={() => {
-                                setValue('');
-                                setOfferings([]);
-                                setSelectedFilters([]);
-                            }
-                            }>
-                                <IconX/>
-                            </ActionIcon>}
-                    />
-                </div>
-            </Group>
-        </Stack>
+            </Stack>
+        </Group>
     );
 }
 

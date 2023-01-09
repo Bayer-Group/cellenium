@@ -9,7 +9,8 @@ import {Annotation} from "./Annotation/Annotation";
 import {DEGTable} from "./DEGTable/DEGTable";
 import {AddGene} from "./AddGene/AddGene";
 import {DropdownItem} from "./DropdownItem/DropdownItem";
-
+import {OntologyBrowser} from "./OntologyBrowser/OntologyBrowser";
+import {OntologyTree} from "./OntologyBrowser/OntologyTree";
 export {
     DEGTable,
     NavBar,
@@ -21,5 +22,7 @@ export {
     AnnotationGroupDisplay,
     Annotation,
     AddGene,
-    DropdownItem
+    DropdownItem,
+    OntologyBrowser,
+    OntologyTree
 }

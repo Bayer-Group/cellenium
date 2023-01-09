@@ -10,6 +10,7 @@ fragment StudyOverview on Study {
     tissueNcitIds
     diseaseMeshIds
 }
+
 fragment TreeTissueOverview on TreeTissue {
     cid
     label
@@ -123,6 +124,16 @@ query autocomplete($query:String!) {
     ontCode
     ontology
   }
+}
+fragment ontologyOverview on Ontology {
+    name
+    ontid
+    nodeId
+}
+query ontologies {
+    ontologiesList{
+        ...ontologyOverview
+    }
 }
 
 `;

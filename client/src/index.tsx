@@ -19,6 +19,8 @@ import AnnotationComparison from "./pages/AnnotationComparison";
 import UserAnnotation from "./pages/UserAnnotation";
 import {NotificationsProvider} from '@mantine/notifications';
 import {RecoilURLSyncJSON} from "recoil-sync";
+import {ModalsProvider} from "@mantine/modals";
+import OntologySandbox from "./pages/OntologySandbox";
 
 export const apolloCache = new InMemoryCache();
 
@@ -66,6 +68,10 @@ const router = createBrowserRouter([
         path: "/SingleGeneExpressionInUmapScatterplotTestPage",
         element: <SingleGeneExpressionInUmapScatterplotTestPage/>,
     },
+    {
+        path: "ontologySandbox",
+        element: <OntologySandbox/>
+    }
 ]);
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -83,7 +89,9 @@ root.render(
                 <RecoilURLSyncJSON location={{part: 'queryParams'}}>
                     <React.Suspense fallback={<GlobalLoading/>}>
                         <NotificationsProvider zIndex={10000000}>
-                            <RouterProvider router={router}/>
+                            <ModalsProvider>
+                                <RouterProvider router={router}/>
+                            </ModalsProvider>
                         </NotificationsProvider>
                     </React.Suspense>
                 </RecoilURLSyncJSON>
