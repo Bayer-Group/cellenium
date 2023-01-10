@@ -8,8 +8,6 @@ import {
     StudySampleProjectionSubsamplingTransposed
 } from "./generated/types";
 import * as aq from 'arquero';
-import {syncEffect, urlSyncEffect} from "recoil-sync";
-import {number, optional} from "@recoiljs/refine";
 
 export const selectedGenesState = atom<Gene[]>({
     key: "selectedGenes",
@@ -20,7 +18,7 @@ export const userGenesState = atom<Gene[]>({
     key: "userGenes",
     default: []
 })
-export const selectedAnnotationState = atom<number|undefined>({
+export const selectedAnnotationState = atom<number | undefined>({
     key: "selectedAnnotation",
     default: undefined
 })
@@ -30,15 +28,31 @@ export const highlightAnnotationState = atom<number>({
     default: 0
 })
 
-export const annotationGroupIdState = atom<number|undefined>({
+export const annotationGroupIdState = atom<number | undefined>({
     key: "annotationGroupId",
     default: undefined
 })
 
 export const studyIdState = atom<number>({
     key: "studyId",
-    default: undefined,
-    effects: [syncEffect({refine: number()})]
+    default: undefined
+});
+
+export const studyLayerIdDefinedState = atom<number>({
+    key: "studyLayerIdDefined",
+    default: undefined
+});
+
+export const studyLayerIdState = selector<number>({
+    key: "studyLayerId",
+    get: ({get}) => {
+        const study = get(studyState);
+        if (study) {
+            // check if the selected layer (additional atom) is valid or return default:
+            return study.studyLayersList[0].studyLayerId;
+        }
+        return -1;
+    }
 });
 
 function buildSampleProjectionTable(d: { studySampleId: number[], projection: number[] }) {
@@ -79,10 +93,10 @@ export const studyState = selector<Study | undefined>({
             const response = await responsePromise;
 
             if (response?.data?.study) {
-                if( response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0 ) {
+                if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
                     throw Error('no projection data');
                 }
-                if( response.data.study.studySampleAnnotationsList.length === 0 ) {
+                if (response.data.study.studySampleAnnotationsList.length === 0) {
                     throw Error('no study annotations');
                 }
 
@@ -100,4 +114,10 @@ export const studyState = selector<Study | undefined>({
     },
     // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
     dangerouslyAllowMutability: true
+});
+
+
+export const pageState = atom<string>({
+    key: "page",
+    default: "CellMarkerAnalysis"
 });

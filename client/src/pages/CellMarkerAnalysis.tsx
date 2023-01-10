@@ -84,7 +84,8 @@ function DifferentialExpressionAnalysis() {
                         <AddGene/>
                     </div>
                     <Stack spacing={'xs'}>
-                        {userGenes.length>0?userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`} gene={gene}/>):
+                        {userGenes.length > 0 ? userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`}
+                                                                                  gene={gene}/>) :
                             <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
                     </Stack>
                     <Space h={'md'}/>

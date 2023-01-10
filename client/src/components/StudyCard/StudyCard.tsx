@@ -15,7 +15,7 @@ function getDiseaseLabel(ontcode:string, ontlist:TreeDiseaseOverviewFragment[]):
 }
 
 const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, diseases: TreeDiseaseOverviewFragment[], tissues: TreeTissueOverviewFragment[]}) => {
-    const newStudyUrl = `cellmarkeranalysis?studyId=${study.studyId}`;
+    const newStudyUrl = `study/${study.studyId}`;
 
     return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
