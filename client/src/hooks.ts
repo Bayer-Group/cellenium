@@ -1,14 +1,15 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
 import * as aq from 'arquero';
 import {useExpressionByOmicsIdsQuery} from "./generated/types";
-import {ExpressionTable} from "./model";
+import {ExpressionTable, SelectBoxItem} from "./model";
 import {useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {
+    annotationGroupIdState,
     highlightAnnotationState,
     selectedAnnotationState,
     selectedGenesState,
     studyIdState,
-    studyLayerIdState
+    studyLayerIdState, studyState
 } from "./atoms";
 import {useParams} from "react-router-dom";
 
@@ -44,6 +45,7 @@ export function useExpressionValues(omicsIds: number[]) {
 
 export function useSetStudyFromUrl() {
     const {studyId: studyIdUrlParam} = useParams<{ studyId: string }>();
+    const studyIdUrlParamInt = studyIdUrlParam && parseInt(studyIdUrlParam);
     const [studyId, setStudyId] = useRecoilState(studyIdState);
     const resetStatesOnStudyChange = [
         useResetRecoilState(selectedGenesState),
@@ -52,12 +54,21 @@ export function useSetStudyFromUrl() {
     ];
 
     useEffect(() => {
-        if (studyIdUrlParam) {
-            const studyIdUrlParamInt = parseInt(studyIdUrlParam);
+        if (studyIdUrlParamInt) {
             if (studyIdUrlParamInt > 0 && studyIdUrlParamInt !== studyId) {
                 setStudyId(studyIdUrlParamInt);
                 resetStatesOnStudyChange.forEach(atomReset => atomReset());
             }
         }
     }, [studyIdUrlParam, studyId]);
+
+    // after the study is loaded, we set valid defaults:
+
+    const study = useRecoilValue(studyState);
+    const setAnnotationGroupId = useSetRecoilState(annotationGroupIdState);
+    useEffect(() => {
+        if (study && study.studyId === studyIdUrlParamInt) {
+            setAnnotationGroupId(study.studyAnnotationGroupUisList[0].annotationGroup.annotationGroupId);
+        }
+    }, [study]);
 }

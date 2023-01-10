@@ -33,47 +33,26 @@ interface PreparedPlot {
 
 function DifferentialExpressionAnalysis() {
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
-
-    //const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const userGenes = useRecoilValue(userGenesState);
-    const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     const study = useRecoilValue(studyState);
-    useEffect(() => {
-        if (study) {
-            const anns: SelectBoxItem[] = []
-            study.annotationGroupMap.forEach((value, key) => {
-                anns.push({
-                    value: key.toString(),
-                    label: value.displayGroup
-                })
-            })
-            if (anns.length > 0) {
-                setAnnotationGroups(anns)
-                setAnnotationGroupId(parseInt(anns[0].value))
-            }
 
-        }
-
-    }, [study])
+    if (!study) {
+        return <></>;
+    }
 
     return (
         <Group position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
-
-                {annotationGroups.length > 0 &&
-                    <Stack>
-                        <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                  changeHandler={(value: number) => {
-                                                      setAnnotationGroupId(value);
-                                                      setSelectedAnnotation(undefined);
-                                                  }}/>
-                        {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
-                            <AnnotationGroupDisplay
-                                annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
-                    </Stack>
-                }
-
+                <Stack>
+                    <AnnotationGroupSelectBox changeHandler={(value: number) => {
+                        setAnnotationGroupId(value);
+                        setSelectedAnnotation(undefined);
+                    }}/>
+                    {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
+                        <AnnotationGroupDisplay
+                            annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
+                </Stack>
             </LeftSidePanel>
             <main>
                 <ProjectionPlot colorBy={'annotation'}/>

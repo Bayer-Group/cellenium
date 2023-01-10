@@ -5,7 +5,14 @@ import {Group, Stack, Text, Title} from "@mantine/core";
 import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {selectedGenesState, studyIdState, studyState, userGenesState} from "../atoms";
+import {
+    annotationGroupIdState,
+    selectedAnnotationState,
+    selectedGenesState,
+    studyIdState,
+    studyState,
+    userGenesState
+} from "../atoms";
 import {SelectBoxItem} from "../model";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
@@ -25,8 +32,10 @@ const genes = [
 
 ]
 const ExpressionAnalysis = () => {
-    const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value)
-    const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
+    const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
+    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+
+    // const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
     const userGenes = useRecoilValue(userGenesState);
     const selectedGenes = useRecoilValue(selectedGenesState);
     const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
@@ -37,45 +46,23 @@ const ExpressionAnalysis = () => {
         return selectedGenes.map(g =>
             table.params({omicsId: g.omicsId}).filter((d: any, p: any) => d.omicsId === p.omicsId));
     }, [selectedGenes, table]);
-
-    const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     const study = useRecoilValue(studyState);
-    console.log({study})
-    useEffect(() => {
-        if (study) {
-            const anns: SelectBoxItem[] = []
-            study.annotationGroupMap.forEach((value, key) => {
-                anns.push({
-                    value: key.toString(),
-                    label: value.displayGroup
-                })
-            })
-            if (anns.length > 0) {
-                setAnnotationGroups(anns)
-                setSelectedAnnotationGroup(parseInt(anns[0].value))
-            }
+    if (!study) {
+        return <></>;
+    }
 
-        }
-
-    }, [study])
     return (
         <Group position={'apart'}>
             <LeftSidePanel>
                 <Stack>
-
-
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
 
-                    {annotationGroups.length > 0 &&
-                        <Stack>
-                            <AnnotationGroupSelectBox annotations={annotationGroups}
-                                                      changeHandler={(value: number) => {
-                                                          setSelectedAnnotationGroup(value);
-                                                      }}/>
-
-                        </Stack>
-                    }
+                    <Stack>
+                        <AnnotationGroupSelectBox changeHandler={(value: number) => {
+                            setAnnotationGroupId(value);
+                        }}/>
+                    </Stack>
                 </Stack>
 
             </LeftSidePanel>
