@@ -21,6 +21,7 @@ export type Study = StudyBasicsFragment & {
     samplesAnnotationTable: SamplesAnnotationTable;
     annotationGroupMap: Map<number, AnnotationGroup>;
     annotationValueMap: Map<number, AnnotationValue>;
+
 };
 
 export type SelectBoxItem = {

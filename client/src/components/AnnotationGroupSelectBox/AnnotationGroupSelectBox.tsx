@@ -1,13 +1,27 @@
 import {Select} from '@mantine/core';
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {SelectBoxItem} from "../../model";
+import {useRecoilValue} from "recoil";
+import {studyState} from "../../atoms";
 
 type Props = {
-    annotations: SelectBoxItem[];
     changeHandler: Function;
 }
 
-function AnnotationGroupSelectBox({annotations, changeHandler}: Props) {
+function AnnotationGroupSelectBox({changeHandler}: Props) {
+    const study = useRecoilValue(studyState);
+    const annotations: SelectBoxItem[] = useMemo(() => {
+        const anns: SelectBoxItem[] = [];
+        if (study) {
+            study.annotationGroupMap.forEach((value, key) => {
+                anns.push({
+                    value: key.toString(),
+                    label: value.displayGroup
+                })
+            });
+        }
+        return anns;
+    }, [study]);
     const [value, setValue] = useState<string | null>(annotations[0].value);
 
     function update(value: string | null) {

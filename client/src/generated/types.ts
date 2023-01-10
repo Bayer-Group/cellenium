@@ -4740,6 +4740,7 @@ export enum StudyOmicsTransposedsOrderBy {
 
 export type StudyOverview = {
   __typename?: 'StudyOverview';
+  cellCount: Maybe<Scalars['Int']>;
   description: Maybe<Scalars['String']>;
   studyId: Maybe<Scalars['Int']>;
   studyName: Maybe<Scalars['String']>;
@@ -4761,6 +4762,8 @@ export type StudyOverviewStudyOntologyListArgs = {
  * tested for equality and combined with a logical ‘and.’
  */
 export type StudyOverviewCondition = {
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `description` field. */
   description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -4773,6 +4776,8 @@ export type StudyOverviewCondition = {
 export type StudyOverviewFilter = {
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<StudyOverviewFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
   /** Filter by the object’s `description` field. */
   description: InputMaybe<StringFilter>;
   /** Negates the expression. */
@@ -4787,6 +4792,7 @@ export type StudyOverviewFilter = {
 
 /** An input for mutations affecting `StudyOverview` */
 export type StudyOverviewInput = {
+  cellCount: InputMaybe<Scalars['Int']>;
   description: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
@@ -4857,6 +4863,8 @@ export type StudyOverviewOntologyFilter = {
 
 /** Methods to use when ordering `StudyOverview`. */
 export enum StudyOverviewsOrderBy {
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
   DescriptionAsc = 'DESCRIPTION_ASC',
   DescriptionDesc = 'DESCRIPTION_DESC',
   Natural = 'NATURAL',
@@ -5703,7 +5711,7 @@ export enum _AllUsedOntologyIdsOrderBy {
   OntCodeDesc = 'ONT_CODE_DESC'
 }
 
-export type StudyOverviewFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> };
+export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
 
 export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
@@ -5718,7 +5726,7 @@ export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Arr
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
+export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
@@ -5758,15 +5766,18 @@ export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
 
-export const StudyOverviewFragmentDoc = gql`
-    fragment StudyOverview on Study {
+export const StudyInfoFragmentDoc = gql`
+    fragment StudyInfo on StudyOverview {
   studyId
   studyName
-  cellCount
   description
-  organismTaxId
-  tissueNcitIds
-  diseaseMeshIds
+  cellCount
+  studyOntologyList {
+    ontCodes
+    labels
+    ontology
+    parentIds
+  }
 }
     `;
 export const TreeOntologyOverviewFragmentDoc = gql`
@@ -5869,14 +5880,14 @@ export type DegLazyQueryHookResult = ReturnType<typeof useDegLazyQuery>;
 export type DegQueryResult = Apollo.QueryResult<DegQuery, DegQueryVariables>;
 export const StudiesDocument = gql`
     query studies {
-  studiesList {
-    ...StudyOverview
+  studyOverviewsList {
+    ...StudyInfo
   }
   treeOntologiesList {
     ...TreeOntologyOverview
   }
 }
-    ${StudyOverviewFragmentDoc}
+    ${StudyInfoFragmentDoc}
 ${TreeOntologyOverviewFragmentDoc}`;
 
 /**

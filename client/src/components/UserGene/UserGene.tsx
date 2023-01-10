@@ -2,9 +2,8 @@ import React from 'react';
 import {ActionIcon, CloseButton, createStyles, Group, Text} from "@mantine/core";
 import {IconDroplet} from "@tabler/icons";
 import {Gene} from "../../model";
-import {useRecoilState} from "recoil";
-import {selectedGenesState, userGenesState} from "../../atoms";
-import {useNavigate} from "react-router-dom";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {pageState, selectedGenesState, userGenesState} from "../../atoms";
 
 type Props = {
     gene: Gene
@@ -25,9 +24,10 @@ const UserGene = ({gene}: Props) => {
     const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
-    const navigate = useNavigate()
+    const setPage = useSetRecoilState(pageState);
 
     function handleRemove(gene: Gene) {
+
         // remove from geneStore
         let removed = geneStore.filter((g) => g.omicsId !== gene.omicsId)
         setGeneStore(removed)
@@ -43,8 +43,8 @@ const UserGene = ({gene}: Props) => {
             setSelectedGenesStore(removed)
         } else {
             // add
-            setSelectedGenesStore([...selectedGenes, gene])
-            navigate('/expressionanalysis?plotType=projectionplot')
+            setSelectedGenesStore([...selectedGenes, gene]);
+            setPage('ExpressionAnalysis');
         }
 
     }

@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import {ReactComponent as CelleniumLogo} from "../../images/logo.svg";
 import {useRecoilState} from "recoil";
 import { useLocation } from 'react-router-dom';
+import {pageState} from "../../atoms";
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -89,11 +90,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const viewLinks = [
-    {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis', link: '/cellmarkeranalysis'},
-    {icon: ExpressionAnalysisIcon, label: 'Expression analysis', link: '/expressionanalysis'},
-    {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis', link: '/coexpressionanalysis'},
-    {icon: CompareAnnotationsIcon, label: 'Compare annotations', link: '/annotationcomparison'},
-    {icon: UserAnnotationIcon, label: 'User annotations', link: '/userannotation'},
+    {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis', link: 'CellMarkerAnalysis'},
+    {icon: ExpressionAnalysisIcon, label: 'Expression analysis', link: 'ExpressionAnalysis'},
+    {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis', link: 'CoexpressionAnalysis'},
+    {icon: CompareAnnotationsIcon, label: 'Compare annotations', link: 'AnnotationComparison'},
+    {icon: UserAnnotationIcon, label: 'User annotations', link: 'UserAnnotation'},
 ];
 
 type Props = {
@@ -102,18 +103,13 @@ type Props = {
 
 function LeftSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
-    const [active, setActive] = useState('Cell type marker analysis');
-    const navigate = useNavigate();
-    const location = useLocation()
+    const [page,setPage] = useRecoilState(pageState);
 
     const mainLinks = viewLinks.map((link) => (
         <Tooltip label={link.label} position="right" withArrow transitionDuration={0} key={link.label}>
             <UnstyledButton
-                onClick={() => {
-                    setActive(link.label)
-                    navigate(link.link)
-                }}
-                className={cx(classes.mainLink, {[classes.mainLinkActive]: link.link === location.pathname})}
+                onClick={() => setPage(link.link)}
+                className={cx(classes.mainLink, {[classes.mainLinkActive]: link.link === page})}
             >
                 <link.icon/>
             </UnstyledButton>

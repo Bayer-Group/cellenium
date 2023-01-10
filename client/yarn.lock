@@ -2550,11 +2550,6 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@recoiljs/refine@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@recoiljs/refine/-/refine-0.1.1.tgz#282a1cc603bac7db08eea571bbee757f9cf7b55c"
-  integrity sha512-ry02rHswJePYkH1o8K99qL4O6TBntF9/g7W5wXVwaOUrIJEZUGfl/I3+btPXbUgyyEZvNs5xcwvOw13AufmFQw==
-
 "@remix-run/router@1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.2.1.tgz#812edd4104a15a493dda1ccac0b352270d7a188c"
@@ -10810,14 +10805,6 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-recoil-sync@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/recoil-sync/-/recoil-sync-0.2.0.tgz#915c219ae6e73ca6b973ce73c6c773d5a4273210"
-  integrity sha512-ZYZM1C4LAhGr3EeMMI5MwT4eaEqsr+ddjB4EwdgN8HXXLmE7P5FVCdFHV3HJtMzxR3Y8sOmJDfN1IPrezwKoRg==
-  dependencies:
-    "@recoiljs/refine" "^0.1.1"
-    transit-js "^0.8.874"
-
 recoil@^0.7.6:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/recoil/-/recoil-0.7.6.tgz#75297ecd70bbfeeb72e861aa6141a86bb6dfcd5e"
@@ -12235,11 +12222,6 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
-
-transit-js@^0.8.874:
-  version "0.8.874"
-  resolved "https://registry.yarnpkg.com/transit-js/-/transit-js-0.8.874.tgz#37b27d6632bd796567c359220297c862e3988bbb"
-  integrity sha512-IDJJGKRzUbJHmN0P15HBBa05nbKor3r2MmG6aSt0UxXIlJZZKcddTk67/U7WyAeW9Hv/VYI02IqLzolsC4sbPA==
 
 tryer@^1.0.1:
   version "1.0.1"

@@ -1,14 +1,18 @@
 import gql from 'graphql-tag';
 
 gql`
-fragment StudyOverview on Study {
+fragment StudyInfo on StudyOverview   {
     studyId
     studyName
-    cellCount
     description
-    organismTaxId
-    
-}
+    cellCount
+    studyOntologyList {
+      ontCodes
+      labels
+      ontology
+      parentIds
+    }
+  }
 
 fragment TreeOntologyOverview on TreeOntology {
     label
@@ -32,8 +36,8 @@ query deg($studyId: Int!, $annotationValueId: Int!) {
 }
 
 query studies {
-    studiesList {
-        ...StudyOverview
+    studyOverviewsList {
+        ...StudyInfo
     }
     treeOntologiesList {
         ...TreeOntologyOverview

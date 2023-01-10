@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
-import {StudyOverviewFragment, TreeOntologyOverviewFragment, useStudiesQuery} from "../generated/types";
+import {
+    StudyInfoFragment,
+    TreeOntologyOverviewFragment,
+    useStudiesQuery
+} from "../generated/types";
 import {OntologyItem} from "../model";
 
 
@@ -45,10 +49,9 @@ const SearchResults = () => {
             </Container>
             <Container size={'xl'}>
                 <Grid>
-                    {data && data.studiesList && data.studiesList.map((study: StudyOverviewFragment) => {
-                        return <Grid.Col span={12} key={study.studyId}><StudyCard study={study}
-                                                                                  tissues={study.tissueNcitIds}
-                                                                                  diseases={study.diseaseMeshIds}/></Grid.Col>
+                    {data && data.studyOverviewsList && data.studyOverviewsList.map((study: StudyInfoFragment) => {
+
+                        return <Grid.Col span={12} key={study.studyId}><StudyCard study={study}/></Grid.Col>
                     })}
                 </Grid>
             </Container>
