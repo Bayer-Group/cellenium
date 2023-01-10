@@ -24,46 +24,48 @@ create view study_overview
 as
 select s.study_id,
        s.study_name,
-       s.description,
-       s.tissue_ncit_ids,
-       ont_tissue.labels      tissue_labels,
-       ont_tissue.parent_ids  tissue_parent_ids,
-       s.disease_mesh_ids,
-       ont_disease.labels     disease_labels,
-       ont_disease.parent_ids disease_parent_ids
-from study s
-         cross join ont_codes_info('NCIT', s.tissue_ncit_ids) ont_tissue
-         cross join ont_codes_info('MeSH', s.disease_mesh_ids) ont_disease;
+       s.description
+from study s;
+
+
+CREATE VIEW study_overview_ontology
+AS
+SELECT s.study_id,
+       'NCIT'            ontology,
+       s.tissue_ncit_ids ont_codes,
+       ont.labels,
+       ont.parent_ids
+FROM study s
+         cross join ont_codes_info('NCIT', s.tissue_ncit_ids) ont
+union all
+SELECT s.study_id,
+       'MeSH'             ontology,
+       s.disease_mesh_ids ont_codes,
+       ont.labels,
+       ont.parent_ids
+FROM study s
+         cross join ont_codes_info('MeSH', s.disease_mesh_ids) ont;
+comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+
 
 drop view if exists _all_used_ontology_ids cascade;
 create view _all_used_ontology_ids
 as
-select (select array_agg(distinct i)
-        from (select i
-              from study_overview
-                       cross join unnest(tissue_ncit_ids) i
-              union
-              select i
-              from study_overview
-                       cross join unnest(tissue_parent_ids) i) x)  "all_tissue_ids",
-       (select array_agg(distinct i)
-        from (select i
-              from study_overview
-                       cross join unnest(disease_mesh_ids) i
-              union
-              select i
-              from study_overview
-                       cross join unnest(disease_parent_ids) i) x) "all_disease_ids";
+select ontology, i ont_code
+from study_overview_ontology
+         cross join unnest(ont_codes) i
+union all
+select ontology, i ont_code
+from study_overview_ontology
+         cross join unnest(parent_ids) i;
 
 
-create view tree_tissues
+create view tree_ontology
 as
-select *
-from concept_hierarchy_minimum_trees_parents_lists('NCIT',
-                                                   (select all_tissue_ids from _all_used_ontology_ids));
-
-create view tree_diseases
-as
-select *
-from concept_hierarchy_minimum_trees_parents_lists('MeSH',
-                                                   (select all_disease_ids from _all_used_ontology_ids));
+with ont_code_lists as (select ontology, array_agg(ont_code) ont_codes
+                        from _all_used_ontology_ids
+                        group by ontology)
+select ont_code_lists.ontology, l.*
+from ont_code_lists,
+     concept_hierarchy_minimum_trees_parents_lists(ont_code_lists.ontology,
+                                                   ont_code_lists.ont_codes) l;
