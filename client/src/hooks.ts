@@ -12,15 +12,15 @@ import {
 } from "./atoms";
 import {useParams} from "react-router-dom";
 
-export function useExpressionValues() {
+export function useExpressionValues(omicsIds: number[]) {
     const studyLayerId = useRecoilValue(studyLayerIdState);
-    const selectedGenes = useRecoilValue(selectedGenesState);
 
     const {data, loading} = useExpressionByOmicsIdsQuery({
         variables: {
             studyLayerId,
-            omicsIds: selectedGenes.map(g => g.omicsId)
-        }
+            omicsIds
+        },
+        skip: omicsIds.length === 0
     });
     if (data?.expressionByOmicsIdsList) {
         let t = aq.from(data?.expressionByOmicsIdsList);
@@ -34,8 +34,6 @@ export function useExpressionValues() {
                 table: ExpressionTable.definedTable(t),
                 loading
             };
-        } else {
-            // TODO
         }
     }
     return {

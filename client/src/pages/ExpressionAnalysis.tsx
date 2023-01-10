@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Group, Stack, Text} from "@mantine/core";
+import {Group, Stack, Text, Title} from "@mantine/core";
 import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyIdState, studyState, userGenesState} from "../atoms";
+import {selectedGenesState, studyIdState, studyState, userGenesState} from "../atoms";
 import {SelectBoxItem} from "../model";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
@@ -28,10 +28,15 @@ const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value)
     const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
     const userGenes = useRecoilValue(userGenesState);
-    const {table, loading} = useExpressionValues();
-    useEffect(() => {
-        console.log({table})
-    }, [table])
+    const selectedGenes = useRecoilValue(selectedGenesState);
+    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
+    const tablePerGene = useMemo(() => {
+        if (selectedGenes.length === 0 || !table) {
+            return undefined;
+        }
+        return selectedGenes.map(g =>
+            table.params({omicsId: g.omicsId}).filter((d: any, p: any) => d.omicsId === p.omicsId));
+    }, [selectedGenes, table]);
 
     const [annotationGroups, setAnnotationGroups] = useState<SelectBoxItem[]>([])
     const study = useRecoilValue(studyState);
@@ -74,9 +79,14 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            <main>
-                <ProjectionPlot colorBy={'expression'} expressionTable={table}/>
-            </main>
+            {tablePerGene && (<main>
+                <Stack>
+                    {selectedGenes.map((g, i) => <>
+                        <Title order={3}>{g.displaySymbol}</Title>
+                        <ProjectionPlot key={g.omicsId} colorBy={'expression'} expressionTable={tablePerGene[i]}/>
+                    </>)}
+                </Stack>
+            </main>)}
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
                     <AddGene/>
