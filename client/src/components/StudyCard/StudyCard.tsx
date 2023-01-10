@@ -2,19 +2,12 @@ import React from 'react';
 import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from '@mantine/core';
 import {IconExternalLink} from "@tabler/icons";
 import {Link} from "react-router-dom";
-import {StudyOverviewFragment, TreeDiseaseOverviewFragment, TreeTissueOverviewFragment} from "../../generated/types";
+import {StudyOverviewFragment, } from "../../generated/types";
 
 
-function getTissueLabel(ontcode:string, ontlist:TreeTissueOverviewFragment[]):string|undefined {
-    const fragment = ontlist.filter((e)=>e.ontCode === ontcode).pop()
-    return fragment?.label
-}
-function getDiseaseLabel(ontcode:string, ontlist:TreeDiseaseOverviewFragment[]):string|undefined {
-    const fragment = ontlist.filter((e)=>e.ontCode === ontcode).pop()
-    return fragment?.label
-}
 
-const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, diseases: TreeDiseaseOverviewFragment[], tissues: TreeTissueOverviewFragment[]}) => {
+
+const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, diseases: string[], tissues: string[]}) => {
     const newStudyUrl = `cellmarkeranalysis?studyId=${study.studyId}`;
 
     return (
@@ -51,12 +44,12 @@ const StudyCard = ({study, diseases, tissues}: {study: StudyOverviewFragment, di
                     <Group position={'left'} spacing={3}>
                         {study.tissueNcitIds && study.tissueNcitIds.map((tissue: string) => {
                             return (<Badge key={tissue} size='sm' color="primary" variant="outline">
-                                {getTissueLabel(tissue, tissues)}
+                                {tissue}
                             </Badge>)
                         })}
                         {study.diseaseMeshIds && study.diseaseMeshIds.map((disease: string) => {
                             if (disease.length > 0) return (<Badge key={disease} size='sm' color="red" variant="outline">
-                                {getDiseaseLabel(disease,diseases)}
+                                {disease}
                             </Badge>)
                         })}
                     </Group>

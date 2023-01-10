@@ -2,21 +2,22 @@ import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, useMantineTheme} f
 import React, {useEffect, useState} from "react";
 import SearchBadge from "../SearchBadge/SearchBadge";
 import {IconBinaryTree, IconSearch, IconX} from "@tabler/icons";
-import {TreeDiseaseOverviewFragment, TreeTissueOverviewFragment, useAutocompleteLazyQuery} from "../../generated/types";
+import { useAutocompleteLazyQuery} from "../../generated/types";
 import {closeModal, openModal} from "@mantine/modals";
 import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
+import {OntologyItem} from "../../model";
 
 type OfferingItem = {
     value: string;
     ontcode: string;
     ontology: string;
 }
+
 type Props = {
-    diseases: TreeDiseaseOverviewFragment[];
-    tissues: TreeTissueOverviewFragment[];
+    ontologies: Map<string,OntologyItem>;
 }
 
-function SearchBar({diseases, tissues}: Props) {
+function SearchBar({ontologies}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<OfferingItem[]>([]);

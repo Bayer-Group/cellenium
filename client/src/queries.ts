@@ -7,23 +7,13 @@ fragment StudyOverview on Study {
     cellCount
     description
     organismTaxId
-    tissueNcitIds
-    diseaseMeshIds
+    
 }
 
-fragment TreeTissueOverview on TreeTissue {
-    cid
+fragment TreeOntologyOverview on TreeOntology {
     label
     ontCode
-    parentCids
-    parentOntCodePath
-}
-
-fragment TreeDiseaseOverview on TreeDisease {
-    cid
-    label
-    ontCode
-    parentCids
+    ontology
     parentOntCodePath
 }
 
@@ -42,15 +32,12 @@ query deg($studyId: Int!, $annotationValueId: Int!) {
 }
 
 query studies {
-  studiesList {
-    ...StudyOverview
-  }
-  treeTissuesList {
-    ...TreeTissueOverview
-  }
-  treeDiseasesList {
-    ...TreeDiseaseOverview
-  }
+    studiesList {
+        ...StudyOverview
+    }
+    treeOntologiesList {
+        ...TreeOntologyOverview
+    }
 }
 
 fragment StudyBasics on Study {

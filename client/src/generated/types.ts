@@ -1175,6 +1175,31 @@ export type CreateStudyOmicPayload = {
   studyOmic: Maybe<StudyOmic>;
 };
 
+/** All input for the create `StudyOverview` mutation. */
+export type CreateStudyOverviewInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `StudyOverview` to be created by this mutation. */
+  studyOverview: StudyOverviewInput;
+};
+
+/** The output of our create `StudyOverview` mutation. */
+export type CreateStudyOverviewPayload = {
+  __typename?: 'CreateStudyOverviewPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  /** The `StudyOverview` that was created by this mutation. */
+  studyOverview: Maybe<StudyOverview>;
+};
+
 /** The output of our create `Study` mutation. */
 export type CreateStudyPayload = {
   __typename?: 'CreateStudyPayload';
@@ -2193,6 +2218,8 @@ export type Mutation = {
   createStudyLayer: Maybe<CreateStudyLayerPayload>;
   /** Creates a single `StudyOmic`. */
   createStudyOmic: Maybe<CreateStudyOmicPayload>;
+  /** Creates a single `StudyOverview`. */
+  createStudyOverview: Maybe<CreateStudyOverviewPayload>;
   /** Creates a single `StudySample`. */
   createStudySample: Maybe<CreateStudySamplePayload>;
   /** Creates a single `StudySampleAnnotation`. */
@@ -2395,6 +2422,12 @@ export type MutationCreateStudyLayerArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyOmicArgs = {
   input: CreateStudyOmicInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateStudyOverviewArgs = {
+  input: CreateStudyOverviewInput;
 };
 
 
@@ -3521,6 +3554,8 @@ export type Query = Node & {
   studyOmicsList: Maybe<Array<StudyOmic>>;
   /** Reads a set of `StudyOmicsTransposed`. */
   studyOmicsTransposedsList: Maybe<Array<StudyOmicsTransposed>>;
+  /** Reads a set of `StudyOverviewOntology`. */
+  studyOverviewOntologiesList: Maybe<Array<StudyOverviewOntology>>;
   /** Reads a set of `StudyOverview`. */
   studyOverviewsList: Maybe<Array<StudyOverview>>;
   studySample: Maybe<StudySample>;
@@ -3534,10 +3569,8 @@ export type Query = Node & {
   studySampleProjectionsList: Maybe<Array<StudySampleProjection>>;
   /** Reads a set of `StudySample`. */
   studySamplesList: Maybe<Array<StudySample>>;
-  /** Reads a set of `TreeDisease`. */
-  treeDiseasesList: Maybe<Array<TreeDisease>>;
-  /** Reads a set of `TreeTissue`. */
-  treeTissuesList: Maybe<Array<TreeTissue>>;
+  /** Reads a set of `TreeOntology`. */
+  treeOntologiesList: Maybe<Array<TreeOntology>>;
 };
 
 
@@ -3964,6 +3997,16 @@ export type QueryStudyOmicsTransposedsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyOverviewOntologiesListArgs = {
+  condition: InputMaybe<StudyOverviewOntologyCondition>;
+  filter: InputMaybe<StudyOverviewOntologyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewsListArgs = {
   condition: InputMaybe<StudyOverviewCondition>;
   filter: InputMaybe<StudyOverviewFilter>;
@@ -4027,22 +4070,12 @@ export type QueryStudySamplesListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryTreeDiseasesListArgs = {
-  condition: InputMaybe<TreeDiseaseCondition>;
-  filter: InputMaybe<TreeDiseaseFilter>;
+export type QueryTreeOntologiesListArgs = {
+  condition: InputMaybe<TreeOntologyCondition>;
+  filter: InputMaybe<TreeOntologyFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<TreeDiseasesOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryTreeTissuesListArgs = {
-  condition: InputMaybe<TreeTissueCondition>;
-  filter: InputMaybe<TreeTissueFilter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<TreeTissuesOrderBy>>;
+  orderBy: InputMaybe<Array<TreeOntologiesOrderBy>>;
 };
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
@@ -4708,14 +4741,19 @@ export enum StudyOmicsTransposedsOrderBy {
 export type StudyOverview = {
   __typename?: 'StudyOverview';
   description: Maybe<Scalars['String']>;
-  diseaseLabels: Maybe<Array<Maybe<Scalars['String']>>>;
-  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  diseaseParentIds: Maybe<Array<Maybe<Scalars['String']>>>;
   studyId: Maybe<Scalars['Int']>;
   studyName: Maybe<Scalars['String']>;
-  tissueLabels: Maybe<Array<Maybe<Scalars['String']>>>;
-  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  tissueParentIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
+  studyOntologyList: Array<StudyOverviewOntology>;
+};
+
+
+export type StudyOverviewStudyOntologyListArgs = {
+  condition: InputMaybe<StudyOverviewOntologyCondition>;
+  filter: InputMaybe<StudyOverviewOntologyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
 
 /**
@@ -4725,22 +4763,10 @@ export type StudyOverview = {
 export type StudyOverviewCondition = {
   /** Checks for equality with the object’s `description` field. */
   description: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `diseaseLabels` field. */
-  diseaseLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `diseaseParentIds` field. */
-  diseaseParentIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
   studyName: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `tissueLabels` field. */
-  tissueLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `tissueParentIds` field. */
-  tissueParentIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `StudyOverview` object types. All fields are combined with a logical ‘and.’ */
@@ -4749,12 +4775,6 @@ export type StudyOverviewFilter = {
   and: InputMaybe<Array<StudyOverviewFilter>>;
   /** Filter by the object’s `description` field. */
   description: InputMaybe<StringFilter>;
-  /** Filter by the object’s `diseaseLabels` field. */
-  diseaseLabels: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `diseaseParentIds` field. */
-  diseaseParentIds: InputMaybe<StringListFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyOverviewFilter>;
   /** Checks for any expressions in this list. */
@@ -4763,35 +4783,87 @@ export type StudyOverviewFilter = {
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyName` field. */
   studyName: InputMaybe<StringFilter>;
-  /** Filter by the object’s `tissueLabels` field. */
-  tissueLabels: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `tissueParentIds` field. */
-  tissueParentIds: InputMaybe<StringListFilter>;
+};
+
+/** An input for mutations affecting `StudyOverview` */
+export type StudyOverviewInput = {
+  description: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
+};
+
+/** Methods to use when ordering `StudyOverviewOntology`. */
+export enum StudyOverviewOntologiesOrderBy {
+  LabelsAsc = 'LABELS_ASC',
+  LabelsDesc = 'LABELS_DESC',
+  Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
+  OntCodesAsc = 'ONT_CODES_ASC',
+  OntCodesDesc = 'ONT_CODES_DESC',
+  ParentIdsAsc = 'PARENT_IDS_ASC',
+  ParentIdsDesc = 'PARENT_IDS_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
+export type StudyOverviewOntology = {
+  __typename?: 'StudyOverviewOntology';
+  labels: Maybe<Array<Maybe<Scalars['String']>>>;
+  ontCodes: Maybe<Array<Maybe<Scalars['String']>>>;
+  ontology: Maybe<Scalars['String']>;
+  parentIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Reads a single `StudyOverview` that is related to this `StudyOverviewOntology`. */
+  study: Maybe<StudyOverview>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `StudyOverviewOntology` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyOverviewOntologyCondition = {
+  /** Checks for equality with the object’s `labels` field. */
+  labels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `ontCodes` field. */
+  ontCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `ontology` field. */
+  ontology: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `parentIds` field. */
+  parentIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyOverviewOntology` object types. All fields are combined with a logical ‘and.’ */
+export type StudyOverviewOntologyFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyOverviewOntologyFilter>>;
+  /** Filter by the object’s `labels` field. */
+  labels: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyOverviewOntologyFilter>;
+  /** Filter by the object’s `ontCodes` field. */
+  ontCodes: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `ontology` field. */
+  ontology: InputMaybe<StringFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyOverviewOntologyFilter>>;
+  /** Filter by the object’s `parentIds` field. */
+  parentIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
 };
 
 /** Methods to use when ordering `StudyOverview`. */
 export enum StudyOverviewsOrderBy {
   DescriptionAsc = 'DESCRIPTION_ASC',
   DescriptionDesc = 'DESCRIPTION_DESC',
-  DiseaseLabelsAsc = 'DISEASE_LABELS_ASC',
-  DiseaseLabelsDesc = 'DISEASE_LABELS_DESC',
-  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
-  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
-  DiseaseParentIdsAsc = 'DISEASE_PARENT_IDS_ASC',
-  DiseaseParentIdsDesc = 'DISEASE_PARENT_IDS_DESC',
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
-  StudyNameDesc = 'STUDY_NAME_DESC',
-  TissueLabelsAsc = 'TISSUE_LABELS_ASC',
-  TissueLabelsDesc = 'TISSUE_LABELS_DESC',
-  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
-  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
-  TissueParentIdsAsc = 'TISSUE_PARENT_IDS_ASC',
-  TissueParentIdsDesc = 'TISSUE_PARENT_IDS_DESC'
+  StudyNameDesc = 'STUDY_NAME_DESC'
 }
 
 /** Represents an update to a `Study`. Fields that are set will be updated. */
@@ -5079,59 +5151,15 @@ export enum StudySamplesOrderBy {
   StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
 }
 
-export type TreeDisease = {
-  __typename?: 'TreeDisease';
-  cid: Maybe<Scalars['Int']>;
-  label: Maybe<Scalars['String']>;
-  ontCode: Maybe<Scalars['String']>;
-  parentCids: Maybe<Array<Maybe<Scalars['Int']>>>;
-  parentOntCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-/**
- * A condition to be used against `TreeDisease` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
- */
-export type TreeDiseaseCondition = {
-  /** Checks for equality with the object’s `cid` field. */
-  cid: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `label` field. */
-  label: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `ontCode` field. */
-  ontCode: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `parentCids` field. */
-  parentCids: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  /** Checks for equality with the object’s `parentOntCodePath` field. */
-  parentOntCodePath: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-/** A filter to be used against `TreeDisease` object types. All fields are combined with a logical ‘and.’ */
-export type TreeDiseaseFilter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<TreeDiseaseFilter>>;
-  /** Filter by the object’s `cid` field. */
-  cid: InputMaybe<IntFilter>;
-  /** Filter by the object’s `label` field. */
-  label: InputMaybe<StringFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<TreeDiseaseFilter>;
-  /** Filter by the object’s `ontCode` field. */
-  ontCode: InputMaybe<StringFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<TreeDiseaseFilter>>;
-  /** Filter by the object’s `parentCids` field. */
-  parentCids: InputMaybe<IntListFilter>;
-  /** Filter by the object’s `parentOntCodePath` field. */
-  parentOntCodePath: InputMaybe<StringListFilter>;
-};
-
-/** Methods to use when ordering `TreeDisease`. */
-export enum TreeDiseasesOrderBy {
+/** Methods to use when ordering `TreeOntology`. */
+export enum TreeOntologiesOrderBy {
   CidAsc = 'CID_ASC',
   CidDesc = 'CID_DESC',
   LabelAsc = 'LABEL_ASC',
   LabelDesc = 'LABEL_DESC',
   Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
   OntCodeAsc = 'ONT_CODE_ASC',
   OntCodeDesc = 'ONT_CODE_DESC',
   ParentCidsAsc = 'PARENT_CIDS_ASC',
@@ -5140,66 +5168,56 @@ export enum TreeDiseasesOrderBy {
   ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC'
 }
 
-export type TreeTissue = {
-  __typename?: 'TreeTissue';
+export type TreeOntology = {
+  __typename?: 'TreeOntology';
   cid: Maybe<Scalars['Int']>;
   label: Maybe<Scalars['String']>;
   ontCode: Maybe<Scalars['String']>;
+  ontology: Maybe<Scalars['String']>;
   parentCids: Maybe<Array<Maybe<Scalars['Int']>>>;
   parentOntCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /**
- * A condition to be used against `TreeTissue` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
+ * A condition to be used against `TreeOntology` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
  */
-export type TreeTissueCondition = {
+export type TreeOntologyCondition = {
   /** Checks for equality with the object’s `cid` field. */
   cid: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `label` field. */
   label: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontCode` field. */
   ontCode: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ontology` field. */
+  ontology: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `parentCids` field. */
   parentCids: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `parentOntCodePath` field. */
   parentOntCodePath: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-/** A filter to be used against `TreeTissue` object types. All fields are combined with a logical ‘and.’ */
-export type TreeTissueFilter = {
+/** A filter to be used against `TreeOntology` object types. All fields are combined with a logical ‘and.’ */
+export type TreeOntologyFilter = {
   /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<TreeTissueFilter>>;
+  and: InputMaybe<Array<TreeOntologyFilter>>;
   /** Filter by the object’s `cid` field. */
   cid: InputMaybe<IntFilter>;
   /** Filter by the object’s `label` field. */
   label: InputMaybe<StringFilter>;
   /** Negates the expression. */
-  not: InputMaybe<TreeTissueFilter>;
+  not: InputMaybe<TreeOntologyFilter>;
   /** Filter by the object’s `ontCode` field. */
   ontCode: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ontology` field. */
+  ontology: InputMaybe<StringFilter>;
   /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<TreeTissueFilter>>;
+  or: InputMaybe<Array<TreeOntologyFilter>>;
   /** Filter by the object’s `parentCids` field. */
   parentCids: InputMaybe<IntListFilter>;
   /** Filter by the object’s `parentOntCodePath` field. */
   parentOntCodePath: InputMaybe<StringListFilter>;
 };
-
-/** Methods to use when ordering `TreeTissue`. */
-export enum TreeTissuesOrderBy {
-  CidAsc = 'CID_ASC',
-  CidDesc = 'CID_DESC',
-  LabelAsc = 'LABEL_ASC',
-  LabelDesc = 'LABEL_DESC',
-  Natural = 'NATURAL',
-  OntCodeAsc = 'ONT_CODE_ASC',
-  OntCodeDesc = 'ONT_CODE_DESC',
-  ParentCidsAsc = 'PARENT_CIDS_ASC',
-  ParentCidsDesc = 'PARENT_CIDS_DESC',
-  ParentOntCodePathAsc = 'PARENT_ONT_CODE_PATH_ASC',
-  ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC'
-}
 
 /** All input for the `updateAnnotationGroupByNodeId` mutation. */
 export type UpdateAnnotationGroupByNodeIdInput = {
@@ -5647,8 +5665,8 @@ export type UpdateStudySamplePayload = {
 
 export type _AllUsedOntologyId = {
   __typename?: '_AllUsedOntologyId';
-  allDiseaseIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  allTissueIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  ontCode: Maybe<Scalars['String']>;
+  ontology: Maybe<Scalars['String']>;
 };
 
 /**
@@ -5656,40 +5674,38 @@ export type _AllUsedOntologyId = {
  * tested for equality and combined with a logical ‘and.’
  */
 export type _AllUsedOntologyIdCondition = {
-  /** Checks for equality with the object’s `allDiseaseIds` field. */
-  allDiseaseIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `allTissueIds` field. */
-  allTissueIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `ontCode` field. */
+  ontCode: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ontology` field. */
+  ontology: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `_AllUsedOntologyId` object types. All fields are combined with a logical ‘and.’ */
 export type _AllUsedOntologyIdFilter = {
-  /** Filter by the object’s `allDiseaseIds` field. */
-  allDiseaseIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `allTissueIds` field. */
-  allTissueIds: InputMaybe<StringListFilter>;
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<_AllUsedOntologyIdFilter>>;
   /** Negates the expression. */
   not: InputMaybe<_AllUsedOntologyIdFilter>;
+  /** Filter by the object’s `ontCode` field. */
+  ontCode: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ontology` field. */
+  ontology: InputMaybe<StringFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<_AllUsedOntologyIdFilter>>;
 };
 
 /** Methods to use when ordering `_AllUsedOntologyId`. */
 export enum _AllUsedOntologyIdsOrderBy {
-  AllDiseaseIdsAsc = 'ALL_DISEASE_IDS_ASC',
-  AllDiseaseIdsDesc = 'ALL_DISEASE_IDS_DESC',
-  AllTissueIdsAsc = 'ALL_TISSUE_IDS_ASC',
-  AllTissueIdsDesc = 'ALL_TISSUE_IDS_DESC',
-  Natural = 'NATURAL'
+  Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
+  OntCodeAsc = 'ONT_CODE_ASC',
+  OntCodeDesc = 'ONT_CODE_DESC'
 }
 
 export type StudyOverviewFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> };
 
-export type TreeTissueOverviewFragment = { __typename?: 'TreeTissue', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
-
-export type TreeDiseaseOverviewFragment = { __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> };
+export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
 export type DegQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -5702,7 +5718,7 @@ export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Arr
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }>, treeTissuesList: Array<{ __typename?: 'TreeTissue', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> }>, treeDiseasesList: Array<{ __typename?: 'TreeDisease', cid: number, label: string, ontCode: string, parentCids: Array<number>, parentOntCodePath: Array<string> }> };
+export type StudiesQuery = { __typename?: 'Query', studiesList: Array<{ __typename?: 'Study', studyId: number, studyName: string, cellCount: number, description: string, organismTaxId: string, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
@@ -5753,21 +5769,11 @@ export const StudyOverviewFragmentDoc = gql`
   diseaseMeshIds
 }
     `;
-export const TreeTissueOverviewFragmentDoc = gql`
-    fragment TreeTissueOverview on TreeTissue {
-  cid
+export const TreeOntologyOverviewFragmentDoc = gql`
+    fragment TreeOntologyOverview on TreeOntology {
   label
   ontCode
-  parentCids
-  parentOntCodePath
-}
-    `;
-export const TreeDiseaseOverviewFragmentDoc = gql`
-    fragment TreeDiseaseOverview on TreeDisease {
-  cid
-  label
-  ontCode
-  parentCids
+  ontology
   parentOntCodePath
 }
     `;
@@ -5866,16 +5872,12 @@ export const StudiesDocument = gql`
   studiesList {
     ...StudyOverview
   }
-  treeTissuesList {
-    ...TreeTissueOverview
-  }
-  treeDiseasesList {
-    ...TreeDiseaseOverview
+  treeOntologiesList {
+    ...TreeOntologyOverview
   }
 }
     ${StudyOverviewFragmentDoc}
-${TreeTissueOverviewFragmentDoc}
-${TreeDiseaseOverviewFragmentDoc}`;
+${TreeOntologyOverviewFragmentDoc}`;
 
 /**
  * __useStudiesQuery__

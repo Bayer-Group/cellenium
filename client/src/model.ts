@@ -1,9 +1,11 @@
 import {AnnotationGroup, AnnotationValue, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
+
 export type OntologyItem = {
     id: string;
     label: string;
+    ontology?: string;
     children?: OntologyItem[];
 }
 
