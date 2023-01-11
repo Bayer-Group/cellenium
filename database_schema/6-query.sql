@@ -24,7 +24,8 @@ create view study_overview
 as
 select s.study_id,
        s.study_name,
-       s.description
+       s.description,
+       s.cell_count
 from study s;
 
 

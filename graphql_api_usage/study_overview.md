@@ -13,30 +13,23 @@ multiple parents), the API performs an additional step to force the nodes into a
 to browser multiple parents for a "current node", and we found that this UI was too confusing.
 
 ```gql
-query OverviewPage {
+query OverviewPage  {
   studyOverviewsList {
     studyId
     studyName
     description
-    tissueLabels
-    tissueNcitIds
-    tissueParentIds
-    diseaseLabels
-    diseaseMeshIds
-    diseaseParentIds
+    cellCount
+    studyOntologyList {
+      ontCodes
+      labels
+      ontology
+      parentIds
+    }
   }
-  treeTissuesList {
-    cid
+  treeOntologiesList {
     label
     ontCode
-    parentCids
-    parentOntCodePath
-  }
-  treeDiseasesList {
-    cid
-    label
-    ontCode
-    parentCids
+    ontology
     parentOntCodePath
   }
 }

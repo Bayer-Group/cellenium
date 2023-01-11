@@ -5,17 +5,17 @@ import {OntologyItem} from "../../model";
 import OntologyBranch from "./OntologyBranch";
 
 type Props = {
-    ontid: number;
+    ontology: OntologyItem;
     handleAddOntologyItem: Function;
 }
 
 
-const OntologyTree = ({ontid, handleAddOntologyItem}: Props) => {
+const OntologyTree = ({ontology, handleAddOntologyItem}: Props) => {
     return (
         <Group position={'center'} align={'center'} grow>
             <Stack spacing={0} justify={'center'} align={'flex-start'}>
                 <Text>Ontology Browser</Text>
-                {DATA.map((item: OntologyItem) => <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={item.id} item={item} level={0}></OntologyBranch>)}
+                {[ontology].map((item: OntologyItem) => <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={item.id} item={item} level={0}></OntologyBranch>)}
             </Stack>
         </Group>
     );

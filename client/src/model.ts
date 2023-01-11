@@ -4,8 +4,10 @@ import {internal} from 'arquero';
 
 export type OntologyItem = {
     id: string;
+    ontology: string;
+    unique_id: string;
     label: string;
-    ontology?: string;
+    parent_unique_id: string|undefined;
     children?: OntologyItem[];
 }
 

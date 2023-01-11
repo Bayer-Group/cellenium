@@ -9,7 +9,7 @@ const OntologyBranch = ({item, level, handleAddOntologyItem}: { item: OntologyIt
     const renderChildren = () => {
         if (hasChildren) {
             return item && item.children && item.children.map((child) => {
-                return <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={child.id} item={child} level={level + 1}/>
+                return <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={child.unique_id} item={child} level={level + 1}/>
             })
         }
         return null;

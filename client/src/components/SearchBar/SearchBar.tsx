@@ -70,11 +70,11 @@ function SearchBar({ontologies}: Props) {
 
             modalId: 'ontologyBrowser',
             title: 'Ontology browser',
-            children: <OntologyBrowser handleAddOntologyItem={(item: string) => {
+            children: <OntologyBrowser ontologyTrees={ontologies} handleAddOntologyItem={(item: OntologyItem) => {
                 setSelectedFilters([...selectedFilters, {
-                    value: item,
-                    ontcode: "string",
-                    ontology: "string"
+                    value: item.label,
+                    ontcode: item.id,
+                    ontology: item.ontology
                 }]);
 
                 closeModal('ontologyBrowser');

@@ -1,42 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
-import {
-    StudyInfoFragment,
-    TreeOntologyOverviewFragment,
-    useStudiesQuery
-} from "../generated/types";
+import {StudyInfoFragment, TreeOntologyOverviewFragment, useStudiesQuery} from "../generated/types";
 import {OntologyItem} from "../model";
+import {generateOntologyTrees} from "./helper";
 
-
-function generateOntologyTrees(nodeList: TreeOntologyOverviewFragment[]) {
-    // @ts-ignore
-    const ontologies = [...new Set(nodeList.map(item => item.ontology))];
-    const ontologyItemMap = new Map<string, OntologyItem>()
-    // setup the hash
-    nodeList.map((nd) => {
-        ontologyItemMap.set(`${nd.ontology}_${nd.ontCode}`, {
-            id: nd.ontCode,
-            label: nd.label,
-            ontology: nd.ontology,
-            children:[]});
-    })
-    // fill the children
-     nodeList.map((nd)=>{
-
-     });
-    console.log({ontologyItemMap})
-}
 
 const SearchResults = () => {
     const {data, error, loading} = useStudiesQuery()
     const [ontologyTrees, setOntologyTrees] = useState<Map<string, OntologyItem>>();
-
-    useEffect(() => {
-        if (data && data.treeOntologiesList) {
-            generateOntologyTrees(data.treeOntologiesList)
-        }
-    }, [data])
+    useEffect(()=>{
+        if (data)
+            setOntologyTrees(generateOntologyTrees(data.treeOntologiesList))
+    },[data])
     return (
         <Container fluid={true}>
             <NavBar mainLinks={[{link: 'single_studies', label: 'Single study analysis'},

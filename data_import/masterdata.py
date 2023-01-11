@@ -10,6 +10,9 @@ import requests
 import sqlalchemy
 import tqdm
 from pybiomart import Dataset
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
                     datefmt='%Y%m%d-%H%M%S', level=logging.DEBUG)
@@ -161,9 +164,9 @@ class Dataimport(object):
         self.conn = None
         self.engine = None
         self.cursor = None
-        self.meshfn = '../scratch/d2023.txt'
-        self.ncitfn = '../scratch/ncit.csv.gz'
-        self.ncbitaxonomyfn = '../scratch/taxdmp.zip'
+        self.meshfn = './scratch/d2023.txt'
+        self.ncitfn = './scratch/ncit.csv.gz'
+        self.ncbitaxonomyfn = './scratch/taxdmp.zip'
 
     def __enter__(self):
         self.engine = sqlalchemy.create_engine(
@@ -327,13 +330,14 @@ class Dataimport(object):
         human = get_gene_mappings('hsapiens_gene_ensembl',
                                   ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id', 'description'],
                                   9606)
-        mus = get_gene_mappings('mmusculus_gene_ensembl',
-                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
-                                10090)
-        rat = get_gene_mappings('rnorvegicus_gene_ensembl',
-                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
-                                10116)
-        genes = pd.concat([human, mus, rat]).reset_index(drop=True)
+        #mus = get_gene_mappings('mmusculus_gene_ensembl',
+        #                        ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+        #                        10090)
+        #rat = get_gene_mappings('rnorvegicus_gene_ensembl',
+        #                        ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+        #                        10116)
+        #genes = pd.concat([human, mus, rat]).reset_index(drop=True)
+        genes = pd.concat([human]).reset_index(drop=True)
         genes[['omics_type', 'tax_id', 'display_symbol', 'display_name']].to_sql('omics_base',
                                                                                  if_exists='append', index=False,
                                                                                  con=self.engine)
@@ -371,9 +375,9 @@ class Dataimport(object):
     def import_masterdata(self):
         self.import_mesh()
         self.import_ncit()
-        self.import_ncbi_taxonomy()
-        self.import_genes()
-        self.import_antibodies()
+        #self.import_ncbi_taxonomy()
+        #self.import_genes()
+        #self.import_antibodies()
         # TODO jasper
 
 

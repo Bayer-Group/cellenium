@@ -32,7 +32,7 @@ const OntologyNode = ({item, selected, hasChildren, level, onToggle, handleAddOn
             {hasChildren && <ActionIcon size='xs' variant={'subtle'} onClick={onToggle}>
                 {selected?<IconCaretDown color={theme.colors.dark[9]}/>:<IconCaretRight color={theme.colors.dark[9]}/>}
             </ActionIcon>}
-            <Text onClick={()=>handleAddOntologyItem(item.label)} className={classes.main} size={'xs'} style={{cursor:'pointer'}}>{item.label}</Text>
+            <Text onClick={()=>handleAddOntologyItem(item)} className={classes.main} size={'xs'} style={{cursor:'pointer'}}>{item.label}</Text>
         </Group>
     );
 };
