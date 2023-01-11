@@ -42,7 +42,7 @@ function DifferentialExpressionAnalysis() {
     }
 
     return (
-        <Group position={'apart'} spacing={'xs'}>
+        <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
                 <Stack>
                     <AnnotationGroupSelectBox changeHandler={(value: number) => {

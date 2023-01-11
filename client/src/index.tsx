@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject} from '@apollo/client';
-import {MantineProvider} from '@mantine/core';
+import {Container, MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import {createBrowserRouter, RouterProvider,} from "react-router-dom";
 import SearchResults from "./pages/SearchResults";
@@ -57,7 +57,9 @@ root.render(
                 <React.Suspense fallback={<GlobalLoading/>}>
                     <NotificationsProvider zIndex={10000000}>
                         <ModalsProvider>
-                            <RouterProvider router={router}/>
+                            <Container style={{height: '100%'}} fluid={true}>
+                                <RouterProvider router={router}/>
+                            </Container>
                         </ModalsProvider>
                     </NotificationsProvider>
                 </React.Suspense>

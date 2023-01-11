@@ -1,19 +1,11 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
 import {Group, Stack, Text, Title} from "@mantine/core";
 import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {
-    annotationGroupIdState,
-    selectedAnnotationState,
-    selectedGenesState,
-    studyIdState,
-    studyState,
-    userGenesState
-} from "../atoms";
-import {SelectBoxItem} from "../model";
+import {annotationGroupIdState, selectedGenesState, studyState, userGenesState} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
 
@@ -52,7 +44,7 @@ const ExpressionAnalysis = () => {
     }
 
     return (
-        <Group position={'apart'}>
+        <Group align={'flex-start'} position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
@@ -66,8 +58,10 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            {tablePerGene && (<main>
-                <Stack>
+            {tablePerGene && (<main
+                style={{height: '100vh', overflowY: 'scroll', flexGrow: 1}}
+                className={'plotContainer'}>
+                <Stack align={'center'}>
                     {selectedGenes.map((g, i) => <>
                         <Title order={3}>{g.displaySymbol}</Title>
                         <ProjectionPlot key={g.omicsId} colorBy={'expression'} expressionTable={tablePerGene[i]}/>

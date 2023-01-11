@@ -118,8 +118,8 @@ function LeftSidePanel({children}: Props) {
 
 
     return (
-        <Navbar height={'100vh'} width={{sm: 300}}>
-            <Navbar.Section grow className={classes.wrapper}>
+        <Navbar style={{ height: '100vh'}} width={{sm: 300}} >
+            <Navbar.Section  grow className={classes.wrapper}>
                 <div className={classes.aside}>
                     <div className={classes.logo}>
                         <Anchor href={'/'}><CelleniumLogo/></Anchor>
