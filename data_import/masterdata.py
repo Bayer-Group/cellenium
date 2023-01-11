@@ -12,8 +12,6 @@ import tqdm
 from pybiomart import Dataset
 import ssl
 
-ssl._create_default_https_context = ssl._create_unverified_context
-
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
                     datefmt='%Y%m%d-%H%M%S', level=logging.DEBUG)
 
