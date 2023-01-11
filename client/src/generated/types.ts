@@ -3571,6 +3571,7 @@ export type Query = Node & {
   studySamplesList: Maybe<Array<StudySample>>;
   /** Reads a set of `TreeOntology`. */
   treeOntologiesList: Maybe<Array<TreeOntology>>;
+  violinPlot: Maybe<Scalars['String']>;
 };
 
 
@@ -4076,6 +4077,15 @@ export type QueryTreeOntologiesListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<TreeOntologiesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryViolinPlotArgs = {
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pOmicsId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
@@ -5754,6 +5764,16 @@ export type ExpressionByOmicsIdsQueryVariables = Exact<{
 
 export type ExpressionByOmicsIdsQuery = { __typename?: 'Query', expressionByOmicsIdsList: Array<{ __typename?: 'ExpressionByOmic', omicsId: number, studySampleIds: Array<number>, values: Array<number> }> };
 
+export type ExpressionViolinPlotQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+}>;
+
+
+export type ExpressionViolinPlotQuery = { __typename?: 'Query', violinPlot: string };
+
 export type AutocompleteQueryVariables = Exact<{
   query: Scalars['String'];
 }>;
@@ -6039,6 +6059,47 @@ export function useExpressionByOmicsIdsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsQuery>;
 export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
 export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
+export const ExpressionViolinPlotDocument = gql`
+    query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
+  violinPlot(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsId: $omicsId
+    pAnnotationGroupId: $annotationGroupId
+  )
+}
+    `;
+
+/**
+ * __useExpressionViolinPlotQuery__
+ *
+ * To run a query within a React component, call `useExpressionViolinPlotQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionViolinPlotQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpressionViolinPlotQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      studyLayerId: // value for 'studyLayerId'
+ *      omicsId: // value for 'omicsId'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *   },
+ * });
+ */
+export function useExpressionViolinPlotQuery(baseOptions: Apollo.QueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
+      }
+export function useExpressionViolinPlotLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
+        }
+export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressionViolinPlotQuery>;
+export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
+export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
 export const AutocompleteDocument = gql`
     query autocomplete($query: String!) {
   autocompleteList(searchQuery: $query, first: 20) {

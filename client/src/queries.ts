@@ -107,6 +107,10 @@ query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   }
 }
 
+query ExpressionViolinPlot($studyId: Int! $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
+  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId)
+}
+
 query autocomplete($query:String!) {
   autocompleteList(searchQuery:$query, first: 20) {
     isSynonymOfPreferredTerm

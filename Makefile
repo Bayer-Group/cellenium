@@ -1,7 +1,9 @@
-.PHONY = reset_database normal_studydata_import test_studydata_import
+.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import
+.SECONDARY:
 
 reset_database:
-	docker exec -it cellenium-postgres-1 bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done'
+	$(shell which nerdctl &>/dev/null && echo nerdctl exec -it cellenium_postgres_1 || echo docker exec -it cellenium-postgres-1) \
+	  bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done' || true
 	PYTHONPATH=$$(pwd)/data_import python data_import/masterdata.py
 	rm -f scratch/*.h5ad.imported
 
@@ -15,6 +17,6 @@ scratch/%.h5ad.imported: scratch/%.h5ad
 
 test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported
 
-normal_studydata_import: scratch/pancreas_atlas.h5ad.imported
+normal_studydata_import: scratch/pancreas_atlas.h5ad.imported scratch/blood_covid.h5ad.imported scratch/lung_asthma.h5ad.imported scratch/tabula_muris_senis_heart.h5ad.imported scratch/tabula_muris_senis_liver.h5ad.imported scratch/tabula_sapiens_kidney.h5ad.imported
 
 huge_studydata_import: scratch/heart_failure_reichart2022.h5ad.imported
