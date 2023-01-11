@@ -1,64 +1,46 @@
-import {ActionIcon, Autocomplete, Group, Stack, Text, TextInputProps, useMantineTheme} from '@mantine/core';
+import {
+    ActionIcon,
+    Autocomplete,
+    AutocompleteItem,
+    Group,
+    Stack,
+    Text,
+    TextInputProps,
+    useMantineTheme
+} from '@mantine/core';
 import React, {FormEvent, useState} from "react";
-import _ from 'lodash';
-import {Gene} from "../../model";
 import {IconArrowRight, IconX} from "@tabler/icons";
-import {useRecoilState} from "recoil";
-import {userGenesState} from "../../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {studyState, userGenesState} from "../../atoms";
 import {showNotification} from '@mantine/notifications';
 import {useForm} from '@mantine/form';
+import * as aq from 'arquero';
+import {Omics} from "../../model";
 
-let GENES: Gene[] = [
-    {'displayName': 'CDK2', 'displaySymbol': 'CDK2', omicsId: 1},
-    {'displayName': 'ATAD2', 'displaySymbol': 'ATAD2', omicsId: 2},
-    {'displayName': 'CDK3', 'displaySymbol': 'CDK3', omicsId: 3},
-    {'displayName': 'BRAF', 'displaySymbol': 'BRAF', omicsId: 4},
-    {'displayName': 'KRAS', 'displaySymbol': 'KRAS', omicsId: 5},
-    {'displayName': 'PTK2', 'displaySymbol': 'PTK2', omicsId: 6},
-    {'displayName': 'ADAR1', 'displaySymbol': 'ADAR1', omicsId: 7},
-    {'displayName': 'CDK6', 'displaySymbol': 'CDK6', omicsId: 8},
-    {'displayName': 'CDK5', 'displaySymbol': 'CDK5', omicsId: 9},
-    {'displayName': 'CDK4', 'displaySymbol': 'CDK4', omicsId: 10},
-];
 
-GENES = _.orderBy(GENES, ['displaySymbol'], ['asc']);
 
-type OfferingGene = {
-    displaySymbol: string,
-    displayName: string,
-    omicsId: number,
-    value: string
-}
 
 function AddGene(props: TextInputProps) {
-    const [offerings, setOfferings] = useState<OfferingGene[]>([])
+    const [offerings, setOfferings] = useState<Omics[]>([])
     const [value, setValue] = useState('');
     const theme = useMantineTheme();
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
-
+    const study = useRecoilValue(studyState);
     const form = useForm();
 
-    function handleChange(input: string) {
-
-        let newOfferings: any = [];
-        if (input.length > 0) {
-            for (let g of GENES) {
-                if (g.displaySymbol.toLowerCase().startsWith(input.toLowerCase())) {
-                    newOfferings.push({
-                        ...g,
-                        value: g.displaySymbol
-                    })
-                }
-                if (newOfferings.length === 5) {
-                    break
-                }
-            }
+    function handleChange(inputString: string) {
+        console.log({inputString})
+        let newOfferings: Omics[] = [];
+        if (inputString.length > 0) {
+            // @ts-ignore
+            newOfferings = study?.studyOmicsTable.filter(aq.escape(t => aq.op.includes(t.displaySymbol, inputString, 0))).objects();
         }
+        console.log({newOfferings});
         setOfferings(newOfferings)
-        setValue(input)
+        setValue(inputString)
     }
 
-    function handleItemSubmit(item: OfferingGene) {
+    function handleItemSubmit(item: Omics) {
         setOfferings([])
         setValue('')
         if (userGenes.filter((g) => g.omicsId === item.omicsId).length === 1) {
@@ -69,19 +51,14 @@ function AddGene(props: TextInputProps) {
                 autoClose: 5000
             })
         } else {
-            setUserGenes([...userGenes, {
-                displaySymbol: item.displaySymbol,
-                displayName: item.displayName,
-                omicsId: item.omicsId
-            }])
-
+            setUserGenes([...userGenes, item])
         }
 
     }
 
     function handleSubmit(event: React.MouseEvent | FormEvent) {
         event.preventDefault();
-        const addGene: OfferingGene[] = offerings.filter((g) => g.displaySymbol.toLowerCase() === value.toLowerCase())
+        const addGene: Omics[] = offerings.filter((g) => g.displaySymbol.toLowerCase() === value.toLowerCase())
 
         if (value === '')
             return
@@ -104,11 +81,7 @@ function AddGene(props: TextInputProps) {
             })
         } else if (addGene.length === 1) {
 
-            setUserGenes([...userGenes, {
-                displaySymbol: addGene[0].displaySymbol,
-                displayName: addGene[0].displayName,
-                omicsId: addGene[0].omicsId
-            }])
+            setUserGenes([...userGenes, addGene[0]])
         }
     }
 
@@ -122,9 +95,9 @@ function AddGene(props: TextInputProps) {
                     <Autocomplete
                         value={value}
                         onChange={handleChange}
-                        data={offerings}
+                        data={offerings as AutocompleteItem[]}
                         radius={'md'}
-                        onItemSubmit={(item: OfferingGene) => {
+                        onItemSubmit={(item: any) => {
                             handleItemSubmit(item)
                         }}
                         rightSection={
@@ -151,14 +124,3 @@ function AddGene(props: TextInputProps) {
 }
 
 export {AddGene}
-
-/*
-                        <ActionIcon onClick={(event) => {
-                            handleClickSubmit(event);
-                            setValue('');
-                            setOfferings([]);
-                        }} size={32} radius="md" color={theme.primaryColor}
-                                    variant="filled">
-                            <IconPlus/>
-                        </ActionIcon>
- */

@@ -1,20 +1,15 @@
 import {atom, selector} from "recoil";
-import {Gene, Study, SamplesProjectionTable, SamplesAnnotationTable} from "./model";
+import {Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable} from "./model";
 import {apolloClient} from "./index";
-import {
-    StudyBasicsDocument, StudyBasicsFragment,
-    StudyBasicsQuery,
-    StudyBasicsQueryVariables,
-    StudySampleProjectionSubsamplingTransposed
-} from "./generated/types";
+import {StudyBasicsDocument, StudyBasicsFragment, StudyBasicsQuery, StudyBasicsQueryVariables} from "./generated/types";
 import * as aq from 'arquero';
 
-export const selectedGenesState = atom<Gene[]>({
+export const selectedGenesState = atom<Omics[]>({
     key: "selectedGenes",
     default: []
 })
 
-export const userGenesState = atom<Gene[]>({
+export const userGenesState = atom<Omics[]>({
     key: "userGenes",
     default: []
 })
@@ -78,6 +73,17 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
     return SamplesAnnotationTable.definedTable(annotatedSamplesTable);
 }
 
+function buildOmicsTable(d: { displaySymbol: string[], displayName: string[], omicsType: string[], omicsId: number[] }) {
+    const retTable = aq.table({
+        value: d.displaySymbol,
+        displaySymbol: d.displaySymbol,
+        displayName: d.displayName,
+        omicsType: d.omicsType,
+        omicsId: d.omicsId
+    })
+    return StudyOmicsTable.definedTable(retTable)
+}
+
 export const studyState = selector<Study | undefined>({
     key: "studyState",
     get: async ({get}) => {
@@ -99,12 +105,16 @@ export const studyState = selector<Study | undefined>({
                 if (response.data.study.studySampleAnnotationsList.length === 0) {
                     throw Error('no study annotations');
                 }
+                if (response.data.study.studyOmicsTransposedList.length === 0) {
+                    throw Error('no genes');
+                }
 
                 // do some computations, e.g. generate arquero table of a received record list...
                 const s: Study = {
                     ...response.data.study,
                     samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0]),
                     samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
+                    studyOmicsTable: buildOmicsTable(response.data.study.studyOmicsTransposedList[0]),
                     annotationGroupMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => [g.annotationGroup.annotationGroupId, g.annotationGroup])),
                     annotationValueMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => g.annotationGroup.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };

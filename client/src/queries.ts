@@ -52,10 +52,10 @@ fragment StudyBasics on Study {
       studyLayerId
     }
     studyOmicsTransposedList {
-      omicsId
-      omicsType
-      displayName
-      displaySymbol
+        displayName
+        displaySymbol
+        omicsId
+        omicsType
     }
     studyAnnotationGroupUisList {
       annotationGroup {

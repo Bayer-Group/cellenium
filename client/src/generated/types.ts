@@ -5728,7 +5728,9 @@ export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
+export type OmicsItemFragment = { __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> };
+
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -5742,7 +5744,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', omicsId: Array<number>, omicsType: Array<OmicsType>, displayName: Array<string>, displaySymbol: Array<string> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -5788,6 +5790,14 @@ export const TreeOntologyOverviewFragmentDoc = gql`
   parentOntCodePath
 }
     `;
+export const OmicsItemFragmentDoc = gql`
+    fragment OmicsItem on StudyOmicsTransposed {
+  displayName
+  displaySymbol
+  omicsId
+  omicsType
+}
+    `;
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
   studyId
@@ -5797,10 +5807,7 @@ export const StudyBasicsFragmentDoc = gql`
     studyLayerId
   }
   studyOmicsTransposedList {
-    omicsId
-    omicsType
-    displayName
-    displaySymbol
+    ...OmicsItem
   }
   studyAnnotationGroupUisList {
     annotationGroup {
@@ -5826,7 +5833,7 @@ export const StudyBasicsFragmentDoc = gql`
     projection
   }
 }
-    `;
+    ${OmicsItemFragmentDoc}`;
 export const OntologyOverviewFragmentDoc = gql`
     fragment ontologyOverview on Ontology {
   name

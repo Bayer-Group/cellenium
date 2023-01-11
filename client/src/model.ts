@@ -7,23 +7,25 @@ export type OntologyItem = {
     ontology: string;
     unique_id: string;
     label: string;
-    parent_unique_id: string|undefined;
+    parent_unique_id: string | undefined;
     children?: OntologyItem[];
 }
 
 
-export type Gene = {
+export type Omics = {
     omicsId: number;
+    omicsType: string;
     displayName: string;
     displaySymbol: string;
+    value?: string;
 }
 
 export type Study = StudyBasicsFragment & {
     samplesProjectionTable: SamplesProjectionTable;
     samplesAnnotationTable: SamplesAnnotationTable;
+    studyOmicsTable: StudyOmicsTable;
     annotationGroupMap: Map<number, AnnotationGroup>;
     annotationValueMap: Map<number, AnnotationValue>;
-
 };
 
 export type SelectBoxItem = {
@@ -56,6 +58,15 @@ export class SamplesAnnotationTable extends DefinedTable {
     static definedTable(t: internal.ColumnTable): SamplesAnnotationTable {
         DefinedTable.checkTable(t, ['studySampleId', 'annotationValueId', 'annotationGroupId']);
         return t as SamplesAnnotationTable;
+    }
+};
+
+export class StudyOmicsTable extends DefinedTable {
+    StudyOmicsTable = true;
+
+    static definedTable(t: internal.ColumnTable): StudyOmicsTable {
+        DefinedTable.checkTable(t, ['omicsId', 'omicsType', 'value', 'displaySymbol', 'displayName']);
+        return t as StudyOmicsTable;
     }
 };
 
