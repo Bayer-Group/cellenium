@@ -56,5 +56,15 @@ query ExpressionByAnnotation {
 To avoid the retrieval of many data points in the web browser, plots can be done in database stored functions
 and transmitted to the client in rasterized form (base64 encoded, graphQL doesn't support binary results).
 
-TODO...
+```gql
+query ExpressionViolinPlot($studyId: Int! $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
+  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId)
+}
 
+{
+  "studyId": 1,
+  "studyLayerId": 1,
+  "omicsId": 8356,
+  "annotationGroupId": 1
+}
+```
