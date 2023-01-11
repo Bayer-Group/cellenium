@@ -19,6 +19,8 @@ logging.info('local study files stored in: %s', basedir)
 
 # downloads an H5AD file and returns the file handle
 def get_h5ad_from_url(url: str, filename: str) -> AnnData:
+    if not filename.endswith("original"):
+        filename = filename + "_original"
     localfile = basedir.joinpath(f"{filename}.h5ad")
     adata = sc.read(localfile, backup_url=url)
     return adata
