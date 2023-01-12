@@ -8,6 +8,7 @@ import scipy
 from anndata import AnnData
 import logging
 from pathlib import Path
+import Density_Sampling.density_sampling as density_sampling
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
@@ -143,23 +144,34 @@ def add_umap(adata: AnnData, layer=None):
         calculate_umap(adata, layer)
     else:
         if not "X_umap" in adata.obsm:
-            adata = calculate_umap(adata)
+            calculate_umap(adata)
 
 
-# add cellenium stuff to hormonize metadata
+def density_sample_umap(adata: AnnData, desired_samples=50000):
+    if len(adata.var) > desired_samples:
+        sampled_indices = density_sampling.density_sampling(adata.obsm['X_umap'], metric='euclidean',
+                                                            desired_samples=desired_samples)
+        _cellenium_uns_dictionary(adata)['umap_density_sampled_indices'] = sampled_indices
+
+
+# add cellenium stuff to harmonize metadata
 def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
     cellenium_settings(adata, main_sample_attributes=main_attributes)
     # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
     return adata
 
 
+def _cellenium_uns_dictionary(adata: AnnData) -> dict:
+    d = adata.uns.get('cellenium', {})
+    adata.uns['cellenium'] = d
+    return d
+
+
 # add differential expression table to the anndata object
 # TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
 def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
     diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
-    d['differentially_expressed_genes'] = diff_exp
+    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = diff_exp
     return adata
 
 
@@ -175,8 +187,7 @@ def set_cellenium_metadata(
 ):
     # lets keep this stable for the jupyter way of h5ad generation
 
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
+    d = _cellenium_uns_dictionary(adata)
 
     assert isinstance(main_sample_attributes, list)
     for a in main_sample_attributes:
@@ -209,8 +220,7 @@ def cellenium_settings(
         pubmed_id: str,
         data_source: str
 ):
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
+    d = _cellenium_uns_dictionary(adata)
 
     # assert isinstance(main_sample_attributes, list)
     # for a in main_sample_attributes:
@@ -280,7 +290,5 @@ def calculate_differentially_expressed_genes(
     logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
                  result_dataframe['attribute_name'].unique().tolist())
 
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
-    d['differentially_expressed_genes'] = result_dataframe.copy()
+    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = result_dataframe.copy()
     return result_dataframe
