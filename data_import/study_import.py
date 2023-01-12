@@ -58,9 +58,14 @@ def import_study_sample(study_id: int, adata: AnnData):
             'study_id': study_id,
             'study_sample_id': adata_samples_df.study_sample_id,
             'projection_type': 'umap',
-            'projection': adata.obsm['X_umap'].tolist(),
-            'display_subsampling': True
+            'projection': adata.obsm['X_umap'].tolist()
         })
+        if 'umap_density_sampled_indices' in adata.uns['cellenium']:
+            projection_df['display_subsampling'] = False
+            projection_df.loc[adata.uns['cellenium']['umap_density_sampled_indices'], 'display_subsampling'] = True
+        else:
+            projection_df['display_subsampling'] = True
+
         import_df(projection_df, 'study_sample_projection')
 
     return adata_samples_df
@@ -240,4 +245,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     adata = sc.read_h5ad(args.filename)
     import_study(adata.uns['cellenium']['title'], adata)
+    logging.info('done')
+
 
