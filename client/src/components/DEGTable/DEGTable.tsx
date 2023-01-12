@@ -6,7 +6,7 @@ import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {studyState, userGenesState} from "../../atoms";
-import {Gene} from "../../model";
+import {Omics} from "../../model";
 import _ from 'lodash';
 
 const customStyles = {
@@ -85,7 +85,9 @@ const columns = memoize((clickHandler) => [
             let gene = {
                 omicsId: row.omicsId,
                 displayName: row.displayName,
-                displaySymbol: row.displaySymbol
+                displaySymbol: row.displaySymbol,
+                omicsType: row.omicsType,
+                value: row.displaySymbol
             }
             return (
                 <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
@@ -109,7 +111,7 @@ const DEGTable = ({annotationId}: Props) => {
         }
     })
 
-    function handleClick(gene: Gene) {
+    function handleClick(gene: Omics) {
         let check = userGenes.filter((g)=>g.omicsId===gene.omicsId)
         if (check.length===0)
             setUserGenes(_.union(userGenes, [gene]))

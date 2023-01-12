@@ -1,12 +1,12 @@
 import React from 'react';
 import {ActionIcon, CloseButton, createStyles, Group, Text} from "@mantine/core";
 import {IconDroplet} from "@tabler/icons";
-import {Gene} from "../../model";
+import {Omics} from "../../model";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {pageState, selectedGenesState, userGenesState} from "../../atoms";
 
 type Props = {
-    gene: Gene
+    gene: Omics
 }
 const useStyles = createStyles((theme) => ({
     active: {
@@ -26,8 +26,7 @@ const UserGene = ({gene}: Props) => {
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
     const setPage = useSetRecoilState(pageState);
 
-    function handleRemove(gene: Gene) {
-
+    function handleRemove(gene: Omics) {
         // remove from geneStore
         let removed = geneStore.filter((g) => g.omicsId !== gene.omicsId)
         setGeneStore(removed)
@@ -36,7 +35,7 @@ const UserGene = ({gene}: Props) => {
         setSelectedGenesStore(removed)
     }
 
-    function handleColorClick(gene: Gene) {
+    function handleColorClick(gene: Omics) {
         if (selectedGenes.filter((g) => g.omicsId === gene.omicsId).length > 0) {
             // remove
             let removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId)

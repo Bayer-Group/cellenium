@@ -23,6 +23,7 @@ function AnnotationGroupSelectBox({changeHandler}: Props) {
         }
         return anns;
     }, [study]);
+
     const [value, setValue] = useState<string | null>(annotations[0].value);
 
     function update(value: string | null) {
@@ -36,6 +37,7 @@ function AnnotationGroupSelectBox({changeHandler}: Props) {
         <Select
             value={value} onChange={(value) => update(value)}
             label="Select annotation group"
+            labelProps={{size:'xs'}}
             placeholder="Pick one"
             transitionDuration={80}
             transitionTimingFunction="ease"
