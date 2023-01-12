@@ -116,7 +116,19 @@ const ProjectionPlot = ({
                 colorscale: 'YlGnBu',
                 reversescale: true,
                 colorbar: {
-                    thickness: 5,
+                    tickfont:{
+                        family: 'Rubik',
+                        size: '14',
+
+                    },
+                    thickness: 15,
+                    outlinewidth: 0,
+                    len:0.2,
+                    lenmode: 'fraction',
+                    yanchor: 'top',
+                    y: 1,
+                    yref: 'paper'
+
                 },
             },
             showlegend: false,
