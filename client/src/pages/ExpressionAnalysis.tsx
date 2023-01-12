@@ -1,8 +1,8 @@
 import React, {useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Group, Loader, Stack, Text, Title} from "@mantine/core";
-import {AddGene, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
+import {Divider, Group, Loader, Stack, Text, Title} from "@mantine/core";
+import {AddGene, AnnotationFilterDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -108,12 +108,12 @@ const ExpressionAnalysis = () => {
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
+                    <AnnotationGroupSelectBox changeHandler={(value: number) => {
+                        setAnnotationGroupId(value);
+                    }}/>
+                    <Divider my="sm"/>
 
-                    <Stack>
-                        <AnnotationGroupSelectBox changeHandler={(value: number) => {
-                            setAnnotationGroupId(value);
-                        }}/>
-                    </Stack>
+                    <AnnotationFilterDisplay/>
                 </Stack>
 
             </LeftSidePanel>

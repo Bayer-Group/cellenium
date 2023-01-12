@@ -87,7 +87,7 @@ function AddGene(props: TextInputProps) {
 
     return (
         <Stack spacing={0}>
-            <Text weight={800} size={'xs'}>
+            <Text size={'xs'}>
                 Enter gene(s)
             </Text>
             <Group align={'center'} spacing={3}>

@@ -13,6 +13,12 @@ export const userGenesState = atom<Omics[]>({
     key: "userGenes",
     default: []
 })
+
+export const selectedAnnotationFilterState = atom<number[]>({
+    key: "selectedAnnotationFilter",
+    default: []
+})
+
 export const selectedAnnotationState = atom<number | undefined>({
     key: "selectedAnnotation",
     default: undefined
