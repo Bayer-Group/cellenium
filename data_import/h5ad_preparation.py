@@ -8,6 +8,8 @@ import scipy
 from anndata import AnnData
 import logging
 from pathlib import Path
+import cello
+
 import Density_Sampling.density_sampling as density_sampling
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
@@ -292,3 +294,21 @@ def calculate_differentially_expressed_genes(
 
     _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = result_dataframe.copy()
     return result_dataframe
+
+
+def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute:str):
+    if adata.uns['cellenium']['taxonomy_id'] != 9606:
+        logging.info('skipping CellO classification, taxonomy_id is not human')
+        return
+    resource_dir = basedir.joinpath(f"cello_resources")
+    os.makedirs(resource_dir, exist_ok=True)
+    # Mahmoud: CellO makes mistakes sometimes due to ribosomal protein genes, so would be good to filter them out before the CellO call
+    remove_ribo = adata.var_names.str.startswith(("RPS", "RPL"))
+    adata_cello = adata[:, ~remove_ribo].copy()
+    cello.scanpy_cello(adata_cello, clust_key=cello_clustering_attribute, rsrc_loc=resource_dir, term_ids=True)
+    adata.obs['CellO_celltype'] = adata.obs.join(adata_cello.obs['Most specific cell type'])['Most specific cell type']
+
+    updated_sample_attributes = ['CellO_celltype']
+    updated_sample_attributes.extend(adata.uns['cellenium']['main_sample_attributes'])
+    adata.uns['cellenium']['main_sample_attributes'] = updated_sample_attributes
+
