@@ -3489,6 +3489,7 @@ export type Query = Node & {
   conceptsInSemanticOrderList: Maybe<Array<Concept>>;
   /** Reads a set of `Concept`. */
   conceptsList: Maybe<Array<Concept>>;
+  correlationTrianglePlot: Maybe<Scalars['String']>;
   /** Reads a set of `DifferentialExpressionV`. */
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
@@ -3723,6 +3724,13 @@ export type QueryConceptsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCorrelationTrianglePlotArgs = {
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -5772,6 +5780,14 @@ export type ExpressionViolinPlotQueryVariables = Exact<{
 
 export type ExpressionViolinPlotQuery = { __typename?: 'Query', violinPlot: string };
 
+export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
+  studyLayerId: Scalars['Int'];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type ExpressionCorrelationTrianglePlotQuery = { __typename?: 'Query', correlationTrianglePlot: string };
+
 export type AutocompleteQueryVariables = Exact<{
   query: Scalars['String'];
 }>;
@@ -6093,6 +6109,40 @@ export function useExpressionViolinPlotLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressionViolinPlotQuery>;
 export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
 export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
+export const ExpressionCorrelationTrianglePlotDocument = gql`
+    query ExpressionCorrelationTrianglePlot($studyLayerId: Int!, $omicsIds: [Int!]!) {
+  correlationTrianglePlot(pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds)
+}
+    `;
+
+/**
+ * __useExpressionCorrelationTrianglePlotQuery__
+ *
+ * To run a query within a React component, call `useExpressionCorrelationTrianglePlotQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionCorrelationTrianglePlotQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpressionCorrelationTrianglePlotQuery({
+ *   variables: {
+ *      studyLayerId: // value for 'studyLayerId'
+ *      omicsIds: // value for 'omicsIds'
+ *   },
+ * });
+ */
+export function useExpressionCorrelationTrianglePlotQuery(baseOptions: Apollo.QueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(ExpressionCorrelationTrianglePlotDocument, options);
+      }
+export function useExpressionCorrelationTrianglePlotLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(ExpressionCorrelationTrianglePlotDocument, options);
+        }
+export type ExpressionCorrelationTrianglePlotQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotQuery>;
+export type ExpressionCorrelationTrianglePlotLazyQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotLazyQuery>;
+export type ExpressionCorrelationTrianglePlotQueryResult = Apollo.QueryResult<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>;
 export const AutocompleteDocument = gql`
     query autocomplete($query: String!) {
   autocompleteList(searchQuery: $query, first: 20) {

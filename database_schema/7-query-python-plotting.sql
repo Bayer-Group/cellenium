@@ -1,4 +1,3 @@
-
 -- these functions can be developed in postgres_python_plotting_devenv.ipynb
 
 CREATE OR REPLACE FUNCTION violin_plot(p_study_id int, p_study_layer_id int, p_omics_id int, p_annotation_group_id int)
@@ -123,3 +122,97 @@ $$ LANGUAGE plpython3u
     PARALLEL SAFE;
 
 --select violin_plot(1, 1, 8356, 1);
+
+
+-- these functions can be developed in postgres_python_plotting_devenv.ipynb
+
+CREATE OR REPLACE FUNCTION correlation_triangle_plot(p_study_layer_id int, p_omics_ids int[])
+    RETURNS text AS
+$$
+
+
+from typing import List
+import pandas as pd
+import numpy as np
+import scipy.stats as stats
+import seaborn as sns
+import matplotlib.pyplot as plt
+import io
+import base64
+
+
+def sql_query(query):
+    # postgres data retrieval with consistent output, both in the jupyter development
+    # environment (plpy is not available) and at runtime inside a plpython3u stored procedure
+    try:
+        import plpy
+    except:
+        from postgres_utils import engine
+        from sqlalchemy import text
+        with engine.connect() as connection:
+            r = connection.execute(text(query))
+            return [row._mapping for row in r.fetchall()]
+    r = plpy.execute(query)
+    return [row for row in r]
+
+
+def get_omics_symbols_map(omics_ids: List[int]):
+    result = sql_query(
+        f"select omics_id, display_symbol from omics_base where omics_id IN ({','.join([str(i) for i in omics_ids])})")
+    return {row['omics_id']: row['display_symbol'] for row in result}
+
+
+def get_expression_correlation_df(study_layer_id: int, omics_ids: List[int]):
+    expression_records = sql_query(f"""
+            select e.omics_id, e.study_sample_ids, e.values
+                from expression e
+            where e.study_layer_id={study_layer_id} and e.omics_id IN ({','.join([str(i) for i in omics_ids])})""")
+    df = pd.DataFrame(expression_records)
+    samples_expression_df = df.explode('study_sample_ids').drop(columns=['values'])
+    samples_expression_df['value'] = df.explode('values')['values']
+    samples_expression_df = samples_expression_df.astype({'study_sample_ids': 'int32', 'value': 'float32'})
+    correlation_df = samples_expression_df.pivot_table(values='value', index='study_sample_ids', columns='omics_id',
+                                                       aggfunc='first').fillna(0.0)
+    correlation_df.rename(columns=get_omics_symbols_map(omics_ids), inplace=True)
+    return correlation_df
+
+
+def sns_scatter_matrix_lower(df):
+    def corrfunc(x, y, **kwargs):
+        plot_data = pd.DataFrame({'x': x, 'y': y})
+        # filter out cells which have no expression for both of the genes, so that the 'not measured'
+        # data doesn't inflate the correlation
+        either_gene_expressed = plot_data[(plot_data.loc[:, 'x'] > 0) | (plot_data.loc[:, 'y'] > 0)]
+        r = either_gene_expressed.corr(method='pearson').loc['x', 'y']
+        ax = plt.gca()
+        ax.annotate("$r$ = {:.2f}".format(r), xy=(.1, .9), xycoords=ax.transAxes, fontsize='small')
+
+    grid = sns.PairGrid(data=df, vars=list(df), height=3)
+    for m, n in zip(*np.triu_indices_from(grid.axes, k=0)):
+        grid.axes[m, n].set_visible(False)
+    grid = grid.map_lower(plt.scatter, s=0.2)
+    grid.map_lower(corrfunc)
+    plt.rcParams["axes.labelsize"] = 14
+
+
+def generate_correlation_plot(study_layer_id: int, omics_ids: List[int]):
+    correlation_df = get_expression_correlation_df(study_layer_id, omics_ids)
+    sns_scatter_matrix_lower(correlation_df)
+
+
+def seaborn_to_base64() -> str:
+    s = io.BytesIO()
+    plt.savefig(s, format='png', bbox_inches="tight")
+    plt.close()
+    s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
+    return f"data:image/png;base64,{s}"
+
+
+generate_correlation_plot(p_study_layer_id, p_omics_ids)
+return seaborn_to_base64()
+$$ LANGUAGE plpython3u
+    IMMUTABLE
+    SECURITY DEFINER
+    PARALLEL SAFE;
+
+-- select correlation_triangle_plot(1, ARRAY[2670,8356,16870]);

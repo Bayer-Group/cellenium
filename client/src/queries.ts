@@ -107,8 +107,12 @@ query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   }
 }
 
-query ExpressionViolinPlot($studyId: Int! $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
+query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
   violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId)
+}
+
+query ExpressionCorrelationTrianglePlot($studyLayerId: Int!, $omicsIds: [Int!]!) {
+  correlationTrianglePlot(pStudyLayerId:$studyLayerId, pOmicsIds: $omicsIds)
 }
 
 query autocomplete($query:String!) {
