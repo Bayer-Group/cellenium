@@ -1,3 +1,4 @@
+import React from 'react';
 import {Select} from '@mantine/core';
 import {useMemo, useState} from "react";
 import {SelectBoxItem} from "../../model";

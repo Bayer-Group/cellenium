@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {createStyles, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
 import {ReactComponent as StudyAnalysisIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
