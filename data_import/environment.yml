@@ -4,8 +4,10 @@ channels:
   - bioconda
 dependencies:
   - python=3.10
-  - pip
   - pyjaspar
+  # cello-classify needs pygraphviz, which requires the graphviz headers for compilation
+  - graphviz
+  - pip
   - pip:
     - pandas
     - numpy
@@ -17,7 +19,6 @@ dependencies:
     - sqlalchemy
     - psycopg2-binary
     - jupyterlab
-    - 'dramatiq[watch]'
-    - dramatiq-pg
     - pybiomart
     - lxml
+    - cello-classify

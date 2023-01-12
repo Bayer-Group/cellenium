@@ -2,6 +2,15 @@
 a FAIR and scalable interactive visual analytics app for scRNA-Seq data
 
 ## Setting up
+
+for CellO:
+```bash
+mkdir scratch/cello_resources
+curl https://deweylab.biostat.wisc.edu/cell_type_classification/resources_v2.0.0.tar.gz >scratch/cello_resources/resources_v2.0.0.tar.gz
+tar -C scratch/cello_resources -zxf scratch/cello_resources/resources_v2.0.0.tar.gz
+````
+
+
 ```bash
 docker-compose up
 conda env create -f data_import/environment.yml
@@ -10,4 +19,12 @@ conda activate cellenium_import
 make reset_database test_studydata_import
 # 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
 make normal_studydata_import
+```
+
+## manually executing the study data preparation jupyter notebooks
+
+The notebooks are run in headless mode by `make`. To create new notebooks and explore datasets:
+
+```bash
+(cd data_import && PYTHONPATH=$(pwd) jupyter-lab)
 ```

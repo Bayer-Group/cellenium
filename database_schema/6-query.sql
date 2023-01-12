@@ -70,3 +70,17 @@ select ont_code_lists.ontology, l.*
 from ont_code_lists,
      concept_hierarchy_minimum_trees_parents_lists(ont_code_lists.ontology,
                                                    ont_code_lists.ont_codes) l;
+
+
+-- TODO materialized view, with refresh no study import
+create view annotation_value_combination_sample_count
+as
+with sample_annotationvalues as (select study_id,
+                                        sample_id,
+                                        array_agg(ssa.annotation_value_id order by ssa.annotation_value_id) annotation_value_combination
+                                 from study_sample_annotation ssa
+                                          cross join lateral unnest(ssa.study_sample_ids) sample_id
+                                 group by study_id, sample_id)
+select study_id, annotation_value_combination, count(1)
+from sample_annotationvalues
+group by study_id, annotation_value_combination;
