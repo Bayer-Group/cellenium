@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTable from "react-data-table-component";
-import {ActionIcon, Stack, Text, useMantineTheme} from "@mantine/core";
+import {ActionIcon, Stack, Text} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
@@ -8,6 +8,7 @@ import {useRecoilState, useRecoilValue} from "recoil";
 import {studyState, userGenesState} from "../../atoms";
 import {Omics} from "../../model";
 import _ from 'lodash';
+import {showNotification} from "@mantine/notifications";
 
 const customStyles = {
     table: {
@@ -91,7 +92,7 @@ const columns = memoize((clickHandler) => [
             }
             return (
                 <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
-                    size={12} color={'black'} /></ActionIcon>)
+                    size={12} color={'black'}/></ActionIcon>)
         },
         width: '20px',
     }
@@ -112,20 +113,28 @@ const DEGTable = ({annotationId}: Props) => {
     })
 
     function handleClick(gene: Omics) {
-        let check = userGenes.filter((g)=>g.omicsId===gene.omicsId)
-        if (check.length===0)
+        let check = userGenes.filter((g) => g.omicsId === gene.omicsId)
+        if (check.length === 0)
             setUserGenes(_.union(userGenes, [gene]))
+        else {
+            showNotification({
+                title: 'Your selection is already in the store',
+                message: "It's not a problem, really!",
+                color: 'red',
+                autoClose: 2500
+            })
+        }
     }
 
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
-            {data && data.differentialExpressionVsList.length>0 &&
+            {data && data.differentialExpressionVsList.length > 0 &&
                 <DataTable dense columns={columns(handleClick)} data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
                            defaultSortAsc={false}
                            customStyles={customStyles} fixedHeader
-                           fixedHeaderScrollHeight="500px"
-                           noDataComponent={<Text>Select one or more cysteine(s) </Text>}/>
+                           fixedHeaderScrollHeight="100vh"
+                           noDataComponent={<Text>No data.</Text>}/>
             }
         </Stack>
     );
