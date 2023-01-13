@@ -65,7 +65,7 @@ function buildSampleProjectionTable(d: { studySampleId: number[], projection: nu
 }
 
 function buildSampleAnnotationTable(s: StudyBasicsFragment) {
-    const samplesTable = aq.from(s.studySampleAnnotationsList).select(aq.not(['__typename']))
+    const samplesTable = aq.from(s.studySampleAnnotationSubsamplingList).select(aq.not(['__typename']))
         .unroll('studySampleIds')
         .select({studySampleIds: 'studySampleId', annotationValueId: 'annotationValueId'});
     // samplesTable.print();
@@ -108,7 +108,7 @@ export const studyState = selector<Study | undefined>({
                 if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
                     throw Error('no projection data');
                 }
-                if (response.data.study.studySampleAnnotationsList.length === 0) {
+                if (response.data.study.studySampleAnnotationSubsamplingList.length === 0) {
                     throw Error('no study annotations');
                 }
                 if (response.data.study.studyOmicsTransposedList.length === 0) {

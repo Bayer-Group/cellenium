@@ -15,7 +15,7 @@ query SingleGeneScatterPlots {
   expressionByOmicsIdsList(
     pOmicsIds: [1, 2]
     pStudyLayerId: 1
-    pSubsampling: true
+    pSubsamplingProjection:UMAP
   ) {
     omicsId
     studySampleIds
@@ -30,6 +30,8 @@ The study samples can be grouped by a selected sample annotation, and the boxsta
 calculated per gene (omics ID) and per annotation group.
 
 As an alternative, the list of values can be retrieved.
+
+This is just a GraphQL example, the query isn't included in the cellenium frontend.
 
 ```gql
 query ExpressionByAnnotation {

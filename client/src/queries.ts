@@ -71,10 +71,9 @@ fragment StudyBasics on Study {
       ordering
       differentialExpressionCalculated
     }
-    studySampleAnnotationsList {
-      # subsampling?
-      studySampleIds
+    studySampleAnnotationSubsamplingList {
       annotationValueId
+      studySampleIds
     }
     studySampleProjectionSubsamplingTransposedList {
       projectionType
@@ -100,7 +99,7 @@ query StudyBasics($studyId: Int!) {
 }
 
 query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
-  expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:null) {
+  expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:UMAP) {
     omicsId
     studySampleIds
     values

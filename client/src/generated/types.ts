@@ -3560,6 +3560,8 @@ export type Query = Node & {
   /** Reads a set of `StudyOverview`. */
   studyOverviewsList: Maybe<Array<StudyOverview>>;
   studySample: Maybe<StudySample>;
+  /** Reads a set of `StudySampleAnnotationSubsampling`. */
+  studySampleAnnotationSubsamplingsList: Maybe<Array<StudySampleAnnotationSubsampling>>;
   /** Reads a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Maybe<Array<StudySampleAnnotation>>;
   /** Reads a single `StudySample` using its globally unique `ID`. */
@@ -4033,6 +4035,16 @@ export type QueryStudySampleArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudySampleAnnotationSubsamplingsListArgs = {
+  condition: InputMaybe<StudySampleAnnotationSubsamplingCondition>;
+  filter: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
   filter: InputMaybe<StudySampleAnnotationFilter>;
@@ -4285,6 +4297,8 @@ export type Study = Node & {
   studyOmicsList: Array<StudyOmic>;
   /** Reads and enables pagination through a set of `StudyOmicsTransposed`. */
   studyOmicsTransposedList: Array<StudyOmicsTransposed>;
+  /** Reads and enables pagination through a set of `StudySampleAnnotationSubsampling`. */
+  studySampleAnnotationSubsamplingList: Array<StudySampleAnnotationSubsampling>;
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
   /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed`. */
@@ -4337,6 +4351,15 @@ export type StudyStudyOmicsTransposedListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
+};
+
+
+export type StudyStudySampleAnnotationSubsamplingListArgs = {
+  condition: InputMaybe<StudySampleAnnotationSubsamplingCondition>;
+  filter: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
 };
 
 
@@ -4981,6 +5004,55 @@ export type StudySampleAnnotationInput = {
   studyId: Scalars['Int'];
   studySampleIds: Array<InputMaybe<Scalars['Int']>>;
 };
+
+export type StudySampleAnnotationSubsampling = {
+  __typename?: 'StudySampleAnnotationSubsampling';
+  annotationValueId: Maybe<Scalars['Int']>;
+  /** Reads a single `Study` that is related to this `StudySampleAnnotationSubsampling`. */
+  study: Maybe<Study>;
+  studyId: Maybe<Scalars['Int']>;
+  studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+};
+
+/**
+ * A condition to be used against `StudySampleAnnotationSubsampling` object types.
+ * All fields are tested for equality and combined with a logical ‘and.’
+ */
+export type StudySampleAnnotationSubsamplingCondition = {
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studySampleIds` field. */
+  studySampleIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+/** A filter to be used against `StudySampleAnnotationSubsampling` object types. All fields are combined with a logical ‘and.’ */
+export type StudySampleAnnotationSubsamplingFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudySampleAnnotationSubsamplingFilter>>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudySampleAnnotationSubsamplingFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studySampleIds` field. */
+  studySampleIds: InputMaybe<IntListFilter>;
+};
+
+/** Methods to use when ordering `StudySampleAnnotationSubsampling`. */
+export enum StudySampleAnnotationSubsamplingsOrderBy {
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC'
+}
 
 /** Methods to use when ordering `StudySampleAnnotation`. */
 export enum StudySampleAnnotationsOrderBy {
@@ -5746,9 +5818,7 @@ export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
-export type OmicsItemFragment = { __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> };
-
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -5762,7 +5832,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationsList: Array<{ __typename?: 'StudySampleAnnotation', studySampleIds: Array<number>, annotationValueId: number }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -5826,14 +5896,6 @@ export const TreeOntologyOverviewFragmentDoc = gql`
   parentOntCodePath
 }
     `;
-export const OmicsItemFragmentDoc = gql`
-    fragment OmicsItem on StudyOmicsTransposed {
-  displayName
-  displaySymbol
-  omicsId
-  omicsType
-}
-    `;
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
   studyId
@@ -5843,7 +5905,10 @@ export const StudyBasicsFragmentDoc = gql`
     studyLayerId
   }
   studyOmicsTransposedList {
-    ...OmicsItem
+    displayName
+    displaySymbol
+    omicsId
+    omicsType
   }
   studyAnnotationGroupUisList {
     annotationGroup {
@@ -5859,9 +5924,9 @@ export const StudyBasicsFragmentDoc = gql`
     ordering
     differentialExpressionCalculated
   }
-  studySampleAnnotationsList {
-    studySampleIds
+  studySampleAnnotationSubsamplingList {
     annotationValueId
+    studySampleIds
   }
   studySampleProjectionSubsamplingTransposedList {
     projectionType
@@ -5869,7 +5934,7 @@ export const StudyBasicsFragmentDoc = gql`
     projection
   }
 }
-    ${OmicsItemFragmentDoc}`;
+    `;
 export const OntologyOverviewFragmentDoc = gql`
     fragment ontologyOverview on Ontology {
   name
@@ -6038,7 +6103,7 @@ export const ExpressionByOmicsIdsDocument = gql`
   expressionByOmicsIdsList(
     pStudyLayerId: $studyLayerId
     pOmicsIds: $omicsIds
-    pSubsamplingProjection: null
+    pSubsamplingProjection: UMAP
   ) {
     omicsId
     studySampleIds

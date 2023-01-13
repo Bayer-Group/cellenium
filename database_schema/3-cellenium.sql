@@ -228,6 +228,19 @@ CREATE TABLE study_sample_annotation
     study_sample_ids    int[] not null
 );
 
+CREATE VIEW study_sample_annotation_subsampling
+as
+select ssa.study_id,
+       ssa.annotation_value_id,
+       array_agg(ssp.study_sample_id) study_sample_ids
+from study_sample_annotation ssa
+         cross join unnest(ssa.study_sample_ids) sample_id
+         join study_sample_projection ssp on ssp.study_id = ssa.study_id and ssp.study_sample_id = sample_id
+where ssp.display_subsampling = True
+group by ssa.study_id, ssa.annotation_value_id;
+comment on view study_sample_annotation_subsampling is
+    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
+
 CREATE TABLE study_omics
 (
     study_id       int not null,
@@ -289,8 +302,9 @@ CREATE TABLE differential_expression
 create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
 
 CREATE VIEW differential_expression_v AS
-    SELECT de.*, ob.display_symbol, ob.display_name FROM differential_expression de
-JOIN omics_base ob on de.omics_id = ob.omics_id;
+SELECT de.*, ob.display_symbol, ob.display_name
+FROM differential_expression de
+         JOIN omics_base ob on de.omics_id = ob.omics_id;
 
 CREATE TABLE study_layer
 (

@@ -150,7 +150,7 @@ def add_umap(adata: AnnData, layer=None):
 
 
 def density_sample_umap(adata: AnnData, desired_samples=50000):
-    if len(adata.var) > desired_samples:
+    if len(adata.obs) > desired_samples:
         sampled_indices = density_sampling.density_sampling(adata.obsm['X_umap'], metric='euclidean',
                                                             desired_samples=desired_samples)
         _cellenium_uns_dictionary(adata)['umap_density_sampled_indices'] = sampled_indices

@@ -17,7 +17,12 @@ scratch/%.h5ad.imported: scratch/%.h5ad
 
 test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported
 
-normal_studydata_import: scratch/pancreas_atlas.h5ad.imported scratch/blood_covid.h5ad.imported scratch/lung_asthma.h5ad.imported scratch/tabula_muris_senis_heart.h5ad.imported scratch/tabula_muris_senis_liver.h5ad.imported scratch/tabula_sapiens_kidney.h5ad.imported
+normal_studydata_import: scratch/pancreas_atlas.h5ad.imported \
+  scratch/blood_covid.h5ad.imported \
+  scratch/lung_asthma.h5ad.imported \
+  scratch/tabula_muris_senis_heart.h5ad.imported \
+  scratch/tabula_muris_senis_liver.h5ad.imported \
+  scratch/tabula_sapiens_kidney.h5ad.imported
 
 huge_studydata_880kcells_33kgenes_import: scratch/heart_failure_reichart2022.h5ad.imported
 
