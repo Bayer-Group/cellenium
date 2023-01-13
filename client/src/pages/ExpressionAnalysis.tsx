@@ -6,7 +6,7 @@ import {AddGene, AnnotationFilterDisplay, AnnotationGroupSelectBox, LeftSidePane
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
-    annotationGroupIdState,
+    annotationGroupIdState, selectedAnnotationFilterState,
     selectedGenesState,
     studyIdState,
     studyLayerIdState,
@@ -37,12 +37,14 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
     const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
+    const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
     const {data, loading} = useExpressionViolinPlotQuery({
         variables: {
             studyId,
             studyLayerId,
             omicsId,
-            annotationGroupId: annotationGroupId || -1
+            annotationGroupId: annotationGroupId || -1,
+            excludeAnnotationValueIds: annotationFilter
         },
         skip: !annotationGroupId || !studyId
     })

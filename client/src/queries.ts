@@ -109,12 +109,12 @@ query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   }
 }
 
-query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
-  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId)
+query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
 }
 
-query ExpressionCorrelationTrianglePlot($studyLayerId: Int!, $omicsIds: [Int!]!) {
-  correlationTrianglePlot(pStudyLayerId:$studyLayerId, pOmicsIds: $omicsIds)
+query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+  correlationTrianglePlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
 }
 
 query autocomplete($query:String!) {

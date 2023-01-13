@@ -1,14 +1,16 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Group, Loader, Space, Stack, Text} from "@mantine/core";
 import {
-    AddGene,
+    AddGene, AnnotationFilterDisplay,
     LeftSidePanel,
     RightSidePanel
 } from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
-    selectedGenesState,
+    annotationGroupIdState,
+    selectedAnnotationFilterState,
+    selectedGenesState, studyIdState,
     studyLayerIdState,
     studyState, userGenesState
 } from "../atoms";
@@ -25,12 +27,16 @@ interface PreparedPlot {
 
 const CoexpressionAnalysisPlot = () => {
     const selectedGenes = useRecoilValue(selectedGenesState);
+    const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
+    const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
 
     const {data, loading} = useExpressionCorrelationTrianglePlotQuery({
         variables: {
+            studyId,
             studyLayerId,
-            omicsIds: selectedGenes.map(g => g.omicsId)
+            omicsIds: selectedGenes.map(g => g.omicsId),
+            excludeAnnotationValueIds: annotationFilter
         },
         skip: selectedGenes.length < 2
     });
@@ -56,6 +62,7 @@ function CoexpressionAnalysis() {
     return (
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
+                <AnnotationFilterDisplay/>
             </LeftSidePanel>
             <main>
                 <CoexpressionAnalysisPlot/>
