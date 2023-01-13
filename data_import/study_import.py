@@ -38,6 +38,7 @@ def import_study_omics(study_id: int, adata: AnnData):
     adata_genes_df = adata_genes_df.reset_index(names='h5ad_var_key')
     adata_genes_df = adata_genes_df.reset_index(names='h5ad_var_index')
     adata_genes_df = adata_genes_df.merge(match_df, how='inner', left_on='h5ad_var_key', right_index=True)
+    adata_genes_df.drop_duplicates('omics_id', inplace=True)
     adata_genes_df['study_id'] = study_id
     import_df(adata_genes_df[['h5ad_var_index', 'omics_id', 'study_id']], 'study_omics')
     return adata_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
@@ -246,5 +247,3 @@ if __name__ == "__main__":
     adata = sc.read_h5ad(args.filename)
     import_study(adata.uns['cellenium']['title'], adata)
     logging.info('done')
-
-

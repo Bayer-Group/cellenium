@@ -258,6 +258,7 @@ CREATE TABLE study_omics
     region_start   int,
     region_end     int
 );
+create unique index study_omics_i1 on study_omics(study_id, omics_id);
 
 CREATE VIEW study_omics_transposed
 as
