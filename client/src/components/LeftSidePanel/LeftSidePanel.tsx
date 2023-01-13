@@ -34,7 +34,7 @@ const useStyles = createStyles((theme) => ({
     },
 
     navigation: {
-        padding: theme.spacing.md,
+        padding: 10,
 
     },
     mainLink: {

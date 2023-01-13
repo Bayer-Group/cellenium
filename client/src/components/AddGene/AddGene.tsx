@@ -90,13 +90,13 @@ function AddGene(props: TextInputProps) {
             <Text size={'xs'}>
                 Enter gene(s)
             </Text>
-            <Group align={'center'} spacing={3}>
+            <Group align={'center'} spacing={0}>
                 <form onSubmit={(event) => handleSubmit(event)}>
                     <Autocomplete
                         value={value}
+                        radius={0}
                         onChange={handleChange}
                         data={offerings as AutocompleteItem[]}
-                        radius={'md'}
                         onItemSubmit={(item: any) => {
                             handleItemSubmit(item)
                         }}
@@ -114,7 +114,7 @@ function AddGene(props: TextInputProps) {
 
                 <ActionIcon onClick={(event) => {
                     handleSubmit(event);
-                }} size={32} radius="md" color={theme.primaryColor}
+                }} size={36} style={{borderBottomLeftRadius: 0, borderTopLeftRadius:0 }}color={theme.primaryColor}
                             variant="filled">
                     <IconArrowRight/>
                 </ActionIcon>

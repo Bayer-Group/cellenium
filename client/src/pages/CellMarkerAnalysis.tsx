@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
-    AddGene,
     AnnotationGroupDisplay,
     AnnotationGroupSelectBox,
     DEGTable,
     LeftSidePanel,
-    RightSidePanel
+    RightSidePanel,
+    UserGeneStore
 } from "../components";
-import {Group, Space, Stack, Text} from "@mantine/core";
-import UserGene from "../components/UserGene/UserGene";
+import {Divider, Group, Space, Stack, Text} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, selectedAnnotationState, studyIdState, studyState, userGenesState} from "../atoms";
-import {SelectBoxItem} from '../model';
+import {annotationGroupIdState, selectedAnnotationState, studyState, userGenesState} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 
 const ANNOTATIONS = [
@@ -58,21 +56,15 @@ function DifferentialExpressionAnalysis() {
                 <ProjectionPlot colorBy={'annotation'}/>
             </main>
             <RightSidePanel>
-                <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div>
-                        <AddGene/>
-                    </div>
-                    <Stack spacing={'xs'}>
-                        {userGenes.length > 0 ? userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`}
-                                                                                  gene={gene}/>) :
-                            <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
-                    </Stack>
-                    <Space h={'md'}/>
+                <Stack>
+                    <Divider size={"xs"} label={'User gene store'}/>
+                    <UserGeneStore/>
+                    <Space h={'xs'}/>
                     <Stack>
-                        <Text weight={800} size={'xs'}>Differentially expressed genes</Text>
+                        <Divider size={"xs"} label={'Differentially expressed genes'}/>
                         {selectedAnnotation ? <DEGTable annotationId={selectedAnnotation}/> :
-                            <Text size='xs' color='gray'>Nothing selected yet.</Text>}
-
+                            <Text size='xs' color='dimmed'>Select cells in the plot or via the selection panel on the
+                                left-hand side.</Text>}
                     </Stack>
                 </Stack>
             </RightSidePanel>

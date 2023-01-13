@@ -12,6 +12,8 @@ import {AddGene} from "./AddGene/AddGene";
 import {DropdownItem} from "./DropdownItem/DropdownItem";
 import {OntologyBrowser} from "./OntologyBrowser/OntologyBrowser";
 import {OntologyTree} from "./OntologyBrowser/OntologyTree";
+import {UserGeneStore} from "./UserGeneStore/UserGeneStore";
+
 export {
     DEGTable,
     NavBar,
@@ -26,5 +28,7 @@ export {
     AddGene,
     DropdownItem,
     OntologyBrowser,
-    OntologyTree
+    OntologyTree,
+    UserGeneStore
+
 }

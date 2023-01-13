@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {createStyles, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
+import {createStyles, Navbar, Stack, Title, Tooltip, UnstyledButton} from '@mantine/core';
 import {ReactComponent as StudyAnalysisIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
 import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
@@ -30,11 +30,11 @@ function RightSidePanel({children}:Props) {
     const {classes, cx} = useStyles();
 
     return (
-        <Navbar height={'100vh'} width={{sm: 300}}>
+        <Navbar height={'100vh'} width={{sm: 300}} >
             <Navbar.Section grow className={classes.wrapper}>
-                <div className={classes.main}>
+                <Stack className={classes.main} spacing={'md'} p={10}>
                     {children}
-                </div>
+                </Stack>
             </Navbar.Section>
         </Navbar>
     );

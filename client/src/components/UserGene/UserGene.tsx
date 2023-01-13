@@ -1,13 +1,11 @@
 import React from 'react';
-import {ActionIcon, CloseButton, createStyles, Group, Text} from "@mantine/core";
-import {IconDroplet} from "@tabler/icons";
+import {ActionIcon, CloseButton, createStyles, Grid, Group, Text} from "@mantine/core";
+import {IconEye} from "@tabler/icons";
 import {Omics} from "../../model";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {pageState, selectedGenesState, userGenesState} from "../../atoms";
 
-type Props = {
-    gene: Omics
-}
+
 const useStyles = createStyles((theme) => ({
     active: {
         backgroundColor: theme.colors.blue[3]
@@ -20,7 +18,12 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const UserGene = ({gene}: Props) => {
+interface Props {
+    gene: Omics;
+    buttons?: string[];
+}
+
+const UserGene = ({gene, buttons = []}: Props) => {
     const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
@@ -49,17 +52,26 @@ const UserGene = ({gene}: Props) => {
     }
 
     return (
-        <Group position={'apart'}>
-            <Group>
-                <CloseButton onClick={() => handleRemove(gene)} size={'xs'} iconSize={15}/>
-                <Text size={'xs'}>{gene.displaySymbol}</Text>
-            </Group>
-            {/* eslint-disable-next-line react/jsx-no-undef */}
-            <ActionIcon
-                className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId == gene.omicsId).length !== 0})}
-                onClick={() => handleColorClick(gene)} variant="default" size={'xs'} mr={5}>
-                <IconDroplet/>
-            </ActionIcon>
+        <Group align={'center'} position={'left'} spacing={2} style={{width: '100%'}}>
+            <Grid columns={12} style={{width: '100%'}}>
+                <Grid.Col span={1}>
+                    <ActionIcon variant={'subtle'} size={'xs'}>
+                        <CloseButton onClick={() => handleRemove(gene)} size={'xs'} iconSize={15}/>
+                    </ActionIcon>
+                </Grid.Col>
+                <Grid.Col span={4}>
+                    <Text size={'xs'}>{gene.displaySymbol}</Text>
+                </Grid.Col>
+                <Grid.Col span={4}>
+
+                    <ActionIcon
+                        className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0})}
+                        onClick={() => handleColorClick(gene)} variant="default" size={'xs'} mr={5}>
+                        <IconEye/>
+                    </ActionIcon>
+
+                </Grid.Col>
+            </Grid>
         </Group>
     );
 };

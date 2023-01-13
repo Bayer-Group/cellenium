@@ -55,9 +55,9 @@ root.render(
         }}>
             <RecoilRoot>
                 <React.Suspense fallback={<GlobalLoading/>}>
-                    <NotificationsProvider zIndex={10000000}>
+                    <NotificationsProvider zIndex={10000000} position={'top-right'}>
                         <ModalsProvider>
-                            <Container style={{height: '100%'}} fluid={true}>
+                            <Container style={{ padding:0}} fluid={true}>
                                 <RouterProvider router={router}/>
                             </Container>
                         </ModalsProvider>

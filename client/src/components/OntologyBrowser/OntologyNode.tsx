@@ -1,7 +1,7 @@
 import React from 'react';
 import {OntologyItem} from "../../model";
 import {ActionIcon, createStyles, Group, Text, useMantineTheme} from "@mantine/core";
-import {IconCaretRight, IconCaretDown} from "@tabler/icons";
+import {IconCaretRight, IconCaretDown, IconChevronDown, IconChevronRight} from "@tabler/icons";
 
 
 
@@ -30,7 +30,7 @@ const OntologyNode = ({item, selected, hasChildren, level, onToggle, handleAddOn
     return (
         <Group pl={`${level * 10}px`} spacing={0}>
             {hasChildren && <ActionIcon size='xs' variant={'subtle'} onClick={onToggle}>
-                {selected?<IconCaretDown color={theme.colors.dark[9]}/>:<IconCaretRight color={theme.colors.dark[9]}/>}
+                {selected?<IconChevronDown color={theme.colors.dark[9]}/>:<IconChevronRight color={theme.colors.dark[9]}/>}
             </ActionIcon>}
             <Text onClick={()=>handleAddOntologyItem(item)} className={classes.main} size={'xs'} style={{cursor:'pointer'}}>{item.label}</Text>
         </Group>
