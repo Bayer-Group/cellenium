@@ -44,6 +44,20 @@ query studies {
     }
 }
 
+fragment AnnotationGrp on StudyAnnotationFrontendGroup {
+    annotationGroupId
+    isPrimary
+    ordering
+    displayGroup
+    differentialExpressionCalculated
+    annotationValuesList {
+      annotationValueId
+      displayValue
+      color
+      sampleCount
+    }
+} 
+
 fragment StudyBasics on Study {
     studyId
     studyName
@@ -57,20 +71,9 @@ fragment StudyBasics on Study {
         omicsId
         omicsType
     }
-    studyAnnotationGroupUisList {
-      annotationGroup {
-        annotationGroupId
-        displayGroup
-        annotationValuesList {
-          annotationValueId
-          displayValue
-          color
-        }        
-      }
-      isPrimary
-      ordering
-      differentialExpressionCalculated
-    }
+    annotationGroupsList {
+        ...AnnotationGrp
+    }    
     studySampleAnnotationSubsamplingList {
       annotationValueId
       studySampleIds

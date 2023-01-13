@@ -1,4 +1,9 @@
-import {AnnotationGroup, AnnotationValue, StudyBasicsFragment} from "./generated/types";
+import {
+    AnnotationGroup,
+    AnnotationGrpFragment,
+    AnnotationValue,
+    StudyBasicsFragment
+} from "./generated/types";
 import {internal} from 'arquero';
 
 
@@ -24,7 +29,7 @@ export type Study = StudyBasicsFragment & {
     samplesProjectionTable: SamplesProjectionTable;
     samplesAnnotationTable: SamplesAnnotationTable;
     studyOmicsTable: StudyOmicsTable;
-    annotationGroupMap: Map<number, AnnotationGroup>;
+    annotationGroupMap: Map<number, AnnotationGrpFragment>;
     annotationValueMap: Map<number, AnnotationValue>;
 };
 

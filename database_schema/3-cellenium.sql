@@ -1,36 +1,17 @@
 CREATE TABLE study
 (
-    study_id                serial primary key,
-    study_name              text not null,
-    description             text,
-    cluster_color_map       jsonb,
-    -- TODO remove default once this data is set by study importer
-    tissue_ncit_ids         text[] default array ['C12393'],
-    --tissue_ncit_labels      text[],
-    disease_mesh_ids        text[],
-    --disease_mesh_labels     text[],
-    cell_ontology_ids       text[],
-    --cell_ontology_labels    text[],
-    organism_tax_id         text,
+    study_id          serial primary key,
+    study_name        text not null,
+    description       text,
+    tissue_ncit_ids   text[],
+    disease_mesh_ids  text[],
+    cell_ontology_ids text[],
+    organism_tax_id   text,
     --organism_label          text,
     --ontology_ids_with_parents text[]   for search
 
-
-    --attributes              text[],
-
-    cluster_hulls           jsonb,
-    plot_coords             jsonb,
-    h5adfile_modified_date  timestamptz,
-    import_status           text,
-    import_status_updated   timestamptz,
-    attribute_value_freq    jsonb,
-    cell_count              int,
---     qc_status               text,
---     qc_result               jsonb,
-
-    -- for subsampling:
-    projection_cell_coords  jsonb,
-    projection_cell_indices jsonb
+    cell_count        int,
+    visible           boolean default False
 );
 
 
@@ -258,7 +239,7 @@ CREATE TABLE study_omics
     region_start   int,
     region_end     int
 );
-create unique index study_omics_i1 on study_omics(study_id, omics_id);
+create unique index study_omics_i1 on study_omics (study_id, omics_id);
 
 CREATE VIEW study_omics_transposed
 as

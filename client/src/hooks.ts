@@ -68,7 +68,7 @@ export function useSetStudyFromUrl() {
     const setAnnotationGroupId = useSetRecoilState(annotationGroupIdState);
     useEffect(() => {
         if (study && study.studyId === studyIdUrlParamInt) {
-            setAnnotationGroupId(study.studyAnnotationGroupUisList[0].annotationGroup.annotationGroupId);
+            setAnnotationGroupId(study.annotationGroupsList[0].annotationGroupId);
         }
     }, [study]);
 }

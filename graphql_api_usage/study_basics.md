@@ -35,19 +35,18 @@ query StudyBasics {
       displayName
       displaySymbol
     }
-    studyAnnotationGroupUisList {
-      annotationGroup {
+    annotationGroupsList {
         annotationGroupId
+        isPrimary
+        ordering
         displayGroup
+        differentialExpressionCalculated
         annotationValuesList {
           annotationValueId
           displayValue
           color
-        }        
-      }
-      isPrimary
-      ordering
-      differentialExpressionCalculated
+          sampleCount
+        }
     }
     studySampleAnnotationSubsamplingList {
       annotationValueId
