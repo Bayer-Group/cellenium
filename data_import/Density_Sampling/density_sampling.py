@@ -49,6 +49,7 @@ from sklearn.neighbors import radius_neighbors_graph
 from sys import exit
 from tempfile import NamedTemporaryFile
 from functools import reduce
+import tqdm
 
 __all__ = ['get_local_densities', 'density_sampling']
 
@@ -139,13 +140,13 @@ def get_local_densities(data, kernel_mult=2.0, metric='manhattan'):
         _, counts = np.unique(rows, return_counts=True)
 
         local_densities = np.zeros(N_samples, dtype=int)
-        for i in range(N_samples):  # CARSTEN
+        for i in range(N_samples):
             local_densities[i] = counts[i]
     else:
         local_densities = np.zeros(N_samples, dtype=int)
 
         chunks_size = get_chunk_size(N_samples, 2)
-        for i in range(0, N_samples, chunks_size):
+        for i in tqdm.tqdm(range(0, N_samples, chunks_size)):
             chunk = data[i:min(i + chunks_size, N_samples)]
 
             D = pairwise_distances(chunk, data, metric, n_jobs=1)
