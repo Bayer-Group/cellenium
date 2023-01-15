@@ -3,3 +3,4 @@
 /.idea
 **/.pybiomart.sqlite
 **/__pycache__/
+/.DS_Store

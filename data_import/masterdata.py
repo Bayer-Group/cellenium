@@ -373,7 +373,7 @@ class Dataimport(object):
         self.import_mesh()
         self.import_ncit()
         #self.import_ncbi_taxonomy()
-        #self.import_genes()
+        self.import_genes()
         #self.import_antibodies()
         # TODO jasper
 

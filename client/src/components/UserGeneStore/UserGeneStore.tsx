@@ -7,10 +7,10 @@ import {userGenesState} from "../../atoms";
 import UserGene from "../UserGene/UserGene";
 
 interface Props {
-    buttons: string[];
+    multiple?: boolean;
 }
 
-const UserGeneStore = () => {
+const UserGeneStore = ({multiple=false}:Props) => {
     const [opened, setOpened] = useState(false);
     const theme = useMantineTheme()
     const userGeneStore = useRecoilValue(userGenesState);
@@ -31,7 +31,7 @@ const UserGeneStore = () => {
                 {userGeneStore.length===0?<Text size={'xs'} color={'dimmed'}>No genes added yet.</Text>:
                     userGeneStore.map((omics)=>{
                         return (<Group align={'center'} position={'left'}>
-                            <UserGene gene={omics}></UserGene>
+                            <UserGene multiple={multiple} gene={omics}></UserGene>
                         </Group>)
                     })}
             </Collapse>

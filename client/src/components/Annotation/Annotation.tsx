@@ -27,7 +27,7 @@ function Annotation({label, color, annotationId}: Props) {
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
 
     return (
-        <Grid pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
+        <Grid columns={12} pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
               onClick={() => {
                   if (highlight === selected) {
@@ -42,7 +42,7 @@ function Annotation({label, color, annotationId}: Props) {
               })}
         >
             <Grid.Col span={10}>
-                <Text size={'md'} fw={selected === annotationId ? 800 : "md"} truncate>
+                <Text title={label} size={'md'} fw={selected === annotationId ? 800 : "md"} lineClamp={1}>
                     {label}
                 </Text>
             </Grid.Col>

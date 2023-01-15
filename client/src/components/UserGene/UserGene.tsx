@@ -8,11 +8,11 @@ import {pageState, selectedGenesState, userGenesState} from "../../atoms";
 
 const useStyles = createStyles((theme) => ({
     active: {
-        backgroundColor: theme.colors.blue[3]
+        backgroundColor: theme.colors.blue[6]
 
     }, main: {
         "&:hover": {
-            backgroundColor: theme.colors.blue[1]
+            backgroundColor: theme.colors.blue[4]
         }
     }
 
@@ -20,10 +20,10 @@ const useStyles = createStyles((theme) => ({
 
 interface Props {
     gene: Omics;
-    buttons?: string[];
+    multiple?: boolean;
 }
 
-const UserGene = ({gene, buttons = []}: Props) => {
+const UserGene = ({gene, multiple=false}: Props) => {
     const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
@@ -45,8 +45,12 @@ const UserGene = ({gene, buttons = []}: Props) => {
             setSelectedGenesStore(removed)
         } else {
             // add
-            setSelectedGenesStore([...selectedGenes, gene]);
-            setPage('ExpressionAnalysis');
+            if (multiple)
+                setSelectedGenesStore([...selectedGenes, gene]);
+            else{
+                setSelectedGenesStore([gene]);
+            }
+            //setPage('ExpressionAnalysis');
         }
 
     }
@@ -63,7 +67,7 @@ const UserGene = ({gene, buttons = []}: Props) => {
                     <ActionIcon
                         className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0})}
                         onClick={() => handleColorClick(gene)} variant="subtle" size={'xs'} mr={5}>
-                        <IconEye/>
+                        <IconEye style={{color: 'green'}}color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0)?'white':'gray' }/>
                     </ActionIcon>
                 </Grid.Col>
                 <Grid.Col span={3}>

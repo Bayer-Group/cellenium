@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
     AnnotationGroupDisplay,
     AnnotationGroupSelectBox,
@@ -9,8 +9,15 @@ import {
 } from "../components";
 import {Divider, Group, Space, Stack, Text} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, selectedAnnotationState, studyState, userGenesState} from "../atoms";
+import {
+    annotationGroupIdState,
+    selectedAnnotationState,
+    selectedGenesState,
+    studyState,
+    userGenesState
+} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
+import {useExpressionValues} from "../hooks";
 
 const ANNOTATIONS = [
     {label: "bone cell", color: "#1f77b4"},
@@ -32,8 +39,8 @@ interface PreparedPlot {
 function DifferentialExpressionAnalysis() {
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-    const userGenes = useRecoilValue(userGenesState);
     const study = useRecoilValue(studyState);
+
 
     if (!study) {
         return <></>;

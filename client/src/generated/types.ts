@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  BigInt: any;
   Datetime: any;
   JSON: any;
 };
@@ -140,6 +141,53 @@ export type AnnotationValueStudySampleAnnotationsListArgs = {
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
+export type AnnotationValueCombinationSampleCount = {
+  __typename?: 'AnnotationValueCombinationSampleCount';
+  annotationValueCombination: Maybe<Array<Maybe<Scalars['Int']>>>;
+  count: Maybe<Scalars['BigInt']>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `AnnotationValueCombinationSampleCount` object
+ * types. All fields are tested for equality and combined with a logical ‘and.’
+ */
+export type AnnotationValueCombinationSampleCountCondition = {
+  /** Checks for equality with the object’s `annotationValueCombination` field. */
+  annotationValueCombination: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** Checks for equality with the object’s `count` field. */
+  count: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `AnnotationValueCombinationSampleCount` object types. All fields are combined with a logical ‘and.’ */
+export type AnnotationValueCombinationSampleCountFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<AnnotationValueCombinationSampleCountFilter>>;
+  /** Filter by the object’s `annotationValueCombination` field. */
+  annotationValueCombination: InputMaybe<IntListFilter>;
+  /** Filter by the object’s `count` field. */
+  count: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<AnnotationValueCombinationSampleCountFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<AnnotationValueCombinationSampleCountFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `AnnotationValueCombinationSampleCount`. */
+export enum AnnotationValueCombinationSampleCountsOrderBy {
+  AnnotationValueCombinationAsc = 'ANNOTATION_VALUE_COMBINATION_ASC',
+  AnnotationValueCombinationDesc = 'ANNOTATION_VALUE_COMBINATION_DESC',
+  CountAsc = 'COUNT_ASC',
+  CountDesc = 'COUNT_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
 /**
  * A condition to be used against `AnnotationValue` object types. All fields are
  * tested for equality and combined with a logical ‘and.’
@@ -239,6 +287,32 @@ export type AutocompleteResultFilter = {
   ontology: InputMaybe<StringFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<AutocompleteResultFilter>>;
+};
+
+/** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
+export type BigIntFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value. */
+  equalTo: InputMaybe<Scalars['BigInt']>;
+  /** Greater than the specified value. */
+  greaterThan: InputMaybe<Scalars['BigInt']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Included in the specified list. */
+  in: InputMaybe<Array<Scalars['BigInt']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan: InputMaybe<Scalars['BigInt']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom: InputMaybe<Scalars['BigInt']>;
+  /** Not equal to the specified value. */
+  notEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Not included in the specified list. */
+  notIn: InputMaybe<Array<Scalars['BigInt']>>;
 };
 
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
@@ -3472,6 +3546,8 @@ export type Query = Node & {
   annotationValue: Maybe<AnnotationValue>;
   /** Reads a single `AnnotationValue` using its globally unique `ID`. */
   annotationValueByNodeId: Maybe<AnnotationValue>;
+  /** Reads a set of `AnnotationValueCombinationSampleCount`. */
+  annotationValueCombinationSampleCountsList: Maybe<Array<AnnotationValueCombinationSampleCount>>;
   /** Reads a set of `AnnotationValue`. */
   annotationValuesList: Maybe<Array<AnnotationValue>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
@@ -3639,6 +3715,16 @@ export type QueryAnnotationValueArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueByNodeIdArgs = {
   nodeId: Scalars['ID'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryAnnotationValueCombinationSampleCountsListArgs = {
+  condition: InputMaybe<AnnotationValueCombinationSampleCountCondition>;
+  filter: InputMaybe<AnnotationValueCombinationSampleCountFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<AnnotationValueCombinationSampleCountsOrderBy>>;
 };
 
 
