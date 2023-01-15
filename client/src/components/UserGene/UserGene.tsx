@@ -73,7 +73,7 @@ const UserGene = ({gene, multiple = false}: Props) => {
                 </Grid.Col>
                 <Grid.Col span={1}>
                     <Tooltip label={`${gene.displayName}`} opened={showInfo}>
-                        <ActionIcon variant={'subtle'} size={'xs'} onClick={()=>setShowInfo(true)} onMouseLeave={()=>setShowInfo(false)}>
+                        <ActionIcon variant={'subtle'} size={'xs'} onClick={()=>setShowInfo((o)=>!o)} onMouseLeave={()=>setShowInfo(false)}>
                             <IconInfoCircle/>
                         </ActionIcon>
                     </Tooltip>

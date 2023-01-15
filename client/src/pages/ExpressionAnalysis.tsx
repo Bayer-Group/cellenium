@@ -1,19 +1,18 @@
 import React, {useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Divider, Group, Loader, Space, Stack, Text, Title} from "@mantine/core";
+import {Divider, Group, Loader, Stack, Text, Title} from "@mantine/core";
 import {
-    AddGene,
     AnnotationFilterDisplay,
-    AnnotationGroupSelectBox, DEGTable,
+    AnnotationGroupSelectBox,
     LeftSidePanel,
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
-    annotationGroupIdState, selectedAnnotationFilterState,
+    annotationGroupIdState,
+    selectedAnnotationFilterState,
     selectedGenesState,
     studyIdState,
     studyLayerIdState,
@@ -26,19 +25,13 @@ import {useExpressionViolinPlotQuery} from "../generated/types";
 
 const analysisTypes = [
     {value: 'violinplot', label: 'Violinplot'},
-    {value: 'boxplot', label: 'Boxplot'},
-    {value: 'projection', label: 'Projectionplot'},
+    {value: 'projection', label: 'Projectionplot'}
+/*
+{value: 'boxplot', label: 'Boxplot'},
     {value: 'dot', label: 'Dotplot'},
-]
-const genes = [
-    {display_symbol: 'CDK2'},
-    {display_symbol: 'KRAS'},
-    {display_symbol: 'BRD4'},
-    {display_symbol: 'KLK3'},
-    {display_symbol: 'ATAD2'},
 
+ */
 ]
-
 
 function ViolinPlot({omicsId}: { omicsId: number }) {
     const studyId = useRecoilValue(studyIdState);
@@ -66,10 +59,10 @@ function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
     return <Stack align={'center'}>
-        {selectedGenes.map((g, i) => <div key={g.omicsId}>
+        {selectedGenes.map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
-        </div>)}
+        </Stack>)}
     </Stack>;
 }
 
@@ -89,11 +82,11 @@ function ProjectionPlots() {
         return <div><Loader size={25}/></div>;
     }
 
-    return <Stack align={'center'}>
-        {tablePerGene && selectedGenes.map((g, i) => <div key={g.omicsId}>
+    return <Stack>
+        {tablePerGene && selectedGenes.map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy={'expression'} expressionTable={tablePerGene[i]}/>
-        </div>)}
+        </Stack>)}
     </Stack>;
 }
 
@@ -110,26 +103,34 @@ const ExpressionAnalysis = () => {
     if (!study) {
         return <></>;
     }
-
+    const showAnnotationSelectors = (
+        <div>
+            <AnnotationGroupSelectBox changeHandler={(value: number) => {
+                setAnnotationGroupId(value);
+            }}/>
+            <Divider my="sm"/>
+            <AnnotationFilterDisplay/>
+        </div>
+    );
     return (
         <Group align={'flex-start'} position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
-                    <AnnotationGroupSelectBox changeHandler={(value: number) => {
-                        setAnnotationGroupId(value);
-                    }}/>
-                    <Divider my="sm"/>
-
-                    <AnnotationFilterDisplay/>
+                    {analysisType !== 'projection' && showAnnotationSelectors}
                 </Stack>
 
             </LeftSidePanel>
             <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1}}
                   className={'plotContainer'}>
-                {analysisType === 'violinplot' && <ViolinPlots/>}
-                {analysisType === 'projection' && <ProjectionPlots/>}
+                <Stack align={'center'} justify={'center'}>
+                    {analysisType === 'violinplot' && <ViolinPlots/>}
+                    {analysisType === 'projection' && <ProjectionPlots/>}
+                    {selectedGenes.length === 0 &&
+                        <Text c={'dimmed'}>Please add and select genes to the <Text span weight={800}>User gene
+                            store</Text></Text>}
+                </Stack>
             </main>
             <RightSidePanel>
                 <Stack>
