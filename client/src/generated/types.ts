@@ -15,8 +15,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: any;
-  Datetime: any;
-  JSON: any;
 };
 
 export type AnnotationGroup = Node & {
@@ -1371,32 +1369,6 @@ export type CreateStudySampleProjectionPayload = {
   studyStudySample: Maybe<StudySample>;
 };
 
-/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
-export type DatetimeFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars['Datetime']>;
-  /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars['Datetime']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars['Datetime']>;
-  /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars['Datetime']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars['Datetime']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars['Datetime']>;
-  /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars['Datetime']>;
-  /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars['Datetime']>>;
-};
-
 /** All input for the `deleteAnnotationGroupByNodeId` mutation. */
 export type DeleteAnnotationGroupByNodeIdInput = {
   /**
@@ -2210,42 +2182,6 @@ export type IntListFilter = {
   notEqualTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Overlaps the specified list of values. */
   overlaps: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-/** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
-export type JsonFilter = {
-  /** Contained by the specified JSON. */
-  containedBy: InputMaybe<Scalars['JSON']>;
-  /** Contains the specified JSON. */
-  contains: InputMaybe<Scalars['JSON']>;
-  /** Contains all of the specified keys. */
-  containsAllKeys: InputMaybe<Array<Scalars['String']>>;
-  /** Contains any of the specified keys. */
-  containsAnyKeys: InputMaybe<Array<Scalars['String']>>;
-  /** Contains the specified key. */
-  containsKey: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars['JSON']>;
-  /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars['JSON']>;
-  /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars['JSON']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars['JSON']>;
-  /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars['JSON']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars['JSON']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars['JSON']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars['JSON']>;
-  /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars['JSON']>;
-  /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars['JSON']>>;
 };
 
 export type MinimumTreesResult = {
@@ -3618,6 +3554,10 @@ export type Query = Node & {
   /** Reads a set of `Study`. */
   studiesList: Maybe<Array<Study>>;
   study: Maybe<Study>;
+  /** Reads a set of `StudyAnnotationFrontendGroup`. */
+  studyAnnotationFrontendGroupsList: Maybe<Array<StudyAnnotationFrontendGroup>>;
+  /** Reads a set of `StudyAnnotationFrontendValue`. */
+  studyAnnotationFrontendValuesList: Maybe<Array<StudyAnnotationFrontendValue>>;
   /** Reads a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUisList: Maybe<Array<StudyAnnotationGroupUi>>;
   /** Reads a single `Study` using its globally unique `ID`. */
@@ -3817,7 +3757,9 @@ export type QueryConceptsListArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCorrelationTrianglePlotArgs = {
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyId: InputMaybe<Scalars['Int']>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
@@ -4036,6 +3978,26 @@ export type QueryStudyArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyAnnotationFrontendGroupsListArgs = {
+  condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
+  filter: InputMaybe<StudyAnnotationFrontendGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryStudyAnnotationFrontendValuesListArgs = {
+  condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
+  filter: InputMaybe<StudyAnnotationFrontendValueFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
@@ -4189,6 +4151,7 @@ export type QueryTreeOntologiesListArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryViolinPlotArgs = {
   pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pOmicsId: InputMaybe<Scalars['Int']>;
   pStudyId: InputMaybe<Scalars['Int']>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
@@ -4314,65 +4277,42 @@ export type StringListFilter = {
 
 /** Methods to use when ordering `Study`. */
 export enum StudiesOrderBy {
-  AttributeValueFreqAsc = 'ATTRIBUTE_VALUE_FREQ_ASC',
-  AttributeValueFreqDesc = 'ATTRIBUTE_VALUE_FREQ_DESC',
   CellCountAsc = 'CELL_COUNT_ASC',
   CellCountDesc = 'CELL_COUNT_DESC',
   CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
   CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
-  ClusterColorMapAsc = 'CLUSTER_COLOR_MAP_ASC',
-  ClusterColorMapDesc = 'CLUSTER_COLOR_MAP_DESC',
-  ClusterHullsAsc = 'CLUSTER_HULLS_ASC',
-  ClusterHullsDesc = 'CLUSTER_HULLS_DESC',
   DescriptionAsc = 'DESCRIPTION_ASC',
   DescriptionDesc = 'DESCRIPTION_DESC',
   DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
   DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
-  H5AdfileModifiedDateAsc = 'H5ADFILE_MODIFIED_DATE_ASC',
-  H5AdfileModifiedDateDesc = 'H5ADFILE_MODIFIED_DATE_DESC',
-  ImportStatusAsc = 'IMPORT_STATUS_ASC',
-  ImportStatusDesc = 'IMPORT_STATUS_DESC',
-  ImportStatusUpdatedAsc = 'IMPORT_STATUS_UPDATED_ASC',
-  ImportStatusUpdatedDesc = 'IMPORT_STATUS_UPDATED_DESC',
   Natural = 'NATURAL',
   OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
   OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
-  PlotCoordsAsc = 'PLOT_COORDS_ASC',
-  PlotCoordsDesc = 'PLOT_COORDS_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
-  ProjectionCellCoordsAsc = 'PROJECTION_CELL_COORDS_ASC',
-  ProjectionCellCoordsDesc = 'PROJECTION_CELL_COORDS_DESC',
-  ProjectionCellIndicesAsc = 'PROJECTION_CELL_INDICES_ASC',
-  ProjectionCellIndicesDesc = 'PROJECTION_CELL_INDICES_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
   StudyNameDesc = 'STUDY_NAME_DESC',
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
-  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC'
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  VisibleAsc = 'VISIBLE_ASC',
+  VisibleDesc = 'VISIBLE_DESC'
 }
 
 export type Study = Node & {
   __typename?: 'Study';
-  attributeValueFreq: Maybe<Scalars['JSON']>;
+  /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup`. */
+  annotationGroupsList: Array<StudyAnnotationFrontendGroup>;
   cellCount: Maybe<Scalars['Int']>;
   cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  clusterColorMap: Maybe<Scalars['JSON']>;
-  clusterHulls: Maybe<Scalars['JSON']>;
   description: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsList: Array<DifferentialExpression>;
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  h5AdfileModifiedDate: Maybe<Scalars['Datetime']>;
-  importStatus: Maybe<Scalars['String']>;
-  importStatusUpdated: Maybe<Scalars['Datetime']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   organismTaxId: Maybe<Scalars['String']>;
-  plotCoords: Maybe<Scalars['JSON']>;
-  projectionCellCoords: Maybe<Scalars['JSON']>;
-  projectionCellIndices: Maybe<Scalars['JSON']>;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
   studyId: Scalars['Int'];
@@ -4392,6 +4332,16 @@ export type Study = Node & {
   /** Reads and enables pagination through a set of `StudySample`. */
   studySamplesList: Array<StudySample>;
   tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  visible: Maybe<Scalars['Boolean']>;
+};
+
+
+export type StudyAnnotationGroupsListArgs = {
+  condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
+  filter: InputMaybe<StudyAnnotationFrontendGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
 };
 
 
@@ -4475,6 +4425,157 @@ export type StudyStudySamplesListArgs = {
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
 };
 
+export type StudyAnnotationFrontendGroup = {
+  __typename?: 'StudyAnnotationFrontendGroup';
+  annotationGroupId: Maybe<Scalars['Int']>;
+  /** Reads and enables pagination through a set of `StudyAnnotationFrontendValue`. */
+  annotationValuesList: Array<StudyAnnotationFrontendValue>;
+  differentialExpressionCalculated: Maybe<Scalars['Boolean']>;
+  displayGroup: Maybe<Scalars['String']>;
+  isPrimary: Maybe<Scalars['Boolean']>;
+  ordering: Maybe<Scalars['Int']>;
+  /** Reads a single `Study` that is related to this `StudyAnnotationFrontendGroup`. */
+  study: Maybe<Study>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+
+export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
+  condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
+  filter: InputMaybe<StudyAnnotationFrontendValueFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
+};
+
+/**
+ * A condition to be used against `StudyAnnotationFrontendGroup` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyAnnotationFrontendGroupCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
+  differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `displayGroup` field. */
+  displayGroup: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `isPrimary` field. */
+  isPrimary: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `ordering` field. */
+  ordering: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyAnnotationFrontendGroup` object types. All fields are combined with a logical ‘and.’ */
+export type StudyAnnotationFrontendGroupFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyAnnotationFrontendGroupFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `differentialExpressionCalculated` field. */
+  differentialExpressionCalculated: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `displayGroup` field. */
+  displayGroup: InputMaybe<StringFilter>;
+  /** Filter by the object’s `isPrimary` field. */
+  isPrimary: InputMaybe<BooleanFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyAnnotationFrontendGroupFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyAnnotationFrontendGroupFilter>>;
+  /** Filter by the object’s `ordering` field. */
+  ordering: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `StudyAnnotationFrontendGroup`. */
+export enum StudyAnnotationFrontendGroupsOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
+  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
+  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
+  IsPrimaryAsc = 'IS_PRIMARY_ASC',
+  IsPrimaryDesc = 'IS_PRIMARY_DESC',
+  Natural = 'NATURAL',
+  OrderingAsc = 'ORDERING_ASC',
+  OrderingDesc = 'ORDERING_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
+export type StudyAnnotationFrontendValue = {
+  __typename?: 'StudyAnnotationFrontendValue';
+  annotationGroupId: Maybe<Scalars['Int']>;
+  annotationValueId: Maybe<Scalars['Int']>;
+  color: Maybe<Scalars['String']>;
+  displayValue: Maybe<Scalars['String']>;
+  /** Reads a single `StudyAnnotationFrontendGroup` that is related to this `StudyAnnotationFrontendValue`. */
+  group: Maybe<StudyAnnotationFrontendGroup>;
+  sampleCount: Maybe<Scalars['Int']>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `StudyAnnotationFrontendValue` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyAnnotationFrontendValueCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `color` field. */
+  color: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displayValue` field. */
+  displayValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `sampleCount` field. */
+  sampleCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyAnnotationFrontendValue` object types. All fields are combined with a logical ‘and.’ */
+export type StudyAnnotationFrontendValueFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyAnnotationFrontendValueFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `color` field. */
+  color: InputMaybe<StringFilter>;
+  /** Filter by the object’s `displayValue` field. */
+  displayValue: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyAnnotationFrontendValueFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyAnnotationFrontendValueFilter>>;
+  /** Filter by the object’s `sampleCount` field. */
+  sampleCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `StudyAnnotationFrontendValue`. */
+export enum StudyAnnotationFrontendValuesOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  ColorAsc = 'COLOR_ASC',
+  ColorDesc = 'COLOR_DESC',
+  DisplayValueAsc = 'DISPLAY_VALUE_ASC',
+  DisplayValueDesc = 'DISPLAY_VALUE_DESC',
+  Natural = 'NATURAL',
+  SampleCountAsc = 'SAMPLE_COUNT_ASC',
+  SampleCountDesc = 'SAMPLE_COUNT_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
 export type StudyAnnotationGroupUi = {
   __typename?: 'StudyAnnotationGroupUi';
   /** Reads a single `AnnotationGroup` that is related to this `StudyAnnotationGroupUi`. */
@@ -4551,105 +4652,65 @@ export enum StudyAnnotationGroupUisOrderBy {
 
 /** A condition to be used against `Study` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type StudyCondition = {
-  /** Checks for equality with the object’s `attributeValueFreq` field. */
-  attributeValueFreq: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `cellCount` field. */
   cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `cellOntologyIds` field. */
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `clusterColorMap` field. */
-  clusterColorMap: InputMaybe<Scalars['JSON']>;
-  /** Checks for equality with the object’s `clusterHulls` field. */
-  clusterHulls: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `description` field. */
   description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `h5AdfileModifiedDate` field. */
-  h5AdfileModifiedDate: InputMaybe<Scalars['Datetime']>;
-  /** Checks for equality with the object’s `importStatus` field. */
-  importStatus: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `importStatusUpdated` field. */
-  importStatusUpdated: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `plotCoords` field. */
-  plotCoords: InputMaybe<Scalars['JSON']>;
-  /** Checks for equality with the object’s `projectionCellCoords` field. */
-  projectionCellCoords: InputMaybe<Scalars['JSON']>;
-  /** Checks for equality with the object’s `projectionCellIndices` field. */
-  projectionCellIndices: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
   studyName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `tissueNcitIds` field. */
   tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `visible` field. */
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 /** A filter to be used against `Study` object types. All fields are combined with a logical ‘and.’ */
 export type StudyFilter = {
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<StudyFilter>>;
-  /** Filter by the object’s `attributeValueFreq` field. */
-  attributeValueFreq: InputMaybe<JsonFilter>;
   /** Filter by the object’s `cellCount` field. */
   cellCount: InputMaybe<IntFilter>;
   /** Filter by the object’s `cellOntologyIds` field. */
   cellOntologyIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `clusterColorMap` field. */
-  clusterColorMap: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `clusterHulls` field. */
-  clusterHulls: InputMaybe<JsonFilter>;
   /** Filter by the object’s `description` field. */
   description: InputMaybe<StringFilter>;
   /** Filter by the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `h5AdfileModifiedDate` field. */
-  h5AdfileModifiedDate: InputMaybe<DatetimeFilter>;
-  /** Filter by the object’s `importStatus` field. */
-  importStatus: InputMaybe<StringFilter>;
-  /** Filter by the object’s `importStatusUpdated` field. */
-  importStatusUpdated: InputMaybe<DatetimeFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<StudyFilter>>;
   /** Filter by the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<StringFilter>;
-  /** Filter by the object’s `plotCoords` field. */
-  plotCoords: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `projectionCellCoords` field. */
-  projectionCellCoords: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `projectionCellIndices` field. */
-  projectionCellIndices: InputMaybe<JsonFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyName` field. */
   studyName: InputMaybe<StringFilter>;
   /** Filter by the object’s `tissueNcitIds` field. */
   tissueNcitIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `visible` field. */
+  visible: InputMaybe<BooleanFilter>;
 };
 
 /** An input for mutations affecting `Study` */
 export type StudyInput = {
-  attributeValueFreq: InputMaybe<Scalars['JSON']>;
   cellCount: InputMaybe<Scalars['Int']>;
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  clusterColorMap: InputMaybe<Scalars['JSON']>;
-  clusterHulls: InputMaybe<Scalars['JSON']>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  h5AdfileModifiedDate: InputMaybe<Scalars['Datetime']>;
-  importStatus: InputMaybe<Scalars['String']>;
-  importStatusUpdated: InputMaybe<Scalars['Datetime']>;
   organismTaxId: InputMaybe<Scalars['String']>;
-  plotCoords: InputMaybe<Scalars['JSON']>;
-  projectionCellCoords: InputMaybe<Scalars['JSON']>;
-  projectionCellIndices: InputMaybe<Scalars['JSON']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: Scalars['String'];
   tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 export type StudyLayer = Node & {
@@ -5003,23 +5064,15 @@ export enum StudyOverviewsOrderBy {
 
 /** Represents an update to a `Study`. Fields that are set will be updated. */
 export type StudyPatch = {
-  attributeValueFreq: InputMaybe<Scalars['JSON']>;
   cellCount: InputMaybe<Scalars['Int']>;
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  clusterColorMap: InputMaybe<Scalars['JSON']>;
-  clusterHulls: InputMaybe<Scalars['JSON']>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  h5AdfileModifiedDate: InputMaybe<Scalars['Datetime']>;
-  importStatus: InputMaybe<Scalars['String']>;
-  importStatusUpdated: InputMaybe<Scalars['Datetime']>;
   organismTaxId: InputMaybe<Scalars['String']>;
-  plotCoords: InputMaybe<Scalars['JSON']>;
-  projectionCellCoords: InputMaybe<Scalars['JSON']>;
-  projectionCellIndices: InputMaybe<Scalars['JSON']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
   tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 export type StudySample = Node & {
@@ -5904,7 +5957,9 @@ export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
+export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
+
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -5918,7 +5973,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, studyAnnotationGroupUisList: Array<{ __typename?: 'StudyAnnotationGroupUi', isPrimary: boolean, ordering: number, differentialExpressionCalculated: boolean, annotationGroup: { __typename?: 'AnnotationGroup', annotationGroupId: number, displayGroup: string, annotationValuesList: Array<{ __typename?: 'AnnotationValue', annotationValueId: number, displayValue: string, color: string }> } }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -5933,14 +5988,17 @@ export type ExpressionViolinPlotQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
   omicsId: Scalars['Int'];
   annotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
 export type ExpressionViolinPlotQuery = { __typename?: 'Query', violinPlot: string };
 
 export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
+  studyId: Scalars['Int'];
   studyLayerId: Scalars['Int'];
   omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
@@ -5982,6 +6040,21 @@ export const TreeOntologyOverviewFragmentDoc = gql`
   parentOntCodePath
 }
     `;
+export const AnnotationGrpFragmentDoc = gql`
+    fragment AnnotationGrp on StudyAnnotationFrontendGroup {
+  annotationGroupId
+  isPrimary
+  ordering
+  displayGroup
+  differentialExpressionCalculated
+  annotationValuesList {
+    annotationValueId
+    displayValue
+    color
+    sampleCount
+  }
+}
+    `;
 export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
   studyId
@@ -5996,19 +6069,8 @@ export const StudyBasicsFragmentDoc = gql`
     omicsId
     omicsType
   }
-  studyAnnotationGroupUisList {
-    annotationGroup {
-      annotationGroupId
-      displayGroup
-      annotationValuesList {
-        annotationValueId
-        displayValue
-        color
-      }
-    }
-    isPrimary
-    ordering
-    differentialExpressionCalculated
+  annotationGroupsList {
+    ...AnnotationGrp
   }
   studySampleAnnotationSubsamplingList {
     annotationValueId
@@ -6020,7 +6082,7 @@ export const StudyBasicsFragmentDoc = gql`
     projection
   }
 }
-    `;
+    ${AnnotationGrpFragmentDoc}`;
 export const OntologyOverviewFragmentDoc = gql`
     fragment ontologyOverview on Ontology {
   name
@@ -6227,12 +6289,13 @@ export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressio
 export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
 export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
 export const ExpressionViolinPlotDocument = gql`
-    query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
+    query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
   violinPlot(
     pStudyId: $studyId
     pStudyLayerId: $studyLayerId
     pOmicsId: $omicsId
     pAnnotationGroupId: $annotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
   )
 }
     `;
@@ -6253,6 +6316,7 @@ export const ExpressionViolinPlotDocument = gql`
  *      studyLayerId: // value for 'studyLayerId'
  *      omicsId: // value for 'omicsId'
  *      annotationGroupId: // value for 'annotationGroupId'
+ *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
  *   },
  * });
  */
@@ -6268,8 +6332,13 @@ export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressio
 export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
 export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
 export const ExpressionCorrelationTrianglePlotDocument = gql`
-    query ExpressionCorrelationTrianglePlot($studyLayerId: Int!, $omicsIds: [Int!]!) {
-  correlationTrianglePlot(pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds)
+    query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+  correlationTrianglePlot(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: $omicsIds
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+  )
 }
     `;
 
@@ -6285,8 +6354,10 @@ export const ExpressionCorrelationTrianglePlotDocument = gql`
  * @example
  * const { data, loading, error } = useExpressionCorrelationTrianglePlotQuery({
  *   variables: {
+ *      studyId: // value for 'studyId'
  *      studyLayerId: // value for 'studyLayerId'
  *      omicsIds: // value for 'omicsIds'
+ *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
  *   },
  * });
  */

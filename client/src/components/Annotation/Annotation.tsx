@@ -18,10 +18,11 @@ const useStyles = createStyles((theme) => ({
 type Props = {
     label: string;
     color: string;
+    sampleCount: number;
     annotationId: number;
 }
 
-function Annotation({label, color, annotationId}: Props) {
+function Annotation({label, color, sampleCount, annotationId}: Props) {
     const {classes, cx} = useStyles();
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
@@ -44,7 +45,11 @@ function Annotation({label, color, annotationId}: Props) {
             <Grid.Col span={10}>
                 <Text title={label} size={'md'} fw={selected === annotationId ? 800 : "md"} lineClamp={1}>
                     {label}
+                    <Text size={'xs'} span style={{marginLeft: '1em'}}>
+                        ({sampleCount})
+                    </Text>
                 </Text>
+
             </Grid.Col>
             <Grid.Col span={2} style={{justifyContent: 'center'}}>
                 <ColorSwatch key={color} color={color} size={selected === annotationId ? 12 : 15}

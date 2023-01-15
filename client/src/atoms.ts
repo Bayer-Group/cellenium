@@ -69,7 +69,7 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
         .unroll('studySampleIds')
         .select({studySampleIds: 'studySampleId', annotationValueId: 'annotationValueId'});
     // samplesTable.print();
-    const annotationGroupsValuesTable = aq.from(s.studyAnnotationGroupUisList.map(e => e.annotationGroup))
+    const annotationGroupsValuesTable = aq.from(s.annotationGroupsList)
         .unroll('annotationValuesList')
         // @ts-ignore
         .derive({annotationValueId: r => r.annotationValuesList.annotationValueId})
@@ -121,8 +121,8 @@ export const studyState = selector<Study | undefined>({
                     samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0]),
                     samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
                     studyOmicsTable: buildOmicsTable(response.data.study.studyOmicsTransposedList[0]),
-                    annotationGroupMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => [g.annotationGroup.annotationGroupId, g.annotationGroup])),
-                    annotationValueMap: new Map(response.data.study.studyAnnotationGroupUisList.map((g: any) => g.annotationGroup.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
+                    annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
+                    annotationValueMap: new Map(response.data.study.annotationGroupsList.map((g) => g.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };
                 return s;
             }

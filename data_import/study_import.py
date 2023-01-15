@@ -53,6 +53,11 @@ def import_study_sample(study_id: int, adata: AnnData):
     adata_samples_df = adata_samples_df[['study_sample_id', 'h5ad_obs_index']]
     adata_samples_df['study_id'] = study_id
     import_df(adata_samples_df, 'study_sample')
+    with engine.connect() as connection:
+        connection.execute(text("UPDATE study SET cell_count=:cell_count WHERE study_id=:study_id"), {
+            'study_id': study_id,
+            'cell_count': len(adata_samples_df)
+        })
 
     if 'X_umap' in adata.obsm:
         projection_df = pd.DataFrame({
@@ -218,14 +223,20 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
                            })
 
 
-def import_study(study_name: str, adata: AnnData) -> int:
+def import_study(filename: str) -> int:
+    adata = sc.read_h5ad(filename)
     with engine.connect() as connection:
-        r = connection.execute(text("""INSERT INTO study (study_name)
-            VALUES (:study_name)
+        r = connection.execute(text("""INSERT INTO study (study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id)
+            VALUES (:study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id)
             RETURNING study_id"""), {
-            'study_name': study_name
+            'study_name': adata.uns['cellenium']['title'],
+            'description': adata.uns['cellenium']['description'],
+            'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
+            'disease_mesh_ids': adata.uns['cellenium']['mesh_disease_ids'].tolist(),
+            'organism_tax_id': adata.uns['cellenium']['taxonomy_id']
         })
         study_id = r.fetchone()[0]
+        logging.info("importing %s as study_id %s", filename, study_id)
 
         adata_genes_df = import_study_omics(study_id, adata)
         adata_samples_df = import_study_sample(study_id, adata)
@@ -236,6 +247,7 @@ def import_study(study_name: str, adata: AnnData) -> int:
         for layer_name in adata.layers.keys():
             import_study_layer_expression(study_id, layer_name, adata_genes_df, adata_samples_df, adata)
 
+        connection.execute(text("UPDATE study SET visible=True WHERE study_id=:study_id"), {'study_id': study_id})
         return study_id
 
 
@@ -244,6 +256,5 @@ if __name__ == "__main__":
     parser.add_argument('filename', help='h5ad file created for cellenium (e.g. study_preparation.py scripts)',
                         type=str)
     args = parser.parse_args()
-    adata = sc.read_h5ad(args.filename)
-    import_study(adata.uns['cellenium']['title'], adata)
+    import_study(args.filename)
     logging.info('done')

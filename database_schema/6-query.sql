@@ -26,7 +26,8 @@ select s.study_id,
        s.study_name,
        s.description,
        s.cell_count
-from study s;
+from study s
+where s.visible = True;
 
 
 CREATE VIEW study_overview_ontology
@@ -84,3 +85,30 @@ with sample_annotationvalues as (select study_id,
 select study_id, annotation_value_combination, count(1)
 from sample_annotationvalues
 group by study_id, annotation_value_combination;
+
+
+create view study_annotation_frontend_group
+as
+select gui.study_id,
+       gui.annotation_group_id,
+       gui.is_primary,
+       gui.ordering,
+       gui.differential_expression_calculated,
+       g.display_group
+from study_annotation_group_ui gui
+         join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
+comment on view study_annotation_frontend_group is
+    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
+
+create view study_annotation_frontend_value
+as
+select ssa.study_id,
+       v.annotation_group_id,
+       ssa.annotation_value_id,
+       v.display_value,
+       v.color,
+       cardinality(ssa.study_sample_ids) sample_count
+from study_sample_annotation ssa
+         join annotation_value v on ssa.annotation_value_id = v.annotation_value_id;
+comment on view study_annotation_frontend_value is
+    E'@foreignKey (study_id, annotation_group_id) references study_annotation_frontend_group (study_id, annotation_group_id)|@fieldName group|@foreignFieldName annotationValues';

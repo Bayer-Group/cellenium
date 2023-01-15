@@ -44,6 +44,20 @@ query studies {
     }
 }
 
+fragment AnnotationGrp on StudyAnnotationFrontendGroup {
+    annotationGroupId
+    isPrimary
+    ordering
+    displayGroup
+    differentialExpressionCalculated
+    annotationValuesList {
+      annotationValueId
+      displayValue
+      color
+      sampleCount
+    }
+} 
+
 fragment StudyBasics on Study {
     studyId
     studyName
@@ -57,20 +71,9 @@ fragment StudyBasics on Study {
         omicsId
         omicsType
     }
-    studyAnnotationGroupUisList {
-      annotationGroup {
-        annotationGroupId
-        displayGroup
-        annotationValuesList {
-          annotationValueId
-          displayValue
-          color
-        }        
-      }
-      isPrimary
-      ordering
-      differentialExpressionCalculated
-    }
+    annotationGroupsList {
+        ...AnnotationGrp
+    }    
     studySampleAnnotationSubsamplingList {
       annotationValueId
       studySampleIds
@@ -106,12 +109,12 @@ query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   }
 }
 
-query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!) {
-  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId)
+query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  violinPlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsId: $omicsId, pAnnotationGroupId: $annotationGroupId, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
 }
 
-query ExpressionCorrelationTrianglePlot($studyLayerId: Int!, $omicsIds: [Int!]!) {
-  correlationTrianglePlot(pStudyLayerId:$studyLayerId, pOmicsIds: $omicsIds)
+query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+  correlationTrianglePlot(pStudyId:$studyId, pStudyLayerId:$studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
 }
 
 query autocomplete($query:String!) {

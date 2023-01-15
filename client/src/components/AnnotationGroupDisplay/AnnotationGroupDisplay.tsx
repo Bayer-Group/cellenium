@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Annotation} from "../Annotation/Annotation";
 import {Stack} from "@mantine/core";
-import {AnnotationGroup} from "../../generated/types";
+import {AnnotationGroup, AnnotationGrpFragment} from "../../generated/types";
 import {useRecoilState} from "recoil";
 import {highlightAnnotationState} from "../../atoms";
 
 type Props = {
-    annotationGroup: AnnotationGroup|undefined;
+    annotationGroup: AnnotationGrpFragment|undefined;
 }
 
 function AnnotationGroupDisplay({annotationGroup}: Props) {
@@ -14,7 +14,7 @@ function AnnotationGroupDisplay({annotationGroup}: Props) {
     return (
         <Stack spacing={2} onMouseLeave={()=>setHighlightAnnotation(0)}>
             {annotationGroup && annotationGroup.annotationValuesList.map((annot) => {
-                return <Annotation key={annot.annotationValueId} label={annot.displayValue} color={annot.color} annotationId={annot.annotationValueId}/>
+                return <Annotation key={annot.annotationValueId} label={annot.displayValue} sampleCount={annot.sampleCount} color={annot.color} annotationId={annot.annotationValueId}/>
             })}
         </Stack>
     );
