@@ -1,8 +1,15 @@
 import React, {useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Divider, Group, Loader, Stack, Text, Title} from "@mantine/core";
-import {AddGene, AnnotationFilterDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
+import {Divider, Group, Loader, Space, Stack, Text, Title} from "@mantine/core";
+import {
+    AddGene,
+    AnnotationFilterDisplay,
+    AnnotationGroupSelectBox, DEGTable,
+    LeftSidePanel,
+    RightSidePanel,
+    UserGeneStore
+} from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -125,13 +132,9 @@ const ExpressionAnalysis = () => {
                 {analysisType === 'projection' && <ProjectionPlots/>}
             </main>
             <RightSidePanel>
-                <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <AddGene/>
-                    <Stack spacing={'xs'}>
-                        {userGenes.length > 0 ? userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`}
-                                                                                  gene={gene}/>) :
-                            <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
-                    </Stack>
+                <Stack>
+                    <Divider size={"xs"} label={'User gene store'}/>
+                    <UserGeneStore multiple={true} opened={true}/>
                 </Stack>
             </RightSidePanel>
         </Group>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ColorSwatch, createStyles, Grid, Text} from "@mantine/core";
+import {ColorSwatch, createStyles, Grid, Group, Text} from "@mantine/core";
 import {useRecoilState} from "recoil";
 import {highlightAnnotationState, selectedAnnotationState} from "../../atoms";
 
@@ -26,7 +26,7 @@ function Annotation({label, color, sampleCount, annotationId}: Props) {
     const {classes, cx} = useStyles();
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
-
+    const showBold = (selected===annotationId) ? 800 : "md";
     return (
         <Grid columns={12} pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
@@ -42,18 +42,19 @@ function Annotation({label, color, sampleCount, annotationId}: Props) {
                   [classes.clicked]: annotationId === selected
               })}
         >
-            <Grid.Col span={10}>
-                <Text title={label} size={'md'} fw={selected === annotationId ? 800 : "md"} lineClamp={1}>
-                    {label}
-                    <Text size={'xs'} span style={{marginLeft: '1em'}}>
-                        ({sampleCount})
+            <Grid.Col span={7}>
+                <Group pr={2} spacing={2}>
+                    <Text title={label} size={'xs'} weight={showBold} lineClamp={1}>
+                        {label}
                     </Text>
-                </Text>
-
+                </Group>
             </Grid.Col>
-            <Grid.Col span={2} style={{justifyContent: 'center'}}>
-                <ColorSwatch key={color} color={color} size={selected === annotationId ? 12 : 15}
-                             style={{border: selected === annotationId ? '2px solid black' : ''}}/>
+            <Grid.Col span={4} style={{textAlign: 'right'}}>
+                {sampleCount ? <Text size={'xs'} weight={showBold} lineClamp={1}>({sampleCount})</Text> : null}
+            </Grid.Col>
+            <Grid.Col span={1} pl={5}>
+                <div><ColorSwatch key={color} color={color} size={selected === annotationId ? 12 : 15}
+                                  style={{border: selected === annotationId ? '2px solid black' : ''}}/></div>
             </Grid.Col>
         </Grid>
     );

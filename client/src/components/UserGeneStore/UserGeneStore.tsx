@@ -8,18 +8,19 @@ import UserGene from "../UserGene/UserGene";
 
 interface Props {
     multiple?: boolean;
+    opened?: boolean;
 }
 
-const UserGeneStore = ({multiple=false}:Props) => {
-    const [opened, setOpened] = useState(false);
+const UserGeneStore = ({multiple=false, opened=false}:Props) => {
+    const [storeOpened, setOpened] = useState(opened);
     const theme = useMantineTheme()
     const userGeneStore = useRecoilValue(userGenesState);
     return (
         <Stack>
             <AddGene/>
-            <Group onClick={() => setOpened(!opened)} style={{cursor: 'pointer'}}>
+            <Group onClick={() => setOpened(!storeOpened)} style={{cursor: 'pointer'}}>
                 <Group spacing={0}><ActionIcon size='xs' variant={'subtle'}>
-                    {opened ? <IconChevronDown color={theme.colors.dark[9]}/> :
+                    {storeOpened ? <IconChevronDown color={theme.colors.dark[9]}/> :
                         <IconChevronRight color={theme.colors.dark[9]}/>}
                 </ActionIcon>
                     <Indicator position={"middle-end"} inline offset={-20} label={`${userGeneStore.length}`} size={20}>
@@ -27,7 +28,7 @@ const UserGeneStore = ({multiple=false}:Props) => {
                     </Indicator>
                 </Group>
             </Group>
-            <Collapse in={opened} transitionDuration={0} transitionTimingFunction="linear">
+            <Collapse in={storeOpened} transitionDuration={0} transitionTimingFunction="linear">
                 {userGeneStore.length===0?<Text size={'xs'} color={'dimmed'}>No genes added yet.</Text>:
                     userGeneStore.map((omics)=>{
                         return (<Group align={'center'} position={'left'}>

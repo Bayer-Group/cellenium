@@ -1,6 +1,6 @@
-import React from 'react';
-import {ActionIcon, CloseButton, createStyles, Grid, Group, Text} from "@mantine/core";
-import {IconEye} from "@tabler/icons";
+import React, {useState} from 'react';
+import {ActionIcon, CloseButton, createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
+import {IconEye, IconInfoCircle} from "@tabler/icons";
 import {Omics} from "../../model";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {pageState, selectedGenesState, userGenesState} from "../../atoms";
@@ -23,12 +23,12 @@ interface Props {
     multiple?: boolean;
 }
 
-const UserGene = ({gene, multiple=false}: Props) => {
+const UserGene = ({gene, multiple = false}: Props) => {
     const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
     const setPage = useSetRecoilState(pageState);
-
+    const [showInfo, setShowInfo] = useState(false)
     function handleRemove(gene: Omics) {
         // remove from geneStore
         let removed = geneStore.filter((g) => g.omicsId !== gene.omicsId)
@@ -47,7 +47,7 @@ const UserGene = ({gene, multiple=false}: Props) => {
             // add
             if (multiple)
                 setSelectedGenesStore([...selectedGenes, gene]);
-            else{
+            else {
                 setSelectedGenesStore([gene]);
             }
             //setPage('ExpressionAnalysis');
@@ -67,15 +67,21 @@ const UserGene = ({gene, multiple=false}: Props) => {
                     <ActionIcon
                         className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0})}
                         onClick={() => handleColorClick(gene)} variant="subtle" size={'xs'} mr={5}>
-                        <IconEye style={{color: 'green'}}color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0)?'white':'gray' }/>
+                        <IconEye style={{color: 'green'}}
+                                 color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0) ? 'white' : 'gray'}/>
                     </ActionIcon>
                 </Grid.Col>
-                <Grid.Col span={3}>
+                <Grid.Col span={1}>
+                    <Tooltip label={`${gene.displayName}`} opened={showInfo}>
+                        <ActionIcon variant={'subtle'} size={'xs'} onClick={()=>setShowInfo(true)} onMouseLeave={()=>setShowInfo(false)}>
+                            <IconInfoCircle/>
+                        </ActionIcon>
+                    </Tooltip>
+                </Grid.Col>
+                <Grid.Col span={5}>
                     <Text size={'xs'}>{gene.displaySymbol}</Text>
                 </Grid.Col>
-                <Grid.Col span={7}>
-                    <Text size={'xs'} lineClamp={1}>{gene.displayName}</Text>
-                </Grid.Col>
+
 
             </Grid>
         </Group>
