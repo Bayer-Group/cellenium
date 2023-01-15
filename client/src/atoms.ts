@@ -8,6 +8,7 @@ export const useGeneStoreCounterColor = atom <string>({
     key: 'usergenestorecountercolor',
     default: 'blue'
 })
+
 export const selectedGenesState = atom<Omics[]>({
     key: "selectedGenes",
     default: []

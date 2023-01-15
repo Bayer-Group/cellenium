@@ -116,7 +116,7 @@ const DEGTable = ({annotationId}: Props) => {
     function handleClick(gene: Omics) {
         let check = userGenes.filter((g) => g.omicsId === gene.omicsId)
         if (check.length === 0) {
-            setIndicatorColor('red')
+            setIndicatorColor('pink')
             setUserGenes(_.union(userGenes, [gene]))
             setTimeout(() => {
                 setIndicatorColor('blue')

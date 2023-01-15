@@ -14,6 +14,7 @@ import {
 import {useParams} from "react-router-dom";
 
 export function useExpressionValues(omicsIds: number[]) {
+    console.log({omicsIds})
     const studyLayerId = useRecoilValue(studyLayerIdState);
 
     const {data, loading} = useExpressionByOmicsIdsQuery({

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect} from 'react';
 import {
     AnnotationGroupDisplay,
     AnnotationGroupSelectBox,
@@ -7,15 +7,9 @@ import {
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import {Divider, Group, Space, Stack, Text} from "@mantine/core";
+import {Divider, Group, Loader, Space, Stack, Text} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {
-    annotationGroupIdState,
-    selectedAnnotationState,
-    selectedGenesState,
-    studyState,
-    userGenesState
-} from "../atoms";
+import {annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
 
@@ -36,11 +30,32 @@ interface PreparedPlot {
     plotlyLayout: Partial<Plotly.Layout>;
 }
 
+function ProjectionPlotWithOptionalExpression() {
+
+    const selectedGenes = useRecoilValue(selectedGenesState);
+    console.log({selectedGenes});
+    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
+
+    if (loading) {
+        return <div><Loader size={25}/></div>;
+    }
+
+    return (<div>
+        {table && <ProjectionPlot colorBy={'annotation'} expressionTable={table}/>}
+        {table===undefined && <ProjectionPlot colorBy={'annotation'} />}
+    </div>)
+}
+
 function DifferentialExpressionAnalysis() {
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
+    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
     const study = useRecoilValue(studyState);
 
+
+    useEffect(() => {
+        setSelectedGenes([])
+    }, [])
 
     if (!study) {
         return <></>;
@@ -60,7 +75,7 @@ function DifferentialExpressionAnalysis() {
                 </Stack>
             </LeftSidePanel>
             <main>
-                <ProjectionPlot colorBy={'annotation'}/>
+                {<ProjectionPlotWithOptionalExpression/>}
             </main>
             <RightSidePanel>
                 <Stack>

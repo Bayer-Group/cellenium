@@ -1,9 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Group, Loader, Space, Stack, Text} from "@mantine/core";
+import {Divider, Group, Loader, Space, Stack, Text} from "@mantine/core";
 import {
     AddGene, AnnotationFilterDisplay,
     LeftSidePanel,
-    RightSidePanel
+    RightSidePanel, UserGeneStore
 } from "../components";
 import UserGene from "../components/UserGene/UserGene";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -68,15 +68,9 @@ function CoexpressionAnalysis() {
                 <CoexpressionAnalysisPlot/>
             </main>
             <RightSidePanel>
-                <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div>
-                        <AddGene/>
-                    </div>
-                    <Stack spacing={'xs'}>
-                        {userGenes.length > 0 ? userGenes.map((gene) => <UserGene key={`ug_${gene.displaySymbol}`}
-                                                                                  gene={gene}/>) :
-                            <Text color={'gray'} size={'xs'}>Nothing added yet.</Text>}
-                    </Stack>
+                <Stack>
+                    <Divider size={"xs"} label={'User gene store'}/>
+                    <UserGeneStore multiple={true} opened={true}/>
                 </Stack>
             </RightSidePanel>
         </Group>

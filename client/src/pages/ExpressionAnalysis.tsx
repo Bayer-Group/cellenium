@@ -59,7 +59,7 @@ function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
     return <Stack align={'center'}>
-        {selectedGenes.map((g, i) => <Stack key={g.omicsId} align={'center'}>
+        {[...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
         </Stack>)}
@@ -74,7 +74,7 @@ function ProjectionPlots() {
         if (selectedGenes.length === 0 || !table) {
             return undefined;
         }
-        return selectedGenes.map(g =>
+        return [...selectedGenes].reverse().map(g =>
             table.params({omicsId: g.omicsId}).filter((d: any, p: any) => d.omicsId === p.omicsId));
     }, [selectedGenes, table]);
 
@@ -83,8 +83,8 @@ function ProjectionPlots() {
     }
 
     return <Stack>
-        {tablePerGene && selectedGenes.map((g, i) => <Stack key={g.omicsId} align={'center'}>
-            <Title order={3}>{g.displaySymbol}</Title>
+        {tablePerGene && [...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
+            <Title>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy={'expression'} expressionTable={tablePerGene[i]}/>
         </Stack>)}
     </Stack>;
@@ -122,13 +122,13 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1}}
+            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop:60 }}
                   className={'plotContainer'}>
                 <Stack align={'center'} justify={'center'}>
                     {analysisType === 'violinplot' && <ViolinPlots/>}
                     {analysisType === 'projection' && <ProjectionPlots/>}
                     {selectedGenes.length === 0 &&
-                        <Text c={'dimmed'}>Please add and select genes to the <Text span weight={800}>User gene
+                        <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
                             store</Text></Text>}
                 </Stack>
             </main>

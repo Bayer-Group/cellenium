@@ -6,7 +6,6 @@ import {Stack, Text} from "@mantine/core";
 const AnnotationFilter = () => {
     const [selectedAnnotationFilter, setSelectedAnnotationFilter] = useRecoilState(selectedAnnotationFilterState);
     const study = useRecoilValue(studyState);
-    console.log(study?.annotationValueMap)
     return (
         <Stack spacing={1}>
             {study && study.annotationValueMap && selectedAnnotationFilter.map((av:number)=>{

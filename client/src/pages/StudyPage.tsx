@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {useRecoilValue} from "recoil";
-import {pageState} from "../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {pageState, selectedGenesState} from "../atoms";
 import {useSetStudyFromUrl} from "../hooks";
 import CellMarkerAnalysis from "./CellMarkerAnalysis";
 import ExpressionAnalysis from "./ExpressionAnalysis";

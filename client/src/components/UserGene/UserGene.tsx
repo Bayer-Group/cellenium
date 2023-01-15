@@ -50,7 +50,6 @@ const UserGene = ({gene, multiple = false}: Props) => {
             else {
                 setSelectedGenesStore([gene]);
             }
-            //setPage('ExpressionAnalysis');
         }
 
     }

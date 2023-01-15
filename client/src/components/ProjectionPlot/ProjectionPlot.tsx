@@ -1,6 +1,12 @@
 import React from 'react';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
+import {
+    annotationGroupIdState,
+    highlightAnnotationState,
+    selectedAnnotationState,
+    selectedGenesState,
+    studyState
+} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -23,12 +29,11 @@ const ProjectionPlot = ({
                         }: Props) => {
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
-    const selectedOmicsIds = [116, 264];
 
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const [selected, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-
+    const selectedGenes = useRecoilState(selectedGenesState);
 
     const annotationProjectionData = React.useMemo(() => {
         if (!study) {
@@ -116,14 +121,14 @@ const ProjectionPlot = ({
                 colorscale: 'YlGnBu',
                 reversescale: true,
                 colorbar: {
-                    tickfont:{
+                    tickfont: {
                         family: 'Rubik',
                         size: '14',
 
                     },
                     thickness: 15,
                     outlinewidth: 0,
-                    len:0.2,
+                    len: 0.2,
                     lenmode: 'fraction',
                     yanchor: 'top',
                     y: 1,
@@ -136,6 +141,45 @@ const ProjectionPlot = ({
         } as Partial<Plotly.PlotData>;
     }, [study, colorBy, annotationProjectionData, expressionTable]);
 
+    const selectedGeneExpressionTrace = React.useMemo(() => {
+        if (!study || !expressionTable || !annotationProjectionData || colorBy !== 'annotation') {
+            return undefined;
+        }
+        const joinedTable = expressionTable.join(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId').reify();
+        return {
+            type: 'scattergl',
+            x: joinedTable.array('projectionX', Float32Array),
+            y: joinedTable.array('projectionY', Float32Array),
+            customdata: joinedTable.array('annotationValueId', Int32Array),
+            mode: 'markers',
+            marker: {
+                size: 10,
+                opacity: 1,
+                color: joinedTable.array('value', Float32Array),
+                colorscale: 'YlGnBu',
+                reversescale: true,
+                colorbar: {
+                    tickfont: {
+                        family: 'Rubik',
+                        size: '14',
+
+                    },
+                    thickness: 15,
+                    outlinewidth: 0,
+                    len: 0.2,
+                    lenmode: 'fraction',
+                    yanchor: 'top',
+                    y: 1,
+                    yref: 'paper'
+
+                },
+            },
+            showlegend: false,
+            hoverinfo: 'none'
+        } as Partial<Plotly.PlotData>;
+    }, [study,  annotationProjectionData, expressionTable, selectedGenes]);
+
+
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
         if (!annotationProjectionData || (!annotationTraces && !expressionTrace)) {
             return undefined;
@@ -143,7 +187,9 @@ const ProjectionPlot = ({
         const plotlyData = [
             ...(annotationTraces || []),
             ...(annotationHighlightTrace ? [annotationHighlightTrace] : []),
-            ...(expressionTrace ? [expressionTrace] : [])];
+            ...(expressionTrace ? [expressionTrace] : []),
+            ...(selectedGeneExpressionTrace ? [selectedGeneExpressionTrace] : []),
+        ];
         return {
             plotlyData,
             plotlyLayout: {
@@ -172,7 +218,7 @@ const ProjectionPlot = ({
     };
 
     function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
-            if (event.points.length > 0 && event.points[0].customdata) {
+        if (event.points.length > 0 && event.points[0].customdata) {
             const annotationValueId = event.points[0].customdata as number;
             setSelectedAnnotation(annotationValueId);
         }
@@ -186,6 +232,7 @@ const ProjectionPlot = ({
                       }}
                       onHover={onHover}
                       onClick={onClick}
+                      onUnhover={()=>setHighlightAnnotation(-1)}
         />);
     } else {
         return (<div>no plot</div>)

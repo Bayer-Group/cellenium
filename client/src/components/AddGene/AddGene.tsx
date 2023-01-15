@@ -30,7 +30,6 @@ function AddGene(props: TextInputProps) {
     const form = useForm();
 
     function handleChange(inputString: string) {
-        console.log({inputString})
         let newOfferings: Omics[] = [];
         if (inputString.length > 0) {
             // @ts-ignore
@@ -52,7 +51,7 @@ function AddGene(props: TextInputProps) {
             })
         } else {
             setUserGenes([...userGenes, item])
-            setIndicatorColor('red')
+            setIndicatorColor('pink')
             setTimeout(()=>{
                 setIndicatorColor('blue')
             }, 100)
