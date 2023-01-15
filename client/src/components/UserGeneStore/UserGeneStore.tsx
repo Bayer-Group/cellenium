@@ -3,7 +3,7 @@ import {ActionIcon, Collapse, Group, Indicator, Stack, Text, useMantineTheme} fr
 import {AddGene} from "../AddGene/AddGene";
 import {IconChevronDown, IconChevronRight} from "@tabler/icons";
 import {useRecoilValue} from "recoil";
-import {userGenesState} from "../../atoms";
+import {userGenesState, useGeneStoreCounterColor} from "../../atoms";
 import UserGene from "../UserGene/UserGene";
 
 interface Props {
@@ -11,8 +11,9 @@ interface Props {
     opened?: boolean;
 }
 
-const UserGeneStore = ({multiple=false, opened=false}:Props) => {
+const UserGeneStore = ({multiple = false, opened = false}: Props) => {
     const [storeOpened, setOpened] = useState(opened);
+    const indicatorColor = useRecoilValue(useGeneStoreCounterColor);
     const theme = useMantineTheme()
     const userGeneStore = useRecoilValue(userGenesState);
     return (
@@ -23,14 +24,16 @@ const UserGeneStore = ({multiple=false, opened=false}:Props) => {
                     {storeOpened ? <IconChevronDown color={theme.colors.dark[9]}/> :
                         <IconChevronRight color={theme.colors.dark[9]}/>}
                 </ActionIcon>
-                    <Indicator position={"middle-end"} inline offset={-20} label={`${userGeneStore.length}`} size={20}>
+                    <Indicator color={indicatorColor} position={"middle-end"} inline offset={-20}
+                               label={`${userGeneStore.length}`} size={20}>
                         <Text size={'xs'}>User gene(s)</Text>
                     </Indicator>
+
                 </Group>
             </Group>
             <Collapse in={storeOpened} transitionDuration={0} transitionTimingFunction="linear">
-                {userGeneStore.length===0?<Text size={'xs'} color={'dimmed'}>No genes added yet.</Text>:
-                    userGeneStore.map((omics)=>{
+                {userGeneStore.length === 0 ? <Text size={'xs'} color={'dimmed'}>No genes added yet.</Text> :
+                    userGeneStore.map((omics) => {
                         return (<Group align={'center'} position={'left'}>
                             <UserGene multiple={multiple} gene={omics}></UserGene>
                         </Group>)

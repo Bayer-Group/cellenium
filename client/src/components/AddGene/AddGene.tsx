@@ -11,7 +11,7 @@ import {
 import React, {FormEvent, useState} from "react";
 import {IconArrowRight, IconX} from "@tabler/icons";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyState, userGenesState} from "../../atoms";
+import {studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
 import {showNotification} from '@mantine/notifications';
 import {useForm} from '@mantine/form';
 import * as aq from 'arquero';
@@ -25,6 +25,7 @@ function AddGene(props: TextInputProps) {
     const [value, setValue] = useState('');
     const theme = useMantineTheme();
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
+    const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor)
     const study = useRecoilValue(studyState);
     const form = useForm();
 
@@ -33,9 +34,8 @@ function AddGene(props: TextInputProps) {
         let newOfferings: Omics[] = [];
         if (inputString.length > 0) {
             // @ts-ignore
-            newOfferings = study?.studyOmicsTable.filter(aq.escape(t => aq.op.includes(t.displaySymbol, inputString, 0))).objects();
+            newOfferings = study?.studyOmicsTable.filter(aq.escape(t => aq.op.includes(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0))).objects();
         }
-        console.log({newOfferings});
         setOfferings(newOfferings)
         setValue(inputString)
     }
@@ -52,6 +52,10 @@ function AddGene(props: TextInputProps) {
             })
         } else {
             setUserGenes([...userGenes, item])
+            setIndicatorColor('red')
+            setTimeout(()=>{
+                setIndicatorColor('blue')
+            }, 100)
         }
 
     }

@@ -5,7 +5,7 @@ import {IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyState, userGenesState} from "../../atoms";
+import {studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
 import {Omics} from "../../model";
 import _ from 'lodash';
 import {showNotification} from "@mantine/notifications";
@@ -103,7 +103,8 @@ type Props = {
 }
 
 const DEGTable = ({annotationId}: Props) => {
-    const [userGenes, setUserGenes] = useRecoilState(userGenesState)
+    const [userGenes, setUserGenes] = useRecoilState(userGenesState);
+    const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor);
     const study = useRecoilValue(studyState);
     const {data, error, loading} = useDegQuery({
         variables: {
@@ -114,9 +115,14 @@ const DEGTable = ({annotationId}: Props) => {
 
     function handleClick(gene: Omics) {
         let check = userGenes.filter((g) => g.omicsId === gene.omicsId)
-        if (check.length === 0)
+        if (check.length === 0) {
+            setIndicatorColor('red')
             setUserGenes(_.union(userGenes, [gene]))
-        else {
+            setTimeout(() => {
+                setIndicatorColor('blue')
+            }, 200)
+
+        } else {
             showNotification({
                 title: 'Your selection is already in the store',
                 message: "It's not a problem, really!",

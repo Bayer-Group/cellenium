@@ -4,6 +4,10 @@ import {apolloClient} from "./index";
 import {StudyBasicsDocument, StudyBasicsFragment, StudyBasicsQuery, StudyBasicsQueryVariables} from "./generated/types";
 import * as aq from 'arquero';
 
+export const useGeneStoreCounterColor = atom <string>({
+    key: 'usergenestorecountercolor',
+    default: 'blue'
+})
 export const selectedGenesState = atom<Omics[]>({
     key: "selectedGenes",
     default: []
