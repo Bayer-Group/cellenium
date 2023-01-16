@@ -1,7 +1,7 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {IconSearch, IconX} from "@tabler/icons";
-import {useHumanGeneAutocompleteQuery} from "../../generated/types";
+import {useHumanGeneAutocompleteQuery, useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
 import {Omics} from "../../model";
 import SearchBadge from "../SearchBadge/SearchBadge";
 import _ from 'lodash';
@@ -9,24 +9,36 @@ import _ from 'lodash';
 const sortAlphaNum = (a: Omics, b: Omics) => a.displaySymbol.localeCompare(b.displaySymbol, 'en', {numeric: true})
 
 interface Props {
-    triggerSearch: Function;
-    onDelete: Function;
+    handleNewFilters: Function;
 }
 
-function GeneSearchBar({triggerSearch, onDelete}: Props) {
+function GeneSearchBar({handleNewFilters}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<Omics[]>([]);
     const [selectedFilters, setSelectedFilters] = useState<Omics[]>([]);
     const {data, error, loading} = useHumanGeneAutocompleteQuery()
+    const [getCellTypes, {
+        data: markerData,
+        error: markerError,
+        loading: markerLoading
+    }] = useStudiesWithMarkerGenesLazyQuery();
 
     function handleSubmit(item: AutocompleteItem) {
         setValue('');
         let newFilters = [...selectedFilters, item as Omics]
         setSelectedFilters(newFilters)
-        console.log({newFilters})
-        triggerSearch(newFilters)
+        getCellTypes({
+            variables: {
+                omicsIds: newFilters.map((ele) => ele.omicsId)
+            }
+        })
     }
+
+    useEffect(() => {
+        if (markerData)
+            handleNewFilters(markerData.differentialExpressionsList)
+    }, [markerData])
 
     function handleChange(input: string) {
         if (input === '') {
@@ -49,10 +61,10 @@ function GeneSearchBar({triggerSearch, onDelete}: Props) {
         let newFilters = selectedFilters.filter((f) => !((f.omicsId === filter.omicsId)));
         if (newFilters.length > 0) {
             setSelectedFilters(newFilters)
-            triggerSearch(newFilters)
+            handleNewFilters(newFilters)
         } else {
             setSelectedFilters([])
-            onDelete([])
+            handleNewFilters([])
         }
 
         setOfferings([])
@@ -98,7 +110,7 @@ function GeneSearchBar({triggerSearch, onDelete}: Props) {
                                     setValue('');
                                     setOfferings([]);
                                     setSelectedFilters([]);
-                                    onDelete([]);
+                                    handleNewFilters([]);
                                 }
                                 }>
                                     <IconX/>

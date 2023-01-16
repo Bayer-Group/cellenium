@@ -78,7 +78,7 @@ function NavBar() {
         <NavLink
             to={item.link}
             key={item.label}
-            className={({isActive})=>isActive?cx([classes.mainLink, classes.mainLinkActive]):classes.mainLink}
+            className={({isActive}) => isActive ? cx([classes.mainLink, classes.mainLinkActive]) : classes.mainLink}
 
         >
             {item.label}
@@ -89,10 +89,12 @@ function NavBar() {
     return (
         <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner} fluid={true}>
-                <Group spacing={5}>
-                    <ProjPlotIcon/>
-                    <Title>cellenium</Title>
-                </Group>
+                <NavLink to={'/'} style={{textDecoration: 'none', color: 'black'}}>
+                    <Group spacing={5}>
+                        <ProjPlotIcon/>
+                        <Title>cellenium</Title>
+                    </Group>
+                </NavLink>
                 <div className={classes.links}>
                     <Group spacing={0} position="right" className={classes.mainLinks}>
                         {mainItems}
