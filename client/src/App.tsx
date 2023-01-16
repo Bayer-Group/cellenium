@@ -1,10 +1,10 @@
 import React from 'react';
-import SearchResults from "./pages/SearchResults";
+import SingleStudy from "./pages/SingleStudy";
 
 function App() {
   return (
     <div className="App">
-      <SearchResults/>
+      <SingleStudy/>
     </div>
   );
 }

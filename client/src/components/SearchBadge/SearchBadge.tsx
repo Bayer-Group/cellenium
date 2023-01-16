@@ -2,10 +2,11 @@ import React from 'react';
 import {ActionIcon, Badge, useMantineTheme} from "@mantine/core";
 import {IconX} from "@tabler/icons";
 import {OfferingItem} from "../SearchBar/SearchBar";
+import {Omics} from "../../model";
 
 type Props = {
     onRemove: Function;
-    item: OfferingItem;
+    item: OfferingItem | Omics;
 }
 
 const SearchBadge = ({onRemove, item}: Props) => {
@@ -13,6 +14,7 @@ const SearchBadge = ({onRemove, item}: Props) => {
     const theme = useMantineTheme();
 
     function ontology2Color(ontology: string) {
+        console.log({ontology})
         let color = '';
         switch (ontology) {
             case 'NCBI_taxonomy':
@@ -23,6 +25,9 @@ const SearchBadge = ({onRemove, item}: Props) => {
                 break;
             case 'MeSH':
                 color = 'violet'//theme.colors.violet[5];
+                break;
+            case 'GENE':
+                color = 'yellow';
                 break;
             default:
                 color = 'gray'//theme.colors.gray[5];
@@ -38,7 +43,8 @@ const SearchBadge = ({onRemove, item}: Props) => {
     );
     return (
         <div>
-            <Badge color={ontology2Color(item.ontology)} radius={4} size={'xl'} variant="filled" sx={{paddingRight: 3, paddingLeft: 8}}
+            <Badge color={ontology2Color(item.ontology ? item.ontology : '')} radius={4} size={'xl'} variant="filled"
+                   sx={{paddingRight: 3, paddingLeft: 8}}
                    rightSection={removeButton}>
                 {item.value}
             </Badge>

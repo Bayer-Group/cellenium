@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ReactComponent as ProjPlotIcon} from "../../images/logo.svg";
-import {useState} from 'react';
-import {Anchor, Burger, Container, createStyles, Group, Title, Header} from '@mantine/core';
+import {Burger, Container, createStyles, Group, Header, Title} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
+import {NavLink} from "react-router-dom";
 
 const HEADER_HEIGHT = 60;
 
@@ -37,6 +37,7 @@ const useStyles = createStyles((theme) => ({
 
     mainLink: {
         textTransform: 'uppercase',
+        textDecoration: "none",
         fontSize: 13,
         color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
         padding: `2px ${theme.spacing.sm}px`,
@@ -60,36 +61,37 @@ interface LinkProps {
     link: string;
 }
 
-interface DoubleHeaderProps {
-    mainLinks: LinkProps[];
-}
+const mainLinks = [{link: '/', label: 'Single study analysis'},
+    {link: '/crossstudy', label: 'Cross-study analysis'},
+    {link: '/markergene', label: 'Marker gene search'}
+];
 
-function NavBar({mainLinks}: DoubleHeaderProps) {
+function NavBar() {
     const [opened, {toggle}] = useDisclosure(false);
     const {classes, cx} = useStyles();
     const [active, setActive] = useState(0);
-
+    let activeStyle = {
+        textDecoration: "underline",
+        color: 'black'
+    };
     const mainItems = mainLinks.map((item, index) => (
-        <Anchor<'a'>
-            href={item.link}
+        <NavLink
+            to={item.link}
             key={item.label}
-            className={cx(classes.mainLink, {[classes.mainLinkActive]: index === active})}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(index);
-            }}
+            className={({isActive})=>isActive?cx([classes.mainLink, classes.mainLinkActive]):classes.mainLink}
+
         >
             {item.label}
-        </Anchor>
+        </NavLink>
     ));
 
 
     return (
-        <Header height={HEADER_HEIGHT} >
+        <Header height={HEADER_HEIGHT}>
             <Container className={classes.inner} fluid={true}>
                 <Group spacing={5}>
                     <ProjPlotIcon/>
-                    <Title >cellenium</Title>
+                    <Title>cellenium</Title>
                 </Group>
                 <div className={classes.links}>
                     <Group spacing={0} position="right" className={classes.mainLinks}>

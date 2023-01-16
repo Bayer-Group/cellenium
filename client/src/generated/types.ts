@@ -5961,6 +5961,20 @@ export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
+export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number } };
+
+export type StudiesWithMarkerGenesQueryVariables = Exact<{
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type StudiesWithMarkerGenesQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number } }> };
+
+export type HumanGeneAutocompleteQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HumanGeneAutocompleteQuery = { __typename?: 'Query', omicsBasesList: Array<{ __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsType: OmicsType, omicsId: number, taxId: number, value: string, ontology: OmicsType }> };
+
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
@@ -6083,6 +6097,29 @@ export const StudyBasicsFragmentDoc = gql`
   }
 }
     ${AnnotationGrpFragmentDoc}`;
+export const DifferentialMarkerFragmentDoc = gql`
+    fragment DifferentialMarker on DifferentialExpression {
+  annotationValueId
+  log2Foldchange
+  pvalueAdj
+  score
+  study {
+    studyName
+    studyId
+  }
+  annotationValue {
+    annotationGroup {
+      displayGroup
+    }
+    displayValue
+  }
+  omics {
+    displaySymbol
+    taxId
+    omicsId
+  }
+}
+    `;
 export const OntologyOverviewFragmentDoc = gql`
     fragment ontologyOverview on Ontology {
   name
@@ -6172,6 +6209,81 @@ export function useStudiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StudiesQueryHookResult = ReturnType<typeof useStudiesQuery>;
 export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
 export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
+export const StudiesWithMarkerGenesDocument = gql`
+    query studiesWithMarkerGenes($omicsIds: [Int!]!) {
+  differentialExpressionsList(filter: {omicsId: {in: $omicsIds}}) {
+    ...DifferentialMarker
+  }
+}
+    ${DifferentialMarkerFragmentDoc}`;
+
+/**
+ * __useStudiesWithMarkerGenesQuery__
+ *
+ * To run a query within a React component, call `useStudiesWithMarkerGenesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudiesWithMarkerGenesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudiesWithMarkerGenesQuery({
+ *   variables: {
+ *      omicsIds: // value for 'omicsIds'
+ *   },
+ * });
+ */
+export function useStudiesWithMarkerGenesQuery(baseOptions: Apollo.QueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
+      }
+export function useStudiesWithMarkerGenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
+        }
+export type StudiesWithMarkerGenesQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesQuery>;
+export type StudiesWithMarkerGenesLazyQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesLazyQuery>;
+export type StudiesWithMarkerGenesQueryResult = Apollo.QueryResult<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>;
+export const HumanGeneAutocompleteDocument = gql`
+    query humanGeneAutocomplete {
+  omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
+    displayName
+    displaySymbol
+    value: displaySymbol
+    omicsType
+    omicsId
+    taxId
+    ontology: omicsType
+  }
+}
+    `;
+
+/**
+ * __useHumanGeneAutocompleteQuery__
+ *
+ * To run a query within a React component, call `useHumanGeneAutocompleteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHumanGeneAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHumanGeneAutocompleteQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHumanGeneAutocompleteQuery(baseOptions?: Apollo.QueryHookOptions<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>(HumanGeneAutocompleteDocument, options);
+      }
+export function useHumanGeneAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>(HumanGeneAutocompleteDocument, options);
+        }
+export type HumanGeneAutocompleteQueryHookResult = ReturnType<typeof useHumanGeneAutocompleteQuery>;
+export type HumanGeneAutocompleteLazyQueryHookResult = ReturnType<typeof useHumanGeneAutocompleteLazyQuery>;
+export type HumanGeneAutocompleteQueryResult = Apollo.QueryResult<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>;
 export const StudyOmicsDocument = gql`
     query studyOmics($studyId: Int!) {
   studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {

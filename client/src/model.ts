@@ -1,9 +1,4 @@
-import {
-    AnnotationGroup,
-    AnnotationGrpFragment,
-    AnnotationValue,
-    StudyBasicsFragment
-} from "./generated/types";
+import {AnnotationGrpFragment, AnnotationValue, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
 
@@ -23,6 +18,8 @@ export type Omics = {
     displayName: string;
     displaySymbol: string;
     value?: string;
+    ontology?: string;
+    taxId?: number;
 }
 
 export type Study = StudyBasicsFragment & {

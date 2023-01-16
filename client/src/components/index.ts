@@ -13,12 +13,15 @@ import {DropdownItem} from "./DropdownItem/DropdownItem";
 import {OntologyBrowser} from "./OntologyBrowser/OntologyBrowser";
 import {OntologyTree} from "./OntologyBrowser/OntologyTree";
 import {UserGeneStore} from "./UserGeneStore/UserGeneStore";
+import {GeneSearchBar} from "./SearchBar/GeneSearchBar";
+import {MarkerCard} from "./MarkerCard/MarkerCard";
 
 export {
     DEGTable,
     NavBar,
     StudyCard,
     SearchBar,
+    GeneSearchBar,
     LeftSidePanel,
     RightSidePanel,
     AnnotationGroupSelectBox,
@@ -29,6 +32,6 @@ export {
     DropdownItem,
     OntologyBrowser,
     OntologyTree,
-    UserGeneStore
-
+    UserGeneStore,
+    MarkerCard
 }

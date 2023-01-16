@@ -6,7 +6,7 @@ import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheOb
 import {Container, MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import {createBrowserRouter, RouterProvider,} from "react-router-dom";
-import SearchResults from "./pages/SearchResults";
+import SingleStudy from "./pages/SingleStudy";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
 import ErrorPage from "./pages/ErrorPage";
@@ -14,6 +14,8 @@ import {NotificationsProvider} from '@mantine/notifications';
 import {ModalsProvider} from "@mantine/modals";
 import OntologySandbox from "./pages/OntologySandbox";
 import {StudyPage} from "./pages/StudyPage";
+import MarkerGeneSearch from "./pages/MarkerGeneSearch";
+import CrossStudySearch from "./pages/CrossStudySearch";
 
 export const apolloCache = new InMemoryCache();
 
@@ -29,7 +31,17 @@ const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <SearchResults/>,
+        element: <SingleStudy/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/markergene",
+        element: <MarkerGeneSearch/>,
+        errorElement: <ErrorPage/>,
+    },
+    {
+        path: "/crossstudy",
+        element: <CrossStudySearch/>,
         errorElement: <ErrorPage/>,
     },
     {
@@ -57,7 +69,7 @@ root.render(
                 <React.Suspense fallback={<GlobalLoading/>}>
                     <NotificationsProvider zIndex={10000000} position={'top-right'}>
                         <ModalsProvider>
-                            <Container style={{ padding:0}} fluid={true}>
+                            <Container style={{padding: 0}} fluid={true}>
                                 <RouterProvider router={router}/>
                             </Container>
                         </ModalsProvider>

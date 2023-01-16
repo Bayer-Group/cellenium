@@ -85,6 +85,46 @@ fragment StudyBasics on Study {
     }
 }
 
+fragment DifferentialMarker on DifferentialExpression {
+    annotationValueId
+    log2Foldchange
+    pvalueAdj
+    score
+    study{
+      studyName
+      studyId
+    }
+    annotationValue {
+      annotationGroup {
+        displayGroup
+      }
+      displayValue
+    }
+    omics {
+        displaySymbol
+        taxId
+        omicsId
+    }
+}
+
+query studiesWithMarkerGenes($omicsIds: [Int!]!) {
+  differentialExpressionsList(filter: {omicsId: {in: $omicsIds}}) {
+    ...DifferentialMarker
+  }
+}
+
+query humanGeneAutocomplete {
+  omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
+    displayName
+    displaySymbol
+    value:displaySymbol
+    omicsType
+    omicsId
+    taxId
+    ontology:omicsType
+  }
+}
+
 query studyOmics($studyId: Int!) {
     studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {
         omics{
@@ -100,6 +140,7 @@ query StudyBasics($studyId: Int!) {
      ...StudyBasics
   }
 }
+
 
 query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
   expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:UMAP) {

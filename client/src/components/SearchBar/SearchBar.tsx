@@ -1,11 +1,11 @@
 import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {useEffect, useState} from "react";
-import SearchBadge from "../SearchBadge/SearchBadge";
 import {IconBinaryTree, IconSearch, IconX} from "@tabler/icons";
-import { useAutocompleteLazyQuery} from "../../generated/types";
+import {useAutocompleteLazyQuery} from "../../generated/types";
 import {closeModal, openModal} from "@mantine/modals";
 import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
 import {OntologyItem} from "../../model";
+import SearchBadge from "../SearchBadge/SearchBadge";
 
 type OfferingItem = {
     value: string;
@@ -14,7 +14,7 @@ type OfferingItem = {
 }
 
 type Props = {
-    ontologies: Map<string,OntologyItem>;
+    ontologies?: Map<string, OntologyItem>;
 }
 
 function SearchBar({ontologies}: Props) {
@@ -59,6 +59,7 @@ function SearchBar({ontologies}: Props) {
         })
     }
 
+
     function handleFilterRemove(filter: OfferingItem) {
         let newFilters = selectedFilters.filter((f) => !((f.ontcode === filter.ontcode) && (f.ontology === f.ontology)))
         setSelectedFilters(newFilters)
@@ -66,20 +67,21 @@ function SearchBar({ontologies}: Props) {
     }
 
     function showOntologyBrowser() {
-        openModal({
+        if (ontologies) {
+            openModal({
+                modalId: 'ontologyBrowser',
+                title: 'Ontology browser',
+                children: <OntologyBrowser ontologyTrees={ontologies} handleAddOntologyItem={(item: OntologyItem) => {
+                    setSelectedFilters([...selectedFilters, {
+                        value: item.label,
+                        ontcode: item.id,
+                        ontology: item.ontology
+                    }]);
 
-            modalId: 'ontologyBrowser',
-            title: 'Ontology browser',
-            children: <OntologyBrowser ontologyTrees={ontologies} handleAddOntologyItem={(item: OntologyItem) => {
-                setSelectedFilters([...selectedFilters, {
-                    value: item.label,
-                    ontcode: item.id,
-                    ontology: item.ontology
-                }]);
-
-                closeModal('ontologyBrowser');
-            }}/>
-        })
+                    closeModal('ontologyBrowser');
+                }}/>
+            })
+        }
 
     }
 
@@ -94,8 +96,8 @@ function SearchBar({ontologies}: Props) {
                     Filter studies by disease, tissue, species, title/description
                 </Text>
 
-                <Group spacing={4} position={'left'} align={'center'}
-                       style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
+                < Group spacing={4} position={'left'} align={'center'}
+                        style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
                 >
                     {loading ? <Loader size={25} color={theme.colors.blue[5]}/> :
                         <IconSearch size={25} color={theme.colors.gray[3]}/>}
@@ -119,7 +121,7 @@ function SearchBar({ontologies}: Props) {
                             }}
                             data={offerings}
                             size="md"
-                            placeholder='lung, "multiple myelome", heart, mouse'
+                            placeholder={'lung, "multiple myelome", heart, mouse'}
                             rightSection={
                                 <ActionIcon onClick={() => {
                                     setValue('');
