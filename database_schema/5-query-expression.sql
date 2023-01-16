@@ -114,25 +114,48 @@ CREATE AGGREGATE boxplot(real) (
 
 
 -- box plot calculated in the database:
-drop view if exists expression_by_annotation_boxplot;
-create view expression_by_annotation_boxplot
+drop view if exists expression_by_annotation;
+create view expression_by_annotation
 as
 with sample_annotation as (select ssa.study_id, av.annotation_group_id, ssa.annotation_value_id, study_sample_id
                            from study_sample_annotation ssa
                                     join annotation_value av on ssa.annotation_value_id = av.annotation_value_id
                                     cross join unnest(ssa.study_sample_ids) as study_sample_id)
-select e.study_layer_id,
+select sl.study_id,
+       e.study_layer_id,
        e.omics_id,
        sa.annotation_group_id,
        sa.annotation_value_id,
-       array_agg(val_value) values,
-       boxplot(val_value)
+       array_agg(val_value)                                       values,
+       boxplot(val_value)                                         boxplot_params,
+       percentile_cont(0.75) within group (order by val_value) as q3,
+       count(1) :: real /
+       (select cardinality(ssa.study_sample_ids) sample_count
+        from study_sample_annotation ssa
+        where sl.study_id = ssa.study_id
+          and ssa.annotation_value_id = sa.annotation_value_id)   expr_cells_fraction
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
          cross join unnest(e.values) with ordinality as val(val_value, val_i)
          cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
          join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sampleid_v
 where val_i = sampleid_i
-group by e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
+group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
 
--- select * from expression_by_annotation_boxplot where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;
+-- select * from expression_by_annotation where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;
+
+drop view if exists expression_by_celltype;
+create view expression_by_celltype
+as
+select study_id,
+       study_layer_id,
+       omics_id,
+       e.annotation_value_id,
+       av.display_value celltype,
+       q3,
+       expr_cells_fraction
+from expression_by_annotation e
+         join annotation_value av on e.annotation_value_id = av.annotation_value_id
+where e.annotation_group_id = (select annotation_group_id from annotation_group where h5ad_column = 'CellO_celltype');
+
+-- select * from expression_by_celltype where omics_id =8356;

@@ -34,12 +34,12 @@ As an alternative, the list of values can be retrieved.
 This is just a GraphQL example, the query isn't included in the cellenium frontend.
 
 ```gql
-query ExpressionByAnnotation {
-  expressionByAnnotationBoxplotsList(
+query ExpressionBoxplotByAnnotation {
+  expressionByAnnotationsList(
     filter: {omicsId: {in: [1, 2]}, studyLayerId: {equalTo: 1}, annotationGroupId: {equalTo: 1}}
   ) {
     annotationValueId
-    boxplot {
+    boxplotParams {
       n
       q1Whisker
       q1
@@ -52,6 +52,26 @@ query ExpressionByAnnotation {
   }
 }
 ```
+
+### Expression Data For Cross-Study Cell Type Bubble Plot
+
+The cell type vs study bubble chart shows a gene's expression in multiple studies, grouped by the
+standardized cell type annotation (using the CellO cell type prediction for consistent annotation).
+
+```gql
+query ExpressionByCelltype {
+  expressionByCelltypesList(
+    filter: { omicsId: { in: [1, 2] }, studyId: { in: [1, 2] } }
+  ) {
+    celltype
+    studyId
+    omicsId
+    q3
+    exprCellsFraction
+  }
+}
+```
+
 
 ### Violin plot (server side generated)
 
