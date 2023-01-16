@@ -248,6 +248,8 @@ def import_study(filename: str) -> int:
             import_study_layer_expression(study_id, layer_name, adata_genes_df, adata_samples_df, adata)
 
         connection.execute(text("UPDATE study SET visible=True WHERE study_id=:study_id"), {'study_id': study_id})
+        logging.info("updating postgres statistics...")
+        connection.execute(text("call _analyze_schema()"))
         return study_id
 
 
