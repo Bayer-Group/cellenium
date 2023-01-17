@@ -1,12 +1,5 @@
-import React, {useState} from 'react';
-import {createStyles, Navbar, Stack, Title, Tooltip, UnstyledButton} from '@mantine/core';
-import {ReactComponent as StudyAnalysisIcon} from "../../icons/study_analysis.svg";
-import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
-import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
-import {ReactComponent as CompareAnnotationsIcon} from "../../icons/annotation_comparison.svg";
-import {ReactComponent as UserAnnotationIcon} from "../../icons/user_annotation.svg";
-
-import {ReactComponent as CelleniumLogo} from "../../images/logo.svg";
+import React from 'react';
+import {createStyles, Navbar, Stack} from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -23,14 +16,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-    children?: JSX.Element[]|JSX.Element;
+    children?: JSX.Element[] | JSX.Element;
 }
 
-function RightSidePanel({children}:Props) {
+function RightSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
 
     return (
-        <Navbar height={'100vh'} width={{sm: 300}} >
+        <Navbar height={'100vh'} width={{sm: 300}} style={{overflowY: 'scroll'}}>
             <Navbar.Section grow className={classes.wrapper}>
                 <Stack className={classes.main} spacing={'md'} p={10}>
                     {children}
