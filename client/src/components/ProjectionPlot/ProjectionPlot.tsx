@@ -107,7 +107,11 @@ const ProjectionPlot = ({
         if (!study || !expressionTable || !annotationProjectionData || colorBy !== 'expression') {
             return undefined;
         }
-        const joinedTable = expressionTable.join(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId').reify();
+        // right join: we want to plot all cells, even those without expression data for this gene (set to 0 for plotting)
+        const joinedTable = expressionTable
+            .join_right(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId')
+            .impute({value: () => 0})
+            .reify();
         return {
             type: 'scattergl',
             x: joinedTable.array('projectionX', Float32Array),
@@ -118,7 +122,7 @@ const ProjectionPlot = ({
                 size: 3,
                 opacity: 0.7,
                 color: joinedTable.array('value', Float32Array),
-                colorscale: 'YlGnBu',
+                colorscale: 'Viridis',
                 reversescale: true,
                 colorbar: {
                     tickfont: {
@@ -177,7 +181,7 @@ const ProjectionPlot = ({
             showlegend: false,
             hoverinfo: 'none'
         } as Partial<Plotly.PlotData>;
-    }, [study,  annotationProjectionData, expressionTable, selectedGenes]);
+    }, [study, annotationProjectionData, expressionTable, selectedGenes]);
 
 
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
@@ -232,7 +236,7 @@ const ProjectionPlot = ({
                       }}
                       onHover={onHover}
                       onClick={onClick}
-                      onUnhover={()=>setHighlightAnnotation(-1)}
+                      onUnhover={() => setHighlightAnnotation(-1)}
         />);
     } else {
         return (<div>no plot</div>)
