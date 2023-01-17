@@ -1,23 +1,30 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {useEffect, useState} from "react";
 import {IconSearch, IconX} from "@tabler/icons";
-import {useHumanGeneAutocompleteQuery, useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
+import {useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
 import {Omics} from "../../model";
 import SearchBadge from "../SearchBadge/SearchBadge";
 import _ from 'lodash';
+import {useRecoilValue} from "recoil";
+import {allGenesState} from "../../atoms";
 
 const sortAlphaNum = (a: Omics, b: Omics) => a.displaySymbol.localeCompare(b.displaySymbol, 'en', {numeric: true})
 
 interface Props {
-    handleNewFilters: Function;
+    humanOnly: boolean,
+    handleNewFilters?: Function;
+    onGeneSelection?: (omicsIds: number[]) => void;
 }
 
-function GeneSearchBar({handleNewFilters}: Props) {
+function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
+    // either just a gene input (onGeneSelection parameter is used) or
+    // also providing the studies that include the gene as differentially expressed (handleNewFilters parameter)
+
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<Omics[]>([]);
     const [selectedFilters, setSelectedFilters] = useState<Omics[]>([]);
-    const {data, error, loading} = useHumanGeneAutocompleteQuery()
+    const allGenes = useRecoilValue(allGenesState) || new Map();
     const [getCellTypes, {
         data: markerData,
         error: markerError,
@@ -26,18 +33,22 @@ function GeneSearchBar({handleNewFilters}: Props) {
 
     function handleSubmit(item: AutocompleteItem) {
         setValue('');
-        let newFilters = [...selectedFilters, item as Omics]
-        setSelectedFilters(newFilters)
-        getCellTypes({
-            variables: {
-                omicsIds: newFilters.map((ele) => ele.omicsId)
-            }
-        })
+        let newFilters = [...selectedFilters, item as Omics];
+        setSelectedFilters(newFilters);
+        onGeneSelection && onGeneSelection(newFilters.map(f => f.omicsId));
+        if (handleNewFilters) {
+            getCellTypes({
+                variables: {
+                    omicsIds: newFilters.map((ele) => ele.omicsId)
+                }
+            })
+        }
     }
 
     useEffect(() => {
-        if (markerData)
-            handleNewFilters(markerData.differentialExpressionsList)
+        if (markerData) {
+            handleNewFilters && handleNewFilters(markerData.differentialExpressionsList);
+        }
     }, [markerData])
 
     function handleChange(input: string) {
@@ -47,8 +58,10 @@ function GeneSearchBar({handleNewFilters}: Props) {
             return
         }
 
-        const newOfferings = _.uniqBy(data?.omicsBasesList
+        const newOfferings = _.uniqBy(Array.from(allGenes.values())
             .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))
+            .filter(gene => humanOnly === false || gene.taxId === 9606)
+            .map(gene => ({...gene, value: gene.displaySymbol, ontology: gene.omicsType}))
             .sort(sortAlphaNum), 'displaySymbol').slice(0, 20);
         if (newOfferings !== undefined)
             setOfferings(newOfferings)
@@ -61,10 +74,10 @@ function GeneSearchBar({handleNewFilters}: Props) {
         let newFilters = selectedFilters.filter((f) => !((f.omicsId === filter.omicsId)));
         if (newFilters.length > 0) {
             setSelectedFilters(newFilters)
-            handleNewFilters(newFilters)
+            handleNewFilters && handleNewFilters(newFilters)
         } else {
             setSelectedFilters([])
-            handleNewFilters([])
+            handleNewFilters && handleNewFilters([])
         }
 
         setOfferings([])
@@ -81,7 +94,7 @@ function GeneSearchBar({handleNewFilters}: Props) {
                 < Group spacing={4} position={'left'} align={'center'}
                         style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
                 >
-                    {loading ? <Loader variant={'dots'} size={25} color={theme.colors.gray[5]}/> :
+                    {!allGenes ? <Loader variant={'dots'} size={25} color={theme.colors.gray[5]}/> :
                         <IconSearch size={25} color={theme.colors.gray[3]}/>}
                     <Group spacing={2}>
                         {selectedFilters.map((filter) => {
@@ -111,7 +124,7 @@ function GeneSearchBar({handleNewFilters}: Props) {
                                     setValue('');
                                     setOfferings([]);
                                     setSelectedFilters([]);
-                                    handleNewFilters([]);
+                                    handleNewFilters && handleNewFilters([]);
                                 }
                                 }>
                                     <IconX/>

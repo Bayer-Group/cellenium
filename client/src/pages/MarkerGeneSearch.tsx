@@ -17,7 +17,7 @@ const MarkerGeneSearch = () => {
             <NavBar/>
             <Space h="xl"/>
             <Container size={'xl'} style={{paddingBottom: '2rem'}}>
-                <GeneSearchBar handleNewFilters={setSearchResults}/>
+                <GeneSearchBar humanOnly={false} handleNewFilters={setSearchResults}/>
             </Container>
             <Container size={'xl'}>
 
