@@ -87,8 +87,8 @@ function SearchBar({ontologies}: Props) {
 
     return (
         <Group position={'left'} align={'flex-end'} spacing={4}>
-            <ActionIcon onClick={showOntologyBrowser} size={'xl'} variant={'light'}>
-                <IconBinaryTree/>
+            <ActionIcon onClick={showOntologyBrowser} size={'xl'} variant={'default'}>
+                <IconBinaryTree color={'lightgray'}/>
             </ActionIcon>
 
             <Stack spacing={0} style={{flexGrow: 1}}>
