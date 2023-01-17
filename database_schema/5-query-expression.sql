@@ -21,17 +21,15 @@ begin
     -- and use the else branch in this case
     if p_subsampling_projection is not null then
         return query select e.omics_id,
-                            array_agg(sampleid_v order by val_i) study_sample_ids,
-                            array_agg(val_value order by val_i)  values
+                            array_agg(sample_id order by sample_id) study_sample_ids,
+                            array_agg(value order by sample_id)     values
                      from expression e
                               join study_layer sl on sl.study_layer_id = e.study_layer_id
-                              cross join unnest(e.values) with ordinality as val(val_value, val_i)
-                              cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
+                              cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
                               join study_sample_projection sp
-                                   on sp.study_id = sl.study_id and sp.study_sample_id = val_i and
+                                   on sp.study_id = sl.study_id and sp.study_sample_id = sample_id and
                                       sp.projection_type = p_subsampling_projection and sp.display_subsampling = True
-                     where val_i = sampleid_i
-                       and e.study_layer_id = p_study_layer_id
+                     where e.study_layer_id = p_study_layer_id
                        and e.omics_id = any (p_omics_ids)
                      group by e.study_layer_id, e.omics_id;
     else
@@ -51,6 +49,7 @@ $$;
 select * from expression_by_omics_ids(1, array [1,116], null);
 select * from expression_by_omics_ids(1, array [1,116], 'umap');
 */
+
 
 DROP AGGREGATE IF EXISTS boxplot(real) CASCADE;
 DROP FUNCTION IF EXISTS _final_boxplot(a real[]);
@@ -114,7 +113,7 @@ CREATE AGGREGATE boxplot(real) (
 
 
 -- box plot calculated in the database:
-drop view if exists expression_by_annotation;
+drop view if exists expression_by_annotation cascade;
 create view expression_by_annotation
 as
 with sample_annotation as (select ssa.study_id, av.annotation_group_id, ssa.annotation_value_id, study_sample_id
@@ -126,20 +125,20 @@ select sl.study_id,
        e.omics_id,
        sa.annotation_group_id,
        sa.annotation_value_id,
-       array_agg(val_value)                                       values,
-       boxplot(val_value)                                         boxplot_params,
-       percentile_cont(0.75) within group (order by val_value) as q3,
+       array_agg(value)                                         values,
+       boxplot(value)                                           boxplot_params,
+       percentile_cont(0.75) within group (order by value) as   q3,
        count(1) :: real /
        (select cardinality(ssa.study_sample_ids) sample_count
         from study_sample_annotation ssa
         where sl.study_id = ssa.study_id
-          and ssa.annotation_value_id = sa.annotation_value_id)   expr_cells_fraction
+          and ssa.annotation_value_id = sa.annotation_value_id) expr_cells_fraction
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
-         cross join unnest(e.values) with ordinality as val(val_value, val_i)
-         cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
-         join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sampleid_v
-where val_i = sampleid_i
+         cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
+    --          cross join unnest(e.values) with ordinality as val(val_value, val_i)
+--          cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
+         join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sample_id
 group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
 
 -- select * from expression_by_annotation where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;
