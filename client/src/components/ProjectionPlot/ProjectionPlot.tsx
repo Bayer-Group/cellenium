@@ -81,7 +81,10 @@ const ProjectionPlot = ({
     }, [study, annotationProjectionData, colorBy]);
 
     const annotationHighlightTrace = React.useMemo(() => {
-        if (!study || !annotationProjectionData || highlightAnnotation === 0) {
+        // Don't show the hovered cluster highlight in the expression view - the small expressionTrace points
+        // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
+        // causes flickering and web browser halt for large datasets.
+        if (!study || !annotationProjectionData || highlightAnnotation === 0 || colorBy !== 'annotation') {
             return undefined;
         }
         const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({highlightAnnotation}).filter((d: any, p: any) => d.annotationValueId === p.highlightAnnotation);
@@ -160,7 +163,7 @@ const ProjectionPlot = ({
                 size: 10,
                 opacity: 1,
                 color: joinedTable.array('value', Float32Array),
-                colorscale: 'YlGnBu',
+                colorscale: 'Viridis',
                 reversescale: true,
                 colorbar: {
                     tickfont: {
@@ -236,7 +239,7 @@ const ProjectionPlot = ({
                       }}
                       onHover={onHover}
                       onClick={onClick}
-                      onUnhover={() => setHighlightAnnotation(-1)}
+                      onUnhover={() => setHighlightAnnotation(0)}
         />);
     } else {
         return (<div>no plot</div>)
