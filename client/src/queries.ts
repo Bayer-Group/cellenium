@@ -113,15 +113,18 @@ query studiesWithMarkerGenes($omicsIds: [Int!]!) {
   }
 }
 
-query humanGeneAutocomplete {
-  omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
+fragment OmicsGene on OmicsBase{
     displayName
     displaySymbol
-    value:displaySymbol
-    omicsType
     omicsId
     taxId
-    ontology:omicsType
+}
+
+query allGenes {
+  omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
+    ...OmicsGene
+    # value:displaySymbol
+    # ontology:omicsType
   }
 }
 
@@ -178,4 +181,16 @@ query ontologies {
     }
 }
 
+query expressionByCelltype($omicsIds: [Int!]!) {
+  expressionByCelltypesList(
+    filter: { omicsId: { in: $omicsIds } }
+    # , studyId: { in: [1, 2] }
+  ) {
+    celltype
+    studyId
+    omicsId
+    q3
+    exprCellsFraction
+  }
+}
 `;

@@ -1,10 +1,18 @@
 import {atom, selector} from "recoil";
 import {Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable} from "./model";
 import {apolloClient} from "./index";
-import {StudyBasicsDocument, StudyBasicsFragment, StudyBasicsQuery, StudyBasicsQueryVariables} from "./generated/types";
+import {
+    AllGenesDocument,
+    AllGenesQuery, AllGenesQueryVariables,
+    OmicsGeneFragment,
+    StudyBasicsDocument,
+    StudyBasicsFragment,
+    StudyBasicsQuery,
+    StudyBasicsQueryVariables
+} from "./generated/types";
 import * as aq from 'arquero';
 
-export const useGeneStoreCounterColor = atom <string>({
+export const useGeneStoreCounterColor = atom<string>({
     key: 'usergenestorecountercolor',
     default: 'blue'
 })
@@ -141,4 +149,17 @@ export const studyState = selector<Study | undefined>({
 export const pageState = atom<string>({
     key: "page",
     default: "CellMarkerAnalysis"
+});
+
+export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
+    key: "allGenesState",
+    get: async ({get}) => {
+        const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
+            query: AllGenesDocument,
+            fetchPolicy: 'no-cache'
+        });
+        if (allGenes?.data) {
+            return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
+        }
+    }
 });

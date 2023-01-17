@@ -1961,72 +1961,168 @@ export enum DifferentialExpressionsOrderBy {
   StudyIdDesc = 'STUDY_ID_DESC'
 }
 
-export type ExpressionByAnnotationBoxplot = {
-  __typename?: 'ExpressionByAnnotationBoxplot';
+export type ExpressionByAnnotation = {
+  __typename?: 'ExpressionByAnnotation';
   annotationGroupId: Maybe<Scalars['Int']>;
   annotationValueId: Maybe<Scalars['Int']>;
-  boxplot: Maybe<BoxplotValue>;
+  boxplotParams: Maybe<BoxplotValue>;
+  exprCellsFraction: Maybe<Scalars['Float']>;
   omicsId: Maybe<Scalars['Int']>;
+  q3: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
   studyLayerId: Maybe<Scalars['Int']>;
   values: Maybe<Array<Maybe<Scalars['Float']>>>;
 };
 
 /**
- * A condition to be used against `ExpressionByAnnotationBoxplot` object types. All
- * fields are tested for equality and combined with a logical ‘and.’
+ * A condition to be used against `ExpressionByAnnotation` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
  */
-export type ExpressionByAnnotationBoxplotCondition = {
+export type ExpressionByAnnotationCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
   annotationValueId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `boxplot` field. */
-  boxplot: InputMaybe<BoxplotValueInput>;
+  /** Checks for equality with the object’s `boxplotParams` field. */
+  boxplotParams: InputMaybe<BoxplotValueInput>;
+  /** Checks for equality with the object’s `exprCellsFraction` field. */
+  exprCellsFraction: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
   omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `q3` field. */
+  q3: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyLayerId` field. */
   studyLayerId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `values` field. */
   values: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
 };
 
-/** A filter to be used against `ExpressionByAnnotationBoxplot` object types. All fields are combined with a logical ‘and.’ */
-export type ExpressionByAnnotationBoxplotFilter = {
+/** A filter to be used against `ExpressionByAnnotation` object types. All fields are combined with a logical ‘and.’ */
+export type ExpressionByAnnotationFilter = {
   /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
+  and: InputMaybe<Array<ExpressionByAnnotationFilter>>;
   /** Filter by the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<IntFilter>;
   /** Filter by the object’s `annotationValueId` field. */
   annotationValueId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `boxplot` field. */
-  boxplot: InputMaybe<BoxplotValueFilter>;
+  /** Filter by the object’s `boxplotParams` field. */
+  boxplotParams: InputMaybe<BoxplotValueFilter>;
+  /** Filter by the object’s `exprCellsFraction` field. */
+  exprCellsFraction: InputMaybe<FloatFilter>;
   /** Negates the expression. */
-  not: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
+  not: InputMaybe<ExpressionByAnnotationFilter>;
   /** Filter by the object’s `omicsId` field. */
   omicsId: InputMaybe<IntFilter>;
   /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
+  or: InputMaybe<Array<ExpressionByAnnotationFilter>>;
+  /** Filter by the object’s `q3` field. */
+  q3: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyLayerId` field. */
   studyLayerId: InputMaybe<IntFilter>;
   /** Filter by the object’s `values` field. */
   values: InputMaybe<FloatListFilter>;
 };
 
-/** Methods to use when ordering `ExpressionByAnnotationBoxplot`. */
-export enum ExpressionByAnnotationBoxplotsOrderBy {
+/** Methods to use when ordering `ExpressionByAnnotation`. */
+export enum ExpressionByAnnotationsOrderBy {
   AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
   AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
   AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
-  BoxplotAsc = 'BOXPLOT_ASC',
-  BoxplotDesc = 'BOXPLOT_DESC',
+  BoxplotParamsAsc = 'BOXPLOT_PARAMS_ASC',
+  BoxplotParamsDesc = 'BOXPLOT_PARAMS_DESC',
+  ExprCellsFractionAsc = 'EXPR_CELLS_FRACTION_ASC',
+  ExprCellsFractionDesc = 'EXPR_CELLS_FRACTION_DESC',
   Natural = 'NATURAL',
   OmicsIdAsc = 'OMICS_ID_ASC',
   OmicsIdDesc = 'OMICS_ID_DESC',
+  Q3Asc = 'Q3_ASC',
+  Q3Desc = 'Q3_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
   StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
   StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
   ValuesAsc = 'VALUES_ASC',
   ValuesDesc = 'VALUES_DESC'
+}
+
+export type ExpressionByCelltype = {
+  __typename?: 'ExpressionByCelltype';
+  annotationValueId: Maybe<Scalars['Int']>;
+  celltype: Maybe<Scalars['String']>;
+  exprCellsFraction: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  q3: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyLayerId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `ExpressionByCelltype` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type ExpressionByCelltypeCondition = {
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `celltype` field. */
+  celltype: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `exprCellsFraction` field. */
+  exprCellsFraction: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `q3` field. */
+  q3: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyLayerId` field. */
+  studyLayerId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `ExpressionByCelltype` object types. All fields are combined with a logical ‘and.’ */
+export type ExpressionByCelltypeFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ExpressionByCelltypeFilter>>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `celltype` field. */
+  celltype: InputMaybe<StringFilter>;
+  /** Filter by the object’s `exprCellsFraction` field. */
+  exprCellsFraction: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ExpressionByCelltypeFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ExpressionByCelltypeFilter>>;
+  /** Filter by the object’s `q3` field. */
+  q3: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyLayerId` field. */
+  studyLayerId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `ExpressionByCelltype`. */
+export enum ExpressionByCelltypesOrderBy {
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  CelltypeAsc = 'CELLTYPE_ASC',
+  CelltypeDesc = 'CELLTYPE_DESC',
+  ExprCellsFractionAsc = 'EXPR_CELLS_FRACTION_ASC',
+  ExprCellsFractionDesc = 'EXPR_CELLS_FRACTION_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  Q3Asc = 'Q3_ASC',
+  Q3Desc = 'Q3_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
+  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC'
 }
 
 export type ExpressionByOmic = {
@@ -3506,8 +3602,10 @@ export type Query = Node & {
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
-  /** Reads a set of `ExpressionByAnnotationBoxplot`. */
-  expressionByAnnotationBoxplotsList: Maybe<Array<ExpressionByAnnotationBoxplot>>;
+  /** Reads a set of `ExpressionByAnnotation`. */
+  expressionByAnnotationsList: Maybe<Array<ExpressionByAnnotation>>;
+  /** Reads a set of `ExpressionByCelltype`. */
+  expressionByCelltypesList: Maybe<Array<ExpressionByCelltype>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList: Maybe<Array<ExpressionByOmic>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -3785,12 +3883,22 @@ export type QueryDifferentialExpressionsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryExpressionByAnnotationBoxplotsListArgs = {
-  condition: InputMaybe<ExpressionByAnnotationBoxplotCondition>;
-  filter: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
+export type QueryExpressionByAnnotationsListArgs = {
+  condition: InputMaybe<ExpressionByAnnotationCondition>;
+  filter: InputMaybe<ExpressionByAnnotationFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<ExpressionByAnnotationBoxplotsOrderBy>>;
+  orderBy: InputMaybe<Array<ExpressionByAnnotationsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryExpressionByCelltypesListArgs = {
+  condition: InputMaybe<ExpressionByCelltypeCondition>;
+  filter: InputMaybe<ExpressionByCelltypeFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ExpressionByCelltypesOrderBy>>;
 };
 
 
@@ -5970,10 +6078,12 @@ export type StudiesWithMarkerGenesQueryVariables = Exact<{
 
 export type StudiesWithMarkerGenesQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number } }> };
 
-export type HumanGeneAutocompleteQueryVariables = Exact<{ [key: string]: never; }>;
+export type OmicsGeneFragment = { __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsId: number, taxId: number };
+
+export type AllGenesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HumanGeneAutocompleteQuery = { __typename?: 'Query', omicsBasesList: Array<{ __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsType: OmicsType, omicsId: number, taxId: number, value: string, ontology: OmicsType }> };
+export type AllGenesQuery = { __typename?: 'Query', omicsBasesList: Array<{ __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsId: number, taxId: number }> };
 
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -6031,6 +6141,13 @@ export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
+
+export type ExpressionByCelltypeQueryVariables = Exact<{
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type ExpressionByCelltypeQuery = { __typename?: 'Query', expressionByCelltypesList: Array<{ __typename?: 'ExpressionByCelltype', celltype: string, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
 
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
@@ -6118,6 +6235,14 @@ export const DifferentialMarkerFragmentDoc = gql`
     taxId
     omicsId
   }
+}
+    `;
+export const OmicsGeneFragmentDoc = gql`
+    fragment OmicsGene on OmicsBase {
+  displayName
+  displaySymbol
+  omicsId
+  taxId
 }
     `;
 export const OntologyOverviewFragmentDoc = gql`
@@ -6244,46 +6369,40 @@ export function useStudiesWithMarkerGenesLazyQuery(baseOptions?: Apollo.LazyQuer
 export type StudiesWithMarkerGenesQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesQuery>;
 export type StudiesWithMarkerGenesLazyQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesLazyQuery>;
 export type StudiesWithMarkerGenesQueryResult = Apollo.QueryResult<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>;
-export const HumanGeneAutocompleteDocument = gql`
-    query humanGeneAutocomplete {
+export const AllGenesDocument = gql`
+    query allGenes {
   omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
-    displayName
-    displaySymbol
-    value: displaySymbol
-    omicsType
-    omicsId
-    taxId
-    ontology: omicsType
+    ...OmicsGene
   }
 }
-    `;
+    ${OmicsGeneFragmentDoc}`;
 
 /**
- * __useHumanGeneAutocompleteQuery__
+ * __useAllGenesQuery__
  *
- * To run a query within a React component, call `useHumanGeneAutocompleteQuery` and pass it any options that fit your needs.
- * When your component renders, `useHumanGeneAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAllGenesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllGenesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHumanGeneAutocompleteQuery({
+ * const { data, loading, error } = useAllGenesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useHumanGeneAutocompleteQuery(baseOptions?: Apollo.QueryHookOptions<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>) {
+export function useAllGenesQuery(baseOptions?: Apollo.QueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>(HumanGeneAutocompleteDocument, options);
+        return Apollo.useQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
       }
-export function useHumanGeneAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>) {
+export function useAllGenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>(HumanGeneAutocompleteDocument, options);
+          return Apollo.useLazyQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
         }
-export type HumanGeneAutocompleteQueryHookResult = ReturnType<typeof useHumanGeneAutocompleteQuery>;
-export type HumanGeneAutocompleteLazyQueryHookResult = ReturnType<typeof useHumanGeneAutocompleteLazyQuery>;
-export type HumanGeneAutocompleteQueryResult = Apollo.QueryResult<HumanGeneAutocompleteQuery, HumanGeneAutocompleteQueryVariables>;
+export type AllGenesQueryHookResult = ReturnType<typeof useAllGenesQuery>;
+export type AllGenesLazyQueryHookResult = ReturnType<typeof useAllGenesLazyQuery>;
+export type AllGenesQueryResult = Apollo.QueryResult<AllGenesQuery, AllGenesQueryVariables>;
 export const StudyOmicsDocument = gql`
     query studyOmics($studyId: Int!) {
   studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {
@@ -6557,3 +6676,42 @@ export function useOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type OntologiesQueryHookResult = ReturnType<typeof useOntologiesQuery>;
 export type OntologiesLazyQueryHookResult = ReturnType<typeof useOntologiesLazyQuery>;
 export type OntologiesQueryResult = Apollo.QueryResult<OntologiesQuery, OntologiesQueryVariables>;
+export const ExpressionByCelltypeDocument = gql`
+    query expressionByCelltype($omicsIds: [Int!]!) {
+  expressionByCelltypesList(filter: {omicsId: {in: $omicsIds}}) {
+    celltype
+    studyId
+    omicsId
+    q3
+    exprCellsFraction
+  }
+}
+    `;
+
+/**
+ * __useExpressionByCelltypeQuery__
+ *
+ * To run a query within a React component, call `useExpressionByCelltypeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionByCelltypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpressionByCelltypeQuery({
+ *   variables: {
+ *      omicsIds: // value for 'omicsIds'
+ *   },
+ * });
+ */
+export function useExpressionByCelltypeQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>(ExpressionByCelltypeDocument, options);
+      }
+export function useExpressionByCelltypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>(ExpressionByCelltypeDocument, options);
+        }
+export type ExpressionByCelltypeQueryHookResult = ReturnType<typeof useExpressionByCelltypeQuery>;
+export type ExpressionByCelltypeLazyQueryHookResult = ReturnType<typeof useExpressionByCelltypeLazyQuery>;
+export type ExpressionByCelltypeQueryResult = Apollo.QueryResult<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>;
