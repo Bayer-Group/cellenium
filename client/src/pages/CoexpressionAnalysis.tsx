@@ -39,14 +39,15 @@ const CoexpressionAnalysisPlot = () => {
     });
 
     if (loading) {
-        return <Center style={{height: '100vh', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
-                                                                        size={'xl'}/></Center>;
+        return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
+                                                                       size={'xl'}/></Center>;
 
     }
     if (!data?.correlationTrianglePlot) {
         return <></>;
     }
-    return <img src={data.correlationTrianglePlot}/>;
+    return <img style={{width: '100%', height: '100vh', overflow: 'hidden', objectFit: 'contain'}}
+                src={data.correlationTrianglePlot}/>;
 };
 
 
@@ -59,11 +60,11 @@ function CoexpressionAnalysis() {
     }
 
     return (
-        <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'}>
+        <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap={true}>
             <LeftSidePanel>
                 <AnnotationFilterDisplay/>
             </LeftSidePanel>
-            <main style={{paddingTop: '60px'}}>
+            <main style={{height: '100vh'}}>
                 <CoexpressionAnalysisPlot/>
             </main>
             <RightSidePanel>

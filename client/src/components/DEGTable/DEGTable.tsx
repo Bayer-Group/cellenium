@@ -139,7 +139,7 @@ const DEGTable = ({annotationId}: Props) => {
                            defaultSortFieldId={3}
                            defaultSortAsc={false}
                            customStyles={customStyles} fixedHeader
-                           fixedHeaderScrollHeight="100vh"
+                           fixedHeaderScrollHeight="100%"
                            noDataComponent={<Text>No data.</Text>}/>
             }
         </Stack>

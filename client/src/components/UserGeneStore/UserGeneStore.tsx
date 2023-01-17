@@ -45,7 +45,7 @@ const UserGeneStore = ({multiple = false, opened = false}: Props) => {
                         <Text size={'xs'} color={'dimmed'}>Remove all genes from store</Text>
 
                     </Group>
-                        {userGeneStore.map((omics) => {
+                        {[...userGeneStore].reverse().map((omics) => {
                             return (<Group align={'center'} position={'left'}>
                                 <UserGene multiple={multiple} gene={omics}></UserGene>
                             </Group>)
