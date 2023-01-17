@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
-import {Divider, Group, Loader, Stack, Text, Title} from "@mantine/core";
+import {Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme} from "@mantine/core";
 import {
     AnnotationFilterDisplay,
     AnnotationGroupSelectBox,
@@ -26,14 +26,15 @@ import {useExpressionViolinPlotQuery} from "../generated/types";
 const analysisTypes = [
     {value: 'violinplot', label: 'Violinplot'},
     {value: 'projection', label: 'Projectionplot'}
-/*
-{value: 'boxplot', label: 'Boxplot'},
-    {value: 'dot', label: 'Dotplot'},
+    /*
+    {value: 'boxplot', label: 'Boxplot'},
+        {value: 'dot', label: 'Dotplot'},
 
- */
+     */
 ]
 
 function ViolinPlot({omicsId}: { omicsId: number }) {
+    const theme = useMantineTheme();
     const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
@@ -52,7 +53,7 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
     if (data?.violinPlot) {
         return <img src={data.violinPlot}/>;
     }
-    return <div>{loading && <Loader size={25}/>}</div>
+    return <div>{loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/>}</div>
 }
 
 function ViolinPlots() {
@@ -68,6 +69,7 @@ function ViolinPlots() {
 
 
 function ProjectionPlots() {
+    const theme = useMantineTheme();
     const selectedGenes = useRecoilValue(selectedGenesState);
     const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
     const tablePerGene = useMemo(() => {
@@ -79,7 +81,8 @@ function ProjectionPlots() {
     }, [selectedGenes, table]);
 
     if (loading) {
-        return <div><Loader size={25}/></div>;
+        return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
+                                                                       size={25}/></Center>;
     }
 
     return <Stack>
@@ -122,7 +125,7 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop:60 }}
+            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop: 60}}
                   className={'plotContainer'}>
                 <Stack align={'center'} justify={'center'}>
                     {analysisType === 'violinplot' && <ViolinPlots/>}

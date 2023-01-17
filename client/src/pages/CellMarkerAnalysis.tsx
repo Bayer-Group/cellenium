@@ -7,7 +7,7 @@ import {
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import {Divider, Group, Loader, Space, Stack, Text} from "@mantine/core";
+import {Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
@@ -31,18 +31,18 @@ interface PreparedPlot {
 }
 
 function ProjectionPlotWithOptionalExpression() {
-
+    const theme = useMantineTheme();
     const selectedGenes = useRecoilValue(selectedGenesState);
     console.log({selectedGenes});
     const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
 
     if (loading) {
-        return <div><Loader size={25}/></div>;
+        return <div><Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/></div>;
     }
 
     return (<div>
         {table && <ProjectionPlot colorBy={'annotation'} expressionTable={table}/>}
-        {table===undefined && <ProjectionPlot colorBy={'annotation'} />}
+        {table === undefined && <ProjectionPlot colorBy={'annotation'}/>}
     </div>)
 }
 
@@ -80,7 +80,7 @@ function DifferentialExpressionAnalysis() {
             <RightSidePanel>
                 <Stack>
                     <Divider size={"xs"} label={'User gene store'}/>
-                    <UserGeneStore/>
+                    <UserGeneStore multiple={false}/>
                     <Space h={'xs'}/>
                     <Stack>
                         <Divider size={"xs"} label={'Differentially expressed genes'}/>

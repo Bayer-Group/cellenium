@@ -19,7 +19,7 @@ const UserGeneStore = ({multiple = false, opened = false}: Props) => {
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
     return (
         <Stack>
-            <AddGene/>
+            <AddGene multipleSelected={multiple}/>
             <Group onClick={() => setOpened(!storeOpened)} style={{cursor: 'pointer'}}>
                 <Group spacing={0}>
                     <ActionIcon size='xs' variant={'subtle'}>

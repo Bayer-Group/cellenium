@@ -81,7 +81,7 @@ function GeneSearchBar({handleNewFilters}: Props) {
                 < Group spacing={4} position={'left'} align={'center'}
                         style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
                 >
-                    {loading ? <Loader size={25} color={theme.colors.blue[5]}/> :
+                    {loading ? <Loader variant={'dots'} size={25} color={theme.colors.gray[5]}/> :
                         <IconSearch size={25} color={theme.colors.gray[3]}/>}
                     <Group spacing={2}>
                         {selectedFilters.map((filter) => {

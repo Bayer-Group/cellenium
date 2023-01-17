@@ -1,10 +1,11 @@
 import React from "react";
+import {Center, Loader} from "@mantine/core";
 
 function GlobalLoading() {
     return (
-        <div>
-            loading...
-        </div>
+        <Center style={{width: '100vw', height: '100vh'}}>
+            <Loader size={'xl'} color={'gray'} variant={'dots'}/>
+        </Center>
     );
 }
 

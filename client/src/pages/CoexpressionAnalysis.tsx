@@ -1,18 +1,14 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {Divider, Group, Loader, Space, Stack, Text} from "@mantine/core";
+import React from 'react';
+import {Center, Divider, Group, Loader, Stack, useMantineTheme} from "@mantine/core";
+import {AnnotationFilterDisplay, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
+import {useRecoilValue} from "recoil";
 import {
-    AddGene, AnnotationFilterDisplay,
-    LeftSidePanel,
-    RightSidePanel, UserGeneStore
-} from "../components";
-import UserGene from "../components/UserGene/UserGene";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {
-    annotationGroupIdState,
     selectedAnnotationFilterState,
-    selectedGenesState, studyIdState,
+    selectedGenesState,
+    studyIdState,
     studyLayerIdState,
-    studyState, userGenesState
+    studyState,
+    userGenesState
 } from "../atoms";
 import ColumnTable from 'arquero/dist/types/table/column-table';
 import {useExpressionCorrelationTrianglePlotQuery} from "../generated/types";
@@ -26,6 +22,7 @@ interface PreparedPlot {
 }
 
 const CoexpressionAnalysisPlot = () => {
+    const theme = useMantineTheme()
     const selectedGenes = useRecoilValue(selectedGenesState);
     const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
@@ -42,7 +39,9 @@ const CoexpressionAnalysisPlot = () => {
     });
 
     if (loading) {
-        return <Loader size={25}/>;
+        return <Center style={{height: '100vh', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
+                                                                        size={'xl'}/></Center>;
+
     }
     if (!data?.correlationTrianglePlot) {
         return <></>;
@@ -64,7 +63,7 @@ function CoexpressionAnalysis() {
             <LeftSidePanel>
                 <AnnotationFilterDisplay/>
             </LeftSidePanel>
-            <main>
+            <main style={{paddingTop: '60px'}}>
                 <CoexpressionAnalysisPlot/>
             </main>
             <RightSidePanel>

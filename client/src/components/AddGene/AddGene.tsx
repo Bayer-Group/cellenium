@@ -1,30 +1,23 @@
-import {
-    ActionIcon,
-    Autocomplete,
-    AutocompleteItem,
-    Group,
-    Stack,
-    Text,
-    TextInputProps,
-    useMantineTheme
-} from '@mantine/core';
+import {ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {FormEvent, useState} from "react";
 import {IconArrowRight, IconX} from "@tabler/icons";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
+import {selectedGenesState, studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
 import {showNotification} from '@mantine/notifications';
 import {useForm} from '@mantine/form';
 import * as aq from 'arquero';
 import {Omics} from "../../model";
 
+interface Props {
+    multipleSelected?: boolean;
+}
 
-
-
-function AddGene(props: TextInputProps) {
+function AddGene({multipleSelected = false}: Props) {
     const [offerings, setOfferings] = useState<Omics[]>([])
     const [value, setValue] = useState('');
     const theme = useMantineTheme();
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
+    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
     const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor)
     const study = useRecoilValue(studyState);
     const form = useForm();
@@ -50,9 +43,13 @@ function AddGene(props: TextInputProps) {
                 autoClose: 5000
             })
         } else {
+            if (multipleSelected)
+                setSelectedGenes([...selectedGenes, item]);
+            else
+                setSelectedGenes([item]);
             setUserGenes([...userGenes, item])
             setIndicatorColor('pink')
-            setTimeout(()=>{
+            setTimeout(() => {
                 setIndicatorColor('blue')
             }, 100)
         }
@@ -83,8 +80,11 @@ function AddGene(props: TextInputProps) {
                 autoClose: 5000
             })
         } else if (addGene.length === 1) {
-
-            setUserGenes([...userGenes, addGene[0]])
+            if (multipleSelected)
+                setSelectedGenes([...selectedGenes, ...addGene]);
+            else
+                setSelectedGenes(addGene);
+            setUserGenes([...userGenes, ...addGene])
         }
     }
 
@@ -117,7 +117,7 @@ function AddGene(props: TextInputProps) {
 
                 <ActionIcon onClick={(event) => {
                     handleSubmit(event);
-                }} size={36} style={{borderBottomLeftRadius: 0, borderTopLeftRadius:0 }}color={theme.primaryColor}
+                }} size={36} style={{borderBottomLeftRadius: 0, borderTopLeftRadius: 0}} color={theme.primaryColor}
                             variant="filled">
                     <IconArrowRight/>
                 </ActionIcon>
