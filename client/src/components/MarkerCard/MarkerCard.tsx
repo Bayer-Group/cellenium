@@ -1,41 +1,58 @@
 import React from 'react';
 import {DifferentialMarkerFragment} from "../../generated/types";
-import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from "@mantine/core";
-import {IconExternalLink} from "@tabler/icons";
-import {Link} from "react-router-dom";
+import {Badge, Card, Container, createStyles, Group, Spoiler, Stack, Text} from "@mantine/core";
+import {InlineFoldChangePlot} from "../InlineFoldChangePlot/InlineFoldChangePlot";
 
 interface Props {
     data: DifferentialMarkerFragment;
 }
 
+const useStyles = createStyles((theme) => ({
+    main: {
+        backgroundColor: "white",
+        cursor: 'pointer',
+        "&:hover": {
+            backgroundColor: theme.colors.gray[1]
+        }
+    }
+}));
+
 const MarkerCard = ({data}: Props) => {
+    const {classes, cx} = useStyles();
+
     return (
-        <Card shadow="sm" p="lg" radius="md" withBorder>
-            <Card.Section withBorder inheritPadding py="xs">
-                <Grid columns={12}>
-                    <Grid.Col span={8}>
-                        <Anchor component={Link} to={'/'} color={'dark'}>
-                            <Text align='left' lineClamp={1} sx={{textOverflow: 'ellipsis', overflow: 'hidden'}}
-                                  weight={800}>{data.annotationValue.displayValue}</Text>
-                        </Anchor>
-                    </Grid.Col>
-                    <Grid.Col span={4}>
-                        <Group position={'right'}>
-                            <Badge variant={'light'} color={'gray'}>{Math.round(100000 / 1000)}k
-                                cells</Badge>
-                            {/* eslint-disable-next-line react/jsx-no-undef */}
-                            <ActionIcon variant={'subtle'} onClick={() => {
-                                window.open("www.google.de", "_blank")
-                            }}>
-                                <IconExternalLink/>
-                            </ActionIcon>
-                        </Group>
-                    </Grid.Col>
-                </Grid>
+        <Card pr={0} onClick={() => alert(1)} shadow="sm" p="lg" radius="md" withBorder>
+            <Card.Section className={classes.main} withBorder inheritPadding py="xs">
+                <Group position={'apart'} spacing={'xs'} noWrap={true} pr={20}>
+                    <Stack spacing={4}>
+                        <Badge variant="outline">cell
+                            annotation</Badge>
+                        <Badge variant="outline">study</Badge>
+                    </Stack>
+                    <Stack spacing={4}>
+                        <Text fw={700} lineClamp={1}>{data.annotationValue.displayValue}</Text>
+                        <Text fw={700} lineClamp={1}>{data.study.studyName}</Text>
+                    </Stack>
+                </Group>
             </Card.Section>
-            <Text mt="sm" mb='sm' color="dimmed" size="sm" lineClamp={3} align={'left'}>
-                Lore Ipsum
-            </Text>
+            <Stack pt={10} pb={10}>
+                <Group position={'left'} spacing={'xs'} noWrap={true}>
+                    <Stack>
+                        <Text fw={700} size={'sm'}>Gene</Text>
+                        <Text size={'sm'} fw={700}>p-value (adjusted)</Text>
+                        <Text size={'sm'} fw={700}>log2FC</Text>
+                    </Stack>
+                    <Stack>
+                        <Text size={'sm'}>{data.omics.displaySymbol}</Text>
+                        <Text size={'sm'}>{data.pvalueAdj.toExponential(2)}</Text>
+                        <Text size={'sm'}>{data.log2Foldchange.toFixed(2)}</Text>
+                    </Stack>
+                    <Container>
+                        <InlineFoldChangePlot/>
+                    </Container>
+                </Group>
+            </Stack>
+
             <Card.Section withBorder inheritPadding py="xs">
                 <Spoiler maxHeight={19} showLabel={"Show more"} hideLabel={'hide'} style={{
                     fontSize: 12,

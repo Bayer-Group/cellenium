@@ -6211,7 +6211,10 @@ export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
 export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
 export const StudiesWithMarkerGenesDocument = gql`
     query studiesWithMarkerGenes($omicsIds: [Int!]!) {
-  differentialExpressionsList(filter: {omicsId: {in: $omicsIds}}) {
+  differentialExpressionsList(
+    filter: {omicsId: {in: $omicsIds}}
+    orderBy: LOG2_FOLDCHANGE_DESC
+  ) {
     ...DifferentialMarker
   }
 }

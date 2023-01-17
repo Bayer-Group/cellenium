@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
-import {StudyInfoFragment, TreeOntologyOverviewFragment, useStudiesQuery} from "../generated/types";
+import {StudyInfoFragment, useStudiesQuery} from "../generated/types";
 import {OntologyItem} from "../model";
 import {generateOntologyTrees} from "./helper";
 
@@ -9,10 +9,10 @@ import {generateOntologyTrees} from "./helper";
 const SingleStudy = () => {
     const {data, error, loading} = useStudiesQuery()
     const [ontologyTrees, setOntologyTrees] = useState<Map<string, OntologyItem>>();
-    useEffect(()=>{
+    useEffect(() => {
         if (data)
             setOntologyTrees(generateOntologyTrees(data.treeOntologiesList))
-    },[data])
+    }, [data])
     return (
         <Container fluid={true}>
             <NavBar/>

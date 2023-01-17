@@ -2,7 +2,7 @@ import React from 'react';
 import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from '@mantine/core';
 import {IconExternalLink} from "@tabler/icons";
 import {Link} from "react-router-dom";
-import {StudyInfoFragment, StudyOverviewOntology} from "../../generated/types";
+import {StudyInfoFragment} from "../../generated/types";
 
 
 const StudyCard = ({study}: { study: StudyInfoFragment }) => {
@@ -40,7 +40,7 @@ const StudyCard = ({study}: { study: StudyInfoFragment }) => {
                     fontSize: 12,
                 }}>
                     <Group position={'left'} spacing={3}>
-                        {study.studyOntologyList && study.studyOntologyList.map((item)=>{
+                        {study.studyOntologyList && study.studyOntologyList.map((item) => {
                             let badges = [<Badge/>]
                             return badges;
                         })}
