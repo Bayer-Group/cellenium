@@ -16,6 +16,7 @@ import {UserGeneStore} from "./UserGeneStore/UserGeneStore";
 import {GeneSearchBar} from "./SearchBar/GeneSearchBar";
 import {MarkerCard} from "./MarkerCard/MarkerCard";
 import {InlineFoldChangePlot} from "./InlineFoldChangePlot/InlineFoldChangePlot";
+import {SankeyPlot} from "./SankeyPlot/SankeyPlot";
 
 export {
     DEGTable,
@@ -35,5 +36,6 @@ export {
     OntologyTree,
     UserGeneStore,
     MarkerCard,
-    InlineFoldChangePlot
+    InlineFoldChangePlot,
+    SankeyPlot
 }
