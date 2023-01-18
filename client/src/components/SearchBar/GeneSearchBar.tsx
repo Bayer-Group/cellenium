@@ -107,7 +107,7 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                     </Group>
                     <div style={{flexGrow: 1}}>
                         <Autocomplete
-                            disabled={loading ? true : false}
+                            disabled={allGenes.size === 0}
                             onFocus={() => handleChange(value)}
                             onChange={handleChange}
                             onItemSubmit={handleSubmit}
