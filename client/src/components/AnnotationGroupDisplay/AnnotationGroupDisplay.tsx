@@ -1,20 +1,26 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Annotation} from "../Annotation/Annotation";
 import {Stack} from "@mantine/core";
-import {AnnotationGroup, AnnotationGrpFragment} from "../../generated/types";
-import {useRecoilState} from "recoil";
-import {highlightAnnotationState} from "../../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {annotationGroupIdState, highlightAnnotationState, studyState} from "../../atoms";
 
-type Props = {
-    annotationGroup: AnnotationGrpFragment|undefined;
-}
 
-function AnnotationGroupDisplay({annotationGroup}: Props) {
+function AnnotationGroupDisplay() {
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
+    const annotationGroupId = useRecoilValue(annotationGroupIdState);
+    const study = useRecoilValue(studyState);
+
+    if (!study || !annotationGroupId) {
+        return <></>;
+    }
+    let annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
+    console.log("HH", annotationGroupId)
     return (
-        <Stack spacing={2} onMouseLeave={()=>setHighlightAnnotation(0)}>
-            {annotationGroup && annotationGroup.annotationValuesList.map((annot) => {
-                return <Annotation key={annot.annotationValueId} label={annot.displayValue} sampleCount={annot.sampleCount} color={annot.color} annotationId={annot.annotationValueId}/>
+        <Stack spacing={2} onMouseLeave={() => setHighlightAnnotation(0)}>
+            {annotations !== undefined && annotations.map((annot) => {
+                return <Annotation key={annot.annotationValueId} label={annot.displayValue}
+                                   sampleCount={annot.sampleCount} color={annot.color}
+                                   annotationId={annot.annotationValueId}/>
             })}
         </Stack>
     );

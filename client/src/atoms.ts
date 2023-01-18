@@ -3,7 +3,8 @@ import {Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmics
 import {apolloClient} from "./index";
 import {
     AllGenesDocument,
-    AllGenesQuery, AllGenesQueryVariables,
+    AllGenesQuery,
+    AllGenesQueryVariables,
     OmicsGeneFragment,
     StudyBasicsDocument,
     StudyBasicsFragment,
@@ -12,6 +13,13 @@ import {
 } from "./generated/types";
 import * as aq from 'arquero';
 
+
+export const userGeneStoreOpenState = atom<boolean>(
+    {
+        key: 'usergenestoreopen',
+        default: false
+    }
+)
 export const useGeneStoreCounterColor = atom<string>({
     key: 'usergenestorecountercolor',
     default: 'blue'

@@ -235,7 +235,8 @@ const ProjectionPlot = ({
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
                       config={{
-                          responsive: true
+                          responsive: true,
+                          displayModeBar: false
                       }}
                       onHover={onHover}
                       onClick={onClick}

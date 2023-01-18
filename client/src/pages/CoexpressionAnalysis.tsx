@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Center, Divider, Group, Loader, Stack, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
-import {useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {
     selectedAnnotationFilterState,
     selectedGenesState,
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState
+    userGenesState,
+    userGeneStoreOpenState
 } from "../atoms";
 import ColumnTable from 'arquero/dist/types/table/column-table';
 import {useExpressionCorrelationTrianglePlotQuery} from "../generated/types";
@@ -27,6 +28,10 @@ const CoexpressionAnalysisPlot = () => {
     const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
     const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
+    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    useEffect(() => {
+        setOpened(true)
+    }, [])
 
     const {data, loading} = useExpressionCorrelationTrianglePlotQuery({
         variables: {
@@ -46,15 +51,20 @@ const CoexpressionAnalysisPlot = () => {
     if (!data?.correlationTrianglePlot) {
         return <></>;
     }
-    return <img style={{width: '100%', height: '100vh', overflow: 'hidden', objectFit: 'contain'}}
-                src={data.correlationTrianglePlot}/>;
+    return <Center style={{height: '100%', width: '100%'}}><img
+        style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', overflow: 'hidden'}}
+        src={data.correlationTrianglePlot}/></Center>;
 };
 
 
 function CoexpressionAnalysis() {
     const userGenes = useRecoilValue(userGenesState);
     const study = useRecoilValue(studyState);
+    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
 
+    useEffect(() => {
+        setOpened(true)
+    }, [])
     if (!study) {
         return <></>;
     }
@@ -70,7 +80,7 @@ function CoexpressionAnalysis() {
             <RightSidePanel>
                 <Stack>
                     <Divider size={"xs"} label={'User gene store'}/>
-                    <UserGeneStore multiple={true} opened={true}/>
+                    <UserGeneStore multiple={true}/>
                 </Stack>
             </RightSidePanel>
         </Group>

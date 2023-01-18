@@ -1,7 +1,7 @@
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useEffect} from 'react';
 import * as aq from 'arquero';
 import {useExpressionByOmicsIdsQuery} from "./generated/types";
-import {ExpressionTable, SelectBoxItem} from "./model";
+import {ExpressionTable} from "./model";
 import {useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
@@ -9,12 +9,12 @@ import {
     selectedAnnotationState,
     selectedGenesState,
     studyIdState,
-    studyLayerIdState, studyState
+    studyLayerIdState,
+    studyState
 } from "./atoms";
 import {useParams} from "react-router-dom";
 
 export function useExpressionValues(omicsIds: number[]) {
-    console.log({omicsIds})
     const studyLayerId = useRecoilValue(studyLayerIdState);
 
     const {data, loading} = useExpressionByOmicsIdsQuery({

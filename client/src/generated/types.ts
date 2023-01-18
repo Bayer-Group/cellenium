@@ -6149,14 +6149,14 @@ export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup
 
 export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: ProjectionType, studySampleId: Array<number>, projection: Array<number> }> };
 
-export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number } };
+export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
 export type StudiesWithMarkerGenesQueryVariables = Exact<{
   omicsIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
-export type StudiesWithMarkerGenesQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number } }> };
+export type StudiesWithMarkerGenesQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } }> };
 
 export type OmicsGeneFragment = { __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsId: number, taxId: number };
 
@@ -6228,6 +6228,14 @@ export type ExpressionByCelltypeQueryVariables = Exact<{
 
 
 export type ExpressionByCelltypeQuery = { __typename?: 'Query', expressionByCelltypesList: Array<{ __typename?: 'ExpressionByCelltype', celltype: string, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
+
+export type HalfAVolcanoQueryVariables = Exact<{
+  annotationValueId: Scalars['Int'];
+  studyId: Scalars['Int'];
+}>;
+
+
+export type HalfAVolcanoQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', log2Foldchange: number, pvalueAdj: number }> };
 
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
@@ -6307,6 +6315,7 @@ export const DifferentialMarkerFragmentDoc = gql`
   annotationValue {
     annotationGroup {
       displayGroup
+      annotationGroupId
     }
     displayValue
   }
@@ -6314,6 +6323,8 @@ export const DifferentialMarkerFragmentDoc = gql`
     displaySymbol
     taxId
     omicsId
+    omicsType
+    displayName
   }
 }
     `;
@@ -6800,3 +6811,42 @@ export function useExpressionByCelltypeLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ExpressionByCelltypeQueryHookResult = ReturnType<typeof useExpressionByCelltypeQuery>;
 export type ExpressionByCelltypeLazyQueryHookResult = ReturnType<typeof useExpressionByCelltypeLazyQuery>;
 export type ExpressionByCelltypeQueryResult = Apollo.QueryResult<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>;
+export const HalfAVolcanoDocument = gql`
+    query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
+  differentialExpressionsList(
+    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}
+  ) {
+    log2Foldchange
+    pvalueAdj
+  }
+}
+    `;
+
+/**
+ * __useHalfAVolcanoQuery__
+ *
+ * To run a query within a React component, call `useHalfAVolcanoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHalfAVolcanoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHalfAVolcanoQuery({
+ *   variables: {
+ *      annotationValueId: // value for 'annotationValueId'
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useHalfAVolcanoQuery(baseOptions: Apollo.QueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
+      }
+export function useHalfAVolcanoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
+        }
+export type HalfAVolcanoQueryHookResult = ReturnType<typeof useHalfAVolcanoQuery>;
+export type HalfAVolcanoLazyQueryHookResult = ReturnType<typeof useHalfAVolcanoLazyQuery>;
+export type HalfAVolcanoQueryResult = Apollo.QueryResult<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>;

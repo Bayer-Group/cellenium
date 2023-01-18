@@ -1,18 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {ActionIcon, Collapse, Group, Indicator, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AddGene} from "../AddGene/AddGene";
 import {IconChevronDown, IconChevronRight, IconTrashX} from "@tabler/icons";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {selectedGenesState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
+import {selectedGenesState, useGeneStoreCounterColor, userGenesState, userGeneStoreOpenState} from "../../atoms";
 import UserGene from "../UserGene/UserGene";
 
 interface Props {
     multiple?: boolean;
-    opened?: boolean;
 }
 
-const UserGeneStore = ({multiple = false, opened = false}: Props) => {
-    const [storeOpened, setOpened] = useState(opened);
+const UserGeneStore = ({multiple = false}: Props) => {
+    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
     const indicatorColor = useRecoilValue(useGeneStoreCounterColor);
     const theme = useMantineTheme()
     const [userGeneStore, setUserGeneStore] = useRecoilState(userGenesState);
@@ -20,7 +19,10 @@ const UserGeneStore = ({multiple = false, opened = false}: Props) => {
     return (
         <Stack>
             <AddGene multipleSelected={multiple}/>
-            <Group onClick={() => setOpened(!storeOpened)} style={{cursor: 'pointer'}}>
+            <Group onClick={() => {
+                console.log({storeOpened});
+                setOpened(!storeOpened)
+            }} style={{cursor: 'pointer'}}>
                 <Group spacing={0}>
                     <ActionIcon size='xs' variant={'subtle'}>
                         {storeOpened ? <IconChevronDown color={theme.colors.dark[9]}/> :
@@ -50,6 +52,7 @@ const UserGeneStore = ({multiple = false, opened = false}: Props) => {
                                 <UserGene multiple={multiple} gene={omics}></UserGene>
                             </Group>)
                         })}</Stack>}
+
             </Collapse>
 
 

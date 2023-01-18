@@ -97,6 +97,7 @@ fragment DifferentialMarker on DifferentialExpression {
     annotationValue {
       annotationGroup {
         displayGroup
+        annotationGroupId
       }
       displayValue
     }
@@ -104,6 +105,8 @@ fragment DifferentialMarker on DifferentialExpression {
         displaySymbol
         taxId
         omicsId
+        omicsType
+        displayName
     }
 }
 
@@ -193,4 +196,14 @@ query expressionByCelltype($omicsIds: [Int!]!) {
     exprCellsFraction
   }
 }
+query halfAVolcano($annotationValueId: Int!, $studyId:Int!) {
+  differentialExpressionsList(
+    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}
+  ) {
+    log2Foldchange
+    pvalueAdj
+  }
+}
+
+
 `;

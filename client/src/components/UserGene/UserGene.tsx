@@ -29,6 +29,7 @@ const UserGene = ({gene, multiple = false}: Props) => {
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
     const setPage = useSetRecoilState(pageState);
     const [showInfo, setShowInfo] = useState(false)
+
     function handleRemove(gene: Omics) {
         // remove from geneStore
         let removed = geneStore.filter((g) => g.omicsId !== gene.omicsId)
@@ -66,13 +67,14 @@ const UserGene = ({gene, multiple = false}: Props) => {
                     <ActionIcon
                         className={cx(classes.main, {[classes.active]: selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0})}
                         onClick={() => handleColorClick(gene)} variant="subtle" size={'xs'} mr={5}>
-                        <IconEye style={{color: 'green'}}
-                                 color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0) ? 'white' : 'gray'}/>
+                        <IconEye
+                            color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0) ? 'white' : 'gray'}/>
                     </ActionIcon>
                 </Grid.Col>
                 <Grid.Col span={1}>
                     <Tooltip label={`${gene.displayName}`} opened={showInfo}>
-                        <ActionIcon variant={'subtle'} size={'xs'} onClick={()=>setShowInfo((o)=>!o)} onMouseLeave={()=>setShowInfo(false)}>
+                        <ActionIcon variant={'subtle'} size={'xs'} onClick={() => setShowInfo((o) => !o)}
+                                    onMouseLeave={() => setShowInfo(false)}>
                             <IconInfoCircle/>
                         </ActionIcon>
                     </Tooltip>

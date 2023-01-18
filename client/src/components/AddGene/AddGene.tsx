@@ -2,7 +2,13 @@ import {ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useManti
 import React, {FormEvent, useState} from "react";
 import {IconArrowRight, IconX} from "@tabler/icons";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {selectedGenesState, studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
+import {
+    selectedGenesState,
+    studyState,
+    useGeneStoreCounterColor,
+    userGenesState,
+    userGeneStoreOpenState
+} from "../../atoms";
 import {showNotification} from '@mantine/notifications';
 import {useForm} from '@mantine/form';
 import * as aq from 'arquero';
@@ -19,6 +25,8 @@ function AddGene({multipleSelected = false}: Props) {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
     const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor)
+    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+
     const study = useRecoilValue(studyState);
     const form = useForm();
 
@@ -52,6 +60,7 @@ function AddGene({multipleSelected = false}: Props) {
             setTimeout(() => {
                 setIndicatorColor('blue')
             }, 100)
+            setOpened(true)
         }
 
     }
@@ -85,6 +94,7 @@ function AddGene({multipleSelected = false}: Props) {
             else
                 setSelectedGenes(addGene);
             setUserGenes([...userGenes, ...addGene])
+            setOpened(true)
         }
     }
 

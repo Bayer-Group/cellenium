@@ -9,7 +9,13 @@ import {
 } from "../components";
 import {Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState} from "../atoms";
+import {
+    annotationGroupIdState,
+    selectedAnnotationState,
+    selectedGenesState,
+    studyState,
+    userGenesState
+} from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
 
@@ -33,7 +39,6 @@ interface PreparedPlot {
 function ProjectionPlotWithOptionalExpression() {
     const theme = useMantineTheme();
     const selectedGenes = useRecoilValue(selectedGenesState);
-    console.log({selectedGenes});
     const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
 
     if (loading) {
@@ -50,28 +55,22 @@ function DifferentialExpressionAnalysis() {
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
+    const [userGenes, setUserGenes] = useRecoilState(userGenesState);
+
     const study = useRecoilValue(studyState);
-
-
     useEffect(() => {
-        setSelectedGenes([])
+        if (selectedGenes.length > 1)
+            setSelectedGenes(selectedGenes.slice(0, 1))
     }, [])
-
     if (!study) {
         return <></>;
     }
-
     return (
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'}>
             <LeftSidePanel>
                 <Stack>
-                    <AnnotationGroupSelectBox changeHandler={(value: number) => {
-                        setAnnotationGroupId(value);
-                        setSelectedAnnotation(undefined);
-                    }}/>
-                    {annotationGroupId && study?.annotationGroupMap.get(annotationGroupId) !== undefined &&
-                        <AnnotationGroupDisplay
-                            annotationGroup={study.annotationGroupMap.get(annotationGroupId)}/>}
+                    <AnnotationGroupSelectBox/>
+                    {annotationGroupId && <AnnotationGroupDisplay/>}
                 </Stack>
             </LeftSidePanel>
             <main>

@@ -1,16 +1,14 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {Select} from '@mantine/core';
-import {useMemo, useState} from "react";
 import {SelectBoxItem} from "../../model";
-import {useRecoilValue} from "recoil";
-import {studyState} from "../../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {annotationGroupIdState, studyState} from "../../atoms";
 
-type Props = {
-    changeHandler: Function;
-}
 
-function AnnotationGroupSelectBox({changeHandler}: Props) {
+function AnnotationGroupSelectBox() {
     const study = useRecoilValue(studyState);
+    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+
     const annotations: SelectBoxItem[] = useMemo(() => {
         const anns: SelectBoxItem[] = [];
         if (study) {
@@ -24,12 +22,12 @@ function AnnotationGroupSelectBox({changeHandler}: Props) {
         return anns;
     }, [study]);
 
-    const [value, setValue] = useState<string | null>(annotations[0].value);
+    const [value, setValue] = useState<string | undefined>(annotationGroupId !== undefined ? annotationGroupId.toString() : annotations[0].value);
 
     function update(value: string | null) {
         if (value) {
             setValue(value)
-            changeHandler(parseInt(value))
+            setAnnotationGroupId(parseInt(value))
         }
     }
 
@@ -37,7 +35,7 @@ function AnnotationGroupSelectBox({changeHandler}: Props) {
         <Select
             value={value} onChange={(value) => update(value)}
             label="Select annotation group"
-            labelProps={{size:'xs'}}
+            labelProps={{size: 'xs'}}
             placeholder="Pick one"
             transitionDuration={80}
             transitionTimingFunction="ease"

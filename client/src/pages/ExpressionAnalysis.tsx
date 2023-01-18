@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
 import {Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme} from "@mantine/core";
@@ -17,7 +17,8 @@ import {
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState
+    userGenesState,
+    userGeneStoreOpenState
 } from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
@@ -97,6 +98,10 @@ function ProjectionPlots() {
 const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    useEffect(() => {
+        setOpened(true)
+    }, [])
 
     // const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
     const userGenes = useRecoilValue(userGenesState);
@@ -108,9 +113,7 @@ const ExpressionAnalysis = () => {
     }
     const showAnnotationSelectors = (
         <div>
-            <AnnotationGroupSelectBox changeHandler={(value: number) => {
-                setAnnotationGroupId(value);
-            }}/>
+            <AnnotationGroupSelectBox/>
             <Divider my="sm"/>
             <AnnotationFilterDisplay/>
         </div>
@@ -138,7 +141,7 @@ const ExpressionAnalysis = () => {
             <RightSidePanel>
                 <Stack>
                     <Divider size={"xs"} label={'User gene store'}/>
-                    <UserGeneStore multiple={true} opened={true}/>
+                    <UserGeneStore multiple={true}/>
                 </Stack>
             </RightSidePanel>
         </Group>
