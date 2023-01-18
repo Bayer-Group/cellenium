@@ -36,15 +36,15 @@ const UserGeneStore = ({multiple = false}: Props) => {
             </Group>
             <Collapse in={storeOpened} transitionDuration={0} transitionTimingFunction="linear">
                 {userGeneStore.length === 0 ? <Text size={'xs'} color={'dimmed'}>No genes added yet.</Text> :
-                    <Stack> <Group>
+                    <Stack> <Group position={'left'} spacing={'xs'}>
+                        <Text size={'xs'} color={'dimmed'}>Remove all genes from store</Text>
                         <ActionIcon size={'xs'} onClick={() => {
                             setSelectedGenes([]);
                             setUserGeneStore([]);
-
                         }}>
                             <IconTrashX/>
                         </ActionIcon>
-                        <Text size={'xs'} color={'dimmed'}>Remove all genes from store</Text>
+
 
                     </Group>
                         {[...userGeneStore].reverse().map((omics) => {

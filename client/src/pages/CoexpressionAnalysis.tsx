@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Center, Divider, Group, Loader, Stack, useMantineTheme} from "@mantine/core";
+import {Center, Divider, Group, Loader, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -49,10 +49,13 @@ const CoexpressionAnalysisPlot = () => {
 
     }
     if (!data?.correlationTrianglePlot) {
-        return <></>;
+        return <Center style={{height: '100%', width: '100%'}}><Text color={'dimmed'} size={'md'}>Please select at least
+            2 genes
+            from the gene
+            store.</Text></Center>;
     }
     return <Center style={{height: '100%', width: '100%'}}><img
-        style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', overflow: 'hidden'}}
+        style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', objectFit: 'fill', overflow: 'hidden'}}
         src={data.correlationTrianglePlot}/></Center>;
 };
 
@@ -66,7 +69,7 @@ function CoexpressionAnalysis() {
         setOpened(true)
     }, [])
     if (!study) {
-        return <></>;
+        return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={'gray'}/> </Center>;
     }
 
     return (

@@ -1,19 +1,25 @@
-import React, {useMemo} from 'react';
-import {SelectItem, Stack, Text} from "@mantine/core";
+import React from 'react';
+import {ActionIcon, Group, Stack, Text} from "@mantine/core";
 import AnnotationFilterSelectBox from "./AnnotationFilterSelectBox";
-import {SelectBoxItem} from "../../model";
-import {useRecoilValue} from "recoil";
-import {studyState} from "../../atoms";
-import AnnotationFilter from "./AnnotationFilter";
+import {IconTrash} from "@tabler/icons";
+import {useRecoilState} from "recoil";
+import {selectedAnnotationFilterState} from "../../atoms";
 
 const AnnotationFilterDisplay = () => {
-
+    const [selectedAnnotationFilter, setSelectedAnnotationFilter] = useRecoilState(selectedAnnotationFilterState);
     return (
         <Stack spacing={0}>
-            <Text size={'xs'}>Filter out cells with attribute(s)</Text>
+            <Group align={'center'} position={'apart'} noWrap={true}><Text size={'xs'}>Filter out cells with
+                annotation(s)</Text>
+                <ActionIcon size={'xs'} onClick={() => {
+                    setSelectedAnnotationFilter([])
+                }}>
+                    <IconTrash/>
+                </ActionIcon>
+            </Group>
             <AnnotationFilterSelectBox/>
         </Stack>
     );
 };
 
-export  {AnnotationFilterDisplay};
+export {AnnotationFilterDisplay};

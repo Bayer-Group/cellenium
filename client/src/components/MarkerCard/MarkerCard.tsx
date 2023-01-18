@@ -48,29 +48,31 @@ const MarkerCard = ({data}: Props) => {
     return (
         <Card pr={0} onClick={() => showGeneInStudy()} shadow="sm" p="lg" radius="md" withBorder>
             <Card.Section className={classes.main} withBorder inheritPadding py="xs">
-                <Group position={'apart'} spacing={'xs'} noWrap={true} pr={20}>
-                    <Stack spacing={4} justify={'flex-end'} align={'flex-end'}>
-                        <Text fw={700}>Cell
+                <Group position={'left'} spacing={'xs'} noWrap={true} pr={20}>
+                    <Stack spacing={4} justify={'flex-end'} align={'flex-start'} style={{minWidth: 90}}>
+                        <Text span fw={100} lineClamp={(1)} size={'xs'}>Cell
                             annotation</Text>
-                        <Text fw={700}>Study</Text>
+                        <Text fw={100} size={'xs'}>Study</Text>
                     </Stack>
-                    <Stack spacing={4} justify={'flex-end'}>
-                        <Text fw={700} lineClamp={1}>{data.annotationValue.displayValue}</Text>
-                        <Text fw={700} lineClamp={1}>{data.study.studyName}</Text>
+                    <Stack spacing={4} justify={'flex-start'}>
+                        <Text fw={700}
+                              lineClamp={1}
+                              size={'xs'}>{`${data.annotationValue.displayValue} (${data.annotationValue.annotationGroup.displayGroup})`}</Text>
+                        <Text fw={700} lineClamp={1} size={'xs'}>{data.study.studyName}</Text>
                     </Stack>
                 </Group>
             </Card.Section>
             <Stack pt={10} pb={10}>
                 <Group position={'left'} spacing={'xs'} noWrap={true}>
-                    <Stack align={'flex-end'}>
-                        <Text fw={700} size={'sm'}>Gene</Text>
-                        <Text size={'sm'} fw={700}>p-value (adj.)</Text>
-                        <Text size={'sm'} fw={700}>log2FC</Text>
+                    <Stack align={'flex-start'}>
+                        <Text fw={100} size={'xs'}>Gene</Text>
+                        <Text size={'xs'} fw={100} lineClamp={1}>p-value (adj.)</Text>
+                        <Text size={'xs'} fw={100}>log2FC</Text>
                     </Stack>
                     <Stack>
-                        <Text size={'sm'}>{data.omics.displaySymbol}</Text>
-                        <Text size={'sm'}>{data.pvalueAdj.toExponential(2)}</Text>
-                        <Text size={'sm'}>{data.log2Foldchange.toFixed(2)}</Text>
+                        <Text size={'xs'} fw={700}>{data.omics.displaySymbol}</Text>
+                        <Text size={'xs'} fw={700}>{data.pvalueAdj.toExponential(2)}</Text>
+                        <Text size={'xs'} fw={700}>{data.log2Foldchange.toFixed(2)}</Text>
                     </Stack>
                     <Container>
                         <InlineFoldChangePlot studyId={data.study.studyId} annotationValueId={data.annotationValueId}
