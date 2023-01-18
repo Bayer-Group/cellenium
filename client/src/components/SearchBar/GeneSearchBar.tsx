@@ -57,16 +57,15 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
             setValue('')
             return
         }
-
         const newOfferings = _.uniqBy(Array.from(allGenes.values())
             .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))
             .filter(gene => humanOnly === false || gene.taxId === 9606)
-            .map(gene => ({...gene, value: gene.displaySymbol, ontology: gene.omicsType}))
-            .sort(sortAlphaNum), 'displaySymbol').slice(0, 20);
+            .sort(sortAlphaNum), 'displaySymbol').slice(0, 20).map((gene) => {
+            return {...gene, ontology: 'GENE', value: gene.displaySymbol}
+        });
         if (newOfferings !== undefined)
             setOfferings(newOfferings)
         setValue(input)
-
 
     }
 
@@ -107,7 +106,7 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                     </Group>
                     <div style={{flexGrow: 1}}>
                         <Autocomplete
-                            disabled={loading ? true : false}
+                            disabled={markerLoading ? true : false}
                             onFocus={() => handleChange(value)}
                             onChange={handleChange}
                             onItemSubmit={handleSubmit}

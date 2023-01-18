@@ -123,8 +123,8 @@ fragment OmicsGene on OmicsBase{
 query allGenes {
   omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
     ...OmicsGene
-    # value:displaySymbol
-    # ontology:omicsType
+    value:displaySymbol
+    ontology:omicsType
   }
 }
 

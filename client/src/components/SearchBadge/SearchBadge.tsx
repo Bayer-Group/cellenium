@@ -27,7 +27,7 @@ const SearchBadge = ({onRemove, item}: Props) => {
                 color = 'violet'//theme.colors.violet[5];
                 break;
             case 'GENE':
-                color = 'yellow';
+                color = 'pink';
                 break;
             default:
                 color = 'gray'//theme.colors.gray[5];

@@ -24,12 +24,12 @@ const MarkerCard = ({data}: Props) => {
         <Card pr={0} onClick={() => alert(1)} shadow="sm" p="lg" radius="md" withBorder>
             <Card.Section className={classes.main} withBorder inheritPadding py="xs">
                 <Group position={'apart'} spacing={'xs'} noWrap={true} pr={20}>
-                    <Stack spacing={4}>
+                    <Stack spacing={4} justify={'flex-end'}>
                         <Badge variant="outline">cell
                             annotation</Badge>
                         <Badge variant="outline">study</Badge>
                     </Stack>
-                    <Stack spacing={4}>
+                    <Stack spacing={4} justify={'flex-end'}>
                         <Text fw={700} lineClamp={1}>{data.annotationValue.displayValue}</Text>
                         <Text fw={700} lineClamp={1}>{data.study.studyName}</Text>
                     </Stack>

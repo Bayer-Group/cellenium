@@ -23,7 +23,8 @@ const MarkerGeneSearch = () => {
 
                 <Grid>
                     {(searchResults.length > 0) && searchResults.map((sr: DifferentialMarkerFragment) => {
-                        return <Grid.Col span={4} key={`${sr.study}_${sr.annotationValue}`}><MarkerCard
+                        return <Grid.Col span={4}
+                                         key={`${sr.study.studyName}_${sr.annotationValue.displayValue}`}><MarkerCard
                             data={sr}/></Grid.Col>
                     })}
                 </Grid>
