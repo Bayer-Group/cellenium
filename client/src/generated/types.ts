@@ -203,6 +203,30 @@ export type AnnotationValueCondition = {
   h5AdValue: InputMaybe<Scalars['String']>;
 };
 
+/** The return type of our `annotationValueCoocurrence` query. */
+export type AnnotationValueCoocurrenceRecord = {
+  __typename?: 'AnnotationValueCoocurrenceRecord';
+  annotationValueId1: Maybe<Scalars['Int']>;
+  annotationValueId2: Maybe<Scalars['Int']>;
+  occurrence: Maybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `AnnotationValueCoocurrenceRecord` object types. All fields are combined with a logical ‘and.’ */
+export type AnnotationValueCoocurrenceRecordFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<AnnotationValueCoocurrenceRecordFilter>>;
+  /** Filter by the object’s `annotationValueId1` field. */
+  annotationValueId1: InputMaybe<IntFilter>;
+  /** Filter by the object’s `annotationValueId2` field. */
+  annotationValueId2: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<AnnotationValueCoocurrenceRecordFilter>;
+  /** Filter by the object’s `occurrence` field. */
+  occurrence: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<AnnotationValueCoocurrenceRecordFilter>>;
+};
+
 /** A filter to be used against `AnnotationValue` object types. All fields are combined with a logical ‘and.’ */
 export type AnnotationValueFilter = {
   /** Checks for all expressions in this list. */
@@ -3648,6 +3672,7 @@ export type Query = Node & {
   annotationValueByNodeId: Maybe<AnnotationValue>;
   /** Reads a set of `AnnotationValueCombinationSampleCount`. */
   annotationValueCombinationSampleCountsList: Maybe<Array<AnnotationValueCombinationSampleCount>>;
+  annotationValueCoocurrenceList: Maybe<Array<Maybe<AnnotationValueCoocurrenceRecord>>>;
   /** Reads a set of `AnnotationValue`. */
   annotationValuesList: Maybe<Array<AnnotationValue>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
@@ -3833,6 +3858,17 @@ export type QueryAnnotationValueCombinationSampleCountsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValueCombinationSampleCountsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryAnnotationValueCoocurrenceListArgs = {
+  annotationGroupId1: InputMaybe<Scalars['Int']>;
+  annotationGroupId2: InputMaybe<Scalars['Int']>;
+  filter: InputMaybe<AnnotationValueCoocurrenceRecordFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -6237,6 +6273,15 @@ export type HalfAVolcanoQueryVariables = Exact<{
 
 export type HalfAVolcanoQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', log2Foldchange: number, pvalueAdj: number }> };
 
+export type AnnotationValueCoocurrenceQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  annotationGroupId1: Scalars['Int'];
+  annotationGroupId2: Scalars['Int'];
+}>;
+
+
+export type AnnotationValueCoocurrenceQuery = { __typename?: 'Query', annotationValueCoocurrenceList: Array<{ __typename?: 'AnnotationValueCoocurrenceRecord', annotationValueId1: number, annotationValueId2: number, occurrence: number }> };
+
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
   studyId
@@ -6850,3 +6895,46 @@ export function useHalfAVolcanoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type HalfAVolcanoQueryHookResult = ReturnType<typeof useHalfAVolcanoQuery>;
 export type HalfAVolcanoLazyQueryHookResult = ReturnType<typeof useHalfAVolcanoLazyQuery>;
 export type HalfAVolcanoQueryResult = Apollo.QueryResult<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>;
+export const AnnotationValueCoocurrenceDocument = gql`
+    query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
+  annotationValueCoocurrenceList(
+    studyId: $studyId
+    annotationGroupId1: $annotationGroupId1
+    annotationGroupId2: $annotationGroupId2
+  ) {
+    annotationValueId1
+    annotationValueId2
+    occurrence
+  }
+}
+    `;
+
+/**
+ * __useAnnotationValueCoocurrenceQuery__
+ *
+ * To run a query within a React component, call `useAnnotationValueCoocurrenceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAnnotationValueCoocurrenceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAnnotationValueCoocurrenceQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      annotationGroupId1: // value for 'annotationGroupId1'
+ *      annotationGroupId2: // value for 'annotationGroupId2'
+ *   },
+ * });
+ */
+export function useAnnotationValueCoocurrenceQuery(baseOptions: Apollo.QueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
+      }
+export function useAnnotationValueCoocurrenceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
+        }
+export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceQuery>;
+export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceLazyQuery>;
+export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>;
