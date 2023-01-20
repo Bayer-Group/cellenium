@@ -1,10 +1,10 @@
 import React from 'react';
-import SingleStudy from "./pages/SingleStudy";
+import StudyList from "./pages/StudyList";
 
 function App() {
   return (
     <div className="App">
-      <SingleStudy/>
+      <StudyList/>
     </div>
   );
 }

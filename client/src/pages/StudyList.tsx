@@ -6,7 +6,7 @@ import {OntologyItem} from "../model";
 import {generateOntologyTrees} from "./helper";
 
 
-const SingleStudy = () => {
+const StudyList = () => {
     const {data, error, loading} = useStudiesQuery()
     const [ontologyTrees, setOntologyTrees] = useState<Map<string, OntologyItem>>();
     useEffect(() => {
@@ -32,4 +32,4 @@ const SingleStudy = () => {
     );
 };
 
-export default SingleStudy;
+export default StudyList;

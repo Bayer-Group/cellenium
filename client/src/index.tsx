@@ -6,7 +6,7 @@ import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheOb
 import {Container, MantineProvider} from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import {createBrowserRouter, RouterProvider,} from "react-router-dom";
-import SingleStudy from "./pages/SingleStudy";
+import StudyList from "./pages/StudyList";
 import {GlobalLoading} from "./pages/GlobalLoading";
 import {RecoilRoot} from "recoil";
 import ErrorPage from "./pages/ErrorPage";
@@ -31,7 +31,7 @@ const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <SingleStudy/>,
+        element: <StudyList/>,
         errorElement: <ErrorPage/>,
     },
     {
