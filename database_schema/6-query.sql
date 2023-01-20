@@ -1,4 +1,4 @@
-DROP FUNCTION annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_value_id_2 int);
+DROP FUNCTION IF EXISTS annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_value_id_2 int);
 CREATE OR REPLACE FUNCTION annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_group_id_2 int)
     RETURNS TABLE
             (
