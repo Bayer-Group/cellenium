@@ -26,6 +26,7 @@ export type Study = StudyBasicsFragment & {
     samplesProjectionTable: SamplesProjectionTable;
     samplesAnnotationTable: SamplesAnnotationTable;
     studyOmicsTable: StudyOmicsTable;
+    studyOmicsMap: Map<number, Omics>;
     annotationGroupMap: Map<number, AnnotationGrpFragment>;
     annotationValueMap: Map<number, AnnotationValue>;
 };

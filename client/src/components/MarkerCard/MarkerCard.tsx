@@ -1,16 +1,8 @@
 import React from 'react';
 import {DifferentialMarkerFragment} from "../../generated/types";
-import {Badge, Card, Container, createStyles, Group, Spoiler, Stack, Text} from "@mantine/core";
+import {Badge, Card, Container, createStyles, Group, Spoiler, Stack, Text, Anchor} from "@mantine/core";
 import {InlineFoldChangePlot} from "../InlineFoldChangePlot/InlineFoldChangePlot";
-import {useRecoilState} from "recoil";
-import {
-    annotationGroupIdState,
-    pageState,
-    selectedAnnotationState,
-    selectedGenesState,
-    userGenesState
-} from "../../atoms";
-import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 interface Props {
     data: DifferentialMarkerFragment;
@@ -29,24 +21,9 @@ const useStyles = createStyles((theme) => ({
 
 const MarkerCard = ({data}: Props) => {
     const {classes, cx} = useStyles();
-    const [page, setPage] = useRecoilState(pageState);
-    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
-    const [userGenes, setUserGenes] = useRecoilState(userGenesState)
-    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-    const navigate = useNavigate();
-
-    function showGeneInStudy() {
-        setPage('CellMarkerAnalysis');
-        setUserGenes([data.omics]);
-        setSelectedGenes([data.omics]);
-        setAnnotationGroupId(data.annotationValue.annotationGroup.annotationGroupId)
-        setSelectedAnnotation(data.annotationValueId);
-        navigate(`/study/${data.study.studyId}`);
-    }
-
+    const newStudyUrl = `/study/${data.study.studyId}?page=CellMarkerAnalysis&annotationGroupId=${data.annotationValue.annotationGroup.annotationGroupId}&annotationValueId=${data.annotationValueId}&omicsId=${data.omics.omicsId}`;
     return (
-        <Card pr={0} onClick={() => showGeneInStudy()} shadow="sm" p="lg" radius="md" withBorder>
+        <Card pr={0} shadow="sm" p="lg" radius="md" withBorder component={Link} to={newStudyUrl}>
             <Card.Section className={classes.main} withBorder inheritPadding py="xs">
                 <Group position={'left'} spacing={'xs'} noWrap={true} pr={20}>
                     <Stack spacing={4} justify={'flex-end'} align={'flex-start'} style={{minWidth: 90}}>
