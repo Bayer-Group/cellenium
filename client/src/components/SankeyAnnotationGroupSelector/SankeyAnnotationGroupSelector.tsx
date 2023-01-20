@@ -30,7 +30,7 @@ function SankeyAnnotationGroupSelector({annotationGroups, value1, value2, handle
                 placeholder="Pick one"
                 transitionDuration={80}
                 transitionTimingFunction="ease"
-                data={annotationGroups}
+                data={annotationGroups.filter((ele)=>ele.value!==value1)}
             />
         </Stack>
     );

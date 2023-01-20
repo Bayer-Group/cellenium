@@ -6,12 +6,28 @@ import {SankeyAnnotationGroupSelector} from "../components/SankeyAnnotationGroup
 import {useRecoilValue} from "recoil";
 import {studyState} from "../atoms";
 import {SelectBoxItem} from "../model";
+import {showNotification} from "@mantine/notifications";
 
 const AnnotationComparison = () => {
     const study = useRecoilValue(studyState);
 
     const [value1, setValue1] = useState<string | undefined>();
     const [value2, setValue2] = useState<string | undefined>();
+
+    function handleChange1(value: string) {
+        if (value !== value2)
+            setValue1(value)
+        else {
+            showNotification({
+                title: 'Please choose two different annotation groups. ',
+                message: "Nice try!",
+                color: 'red',
+                autoClose: 2500
+            })
+        }
+
+    }
+
     const annotations: SelectBoxItem[] = useMemo(() => {
         const anns: SelectBoxItem[] = [];
         if (study) {
@@ -22,12 +38,17 @@ const AnnotationComparison = () => {
                 })
             });
         }
+        if (anns.length > 1) {
+            setValue1(anns[0].value);
+            setValue2(anns[1].value);
+        }
         return anns;
     }, [study]);
     return (
         <Group position={'apart'} noWrap>
             <LeftSidePanel>
-                <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={setValue1} value1={value1}
+                <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={handleChange1}
+                                               value1={value1}
                                                handleChange2={setValue2} value2={value2}/>
             </LeftSidePanel>
             <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop: 60}}>

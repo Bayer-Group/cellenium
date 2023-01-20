@@ -25,8 +25,6 @@ const SankeyPlot = ({
     })
     const sankeyData = useMemo(() => {
         if (data) {
-            console.log(annotationGroupId1, annotationValues1)
-            console.log(annotationGroupId2, annotationValues2)
             const nodes: any = []
             const vals1: number[] = [];
             const vals2: number[] = [];
