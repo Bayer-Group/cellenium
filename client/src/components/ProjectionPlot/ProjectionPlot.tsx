@@ -114,6 +114,7 @@ const ProjectionPlot = ({
         const joinedTable = expressionTable
             .join_right(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId')
             .impute({value: () => 0})
+            .orderby(['value'])
             .reify();
         return {
             type: 'scattergl',
@@ -152,7 +153,12 @@ const ProjectionPlot = ({
         if (!study || !expressionTable || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
         }
-        const joinedTable = expressionTable.join(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId').reify();
+        const joinedTable = expressionTable
+            .join(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId')
+            .orderby(['value'])
+            .reify();
+
+
         return {
             type: 'scattergl',
             x: joinedTable.array('projectionX', Float32Array),
@@ -160,10 +166,12 @@ const ProjectionPlot = ({
             customdata: joinedTable.array('annotationValueId', Int32Array),
             mode: 'markers',
             marker: {
-                size: 10,
+                size: 4,
                 opacity: 1,
                 color: joinedTable.array('value', Float32Array),
                 colorscale: 'Viridis',
+                cmin: 0,
+                cmax: Math.max(...joinedTable.array('value')),
                 reversescale: true,
                 colorbar: {
                     tickfont: {
