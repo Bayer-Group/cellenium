@@ -17,6 +17,7 @@ import {GeneSearchBar} from "./SearchBar/GeneSearchBar";
 import {MarkerCard} from "./MarkerCard/MarkerCard";
 import {InlineFoldChangePlot} from "./InlineFoldChangePlot/InlineFoldChangePlot";
 import {SankeyPlot} from "./SankeyPlot/SankeyPlot";
+import {SpeciesSelect} from "./SpeciesSelect/SpeciesSelect";
 
 export {
     DEGTable,
@@ -37,5 +38,6 @@ export {
     UserGeneStore,
     MarkerCard,
     InlineFoldChangePlot,
-    SankeyPlot
+    SankeyPlot,
+    SpeciesSelect
 }

@@ -7,6 +7,7 @@ import SearchBadge from "../SearchBadge/SearchBadge";
 import _ from 'lodash';
 import {useRecoilValue} from "recoil";
 import {allGenesState} from "../../atoms";
+import {SpeciesSelect} from "../SpeciesSelect/SpeciesSelect";
 
 const sortAlphaNum = (a: Omics, b: Omics) => a.displaySymbol.localeCompare(b.displaySymbol, 'en', {numeric: true})
 
@@ -84,14 +85,16 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
 
 
     return (
-        <Group position={'left'} align={'flex-end'} spacing={4}>
+        <Group position={'left'} align={'flex-end'} spacing={4} noWrap>
+            <SpeciesSelect/>
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
-                    Filter by human gene symbol(s)
+                    Enter gene symbol(s)
                 </Text>
 
                 < Group spacing={4} position={'left'} align={'center'}
-                        style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
+                        style={{'border': `1px ${theme.colors.gray[3]} solid`, borderRadius: 5, paddingLeft: 4}}
+                        noWrap
                 >
                     {!allGenes ? <Loader variant={'dots'} size={25} color={theme.colors.gray[5]}/> :
                         <IconSearch size={25} color={theme.colors.gray[3]}/>}
@@ -106,17 +109,20 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                     </Group>
                     <div style={{flexGrow: 1}}>
                         <Autocomplete
+                            style={{
+                                height: 40
+                            }}
                             disabled={allGenes.size === 0}
                             onFocus={() => handleChange(value)}
                             onChange={handleChange}
                             onItemSubmit={handleSubmit}
                             value={value}
                             variant='unstyled'
+                            data={offerings as AutocompleteItem[]}
                             styles={{
                                 label: {fontWeight: 500, fontSize: '0.8rem', display: 'inline-block'},
                             }}
-                            data={offerings as AutocompleteItem[]}
-                            size="md"
+                            size={'md'}
                             placeholder={'EGFR, KLK3, CDK2'}
                             rightSection={
                                 <ActionIcon onClick={() => {

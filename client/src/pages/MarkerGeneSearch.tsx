@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {MarkerCard, NavBar} from "../components";
-import {Container, Grid, Space, Text} from "@mantine/core";
+import {Center, Container, Grid, Space, Text} from "@mantine/core";
 import {GeneSearchBar} from "../components/SearchBar/GeneSearchBar";
 import {DifferentialMarkerFragment} from "../generated/types";
 
@@ -28,10 +28,11 @@ const MarkerGeneSearch = () => {
                             data={sr}/></Grid.Col>
                     })}
                 </Grid>
-                <Container size={'xl'}>
+                <Space h={'xl'}/>
+                <Center style={{'height': '100%', 'width': '100%'}} >
                     {searchResults.length === 0 &&
                         <Text color={'dimmed'}>Please enter your genes of interest.</Text>}
-                </Container>
+                </Center>
             </Container>
         </Container>
     );
