@@ -184,7 +184,7 @@ const ProjectionPlot = ({
             showlegend: false,
             hoverinfo: 'none'
         } as Partial<Plotly.PlotData>;
-    }, [study, annotationProjectionData, expressionTable, selectedGenes]);
+    }, [study, annotationProjectionData, expressionTable, colorBy]);
 
 
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
@@ -215,7 +215,7 @@ const ProjectionPlot = ({
                 },
             },
         }
-    }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace]);
+    }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace, selectedGeneExpressionTrace]);
 
     function onHover(event: Readonly<Plotly.PlotHoverEvent>) {
         if (event.points.length > 0 && event.points[0].customdata) {
