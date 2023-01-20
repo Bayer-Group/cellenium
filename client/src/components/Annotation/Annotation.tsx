@@ -20,9 +20,10 @@ type Props = {
     color: string;
     sampleCount: number;
     annotationId: number;
+    isSelectable: boolean;
 }
 
-function Annotation({label, color, sampleCount, annotationId}: Props) {
+function Annotation({label, color, sampleCount, annotationId, isSelectable=false}: Props) {
     const {classes, cx} = useStyles();
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
@@ -31,6 +32,8 @@ function Annotation({label, color, sampleCount, annotationId}: Props) {
         <Grid columns={12} pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
               onClick={() => {
+                  if (!isSelectable)
+                      return null
                   if (highlight === selected) {
                       setSelected(0)
                   } else {

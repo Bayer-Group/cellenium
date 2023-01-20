@@ -34,6 +34,7 @@ const ProjectionPlot = ({
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const [selected, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const selectedGenes = useRecoilState(selectedGenesState);
+    const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
 
     const annotationProjectionData = React.useMemo(() => {
         if (!study) {
@@ -233,6 +234,8 @@ const ProjectionPlot = ({
     };
 
     function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
+        if (!isSelectable)
+            return null;
         if (event.points.length > 0 && event.points[0].customdata) {
             const annotationValueId = event.points[0].customdata as number;
             setSelectedAnnotation(annotationValueId);

@@ -2,12 +2,13 @@ import React, {useMemo, useState} from 'react';
 import {Select} from '@mantine/core';
 import {SelectBoxItem} from "../../model";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {annotationGroupIdState, studyState} from "../../atoms";
+import {annotationGroupIdState, selectedAnnotationState, studyState} from "../../atoms";
 
 
 function AnnotationGroupSelectBox() {
     const study = useRecoilValue(studyState);
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
 
     const annotations: SelectBoxItem[] = useMemo(() => {
         const anns: SelectBoxItem[] = [];
@@ -28,6 +29,7 @@ function AnnotationGroupSelectBox() {
         if (value) {
             setValue(value)
             setAnnotationGroupId(parseInt(value))
+            setSelectedAnnotation(undefined)
         }
     }
 

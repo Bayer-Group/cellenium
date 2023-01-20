@@ -13,14 +13,15 @@ function AnnotationGroupDisplay() {
     if (!study || !annotationGroupId) {
         return <></>;
     }
-    let annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
-    console.log("HH", annotationGroupId)
+    const annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
+    const isSelectable = study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated;
     return (
         <Stack spacing={2} onMouseLeave={() => setHighlightAnnotation(0)}>
             {annotations !== undefined && annotations.map((annot) => {
                 return <Annotation key={annot.annotationValueId} label={annot.displayValue}
                                    sampleCount={annot.sampleCount} color={annot.color}
-                                   annotationId={annot.annotationValueId}/>
+                                   annotationId={annot.annotationValueId}
+                isSelectable={isSelectable as boolean}/>
             })}
         </Stack>
     );

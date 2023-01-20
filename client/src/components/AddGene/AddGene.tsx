@@ -5,8 +5,8 @@ import {useRecoilState, useRecoilValue} from "recoil";
 import {
     selectedGenesState,
     studyState,
-    useGeneStoreCounterColor,
     userGenesState,
+    userGeneStoreCounterColor,
     userGeneStoreOpenState
 } from "../../atoms";
 import {showNotification} from '@mantine/notifications';
@@ -24,7 +24,7 @@ function AddGene({multipleSelected = false}: Props) {
     const theme = useMantineTheme();
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor)
+    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor)
     const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
 
     const study = useRecoilValue(studyState);

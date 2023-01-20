@@ -5,7 +5,7 @@ import {IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyState, useGeneStoreCounterColor, userGenesState} from "../../atoms";
+import {studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState} from "../../atoms";
 import {Omics} from "../../model";
 import _ from 'lodash';
 import {showNotification} from "@mantine/notifications";
@@ -104,8 +104,9 @@ type Props = {
 
 const DEGTable = ({annotationId}: Props) => {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(useGeneStoreCounterColor);
+    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
     const study = useRecoilValue(studyState);
+    const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
     const {data, error, loading} = useDegQuery({
         variables: {
             annotationValueId: annotationId,
@@ -118,6 +119,7 @@ const DEGTable = ({annotationId}: Props) => {
         if (check.length === 0) {
             setIndicatorColor('pink')
             setUserGenes(_.union(userGenes, [gene]))
+            setStoreOpen(false)
             setTimeout(() => {
                 setIndicatorColor('blue')
             }, 200)
@@ -127,7 +129,7 @@ const DEGTable = ({annotationId}: Props) => {
                 title: 'Your selection is already in the store',
                 message: "It's not a problem, really!",
                 color: 'red',
-                autoClose: 2500
+                autoClose: 1000
             })
         }
     }
@@ -142,6 +144,10 @@ const DEGTable = ({annotationId}: Props) => {
                            fixedHeaderScrollHeight="100%"
                            noDataComponent={<Text>No data.</Text>}/>
             }
+            {data && data.differentialExpressionVsList.length === 0 &&
+                <Text color={'dimmed'} size={'xs'}>
+                    No differentially expressed genes for selected cells.
+                </Text>}
         </Stack>
     );
 };

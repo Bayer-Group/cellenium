@@ -3,7 +3,7 @@ import {ActionIcon, Collapse, Group, Indicator, Stack, Text, useMantineTheme} fr
 import {AddGene} from "../AddGene/AddGene";
 import {IconChevronDown, IconChevronRight, IconTrashX} from "@tabler/icons";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {selectedGenesState, useGeneStoreCounterColor, userGenesState, userGeneStoreOpenState} from "../../atoms";
+import {selectedGenesState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState} from "../../atoms";
 import UserGene from "../UserGene/UserGene";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 const UserGeneStore = ({multiple = false}: Props) => {
     const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
-    const indicatorColor = useRecoilValue(useGeneStoreCounterColor);
+    const indicatorColor = useRecoilValue(userGeneStoreCounterColor);
     const theme = useMantineTheme()
     const [userGeneStore, setUserGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);

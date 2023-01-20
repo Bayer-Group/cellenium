@@ -62,6 +62,7 @@ function DifferentialExpressionAnalysis() {
         if (selectedGenes.length > 1)
             setSelectedGenes(selectedGenes.slice(0, 1))
     }, [])
+
     if (!study) {
         return <></>;
     }
@@ -83,9 +84,15 @@ function DifferentialExpressionAnalysis() {
                     <Space h={'xs'}/>
                     <Stack>
                         <Divider size={"xs"} label={'Differentially expressed genes'}/>
-                        {selectedAnnotation ? <DEGTable annotationId={selectedAnnotation}/> :
+                        {!selectedAnnotation &&
+                            study.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated === true &&
                             <Text size='xs' color='dimmed'>Select cells in the plot or via the selection panel on the
                                 left-hand side.</Text>}
+                        {selectedAnnotation !== undefined && <DEGTable annotationId={selectedAnnotation}/>}
+                        {study.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated === false &&
+                            <Text size={'xs'} color={'dimmed'}>
+                                No differential gene expression calculated for selected annotation group.
+                            </Text>}
                     </Stack>
                 </Stack>
             </RightSidePanel>

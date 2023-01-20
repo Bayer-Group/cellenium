@@ -20,7 +20,7 @@ export const userGeneStoreOpenState = atom<boolean>(
         default: false
     }
 )
-export const useGeneStoreCounterColor = atom<string>({
+export const userGeneStoreCounterColor = atom<string>({
     key: 'usergenestorecountercolor',
     default: 'blue'
 })
