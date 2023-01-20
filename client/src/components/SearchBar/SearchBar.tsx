@@ -15,9 +15,10 @@ type OfferingItem = {
 
 type Props = {
     ontologies?: Map<string, OntologyItem>;
+    onSearchElementsUpdate: (ontCodes: string[]) => void;
 }
 
-function SearchBar({ontologies}: Props) {
+function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<OfferingItem[]>([]);
@@ -38,6 +39,8 @@ function SearchBar({ontologies}: Props) {
             setOfferings(newOfferings);
         }
     }, [autocompleteSuggestions])
+
+    useEffect(() => onSearchElementsUpdate(selectedFilters.map(f => f.ontcode)), [selectedFilters]);
 
     function handleSubmit(item: OfferingItem) {
         setValue('');
