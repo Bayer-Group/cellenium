@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {ActionIcon, CloseButton, createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
-import {IconEye, IconInfoCircle} from "@tabler/icons";
+import {ActionIcon,  createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
+import {IconEye, IconInfoCircle, IconX} from "@tabler/icons";
 import {Omics} from "../../model";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {pageState, selectedGenesState, userGenesState} from "../../atoms";
@@ -60,7 +60,7 @@ const UserGene = ({gene, multiple = false}: Props) => {
             <Grid columns={12} style={{width: '100%'}} gutter={'md'}>
                 <Grid.Col span={1}>
                     <ActionIcon variant={'subtle'} size={'xs'}>
-                        <CloseButton onClick={() => handleRemove(gene)} size={'xs'} iconSize={15}/>
+                        <IconX onClick={() => handleRemove(gene)} size={'xs'}/>
                     </ActionIcon>
                 </Grid.Col>
                 <Grid.Col span={1}>
