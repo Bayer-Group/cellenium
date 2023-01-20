@@ -1,15 +1,14 @@
 import argparse
+import logging
 from typing import List
 
-import pandas as pd
-from anndata import AnnData
-from psycopg2 import extras
-from sqlalchemy import text
 import numpy as np
+import pandas as pd
 import scanpy as sc
 import scipy.sparse as sparse
 import tqdm
-import logging
+from anndata import AnnData
+from sqlalchemy import text
 
 from huge_palette import huge_palette
 from postgres_utils import engine, import_df
@@ -101,9 +100,10 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
                 }).fetchone()
             if r is None:
                 r = connection.execute(text("""INSERT INTO annotation_group (h5ad_column, display_group)
-                            VALUES (:h5ad_column, :h5ad_column)
+                            VALUES (:h5ad_column, :h5ad_column_display)
                             RETURNING annotation_group_id, 0"""), {
-                    'h5ad_column': annotation_col
+                    'h5ad_column': annotation_col,
+                    'h5ad_column_display': annotation_col.replace('_', ' ')
                 }).fetchone()
             annotation_group_id = r[0]
             color_index = r[1]
@@ -126,11 +126,13 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
                     }).fetchone()
                 if r is None:
                     connection.execute(text("""INSERT INTO annotation_value (annotation_group_id, h5ad_value, display_value, color)
-                                            VALUES (:annotation_group_id, :h5ad_value, :h5ad_value, :color)"""), {
-                        'annotation_group_id': annotation_group_id,
-                        'h5ad_value': value,
-                        'color': huge_palette[color_index]
-                    })
+                                            VALUES (:annotation_group_id, :h5ad_value, :h5ad_value_display, :color)"""),
+                                       {
+                                           'annotation_group_id': annotation_group_id,
+                                           'h5ad_value': value,
+                                           'h5ad_value_display': value.replace('_', ' '),
+                                           'color': huge_palette[color_index]
+                                       })
                     color_index += 1
 
     annotation_definition_df = get_annotation_definition_df(import_sample_annotations)

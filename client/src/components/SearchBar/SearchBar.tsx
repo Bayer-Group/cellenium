@@ -102,7 +102,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
                 < Group spacing={4} position={'left'} align={'center'}
                         style={{'border': '1px lightgray solid', borderRadius: 5, paddingLeft: 4}}
                 >
-                    {loading ? <Loader variant={'dots'} size={'xl'} color={theme.colors.gray[5]}/> :
+                    {loading ? <Loader size={25} color={theme.colors.gray[5]}/> :
                         <IconSearch size={25} color={theme.colors.gray[3]}/>}
                     <Group spacing={2}>
                         {selectedFilters.map((filter) => {
