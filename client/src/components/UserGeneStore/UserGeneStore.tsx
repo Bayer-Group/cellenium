@@ -48,7 +48,7 @@ const UserGeneStore = ({multiple = false}: Props) => {
 
                     </Group>
                         {[...userGeneStore].reverse().map((omics) => {
-                            return (<Group align={'center'} position={'left'}>
+                            return (<Group key={omics.omicsId} align={'center'} position={'left'}>
                                 <UserGene multiple={multiple} gene={omics}></UserGene>
                             </Group>)
                         })}</Stack>}
