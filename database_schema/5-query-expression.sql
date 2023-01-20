@@ -149,6 +149,7 @@ as
 select study_id,
        study_layer_id,
        omics_id,
+       e.annotation_group_id,
        e.annotation_value_id,
        av.display_value celltype,
        q3,

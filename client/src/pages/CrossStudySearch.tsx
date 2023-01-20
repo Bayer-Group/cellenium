@@ -2,12 +2,14 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {GeneSearchBar, MarkerCard, NavBar, SearchBar, StudyCard} from "../components";
 import {Container, Grid, Space, Text} from "@mantine/core";
 import {
+    ExpressionByCelltypeQuery,
     useExpressionByCelltypeQuery,
     useStudiesQuery
 } from "../generated/types";
-import {VegaLite, VisualizationSpec} from "react-vega";
+import {VegaLite, VisualizationSpec, View} from "react-vega";
 import {useRecoilValue} from "recoil";
 import {allGenesState} from "../atoms";
+import {useNavigate} from "react-router-dom";
 
 
 const createSpec = (multipleGenes: boolean): VisualizationSpec => {
@@ -81,6 +83,7 @@ const CrossStudySearch = () => {
     const {data: studyData, error, loading: studyDataLoading} = useStudiesQuery();
     const [omicsIds, setOmicsIds] = useState<number[]>([]);
     const allGenes = useRecoilValue(allGenesState);
+    const navigate = useNavigate();
     const {data, loading} = useExpressionByCelltypeQuery({
         variables: {
             omicsIds: omicsIds
@@ -101,6 +104,22 @@ const CrossStudySearch = () => {
 
     }, [studyData, data]);
 
+    const setUpSelectionListener = (view: View) => {
+        view.addEventListener("click", (event, item) => {
+            if (item) {
+                const heatmapItem = item.datum as ExpressionByCelltypeQuery['expressionByCelltypesList'][0];
+                const newStudyUrl = `/study/${heatmapItem.studyId}?page=CellMarkerAnalysis&annotationGroupId=${heatmapItem.annotationGroupId}&annotationValueId=${heatmapItem.annotationValueId}&omicsId=${heatmapItem.omicsId}`;
+                if (event.shiftKey || event.altKey) {
+                    const parsedUrl = new URL(window.location.href);
+                    const url = `${parsedUrl.origin}${newStudyUrl}`
+                    window.open(url, '_blank')
+                } else {
+                    navigate(newStudyUrl);
+                }
+            }
+        })
+    }
+
     return (
         <Container fluid={true}>
             <NavBar/>
@@ -110,8 +129,8 @@ const CrossStudySearch = () => {
             </Container>
             <Container size={'xl'}>
                 {heatmapDisplayData && <VegaLite
-                    spec={createSpec(omicsIds.length > 1)} //heatmapSelectedGenes.length > 1, heatmapChosenStudies.length)}
-                    //onNewView={(view) => setUpSelectionListener(view)}
+                    spec={createSpec(omicsIds.length > 1)}
+                    onNewView={(view) => setUpSelectionListener(view)}
                     data={{
                         "table": heatmapDisplayData
                     }}/>}

@@ -1998,74 +1998,6 @@ export type ExpressionByAnnotation = {
   values: Maybe<Array<Maybe<Scalars['Float']>>>;
 };
 
-export type ExpressionByAnnotationBoxplot = {
-  __typename?: 'ExpressionByAnnotationBoxplot';
-  annotationGroupId: Maybe<Scalars['Int']>;
-  annotationValueId: Maybe<Scalars['Int']>;
-  boxplot: Maybe<BoxplotValue>;
-  omicsId: Maybe<Scalars['Int']>;
-  studyLayerId: Maybe<Scalars['Int']>;
-  values: Maybe<Array<Maybe<Scalars['Float']>>>;
-};
-
-/**
- * A condition to be used against `ExpressionByAnnotationBoxplot` object types. All
- * fields are tested for equality and combined with a logical ‘and.’
- */
-export type ExpressionByAnnotationBoxplotCondition = {
-  /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `boxplot` field. */
-  boxplot: InputMaybe<BoxplotValueInput>;
-  /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyLayerId` field. */
-  studyLayerId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `values` field. */
-  values: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
-};
-
-/** A filter to be used against `ExpressionByAnnotationBoxplot` object types. All fields are combined with a logical ‘and.’ */
-export type ExpressionByAnnotationBoxplotFilter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
-  /** Filter by the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `boxplot` field. */
-  boxplot: InputMaybe<BoxplotValueFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
-  /** Filter by the object’s `omicsId` field. */
-  omicsId: InputMaybe<IntFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<ExpressionByAnnotationBoxplotFilter>>;
-  /** Filter by the object’s `studyLayerId` field. */
-  studyLayerId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `values` field. */
-  values: InputMaybe<FloatListFilter>;
-};
-
-/** Methods to use when ordering `ExpressionByAnnotationBoxplot`. */
-export enum ExpressionByAnnotationBoxplotsOrderBy {
-  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
-  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
-  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
-  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
-  BoxplotAsc = 'BOXPLOT_ASC',
-  BoxplotDesc = 'BOXPLOT_DESC',
-  Natural = 'NATURAL',
-  OmicsIdAsc = 'OMICS_ID_ASC',
-  OmicsIdDesc = 'OMICS_ID_DESC',
-  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
-  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
-  ValuesAsc = 'VALUES_ASC',
-  ValuesDesc = 'VALUES_DESC'
-}
-
 /**
  * A condition to be used against `ExpressionByAnnotation` object types. All fields
  * are tested for equality and combined with a logical ‘and.’
@@ -2144,6 +2076,7 @@ export enum ExpressionByAnnotationsOrderBy {
 
 export type ExpressionByCelltype = {
   __typename?: 'ExpressionByCelltype';
+  annotationGroupId: Maybe<Scalars['Int']>;
   annotationValueId: Maybe<Scalars['Int']>;
   celltype: Maybe<Scalars['String']>;
   exprCellsFraction: Maybe<Scalars['Float']>;
@@ -2158,6 +2091,8 @@ export type ExpressionByCelltype = {
  * are tested for equality and combined with a logical ‘and.’
  */
 export type ExpressionByCelltypeCondition = {
+  /** Checks for equality with the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
   annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `celltype` field. */
@@ -2178,6 +2113,8 @@ export type ExpressionByCelltypeCondition = {
 export type ExpressionByCelltypeFilter = {
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<ExpressionByCelltypeFilter>>;
+  /** Filter by the object’s `annotationGroupId` field. */
+  annotationGroupId: InputMaybe<IntFilter>;
   /** Filter by the object’s `annotationValueId` field. */
   annotationValueId: InputMaybe<IntFilter>;
   /** Filter by the object’s `celltype` field. */
@@ -2200,6 +2137,8 @@ export type ExpressionByCelltypeFilter = {
 
 /** Methods to use when ordering `ExpressionByCelltype`. */
 export enum ExpressionByCelltypesOrderBy {
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
   AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
   CelltypeAsc = 'CELLTYPE_ASC',
@@ -3695,8 +3634,6 @@ export type Query = Node & {
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
-  /** Reads a set of `ExpressionByAnnotationBoxplot`. */
-  expressionByAnnotationBoxplotsList: Maybe<Array<ExpressionByAnnotationBoxplot>>;
   /** Reads a set of `ExpressionByAnnotation`. */
   expressionByAnnotationsList: Maybe<Array<ExpressionByAnnotation>>;
   /** Reads a set of `ExpressionByCelltype`. */
@@ -3985,16 +3922,6 @@ export type QueryDifferentialExpressionsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryExpressionByAnnotationBoxplotsListArgs = {
-  condition: InputMaybe<ExpressionByAnnotationBoxplotCondition>;
-  filter: InputMaybe<ExpressionByAnnotationBoxplotFilter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<ExpressionByAnnotationBoxplotsOrderBy>>;
 };
 
 
@@ -6263,7 +6190,7 @@ export type ExpressionByCelltypeQueryVariables = Exact<{
 }>;
 
 
-export type ExpressionByCelltypeQuery = { __typename?: 'Query', expressionByCelltypesList: Array<{ __typename?: 'ExpressionByCelltype', celltype: string, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
+export type ExpressionByCelltypeQuery = { __typename?: 'Query', expressionByCelltypesList: Array<{ __typename?: 'ExpressionByCelltype', celltype: string, annotationValueId: number, annotationGroupId: number, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
 
 export type HalfAVolcanoQueryVariables = Exact<{
   annotationValueId: Scalars['Int'];
@@ -6821,6 +6748,8 @@ export const ExpressionByCelltypeDocument = gql`
     query expressionByCelltype($omicsIds: [Int!]!) {
   expressionByCelltypesList(filter: {omicsId: {in: $omicsIds}}) {
     celltype
+    annotationValueId
+    annotationGroupId
     studyId
     omicsId
     q3

@@ -190,6 +190,9 @@ query expressionByCelltype($omicsIds: [Int!]!) {
     # , studyId: { in: [1, 2] }
   ) {
     celltype
+    annotationValueId
+    # the annotationGroupId is constant as we're getting CellO 
+    annotationGroupId
     studyId
     omicsId
     q3
