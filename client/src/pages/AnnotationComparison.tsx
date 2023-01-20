@@ -25,7 +25,7 @@ const AnnotationComparison = () => {
         return anns;
     }, [study]);
     return (
-        <Group position={'apart'}>
+        <Group position={'apart'} noWrap>
             <LeftSidePanel>
                 <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={setValue1} value1={value1}
                                                handleChange2={setValue2} value2={value2}/>

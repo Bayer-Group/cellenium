@@ -80,7 +80,7 @@ const SankeyPlot = ({
                  <ResponsiveSankey
                     data={sankeyData}
                     label={"label"}
-                    margin={{top: 40, right: 100, bottom: 40, left: 100}}
+                    margin={{top: 40, right: 250, bottom: 40, left: 250}}
                     align="justify"
                     colors={{scheme: 'category10'}}
                     nodeOpacity={1}

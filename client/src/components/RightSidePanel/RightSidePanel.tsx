@@ -23,7 +23,7 @@ function RightSidePanel({children}: Props) {
     const {classes, cx} = useStyles();
 
     return (
-        <Navbar height={'100vh'} width={{sm: 300}} style={{overflowY: 'scroll'}}>
+        <Navbar height={'100vh'} width={{sm: 300}} style={{overflowY: 'scroll', minWidth: 300}}>
             <Navbar.Section grow className={classes.wrapper}>
                 <Stack className={classes.main} spacing={'md'} p={10}>
                     {children}

@@ -119,7 +119,7 @@ const ExpressionAnalysis = () => {
         </div>
     );
     return (
-        <Group align={'flex-start'} position={'apart'} spacing={'xs'}>
+        <Group align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}

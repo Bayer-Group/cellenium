@@ -1,15 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Anchor, createStyles, Group, Navbar, Title, Tooltip, UnstyledButton} from '@mantine/core';
 import {ReactComponent as CellTypeMarkerIcon} from "../../icons/study_analysis.svg";
 import {ReactComponent as ExpressionAnalysisIcon} from "../../icons/expression_analysis.svg";
 import {ReactComponent as CoExpressionAnalysisIcon} from "../../icons/coexpression_analysis.svg";
 import {ReactComponent as CompareAnnotationsIcon} from "../../icons/annotation_comparison.svg";
 import {ReactComponent as UserAnnotationIcon} from "../../icons/user_annotation.svg";
-import {useNavigate} from "react-router-dom";
 
 import {ReactComponent as CelleniumLogo} from "../../images/logo.svg";
 import {useRecoilState} from "recoil";
-import { useLocation } from 'react-router-dom';
 import {pageState} from "../../atoms";
 
 const useStyles = createStyles((theme) => ({
@@ -118,7 +116,7 @@ function LeftSidePanel({children}: Props) {
 
 
     return (
-        <Navbar style={{ height: '100vh'}} width={{sm: 300}} >
+        <Navbar style={{ height: '100vh', minWidth: 300}} width={{sm: 300}} >
             <Navbar.Section  grow className={classes.wrapper}>
                 <div className={classes.aside}>
                     <div className={classes.logo}>
