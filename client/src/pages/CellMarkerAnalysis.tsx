@@ -66,7 +66,7 @@ function DifferentialExpressionAnalysis() {
         return <></>;
     }
     return (
-        <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'}>
+        <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
                 <Stack>
                     <AnnotationGroupSelectBox/>

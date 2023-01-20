@@ -206,4 +206,12 @@ query halfAVolcano($annotationValueId: Int!, $studyId:Int!) {
 }
 
 
+query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
+  annotationValueCoocurrenceList(studyId: $studyId, annotationGroupId1:$annotationGroupId1, annotationGroupId2:$annotationGroupId2) {
+    annotationValueId1
+    annotationValueId2
+    occurrence
+  }
+}
+
 `;
