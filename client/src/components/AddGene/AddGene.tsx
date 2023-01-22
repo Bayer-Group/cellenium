@@ -48,7 +48,7 @@ function AddGene({multipleSelected = false}: Props) {
                 title: 'Your input is already in the store!',
                 message: "It's not a problem, really!",
                 color: 'red',
-                autoClose: 5000
+                autoClose: 1000
             })
         } else {
             if (multipleSelected)
@@ -86,7 +86,7 @@ function AddGene({multipleSelected = false}: Props) {
                 title: 'Your input is already in the store!',
                 message: "It's not a problem, really!",
                 color: 'red',
-                autoClose: 5000
+                autoClose: 1000
             })
         } else if (addGene.length === 1) {
             if (multipleSelected)

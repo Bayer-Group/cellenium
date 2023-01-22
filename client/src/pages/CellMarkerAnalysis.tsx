@@ -56,7 +56,6 @@ function DifferentialExpressionAnalysis() {
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
-
     const study = useRecoilValue(studyState);
     useEffect(() => {
         if (selectedGenes.length > 1)
@@ -70,7 +69,7 @@ function DifferentialExpressionAnalysis() {
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
                 <Stack>
-                    <AnnotationGroupSelectBox/>
+                    {annotationGroupId && <AnnotationGroupSelectBox/>}
                     {annotationGroupId && <AnnotationGroupDisplay/>}
                 </Stack>
             </LeftSidePanel>

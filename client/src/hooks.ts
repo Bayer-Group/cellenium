@@ -5,15 +5,16 @@ import {ExpressionTable} from "./model";
 import {useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
-    highlightAnnotationState, pageState,
+    highlightAnnotationState,
+    pageState,
     selectedAnnotationState,
     selectedGenesState,
     studyIdState,
     studyLayerIdState,
-    studyState, userGenesState
+    studyState,
+    userGenesState
 } from "./atoms";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import userGene from "./components/UserGene/UserGene";
 
 export function useExpressionValues(omicsIds: number[]) {
     const studyLayerId = useRecoilValue(studyLayerIdState);
@@ -98,7 +99,7 @@ export function useSetStudyFromUrl() {
     useEffect(() => {
         if (study && study.studyId === studyIdUrlParamInt) {
             setValidParam('page', setPage);
-            setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
+            setValidParam('annotationGroupId', setAnnotationGroupId);
             setValidParam('annotationValueId', setSelectedAnnotation);
             setValidParam('omicsId', (omicsId: number) => {
                 const o = study.studyOmicsMap.get(omicsId);

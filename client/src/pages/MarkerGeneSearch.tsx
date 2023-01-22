@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {MarkerCard, NavBar} from "../components";
 import {Center, Container, Grid, Space, Text} from "@mantine/core";
 import {GeneSearchBar} from "../components/SearchBar/GeneSearchBar";
@@ -8,10 +8,6 @@ import {DifferentialMarkerFragment} from "../generated/types";
 const MarkerGeneSearch = () => {
     const [searchResults, setSearchResults] = useState<DifferentialMarkerFragment[]>([]);
 
-
-    useEffect(() => {
-        console.log({searchResults})
-    }, [searchResults])
     return (
         <Container fluid={true}>
             <NavBar/>

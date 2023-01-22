@@ -9,7 +9,7 @@ function AnnotationGroupSelectBox() {
     const study = useRecoilValue(studyState);
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-
+    const [value, setValue] = useState<string | undefined>();
     const annotations: SelectBoxItem[] = useMemo(() => {
         const anns: SelectBoxItem[] = [];
         if (study) {
@@ -20,10 +20,11 @@ function AnnotationGroupSelectBox() {
                 })
             });
         }
+        setValue(annotationGroupId?.toString())
         return anns;
-    }, [study]);
+    }, [study, annotationGroupId]);
+    console.log("AAAA", annotationGroupId)
 
-    const [value, setValue] = useState<string | undefined>(annotationGroupId !== undefined ? annotationGroupId.toString() : annotations[0].value);
 
     function update(value: string | null) {
         if (value) {
