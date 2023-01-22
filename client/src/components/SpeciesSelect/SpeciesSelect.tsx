@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
-import {Select} from "@mantine/core";
+import React from 'react';
+import {Select, SelectItem} from "@mantine/core";
 
-const SPECIES = [
-    {value: "9606", label: 'Homo sapiens'},
-    {value: "10090", label: 'Mus musculus'},
-    {value: "10116", label: 'Rattus norvegicus'},
-]
-const SpeciesSelect = () => {
-    const [value, setValue] = useState(SPECIES[0].value)
+
+interface Props {
+    species: string;
+    handleChange: Function;
+    data: SelectItem[];
+}
+const SpeciesSelect = ({handleChange, species, data}: Props) => {
     return (
         <Select style={{borderColor: '#000'}} onChange={
-            (value: string) => setValue(value)
-        } value={value} variant={'default'} size={'md'} data={SPECIES as any} label={'Select species'}
+            (value: string) => handleChange(value)
+        } value={species} variant={'default'} size={'md'} data={data} label={'Select species'}
                 labelProps={{fw: 700, size: 'xs'}}/>
     );
 };

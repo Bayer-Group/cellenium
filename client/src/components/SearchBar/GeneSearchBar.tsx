@@ -1,5 +1,5 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {IconSearch, IconX} from "@tabler/icons";
 import {useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
 import {Omics} from "../../model";
@@ -17,6 +17,12 @@ interface Props {
     onGeneSelection?: (omicsIds: number[]) => void;
 }
 
+const SPECIES = [
+    {value: "9606", label: 'Homo sapiens'},
+    {value: "10090", label: 'Mus musculus'},
+    {value: "10116", label: 'Rattus norvegicus'},
+]
+
 function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
     // either just a gene input (onGeneSelection parameter is used) or
     // also providing the studies that include the gene as differentially expressed (handleNewFilters parameter)
@@ -26,6 +32,9 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
     const [offerings, setOfferings] = useState<Omics[]>([]);
     const [selectedFilters, setSelectedFilters] = useState<Omics[]>([]);
     const allGenes = useRecoilValue(allGenesState) || new Map();
+    const [species, setSpecies] = useState<string>(SPECIES[0].value);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const [getCellTypes, {
         data: markerData,
         error: markerError,
@@ -44,6 +53,9 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                 }
             })
         }
+        if (inputRef && inputRef.current !== null) {
+            inputRef.current.focus()
+        }
     }
 
     useEffect(() => {
@@ -56,9 +68,14 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
         if (input === '') {
             setOfferings([])
             setValue('')
+            if (inputRef && inputRef.current !== null) {
+                inputRef.current.focus()
+            }
             return
         }
+        console.log(allGenes.values())
         const newOfferings = _.uniqBy(Array.from(allGenes.values())
+            .filter((gene) => gene.taxId === parseInt(species))
             .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))
             .filter(gene => humanOnly === false || gene.taxId === 9606)
             .sort(sortAlphaNum), 'displaySymbol').slice(0, 20).map((gene) => {
@@ -79,14 +96,16 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
             setSelectedFilters([])
             handleNewFilters && handleNewFilters([])
         }
-
+        if (inputRef && inputRef.current !== null) {
+            inputRef.current.focus()
+        }
         setOfferings([])
     }
 
 
     return (
         <Group position={'left'} align={'flex-end'} spacing={4} noWrap>
-            <SpeciesSelect/>
+            <SpeciesSelect data={SPECIES} species={species} handleChange={setSpecies}/>
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
                     Enter gene symbol(s)
@@ -109,6 +128,8 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                     </Group>
                     <div style={{flexGrow: 1}}>
                         <Autocomplete
+                            ref={inputRef}
+                            autoFocus
                             style={{
                                 height: 40
                             }}
