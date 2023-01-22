@@ -3,6 +3,7 @@ import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from '@mant
 import {IconExternalLink} from "@tabler/icons";
 import {Link} from "react-router-dom";
 import {StudyInfoFragment} from "../../generated/types";
+import {ontology2Color} from "../../pages/helper";
 
 
 const StudyCard = ({study}: { study: StudyInfoFragment }) => {
@@ -36,13 +37,18 @@ const StudyCard = ({study}: { study: StudyInfoFragment }) => {
                 {study.description}
             </Text>
             <Card.Section withBorder inheritPadding py="xs">
-                <Spoiler maxHeight={19} showLabel={"Show more"} hideLabel={'hide'} style={{
+                <Spoiler maxHeight={25} showLabel={"Show more"} hideLabel={'hide'} style={{
                     fontSize: 12,
                 }}>
                     <Group position={'left'} spacing={3}>
                         {study.studyOntologyList && study.studyOntologyList.map((item) => {
-                            let badges = [<Badge/>]
-                            return badges;
+                            console.log({item})
+                            if (item.labels !== null) {
+                                let badges = item.labels.map((label) => <Badge
+                                    color={ontology2Color(item.ontology)}>{label}</Badge>)
+                                return badges;
+                            }
+                            return null;
                         })}
                     </Group>
                 </Spoiler>
