@@ -56,7 +56,9 @@ const CelltypeDiscovery = () => {
             .params({plotFilter: omicsY.omicsId})
             .filter((d: any, p: any) => d.omicsId === p.plotFilter)
             .select({studySampleId: 'studySampleId', value: 'valueB'});
-        const sameSampleExprValues = subTableA.join(subTableB, ['studySampleId', 'studySampleId']).derive({index: () => aq.op.row_number() - 1});
+        const sameSampleExprValues = subTableA.join_full(subTableB, ['studySampleId', 'studySampleId']).derive({index: () => aq.op.row_number() - 1})
+            .impute({valueA: () => 0, valueB: () => 0});
+        sameSampleExprValues.print({offset: 7500});
 
         const plot: Partial<Plotly.PlotData> = {
             type: 'scattergl',
