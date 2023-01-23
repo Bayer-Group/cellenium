@@ -1,3 +1,42 @@
+DROP FUNCTION IF EXISTS get_correlated_genes(study_id int, omics_id int);
+CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
+    RETURNS table
+        (
+            omics_id INT,
+            pearson FLOAT
+        )
+AS
+$$
+import pandas as pd
+import scanpy as sc
+from joblib import Parallel, delayed, cpu_count
+import numpy as np
+import scipy
+
+
+def compute_correlation(df, genes, goi):
+    collect = []
+    for gene in genes:
+        tmp = df[[goi,gene]]
+        tmp_both = tmp.loc[~(tmp==0).all(axis=1)]
+        try:
+            r, p = scipy.stats.pearsonr(*tmp_both.to_dict(orient = 'list').values())
+            if abs(r)>=0.2:
+                collect.append({'gene': gene, 'r':r, 'p': p})
+        except:
+            pass
+    return pd.DataFrame(collect)
+fn = '../scratch/blood_covid.h5ad'
+adata = sc.read(fn)
+df = adata.to_df()
+chunks = np.array_split(df.columns.drop(goi),8)
+result = Parallel(n_jobs=cpu_count())(delayed(compute_correlation)(df = df,genes=chunk, goi=goi) for chunk in chunks)
+pd.concat(result).sort_values('r', ascending = False).reset_index(drop = True)
+$$ LANGUAGE plpython3u
+    IMMUTABLE
+    SECURITY DEFINER
+    PARALLEL SAFE;
+
 DROP FUNCTION IF EXISTS annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_value_id_2 int);
 CREATE OR REPLACE FUNCTION annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_group_id_2 int)
     RETURNS TABLE
