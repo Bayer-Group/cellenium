@@ -39,7 +39,7 @@ interface PreparedPlot {
 function ProjectionPlotWithOptionalExpression() {
     const theme = useMantineTheme();
     const selectedGenes = useRecoilValue(selectedGenesState);
-    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
+    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId), true);
 
     if (loading) {
         return <div><Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/></div>;

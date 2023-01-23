@@ -72,7 +72,7 @@ function ViolinPlots() {
 function ProjectionPlots() {
     const theme = useMantineTheme();
     const selectedGenes = useRecoilValue(selectedGenesState);
-    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId));
+    const {table, loading} = useExpressionValues(selectedGenes.map(g => g.omicsId), true);
     const tablePerGene = useMemo(() => {
         if (selectedGenes.length === 0 || !table) {
             return undefined;

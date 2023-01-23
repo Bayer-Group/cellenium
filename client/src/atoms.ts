@@ -35,6 +35,11 @@ export const userGenesState = atom<Omics[]>({
     default: []
 })
 
+export const celltypeDiscoveryGenesState = atom<(Omics|null)[]>({
+    key: "celltypeDiscoveryGenesState",
+    default: [null, null]
+})
+
 export const selectedAnnotationFilterState = atom<number[]>({
     key: "selectedAnnotationFilter",
     default: []
@@ -146,6 +151,7 @@ export const studyState = selector<Study | undefined>({
                     annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
                     annotationValueMap: new Map(response.data.study.annotationGroupsList.map((g) => g.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };
+                console.log('studyState set', s)
                 return s;
             }
         }

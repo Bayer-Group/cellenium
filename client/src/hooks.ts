@@ -1,6 +1,6 @@
 import {useEffect, useMemo} from 'react';
 import * as aq from 'arquero';
-import {useExpressionByOmicsIdsQuery} from "./generated/types";
+import {InputMaybe, ProjectionType, useExpressionByOmicsIdsQuery} from "./generated/types";
 import {ExpressionTable} from "./model";
 import {useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {
@@ -16,13 +16,14 @@ import {
 } from "./atoms";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 
-export function useExpressionValues(omicsIds: number[]) {
+export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
     const studyLayerId = useRecoilValue(studyLayerIdState);
 
     const {data, loading} = useExpressionByOmicsIdsQuery({
         variables: {
             studyLayerId,
-            omicsIds
+            omicsIds,
+            subsamplingProjection: (subsampling ? ProjectionType.Umap : null ) as InputMaybe<ProjectionType>
         },
         skip: omicsIds.length === 0
     });

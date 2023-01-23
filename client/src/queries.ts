@@ -148,8 +148,8 @@ query StudyBasics($studyId: Int!) {
 }
 
 
-query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
-  expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:UMAP) {
+query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection:ProjectionType) {
+  expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:$subsamplingProjection) {
     omicsId
     studySampleIds
     values

@@ -7,6 +7,7 @@ import ExpressionAnalysis from "./ExpressionAnalysis";
 import CoexpressionAnalysis from "./CoexpressionAnalysis";
 import AnnotationComparison from "./AnnotationComparison";
 import UserAnnotation from "./UserAnnotation";
+import CelltypeDiscovery from "./CelltypeDiscovery";
 
 export function StudyPage() {
     useSetStudyFromUrl();
@@ -19,6 +20,8 @@ export function StudyPage() {
             return <ExpressionAnalysis/>;
         case 'CoexpressionAnalysis':
             return <CoexpressionAnalysis/>;
+        case 'CelltypeDiscovery':
+            return <CelltypeDiscovery/>;
         case 'AnnotationComparison':
             return <AnnotationComparison/>;
         case 'UserAnnotation':

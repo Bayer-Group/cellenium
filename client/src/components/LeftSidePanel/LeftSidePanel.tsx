@@ -91,6 +91,7 @@ const viewLinks = [
     {icon: CellTypeMarkerIcon, label: 'Cell type marker analysis', link: 'CellMarkerAnalysis'},
     {icon: ExpressionAnalysisIcon, label: 'Expression analysis', link: 'ExpressionAnalysis'},
     {icon: CoExpressionAnalysisIcon, label: 'Co-Expression analysis', link: 'CoexpressionAnalysis'},
+    {icon: CoExpressionAnalysisIcon, label: 'Interactive Celltype Discovery', link: 'CelltypeDiscovery'},
     {icon: CompareAnnotationsIcon, label: 'Compare annotations', link: 'AnnotationComparison'},
     {icon: UserAnnotationIcon, label: 'User annotations', link: 'UserAnnotation'},
 ];
