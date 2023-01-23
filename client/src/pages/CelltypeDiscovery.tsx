@@ -1,8 +1,14 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Group, Space, Stack, Text} from "@mantine/core";
+import {Group, Space, Stack, Text, Button, Loader} from "@mantine/core";
 import {LeftSidePanel, RightSidePanel} from "../components";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {celltypeDiscoveryGenesState, selectedGenesState, studyState, userGenesState} from "../atoms";
+import {
+    celltypeDiscoveryCoexpressionSamplesState,
+    celltypeDiscoveryGenesState,
+    selectedGenesState,
+    studyState,
+    userGenesState
+} from "../atoms";
 import {useExpressionValues} from "../hooks";
 import * as aq from 'arquero';
 import Plot from "react-plotly.js";
@@ -21,27 +27,25 @@ const plotlyConfig: Partial<Plotly.Config> = {
     responsive: true
 };
 
-const CelltypeDiscovery = () => {
+
+function CoexpressionPlot({
+                              stateOffset,
+                              onSelection
+                          }: {
+    stateOffset: number;
+    onSelection: (event: Readonly<Plotly.PlotSelectionEvent>) => void;
+}) {
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
-
-    // convenient default for gene input
-    const userGenes = useRecoilValue(userGenesState);
-    useEffect(() => {
-        if (!omicsAll[0] && !omicsAll[1]) {
-            if (userGenes.length > 1) {
-                setOmicsAll([userGenes[0], userGenes[1]]);
-            } else if (userGenes.length > 0) {
-                setOmicsAll([userGenes[0], null]);
-            }
-        }
-    }, [omicsAll, userGenes]);
-
-    const omicsX = omicsAll[0];
-    const omicsY = omicsAll[1];
-    const setOmicsX = (o: Omics | null) => setOmicsAll(old => [o, old[1]]);
-    const setOmicsY = (o: Omics | null) => setOmicsAll(old => [old[0], o]);
+    const omicsX = omicsAll[stateOffset * 2];
+    const omicsY = omicsAll[stateOffset * 2 + 1];
+    const setOmicsX = (omics: Omics | null) => setOmicsAll(prev => prev.map((o, i) => i === stateOffset * 2 ? omics : o));
+    const setOmicsY = (omics: Omics | null) => setOmicsAll(prev => prev.map((o, i) => i === stateOffset * 2 + 1 ? omics : o));
     const {table, loading} = useExpressionValues((omicsX && omicsY) ? [omicsX.omicsId, omicsY.omicsId] : [], false);
-    const study = useRecoilValue(studyState);
+
+    const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
+    const filterSampleIds = celltypeDiscoveryCoexpressionSamples[stateOffset];
+    console.log(stateOffset, 'omicsAll', omicsAll, 'celltypeDiscoveryCoexpressionSamples', celltypeDiscoveryCoexpressionSamples)
+
 
     const preparedPlot = useMemo(() => {
         if (!table || !omicsX || !omicsY) {
@@ -56,8 +60,12 @@ const CelltypeDiscovery = () => {
             .params({plotFilter: omicsY.omicsId})
             .filter((d: any, p: any) => d.omicsId === p.plotFilter)
             .select({studySampleId: 'studySampleId', value: 'valueB'});
-        const sameSampleExprValues = subTableA.join_full(subTableB, ['studySampleId', 'studySampleId']).derive({index: () => aq.op.row_number() - 1})
+        let sameSampleExprValues = subTableA.join_full(subTableB, ['studySampleId', 'studySampleId']).derive({index: () => aq.op.row_number() - 1})
             .impute({valueA: () => 0, valueB: () => 0});
+        if (filterSampleIds) {
+            // @ts-ignore
+            sameSampleExprValues = sameSampleExprValues.params({filterSampleIds}).filter((d, p) => aq.op.includes(p.filterSampleIds, d.studySampleId, 0));
+        }
 
         const plot: Partial<Plotly.PlotData> = {
             type: 'scattergl',
@@ -89,11 +97,59 @@ const CelltypeDiscovery = () => {
         } as PreparedPlot;
     }, [table]);
 
-    const [selectedSampleIds, setSelectedSampleIds] = useState<number[] | undefined>(undefined);
+    return (<div style={{width: '100%'}}>
+        <Group>
+            <Group><Text>X</Text><SingleGeneSelection selection={omicsX} onSelectionChange={setOmicsX}/></Group>
+            <Group><Text>Y</Text><SingleGeneSelection selection={omicsY} onSelectionChange={setOmicsY}/></Group>
+        </Group>
+        {preparedPlot && !preparedPlot.message && <Plot data={preparedPlot.plotlyData}
+                                                        layout={preparedPlot.plotlyLayout}
+                                                        config={plotlyConfig}
+                                                        onSelected={onSelection}
+        />}
+        {!preparedPlot && <div style={{height: 250, width: 250}}>
+            {loading && <Loader variant={'dots'}/>}
+        </div>}
+    </div>);
+}
+
+function CelltypeDiscovery() {
+    const study = useRecoilValue(studyState);
+    const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
+    const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
+
+    // convenient default for gene input
+    const userGenes = useRecoilValue(userGenesState);
+    useEffect(() => {
+        if (!omicsAll[0] && !omicsAll[1]) {
+            if (userGenes.length > 1) {
+                setOmicsAll([userGenes[0], userGenes[1]]);
+            } else if (userGenes.length > 0) {
+                setOmicsAll([userGenes[0], null]);
+            }
+        }
+    }, [omicsAll, userGenes]);
+
+    const [selectedSampleIds, setSelectedSampleIds] = useState<number[] | null>(null);
 
     const onCoexpressionSelection = (event: Readonly<Plotly.PlotSelectionEvent>) => {
         const theelectedSampleIds = event.points.map(p => p.customdata) as number[];
         setSelectedSampleIds(theelectedSampleIds);
+    };
+
+    const newPlotBasedOnSelectedSamples = () => {
+        setOmicsAll(prev => [...prev, prev[prev.length - 2], prev[prev.length - 1]]);
+        setCelltypeDiscoveryCoexpressionSamples(prev => [...prev, selectedSampleIds]);
+        setSelectedSampleIds(null);
+    };
+    const newUnrelatedPlot = () => {
+        setOmicsAll(prev => [...prev, prev[prev.length - 2], prev[prev.length - 1]]);
+        setCelltypeDiscoveryCoexpressionSamples(prev => [...prev, null]);
+        setSelectedSampleIds(null);
+    };
+    const removeLastPlot = () => {
+        setOmicsAll(prev => prev.slice(0, prev.length - 2));
+        setCelltypeDiscoveryCoexpressionSamples(prev => prev.slice(0, prev.length - 1));
     };
 
 
@@ -109,19 +165,15 @@ const CelltypeDiscovery = () => {
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    <div style={{width: '80%'}}>
-                        <Group>
-                            <SingleGeneSelection selection={omicsX} onSelectionChange={setOmicsX}/>
-                            <SingleGeneSelection selection={omicsY} onSelectionChange={setOmicsY}/>
-                        </Group>
-                    </div>
-                    {preparedPlot && !preparedPlot.message &&
-                        <Plot data={preparedPlot.plotlyData}
-                              layout={preparedPlot.plotlyLayout}
-                              config={plotlyConfig}
-                              onSelected={onCoexpressionSelection}
-                        />
-                    }
+                    {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((z, i) => <CoexpressionPlot key={i}
+                                                                                                             stateOffset={i}
+                                                                                                             onSelection={onCoexpressionSelection}/>)}
+                    <Button onClick={newPlotBasedOnSelectedSamples}
+                            disabled={selectedSampleIds === null || selectedSampleIds.length === 0}>Add Plot, based on
+                        selected samples</Button>
+                    <Button onClick={newUnrelatedPlot}>Add independent plot</Button>
+                    <Button onClick={removeLastPlot}
+                            disabled={celltypeDiscoveryCoexpressionSamples.length < 2}>Remove last plot</Button>
                 </Stack>
             </RightSidePanel>
         </Group>

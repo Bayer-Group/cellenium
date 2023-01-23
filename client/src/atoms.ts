@@ -40,6 +40,11 @@ export const celltypeDiscoveryGenesState = atom<(Omics|null)[]>({
     default: [null, null]
 })
 
+export const celltypeDiscoveryCoexpressionSamplesState = atom<(number[]|null)[]>({
+    key: "celltypeDiscoveryCoexpressionSamplesState",
+    default: [null]
+})
+
 export const selectedAnnotationFilterState = atom<number[]>({
     key: "selectedAnnotationFilter",
     default: []

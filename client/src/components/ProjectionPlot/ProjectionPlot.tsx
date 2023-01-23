@@ -26,7 +26,7 @@ const plotlyConfig: Partial<Plotly.Config> = {
 type Props = {
     colorBy: 'annotation' | 'expression';
     expressionTable?: ExpressionTable;
-    showSampleIds?: number[];
+    showSampleIds?: number[] | null;
 }
 
 const ProjectionPlot = ({
