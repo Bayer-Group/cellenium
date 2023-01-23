@@ -13,6 +13,7 @@ services:
     volumes:
       - postgresdata:/var/lib/postgresql/data
       - ./database_schema:/database_schema
+      - ./scratch:/h5ad_store
 
   postgraphile:
     build:
