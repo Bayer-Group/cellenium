@@ -1,5 +1,5 @@
 import React from 'react';
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
     highlightAnnotationState,
@@ -39,8 +39,7 @@ const ProjectionPlot = ({
 
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
-    const [selected, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-    const selectedGenes = useRecoilState(selectedGenesState);
+    const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
     const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
 
     const annotationProjectionData = React.useMemo(() => {
@@ -50,13 +49,11 @@ const ProjectionPlot = ({
 
         // @ts-ignore
         let samplesAnnotationProjectionTable = study.samplesAnnotationTable.params({annotationGroupId}).filter((d, p) => d.annotationGroupId === p.annotationGroupId);
-        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join(study.samplesProjectionTable, 'studySampleId').reify();
+        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join_right(study.samplesProjectionTable, 'studySampleId')
+            .impute({annotationValueId: () => -1})
+            .reify();
         const rangeX = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionX')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionX')) * 1.05];
         const rangeY = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionY')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionY')) * 1.05];
-        // if (showSampleIds) {
-        //     // @ts-ignore
-        //     samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.params({showSampleIds}).filter((d, p) => aq.op.includes(p.showSampleIds, d.studySampleId, 0));
-        // }
         const distinctAnnotationValueIds: number[] = samplesAnnotationProjectionTable.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
         return {
@@ -78,13 +75,13 @@ const ProjectionPlot = ({
                 type: 'scattergl',
                 x: tableForAnnotation.array('projectionX', Float32Array),
                 y: tableForAnnotation.array('projectionY', Float32Array),
-                customdata: tableForAnnotation.array('annotationValueId', Int32Array),
+                customdata: study.annotationValueMap.get(annotationValueId) && tableForAnnotation.array('annotationValueId', Int32Array),
                 text: study.annotationValueMap.get(annotationValueId)?.displayValue,
                 mode: 'markers',
                 marker: {
                     size: 3,
                     opacity: 0.7,
-                    color: study.annotationValueMap.get(annotationValueId)?.color,
+                    color: study.annotationValueMap.get(annotationValueId)?.color || '#d7d5d5',
                 },
                 showlegend: false,
                 hoverinfo: "text"

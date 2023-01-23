@@ -52,10 +52,9 @@ function ProjectionPlotWithOptionalExpression() {
 }
 
 function DifferentialExpressionAnalysis() {
-    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
-    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
+    const annotationGroupId = useRecoilValue(annotationGroupIdState);
+    const selectedAnnotation = useRecoilValue(selectedAnnotationState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-    const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const study = useRecoilValue(studyState);
     useEffect(() => {
         if (selectedGenes.length > 1)

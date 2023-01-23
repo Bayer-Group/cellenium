@@ -28,6 +28,8 @@ export type AnnotationGroup = Node & {
   nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
+  /** Reads and enables pagination through a set of `UserAnnotationGroup`. */
+  userAnnotationGroupsBySavedAsAnnotationGroupIdList: Array<UserAnnotationGroup>;
 };
 
 
@@ -46,6 +48,15 @@ export type AnnotationGroupStudyAnnotationGroupUisListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
+};
+
+
+export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdListArgs = {
+  condition: InputMaybe<UserAnnotationGroupCondition>;
+  filter: InputMaybe<UserAnnotationGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
 
 /**
@@ -1393,6 +1404,35 @@ export type CreateStudySampleProjectionPayload = {
   studyStudySample: Maybe<StudySample>;
 };
 
+/** All input for the create `UserAnnotationGroup` mutation. */
+export type CreateUserAnnotationGroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `UserAnnotationGroup` to be created by this mutation. */
+  userAnnotationGroup: UserAnnotationGroupInput;
+};
+
+/** The output of our create `UserAnnotationGroup` mutation. */
+export type CreateUserAnnotationGroupPayload = {
+  __typename?: 'CreateUserAnnotationGroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  /** Reads a single `AnnotationGroup` that is related to this `UserAnnotationGroup`. */
+  savedAsAnnotationGroup: Maybe<AnnotationGroup>;
+  /** Reads a single `Study` that is related to this `UserAnnotationGroup`. */
+  study: Maybe<Study>;
+  /** The `UserAnnotationGroup` that was created by this mutation. */
+  userAnnotationGroup: Maybe<UserAnnotationGroup>;
+};
+
 /** All input for the `deleteAnnotationGroupByNodeId` mutation. */
 export type DeleteAnnotationGroupByNodeIdInput = {
   /**
@@ -2363,6 +2403,8 @@ export type Mutation = {
   createStudySampleAnnotation: Maybe<CreateStudySampleAnnotationPayload>;
   /** Creates a single `StudySampleProjection`. */
   createStudySampleProjection: Maybe<CreateStudySampleProjectionPayload>;
+  /** Creates a single `UserAnnotationGroup`. */
+  createUserAnnotationGroup: Maybe<CreateUserAnnotationGroupPayload>;
   /** Deletes a single `AnnotationGroup` using a unique key. */
   deleteAnnotationGroup: Maybe<DeleteAnnotationGroupPayload>;
   /** Deletes a single `AnnotationGroup` using its globally unique id. */
@@ -2451,6 +2493,7 @@ export type Mutation = {
   updateStudySample: Maybe<UpdateStudySamplePayload>;
   /** Updates a single `StudySample` using its globally unique id and a patch. */
   updateStudySampleByNodeId: Maybe<UpdateStudySamplePayload>;
+  userAnnotationDefine: Maybe<UserAnnotationDefinePayload>;
 };
 
 
@@ -2583,6 +2626,12 @@ export type MutationCreateStudySampleAnnotationArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudySampleProjectionArgs = {
   input: CreateStudySampleProjectionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateUserAnnotationGroupArgs = {
+  input: CreateUserAnnotationGroupInput;
 };
 
 
@@ -2847,6 +2896,12 @@ export type MutationUpdateStudySampleArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudySampleByNodeIdArgs = {
   input: UpdateStudySampleByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUserAnnotationDefineArgs = {
+  input: UserAnnotationDefineInput;
 };
 
 /** An object with a globally unique `ID`. */
@@ -3720,6 +3775,8 @@ export type Query = Node & {
   studySamplesList: Maybe<Array<StudySample>>;
   /** Reads a set of `TreeOntology`. */
   treeOntologiesList: Maybe<Array<TreeOntology>>;
+  /** Reads a set of `UserAnnotationGroup`. */
+  userAnnotationGroupsList: Maybe<Array<UserAnnotationGroup>>;
   violinPlot: Maybe<Scalars['String']>;
 };
 
@@ -4300,6 +4357,16 @@ export type QueryTreeOntologiesListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryUserAnnotationGroupsListArgs = {
+  condition: InputMaybe<UserAnnotationGroupCondition>;
+  filter: InputMaybe<UserAnnotationGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryViolinPlotArgs = {
   pAnnotationGroupId: InputMaybe<Scalars['Int']>;
   pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
@@ -4483,6 +4550,8 @@ export type Study = Node & {
   /** Reads and enables pagination through a set of `StudySample`. */
   studySamplesList: Array<StudySample>;
   tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Reads and enables pagination through a set of `UserAnnotationGroup`. */
+  userAnnotationGroupsList: Array<UserAnnotationGroup>;
   visible: Maybe<Scalars['Boolean']>;
 };
 
@@ -4574,6 +4643,15 @@ export type StudyStudySamplesListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
+};
+
+
+export type StudyUserAnnotationGroupsListArgs = {
+  condition: InputMaybe<UserAnnotationGroupCondition>;
+  filter: InputMaybe<UserAnnotationGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
 
 export type StudyAnnotationFrontendGroup = {
@@ -6051,6 +6129,89 @@ export type UpdateStudySamplePayload = {
   studySample: Maybe<StudySample>;
 };
 
+/** All input for the `userAnnotationDefine` mutation. */
+export type UserAnnotationDefineInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  pAnnotationGroupName: InputMaybe<Scalars['String']>;
+  pSelectedSampleIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+};
+
+/** The output of our `userAnnotationDefine` mutation. */
+export type UserAnnotationDefinePayload = {
+  __typename?: 'UserAnnotationDefinePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  integer: Maybe<Scalars['Int']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+export type UserAnnotationGroup = {
+  __typename?: 'UserAnnotationGroup';
+  calculateDifferentialExpression: Scalars['Boolean'];
+  /** Reads a single `AnnotationGroup` that is related to this `UserAnnotationGroup`. */
+  savedAsAnnotationGroup: Maybe<AnnotationGroup>;
+  savedAsAnnotationGroupId: Scalars['Int'];
+  /** Reads a single `Study` that is related to this `UserAnnotationGroup`. */
+  study: Maybe<Study>;
+  studyId: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `UserAnnotationGroup` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type UserAnnotationGroupCondition = {
+  /** Checks for equality with the object’s `calculateDifferentialExpression` field. */
+  calculateDifferentialExpression: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `savedAsAnnotationGroupId` field. */
+  savedAsAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `UserAnnotationGroup` object types. All fields are combined with a logical ‘and.’ */
+export type UserAnnotationGroupFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<UserAnnotationGroupFilter>>;
+  /** Filter by the object’s `calculateDifferentialExpression` field. */
+  calculateDifferentialExpression: InputMaybe<BooleanFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<UserAnnotationGroupFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<UserAnnotationGroupFilter>>;
+  /** Filter by the object’s `savedAsAnnotationGroupId` field. */
+  savedAsAnnotationGroupId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `UserAnnotationGroup` */
+export type UserAnnotationGroupInput = {
+  calculateDifferentialExpression: Scalars['Boolean'];
+  savedAsAnnotationGroupId: Scalars['Int'];
+  studyId: Scalars['Int'];
+};
+
+/** Methods to use when ordering `UserAnnotationGroup`. */
+export enum UserAnnotationGroupsOrderBy {
+  CalculateDifferentialExpressionAsc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_ASC',
+  CalculateDifferentialExpressionDesc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_DESC',
+  Natural = 'NATURAL',
+  SavedAsAnnotationGroupIdAsc = 'SAVED_AS_ANNOTATION_GROUP_ID_ASC',
+  SavedAsAnnotationGroupIdDesc = 'SAVED_AS_ANNOTATION_GROUP_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
 export type _AllUsedOntologyId = {
   __typename?: '_AllUsedOntologyId';
   ontCode: Maybe<Scalars['String']>;
@@ -6209,6 +6370,15 @@ export type AnnotationValueCoocurrenceQueryVariables = Exact<{
 
 
 export type AnnotationValueCoocurrenceQuery = { __typename?: 'Query', annotationValueCoocurrenceList: Array<{ __typename?: 'AnnotationValueCoocurrenceRecord', annotationValueId1: number, annotationValueId2: number, occurrence: number }> };
+
+export type SaveUserAnnotationMutationVariables = Exact<{
+  studyId: Scalars['Int'];
+  annotationGroupName: Scalars['String'];
+  selectedSampleIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type SaveUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload', clientMutationId: string, integer: number } };
 
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
@@ -6869,3 +7039,40 @@ export function useAnnotationValueCoocurrenceLazyQuery(baseOptions?: Apollo.Lazy
 export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceQuery>;
 export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceLazyQuery>;
 export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>;
+export const SaveUserAnnotationDocument = gql`
+    mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: [Int!]!) {
+  userAnnotationDefine(
+    input: {pStudyId: $studyId, pAnnotationGroupName: $annotationGroupName, pSelectedSampleIds: $selectedSampleIds}
+  ) {
+    clientMutationId
+    integer
+  }
+}
+    `;
+
+/**
+ * __useSaveUserAnnotationMutation__
+ *
+ * To run a mutation, you first call `useSaveUserAnnotationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveUserAnnotationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveUserAnnotationMutation, { data, loading, error }] = useSaveUserAnnotationMutation({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      annotationGroupName: // value for 'annotationGroupName'
+ *      selectedSampleIds: // value for 'selectedSampleIds'
+ *   },
+ * });
+ */
+export function useSaveUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>(SaveUserAnnotationDocument, options);
+      }
+export type SaveUserAnnotationMutationHookResult = ReturnType<typeof useSaveUserAnnotationMutation>;
+export type SaveUserAnnotationMutationResult = Apollo.MutationResult<SaveUserAnnotationMutation>;
+export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>;

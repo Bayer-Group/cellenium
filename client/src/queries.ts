@@ -217,4 +217,11 @@ query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $ann
   }
 }
 
+mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: [Int!]!) {
+  userAnnotationDefine(input: {pStudyId:$studyId, pAnnotationGroupName:$annotationGroupName, pSelectedSampleIds:$selectedSampleIds}) {
+    clientMutationId
+    integer
+  } 
+}
+
 `;

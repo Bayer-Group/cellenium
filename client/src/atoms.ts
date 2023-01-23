@@ -70,6 +70,11 @@ export const studyIdState = atom<number>({
     default: undefined
 });
 
+export const studyReloadHelperState = atom<number>({
+    key: "studyReloadHelper",
+    default: 1
+});
+
 export const studyLayerIdDefinedState = atom<number>({
     key: "studyLayerIdDefined",
     default: undefined
@@ -125,13 +130,16 @@ export const studyState = selector<Study | undefined>({
     key: "studyState",
     get: async ({get}) => {
         const studyId = get(studyIdState);
+        const studyReloadHelper = get(studyReloadHelperState);
         if (studyId) {
             const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
                 query: StudyBasicsDocument,
                 variables: {
                     studyId,
                 },
+                fetchPolicy: "network-only"
             });
+            // console.log('REFETCH', studyReloadHelper)
             // could do multiple queries in parallel ... but maybe not needed
             const response = await responsePromise;
 
@@ -156,7 +164,7 @@ export const studyState = selector<Study | undefined>({
                     annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
                     annotationValueMap: new Map(response.data.study.annotationGroupsList.map((g) => g.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };
-                console.log('studyState set', s)
+                // console.log('studyState set', s)
                 return s;
             }
         }

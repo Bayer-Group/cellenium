@@ -1,11 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Group, Space, Stack, Text, Button, Loader} from "@mantine/core";
-import {LeftSidePanel, RightSidePanel} from "../components";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {Group, Space, Stack, Text, Button, Loader, TextInput} from "@mantine/core";
+import {AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
+    annotationGroupIdState,
     celltypeDiscoveryCoexpressionSamplesState,
     celltypeDiscoveryGenesState,
-    selectedGenesState,
+    selectedGenesState, studyReloadHelperState,
     studyState,
     userGenesState
 } from "../atoms";
@@ -16,6 +17,8 @@ import {SingleGeneSelection} from "../components/AddGene/SingleGeneSelection";
 import {Omics} from "../model";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import * as Plotly from "plotly.js";
+import {useSaveUserAnnotationMutation} from "../generated/types";
+import {showNotification} from "@mantine/notifications";
 
 interface PreparedPlot {
     message?: string;
@@ -42,10 +45,8 @@ function CoexpressionPlot({
     const setOmicsY = (omics: Omics | null) => setOmicsAll(prev => prev.map((o, i) => i === stateOffset * 2 + 1 ? omics : o));
     const {table, loading} = useExpressionValues((omicsX && omicsY) ? [omicsX.omicsId, omicsY.omicsId] : [], false);
 
-    const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
+    const celltypeDiscoveryCoexpressionSamples = useRecoilValue(celltypeDiscoveryCoexpressionSamplesState);
     const filterSampleIds = celltypeDiscoveryCoexpressionSamples[stateOffset];
-    console.log(stateOffset, 'omicsAll', omicsAll, 'celltypeDiscoveryCoexpressionSamples', celltypeDiscoveryCoexpressionSamples)
-
 
     const preparedPlot = useMemo(() => {
         if (!table || !omicsX || !omicsY) {
@@ -115,6 +116,7 @@ function CoexpressionPlot({
 
 function CelltypeDiscovery() {
     const study = useRecoilValue(studyState);
+    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
     const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
 
@@ -146,7 +148,38 @@ function CelltypeDiscovery() {
         setOmicsAll(prev => prev.slice(0, prev.length - 2));
         setCelltypeDiscoveryCoexpressionSamples(prev => prev.slice(0, prev.length - 1));
     };
-
+    const [annotationName, setAnnotationName] = useState("");
+    const [saveUserAnnotationMutation, {
+        data: saveUserAnnotationResult,
+        loading: saveUserAnnotationLoading
+    }] = useSaveUserAnnotationMutation();
+    const setStudyReloadHelper = useSetRecoilState(studyReloadHelperState);
+    const saveUserAnnotation = () => {
+        if (study && selectedSampleIds && selectedSampleIds.length > 0) {
+            saveUserAnnotationMutation({
+                variables: {
+                    studyId: study.studyId,
+                    annotationGroupName: annotationName,
+                    selectedSampleIds
+                }
+            }).then(value => {
+                showNotification({
+                    title: 'Successfully saved user annotation',
+                    message: 'You can find it among the other study annotations.',
+                    color: 'green',
+                    autoClose: 2000
+                });
+                setAnnotationName("");
+                setStudyReloadHelper(prev => prev + 1);
+            }).catch(reason => {
+                showNotification({
+                    title: 'Could not save user annotation',
+                    message: reason.message,
+                    color: 'red'
+                });
+            });
+        }
+    };
 
     if (!study) {
         return <></>;
@@ -154,6 +187,10 @@ function CelltypeDiscovery() {
     return (
         <Group position={'apart'}>
             <LeftSidePanel>
+                <Stack>
+                    {annotationGroupId && <AnnotationGroupSelectBox/>}
+                    {annotationGroupId && <AnnotationGroupDisplay/>}
+                </Stack>
             </LeftSidePanel>
             <main>
                 <ProjectionPlot colorBy={'annotation'} showSampleIds={selectedSampleIds}/>
@@ -164,10 +201,19 @@ function CelltypeDiscovery() {
                                                                                                              stateOffset={i}
                                                                                                              onSelection={onCoexpressionSelection}/>)}
                     <Button onClick={newPlotBasedOnSelectedSamples}
-                            disabled={selectedSampleIds === null || selectedSampleIds.length === 0}>Add Plot, based on
+                            disabled={selectedSampleIds === null || selectedSampleIds.length === 0}>Add plot, based on
                         selected samples</Button>
                     <Button onClick={removeLastPlot}
                             disabled={celltypeDiscoveryCoexpressionSamples.length < 2}>Remove last plot</Button>
+                    <Group>
+                        <TextInput value={annotationName}
+                                   placeholder={"My Custom Cell Annotation"}
+                                   onChange={(event) => setAnnotationName(event.currentTarget.value)}/>
+                        <Button
+                            disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
+                            onClick={saveUserAnnotation}
+                            loading={saveUserAnnotationLoading}>Save</Button>
+                    </Group>
                 </Stack>
             </RightSidePanel>
         </Group>
