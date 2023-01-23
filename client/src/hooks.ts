@@ -99,7 +99,7 @@ export function useSetStudyFromUrl() {
     useEffect(() => {
         if (study && study.studyId === studyIdUrlParamInt) {
             setValidParam('page', setPage);
-            setValidParam('annotationGroupId', setAnnotationGroupId);
+            setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
             setValidParam('annotationValueId', setSelectedAnnotation);
             setValidParam('omicsId', (omicsId: number) => {
                 const o = study.studyOmicsMap.get(omicsId);

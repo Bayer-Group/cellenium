@@ -30,7 +30,7 @@ const UserGeneStore = ({multiple = false}: Props) => {
                     </ActionIcon>
                     <Indicator color={indicatorColor} position={"middle-end"} inline offset={-20}
                                label={`${userGeneStore.length}`} size={20}>
-                        <Text size={'xs'}>User gene(s)</Text>
+                        <Text size={'xs'}>Stored gene(s)</Text>
                     </Indicator>
                 </Group>
             </Group>
