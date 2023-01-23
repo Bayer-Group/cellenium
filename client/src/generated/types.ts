@@ -6145,6 +6145,7 @@ export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'St
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
   omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  subsamplingProjection: InputMaybe<ProjectionType>;
 }>;
 
 
@@ -6546,11 +6547,11 @@ export type StudyBasicsQueryHookResult = ReturnType<typeof useStudyBasicsQuery>;
 export type StudyBasicsLazyQueryHookResult = ReturnType<typeof useStudyBasicsLazyQuery>;
 export type StudyBasicsQueryResult = Apollo.QueryResult<StudyBasicsQuery, StudyBasicsQueryVariables>;
 export const ExpressionByOmicsIdsDocument = gql`
-    query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!) {
+    query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: ProjectionType) {
   expressionByOmicsIdsList(
     pStudyLayerId: $studyLayerId
     pOmicsIds: $omicsIds
-    pSubsamplingProjection: UMAP
+    pSubsamplingProjection: $subsamplingProjection
   ) {
     omicsId
     studySampleIds
@@ -6573,6 +6574,7 @@ export const ExpressionByOmicsIdsDocument = gql`
  *   variables: {
  *      studyLayerId: // value for 'studyLayerId'
  *      omicsIds: // value for 'omicsIds'
+ *      subsamplingProjection: // value for 'subsamplingProjection'
  *   },
  * });
  */

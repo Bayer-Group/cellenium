@@ -18,14 +18,21 @@ interface PreparedPlot {
     plotlyLayout: Partial<Plotly.Layout>;
 }
 
+const plotlyConfig: Partial<Plotly.Config> = {
+    responsive: true,
+    displayModeBar: false
+};
+
 type Props = {
     colorBy: 'annotation' | 'expression';
     expressionTable?: ExpressionTable;
+    showSampleIds?: number[];
 }
 
 const ProjectionPlot = ({
                             colorBy,
-                            expressionTable
+                            expressionTable,
+                            showSampleIds
                         }: Props) => {
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
@@ -46,6 +53,10 @@ const ProjectionPlot = ({
         samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join(study.samplesProjectionTable, 'studySampleId').reify();
         const rangeX = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionX')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionX')) * 1.05];
         const rangeY = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionY')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionY')) * 1.05];
+        if (showSampleIds) {
+            // @ts-ignore
+            samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.params({showSampleIds}).filter((d, p) => aq.op.includes(p.showSampleIds, d.studySampleId, 0));
+        }
         const distinctAnnotationValueIds: number[] = samplesAnnotationProjectionTable.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
         return {
@@ -54,7 +65,7 @@ const ProjectionPlot = ({
             rangeY,
             distinctAnnotationValueIds
         }
-    }, [annotationGroupId, study]);
+    }, [annotationGroupId, study, showSampleIds]);
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {
@@ -245,10 +256,7 @@ const ProjectionPlot = ({
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
-                      config={{
-                          responsive: true,
-                          displayModeBar: false
-                      }}
+                      config={plotlyConfig}
                       onHover={onHover}
                       onClick={onClick}
                       onUnhover={() => setHighlightAnnotation(0)}
