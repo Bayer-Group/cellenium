@@ -142,11 +142,6 @@ function CelltypeDiscovery() {
         setCelltypeDiscoveryCoexpressionSamples(prev => [...prev, selectedSampleIds]);
         setSelectedSampleIds(null);
     };
-    const newUnrelatedPlot = () => {
-        setOmicsAll(prev => [...prev, prev[prev.length - 2], prev[prev.length - 1]]);
-        setCelltypeDiscoveryCoexpressionSamples(prev => [...prev, null]);
-        setSelectedSampleIds(null);
-    };
     const removeLastPlot = () => {
         setOmicsAll(prev => prev.slice(0, prev.length - 2));
         setCelltypeDiscoveryCoexpressionSamples(prev => prev.slice(0, prev.length - 1));
@@ -171,7 +166,6 @@ function CelltypeDiscovery() {
                     <Button onClick={newPlotBasedOnSelectedSamples}
                             disabled={selectedSampleIds === null || selectedSampleIds.length === 0}>Add Plot, based on
                         selected samples</Button>
-                    <Button onClick={newUnrelatedPlot}>Add independent plot</Button>
                     <Button onClick={removeLastPlot}
                             disabled={celltypeDiscoveryCoexpressionSamples.length < 2}>Remove last plot</Button>
                 </Stack>

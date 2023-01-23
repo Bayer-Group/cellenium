@@ -53,10 +53,10 @@ const ProjectionPlot = ({
         samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join(study.samplesProjectionTable, 'studySampleId').reify();
         const rangeX = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionX')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionX')) * 1.05];
         const rangeY = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionY')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionY')) * 1.05];
-        if (showSampleIds) {
-            // @ts-ignore
-            samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.params({showSampleIds}).filter((d, p) => aq.op.includes(p.showSampleIds, d.studySampleId, 0));
-        }
+        // if (showSampleIds) {
+        //     // @ts-ignore
+        //     samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.params({showSampleIds}).filter((d, p) => aq.op.includes(p.showSampleIds, d.studySampleId, 0));
+        // }
         const distinctAnnotationValueIds: number[] = samplesAnnotationProjectionTable.rollup({annotationValueIds: aq.op.array_agg_distinct('annotationValueId')}).array('annotationValueIds')[0];
 
         return {
@@ -65,7 +65,7 @@ const ProjectionPlot = ({
             rangeY,
             distinctAnnotationValueIds
         }
-    }, [annotationGroupId, study, showSampleIds]);
+    }, [annotationGroupId, study]);
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {
@@ -206,6 +206,31 @@ const ProjectionPlot = ({
         } as Partial<Plotly.PlotData>;
     }, [study, annotationProjectionData, expressionTable, colorBy]);
 
+    const selectedSamplesTrace = React.useMemo(() => {
+        if (!study || !annotationProjectionData || !showSampleIds) {
+            return undefined;
+        }
+        const filteredTable = annotationProjectionData.samplesAnnotationProjectionTable
+            // @ts-ignore
+            .params({showSampleIds}).filter((d, p) => aq.op.includes(p.showSampleIds, d.studySampleId, 0))
+            .reify();
+        return {
+            type: 'scattergl',
+            x: filteredTable.array('projectionX', Float32Array),
+            y: filteredTable.array('projectionY', Float32Array),
+            customdata: filteredTable.array('annotationValueId', Int32Array),
+            mode: 'markers',
+            marker: {
+                size: 5,
+                opacity: 1,
+                color: '#4b4b0a',
+            },
+            showlegend: false,
+            hoverinfo: 'none'
+        } as Partial<Plotly.PlotData>;
+
+    }, [annotationProjectionData, study, showSampleIds]);
+
 
     const preparedPlot: PreparedPlot | undefined = React.useMemo(() => {
         if (!annotationProjectionData || (!annotationTraces && !expressionTrace)) {
@@ -216,6 +241,7 @@ const ProjectionPlot = ({
             ...(annotationHighlightTrace ? [annotationHighlightTrace] : []),
             ...(expressionTrace ? [expressionTrace] : []),
             ...(selectedGeneExpressionTrace ? [selectedGeneExpressionTrace] : []),
+            ...(selectedSamplesTrace ? [selectedSamplesTrace] : []),
         ];
         return {
             plotlyData,
@@ -235,7 +261,7 @@ const ProjectionPlot = ({
                 },
             },
         }
-    }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace, selectedGeneExpressionTrace]);
+    }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace, selectedGeneExpressionTrace, selectedSamplesTrace]);
 
     function onHover(event: Readonly<Plotly.PlotHoverEvent>) {
         if (event.points.length > 0 && event.points[0].customdata) {
