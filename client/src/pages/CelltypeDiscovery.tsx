@@ -58,7 +58,6 @@ const CelltypeDiscovery = () => {
             .select({studySampleId: 'studySampleId', value: 'valueB'});
         const sameSampleExprValues = subTableA.join_full(subTableB, ['studySampleId', 'studySampleId']).derive({index: () => aq.op.row_number() - 1})
             .impute({valueA: () => 0, valueB: () => 0});
-        sameSampleExprValues.print({offset: 7500});
 
         const plot: Partial<Plotly.PlotData> = {
             type: 'scattergl',
