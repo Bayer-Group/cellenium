@@ -1,5 +1,6 @@
 CREATE TABLE study
 (
+    filename         text,
     study_id          serial primary key,
     study_name        text not null,
     description       text,

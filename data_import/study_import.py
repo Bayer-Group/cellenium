@@ -1,5 +1,6 @@
 import argparse
 import logging
+from pathlib import Path
 from typing import List
 
 import numpy as np
@@ -228,9 +229,10 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
 def import_study(filename: str) -> int:
     adata = sc.read_h5ad(filename)
     with engine.connect() as connection:
-        r = connection.execute(text("""INSERT INTO study (study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id)
-            VALUES (:study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id)
+        r = connection.execute(text("""INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id)
+            VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id)
             RETURNING study_id"""), {
+            'filename': (Path('/h5ad_store') / Path(filename).name).as_posix(),
             'study_name': adata.uns['cellenium']['title'],
             'description': adata.uns['cellenium']['description'],
             'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
