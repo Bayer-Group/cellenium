@@ -1,3 +1,47 @@
+DROP FUNCTION IF EXISTS get_correlated_genes(study_id int, omics_id int);
+CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
+    RETURNS table
+        (
+            omics_id INT,
+            pearson FLOAT
+        )
+AS
+$$
+import pandas as pd
+import scanpy as sc
+from joblib import Parallel, delayed, cpu_count
+import numpy as np
+import scipy
+from numba import njit
+
+@njit
+def pearson_corr(v1,v2):
+    return np.corrcoef(v1,v2)
+
+def compute_correlation(df, genes, goi):
+    collect = []
+    for gene in genes:
+        tmp = df[[goi,gene]]
+        tmp_both = tmp.loc[~(tmp==0).all(axis=1)].to_numpy()
+        try:
+            r,p = scipy.stats.pearsonr(tmp_both[:,0],tmp_both[:,1])
+            if abs(r)>=0.2:
+                collect.append({'gene': gene, 'r':r})
+        except:
+            pass
+    return pd.DataFrame(collect)
+fn = '../scratch/blood_covid.h5ad'
+adata = sc.read(fn)
+df = adata.to_df()
+chunks = np.array_split(df.columns.drop(goi),8)
+result = Parallel(n_jobs=cpu_count())(delayed(compute_correlation)(df = df,genes=chunk, goi=goi) for chunk in chunks)
+pd.concat(result).sort_values('r', ascending = False).reset_index(drop = True)
+$$ LANGUAGE plpython3u
+    IMMUTABLE
+    SECURITY DEFINER
+    PARALLEL SAFE;
+
+
 drop type if exists expression_by_omics cascade;
 create type expression_by_omics as
 (

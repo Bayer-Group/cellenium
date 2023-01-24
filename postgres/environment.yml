@@ -5,6 +5,7 @@ dependencies:
   - scanpy
   - pandas
   - numpy
+  - numba
   - scipy
   - requests
   - matplotlib
