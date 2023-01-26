@@ -3,7 +3,9 @@ CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
     RETURNS table
         (
             omics_id INT,
-            pearson FLOAT
+            display_symbol TEXT,
+            display_name TEXT,
+            r FLOAT
         )
 AS
 $$
@@ -14,28 +16,62 @@ import numpy as np
 import scipy
 from numba import njit
 
-@njit
-def pearson_corr(v1,v2):
-    return np.corrcoef(v1,v2)
+def sql_query(query):
+    # postgres data retrieval with consistent output, both in the jupyter development
+    # environment (plpy is not available) and at runtime inside a plpython3u stored procedure
+    try:
+        import plpy
+    except:
+        from postgres_utils import engine
+        from sqlalchemy import text
+        with engine.connect() as connection:
+            r = connection.execute(text(query))
+            return [row._mapping for row in r.fetchall()]
+    r = plpy.execute(query)
+    return [row for row in r]
 
-def compute_correlation(df, genes, goi):
+@njit
+def pearson_corr(m):
+    return np.corrcoef(m)[0,1]
+
+def compute_correlation(m, genes, goi):
     collect = []
     for gene in genes:
-        tmp = df[[goi,gene]]
-        tmp_both = tmp.loc[~(tmp==0).all(axis=1)].to_numpy()
-        try:
-            r,p = scipy.stats.pearsonr(tmp_both[:,0],tmp_both[:,1])
-            if abs(r)>=0.2:
-                collect.append({'gene': gene, 'r':r})
-        except:
-            pass
+        r = pearson_corr(m[[goi,gene]])
+        if r>=0.2:
+            collect.append({'h5ad_var_index': gene, 'r':r})
     return pd.DataFrame(collect)
-fn = '../scratch/blood_covid.h5ad'
+
+
+data = sql_query(f"""
+    SELECT s.filename,so.h5ad_var_index FROM study s
+    JOIN study_omics so
+      ON s.study_id=so.study_id
+    WHERE omics_id={omics_id} AND s.study_id={study_id}
+    """)
+#fn = Path('/h5ad_store') / data[0].get('filename')
+fn = Path('/h5ad_store') / Path(data[0].get('filename')).name
+goi = data[0].get('h5ad_var_index')
+
 adata = sc.read(fn)
-df = adata.to_df()
-chunks = np.array_split(df.columns.drop(goi),8)
-result = Parallel(n_jobs=cpu_count())(delayed(compute_correlation)(df = df,genes=chunk, goi=goi) for chunk in chunks)
-pd.concat(result).sort_values('r', ascending = False).reset_index(drop = True)
+df = adata.X.T.todense()
+
+chunks = np.array_split([_ for _ in range(0,adata.n_vars) if _!=goi],8)
+result = Parallel(n_jobs=cpu_count(), backend="threading")(delayed(compute_correlation)(m = df, genes=chunk, goi=goi) for chunk in chunks)
+result = pd.concat(result)
+
+geneids = tuple(result.h5ad_var_index.tolist())
+ret = sql_query(f'''
+    SELECT so.omics_id, ob.display_symbol, ob.display_name, so.h5ad_var_index FROM study_omics so
+      JOIN omics_base ob
+        ON ob.omics_id = so.omics_id
+     WHERE  so.study_id = {study_id}
+       AND so.h5ad_var_index in {geneids}
+''')
+out = pd.DataFrame(ret).merge(result, on = 'h5ad_var_index').drop('h5ad_var_index', axis =1)
+out = out[['omics_id','display_symbol','display_name','r']]
+
+return out.to_records(index=False)
 $$ LANGUAGE plpython3u
     IMMUTABLE
     SECURITY DEFINER

@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
 
 gql`
+
+
 fragment StudyInfo on StudyOverview   {
     studyId
     studyName
