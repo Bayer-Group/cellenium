@@ -184,21 +184,31 @@ query ontologies {
     }
 }
 
-query expressionByCelltype($omicsIds: [Int!]!) {
-  expressionByCelltypesList(
-    filter: { omicsId: { in: $omicsIds } }
-    # , studyId: { in: [1, 2] }
-  ) {
-    celltype
+fragment DotPlotElement on ExpressionByAnnotation {
     annotationValueId
-    # the annotationGroupId is constant as we're getting CellO 
+    annotationDisplayValue
+    # the annotationGroupId is constant as we're getting data for one annotation group
     annotationGroupId
     studyId
     omicsId
     q3
     exprCellsFraction
+}
+
+query expressionByAnnotation($filter: ExpressionByAnnotationFilter!) {
+  expressionByAnnotationsList(
+    filter: $filter
+  ) {
+    ...DotPlotElement
   }
 }
+
+query CellOAnnotationGroupId {
+  annotationGroupsList(filter: {h5AdColumn: {equalTo: "CellO_celltype"}}) {
+    annotationGroupId
+  }
+}
+
 query halfAVolcano($annotationValueId: Int!, $studyId:Int!) {
   differentialExpressionsList(
     filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}

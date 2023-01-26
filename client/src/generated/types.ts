@@ -2027,6 +2027,7 @@ export enum DifferentialExpressionsOrderBy {
 
 export type ExpressionByAnnotation = {
   __typename?: 'ExpressionByAnnotation';
+  annotationDisplayValue: Maybe<Scalars['String']>;
   annotationGroupId: Maybe<Scalars['Int']>;
   annotationValueId: Maybe<Scalars['Int']>;
   boxplotParams: Maybe<BoxplotValue>;
@@ -2043,6 +2044,8 @@ export type ExpressionByAnnotation = {
  * are tested for equality and combined with a logical ‘and.’
  */
 export type ExpressionByAnnotationCondition = {
+  /** Checks for equality with the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
@@ -2067,6 +2070,8 @@ export type ExpressionByAnnotationCondition = {
 export type ExpressionByAnnotationFilter = {
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<ExpressionByAnnotationFilter>>;
+  /** Filter by the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<StringFilter>;
   /** Filter by the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<IntFilter>;
   /** Filter by the object’s `annotationValueId` field. */
@@ -2093,6 +2098,8 @@ export type ExpressionByAnnotationFilter = {
 
 /** Methods to use when ordering `ExpressionByAnnotation`. */
 export enum ExpressionByAnnotationsOrderBy {
+  AnnotationDisplayValueAsc = 'ANNOTATION_DISPLAY_VALUE_ASC',
+  AnnotationDisplayValueDesc = 'ANNOTATION_DISPLAY_VALUE_DESC',
   AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
   AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
@@ -2112,88 +2119,6 @@ export enum ExpressionByAnnotationsOrderBy {
   StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
   ValuesAsc = 'VALUES_ASC',
   ValuesDesc = 'VALUES_DESC'
-}
-
-export type ExpressionByCelltype = {
-  __typename?: 'ExpressionByCelltype';
-  annotationGroupId: Maybe<Scalars['Int']>;
-  annotationValueId: Maybe<Scalars['Int']>;
-  celltype: Maybe<Scalars['String']>;
-  exprCellsFraction: Maybe<Scalars['Float']>;
-  omicsId: Maybe<Scalars['Int']>;
-  q3: Maybe<Scalars['Float']>;
-  studyId: Maybe<Scalars['Int']>;
-  studyLayerId: Maybe<Scalars['Int']>;
-};
-
-/**
- * A condition to be used against `ExpressionByCelltype` object types. All fields
- * are tested for equality and combined with a logical ‘and.’
- */
-export type ExpressionByCelltypeCondition = {
-  /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `celltype` field. */
-  celltype: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `exprCellsFraction` field. */
-  exprCellsFraction: InputMaybe<Scalars['Float']>;
-  /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `q3` field. */
-  q3: InputMaybe<Scalars['Float']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyLayerId` field. */
-  studyLayerId: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `ExpressionByCelltype` object types. All fields are combined with a logical ‘and.’ */
-export type ExpressionByCelltypeFilter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<ExpressionByCelltypeFilter>>;
-  /** Filter by the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `celltype` field. */
-  celltype: InputMaybe<StringFilter>;
-  /** Filter by the object’s `exprCellsFraction` field. */
-  exprCellsFraction: InputMaybe<FloatFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<ExpressionByCelltypeFilter>;
-  /** Filter by the object’s `omicsId` field. */
-  omicsId: InputMaybe<IntFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<ExpressionByCelltypeFilter>>;
-  /** Filter by the object’s `q3` field. */
-  q3: InputMaybe<FloatFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studyLayerId` field. */
-  studyLayerId: InputMaybe<IntFilter>;
-};
-
-/** Methods to use when ordering `ExpressionByCelltype`. */
-export enum ExpressionByCelltypesOrderBy {
-  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
-  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
-  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
-  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
-  CelltypeAsc = 'CELLTYPE_ASC',
-  CelltypeDesc = 'CELLTYPE_DESC',
-  ExprCellsFractionAsc = 'EXPR_CELLS_FRACTION_ASC',
-  ExprCellsFractionDesc = 'EXPR_CELLS_FRACTION_DESC',
-  Natural = 'NATURAL',
-  OmicsIdAsc = 'OMICS_ID_ASC',
-  OmicsIdDesc = 'OMICS_ID_DESC',
-  Q3Asc = 'Q3_ASC',
-  Q3Desc = 'Q3_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
-  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
-  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC'
 }
 
 export type ExpressionByOmic = {
@@ -3691,8 +3616,6 @@ export type Query = Node & {
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
   /** Reads a set of `ExpressionByAnnotation`. */
   expressionByAnnotationsList: Maybe<Array<ExpressionByAnnotation>>;
-  /** Reads a set of `ExpressionByCelltype`. */
-  expressionByCelltypesList: Maybe<Array<ExpressionByCelltype>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList: Maybe<Array<ExpressionByOmic>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -3989,16 +3912,6 @@ export type QueryExpressionByAnnotationsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ExpressionByAnnotationsOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryExpressionByCelltypesListArgs = {
-  condition: InputMaybe<ExpressionByCelltypeCondition>;
-  filter: InputMaybe<ExpressionByCelltypeFilter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<ExpressionByCelltypesOrderBy>>;
 };
 
 
@@ -4503,6 +4416,8 @@ export enum StudiesOrderBy {
   DescriptionDesc = 'DESCRIPTION_DESC',
   DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
   DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
   Natural = 'NATURAL',
   OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
   OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
@@ -4528,6 +4443,7 @@ export type Study = Node & {
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsList: Array<DifferentialExpression>;
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  filename: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   organismTaxId: Maybe<Scalars['String']>;
@@ -4889,6 +4805,8 @@ export type StudyCondition = {
   description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `filename` field. */
+  filename: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -4913,6 +4831,8 @@ export type StudyFilter = {
   description: InputMaybe<StringFilter>;
   /** Filter by the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `filename` field. */
+  filename: InputMaybe<StringFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyFilter>;
   /** Checks for any expressions in this list. */
@@ -4935,6 +4855,7 @@ export type StudyInput = {
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  filename: InputMaybe<Scalars['String']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: Scalars['String'];
@@ -5297,6 +5218,7 @@ export type StudyPatch = {
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  filename: InputMaybe<Scalars['String']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
@@ -6347,12 +6269,19 @@ export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
 
-export type ExpressionByCelltypeQueryVariables = Exact<{
-  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+export type DotPlotElementFragment = { __typename?: 'ExpressionByAnnotation', annotationValueId: number, annotationDisplayValue: string, annotationGroupId: number, studyId: number, omicsId: number, q3: number, exprCellsFraction: number };
+
+export type ExpressionByAnnotationQueryVariables = Exact<{
+  filter: ExpressionByAnnotationFilter;
 }>;
 
 
-export type ExpressionByCelltypeQuery = { __typename?: 'Query', expressionByCelltypesList: Array<{ __typename?: 'ExpressionByCelltype', celltype: string, annotationValueId: number, annotationGroupId: number, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
+export type ExpressionByAnnotationQuery = { __typename?: 'Query', expressionByAnnotationsList: Array<{ __typename?: 'ExpressionByAnnotation', annotationValueId: number, annotationDisplayValue: string, annotationGroupId: number, studyId: number, omicsId: number, q3: number, exprCellsFraction: number }> };
+
+export type CellOAnnotationGroupIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CellOAnnotationGroupIdQuery = { __typename?: 'Query', annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', annotationGroupId: number }> };
 
 export type HalfAVolcanoQueryVariables = Exact<{
   annotationValueId: Scalars['Int'];
@@ -6484,6 +6413,17 @@ export const OntologyOverviewFragmentDoc = gql`
   name
   ontid
   nodeId
+}
+    `;
+export const DotPlotElementFragmentDoc = gql`
+    fragment DotPlotElement on ExpressionByAnnotation {
+  annotationValueId
+  annotationDisplayValue
+  annotationGroupId
+  studyId
+  omicsId
+  q3
+  exprCellsFraction
 }
     `;
 export const DegDocument = gql`
@@ -6916,47 +6856,75 @@ export function useOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type OntologiesQueryHookResult = ReturnType<typeof useOntologiesQuery>;
 export type OntologiesLazyQueryHookResult = ReturnType<typeof useOntologiesLazyQuery>;
 export type OntologiesQueryResult = Apollo.QueryResult<OntologiesQuery, OntologiesQueryVariables>;
-export const ExpressionByCelltypeDocument = gql`
-    query expressionByCelltype($omicsIds: [Int!]!) {
-  expressionByCelltypesList(filter: {omicsId: {in: $omicsIds}}) {
-    celltype
-    annotationValueId
-    annotationGroupId
-    studyId
-    omicsId
-    q3
-    exprCellsFraction
+export const ExpressionByAnnotationDocument = gql`
+    query expressionByAnnotation($filter: ExpressionByAnnotationFilter!) {
+  expressionByAnnotationsList(filter: $filter) {
+    ...DotPlotElement
   }
 }
-    `;
+    ${DotPlotElementFragmentDoc}`;
 
 /**
- * __useExpressionByCelltypeQuery__
+ * __useExpressionByAnnotationQuery__
  *
- * To run a query within a React component, call `useExpressionByCelltypeQuery` and pass it any options that fit your needs.
- * When your component renders, `useExpressionByCelltypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useExpressionByAnnotationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionByAnnotationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useExpressionByCelltypeQuery({
+ * const { data, loading, error } = useExpressionByAnnotationQuery({
  *   variables: {
- *      omicsIds: // value for 'omicsIds'
+ *      filter: // value for 'filter'
  *   },
  * });
  */
-export function useExpressionByCelltypeQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>) {
+export function useExpressionByAnnotationQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>(ExpressionByCelltypeDocument, options);
+        return Apollo.useQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
       }
-export function useExpressionByCelltypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>) {
+export function useExpressionByAnnotationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>(ExpressionByCelltypeDocument, options);
+          return Apollo.useLazyQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
         }
-export type ExpressionByCelltypeQueryHookResult = ReturnType<typeof useExpressionByCelltypeQuery>;
-export type ExpressionByCelltypeLazyQueryHookResult = ReturnType<typeof useExpressionByCelltypeLazyQuery>;
-export type ExpressionByCelltypeQueryResult = Apollo.QueryResult<ExpressionByCelltypeQuery, ExpressionByCelltypeQueryVariables>;
+export type ExpressionByAnnotationQueryHookResult = ReturnType<typeof useExpressionByAnnotationQuery>;
+export type ExpressionByAnnotationLazyQueryHookResult = ReturnType<typeof useExpressionByAnnotationLazyQuery>;
+export type ExpressionByAnnotationQueryResult = Apollo.QueryResult<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>;
+export const CellOAnnotationGroupIdDocument = gql`
+    query CellOAnnotationGroupId {
+  annotationGroupsList(filter: {h5AdColumn: {equalTo: "CellO_celltype"}}) {
+    annotationGroupId
+  }
+}
+    `;
+
+/**
+ * __useCellOAnnotationGroupIdQuery__
+ *
+ * To run a query within a React component, call `useCellOAnnotationGroupIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCellOAnnotationGroupIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCellOAnnotationGroupIdQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCellOAnnotationGroupIdQuery(baseOptions?: Apollo.QueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
+      }
+export function useCellOAnnotationGroupIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
+        }
+export type CellOAnnotationGroupIdQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdQuery>;
+export type CellOAnnotationGroupIdLazyQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdLazyQuery>;
+export type CellOAnnotationGroupIdQueryResult = Apollo.QueryResult<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>;
 export const HalfAVolcanoDocument = gql`
     query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
   differentialExpressionsList(
