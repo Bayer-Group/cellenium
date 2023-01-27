@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Center, Divider, Group, Loader, Stack, Text, useMantineTheme} from "@mantine/core";
+import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
@@ -85,6 +85,9 @@ function CoexpressionAnalysis() {
                 <Stack>
                     <Divider size={"xs"} label={'Gene store'}/>
                     <UserGeneStore multiple={true} findCoexpressors={true}/>
+                    <Space/>
+                    <Divider size={"xs"} label={'Correlated genes'}/>
+                    {correlationOmicsId===undefined && <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
                     {correlationOmicsId!==undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
                 </Stack>
             </RightSidePanel>

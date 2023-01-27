@@ -1,5 +1,4 @@
 import React from 'react';
-import DataTable from "react-data-table-component";
 import {ActionIcon, Loader, Stack, Text} from "@mantine/core";
 import {IconPlus} from "@tabler/icons";
 import memoize from 'memoize-one';
@@ -14,6 +13,7 @@ import {
 import {Omics} from "../../model";
 import _ from 'lodash';
 import {useCorrelatedgenesQuery} from "../../generated/types";
+import DataTable from 'react-data-table-component';
 
 const customStyles = {
     table: {
@@ -142,14 +142,15 @@ const CorrelationTable = ({omicsId, studyId}: Props) => {
     }
 
     return (
-        <Stack justify={'flex-start'} align={'center'}>
+        <Stack justify={'flex-start'} align={'flex-start'}>
             {data && data.getCorrelatedGenesList.length > 0 &&
-                <DataTable dense columns={columns(handleClick)} data={data.getCorrelatedGenesList}
-                           defaultSortFieldId={3}
-                           defaultSortAsc={false}
-                           customStyles={customStyles} fixedHeader
-                           fixedHeaderScrollHeight="100%"
-                           noDataComponent={<Text>No data.</Text>}/>
+
+                    <DataTable dense columns={columns(handleClick)} data={data.getCorrelatedGenesList}
+                               defaultSortFieldId={3}
+                               defaultSortAsc={false}
+                               customStyles={customStyles} fixedHeader
+                               fixedHeaderScrollHeight="100%"
+                               noDataComponent={<Text>No data.</Text>}/>
             }
             {data && data.getCorrelatedGenesList.length === 0 &&
                 <Text color={'dimmed'} size={'xs'}>
