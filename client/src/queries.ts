@@ -1,6 +1,14 @@
 import gql from 'graphql-tag';
 
 gql`
+query correlatedgenes($studyId: Int!, $omicsId: Int!) {
+  getCorrelatedGenesList(studyId: $studyId, omicsId: $omicsId) {
+    displayName
+    displaySymbol
+    omicsId
+    r
+  }
+}
 
 
 fragment StudyInfo on StudyOverview   {

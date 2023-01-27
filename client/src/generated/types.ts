@@ -2210,6 +2210,33 @@ export type FloatListFilter = {
   overlaps: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
 };
 
+/** The return type of our `getCorrelatedGenes` query. */
+export type GetCorrelatedGenesRecord = {
+  __typename?: 'GetCorrelatedGenesRecord';
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  omicsId: Maybe<Scalars['Int']>;
+  r: Maybe<Scalars['Float']>;
+};
+
+/** A filter to be used against `GetCorrelatedGenesRecord` object types. All fields are combined with a logical ‘and.’ */
+export type GetCorrelatedGenesRecordFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<GetCorrelatedGenesRecordFilter>>;
+  /** Filter by the object’s `displayName` field. */
+  displayName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<GetCorrelatedGenesRecordFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<GetCorrelatedGenesRecordFilter>>;
+  /** Filter by the object’s `r` field. */
+  r: InputMaybe<FloatFilter>;
+};
+
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -3618,6 +3645,7 @@ export type Query = Node & {
   expressionByAnnotationsList: Maybe<Array<ExpressionByAnnotation>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList: Maybe<Array<ExpressionByOmic>>;
+  getCorrelatedGenesList: Maybe<Array<Maybe<GetCorrelatedGenesRecord>>>;
   /** Fetches an object given its globally unique `ID`. */
   node: Maybe<Node>;
   /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
@@ -3923,6 +3951,16 @@ export type QueryExpressionByOmicsIdsListArgs = {
   pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
   pSubsamplingProjection: InputMaybe<ProjectionType>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryGetCorrelatedGenesListArgs = {
+  filter: InputMaybe<GetCorrelatedGenesRecordFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  omicsId: InputMaybe<Scalars['Int']>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -6174,6 +6212,14 @@ export enum _AllUsedOntologyIdsOrderBy {
   OntCodeDesc = 'ONT_CODE_DESC'
 }
 
+export type CorrelatedgenesQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  omicsId: Scalars['Int'];
+}>;
+
+
+export type CorrelatedgenesQuery = { __typename?: 'Query', getCorrelatedGenesList: Array<{ __typename?: 'GetCorrelatedGenesRecord', displayName: string, displaySymbol: string, omicsId: number, r: number }> };
+
 export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
 
 export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
@@ -6426,6 +6472,45 @@ export const DotPlotElementFragmentDoc = gql`
   exprCellsFraction
 }
     `;
+export const CorrelatedgenesDocument = gql`
+    query correlatedgenes($studyId: Int!, $omicsId: Int!) {
+  getCorrelatedGenesList(studyId: $studyId, omicsId: $omicsId) {
+    displayName
+    displaySymbol
+    omicsId
+    r
+  }
+}
+    `;
+
+/**
+ * __useCorrelatedgenesQuery__
+ *
+ * To run a query within a React component, call `useCorrelatedgenesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCorrelatedgenesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCorrelatedgenesQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      omicsId: // value for 'omicsId'
+ *   },
+ * });
+ */
+export function useCorrelatedgenesQuery(baseOptions: Apollo.QueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
+      }
+export function useCorrelatedgenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
+        }
+export type CorrelatedgenesQueryHookResult = ReturnType<typeof useCorrelatedgenesQuery>;
+export type CorrelatedgenesLazyQueryHookResult = ReturnType<typeof useCorrelatedgenesLazyQuery>;
+export type CorrelatedgenesQueryResult = Apollo.QueryResult<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>;
 export const DegDocument = gql`
     query deg($studyId: Int!, $annotationValueId: Int!) {
   differentialExpressionVsList(

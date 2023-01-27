@@ -16,6 +16,10 @@ import {
 } from "./generated/types";
 import * as aq from 'arquero';
 
+export const correlationOmicsIdState = atom<number>({
+    key: 'coexpressionOmicsId',
+    default: undefined
+})
 
 export const userGeneStoreOpenState = atom<boolean>(
     {
