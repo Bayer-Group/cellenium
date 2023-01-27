@@ -55,10 +55,6 @@ const SankeyPlot = ({
                     value: nd.occurrence
                 })
             })
-            console.log({
-                nodes,
-                links
-            });
             return {
                 nodes,
                 links

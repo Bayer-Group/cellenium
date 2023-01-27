@@ -43,7 +43,6 @@ const StudyCard = ({study}: { study: StudyInfoFragment }) => {
                 }}>
                     <Group position={'left'} spacing={3}>
                         {study.studyOntologyList && study.studyOntologyList.map((item) => {
-                            console.log({item})
                             if (item.labels !== null) {
                                 let badges = item.labels.map((label) => <Badge
                                     color={ontology2Color(item.ontology)}>{label}</Badge>)

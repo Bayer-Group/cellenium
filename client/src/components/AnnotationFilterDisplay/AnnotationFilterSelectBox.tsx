@@ -30,7 +30,7 @@ const AnnotationFilterSelectBox = () => {
             searchable
             placeholder="Select"
             data={annotations}
-            onSubmit={(event) => console.log(event)}
+            // onSubmit={(event) => console.log(event)}
 
         />
     );

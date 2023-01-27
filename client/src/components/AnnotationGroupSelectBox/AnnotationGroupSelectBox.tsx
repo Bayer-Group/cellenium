@@ -23,8 +23,6 @@ function AnnotationGroupSelectBox() {
         setValue(annotationGroupId?.toString())
         return anns;
     }, [study, annotationGroupId]);
-    console.log("AAAA", annotationGroupId)
-
 
     function update(value: string | null) {
         if (value) {
