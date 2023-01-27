@@ -9,12 +9,13 @@ CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
         )
 AS
 $$
+
 import pandas as pd
 import scanpy as sc
 from joblib import Parallel, delayed, cpu_count
 import numpy as np
 import scipy
-from numba import njit
+# from numba import njit
 from pathlib import Path
 
 def sql_query(query):
@@ -31,7 +32,9 @@ def sql_query(query):
     r = plpy.execute(query)
     return [row for row in r]
 
-@njit
+# numba is disabled, the function crashes if the correlation result is empty, e.g.
+# for KRAS in the "COVID-19" study:
+#@njit
 def pearson_corr(m):
     return np.corrcoef(m)[0,1]
 
@@ -59,6 +62,8 @@ df = adata.X.T.todense()
 chunks = np.array_split([_ for _ in range(0,adata.n_vars) if _!=goi],8)
 result = Parallel(n_jobs=cpu_count(), backend="threading")(delayed(compute_correlation)(m = df, genes=chunk, goi=goi) for chunk in chunks)
 result = pd.concat(result)
+if len(result) == 0:
+    return []
 
 geneids = tuple(result.h5ad_var_index.tolist())
 ret = sql_query(f'''
