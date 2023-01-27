@@ -165,7 +165,7 @@ function CelltypeDiscovery() {
             }).then(value => {
                 showNotification({
                     title: 'Successfully saved user annotation',
-                    message: 'You can find it among the other study annotations.',
+                    message: 'Differentially expressed genes are calculated in the background and will appear later.',
                     color: 'green',
                     autoClose: 2000
                 });

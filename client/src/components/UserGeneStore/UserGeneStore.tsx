@@ -8,9 +8,10 @@ import UserGene from "../UserGene/UserGene";
 
 interface Props {
     multiple?: boolean;
+    findCoexpressors?: boolean;
 }
 
-const UserGeneStore = ({multiple = false}: Props) => {
+const UserGeneStore = ({multiple = false, findCoexpressors=false}: Props) => {
     const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
     const indicatorColor = useRecoilValue(userGeneStoreCounterColor);
     const theme = useMantineTheme()
@@ -49,7 +50,7 @@ const UserGeneStore = ({multiple = false}: Props) => {
                     </Group>
                         {[...userGeneStore].reverse().map((omics) => {
                             return (<Group key={omics.omicsId} align={'center'} position={'left'}>
-                                <UserGene multiple={multiple} gene={omics}></UserGene>
+                                <UserGene multiple={multiple} gene={omics} findCoexpressors={findCoexpressors}></UserGene>
                             </Group>)
                         })}</Stack>}
 

@@ -18,6 +18,7 @@ import {MarkerCard} from "./MarkerCard/MarkerCard";
 import {InlineFoldChangePlot} from "./InlineFoldChangePlot/InlineFoldChangePlot";
 import {SankeyPlot} from "./SankeyPlot/SankeyPlot";
 import {SpeciesSelect} from "./SpeciesSelect/SpeciesSelect";
+import {CorrelationTable} from "./CorrelationTable/CorrelationTable";
 
 export {
     DEGTable,
@@ -39,5 +40,6 @@ export {
     MarkerCard,
     InlineFoldChangePlot,
     SankeyPlot,
-    SpeciesSelect
+    SpeciesSelect,
+    CorrelationTable
 }

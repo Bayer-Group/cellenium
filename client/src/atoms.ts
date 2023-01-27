@@ -5,6 +5,9 @@ import {
     AllGenesDocument,
     AllGenesQuery,
     AllGenesQueryVariables,
+    CellOAnnotationGroupIdDocument,
+    CellOAnnotationGroupIdQuery,
+    CellOAnnotationGroupIdQueryVariables,
     OmicsGeneFragment,
     StudyBasicsDocument,
     StudyBasicsFragment,
@@ -13,6 +16,10 @@ import {
 } from "./generated/types";
 import * as aq from 'arquero';
 
+export const correlationOmicsIdState = atom<number>({
+    key: 'coexpressionOmicsId',
+    default: undefined
+})
 
 export const userGeneStoreOpenState = atom<boolean>(
     {
@@ -35,12 +42,12 @@ export const userGenesState = atom<Omics[]>({
     default: []
 })
 
-export const celltypeDiscoveryGenesState = atom<(Omics|null)[]>({
+export const celltypeDiscoveryGenesState = atom<(Omics | null)[]>({
     key: "celltypeDiscoveryGenesState",
     default: [null, null]
 })
 
-export const celltypeDiscoveryCoexpressionSamplesState = atom<(number[]|null)[]>({
+export const celltypeDiscoveryCoexpressionSamplesState = atom<(number[] | null)[]>({
     key: "celltypeDiscoveryCoexpressionSamplesState",
     default: [null]
 })
@@ -188,6 +195,20 @@ export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined
         });
         if (allGenes?.data) {
             return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
+        }
+    }
+});
+
+
+export const cellOAnnotationGroupIdState = selector<number | undefined>({
+    key: "cellOAnnotationGroupIdState",
+    get: async ({get}) => {
+        const annotationGroupIdData = await apolloClient.query<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>({
+            query: CellOAnnotationGroupIdDocument,
+            fetchPolicy: 'no-cache'
+        });
+        if (annotationGroupIdData?.data) {
+            return annotationGroupIdData.data.annotationGroupsList[0].annotationGroupId;
         }
     }
 });

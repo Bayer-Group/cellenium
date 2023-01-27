@@ -1,42 +1,3 @@
-DROP FUNCTION IF EXISTS get_correlated_genes(study_id int, omics_id int);
-CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
-    RETURNS table
-        (
-            omics_id INT,
-            pearson FLOAT
-        )
-AS
-$$
-import pandas as pd
-import scanpy as sc
-from joblib import Parallel, delayed, cpu_count
-import numpy as np
-import scipy
-
-
-def compute_correlation(df, genes, goi):
-    collect = []
-    for gene in genes:
-        tmp = df[[goi,gene]]
-        tmp_both = tmp.loc[~(tmp==0).all(axis=1)]
-        try:
-            r, p = scipy.stats.pearsonr(*tmp_both.to_dict(orient = 'list').values())
-            if abs(r)>=0.2:
-                collect.append({'gene': gene, 'r':r, 'p': p})
-        except:
-            pass
-    return pd.DataFrame(collect)
-fn = '../scratch/blood_covid.h5ad'
-adata = sc.read(fn)
-df = adata.to_df()
-chunks = np.array_split(df.columns.drop(goi),8)
-result = Parallel(n_jobs=cpu_count())(delayed(compute_correlation)(df = df,genes=chunk, goi=goi) for chunk in chunks)
-pd.concat(result).sort_values('r', ascending = False).reset_index(drop = True)
-$$ LANGUAGE plpython3u
-    IMMUTABLE
-    SECURITY DEFINER
-    PARALLEL SAFE;
-
 DROP FUNCTION IF EXISTS annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_value_id_2 int);
 CREATE OR REPLACE FUNCTION annotation_value_coocurrence(study_id int, annotation_group_id_1 int, annotation_group_id_2 int)
     RETURNS TABLE
@@ -47,8 +8,10 @@ CREATE OR REPLACE FUNCTION annotation_value_coocurrence(study_id int, annotation
             )
 AS
 $$
+
 import pandas as pd
 import numpy as np
+
 
 def sql_query(query):
     # postgres data retrieval with consistent output, both in the jupyter development
@@ -124,7 +87,6 @@ where s.visible = True;
 
 
 
-
 CREATE VIEW study_overview_ontology
 AS
 SELECT s.study_id,
@@ -166,20 +128,6 @@ select ont_code_lists.ontology, l.*
 from ont_code_lists,
      concept_hierarchy_minimum_trees_parents_lists(ont_code_lists.ontology,
                                                    ont_code_lists.ont_codes) l;
-
-
--- TODO materialized view, with refresh no study import
-create view annotation_value_combination_sample_count
-as
-with sample_annotationvalues as (select study_id,
-                                        sample_id,
-                                        array_agg(ssa.annotation_value_id order by ssa.annotation_value_id) annotation_value_combination
-                                 from study_sample_annotation ssa
-                                          cross join lateral unnest(ssa.study_sample_ids) sample_id
-                                 group by study_id, sample_id)
-select study_id, annotation_value_combination, count(1)
-from sample_annotationvalues
-group by study_id, annotation_value_combination;
 
 
 create view study_annotation_frontend_group

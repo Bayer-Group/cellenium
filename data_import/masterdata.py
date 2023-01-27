@@ -231,7 +231,9 @@ class Dataimport(object):
 
     def import_ncit(self):
         logging.info('importing NCIT')
-        # download
+        # download URL obtained at: https://bioportal.bioontology.org/ontologies/NCIT
+        # The apikey is a generic string issued by https://bioportal.bioontology.org/ for all anonymous users of their
+        # site.
         url = 'https://data.bioontology.org/ontologies/NCIT/download?apikey=8b5b7825-538d-40e0-9e9e-5ab9274a9aeb&download_format=csv'
         if not os.path.exists(self.ncitfn):
             download(url, self.ncitfn)
@@ -328,11 +330,11 @@ class Dataimport(object):
                                   ['hgnc_symbol', 'ensembl_gene_id', 'entrezgene_id', 'description'],
                                   9606)
         mus = get_gene_mappings('mmusculus_gene_ensembl',
-                               ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
-                               10090)
+                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+                                10090)
         rat = get_gene_mappings('rnorvegicus_gene_ensembl',
-                               ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
-                               10116)
+                                ['ensembl_gene_id', 'external_gene_name', 'entrezgene_id', 'description'],
+                                10116)
         genes = pd.concat([human, mus, rat]).reset_index(drop=True)
         genes[['omics_type', 'tax_id', 'display_symbol', 'display_name']].to_sql('omics_base',
                                                                                  if_exists='append', index=False,
@@ -371,9 +373,9 @@ class Dataimport(object):
     def import_masterdata(self):
         self.import_mesh()
         self.import_ncit()
-        #self.import_ncbi_taxonomy()
+        # self.import_ncbi_taxonomy()
         self.import_genes()
-        #self.import_antibodies()
+        # self.import_antibodies()
         # TODO jasper
 
 

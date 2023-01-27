@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
-import {Center, Divider, Group, Loader, Stack, Text, useMantineTheme} from "@mantine/core";
-import {AnnotationFilterDisplay, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
+import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
+import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
+    correlationOmicsIdState,
     selectedAnnotationFilterState,
     selectedGenesState,
     studyIdState,
@@ -64,7 +65,7 @@ function CoexpressionAnalysis() {
     const userGenes = useRecoilValue(userGenesState);
     const study = useRecoilValue(studyState);
     const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
-
+    const correlationOmicsId = useRecoilValue(correlationOmicsIdState);
     useEffect(() => {
         setOpened(true)
     }, [])
@@ -83,7 +84,11 @@ function CoexpressionAnalysis() {
             <RightSidePanel>
                 <Stack>
                     <Divider size={"xs"} label={'Gene store'}/>
-                    <UserGeneStore multiple={true}/>
+                    <UserGeneStore multiple={true} findCoexpressors={true}/>
+                    <Space/>
+                    <Divider size={"xs"} label={'Correlated genes'}/>
+                    {correlationOmicsId===undefined && <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
+                    {correlationOmicsId!==undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
                 </Stack>
             </RightSidePanel>
         </Group>

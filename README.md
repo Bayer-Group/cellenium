@@ -23,13 +23,16 @@ database schema setup and data ingestion.
 
 ## Setting up
 
-for CellO:
+Preparation of CellO data files (workaround for https://github.com/deweylab/CellO/issues/29 ):
+
 ```bash
 mkdir scratch/cello_resources
 curl https://deweylab.biostat.wisc.edu/cell_type_classification/resources_v2.0.0.tar.gz >scratch/cello_resources/resources_v2.0.0.tar.gz
 tar -C scratch/cello_resources -zxf scratch/cello_resources/resources_v2.0.0.tar.gz
-````
+```
 
+Cellenium setup, including execution of study data processing notebooks (initially, this will take a couple of hours
+to run).
 
 ```bash
 docker-compose up
@@ -40,6 +43,9 @@ make reset_database test_studydata_import
 # 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
 make normal_studydata_import
 ```
+
+Before you process and import the huge example study (there are two additional make targets for that), edit the beginning
+of `heart_failure_reichart2022*.ipynb` and define the download URL as described in the notebooks.
 
 ## manually executing the study data preparation jupyter notebooks
 

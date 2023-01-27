@@ -1,3 +1,88 @@
+DROP FUNCTION IF EXISTS get_correlated_genes(study_id int, omics_id int);
+CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
+    RETURNS table
+        (
+            omics_id INT,
+            display_symbol TEXT,
+            display_name TEXT,
+            r FLOAT
+        )
+AS
+$$
+
+import pandas as pd
+import scanpy as sc
+from joblib import Parallel, delayed, cpu_count
+import numpy as np
+import scipy
+# from numba import njit
+from pathlib import Path
+
+def sql_query(query):
+    # postgres data retrieval with consistent output, both in the jupyter development
+    # environment (plpy is not available) and at runtime inside a plpython3u stored procedure
+    try:
+        import plpy
+    except:
+        from postgres_utils import engine
+        from sqlalchemy import text
+        with engine.connect() as connection:
+            r = connection.execute(text(query))
+            return [row._mapping for row in r.fetchall()]
+    r = plpy.execute(query)
+    return [row for row in r]
+
+# numba is disabled, the function crashes if the correlation result is empty, e.g.
+# for KRAS in the "COVID-19" study:
+#@njit
+def pearson_corr(m):
+    return np.corrcoef(m)[0,1]
+
+def compute_correlation(m, genes, goi):
+    collect = []
+    for gene in genes:
+        r = pearson_corr(m[[goi,gene]])
+        if r>=0.2:
+            collect.append({'h5ad_var_index': gene, 'r':r})
+    return pd.DataFrame(collect)
+
+
+data = sql_query(f"""
+    SELECT s.filename,so.h5ad_var_index FROM study s
+    JOIN study_omics so
+      ON s.study_id=so.study_id
+    WHERE omics_id={omics_id} AND s.study_id={study_id}
+    """)
+fn = Path('/h5ad_store') / Path(data[0].get('filename')).name
+goi = data[0].get('h5ad_var_index')
+
+adata = sc.read(fn)
+df = adata.X.T.todense()
+
+chunks = np.array_split([_ for _ in range(0,adata.n_vars) if _!=goi],8)
+result = Parallel(n_jobs=cpu_count(), backend="threading")(delayed(compute_correlation)(m = df, genes=chunk, goi=goi) for chunk in chunks)
+result = pd.concat(result)
+if len(result) == 0:
+    return []
+
+geneids = tuple(result.h5ad_var_index.tolist())
+ret = sql_query(f'''
+    SELECT so.omics_id, ob.display_symbol, ob.display_name, so.h5ad_var_index FROM study_omics so
+      JOIN omics_base ob
+        ON ob.omics_id = so.omics_id
+     WHERE  so.study_id = {study_id}
+       AND so.h5ad_var_index in {geneids}
+''')
+out = pd.DataFrame(ret).merge(result, on = 'h5ad_var_index').drop('h5ad_var_index', axis =1)
+out = out[['omics_id','display_symbol','display_name','r']]
+
+return out.sort_values('r', ascending = False).to_records(index=False)
+$$ LANGUAGE plpython3u
+    IMMUTABLE
+    SECURITY DEFINER
+    PARALLEL SAFE;
+
+
 drop type if exists expression_by_omics cascade;
 create type expression_by_omics as
 (
@@ -112,7 +197,7 @@ CREATE AGGREGATE boxplot(real) (
     );
 
 
--- box plot calculated in the database:
+-- box plot / dot plot calculated in the database:
 drop view if exists expression_by_annotation cascade;
 create view expression_by_annotation
 as
@@ -125,6 +210,7 @@ select sl.study_id,
        e.omics_id,
        sa.annotation_group_id,
        sa.annotation_value_id,
+       av.display_value                                         annotation_display_value,
        array_agg(value)                                         values,
        boxplot(value)                                           boxplot_params,
        percentile_cont(0.75) within group (order by value) as   q3,
@@ -136,26 +222,14 @@ select sl.study_id,
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
          cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
-    --          cross join unnest(e.values) with ordinality as val(val_value, val_i)
---          cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
          join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sample_id
-group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
+         join annotation_value av on sa.annotation_value_id = av.annotation_value_id
+group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id, av.display_value;
 
--- select * from expression_by_annotation where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;
-
-drop view if exists expression_by_celltype;
-create view expression_by_celltype
-as
-select study_id,
-       study_layer_id,
-       omics_id,
-       e.annotation_group_id,
-       e.annotation_value_id,
-       av.display_value celltype,
-       q3,
-       expr_cells_fraction
-from expression_by_annotation e
-         join annotation_value av on e.annotation_value_id = av.annotation_value_id
-where e.annotation_group_id = (select annotation_group_id from annotation_group where h5ad_column = 'CellO_celltype');
-
--- select * from expression_by_celltype where omics_id =8356;
+/*
+select omics_id, annotation_display_value, q3, expr_cells_fraction
+from expression_by_annotation
+where study_id = 5
+  and study_layer_id=5 and annotation_group_id = 12
+  and omics_id in (10382, 11906);
+*/

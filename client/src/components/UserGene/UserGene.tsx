@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {ActionIcon,  createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
-import {IconEye, IconInfoCircle, IconX} from "@tabler/icons";
+import {ActionIcon, createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
+import {IconCalculator, IconEye, IconInfoCircle, IconX} from "@tabler/icons";
 import {Omics} from "../../model";
-import {useRecoilState, useSetRecoilState} from "recoil";
-import {pageState, selectedGenesState, userGenesState} from "../../atoms";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {correlationOmicsIdState, selectedGenesState, studyState, userGenesState} from "../../atoms";
 
 
 const useStyles = createStyles((theme) => ({
@@ -21,14 +21,16 @@ const useStyles = createStyles((theme) => ({
 interface Props {
     gene: Omics;
     multiple?: boolean;
+    findCoexpressors?: boolean;
 }
 
-const UserGene = ({gene, multiple = false}: Props) => {
+const UserGene = ({gene, multiple = false, findCoexpressors = false}: Props) => {
     const {cx, classes} = useStyles();
     const [geneStore, setGeneStore] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
-    const setPage = useSetRecoilState(pageState);
     const [showInfo, setShowInfo] = useState(false)
+    const [correlationOmicsId, setCorrelationOmicsId] = useRecoilState(correlationOmicsIdState);
+    const study = useRecoilValue(studyState);
 
     function handleRemove(gene: Omics) {
         // remove from geneStore
@@ -37,6 +39,12 @@ const UserGene = ({gene, multiple = false}: Props) => {
         // remove from Selection
         removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId)
         setSelectedGenesStore(removed)
+    }
+
+    function searchCoexpressors(gene: Omics) {
+        setCorrelationOmicsId(gene.omicsId);
+        setSelectedGenesStore([...selectedGenes, gene]);
+
     }
 
     function handleColorClick(gene: Omics) {
@@ -71,6 +79,16 @@ const UserGene = ({gene, multiple = false}: Props) => {
                             color={(selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0) ? 'white' : 'gray'}/>
                     </ActionIcon>
                 </Grid.Col>
+                {findCoexpressors &&
+                    <Grid.Col span={1}>
+                        <ActionIcon
+                            className={cx(classes.main, {[classes.active]: gene.omicsId===correlationOmicsId})}
+
+                            variant={'subtle'} size={'xs'} onClick={() => searchCoexpressors(gene)}>
+                            <IconCalculator
+                            color={ correlationOmicsId === gene.omicsId ? 'white' : 'gray'}/>
+                        </ActionIcon>
+                    </Grid.Col>}
                 <Grid.Col span={1}>
                     <Tooltip label={`${gene.displayName}`} opened={showInfo}>
                         <ActionIcon variant={'subtle'} size={'xs'} onClick={() => setShowInfo((o) => !o)}
@@ -79,7 +97,8 @@ const UserGene = ({gene, multiple = false}: Props) => {
                         </ActionIcon>
                     </Tooltip>
                 </Grid.Col>
-                <Grid.Col span={5}>
+
+                <Grid.Col span={4}>
                     <Text size={'xs'}>{gene.displaySymbol}</Text>
                 </Grid.Col>
 
