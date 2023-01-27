@@ -73,7 +73,6 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
             }
             return
         }
-        console.log(allGenes.values())
         const newOfferings = _.uniqBy(Array.from(allGenes.values())
             .filter((gene) => gene.taxId === parseInt(species))
             .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))

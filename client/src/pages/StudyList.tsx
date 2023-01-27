@@ -21,7 +21,6 @@ const StudyList = () => {
         () => data?.treeOntologiesList && generateOntologyTrees(data.treeOntologiesList),
         [data]);
     const [searchOntCodes, setSearchOntCodes] = useState<string[]>([]);
-    console.log('searchOntCodes', searchOntCodes)
 
     const filteredStudies = useMemo(() => {
         if (!allStudies) {

@@ -6,6 +6,9 @@ import h5ad_preparation as prep
 from pathlib import Path
 
 
+# Please note: This file is not part of the typical cellenium setup / data import process yet.
+
+
 def create_study_files(sep = "\t"):
     
     study_list_filename = "public_data_links.txt"

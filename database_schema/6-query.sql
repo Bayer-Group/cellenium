@@ -81,6 +81,7 @@ as
 select s.study_id,
        s.study_name,
        s.description,
+       s.external_website,
        s.cell_count
 from study s
 where s.visible = True;

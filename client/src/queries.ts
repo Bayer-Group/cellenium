@@ -16,6 +16,7 @@ fragment StudyInfo on StudyOverview   {
     studyName
     description
     cellCount
+    externalWebsite
     studyOntologyList {
       ontCodes
       labels

@@ -4,6 +4,7 @@ CREATE TABLE study
     study_id          serial primary key,
     study_name        text not null,
     description       text,
+    external_website  text,
     tissue_ncit_ids   text[],
     disease_mesh_ids  text[],
     cell_ontology_ids text[],

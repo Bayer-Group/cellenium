@@ -1,7 +1,7 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {FormEvent, useState} from "react";
 import {IconArrowRight, IconX} from "@tabler/icons";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     selectedGenesState,
     studyState,
@@ -24,8 +24,8 @@ function AddGene({multipleSelected = false}: Props) {
     const theme = useMantineTheme();
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor)
-    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    const setIndicatorColor = useSetRecoilState(userGeneStoreCounterColor)
+    const setOpened = useSetRecoilState(userGeneStoreOpenState);
 
     const study = useRecoilValue(studyState);
     const form = useForm();

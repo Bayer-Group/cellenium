@@ -21,7 +21,6 @@ const UserGeneStore = ({multiple = false, findCoexpressors=false}: Props) => {
         <Stack>
             <AddGene multipleSelected={multiple}/>
             <Group onClick={() => {
-                console.log({storeOpened});
                 setOpened(!storeOpened)
             }} style={{cursor: 'pointer'}}>
                 <Group spacing={0}>

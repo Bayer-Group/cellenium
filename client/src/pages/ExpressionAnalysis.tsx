@@ -9,7 +9,7 @@ import {
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
     selectedAnnotationFilterState,
@@ -143,14 +143,12 @@ function DotPlots() {
 
 const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
-    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
-    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    const setOpened = useSetRecoilState(userGeneStoreOpenState);
     useEffect(() => {
         setOpened(true)
     }, [])
 
     // const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
-    const userGenes = useRecoilValue(userGenesState);
     const selectedGenes = useRecoilValue(selectedGenesState);
 
     const study = useRecoilValue(studyState);
