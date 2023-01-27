@@ -4454,6 +4454,8 @@ export enum StudiesOrderBy {
   DescriptionDesc = 'DESCRIPTION_DESC',
   DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
   DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
   FilenameAsc = 'FILENAME_ASC',
   FilenameDesc = 'FILENAME_DESC',
   Natural = 'NATURAL',
@@ -4481,6 +4483,7 @@ export type Study = Node & {
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsList: Array<DifferentialExpression>;
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
   filename: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
@@ -4843,6 +4846,8 @@ export type StudyCondition = {
   description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
   filename: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
@@ -4869,6 +4874,8 @@ export type StudyFilter = {
   description: InputMaybe<StringFilter>;
   /** Filter by the object’s `diseaseMeshIds` field. */
   diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
   filename: InputMaybe<StringFilter>;
   /** Negates the expression. */
@@ -4893,6 +4900,7 @@ export type StudyInput = {
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
@@ -5118,6 +5126,7 @@ export type StudyOverview = {
   __typename?: 'StudyOverview';
   cellCount: Maybe<Scalars['Int']>;
   description: Maybe<Scalars['String']>;
+  externalWebsite: Maybe<Scalars['String']>;
   studyId: Maybe<Scalars['Int']>;
   studyName: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
@@ -5142,6 +5151,8 @@ export type StudyOverviewCondition = {
   cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `description` field. */
   description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
@@ -5156,6 +5167,8 @@ export type StudyOverviewFilter = {
   cellCount: InputMaybe<IntFilter>;
   /** Filter by the object’s `description` field. */
   description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyOverviewFilter>;
   /** Checks for any expressions in this list. */
@@ -5170,6 +5183,7 @@ export type StudyOverviewFilter = {
 export type StudyOverviewInput = {
   cellCount: InputMaybe<Scalars['Int']>;
   description: InputMaybe<Scalars['String']>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
 };
@@ -5243,6 +5257,8 @@ export enum StudyOverviewsOrderBy {
   CellCountDesc = 'CELL_COUNT_DESC',
   DescriptionAsc = 'DESCRIPTION_ASC',
   DescriptionDesc = 'DESCRIPTION_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
@@ -5256,6 +5272,7 @@ export type StudyPatch = {
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
@@ -6220,7 +6237,7 @@ export type CorrelatedgenesQueryVariables = Exact<{
 
 export type CorrelatedgenesQuery = { __typename?: 'Query', getCorrelatedGenesList: Array<{ __typename?: 'GetCorrelatedGenesRecord', displayName: string, displaySymbol: string, omicsId: number, r: number }> };
 
-export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
+export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
 
 export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
@@ -6235,7 +6252,7 @@ export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Arr
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
+export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
 export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
@@ -6361,6 +6378,7 @@ export const StudyInfoFragmentDoc = gql`
   studyName
   description
   cellCount
+  externalWebsite
   studyOntologyList {
     ontCodes
     labels

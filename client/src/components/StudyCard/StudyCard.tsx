@@ -24,11 +24,12 @@ const StudyCard = ({study}: { study: StudyInfoFragment }) => {
                             <Badge variant={'light'} color={'gray'}>{Math.round(study.cellCount / 1000)}k
                                 cells</Badge>
                             {/* eslint-disable-next-line react/jsx-no-undef */}
-                            <ActionIcon variant={'subtle'} onClick={() => {
-                                window.open("www.google.de", "_blank")
-                            }}>
-                                <IconExternalLink/>
-                            </ActionIcon>
+                            {study.externalWebsite && (<ActionIcon variant={'subtle'} onClick={() => {
+                                    window.open(study.externalWebsite, "_blank")
+                                }}>
+                                    <IconExternalLink/>
+                                </ActionIcon>
+                            )}
                         </Group>
                     </Grid.Col>
                 </Grid>
