@@ -116,7 +116,7 @@ function CoexpressionPlot({
 
 function CelltypeDiscovery() {
     const study = useRecoilValue(studyState);
-    const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
+    const annotationGroupId = useRecoilValue(annotationGroupIdState);
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
     const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
 

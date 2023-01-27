@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     correlationOmicsIdState,
     selectedAnnotationFilterState,
@@ -29,7 +29,7 @@ const CoexpressionAnalysisPlot = () => {
     const studyId = useRecoilValue(studyIdState);
     const studyLayerId = useRecoilValue(studyLayerIdState);
     const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
-    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    const setOpened = useSetRecoilState(userGeneStoreOpenState);
     useEffect(() => {
         setOpened(true)
     }, [])
@@ -62,9 +62,8 @@ const CoexpressionAnalysisPlot = () => {
 
 
 function CoexpressionAnalysis() {
-    const userGenes = useRecoilValue(userGenesState);
     const study = useRecoilValue(studyState);
-    const [storeOpened, setOpened] = useRecoilState(userGeneStoreOpenState);
+    const setOpened = useSetRecoilState(userGeneStoreOpenState);
     const correlationOmicsId = useRecoilValue(correlationOmicsIdState);
     useEffect(() => {
         setOpened(true)
