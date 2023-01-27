@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
         )
 AS
 $$
-import pandas as pd
+    import pandas as pd
 import scanpy as sc
 from joblib import Parallel, delayed, cpu_count
 import numpy as np
@@ -49,7 +49,6 @@ data = sql_query(f"""
       ON s.study_id=so.study_id
     WHERE omics_id={omics_id} AND s.study_id={study_id}
     """)
-#fn = Path('/h5ad_store') / data[0].get('filename')
 fn = Path('/h5ad_store') / Path(data[0].get('filename')).name
 goi = data[0].get('h5ad_var_index')
 
@@ -192,7 +191,7 @@ CREATE AGGREGATE boxplot(real) (
     );
 
 
--- box plot calculated in the database:
+-- box plot / dot plot calculated in the database:
 drop view if exists expression_by_annotation cascade;
 create view expression_by_annotation
 as
@@ -205,6 +204,7 @@ select sl.study_id,
        e.omics_id,
        sa.annotation_group_id,
        sa.annotation_value_id,
+       av.display_value                                         annotation_display_value,
        array_agg(value)                                         values,
        boxplot(value)                                           boxplot_params,
        percentile_cont(0.75) within group (order by value) as   q3,
@@ -216,26 +216,14 @@ select sl.study_id,
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
          cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
-    --          cross join unnest(e.values) with ordinality as val(val_value, val_i)
---          cross join unnest(e.study_sample_ids) with ordinality as sampleid(sampleid_v, sampleid_i)
          join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sample_id
-group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id;
+         join annotation_value av on sa.annotation_value_id = av.annotation_value_id
+group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id, av.display_value;
 
--- select * from expression_by_annotation where study_layer_id = 1 and omics_id = 116 and annotation_group_id = 1;
-
-drop view if exists expression_by_celltype;
-create view expression_by_celltype
-as
-select study_id,
-       study_layer_id,
-       omics_id,
-       e.annotation_group_id,
-       e.annotation_value_id,
-       av.display_value celltype,
-       q3,
-       expr_cells_fraction
-from expression_by_annotation e
-         join annotation_value av on e.annotation_value_id = av.annotation_value_id
-where e.annotation_group_id = (select annotation_group_id from annotation_group where h5ad_column = 'CellO_celltype');
-
--- select * from expression_by_celltype where omics_id =8356;
+/*
+select omics_id, annotation_display_value, q3, expr_cells_fraction
+from expression_by_annotation
+where study_id = 5
+  and study_layer_id=5 and annotation_group_id = 12
+  and omics_id in (10382, 11906);
+*/

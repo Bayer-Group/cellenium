@@ -28,7 +28,7 @@ for CellO:
 mkdir scratch/cello_resources
 curl https://deweylab.biostat.wisc.edu/cell_type_classification/resources_v2.0.0.tar.gz >scratch/cello_resources/resources_v2.0.0.tar.gz
 tar -C scratch/cello_resources -zxf scratch/cello_resources/resources_v2.0.0.tar.gz
-````
+```
 
 
 ```bash

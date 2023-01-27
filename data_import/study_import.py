@@ -232,7 +232,8 @@ def import_study(filename: str) -> int:
         r = connection.execute(text("""INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id)
             VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id)
             RETURNING study_id"""), {
-            'filename': (Path('/h5ad_store') / Path(filename).name).as_posix(),
+            'filename': Path(filename).relative_to("scratch").as_posix(),
+            # filename inside scratch (scratch will be /h5ad_store in postgres docker)
             'study_name': adata.uns['cellenium']['title'],
             'description': adata.uns['cellenium']['description'],
             'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),

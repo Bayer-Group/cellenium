@@ -1,6 +1,6 @@
 CREATE TABLE study
 (
-    filename         text,
+    filename          text,
     study_id          serial primary key,
     study_name        text not null,
     description       text,
@@ -209,6 +209,7 @@ CREATE TABLE study_sample_annotation
     -- the samples that are annotated with that value, e.g. that specific cell type
     study_sample_ids    int[] not null
 );
+create unique index study_sample_annotation_1 on study_sample_annotation (study_id, annotation_value_id);
 
 CREATE VIEW study_sample_annotation_subsampling
 as

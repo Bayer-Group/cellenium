@@ -22,11 +22,17 @@ import {
 } from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
-import {useExpressionViolinPlotQuery} from "../generated/types";
+import {
+    ExpressionByAnnotationFilter,
+    useExpressionByAnnotationQuery,
+    useExpressionViolinPlotQuery
+} from "../generated/types";
+import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";
 
 const analysisTypes = [
-    {value: 'violinplot', label: 'Violinplot'},
-    {value: 'projection', label: 'Projectionplot'}
+    {value: 'violinplot', label: 'Violin Plot'},
+    {value: 'projection', label: 'Projection Plot'},
+    {value: 'dotplot', label: 'Dot Plot'}
     /*
     {value: 'boxplot', label: 'Boxplot'},
         {value: 'dot', label: 'Dotplot'},
@@ -94,6 +100,46 @@ function ProjectionPlots() {
     </Stack>;
 }
 
+function DotPlots() {
+    const theme = useMantineTheme();
+    const study = useRecoilValue(studyState);
+    const studyLayerId = useRecoilValue(studyLayerIdState);
+    const annotationGroupId = useRecoilValue(annotationGroupIdState);
+    const selectedGenes = useRecoilValue(selectedGenesState);
+    const {data, loading} = useExpressionByAnnotationQuery({
+        variables: {
+            filter: {
+                omicsId: {in: selectedGenes.map(g => g.omicsId)},
+                annotationGroupId: {equalTo: annotationGroupId || -1},
+                studyId: {equalTo: study?.studyId || -1},
+                studyLayerId: {equalTo: studyLayerId}
+            } as ExpressionByAnnotationFilter
+        },
+        skip: selectedGenes.length === 0 || !annotationGroupId || !study
+    });
+    const heatmapDisplayData = useMemo(() => {
+        if (!data?.expressionByAnnotationsList) {
+            return undefined;
+        }
+        return data.expressionByAnnotationsList
+            .map(dotPlotElement => ({
+                ...dotPlotElement,
+                displaySymbol: study?.studyOmicsMap?.get(dotPlotElement.omicsId)?.displaySymbol || "nn"
+            }));
+    }, [data, selectedGenes]);
+
+    if (loading) {
+        return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
+                                                                       size={25}/></Center>;
+    }
+    return <Stack>
+        {heatmapDisplayData &&
+            <ExpressionDotPlot data={heatmapDisplayData}
+                               annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
+                               xAxis={"displaySymbol"}/>
+        }
+    </Stack>;
+}
 
 const ExpressionAnalysis = () => {
     const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
@@ -133,6 +179,7 @@ const ExpressionAnalysis = () => {
                 <Stack align={'center'} justify={'center'}>
                     {analysisType === 'violinplot' && <ViolinPlots/>}
                     {analysisType === 'projection' && <ProjectionPlots/>}
+                    {analysisType === 'dotplot' && <DotPlots/>}
                     {selectedGenes.length === 0 &&
                         <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
                             store</Text></Text>}
