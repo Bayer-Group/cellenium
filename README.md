@@ -8,6 +8,7 @@ Cellenium is a FAIR and scalable interactive visual analytics app for scRNA-Seq 
 
 Link to publication: ...
 
+![UMAP projection cell type plot of the public study example blood_covid.ipynb](screenshots/projection_plot.png)
 
 ## System Overview
 
