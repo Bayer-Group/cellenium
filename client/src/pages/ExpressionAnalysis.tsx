@@ -66,12 +66,12 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
 function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
-    return <Stack align={'center'}>
+    return <Group position={"center"}>
         {[...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
         </Stack>)}
-    </Stack>;
+    </Group>;
 }
 
 
@@ -92,12 +92,12 @@ function ProjectionPlots() {
                                                                        size={25}/></Center>;
     }
 
-    return <Stack>
+    return <Group position={"center"}>
         {tablePerGene && [...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy={'expression'} expressionTable={tablePerGene[i]}/>
         </Stack>)}
-    </Stack>;
+    </Group>;
 }
 
 function DotPlots() {
@@ -176,14 +176,12 @@ const ExpressionAnalysis = () => {
             </LeftSidePanel>
             <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop: 60}}
                   className={'plotContainer'}>
-                <Stack align={'center'} justify={'center'}>
-                    {analysisType === 'violinplot' && <ViolinPlots/>}
-                    {analysisType === 'projection' && <ProjectionPlots/>}
-                    {analysisType === 'dotplot' && <DotPlots/>}
-                    {selectedGenes.length === 0 &&
-                        <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
-                            store</Text></Text>}
-                </Stack>
+                {analysisType === 'violinplot' && <ViolinPlots/>}
+                {analysisType === 'projection' && <ProjectionPlots/>}
+                {analysisType === 'dotplot' && <DotPlots/>}
+                {selectedGenes.length === 0 &&
+                    <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
+                        store</Text></Text>}
             </main>
             <RightSidePanel>
                 <Stack>
