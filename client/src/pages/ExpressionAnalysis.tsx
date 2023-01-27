@@ -132,13 +132,13 @@ function DotPlots() {
         return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
                                                                        size={25}/></Center>;
     }
-    return <Stack>
+    return <Group position={"center"}>
         {heatmapDisplayData &&
             <ExpressionDotPlot data={heatmapDisplayData}
                                annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
                                xAxis={"displaySymbol"}/>
         }
-    </Stack>;
+    </Group>;
 }
 
 const ExpressionAnalysis = () => {
@@ -170,7 +170,7 @@ const ExpressionAnalysis = () => {
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
-                    {analysisType !== 'projection' && showAnnotationSelectors}
+                    {analysisType === 'violinplot' && showAnnotationSelectors}
                 </Stack>
 
             </LeftSidePanel>
