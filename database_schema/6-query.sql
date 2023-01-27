@@ -8,8 +8,10 @@ CREATE OR REPLACE FUNCTION annotation_value_coocurrence(study_id int, annotation
             )
 AS
 $$
+
 import pandas as pd
 import numpy as np
+
 
 def sql_query(query):
     # postgres data retrieval with consistent output, both in the jupyter development
@@ -85,7 +87,6 @@ where s.visible = True;
 
 
 
-
 CREATE VIEW study_overview_ontology
 AS
 SELECT s.study_id,
@@ -127,20 +128,6 @@ select ont_code_lists.ontology, l.*
 from ont_code_lists,
      concept_hierarchy_minimum_trees_parents_lists(ont_code_lists.ontology,
                                                    ont_code_lists.ont_codes) l;
-
-
--- TODO materialized view, with refresh no study import
-create view annotation_value_combination_sample_count
-as
-with sample_annotationvalues as (select study_id,
-                                        sample_id,
-                                        array_agg(ssa.annotation_value_id order by ssa.annotation_value_id) annotation_value_combination
-                                 from study_sample_annotation ssa
-                                          cross join lateral unnest(ssa.study_sample_ids) sample_id
-                                 group by study_id, sample_id)
-select study_id, annotation_value_combination, count(1)
-from sample_annotationvalues
-group by study_id, annotation_value_combination;
 
 
 create view study_annotation_frontend_group
