@@ -9,12 +9,13 @@ CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
         )
 AS
 $$
-    import pandas as pd
+import pandas as pd
 import scanpy as sc
 from joblib import Parallel, delayed, cpu_count
 import numpy as np
 import scipy
 from numba import njit
+from pathlib import Path
 
 def sql_query(query):
     # postgres data retrieval with consistent output, both in the jupyter development
@@ -70,7 +71,7 @@ ret = sql_query(f'''
 out = pd.DataFrame(ret).merge(result, on = 'h5ad_var_index').drop('h5ad_var_index', axis =1)
 out = out[['omics_id','display_symbol','display_name','r']]
 
-return out.to_records(index=False)
+return out.sort_values('r', ascending = False).to_records(index=False)
 $$ LANGUAGE plpython3u
     IMMUTABLE
     SECURITY DEFINER
