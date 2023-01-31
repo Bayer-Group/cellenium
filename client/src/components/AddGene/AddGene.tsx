@@ -34,7 +34,8 @@ function AddGene({multipleSelected = false}: Props) {
         let newOfferings: Omics[] = [];
         if (inputString.length > 0) {
             // @ts-ignore
-            newOfferings = study?.studyOmicsTable.filter(aq.escape(t => aq.op.includes(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0))).objects();
+            newOfferings = study?.studyOmicsTable.filter(aq.escape(t => aq.op.startswith(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0))).objects();
+            newOfferings = newOfferings.sort((a, b) => a.displaySymbol.localeCompare(b.displaySymbol));
         }
         setOfferings(newOfferings)
         setValue(inputString)
@@ -110,6 +111,7 @@ function AddGene({multipleSelected = false}: Props) {
                         radius={0}
                         onChange={handleChange}
                         data={offerings as AutocompleteItem[]}
+                        limit={15}
                         onItemSubmit={(item: any) => {
                             handleItemSubmit(item)
                         }}
