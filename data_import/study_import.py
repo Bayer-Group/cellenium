@@ -21,8 +21,10 @@ logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(
 def import_study_omics(study_id: int, adata: AnnData):
     logging.info('importing gene definitions of study')
     omics_df = pd.read_sql(
-        "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=9606 and omics_type='gene'",
-        engine, index_col='omics_id')
+        "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
+        engine,
+        params={'tax_id': int(adata.uns['cellenium']['taxonomy_id'])},
+        index_col='omics_id')
     match_dfs = []
     for col in ['ensembl_gene_id', 'entrez_gene_ids', 'hgnc_symbols']:
         match_df = pd.DataFrame(omics_df[[col]])
