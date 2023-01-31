@@ -2,11 +2,11 @@ name: postgres_python
 dependencies:
   - python=3.10
   - postgresql-plpython=15.1
-  - scanpy
-  - pandas
-  - numpy
+  - scanpy=1.9.*
+  - pandas=1.5.*
+  - numpy=1.23.*
   - numba
-  - scipy
+  - scipy=1.10.*
   - requests
   - matplotlib
   - seaborn

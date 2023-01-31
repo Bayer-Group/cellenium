@@ -9,14 +9,14 @@ dependencies:
   - graphviz
   - pip
   - pip:
-    - pandas
-    - numpy
-    - scipy
+    - pandas~=1.5.2
+    - numpy~=1.23.5
+    - scipy~=1.10.0
     - requests
     - matplotlib
     - seaborn
-    - scanpy
-    - sqlalchemy
+    - scanpy~=1.9.1
+    - sqlalchemy~=1.4.46
     - psycopg2-binary
     - jupyterlab
     - pybiomart
