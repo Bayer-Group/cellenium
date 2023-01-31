@@ -25,9 +25,10 @@ const MarkerGeneSearch = () => {
                     })}
                 </Grid>
                 <Space h={'xl'}/>
-                <Center style={{'height': '100%', 'width': '100%'}} >
+                <Center style={{'height': '100%', 'width': '100%'}}>
                     {searchResults.length === 0 &&
-                        <Text color={'dimmed'}>Please enter your genes of interest.</Text>}
+                        <Text color={'dimmed'}>Please enter your genes of interest. Cellenium will search for studies
+                            and cell annotation clusters that show the entered gene as differentially expressed.</Text>}
                 </Center>
             </Container>
         </Container>

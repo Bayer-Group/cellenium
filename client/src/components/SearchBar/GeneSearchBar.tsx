@@ -1,5 +1,5 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {IconSearch, IconX} from "@tabler/icons";
 import {useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
 import {Omics} from "../../model";
@@ -34,6 +34,7 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
     const allGenes = useRecoilValue(allGenesState) || new Map();
     const [species, setSpecies] = useState<string>(SPECIES[0].value);
     const inputRef = useRef<HTMLInputElement>(null);
+    const speciesList = useMemo(() => humanOnly ? SPECIES.filter(s => s.value === "9606") : SPECIES, []);
 
     const [getCellTypes, {
         data: markerData,
@@ -104,7 +105,7 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
 
     return (
         <Group position={'left'} align={'flex-end'} spacing={4} noWrap>
-            <SpeciesSelect data={SPECIES} species={species} handleChange={setSpecies}/>
+            <SpeciesSelect data={speciesList} species={species} handleChange={setSpecies}/>
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
                     Enter gene symbol(s)

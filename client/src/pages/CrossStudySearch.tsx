@@ -62,6 +62,13 @@ const CrossStudySearch = () => {
             <Container size={'xl'} style={{paddingBottom: '2rem'}}>
                 <GeneSearchBar humanOnly={true} onGeneSelection={ids => setOmicsIds(ids)}/>
             </Container>
+            {omicsIds.length === 0 && <Center>
+                <Text style={{'width': '50em'}} color={'dimmed'}>Please enter your genes of interest. Cellenium will
+                    show the gene's
+                    expression in human studies with standardized cell annotation (CellO). As the study data is
+                    processed and normalized independently, this is a qualitative direction for which studies
+                    to explore independently. Click in the chart to open a study.</Text>
+            </Center>}
             <Group position={"center"}>
                 {(loading || studyDataLoading) && <Loader variant={'dots'} color={theme.colors.gray[5]} size={25}/>}
                 {heatmapDisplayData && heatmapDisplayData.map(heatmap => <Stack>
