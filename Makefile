@@ -2,7 +2,7 @@
 .SECONDARY:
 
 reset_database:
-	$(shell which nerdctl &>/dev/null && echo nerdctl exec -it cellenium_postgres_1 || echo docker exec -it cellenium-postgres-1) \
+	$(shell which nerdctl &>/dev/null && echo nerdctl exec -it cellenium_postgres_1 || echo docker-compose exec postgres) \
 	  bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done' || true
 	PYTHONPATH=$$(pwd)/data_import python data_import/masterdata.py
 	rm -f scratch/*.h5ad.imported
