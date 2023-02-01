@@ -155,20 +155,17 @@ const ExpressionAnalysis = () => {
     if (!study) {
         return <></>;
     }
-    const showAnnotationSelectors = (
-        <div>
-            <AnnotationGroupSelectBox/>
-            <Divider my="sm"/>
-            <AnnotationFilterDisplay/>
-        </div>
-    );
     return (
         <Group align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
-                    {analysisType === 'violinplot' && showAnnotationSelectors}
+                    {(analysisType === 'violinplot' || analysisType == 'dotplot') && <AnnotationGroupSelectBox/>}
+                    {analysisType === 'violinplot' && (<>
+                        <Divider my="sm"/>
+                        <AnnotationFilterDisplay/>
+                    </>)}
                 </Stack>
 
             </LeftSidePanel>
