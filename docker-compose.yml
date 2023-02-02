@@ -35,5 +35,11 @@ services:
     ports:
       - "5000:5000"
 
+  client:
+    build:
+      context: ./client
+    ports:
+      - "5002:5002"
+
 volumes:
   postgresdata:
