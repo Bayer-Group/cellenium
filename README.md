@@ -48,12 +48,17 @@ conda env create -f data_import/environment.yml
 conda activate cellenium_import
 # 'test_studydata' should contain data to cover all application features, but is small enough to be imported in a few minutes
 make reset_database test_studydata_import
-# now that the database is populated with a first study, we may install the webapp's dependencies and run it
-(cd client && yarn && yarn start)
 
 # 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
 make normal_studydata_import
 ```
+
+The GraphQL API explorer is available at http://localhost:5000/postgraphile/graphiql . Postgraphile will listen
+to changes in the database schema and the updated API is visible immediately.
+
+The cellenium webapp 'production build' static site is hosted in the 'client' container, see http://localhost:5002/ .
+For development, you run `(cd client && yarn && yarn start)` to install the webapp's dependencies and have
+a hot-reloaded webapp.
 
 Before you process and import the huge example study (there are two additional make targets for that), edit the beginning
 of `heart_failure_reichart2022*.ipynb` and define the download URL as described in the notebooks.
