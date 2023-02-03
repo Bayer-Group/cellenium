@@ -11,6 +11,8 @@ dependencies:
   - matplotlib
   - seaborn
   - networkx
+  - python-jose
+  - msal
   - pip
   - git
   - make

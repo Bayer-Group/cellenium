@@ -12,7 +12,7 @@ Cellenium is a FAIR and scalable interactive visual analytics app for scRNA-Seq 
 
 Link to publication: ...
 
-![UMAP projection cell type plot of the public study example blood_covid.ipynb](screenshots/projection_plot.png)
+![UMAP projection cell type plot of the public study example blood_covid.ipynb](documentation/screenshots/projection_plot.png)
 
 ## System Overview
 
@@ -21,10 +21,10 @@ downloading some publicly available scRNA studies, normalize the data if necessa
 expressed genes, a UMAP projection and other study data that is needed for Cellenium's features to work.
 
 Cellenium is a web application that accesses a PostgreSQL database via GraphQL API. Some API features, like
-server-side rendered plots, depend on Python stored procedures. The [graphql_api_usage](graphql_api_usage/) folder
+server-side rendered plots, depend on Python stored procedures. The [graphql_api_usage](documentation/graphql_api_usage/) folder
 contains a couple of example queries to illustrate the API capabilities.
 
-![Cellenium architecture](cellenium_architecture.png)
+![Cellenium architecture](documentation/cellenium_architecture.png)
 
 The setup steps below automate the download and creation of appropriate H5AD files, docker image build,
 database schema setup and data ingestion.

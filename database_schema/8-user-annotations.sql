@@ -19,6 +19,7 @@ create function user_annotation_define(p_study_id int,
 )
     returns integer -- created annotation_group_id
     language plpgsql
+    security definer -- need to invoke pg_background_launch, which we don't grant to the API user
     volatile
 as
 $$
@@ -26,7 +27,13 @@ declare
     created_annotation_group_id int;
     created_annotation_value_id int;
     worker_pid                  int;
+    study_allowed int;
 begin
+    select count(1) into study_allowed from study_visible_currentuser where study_id = p_study_id;
+    if study_allowed = 0 then
+        raise 'no permission to create user annotation for this study';
+    end if;
+
     insert into annotation_group (h5ad_column, display_group)
     values (p_study_id || '_' || p_annotation_group_name, p_annotation_group_name)
     returning annotation_group_id into created_annotation_group_id;

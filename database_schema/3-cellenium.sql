@@ -1,19 +1,20 @@
 CREATE TABLE study
 (
-    filename          text,
-    study_id          serial primary key,
-    study_name        text not null,
-    description       text,
-    external_website  text,
-    tissue_ncit_ids   text[],
-    disease_mesh_ids  text[],
-    cell_ontology_ids text[],
-    organism_tax_id   text,
+    filename           text,
+    study_id           serial primary key,
+    study_name         text not null,
+    description        text,
+    external_website   text,
+    tissue_ncit_ids    text[],
+    disease_mesh_ids   text[],
+    cell_ontology_ids  text[],
+    organism_tax_id    text,
     --organism_label          text,
     --ontology_ids_with_parents text[]   for search
 
-    cell_count        int,
-    visible           boolean default False
+    cell_count         int,
+    visible            boolean default False,
+    reader_permissions text[]
 );
 
 
@@ -286,7 +287,9 @@ CREATE TABLE differential_expression
 );
 create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
 
-CREATE VIEW differential_expression_v AS
+CREATE VIEW differential_expression_v
+    with (security_invoker = true)
+AS
 SELECT de.*, ob.display_symbol, ob.display_name
 FROM differential_expression de
          JOIN omics_base ob on de.omics_id = ob.omics_id;

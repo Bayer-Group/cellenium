@@ -49,7 +49,7 @@ out = out.loc[out['occurrence'] != 0, :].astype(int).reset_index(drop=True)
 return out.to_records(index=False).tolist()
 $$ LANGUAGE plpython3u
     IMMUTABLE
-    SECURITY DEFINER
+    SECURITY INVOKER
     PARALLEL SAFE;
 
 
@@ -77,6 +77,7 @@ $$;
 
 drop view if exists study_overview cascade;
 create view study_overview
+            with (security_invoker = true) -- use current user's permission when querying study table
 as
 select s.study_id,
        s.study_name,
@@ -89,6 +90,7 @@ where s.visible = True;
 
 
 CREATE VIEW study_overview_ontology
+    with (security_invoker = true)
 AS
 SELECT s.study_id,
        'NCIT'            ontology,

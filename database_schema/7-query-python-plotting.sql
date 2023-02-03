@@ -3,6 +3,7 @@ CREATE OR REPLACE FUNCTION violin_plot(p_study_id int, p_study_layer_id int, p_o
                                        p_exclude_annotation_value_ids int[])
     RETURNS text AS
 $$
+
 from typing import List
 import pandas as pd
 import seaborn as sns
@@ -122,7 +123,7 @@ generate_plot(p_study_id, p_study_layer_id, p_omics_id, p_annotation_group_id, p
 return seaborn_to_base64()
 $$ LANGUAGE plpython3u
     IMMUTABLE
-    SECURITY DEFINER
+    SECURITY INVOKER -- secured by expression_policy, which checks if the current user has access to the current study
     PARALLEL SAFE;
 
 --select violin_plot(1, 1, 8356, 1, ARRAY[]::int[]);
@@ -234,7 +235,7 @@ generate_correlation_plot(p_study_id, p_study_layer_id, p_omics_ids, p_exclude_a
 return seaborn_to_base64()
 $$ LANGUAGE plpython3u
     IMMUTABLE
-    SECURITY DEFINER
+    SECURITY INVOKER -- secured by expression_policy, which checks if the current user has access to the current study
     PARALLEL SAFE;
 
 -- select correlation_triangle_plot(1, 1, ARRAY[2670,8356,16870], ARRAY[]::int[]);

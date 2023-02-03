@@ -296,6 +296,7 @@ class Dataimport(object):
         concept = df.explode(['MH'])[['ontid', 'UI', 'MH']].rename(
             columns={'MH': 'label', 'UI': 'ont_code'}).drop_duplicates().reset_index(drop=True)
         concept = concept[['ontid', 'ont_code', 'label']]
+        concept = pd.concat([concept, pd.DataFrame({'ontid': [1], 'ont_code': ['HEALTHY'], 'label': ['Healthy']})])
         concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
 
         # get ids

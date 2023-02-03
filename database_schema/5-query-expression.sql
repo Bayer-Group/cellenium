@@ -18,6 +18,7 @@ import scipy
 # from numba import njit
 from pathlib import Path
 
+
 def sql_query(query):
     # postgres data retrieval with consistent output, both in the jupyter development
     # environment (plpy is not available) and at runtime inside a plpython3u stored procedure
@@ -79,7 +80,7 @@ out = out[['omics_id','display_symbol','display_name','r']]
 return out.sort_values('r', ascending = False).to_records(index=False)
 $$ LANGUAGE plpython3u
     IMMUTABLE
-    SECURITY DEFINER
+    SECURITY INVOKER -- secured by study_policy, as we're retrieving the h5ad filename from the study table
     PARALLEL SAFE;
 
 
@@ -200,31 +201,27 @@ CREATE AGGREGATE boxplot(real) (
 -- box plot / dot plot calculated in the database:
 drop view if exists expression_by_annotation cascade;
 create view expression_by_annotation
+    with (security_invoker = true)
 as
-with sample_annotation as (select ssa.study_id, av.annotation_group_id, ssa.annotation_value_id, study_sample_id
-                           from study_sample_annotation ssa
-                                    join annotation_value av on ssa.annotation_value_id = av.annotation_value_id
-                                    cross join unnest(ssa.study_sample_ids) as study_sample_id)
 select sl.study_id,
        e.study_layer_id,
        e.omics_id,
-       sa.annotation_group_id,
-       sa.annotation_value_id,
-       av.display_value                                         annotation_display_value,
-       array_agg(value)                                         values,
-       boxplot(value)                                           boxplot_params,
-       percentile_cont(0.75) within group (order by value) as   q3,
-       count(1) :: real /
-       (select cardinality(ssa.study_sample_ids) sample_count
-        from study_sample_annotation ssa
-        where sl.study_id = ssa.study_id
-          and ssa.annotation_value_id = sa.annotation_value_id) expr_cells_fraction
+       av.annotation_group_id,
+       av.annotation_value_id,
+       av.display_value                                       annotation_display_value,
+       array_agg(value)                                       values,
+       boxplot(value)                                         boxplot_params,
+       percentile_cont(0.75) within group (order by value) as q3,
+       count(1) :: real / cardinality(ssa.study_sample_ids)   expr_cells_fraction
 from expression e
          join study_layer sl on sl.study_layer_id = e.study_layer_id
          cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
-         join sample_annotation sa on sa.study_id = sl.study_id and sa.study_sample_id = sample_id
-         join annotation_value av on sa.annotation_value_id = av.annotation_value_id
-group by sl.study_id, e.study_layer_id, e.omics_id, sa.annotation_group_id, sa.annotation_value_id, av.display_value;
+         cross join annotation_value av
+         join study_sample_annotation ssa
+              on ssa.study_id = sl.study_id and ssa.annotation_value_id = av.annotation_value_id
+where x.sample_id = ANY (ssa.study_sample_ids)
+group by sl.study_id, e.study_layer_id, e.omics_id, av.annotation_group_id, av.annotation_value_id, av.display_value,
+         cardinality(ssa.study_sample_ids);
 
 /*
 select omics_id, annotation_display_value, q3, expr_cells_fraction
