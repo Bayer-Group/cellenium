@@ -18,20 +18,17 @@ services:
   postgraphile:
     build:
       context: ./postgraphile
-    command: >-
-      --connection postgres://postgres:postgres@postgres:5001/postgres
-      --schema public
-      --watch
-      --retry-on-init-fail
-      --enable-query-batching
-      --show-error-stack=json --extended-errors hint,detail,errcode
-      --simple-collections only
-      --no-setof-functions-contain-nulls
-      --dynamic-json
-      --append-plugins @graphile-contrib/pg-simplify-inflector,postgraphile-plugin-connection-filter
-      --port 5000
-      --graphql "/postgraphile/"
-      --graphiql "/postgraphile/graphiql" --enhance-graphiql --allow-explain
+    environment:
+      # study-level permissions are not in effect until permissions are set in the study table,
+      # these are demo examples for testing:
+      # - AUTH_HEADER_NAME=authorization
+      # - AUTH_HEADER_MOCK_VALUE=Group1;Group2
+      - DATABASE_URL=postgres://postgraphile:postgraphile@postgres:5001/postgres
+      # the postgraphile database user is sufficient for the API;
+      # during development it is helpful to enable database schema watching in postgres,
+      # which needs more permissions. (optional environment variable)
+      - OWNER_DATABASE_URL=postgres://postgres:postgres@postgres:5001/postgres
+      - PORT=5000
     ports:
       - "5000:5000"
 

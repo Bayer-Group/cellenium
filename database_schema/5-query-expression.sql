@@ -18,6 +18,7 @@ import scipy
 # from numba import njit
 from pathlib import Path
 
+
 def sql_query(query):
     # postgres data retrieval with consistent output, both in the jupyter development
     # environment (plpy is not available) and at runtime inside a plpython3u stored procedure
@@ -79,7 +80,7 @@ out = out[['omics_id','display_symbol','display_name','r']]
 return out.sort_values('r', ascending = False).to_records(index=False)
 $$ LANGUAGE plpython3u
     IMMUTABLE
-    SECURITY DEFINER
+    SECURITY INVOKER -- secured by study_policy, as we're retrieving the h5ad filename from the study table
     PARALLEL SAFE;
 
 
@@ -200,6 +201,7 @@ CREATE AGGREGATE boxplot(real) (
 -- box plot / dot plot calculated in the database:
 drop view if exists expression_by_annotation cascade;
 create view expression_by_annotation
+    with (security_invoker = true)
 as
 select sl.study_id,
        e.study_layer_id,

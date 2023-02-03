@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "lodash.set": "^4.3.2",
+    "postgraphile": "^4.13.0",
+    "postgraphile-plugin-connection-filter": "^2.3.0"
+  },
+  "scripts": {
+    "start": "node postgraphile_server.js"
+  }
+}
