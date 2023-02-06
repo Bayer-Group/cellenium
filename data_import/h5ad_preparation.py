@@ -91,6 +91,21 @@ def _set_X_or_layer(adata: AnnData, layer, m):
         adata.X = m
 
 
+def validate_gene_ids(adata: AnnData, taxonomy_id: int):
+    # cellenium recognizes HGNC Symbols and Ensembl Gene IDs in the annotation index.
+    # Simple validation which checks some housekeeping genes.
+    require_ids = {
+        9606: ['ATF1', 'ENSG00000123268'],
+        10090: ['Atf1', 'ENSMUSG00000023027'],
+        10116: ['Atf1', 'ENSRNOG00000061088']
+    }
+    ids = require_ids[taxonomy_id]
+    for id in ids:
+        if id in adata.var.index:
+            return True
+    assert False, f"None of {ids} where found in adata.var"
+
+
 # checks if the matrix at .X (or layer) is sparse, if not make it so
 def make_sparse(adata: AnnData, layer=None):
     if not scipy.sparse.issparse(_get_X_or_layer(adata, layer)):
@@ -185,16 +200,23 @@ def set_cellenium_metadata(
         ncit_tissue_ids: List[str],
         mesh_disease_ids: List[str],
         X_pseudolayer_name: str,
-        main_sample_attributes: List[str]
+        main_sample_attributes: List[str],
+        secondary_sample_attributes: List[str] = [],
+        initial_reader_permissions: List[str] = None,
+        initial_admin_permissions: List[str] = None
 ):
-    # lets keep this stable for the jupyter way of h5ad generation
+    def _check_cell_annotation(attribute: str):
+        if a not in adata.obs.columns:
+            raise Exception(f"attribute {a} not in observations dataframe")
+        count_unique_values = len(adata.obs[a].unique())
+        if count_unique_values > 100:
+            raise Exception(f"attribute {a} has {count_unique_values} unique annotations, 100 is the maximum")
 
     d = _cellenium_uns_dictionary(adata)
 
     assert isinstance(main_sample_attributes, list)
     for a in main_sample_attributes:
-        if a not in adata.obs.columns:
-            raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
+        _check_cell_annotation(a)
     d['main_sample_attributes'] = main_sample_attributes
 
     assert title is not None
@@ -209,6 +231,14 @@ def set_cellenium_metadata(
     d['mesh_disease_ids'] = mesh_disease_ids
     assert X_pseudolayer_name is not None
     d['X_pseudolayer_name'] = X_pseudolayer_name
+    for a in secondary_sample_attributes:
+        _check_cell_annotation(a)
+        if a in main_sample_attributes:
+            raise Exception(
+                f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
+    d['secondary_sample_attributes'] = secondary_sample_attributes
+    d['initial_reader_permissions'] = initial_reader_permissions
+    d['initial_admin_permissions'] = initial_admin_permissions
 
 
 # cellenium meta data
@@ -296,7 +326,7 @@ def calculate_differentially_expressed_genes(
     return result_dataframe
 
 
-def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute:str):
+def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute: str):
     if adata.uns['cellenium']['taxonomy_id'] != 9606:
         logging.info('skipping CellO classification, taxonomy_id is not human')
         return
@@ -311,4 +341,3 @@ def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute:str):
     updated_sample_attributes = ['CellO_celltype']
     updated_sample_attributes.extend(adata.uns['cellenium']['main_sample_attributes'])
     adata.uns['cellenium']['main_sample_attributes'] = updated_sample_attributes
-

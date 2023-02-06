@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 from pathlib import Path
 from typing import List
@@ -9,10 +10,11 @@ import scanpy as sc
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
+from psycopg2.extras import Json
 from sqlalchemy import text
 
 from huge_palette import huge_palette
-from postgres_utils import engine, import_df
+from postgres_utils import engine, import_df, NumpyEncoder
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
@@ -92,6 +94,10 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
     logging.info('importing sample annotations')
     import_sample_annotations = adata.uns['cellenium']['main_sample_attributes'].tolist()
     import_sample_annotations.extend(adata.uns['cellenium'].get('advanced_sample_attributes', []))
+    secondary_sample_attributes = []
+    if adata.uns['cellenium'].get('secondary_sample_attributes') is not None:
+        secondary_sample_attributes = adata.uns['cellenium']['secondary_sample_attributes'].tolist()
+        import_sample_annotations.extend(secondary_sample_attributes)
 
     with engine.connect() as connection:
         for annotation_col in import_sample_annotations:
@@ -112,10 +118,11 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
             color_index = r[1]
 
             connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
-                                                                    VALUES (:study_id, :annotation_group_id, True, :ordering, False)"""),
+                                                                    VALUES (:study_id, :annotation_group_id, :is_primary, :ordering, False)"""),
                                {
                                    'study_id': study_id,
                                    'annotation_group_id': annotation_group_id,
+                                   'is_primary': annotation_col not in secondary_sample_attributes,
                                    'ordering': import_sample_annotations.index(annotation_col)
                                })
 
@@ -230,9 +237,18 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
 
 def import_study(filename: str) -> int:
     adata = sc.read_h5ad(filename)
+
+    def _config_optional_list(key: str):
+        if adata.uns['cellenium'].get(key):
+            return adata.uns['cellenium'][key].tolist()
+        return None
+
     with engine.connect() as connection:
-        r = connection.execute(text("""INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id)
-            VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id)
+        r = connection.execute(text("""INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
+               reader_permissions, admin_permissions, legacy_config)
+            VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
+               :reader_permissions, :admin_permissions, :legacy_config
+            )
             RETURNING study_id"""), {
             'filename': Path(filename).relative_to("scratch").as_posix(),
             # filename inside scratch (scratch will be /h5ad_store in postgres docker)
@@ -240,7 +256,11 @@ def import_study(filename: str) -> int:
             'description': adata.uns['cellenium']['description'],
             'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
             'disease_mesh_ids': adata.uns['cellenium']['mesh_disease_ids'].tolist(),
-            'organism_tax_id': adata.uns['cellenium']['taxonomy_id']
+            'organism_tax_id': adata.uns['cellenium']['taxonomy_id'],
+            'reader_permissions': _config_optional_list('initial_reader_permissions'),
+            'admin_permissions': _config_optional_list('initial_admin_permissions'),
+            'legacy_config': Json(adata.uns['cellenium'].get('legacy_config'),
+                                  dumps=lambda data: json.dumps(data, cls=NumpyEncoder))
         })
         study_id = r.fetchone()[0]
         logging.info("importing %s as study_id %s", filename, study_id)

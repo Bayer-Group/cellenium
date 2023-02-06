@@ -14,7 +14,9 @@ CREATE TABLE study
 
     cell_count         int,
     visible            boolean default False,
-    reader_permissions text[]
+    reader_permissions text[],
+    admin_permissions  text[],
+    legacy_config      jsonb
 );
 
 

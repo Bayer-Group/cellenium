@@ -2,6 +2,7 @@ from psycopg2 import extras
 from psycopg2.extensions import register_adapter, AsIs
 import numpy as np
 from sqlalchemy import create_engine
+import json
 
 
 def addapt_numpy_float64(numpy_float64):
@@ -34,6 +35,21 @@ register_adapter(np.float32, addapt_numpy_float32)
 register_adapter(np.int32, addapt_numpy_int32)
 register_adapter(np.uint32, addapt_numpy_uint32)
 register_adapter(np.ndarray, addapt_numpy_array)
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """ Special json encoder for numpy types """
+
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, np.bool_):
+            return obj.item()
+        return json.JSONEncoder.default(self, obj)
 
 
 def import_df(df, schema_and_table: str):
