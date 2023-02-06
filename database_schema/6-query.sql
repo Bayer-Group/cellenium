@@ -65,13 +65,23 @@ create function ont_codes_info(p_ontology text, p_ont_codes text[])
     STABLE
 as
 $$
-select array_agg(distinct c.label) labels,
-       array_agg(parents.ont_code) parent_ids
-from ontology o
-         join concept c on o.ontid = c.ontid
-         cross join concept_all_parents(c) parents
-where o.name = p_ontology
-  and c.ont_code = any (p_ont_codes)
+select min(labels), min(parent_ids)
+from (
+         -- in case there are no parents, still find the label
+         select array_agg(distinct c.label) labels,
+                null::text[]                parent_ids
+         from ontology o
+                  join concept c on o.ontid = c.ontid
+         where o.name = p_ontology
+           and c.ont_code = any (p_ont_codes)
+         union all
+         select array_agg(distinct c.label) labels,
+                array_agg(parents.ont_code) parent_ids
+         from ontology o
+                  join concept c on o.ontid = c.ontid
+                  cross join concept_all_parents(c) parents
+         where o.name = p_ontology
+           and c.ont_code = any (p_ont_codes)) x
 $$;
 
 
@@ -111,6 +121,11 @@ SELECT s.study_id,
 FROM study s
          cross join ont_codes_info('MeSH', s.disease_mesh_ids) ont;
 comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+
+
+select *
+from ont_codes_info('MeSH', ARRAY ['HEALTHY']);
+
 
 
 drop view if exists _all_used_ontology_ids cascade;
