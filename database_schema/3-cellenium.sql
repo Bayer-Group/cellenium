@@ -140,6 +140,8 @@ CREATE TABLE annotation_value
     color               text
 );
 create unique index annotation_value_1 on annotation_value (annotation_group_id, h5ad_value);
+create index annotation_value_2 on annotation_value (annotation_group_id) include (annotation_value_id);
+create index annotation_value_3 on annotation_value (annotation_value_id) include (display_value, annotation_group_id);
 
 CREATE TABLE study_annotation_group_ui
 (

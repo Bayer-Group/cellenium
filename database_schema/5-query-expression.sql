@@ -1,12 +1,12 @@
 DROP FUNCTION IF EXISTS get_correlated_genes(study_id int, omics_id int);
 CREATE OR REPLACE FUNCTION get_correlated_genes(study_id int, omics_id int)
     RETURNS table
-        (
-            omics_id INT,
-            display_symbol TEXT,
-            display_name TEXT,
-            r FLOAT
-        )
+            (
+                omics_id       INT,
+                display_symbol TEXT,
+                display_name   TEXT,
+                r              FLOAT
+            )
 AS
 $$
 
@@ -33,18 +33,20 @@ def sql_query(query):
     r = plpy.execute(query)
     return [row for row in r]
 
+
 # numba is disabled, the function crashes if the correlation result is empty, e.g.
 # for KRAS in the "COVID-19" study:
-#@njit
+# @njit
 def pearson_corr(m):
-    return np.corrcoef(m)[0,1]
+    return np.corrcoef(m)[0, 1]
+
 
 def compute_correlation(m, genes, goi):
     collect = []
     for gene in genes:
-        r = pearson_corr(m[[goi,gene]])
-        if r>=0.2:
-            collect.append({'h5ad_var_index': gene, 'r':r})
+        r = pearson_corr(m[[goi, gene]])
+        if r >= 0.2:
+            collect.append({'h5ad_var_index': gene, 'r': r})
     return pd.DataFrame(collect)
 
 
@@ -60,8 +62,9 @@ goi = data[0].get('h5ad_var_index')
 adata = sc.read(fn)
 df = adata.X.T.todense()
 
-chunks = np.array_split([_ for _ in range(0,adata.n_vars) if _!=goi],8)
-result = Parallel(n_jobs=cpu_count(), backend="threading")(delayed(compute_correlation)(m = df, genes=chunk, goi=goi) for chunk in chunks)
+chunks = np.array_split([_ for _ in range(0, adata.n_vars) if _ != goi], 8)
+result = Parallel(n_jobs=cpu_count(), backend="threading")(
+    delayed(compute_correlation)(m=df, genes=chunk, goi=goi) for chunk in chunks)
 result = pd.concat(result)
 if len(result) == 0:
     return []
@@ -74,10 +77,10 @@ ret = sql_query(f'''
      WHERE  so.study_id = {study_id}
        AND so.h5ad_var_index in {geneids}
 ''')
-out = pd.DataFrame(ret).merge(result, on = 'h5ad_var_index').drop('h5ad_var_index', axis =1)
-out = out[['omics_id','display_symbol','display_name','r']]
+out = pd.DataFrame(ret).merge(result, on='h5ad_var_index').drop('h5ad_var_index', axis=1)
+out = out[['omics_id', 'display_symbol', 'display_name', 'r']]
 
-return out.sort_values('r', ascending = False).to_records(index=False)
+return out.sort_values('r', ascending=False).to_records(index=False)
 $$ LANGUAGE plpython3u
     IMMUTABLE
     SECURITY INVOKER -- secured by study_policy, as we're retrieving the h5ad filename from the study table
@@ -199,34 +202,71 @@ CREATE AGGREGATE boxplot(real) (
 
 
 -- box plot / dot plot calculated in the database:
-drop view if exists expression_by_annotation cascade;
-create view expression_by_annotation
-    with (security_invoker = true)
+
+drop type if exists expression_by_annotation cascade;
+create type expression_by_annotation as
+(
+    study_layer_id           int,
+    omics_id                 int,
+    annotation_value_id      int,
+    annotation_display_value text,
+    values                   real[],
+    boxplot_params           boxplot_values,
+    median                   real,
+    q3                       real,
+    value_count              int,
+    expr_samples_fraction    real
+);
+
+drop function if exists expression_by_annotation;
+create function expression_by_annotation(p_study_layer_ids int[], p_omics_ids int[],
+                                         p_annotation_group_id int, p_exclude_annotation_value_ids int[])
+    returns setof expression_by_annotation
+    language sql
+    stable
 as
-select sl.study_id,
-       e.study_layer_id,
-       e.omics_id,
-       av.annotation_group_id,
-       av.annotation_value_id,
-       av.display_value                                       annotation_display_value,
-       array_agg(value)                                       values,
-       boxplot(value)                                         boxplot_params,
-       percentile_cont(0.75) within group (order by value) as q3,
-       count(1) :: real / cardinality(ssa.study_sample_ids)   expr_cells_fraction
-from expression e
-         join study_layer sl on sl.study_layer_id = e.study_layer_id
-         cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
-         cross join annotation_value av
-         join study_sample_annotation ssa
-              on ssa.study_id = sl.study_id and ssa.annotation_value_id = av.annotation_value_id
-where x.sample_id = ANY (ssa.study_sample_ids)
-group by sl.study_id, e.study_layer_id, e.omics_id, av.annotation_group_id, av.annotation_value_id, av.display_value,
-         cardinality(ssa.study_sample_ids);
+$$
+with expr as (select e.study_layer_id, sample_id, e.omics_id, value
+              from expression e
+                       cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
+              where omics_id = any (p_omics_ids)
+                and study_layer_id = any (p_study_layer_ids)
+                -- ordering both CTEs by sample_id is important for the join on "expr.sample_id = annot.sample_id" below
+              order by 1, 2, 3),
+     annot as (select sl.study_layer_id,
+                      sample_id,
+                      ssa.annotation_value_id,
+                      count(1) over (partition by sl.study_layer_id, ssa.annotation_value_id ) sample_count
+               from study_sample_annotation ssa
+                        cross join unnest(ssa.study_sample_ids) sample_id
+                        join study_layer sl on ssa.study_id = sl.study_id
+               where sl.study_layer_id = any (p_study_layer_ids)
+                 and ssa.annotation_value_id in (select annotation_value_id
+                                                 from annotation_value
+                                                 where annotation_group_id = p_annotation_group_id)
+                 and sample_id not in (select exclude_sample_id
+                                       from study_sample_annotation exclude_ssa
+                                                cross join unnest(exclude_ssa.study_sample_ids) exclude_sample_id
+                                       where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids))
+               order by 1, 2)
+select expr.study_layer_id,
+       expr.omics_id,
+       annot.annotation_value_id,
+       (select av.display_value
+        from annotation_value av
+        where av.annotation_value_id = annot.annotation_value_id) annotation_display_value,
+       array_agg(value)                                           values,
+       boxplot(value)                                             boxplot_params,
+       percentile_cont(0.5) within group (order by value)  as     median,
+       percentile_cont(0.75) within group (order by value) as     q3,
+       count(1)                                                   value_count,
+       count(1) :: real / annot.sample_count                      expr_samples_fraction
+from expr
+         join annot on expr.sample_id = annot.sample_id and expr.study_layer_id = annot.study_layer_id
+group by expr.study_layer_id, expr.omics_id, annot.annotation_value_id, annot.sample_count
+$$;
 
 /*
-select omics_id, annotation_display_value, q3, expr_cells_fraction
-from expression_by_annotation
-where study_id = 5
-  and study_layer_id=5 and annotation_group_id = 12
-  and omics_id in (10382, 11906);
+select study_layer_id, omics_id, annotation_value_id, annotation_display_value, q3, expr_samples_fraction from expression_by_annotation(ARRAY[3],
+    ARRAY[10382, 11906], 3, ARRAY[]::int[]);
 */

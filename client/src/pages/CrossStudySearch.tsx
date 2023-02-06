@@ -21,22 +21,23 @@ const CrossStudySearch = () => {
     const navigate = useNavigate();
     const {data, loading} = useExpressionByAnnotationQuery({
         variables: {
-            filter: {
-                omicsId: {in: omicsIds},
-                annotationGroupId: {equalTo: cellOAnnotationGroupId || -1}
-            } as ExpressionByAnnotationFilter
+            studyLayerIds: studyData?.studyOverviewsList.map(s => s.defaultStudyLayerId) || [],
+            omicsIds,
+            annotationGroupId: cellOAnnotationGroupId || -1,
+            excludeAnnotationValueIds: []
         },
         skip: omicsIds.length === 0 || !studyData?.studyOverviewsList || !cellOAnnotationGroupId
     })
 
     const heatmapDisplayData = useMemo(() => {
-        if (!studyData?.studyOverviewsList || !data?.expressionByAnnotationsList) {
+        if (!studyData?.studyOverviewsList || !data?.expressionByAnnotationList) {
             return undefined;
         }
-        const studyIdMap = new Map(studyData.studyOverviewsList.map(s => [s.studyId, s.studyName]));
-        const allData = data.expressionByAnnotationsList.map(o => ({
+        const studyLayerIdMap = new Map(studyData.studyOverviewsList.map(s => [s.defaultStudyLayerId, s]));
+        const allData = data.expressionByAnnotationList.map(o => ({
             ...o,
-            studyName: studyIdMap.get(o.studyId)
+            studyName: studyLayerIdMap.get(o.studyLayerId)?.studyName,
+            studyId: studyLayerIdMap.get(o.studyLayerId)?.studyId
         }));
         return omicsIds.map(id => ({
             omicsId: id,
@@ -45,7 +46,8 @@ const CrossStudySearch = () => {
     }, [studyData, data, omicsIds]);
 
     const onHeatmapClick = (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => {
-        const newStudyUrl = `/study/${dotPlotElement.studyId}?page=CellMarkerAnalysis&annotationGroupId=${dotPlotElement.annotationGroupId}&annotationValueId=${dotPlotElement.annotationValueId}&omicsId=${dotPlotElement.omicsId}`;
+        const dpe = dotPlotElement as DotPlotElementFragment & { studyId: number };
+        const newStudyUrl = `/study/${dpe.studyId}?page=CellMarkerAnalysis&annotationGroupId=${cellOAnnotationGroupId}&annotationValueId=${dotPlotElement.annotationValueId}&omicsId=${dotPlotElement.omicsId}`;
         if (event.shiftKey || event.altKey) {
             const parsedUrl = new URL(window.location.href);
             const url = `${parsedUrl.origin}${newStudyUrl}`

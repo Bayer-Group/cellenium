@@ -83,10 +83,13 @@ select s.study_id,
        s.study_name,
        s.description,
        s.external_website,
-       s.cell_count
+       s.cell_count,
+       (select min(sl.study_layer_id)
+        from study_layer sl
+        where sl.study_id = s.study_id
+          and omics_type = 'gene') default_study_layer_id
 from study s
 where s.visible = True;
-
 
 
 CREATE VIEW study_overview_ontology

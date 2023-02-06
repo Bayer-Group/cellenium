@@ -21,7 +21,7 @@ function createSpec(annotationTitle: string, xAxis: "studyName" | "displaySymbol
                 "field": "displaySymbol", "type": "nominal", "title": "Gene",
             },
             "size": {
-                "field": "exprCellsFraction",
+                "field": "exprSamplesFraction",
                 "type": "quantitative",
                 "title": "Expr. fraction"
             },

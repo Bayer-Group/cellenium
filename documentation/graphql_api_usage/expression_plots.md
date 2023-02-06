@@ -26,8 +26,8 @@ query SingleGeneScatterPlots {
 
 ### Expression Data For Box Plot
 
-The study samples can be grouped by a selected sample annotation, and the boxstats (box, median, whiskers, outliers), are
-calculated per gene (omics ID) and per annotation group.
+The study samples can be grouped by a selected sample annotation, and the boxstats (box, median, whiskers, outliers),
+are calculated per gene (omics ID) and per annotation group.
 
 As an alternative, the list of values can be retrieved.
 
@@ -35,9 +35,13 @@ This is just a GraphQL example, the query isn't included in the cellenium fronte
 
 ```gql
 query ExpressionBoxplotByAnnotation {
-  expressionByAnnotationsList(
-    filter: {omicsId: {in: [1, 2]}, studyLayerId: {equalTo: 1}, annotationGroupId: {equalTo: 1}}
+  expressionByAnnotationList(
+    pStudyLayerIds: [1],
+    pOmicsIds: [1, 2],
+    pAnnotationGroupId: 1,
+    pExcludeAnnotationValueIds: []
   ) {
+    omicsId
     annotationValueId
     boxplotParams {
       n
@@ -48,9 +52,10 @@ query ExpressionBoxplotByAnnotation {
       q3Whisker
       outliers
     }
-    values
+    exprSamplesFraction
   }
 }
+
 ```
 
 ### Expression Data For Cross-Study Cell Type Bubble Plot
@@ -58,20 +63,8 @@ query ExpressionBoxplotByAnnotation {
 The cell type vs study bubble chart shows a gene's expression in multiple studies, grouped by the
 standardized cell type annotation (using the CellO cell type prediction for consistent annotation).
 
-```gql
-query ExpressionByCelltype {
-  expressionByCelltypesList(
-    filter: { omicsId: { in: [1, 2] }, studyId: { in: [1, 2] } }
-  ) {
-    celltype
-    studyId
-    omicsId
-    q3
-    exprCellsFraction
-  }
-}
-```
-
+This is basically the query above, with a fixed `pAnnotationGroupId` (the CellO cell type annotation group)
+and multiple `pStudyLayerIds`, to cover all the studies.
 
 ### Violin plot (server side generated)
 
