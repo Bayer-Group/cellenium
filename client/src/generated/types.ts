@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  JSON: any;
 };
 
 export type AnnotationGroup = Node & {
@@ -1971,6 +1972,7 @@ export type ExpressionByAnnotation = {
   annotationValueId: Maybe<Scalars['Int']>;
   boxplotParams: Maybe<BoxplotValue>;
   exprSamplesFraction: Maybe<Scalars['Float']>;
+  mean: Maybe<Scalars['Float']>;
   median: Maybe<Scalars['Float']>;
   omicsId: Maybe<Scalars['Int']>;
   q3: Maybe<Scalars['Float']>;
@@ -1991,6 +1993,8 @@ export type ExpressionByAnnotationFilter = {
   boxplotParams: InputMaybe<BoxplotValueFilter>;
   /** Filter by the object’s `exprSamplesFraction` field. */
   exprSamplesFraction: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `mean` field. */
+  mean: InputMaybe<FloatFilter>;
   /** Filter by the object’s `median` field. */
   median: InputMaybe<FloatFilter>;
   /** Negates the expression. */
@@ -2189,6 +2193,42 @@ export type IntListFilter = {
   notEqualTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Overlaps the specified list of values. */
   overlaps: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+/** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
+export type JsonFilter = {
+  /** Contained by the specified JSON. */
+  containedBy: InputMaybe<Scalars['JSON']>;
+  /** Contains the specified JSON. */
+  contains: InputMaybe<Scalars['JSON']>;
+  /** Contains all of the specified keys. */
+  containsAllKeys: InputMaybe<Array<Scalars['String']>>;
+  /** Contains any of the specified keys. */
+  containsAnyKeys: InputMaybe<Array<Scalars['String']>>;
+  /** Contains the specified key. */
+  containsKey: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom: InputMaybe<Scalars['JSON']>;
+  /** Equal to the specified value. */
+  equalTo: InputMaybe<Scalars['JSON']>;
+  /** Greater than the specified value. */
+  greaterThan: InputMaybe<Scalars['JSON']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo: InputMaybe<Scalars['JSON']>;
+  /** Included in the specified list. */
+  in: InputMaybe<Array<Scalars['JSON']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan: InputMaybe<Scalars['JSON']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo: InputMaybe<Scalars['JSON']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom: InputMaybe<Scalars['JSON']>;
+  /** Not equal to the specified value. */
+  notEqualTo: InputMaybe<Scalars['JSON']>;
+  /** Not included in the specified list. */
+  notIn: InputMaybe<Array<Scalars['JSON']>>;
 };
 
 export type MinimumTreesResult = {
@@ -4345,6 +4385,8 @@ export type StringListFilter = {
 
 /** Methods to use when ordering `Study`. */
 export enum StudiesOrderBy {
+  AdminPermissionsAsc = 'ADMIN_PERMISSIONS_ASC',
+  AdminPermissionsDesc = 'ADMIN_PERMISSIONS_DESC',
   CellCountAsc = 'CELL_COUNT_ASC',
   CellCountDesc = 'CELL_COUNT_DESC',
   CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
@@ -4357,6 +4399,8 @@ export enum StudiesOrderBy {
   ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
   FilenameAsc = 'FILENAME_ASC',
   FilenameDesc = 'FILENAME_DESC',
+  LegacyConfigAsc = 'LEGACY_CONFIG_ASC',
+  LegacyConfigDesc = 'LEGACY_CONFIG_DESC',
   Natural = 'NATURAL',
   OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
   OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
@@ -4376,6 +4420,7 @@ export enum StudiesOrderBy {
 
 export type Study = Node & {
   __typename?: 'Study';
+  adminPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup`. */
   annotationGroupsList: Array<StudyAnnotationFrontendGroup>;
   cellCount: Maybe<Scalars['Int']>;
@@ -4386,6 +4431,7 @@ export type Study = Node & {
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
   externalWebsite: Maybe<Scalars['String']>;
   filename: Maybe<Scalars['String']>;
+  legacyConfig: Maybe<Scalars['JSON']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   organismTaxId: Maybe<Scalars['String']>;
@@ -4740,6 +4786,8 @@ export enum StudyAnnotationGroupUisOrderBy {
 
 /** A condition to be used against `Study` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type StudyCondition = {
+  /** Checks for equality with the object’s `adminPermissions` field. */
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `cellCount` field. */
   cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `cellOntologyIds` field. */
@@ -4752,6 +4800,8 @@ export type StudyCondition = {
   externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
   filename: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `legacyConfig` field. */
+  legacyConfig: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `readerPermissions` field. */
@@ -4768,6 +4818,8 @@ export type StudyCondition = {
 
 /** A filter to be used against `Study` object types. All fields are combined with a logical ‘and.’ */
 export type StudyFilter = {
+  /** Filter by the object’s `adminPermissions` field. */
+  adminPermissions: InputMaybe<StringListFilter>;
   /** Checks for all expressions in this list. */
   and: InputMaybe<Array<StudyFilter>>;
   /** Filter by the object’s `cellCount` field. */
@@ -4782,6 +4834,8 @@ export type StudyFilter = {
   externalWebsite: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
   filename: InputMaybe<StringFilter>;
+  /** Filter by the object’s `legacyConfig` field. */
+  legacyConfig: InputMaybe<JsonFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyFilter>;
   /** Checks for any expressions in this list. */
@@ -4802,12 +4856,14 @@ export type StudyFilter = {
 
 /** An input for mutations affecting `Study` */
 export type StudyInput = {
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   cellCount: InputMaybe<Scalars['Int']>;
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
+  legacyConfig: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   studyId: InputMaybe<Scalars['Int']>;
@@ -5183,12 +5239,14 @@ export enum StudyOverviewsOrderBy {
 
 /** Represents an update to a `Study`. Fields that are set will be updated. */
 export type StudyPatch = {
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   cellCount: InputMaybe<Scalars['Int']>;
   cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description: InputMaybe<Scalars['String']>;
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
+  legacyConfig: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   studyId: InputMaybe<Scalars['Int']>;
@@ -6286,7 +6344,7 @@ export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
 
-export type DotPlotElementFragment = { __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, exprSamplesFraction: number };
+export type DotPlotElementFragment = { __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, median: number, exprSamplesFraction: number };
 
 export type ExpressionByAnnotationQueryVariables = Exact<{
   studyLayerIds: Array<Scalars['Int']> | Scalars['Int'];
@@ -6296,7 +6354,7 @@ export type ExpressionByAnnotationQueryVariables = Exact<{
 }>;
 
 
-export type ExpressionByAnnotationQuery = { __typename?: 'Query', expressionByAnnotationList: Array<{ __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, exprSamplesFraction: number }> };
+export type ExpressionByAnnotationQuery = { __typename?: 'Query', expressionByAnnotationList: Array<{ __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, median: number, exprSamplesFraction: number }> };
 
 export type CellOAnnotationGroupIdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -6444,6 +6502,7 @@ export const DotPlotElementFragmentDoc = gql`
   annotationValueId
   annotationDisplayValue
   q3
+  median
   exprSamplesFraction
 }
     `;

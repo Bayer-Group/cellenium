@@ -202,6 +202,7 @@ fragment DotPlotElement on ExpressionByAnnotation {
     annotationValueId
     annotationDisplayValue
     q3
+    median
     exprSamplesFraction
 }
 

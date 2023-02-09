@@ -214,6 +214,7 @@ create type expression_by_annotation as
     boxplot_params           boxplot_values,
     median                   real,
     q3                       real,
+    mean                     real,
     value_count              int,
     expr_samples_fraction    real
 );
@@ -259,6 +260,7 @@ select expr.study_layer_id,
        boxplot(value)                                             boxplot_params,
        percentile_cont(0.5) within group (order by value)  as     median,
        percentile_cont(0.75) within group (order by value) as     q3,
+       avg(value)                                          as     "mean",
        count(1)                                                   value_count,
        count(1) :: real / annot.sample_count                      expr_samples_fraction
 from expr
