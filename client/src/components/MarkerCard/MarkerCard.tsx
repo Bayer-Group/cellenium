@@ -3,6 +3,7 @@ import {DifferentialMarkerFragment} from "../../generated/types";
 import {Badge, Card, Container, createStyles, Group, Spoiler, Stack, Text, Anchor} from "@mantine/core";
 import {InlineFoldChangePlot} from "../InlineFoldChangePlot/InlineFoldChangePlot";
 import {Link} from "react-router-dom";
+import {ontology2Color} from "../../pages/helper";
 
 interface Props {
     data: DifferentialMarkerFragment;
@@ -59,19 +60,6 @@ const MarkerCard = ({data}: Props) => {
                 </Group>
             </Stack>
 
-            <Card.Section withBorder inheritPadding py="xs">
-                <Spoiler maxHeight={19} showLabel={"Show more"} hideLabel={'hide'} style={{
-                    fontSize: 12,
-                }}>
-                    <Group position={'left'} spacing={3}>
-                        {[1, 2, 3, 4].map((item) => {
-                            let badges = [<Badge/>]
-                            return badges;
-                        })}
-                    </Group>
-                </Spoiler>
-
-            </Card.Section>
         </Card>
     );
 };
