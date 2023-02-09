@@ -13,8 +13,7 @@ const sortAlphaNum = (a: Omics, b: Omics) => a.displaySymbol.localeCompare(b.dis
 
 interface Props {
     humanOnly: boolean,
-    handleNewFilters?: Function;
-    onGeneSelection?: (omicsIds: number[]) => void;
+    onGeneSelection: (omicsIds: number[]) => void;
 }
 
 const SPECIES = [
@@ -23,10 +22,7 @@ const SPECIES = [
     {value: "10116", label: 'Rattus norvegicus'},
 ]
 
-function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
-    // either just a gene input (onGeneSelection parameter is used) or
-    // also providing the studies that include the gene as differentially expressed (handleNewFilters parameter)
-
+function GeneSearchBar({humanOnly, onGeneSelection}: Props) {
     const theme = useMantineTheme();
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<Omics[]>([]);
@@ -36,34 +32,15 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     const speciesList = useMemo(() => humanOnly ? SPECIES.filter(s => s.value === "9606") : SPECIES, []);
 
-    const [getCellTypes, {
-        data: markerData,
-        error: markerError,
-        loading: markerLoading
-    }] = useStudiesWithMarkerGenesLazyQuery();
-
     function handleSubmit(item: AutocompleteItem) {
         setValue('');
         let newFilters = [...selectedFilters, item as Omics];
         setSelectedFilters(newFilters);
-        onGeneSelection && onGeneSelection(newFilters.map(f => f.omicsId));
-        if (handleNewFilters) {
-            getCellTypes({
-                variables: {
-                    omicsIds: newFilters.map((ele) => ele.omicsId)
-                }
-            })
-        }
+        onGeneSelection(newFilters.map(f => f.omicsId));
         if (inputRef && inputRef.current !== null) {
             inputRef.current.focus()
         }
     }
-
-    useEffect(() => {
-        if (markerData) {
-            handleNewFilters && handleNewFilters(markerData.differentialExpressionsList);
-        }
-    }, [markerData])
 
     function handleChange(input: string) {
         if (input === '') {
@@ -90,16 +67,15 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
     function handleFilterRemove(filter: Omics) {
         let newFilters = selectedFilters.filter((f) => !((f.omicsId === filter.omicsId)));
         if (newFilters.length > 0) {
-            setSelectedFilters(newFilters)
-            handleNewFilters && handleNewFilters(newFilters)
+            setSelectedFilters(newFilters);
         } else {
-            setSelectedFilters([])
-            handleNewFilters && handleNewFilters([])
+            setSelectedFilters([]);
         }
         if (inputRef && inputRef.current !== null) {
-            inputRef.current.focus()
+            inputRef.current.focus();
         }
-        setOfferings([])
+        setOfferings([]);
+        onGeneSelection(newFilters.map(f => f.omicsId));
     }
 
 
@@ -150,7 +126,6 @@ function GeneSearchBar({humanOnly, handleNewFilters, onGeneSelection}: Props) {
                                     setValue('');
                                     setOfferings([]);
                                     setSelectedFilters([]);
-                                    handleNewFilters && handleNewFilters([]);
                                 }
                                 }>
                                     <IconX/>
