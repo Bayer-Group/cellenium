@@ -160,7 +160,7 @@ function CelltypeDiscovery() {
                 variables: {
                     studyId: study.studyId,
                     annotationGroupName: annotationName,
-                    selectedSampleIds
+                    selectedSampleIds: selectedSampleIds.join(',')
                 }
             }).then(value => {
                 showNotification({

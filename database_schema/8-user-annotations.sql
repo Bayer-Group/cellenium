@@ -15,7 +15,7 @@ CREATE TABLE user_annotation_group
 drop function if exists user_annotation_define;
 create function user_annotation_define(p_study_id int,
                                        p_annotation_group_name text,
-                                       p_selected_sample_ids int[]
+                                       p_selected_sample_ids text
 )
     returns integer -- created annotation_group_id
     language plpgsql
@@ -24,15 +24,19 @@ create function user_annotation_define(p_study_id int,
 as
 $$
 declare
+    selected_sample_ids_array   int[];
     created_annotation_group_id int;
     created_annotation_value_id int;
     worker_pid                  int;
-    study_allowed int;
+    study_allowed               int;
 begin
     select count(1) into study_allowed from study_visible_currentuser where study_id = p_study_id;
     if study_allowed = 0 then
         raise 'no permission to create user annotation for this study';
     end if;
+
+    -- we can't use an array parameter directly, as postgraphile seems to create a statement with more than 65k placeholders (instead of an array placeholder)
+    select string_to_array(p_selected_sample_ids, ',') :: int[] into selected_sample_ids_array;
 
     insert into annotation_group (h5ad_column, display_group)
     values (p_study_id || '_' || p_annotation_group_name, p_annotation_group_name)
@@ -50,7 +54,7 @@ begin
     values (p_study_id, created_annotation_group_id, false, 0, false);
 
     insert into study_sample_annotation (study_id, annotation_value_id, study_sample_ids)
-    values (p_study_id, created_annotation_value_id, p_selected_sample_ids);
+    values (p_study_id, created_annotation_value_id, selected_sample_ids_array);
 
     SELECT pg_background_launch(format('call user_annotation_diffexp_job(%s, %s)', p_study_id,
                                        created_annotation_group_id))
