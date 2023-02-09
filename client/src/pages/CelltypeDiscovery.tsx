@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Group, Space, Stack, Text, Button, Loader, TextInput} from "@mantine/core";
+import {Group, Space, Stack, Text, Button, Loader, TextInput, Overlay, Box} from "@mantine/core";
 import {AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
@@ -197,9 +197,16 @@ function CelltypeDiscovery() {
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((z, i) => <CoexpressionPlot key={i}
-                                                                                                             stateOffset={i}
-                                                                                                             onSelection={onCoexpressionSelection}/>)}
+                    {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((z, i) => (
+                        <Box sx={{height: 350, position: 'relative'}} key={i}>
+                            {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
+                            {i < celltypeDiscoveryCoexpressionSamples.length - 1 &&
+                                <Overlay opacity={0.6} color="#000" zIndex={5}/>}
+                            <CoexpressionPlot
+                                stateOffset={i}
+                                onSelection={onCoexpressionSelection}/>
+                        </Box>
+                    ))}
                     <Button onClick={newPlotBasedOnSelectedSamples}
                             disabled={selectedSampleIds === null || selectedSampleIds.length === 0}>Add plot, based on
                         selected samples</Button>
