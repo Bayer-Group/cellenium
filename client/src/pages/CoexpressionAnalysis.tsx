@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {
     correlationOmicsIdState,
     selectedAnnotationFilterState,
@@ -9,7 +9,6 @@ import {
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState,
     userGeneStoreOpenState
 } from "../atoms";
 import ColumnTable from 'arquero/dist/types/table/column-table';
@@ -75,8 +74,8 @@ function CoexpressionAnalysis() {
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap={true}>
             <LeftSidePanel>
                 <Stack pt={5}>
-                <AnnotationFilterDisplay/>
-                    </Stack>
+                    <AnnotationFilterDisplay/>
+                </Stack>
             </LeftSidePanel>
             <main style={{height: '100vh'}}>
                 <CoexpressionAnalysisPlot/>
@@ -87,8 +86,10 @@ function CoexpressionAnalysis() {
                     <UserGeneStore multiple={true} findCoexpressors={true}/>
                     <Space/>
                     <Divider size={"xs"} label={'Correlated genes'}/>
-                    {correlationOmicsId===undefined && <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
-                    {correlationOmicsId!==undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
+                    {correlationOmicsId === undefined &&
+                        <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
+                    {correlationOmicsId !== undefined &&
+                        <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
                 </Stack>
             </RightSidePanel>
         </Group>

@@ -13,14 +13,14 @@ function createSpec(annotationTitle: string, xAxis: "studyName" | "displaySymbol
             "y": {
                 "field": "annotationDisplayValue",
                 "type": "ordinal",
-                "title": annotationTitle,
+                "title": "",
                 "axis": {"offset": 10}
             },
             "x": xAxis === "studyName" ? {
-                "field": "studyName", "type": "nominal", "title": "Study",
+                "field": "studyName", "type": "nominal", "title": "",
                 "axis": {"offset": 10}
             } : {
-                "field": "displaySymbol", "type": "nominal", "title": "Gene",
+                "field": "displaySymbol", "type": "nominal", "title": "",
                 "axis": {"offset": 10}
             },
             "size": {
