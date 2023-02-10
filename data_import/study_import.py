@@ -235,7 +235,7 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
                            })
 
 
-def import_study(filename: str) -> int:
+def import_study(filename: str, analyze_database: bool) -> int:
     adata = sc.read_h5ad(filename)
 
     def _config_optional_list(key: str):
@@ -276,7 +276,8 @@ def import_study(filename: str) -> int:
 
         connection.execute(text("UPDATE study SET visible=True WHERE study_id=:study_id"), {'study_id': study_id})
         logging.info("updating postgres statistics...")
-        connection.execute(text("call _analyze_schema()"))
+        if analyze_database:
+            connection.execute(text("call _analyze_schema()"))
         return study_id
 
 
@@ -284,6 +285,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="cellenium study import tool")
     parser.add_argument('filename', help='h5ad file created for cellenium (e.g. study_preparation.py scripts)',
                         type=str)
+    parser.add_argument('--analyze-database', action='store_true')
     args = parser.parse_args()
-    import_study(args.filename)
+    import_study(args.filename, args.analyze_database)
     logging.info('done')
