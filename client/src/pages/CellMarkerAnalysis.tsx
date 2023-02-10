@@ -91,10 +91,6 @@ function DifferentialExpressionAnalysis() {
                             <Text size='xs' color='dimmed'>Select cells in the plot or via the selection panel on the
                                 left-hand side.</Text>}
                         {selectedAnnotation !== undefined && <DEGTable annotationId={selectedAnnotation}/>}
-                        {study.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated === false &&
-                            <Text size={'xs'} color={'dimmed'}>
-                                No differential gene expression calculated for selected annotation group.
-                            </Text>}
                     </Stack>
                 </Stack>
             </RightSidePanel>

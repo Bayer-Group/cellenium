@@ -48,7 +48,7 @@ function AnnotationGroupSelectBox() {
         if (value) {
             setValue(value)
             setAnnotationGroupId(parseInt(value))
-            setSelectedAnnotation(undefined)
+            setSelectedAnnotation(0)
         }
     }
 

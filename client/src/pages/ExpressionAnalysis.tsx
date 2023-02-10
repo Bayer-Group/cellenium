@@ -94,7 +94,7 @@ function ProjectionPlots() {
 
     return <Group position={"center"}>
         {tablePerGene && [...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
-            <Title>{g.displaySymbol}</Title>
+            <Title order={3}>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy={'expression'} expressionTable={tablePerGene[i]}/>
         </Stack>)}
     </Group>;

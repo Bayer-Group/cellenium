@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
 import Plot from 'react-plotly.js';
@@ -33,7 +33,7 @@ const ProjectionPlot = ({
 
     const study = useRecoilValue(studyState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
-    const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
+    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
 
     const annotationProjectionData = React.useMemo(() => {
@@ -63,6 +63,7 @@ const ProjectionPlot = ({
         if (!study || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
         }
+        // the cells in selected annotation color
         return annotationProjectionData.distinctAnnotationValueIds.map(annotationValueId => {
             const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
             return {
@@ -74,15 +75,16 @@ const ProjectionPlot = ({
                 mode: 'markers',
                 marker: {
                     size: 3,
-                    opacity: 0.7,
+                    opacity: expressionTable?0.2:0.7,
                     color: study.annotationValueMap.get(annotationValueId)?.color || '#d7d5d5',
                 },
                 showlegend: false,
                 hoverinfo: "text"
             } as Partial<Plotly.PlotData>;
         });
-    }, [study, annotationProjectionData, colorBy]);
+    }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy]);
 
+    // the hovered cells highlighted
     const annotationHighlightTrace = React.useMemo(() => {
         // Don't show the hovered cluster highlight in the expression view - the small expressionTrace points
         // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
@@ -98,7 +100,32 @@ const ProjectionPlot = ({
             mode: 'markers',
             text: study.annotationValueMap.get(highlightAnnotation)?.displayValue,
             marker: {
-                size: 20,
+                size: 10,
+                opacity: 0.1,
+                color: 'yellow'
+            },
+            showlegend: false,
+            hoverinfo: "text"
+        } as Partial<Plotly.PlotData>;
+    }, [study, annotationProjectionData, highlightAnnotation]);
+
+        // the selected cells highlighted
+    const selectedAnnotationHighlightTrace = React.useMemo(() => {
+        // Don't show the hovered cluster highlight in the expression view - the small expressionTrace points
+        // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
+        // causes flickering and web browser halt for large datasets.
+        if (!study || !annotationProjectionData || selectedAnnotation === 0 || colorBy !== 'annotation') {
+            return undefined;
+        }
+        const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({selectedAnnotation}).filter((d: any, p: any) => d.annotationValueId === p.selectedAnnotation);
+        return {
+            type: 'scattergl',
+            x: tableForAnnotation.array('projectionX', Float32Array),
+            y: tableForAnnotation.array('projectionY', Float32Array),
+            mode: 'markers',
+            text: study.annotationValueMap.get(selectedAnnotation as number)?.displayValue,
+            marker: {
+                size: 10,
                 opacity: 0.4,
                 color: colorBy === 'annotation'
                     ? study.annotationValueMap.get(highlightAnnotation)?.color
@@ -107,8 +134,9 @@ const ProjectionPlot = ({
             showlegend: false,
             hoverinfo: "text"
         } as Partial<Plotly.PlotData>;
-    }, [study, annotationProjectionData, highlightAnnotation]);
+    }, [study, annotationProjectionData, selectedAnnotation]);
 
+    // the cells colored according to gene expression for the expression analysis page, include 0 values
     const expressionTrace = React.useMemo(() => {
         if (!study || !expressionTable || !annotationProjectionData || colorBy !== 'expression') {
             return undefined;
@@ -133,7 +161,6 @@ const ProjectionPlot = ({
                 reversescale: true,
                 colorbar: {
                     tickfont: {
-                        family: 'Rubik',
                         size: '14',
 
                     },
@@ -152,6 +179,7 @@ const ProjectionPlot = ({
         } as Partial<Plotly.PlotData>;
     }, [study, colorBy, annotationProjectionData, expressionTable]);
 
+    // gene expression of selected gene projected on top of normal annotation plot
     const selectedGeneExpressionTrace = React.useMemo(() => {
         if (!study || !expressionTable || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
@@ -160,8 +188,6 @@ const ProjectionPlot = ({
             .join(annotationProjectionData.samplesAnnotationProjectionTable, 'studySampleId')
             .orderby(['value'])
             .reify();
-
-
         return {
             type: 'scattergl',
             x: joinedTable.array('projectionX', Float32Array),
@@ -169,7 +195,7 @@ const ProjectionPlot = ({
             customdata: joinedTable.array('annotationValueId', Int32Array),
             mode: 'markers',
             marker: {
-                size: 4,
+                size: 5,
                 opacity: 1,
                 color: joinedTable.array('value', Float32Array),
                 colorscale: 'Viridis',
@@ -178,7 +204,6 @@ const ProjectionPlot = ({
                 reversescale: true,
                 colorbar: {
                     tickfont: {
-                        family: 'Rubik',
                         size: '14',
 
                     },
@@ -197,6 +222,7 @@ const ProjectionPlot = ({
         } as Partial<Plotly.PlotData>;
     }, [study, annotationProjectionData, expressionTable, colorBy]);
 
+    // traces from the interactive user cell selection
     const selectedSamplesTrace = React.useMemo(() => {
         if (!study || !annotationProjectionData || !showSampleIds) {
             return undefined;
@@ -230,6 +256,7 @@ const ProjectionPlot = ({
         const plotlyData = [
             ...(annotationTraces || []),
             ...(annotationHighlightTrace ? [annotationHighlightTrace] : []),
+            ...(selectedAnnotationHighlightTrace ? [selectedAnnotationHighlightTrace] : []),
             ...(expressionTrace ? [expressionTrace] : []),
             ...(selectedGeneExpressionTrace ? [selectedGeneExpressionTrace] : []),
             ...(selectedSamplesTrace ? [selectedSamplesTrace] : []),
@@ -238,7 +265,7 @@ const ProjectionPlot = ({
             plotlyData,
             plotlyLayout: {
                 width: 850,
-                height: window.innerHeight - 10,
+                height: window.innerHeight - 50,
                 margin: {l: 0, r: 0, t: 0, b: 0},
                 xaxis: {
                     visible: false,
@@ -271,7 +298,7 @@ const ProjectionPlot = ({
         }
     }
     function onDoubleClick() {
-        setSelectedAnnotation(undefined)
+        setSelectedAnnotation(0)
     }
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
