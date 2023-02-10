@@ -124,7 +124,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
                             }}
                             data={offerings}
                             size="md"
-                            placeholder={'lung, "multiple myelome", heart, mouse'}
+                            placeholder={'lung, cancer, heart'}
                             rightSection={
                                 <ActionIcon onClick={() => {
                                     setValue('');

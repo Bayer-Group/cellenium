@@ -1,12 +1,6 @@
 import React from 'react';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {
-    annotationGroupIdState,
-    highlightAnnotationState,
-    selectedAnnotationState,
-    selectedGenesState,
-    studyState
-} from "../../atoms";
+import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -268,20 +262,24 @@ const ProjectionPlot = ({
     };
 
     function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
-        if (!isSelectable)
+        if (!isSelectable) {
             return null;
+        }
         if (event.points.length > 0 && event.points[0].customdata) {
             const annotationValueId = event.points[0].customdata as number;
             setSelectedAnnotation(annotationValueId);
         }
     }
-
+    function onDoubleClick() {
+        setSelectedAnnotation(undefined)
+    }
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
                       config={plotlyConfig}
                       onHover={onHover}
                       onClick={onClick}
+                      onDoubleClick={onDoubleClick}
                       onUnhover={() => setHighlightAnnotation(0)}
         />);
     } else {
