@@ -69,6 +69,8 @@ function DifferentialExpressionAnalysis() {
             <LeftSidePanel>
                 <Stack>
                     {annotationGroupId && <AnnotationGroupSelectBox/>}
+                    {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated?
+                    null:<Text color={'red'} size={'xs'}>No DEGs calculated for selected group.</Text>}
                     {annotationGroupId && <AnnotationGroupDisplay/>}
                 </Stack>
             </LeftSidePanel>
@@ -82,6 +84,8 @@ function DifferentialExpressionAnalysis() {
                     <Space h={'xs'}/>
                     <Stack>
                         <Divider size={"xs"} label={'Differentially expressed genes'}/>
+                        {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated?
+                    null:<Text color={'red'} size={'xs'}>No DEGs calculated for selected group.</Text>}
                         {!selectedAnnotation &&
                             study.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated === true &&
                             <Text size='xs' color='dimmed'>Select cells in the plot or via the selection panel on the
