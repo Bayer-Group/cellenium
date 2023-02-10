@@ -40,7 +40,7 @@ const MarkerCard = ({data}: Props) => {
                     </Stack>
                 </Group>
             </Card.Section>
-            <Stack pt={10} pb={10}>
+            <Stack pt={10} >
                 <Group position={'left'} spacing={'xs'} noWrap={true}>
                     <Stack align={'flex-start'}>
                         <Text fw={100} size={'xs'}>Gene</Text>
