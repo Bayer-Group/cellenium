@@ -52,8 +52,7 @@ const CoexpressionAnalysisPlot = () => {
     if (!data?.correlationTrianglePlot) {
         return <Center style={{height: '100%', width: '100%'}}><Text color={'dimmed'} size={'md'}>Please select at least
             2 genes
-            from the gene
-            store.</Text></Center>;
+            from the <Text span weight={800}>gene store</Text>.</Text></Center>;
     }
     return <Center style={{height: '100%', width: '100%'}}><img
         style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', objectFit: 'fill', overflow: 'hidden'}}
@@ -75,7 +74,9 @@ function CoexpressionAnalysis() {
     return (
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap={true}>
             <LeftSidePanel>
+                <Stack pt={5}>
                 <AnnotationFilterDisplay/>
+                    </Stack>
             </LeftSidePanel>
             <main style={{height: '100vh'}}>
                 <CoexpressionAnalysisPlot/>

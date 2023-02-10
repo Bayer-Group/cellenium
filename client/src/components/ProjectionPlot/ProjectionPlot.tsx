@@ -238,7 +238,7 @@ const ProjectionPlot = ({
             plotlyData,
             plotlyLayout: {
                 width: 850,
-                height: 700,
+                height: window.innerHeight - 10,
                 margin: {l: 0, r: 0, t: 0, b: 0},
                 xaxis: {
                     visible: false,

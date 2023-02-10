@@ -71,7 +71,7 @@ const CrossStudySearch = () => {
                     processed and normalized independently, this is a qualitative direction for which studies
                     to explore independently. Click in the chart to open a study.</Text>
             </Center>}
-            <Group position={"center"}>
+            <Group position={"center"} align={'start'}>
                 {(loading || studyDataLoading) && <Loader variant={'dots'} color={theme.colors.gray[5]} size={25}/>}
                 {heatmapDisplayData && heatmapDisplayData.map(heatmap => <Stack>
                     <Text>{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>

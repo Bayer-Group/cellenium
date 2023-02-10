@@ -131,13 +131,13 @@ function DotPlots() {
         return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
                                                                        size={25}/></Center>;
     }
-    return <Group position={"center"}>
+    return <>
         {heatmapDisplayData &&
-            <ExpressionDotPlot data={heatmapDisplayData}
+            <Center style={{height: '100%', width: '100%'}}><ExpressionDotPlot data={heatmapDisplayData}
                                annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
-                               xAxis={"displaySymbol"}/>
+                                       xAxis={"displaySymbol"}/></Center>
         }
-    </Group>;
+    </>;
 }
 
 const ExpressionAnalysis = () => {
@@ -157,7 +157,7 @@ const ExpressionAnalysis = () => {
     return (
         <Group align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
-                <Stack>
+                <Stack spacing={'md'}>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
                     {(analysisType === 'violinplot' || analysisType == 'dotplot') && (<>
@@ -168,14 +168,15 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop: 60}}
+            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1}}
                   className={'plotContainer'}>
+
                 {analysisType === 'violinplot' && <ViolinPlots/>}
                 {analysisType === 'projection' && <ProjectionPlots/>}
                 {analysisType === 'dotplot' && <DotPlots/>}
                 {selectedGenes.length === 0 &&
-                    <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
-                        store</Text></Text>}
+                    <Center style={{height: '100%', width: '100%'}}><Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>gene
+                        store</Text>.</Text></Center>}
             </main>
             <RightSidePanel>
                 <Stack>
