@@ -240,7 +240,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
     adata = sc.read_h5ad(filename)
 
     def _config_optional_list(key: str):
-        if adata.uns['cellenium'].get(key):
+        if adata.uns['cellenium'].get(key) is not None:
             return adata.uns['cellenium'][key].tolist()
         return None
 
