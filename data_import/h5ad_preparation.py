@@ -224,9 +224,12 @@ def set_cellenium_metadata(
     d['description'] = description
     assert isinstance(taxonomy_id, int)
     d['taxonomy_id'] = taxonomy_id
+    if ncit_tissue_ids is None:
+        ncit_tissue_ids = []
     assert isinstance(ncit_tissue_ids, list)
-    assert len(ncit_tissue_ids) > 0
     d['ncit_tissue_ids'] = ncit_tissue_ids
+    if mesh_disease_ids is None:
+        mesh_disease_ids = []
     assert isinstance(mesh_disease_ids, list)
     d['mesh_disease_ids'] = mesh_disease_ids
     assert X_pseudolayer_name is not None
