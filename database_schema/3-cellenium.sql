@@ -14,7 +14,9 @@ CREATE TABLE study
 
     cell_count         int,
     visible            boolean default False,
-    reader_permissions text[]
+    reader_permissions text[],
+    admin_permissions  text[],
+    legacy_config      jsonb
 );
 
 
@@ -136,10 +138,11 @@ CREATE TABLE annotation_value
     annotation_group_id int  not null references annotation_group,
 
     h5ad_value          text not null,
-    display_value       text not null,
-    color               text
+    display_value       text not null
 );
 create unique index annotation_value_1 on annotation_value (annotation_group_id, h5ad_value);
+create index annotation_value_2 on annotation_value (annotation_group_id) include (annotation_value_id);
+create index annotation_value_3 on annotation_value (annotation_value_id) include (display_value, annotation_group_id);
 
 CREATE TABLE study_annotation_group_ui
 (
@@ -209,7 +212,9 @@ CREATE TABLE study_sample_annotation
             REFERENCES annotation_value (annotation_value_id),
 
     -- the samples that are annotated with that value, e.g. that specific cell type
-    study_sample_ids    int[] not null
+    study_sample_ids    int[] not null,
+
+    color               text
 );
 create unique index study_sample_annotation_1 on study_sample_annotation (study_id, annotation_value_id);
 

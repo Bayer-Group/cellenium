@@ -11,7 +11,7 @@ scratch/%.h5ad: data_import/public_data/%.ipynb
 	PYTHONPATH=$$(pwd)/data_import jupyter nbconvert --execute --to html --stdout  $<  > $@.html
 
 scratch/%.h5ad.imported: scratch/%.h5ad
-	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $<
+	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
 	echo "done" > $@
 
 test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported

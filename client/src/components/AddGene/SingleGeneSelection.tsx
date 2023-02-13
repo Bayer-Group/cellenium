@@ -17,11 +17,11 @@ interface Props {
 }
 
 function SingleGeneSelection({selection, onSelectionChange}: Props) {
-    const [offerings, setOfferings] = useState<Omics[]>([])
+    const [offerings, setOfferings] = useState<Omics[]>([]);
     const [value, setValue] = useState(selection ? selection.displaySymbol : '');
     useEffect(() => {
         if (value !== selection?.displaySymbol) {
-            if (selection && value !== '') {
+            if (selection && value === '') {
                 setValue(selection.displaySymbol);
             }
         }

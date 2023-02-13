@@ -57,9 +57,12 @@ def get_annotated_samples_expression(study_id: int, study_layer_id: int, omics_i
     return sample_annotation_values_df, sample_annotation_df, samples_expression_df
 
 
-def get_palette(annotation_group_id: int):
-    annotation_values = sql_query(
-        f"select av.display_value, av.color from annotation_value av where av.annotation_group_id = {annotation_group_id}")
+def get_palette(study_id: int, annotation_group_id: int):
+    annotation_values = sql_query(f"""
+        select av.display_value, ssa.color
+        from annotation_value av
+        join study_sample_annotation ssa on av.annotation_value_id = ssa.annotation_value_id
+        where av.annotation_group_id={annotation_group_id} and ssa.study_id={study_id}""")
     palette = {e['display_value']: e['color'] for e in annotation_values}
     return palette
 
@@ -101,12 +104,8 @@ def generate_plot(study_id: int, study_layer_id: int, omics_id: int, annotation_
     max_x_values_chars = max([len(name) for name in df[groupByAttribute].unique()])
     fig, ax = plt.subplots(figsize=((unique_x_values * 1.0) * 0.6, (5 + max_x_values_chars * 0.05) * 0.6))
     sns.violinplot(ax=ax, data=df, y='value',
-                   x='display_value',  # annotation category
-                   # order=_get_ordered_attributevalues(df, groupByAttribute),
-                   # hue=secondaryGroupByAttribute,
-                   # hue_order=_get_ordered_attributevalues(df,
-                   #                                       secondaryGroupByAttribute) if secondaryGroupByAttribute else None,
-                   palette=get_palette(annotation_group_id),
+                   x='display_value',
+                   palette=get_palette(study_id, annotation_group_id),
                    saturation=1,
                    cut=0,
                    scale='width',

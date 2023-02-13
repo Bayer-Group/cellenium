@@ -21,12 +21,13 @@ function createSpec(annotationTitle: string, xAxis: "studyName" | "displaySymbol
                 "field": "displaySymbol", "type": "nominal", "title": "Gene",
             },
             "size": {
-                "field": "exprCellsFraction",
+                "field": "exprSamplesFraction",
                 "type": "quantitative",
+                "scale": {domain: [0.00, 1.0]},
                 "title": "Expr. fraction"
             },
             "color": {
-                "field": "q3",
+                "field": "median",
                 "type": "quantitative",
                 "scale": {"scheme": "viridis", reverse: true}
             }
@@ -61,6 +62,15 @@ export function ExpressionDotPlot({
     return <VegaLite
         spec={spec}
         onNewView={(view) => setUpSelectionListener(view)}
+        // config={{circle: {
+        //     size: 10
+        // },
+        //     style: {
+        //     circle: {
+        //         size: 10,
+        //     }
+        //     }
+        // }}
         data={{
             "table": data
         }}/>

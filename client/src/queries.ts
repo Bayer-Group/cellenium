@@ -17,6 +17,7 @@ fragment StudyInfo on StudyOverview   {
     description
     cellCount
     externalWebsite
+    defaultStudyLayerId
     studyOntologyList {
       ontCodes
       labels
@@ -196,19 +197,21 @@ query ontologies {
 }
 
 fragment DotPlotElement on ExpressionByAnnotation {
+    studyLayerId
+    omicsId
     annotationValueId
     annotationDisplayValue
-    # the annotationGroupId is constant as we're getting data for one annotation group
-    annotationGroupId
-    studyId
-    omicsId
     q3
-    exprCellsFraction
+    median
+    exprSamplesFraction
 }
 
-query expressionByAnnotation($filter: ExpressionByAnnotationFilter!) {
-  expressionByAnnotationsList(
-    filter: $filter
+query expressionByAnnotation($studyLayerIds: [Int!]!,  $omicsIds: [Int!]!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  expressionByAnnotationList(
+    pStudyLayerIds: $studyLayerIds,
+    pOmicsIds: $omicsIds,
+    pAnnotationGroupId: $annotationGroupId,
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
   ) {
     ...DotPlotElement
   }
@@ -238,7 +241,7 @@ query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $ann
   }
 }
 
-mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: [Int!]!) {
+mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!) {
   userAnnotationDefine(input: {pStudyId:$studyId, pAnnotationGroupName:$annotationGroupName, pSelectedSampleIds:$selectedSampleIds}) {
     clientMutationId
     integer

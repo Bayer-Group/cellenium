@@ -49,7 +49,8 @@ app.use(
             simpleCollections: "only",
             enableQueryBatching: true,
             appendPlugins: [require("@graphile-contrib/pg-simplify-inflector"),
-                require("postgraphile-plugin-connection-filter")]
+                require("postgraphile-plugin-connection-filter")],
+            bodySizeLimit: "100MB"
         }
     )
 );

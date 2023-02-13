@@ -106,22 +106,21 @@ function DotPlots() {
     const studyLayerId = useRecoilValue(studyLayerIdState);
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
     const selectedGenes = useRecoilValue(selectedGenesState);
+    const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
     const {data, loading} = useExpressionByAnnotationQuery({
         variables: {
-            filter: {
-                omicsId: {in: selectedGenes.map(g => g.omicsId)},
-                annotationGroupId: {equalTo: annotationGroupId || -1},
-                studyId: {equalTo: study?.studyId || -1},
-                studyLayerId: {equalTo: studyLayerId}
-            } as ExpressionByAnnotationFilter
+            omicsIds: selectedGenes.map(g => g.omicsId),
+            studyLayerIds: [studyLayerId],
+            annotationGroupId: annotationGroupId || -1,
+            excludeAnnotationValueIds: annotationFilter,
         },
         skip: selectedGenes.length === 0 || !annotationGroupId || !study
     });
     const heatmapDisplayData = useMemo(() => {
-        if (!data?.expressionByAnnotationsList) {
+        if (!data?.expressionByAnnotationList) {
             return undefined;
         }
-        return data.expressionByAnnotationsList
+        return data.expressionByAnnotationList
             .map(dotPlotElement => ({
                 ...dotPlotElement,
                 displaySymbol: study?.studyOmicsMap?.get(dotPlotElement.omicsId)?.displaySymbol || "nn"
@@ -161,8 +160,8 @@ const ExpressionAnalysis = () => {
                 <Stack>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
-                    {(analysisType === 'violinplot' || analysisType == 'dotplot') && <AnnotationGroupSelectBox/>}
-                    {analysisType === 'violinplot' && (<>
+                    {(analysisType === 'violinplot' || analysisType == 'dotplot') && (<>
+                        <AnnotationGroupSelectBox/>
                         <Divider my="sm"/>
                         <AnnotationFilterDisplay/>
                     </>)}
