@@ -170,7 +170,7 @@ select ssa.study_id,
        v.annotation_group_id,
        ssa.annotation_value_id,
        v.display_value,
-       v.color,
+       ssa.color,
        cardinality(ssa.study_sample_ids) sample_count
 from study_sample_annotation ssa
          join annotation_value v on ssa.annotation_value_id = v.annotation_value_id;
