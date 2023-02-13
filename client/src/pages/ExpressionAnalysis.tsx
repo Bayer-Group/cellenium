@@ -30,9 +30,9 @@ import {
 import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";
 
 const analysisTypes = [
-    {value: 'violinplot', label: 'Violin Plot'},
-    {value: 'projection', label: 'Projection Plot'},
-    {value: 'dotplot', label: 'Dot Plot'}
+    {value: 'violinplot', label: 'Violin plot'},
+    {value: 'projection', label: 'Projection plot'},
+    {value: 'dotplot', label: 'Dot plot'}
     /*
     {value: 'boxplot', label: 'Boxplot'},
         {value: 'dot', label: 'Dotplot'},

@@ -23,7 +23,7 @@ const AnnotationFilterSelectBox = () => {
 
     return (
         <MultiSelect
-            style={{width: 200, maxWidth: 200}}
+            style={{width: 210, maxWidth: 210, minWidth: 210}}
             value={selectedAnnotationFilter.map(s => s.toString())}
             onChange={(value) => {
                 setSelectedAnnotationFilter(value.map((v) => parseInt(v)));

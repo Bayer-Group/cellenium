@@ -16,7 +16,9 @@ function AnnotationGroupDisplay() {
     const annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
     const isSelectable = study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated;
     return (
-        <Stack spacing={2} onMouseLeave={() => setHighlightAnnotation(0)}>
+        <Stack spacing={2} onMouseLeave={() => setHighlightAnnotation(0)}
+            style={{maxWidth: 205}}
+        >
             {annotations !== undefined && annotations.map((annot) => {
                 return <Annotation key={annot.annotationValueId} label={annot.displayValue}
                                    sampleCount={annot.sampleCount} color={annot.color}

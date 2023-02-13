@@ -54,6 +54,7 @@ function AnnotationGroupSelectBox() {
 
     return (
         <Select
+            style={{maxWidth: 210, width: 210, minWidth: 210}}
             value={value} onChange={(value) => update(value)}
             label="Select annotation group"
             labelProps={{size: 'xs'}}

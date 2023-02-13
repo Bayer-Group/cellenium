@@ -22,3 +22,4 @@ dependencies:
     - pybiomart
     - lxml
     - cello-classify
+    - owlready2

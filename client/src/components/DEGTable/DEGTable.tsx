@@ -144,10 +144,7 @@ const DEGTable = ({annotationId}: Props) => {
                            fixedHeaderScrollHeight="100%"
                            noDataComponent={<Text>No data.</Text>}/>
             }
-            {data && data.differentialExpressionVsList.length === 0 &&
-                <Text color={'dimmed'} size={'xs'}>
-                    No differentially expressed genes for selected cells.
-                </Text>}
+
         </Stack>
     );
 };

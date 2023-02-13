@@ -324,6 +324,58 @@ class Dataimport(object):
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
 
+
+    def import_cto(self):
+        logging.info('importing CTO')
+        # download
+        url = 'http://purl.obolibrary.org/obo/cl.owl'
+        if not os.path.exists(self.meshfn):
+            download(url, self.meshfn)
+
+        # make entry into ontology table
+        try:
+            self.add_ontology(name='MeSH', ontid=1)
+        except sqlalchemy.exc.IntegrityError:
+            logging.warning('MeSH already imported into ontology table')
+
+        # parse ASCII format
+        df = parse_mesh_ascii_diseases(self.meshfn)
+
+        # fill concept table
+        # self.engine.execute('DELETE FROM concept WHERE ontid = 1')
+        logging.info('import the MeSH concepts')
+        concept = df.explode(['MH'])[['ontid', 'UI', 'MH']].rename(
+            columns={'MH': 'label', 'UI': 'ont_code'}).drop_duplicates().reset_index(drop=True)
+        concept = concept[['ontid', 'ont_code', 'label']]
+        concept = pd.concat([concept, pd.DataFrame({'ontid': [1], 'ont_code': ['HEALTHY'], 'label': ['Healthy']})])
+        concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
+
+        # get ids
+        cids = pd.read_sql('SELECT cid, ont_code from concept where ontid = 1', con=self.engine)
+
+        # construct the synonym table
+        logging.info('import the MeSH concept_synonyms')
+        synonyms = df[['UI', 'ENTRY']].rename(columns={'UI': 'ont_code', 'ENTRY': 'synonym'}).merge(cids, on='ont_code')
+        synonyms = synonyms.explode('synonym').drop_duplicates()
+        synonyms.synonym = synonyms.synonym.str.split('|', expand=True)[0]
+        synonyms[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
+
+        # construct the hierarchy table
+        logging.info('import the MeSH concept_hierarchy')
+        hierarchy = df[['UI', 'MN']].explode('MN').rename(columns={'UI': 'ont_code', 'ENTRY': 'synonym'}) \
+            .merge(cids, on='ont_code').drop_duplicates()
+        hierarchy['MN_PARENT'] = hierarchy['MN'].str.split('.').str[:-1].str.join('.')
+
+        hierarchy = hierarchy.merge(
+            hierarchy.rename(columns={'cid': 'parent_cid'})[['parent_cid', 'MN']].drop_duplicates(),
+            left_on='MN_PARENT', right_on='MN', how='left').rename(columns={})
+        hierarchy = hierarchy.dropna(subset=['parent_cid'])
+        hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
+        hierarchy = hierarchy[['cid', 'parent_cid']].drop_duplicates()
+        hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
+                         con=self.engine)
+
+
     def import_genes(self):
         # import gene mappings
         logging.info('importing gene mappings')
@@ -372,10 +424,13 @@ class Dataimport(object):
                                                                index=False, con=self.engine)
 
     def import_masterdata(self):
-        self.import_mesh()
-        self.import_ncit()
+        #self.import_mesh()
+        #self.import_ncit()
         # self.import_ncbi_taxonomy()
-        self.import_genes()
+        # self.import_simplified_flat_taxonomy()
+        self.import_cto()
+
+        #self.import_genes()
         # self.import_antibodies()
         # TODO jasper
 
