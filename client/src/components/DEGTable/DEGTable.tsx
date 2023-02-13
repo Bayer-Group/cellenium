@@ -1,11 +1,17 @@
 import React from 'react';
 import DataTable from "react-data-table-component";
-import {ActionIcon, Stack, Text} from "@mantine/core";
-import {IconPlus} from "@tabler/icons";
+import {ActionIcon, Group, Stack, Text} from "@mantine/core";
+import {IconEye, IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState} from "../../atoms";
+import {
+    selectedGenesState,
+    studyState,
+    userGenesState,
+    userGeneStoreCounterColor,
+    userGeneStoreOpenState
+} from "../../atoms";
 import {Omics} from "../../model";
 import _ from 'lodash';
 import {showNotification} from "@mantine/notifications";
@@ -61,7 +67,7 @@ const customStyles = {
         },
     },
 };
-const columns = memoize((clickHandler) => [
+const columns = memoize((clickHandler, handleColorClick) => [
     {
         name: 'gene',
         selector: (row: any) => row.displaySymbol,
@@ -91,8 +97,16 @@ const columns = memoize((clickHandler) => [
                 value: row.displaySymbol
             }
             return (
-                <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size='xs' variant={"default"}><IconPlus
-                    size={12} color={'black'}/></ActionIcon>)
+                <Group position={'center'} align={'center'} noWrap={true} spacing={0}>
+                    <ActionIcon title={'superpose expression'}
+                        onClick={() => handleColorClick(gene)} variant="default" size={'xs'} mr={5}>
+                        <IconEye/>
+                    </ActionIcon>
+                    <ActionIcon title={'add to gene store'} color={'blue.3'} onClick={() => clickHandler(gene)} size='xs'
+                                variant={"default"}><IconPlus
+                        size={12} color={'black'}/></ActionIcon>
+                </Group>
+            )
         },
         width: '20px',
     }
@@ -105,6 +119,8 @@ type Props = {
 const DEGTable = ({annotationId}: Props) => {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
+    const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
+
     const study = useRecoilValue(studyState);
     const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
     const {data, error, loading} = useDegQuery({
@@ -113,6 +129,17 @@ const DEGTable = ({annotationId}: Props) => {
             studyId: study?.studyId || 0
         }
     })
+
+    function handleColorClick(gene: Omics) {
+        if (selectedGenes.filter((g) => g.omicsId === gene.omicsId).length > 0) {
+            // remove
+            let removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId)
+            setSelectedGenesStore(removed)
+        } else {
+            setSelectedGenesStore([gene]);
+        }
+
+    }
 
     function handleClick(gene: Omics) {
         let check = userGenes.filter((g) => g.omicsId === gene.omicsId)
@@ -137,7 +164,8 @@ const DEGTable = ({annotationId}: Props) => {
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
             {data && data.differentialExpressionVsList.length > 0 &&
-                <DataTable dense columns={columns(handleClick)} data={data.differentialExpressionVsList}
+                <DataTable dense columns={columns(handleClick, handleColorClick)}
+                           data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
                            defaultSortAsc={false}
                            customStyles={customStyles} fixedHeader

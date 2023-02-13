@@ -8,6 +8,7 @@ import {annotationGroupIdState, highlightAnnotationState, studyState} from "../.
 function AnnotationGroupDisplay() {
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
+
     const study = useRecoilValue(studyState);
 
     if (!study || !annotationGroupId) {

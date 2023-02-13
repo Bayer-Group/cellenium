@@ -1,12 +1,13 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Group, Space, Stack, Text, Button, Loader, TextInput, Overlay, Box} from "@mantine/core";
+import {Box, Button, Group, Loader, Overlay, Stack, Text, TextInput} from "@mantine/core";
 import {AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
     celltypeDiscoveryCoexpressionSamplesState,
     celltypeDiscoveryGenesState,
-    selectedGenesState, studyReloadHelperState,
+    selectedAnnotationState,
+    studyReloadHelperState,
     studyState,
     userGenesState
 } from "../atoms";
@@ -33,10 +34,12 @@ const plotlyConfig: Partial<Plotly.Config> = {
 
 function CoexpressionPlot({
                               stateOffset,
-                              onSelection
+                              onSelection,
+                              onDoubleClick
                           }: {
     stateOffset: number;
     onSelection: (event: Readonly<Plotly.PlotSelectionEvent>) => void;
+    onDoubleClick: () => void;
 }) {
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
     const omicsX = omicsAll[stateOffset * 2];
@@ -107,6 +110,7 @@ function CoexpressionPlot({
                                                         layout={preparedPlot.plotlyLayout}
                                                         config={plotlyConfig}
                                                         onSelected={onSelection}
+                                                        onDeselect={onDoubleClick}
         />}
         {!preparedPlot && <div style={{height: 250, width: 250}}>
             {loading && <Loader variant={'dots'}/>}
@@ -119,6 +123,11 @@ function CelltypeDiscovery() {
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
     const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
+    const [selected, setSelected] = useRecoilState(selectedAnnotationState);
+
+    useEffect(() => {
+        setSelected(0)
+    }, [])
 
     // convenient default for gene input
     const userGenes = useRecoilValue(userGenesState);
@@ -137,6 +146,9 @@ function CelltypeDiscovery() {
     const onCoexpressionSelection = (event: Readonly<Plotly.PlotSelectionEvent>) => {
         const theelectedSampleIds = event.points.map(p => p.customdata) as number[];
         setSelectedSampleIds(theelectedSampleIds);
+    };
+    const onCoexpressionDoubleClick = () => {
+        setSelectedSampleIds([]);
     };
 
     const newPlotBasedOnSelectedSamples = () => {
@@ -204,7 +216,9 @@ function CelltypeDiscovery() {
                                 <Overlay opacity={0.6} color="#000" zIndex={5}/>}
                             <CoexpressionPlot
                                 stateOffset={i}
-                                onSelection={onCoexpressionSelection}/>
+                                onSelection={onCoexpressionSelection}
+                                onDoubleClick={onCoexpressionDoubleClick}
+                            />
                         </Box>
                     ))}
                     <Button onClick={newPlotBasedOnSelectedSamples}

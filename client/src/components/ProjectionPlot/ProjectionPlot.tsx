@@ -28,6 +28,7 @@ const ProjectionPlot = ({
                             expressionTable,
                             showSampleIds
                         }: Props) => {
+
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
 
@@ -75,14 +76,14 @@ const ProjectionPlot = ({
                 mode: 'markers',
                 marker: {
                     size: 3,
-                    opacity: expressionTable?0.2:0.7,
+                    opacity: (expressionTable||showSampleIds&&showSampleIds.length>0)?0.2:0.7,
                     color: study.annotationValueMap.get(annotationValueId)?.color || '#d7d5d5',
                 },
                 showlegend: false,
                 hoverinfo: "text"
             } as Partial<Plotly.PlotData>;
         });
-    }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy]);
+    }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy,showSampleIds]);
 
     // the hovered cells highlighted
     const annotationHighlightTrace = React.useMemo(() => {
@@ -238,9 +239,9 @@ const ProjectionPlot = ({
             customdata: filteredTable.array('annotationValueId', Int32Array),
             mode: 'markers',
             marker: {
-                size: 5,
-                opacity: 1,
-                color: '#4b4b0a',
+                size: 10,
+                opacity: 0.8,
+                color: 'yellow'
             },
             showlegend: false,
             hoverinfo: 'none'
