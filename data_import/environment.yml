@@ -13,7 +13,7 @@ dependencies:
     - numpy~=1.23.5
     - scipy~=1.10.0
     - requests
-    - matplotlib
+    - matplotlib~=3.6.3
     - seaborn
     - scanpy~=1.9.1
     - sqlalchemy~=1.4.46

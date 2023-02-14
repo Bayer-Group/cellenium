@@ -8,7 +8,7 @@ dependencies:
   - numba
   - scipy=1.10.*
   - requests
-  - matplotlib
+  - matplotlib=3.6.*
   - seaborn
   - networkx
   - python-jose
