@@ -2,19 +2,23 @@ import {TreeOntologyOverviewFragment} from "../generated/types";
 import {OntologyItem} from "../model";
 
 export function ontology2Color(ontology: string) {
+    console.log({ontology})
     let color = '';
     switch (ontology) {
-        case 'NCBI_taxonomy':
-            color = 'yellow'//theme.colors.yellow[5];
+        case 'taxonomy':
+            color = 'blue'//theme.colors.yellow[5];
             break;
         case 'NCIT':
-            color = 'red'//theme.colors.red[5];
+            color = 'pink'//theme.colors.red[5];
             break;
         case 'MeSH':
-            color = 'violet'//theme.colors.violet[5];
+            color = 'teal'//theme.colors.violet[5];
             break;
         case 'GENE':
-            color = 'pink';
+            color = 'lime';
+            break;
+        case 'CO':
+            color = 'orange';
             break;
         default:
             color = 'gray'//theme.colors.gray[5];
