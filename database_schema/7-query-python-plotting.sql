@@ -166,7 +166,7 @@ def get_omics_symbols_map(omics_ids: List[int]):
     return {row['omics_id']: row['display_symbol'] for row in result}
 
 
-def get_expression_correlation_df(study_layer_id: int, omics_ids: List[int]):
+def get_expression_correlation_df(study_id: int, study_layer_id: int, omics_ids: List[int]):
     expression_records = sql_query(f"""
             select e.omics_id, e.study_sample_ids, e.values
                 from expression e
@@ -178,6 +178,15 @@ def get_expression_correlation_df(study_layer_id: int, omics_ids: List[int]):
     correlation_df = samples_expression_df.pivot_table(values='value', index='study_sample_ids', columns='omics_id',
                                                        aggfunc='first').fillna(0.0)
     correlation_df.rename(columns=get_omics_symbols_map(omics_ids), inplace=True)
+
+    max_study_sample_id = sql_query(f"""
+            select max(study_sample_id) max_study_sample_id
+            from study_sample
+            where study_id = {study_id}""")[0]['max_study_sample_id']
+    all_sample_ids_df = pd.DataFrame({'all': range(1, max_study_sample_id + 1)})
+    all_sample_ids_df.set_index('all', inplace=True)
+    correlation_df = correlation_df.join(all_sample_ids_df, how='right').fillna(0.0)
+
     return correlation_df
 
 
@@ -197,11 +206,7 @@ def get_exclude_sample_ids_df(study_id: int, exclude_annotation_value_ids: List[
 
 def sns_scatter_matrix_lower(df):
     def corrfunc(x, y, **kwargs):
-        plot_data = pd.DataFrame({'x': x, 'y': y})
-        # filter out cells which have no expression for both of the genes, so that the 'not measured'
-        # data doesn't inflate the correlation
-        either_gene_expressed = plot_data[(plot_data.loc[:, 'x'] > 0) | (plot_data.loc[:, 'y'] > 0)]
-        r = either_gene_expressed.corr(method='pearson').loc['x', 'y']
+        r = np.corrcoef(x, y)[0, 1]
         ax = plt.gca()
         ax.annotate("$r$ = {:.2f}".format(r), xy=(.1, .9), xycoords=ax.transAxes, fontsize='small')
 
@@ -215,7 +220,7 @@ def sns_scatter_matrix_lower(df):
 
 def generate_correlation_plot(study_id: int, study_layer_id: int, omics_ids: List[int],
                               exclude_annotation_value_ids: List[int]):
-    correlation_df = get_expression_correlation_df(study_layer_id, omics_ids)
+    correlation_df = get_expression_correlation_df(study_id, study_layer_id, omics_ids)
     if exclude_annotation_value_ids:
         exclude_sample_ids_df = get_exclude_sample_ids_df(study_id, exclude_annotation_value_ids)
         correlation_df = correlation_df[~correlation_df.index.isin(exclude_sample_ids_df.index)]
