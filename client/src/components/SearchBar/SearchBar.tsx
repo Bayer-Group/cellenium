@@ -1,4 +1,4 @@
-import {ActionIcon, Autocomplete, Group, Loader, Stack, Text,Badge, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, Badge, useMantineTheme} from '@mantine/core';
 import React, {forwardRef, useEffect, useState} from "react";
 import {IconBinaryTree, IconCalculator, IconSearch, IconX} from "@tabler/icons";
 import {useAutocompleteLazyQuery} from "../../generated/types";
@@ -114,7 +114,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
 
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
-                    Filter studies by disease, tissue, species, title/description
+                    Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO)
                 </Text>
 
                 < Group spacing={4} position={'left'} align={'center'}
