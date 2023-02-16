@@ -76,14 +76,14 @@ const ProjectionPlot = ({
                 mode: 'markers',
                 marker: {
                     size: 3,
-                    opacity: (expressionTable||showSampleIds&&showSampleIds.length>0)?0.2:0.7,
+                    opacity: (expressionTable || showSampleIds && showSampleIds.length > 0) ? 0.2 : 0.7,
                     color: study.annotationValueMap.get(annotationValueId)?.color || '#d7d5d5',
                 },
                 showlegend: false,
                 hoverinfo: "text"
             } as Partial<Plotly.PlotData>;
         });
-    }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy,showSampleIds]);
+    }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy, showSampleIds]);
 
     // the hovered cells highlighted
     const annotationHighlightTrace = React.useMemo(() => {
@@ -110,7 +110,7 @@ const ProjectionPlot = ({
         } as Partial<Plotly.PlotData>;
     }, [study, annotationProjectionData, highlightAnnotation]);
 
-        // the selected cells highlighted
+    // the selected cells highlighted
     const selectedAnnotationHighlightTrace = React.useMemo(() => {
         // Don't show the hovered cluster highlight in the expression view - the small expressionTrace points
         // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
@@ -129,7 +129,7 @@ const ProjectionPlot = ({
                 size: 10,
                 opacity: 0.4,
                 color: colorBy === 'annotation'
-                    ? study.annotationValueMap.get(highlightAnnotation)?.color
+                    ? study.annotationValueMap.get(selectedAnnotation)?.color
                     : '#dddddd',
             },
             showlegend: false,
@@ -298,9 +298,11 @@ const ProjectionPlot = ({
             setSelectedAnnotation(annotationValueId);
         }
     }
+
     function onDoubleClick() {
         setSelectedAnnotation(0)
     }
+
     if (preparedPlot) {
         return (<Plot data={preparedPlot.plotlyData}
                       layout={preparedPlot.plotlyLayout}
