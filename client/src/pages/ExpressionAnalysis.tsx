@@ -58,7 +58,7 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
     })
 
     if (data?.violinPlot) {
-        return <img src={data.violinPlot}/>;
+        return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} src={data.violinPlot}/>;
     }
     return <div>{loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/>}</div>
 }
@@ -66,12 +66,12 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
 function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
-    return <Group position={"center"}>
+    return <Stack align={'center'} style={{width: '100%'}}>
         {[...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
         </Stack>)}
-    </Group>;
+    </Stack>;
 }
 
 
