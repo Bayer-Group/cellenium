@@ -6104,6 +6104,7 @@ export type UserAnnotationDefineInput = {
   pAnnotationGroupName: InputMaybe<Scalars['String']>;
   pSelectedSampleIds: InputMaybe<Scalars['String']>;
   pStudyId: InputMaybe<Scalars['Int']>;
+  pUnexpressedSamplesOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** The output of our `userAnnotationDefine` mutation. */
@@ -6358,6 +6359,7 @@ export type SaveUserAnnotationMutationVariables = Exact<{
   studyId: Scalars['Int'];
   annotationGroupName: Scalars['String'];
   selectedSampleIds: Scalars['String'];
+  unexpressedSamplesOmicsIds: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
 
@@ -7112,9 +7114,9 @@ export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<typeof useAnn
 export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceLazyQuery>;
 export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>;
 export const SaveUserAnnotationDocument = gql`
-    mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!) {
+    mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
   userAnnotationDefine(
-    input: {pStudyId: $studyId, pAnnotationGroupName: $annotationGroupName, pSelectedSampleIds: $selectedSampleIds}
+    input: {pStudyId: $studyId, pAnnotationGroupName: $annotationGroupName, pSelectedSampleIds: $selectedSampleIds, pUnexpressedSamplesOmicsIds: $unexpressedSamplesOmicsIds}
   ) {
     clientMutationId
     integer
@@ -7138,6 +7140,7 @@ export const SaveUserAnnotationDocument = gql`
  *      studyId: // value for 'studyId'
  *      annotationGroupName: // value for 'annotationGroupName'
  *      selectedSampleIds: // value for 'selectedSampleIds'
+ *      unexpressedSamplesOmicsIds: // value for 'unexpressedSamplesOmicsIds'
  *   },
  * });
  */

@@ -28,8 +28,8 @@ function Annotation({label, color, sampleCount, annotationId, isSelectable = fal
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-
-    const showBold = (selected === annotationId) ? 800 : "md";
+    const annotationIsSelected = selected === annotationId && isSelectable;
+    const showBold = annotationIsSelected ? 800 : "md";
     return (
         <Grid columns={12} pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
@@ -45,7 +45,7 @@ function Annotation({label, color, sampleCount, annotationId, isSelectable = fal
               }}
               className={cx({
                   [classes.hovered]: annotationId === highlight,
-                  [classes.clicked]: annotationId === selected
+                  [classes.clicked]: annotationIsSelected
               })}
         >
             <Grid.Col span={7}>
@@ -59,8 +59,8 @@ function Annotation({label, color, sampleCount, annotationId, isSelectable = fal
                 {sampleCount ? <Text size={'xs'} weight={showBold} lineClamp={1}>({sampleCount})</Text> : null}
             </Grid.Col>
             <Grid.Col span={1} pl={5}>
-                <div><ColorSwatch key={color} color={color} size={selected === annotationId ? 12 : 15}
-                                  style={{border: selected === annotationId ? '2px solid black' : ''}}/></div>
+                <div><ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15}
+                                  style={{border: annotationIsSelected ? '2px solid black' : ''}}/></div>
             </Grid.Col>
         </Grid>
     );
