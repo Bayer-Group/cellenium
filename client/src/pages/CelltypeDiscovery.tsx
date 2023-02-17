@@ -216,11 +216,11 @@ function CelltypeDiscovery() {
             <LeftSidePanel>
                 <Stack>
                     {annotationGroupId && <AnnotationGroupSelectBox/>}
-                    {annotationGroupId && <AnnotationGroupDisplay/>}
+                    {annotationGroupId && <AnnotationGroupDisplay disableSelection={true}/>}
                 </Stack>
             </LeftSidePanel>
             <main>
-                <ProjectionPlot colorBy={'annotation'} showSampleIds={selectedSampleIds}/>
+                <ProjectionPlot colorBy={'annotation'} showSampleIds={selectedSampleIds} disableSelection={true}/>
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>

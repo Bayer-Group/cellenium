@@ -26,12 +26,14 @@ type Props = {
     colorBy: 'annotation' | 'expression';
     expressionTable?: ExpressionTable;
     showSampleIds?: number[] | null;
+    disableSelection?: boolean;
 }
 
 const ProjectionPlot = ({
                             colorBy,
                             expressionTable,
-                            showSampleIds
+                            showSampleIds,
+                            disableSelection
                         }: Props) => {
 
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
@@ -41,7 +43,7 @@ const ProjectionPlot = ({
     const projection = useRecoilValue(selectedProjectionState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-    const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
+    const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
 
     const annotationProjectionData = React.useMemo(() => {
         if (!study || !study.samplesProjectionTables.get(projection)) {
