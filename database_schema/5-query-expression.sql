@@ -97,7 +97,7 @@ create type expression_by_omics as
 
 drop function if exists expression_by_omics_ids;
 create function expression_by_omics_ids(p_study_layer_id int, p_omics_ids int[],
-                                        p_subsampling_projection projection_type)
+                                        p_subsampling_projection text)
     returns setof expression_by_omics
     language plpgsql
     immutable
@@ -108,7 +108,7 @@ $$
 begin
     -- we could use a study-level flag that determines if display_subsampling is False for any sample,
     -- and use the else branch in this case
-    if p_subsampling_projection is not null then
+    if p_subsampling_projection is not null and p_subsampling_projection != '' then
         return query select e.omics_id,
                             array_agg(sample_id order by sample_id) study_sample_ids,
                             array_agg(value order by sample_id)     values

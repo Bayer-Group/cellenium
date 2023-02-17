@@ -23,12 +23,12 @@ export type Omics = {
 }
 
 export type Study = StudyBasicsFragment & {
-    samplesProjectionTable: SamplesProjectionTable;
+    samplesProjectionTables: Map<string,SamplesProjectionTable>;
     samplesAnnotationTable: SamplesAnnotationTable;
     studyOmicsTable: StudyOmicsTable;
     studyOmicsMap: Map<number, Omics>;
     annotationGroupMap: Map<number, AnnotationGrpFragment>;
-    annotationValueMap: Map<number, AnnotationValue>;
+    annotationValueMap: Map<number, AnnotationGrpFragment['annotationValuesList'][0]>;
 };
 
 export type SelectBoxItem = {

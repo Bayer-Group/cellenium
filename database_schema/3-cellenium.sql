@@ -13,6 +13,7 @@ CREATE TABLE study
     --ontology_ids_with_parents text[]   for search
 
     cell_count         int,
+    projections        text[],
     visible            boolean default False,
     reader_permissions text[],
     admin_permissions  text[],
@@ -173,18 +174,17 @@ CREATE TABLE study_sample
 --create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
 
-CREATE TYPE projection_type AS ENUM ('umap', 'tsne', 'pca');
 CREATE TABLE study_sample_projection
 (
-    study_id            int             not null,
-    study_sample_id     int             not null,
+    study_id            int     not null,
+    study_sample_id     int     not null,
     constraint fk_study_sample
         FOREIGN KEY (study_id, study_sample_id)
             REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
-    projection_type     projection_type not null,
-    projection          real[]          not null,
+    projection_type     text    not null,
+    projection          real[]  not null,
     -- subsampling reduces overlapping points in a projection
-    display_subsampling boolean         not null
+    display_subsampling boolean not null
 );
 
 CREATE VIEW study_sample_projection_subsampling_transposed

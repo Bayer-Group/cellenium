@@ -48,6 +48,25 @@ def import_study_omics(study_id: int, adata: AnnData):
     return adata_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
 
 
+def import_projection(adata, adata_samples_df, study_id, key):
+    projection_df = pd.DataFrame({
+        'study_id': study_id,
+        'study_sample_id': adata_samples_df.study_sample_id,
+        'projection_type': key,
+        'projection': adata.obsm[f'X_{key}'][:, 0:2].tolist()
+    })
+    if f'{key}_density_sampled_indices' in adata.uns['cellenium']:
+        projection_df['display_subsampling'] = False
+        projection_df.loc[adata.uns['cellenium'][f'{key}_density_sampled_indices'], 'display_subsampling'] = True
+    else:
+        projection_df['display_subsampling'] = True
+    import_df(projection_df, 'study_sample_projection')
+
+
+def _projection_list(adata: AnnData):
+    return adata.uns['cellenium'].get('import_projections', np.array(['umap'])).tolist()
+
+
 def import_study_sample(study_id: int, adata: AnnData):
     logging.info('importing sample definitions')
     adata_samples_df = adata.obs.copy()
@@ -62,21 +81,8 @@ def import_study_sample(study_id: int, adata: AnnData):
             'study_id': study_id,
             'cell_count': len(adata_samples_df)
         })
-
-    if 'X_umap' in adata.obsm:
-        projection_df = pd.DataFrame({
-            'study_id': study_id,
-            'study_sample_id': adata_samples_df.study_sample_id,
-            'projection_type': 'umap',
-            'projection': adata.obsm['X_umap'].tolist()
-        })
-        if 'umap_density_sampled_indices' in adata.uns['cellenium']:
-            projection_df['display_subsampling'] = False
-            projection_df.loc[adata.uns['cellenium']['umap_density_sampled_indices'], 'display_subsampling'] = True
-        else:
-            projection_df['display_subsampling'] = True
-
-        import_df(projection_df, 'study_sample_projection')
+    for projection in _projection_list(adata):
+        import_projection(adata, adata_samples_df, study_id, projection)
 
     return adata_samples_df
 
@@ -246,9 +252,9 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
     with engine.connect() as connection:
         r = connection.execute(text("""INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
-               reader_permissions, admin_permissions, legacy_config)
+               projections, reader_permissions, admin_permissions, legacy_config)
             VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
-               :reader_permissions, :admin_permissions, :legacy_config
+               :projections, :reader_permissions, :admin_permissions, :legacy_config
             )
             RETURNING study_id"""), {
             'filename': Path(filename).relative_to("scratch").as_posix(),
@@ -258,6 +264,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
             'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
             'disease_mesh_ids': adata.uns['cellenium']['mesh_disease_ids'].tolist(),
             'organism_tax_id': adata.uns['cellenium']['taxonomy_id'],
+            'projections': _projection_list(adata),
             'reader_permissions': _config_optional_list('initial_reader_permissions'),
             'admin_permissions': _config_optional_list('initial_admin_permissions'),
             'legacy_config': Json(adata.uns['cellenium'].get('legacy_config'),

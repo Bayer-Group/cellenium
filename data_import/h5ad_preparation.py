@@ -202,6 +202,7 @@ def set_cellenium_metadata(
         X_pseudolayer_name: str,
         main_sample_attributes: List[str],
         secondary_sample_attributes: List[str] = [],
+        import_projections: List[str] = ['umap'],
         initial_reader_permissions: List[str] = None,
         initial_admin_permissions: List[str] = None
 ):
@@ -240,6 +241,9 @@ def set_cellenium_metadata(
             raise Exception(
                 f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
     d['secondary_sample_attributes'] = secondary_sample_attributes
+    for p in import_projections:
+        assert adata.obsm[f'X_{p}'] is not None
+    d['import_projections'] = import_projections
     d['initial_reader_permissions'] = initial_reader_permissions
     d['initial_admin_permissions'] = initial_admin_permissions
 

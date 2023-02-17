@@ -92,11 +92,16 @@ export const studyLayerIdState = selector<number>({
     get: ({get}) => {
         const study = get(studyState);
         if (study) {
-            // check if the selected layer (additional atom) is valid or return default:
+            // check if the selected layer (additional atom studyLayerIdDefinedState, unused) is valid or return default:
             return study.studyLayersList[0].studyLayerId;
         }
         return -1;
     }
+});
+
+export const selectedProjectionState = atom<string>({
+    key: "selectedProjection",
+    default: ""
 });
 
 function buildSampleProjectionTable(d: { studySampleId: number[], projection: number[] }) {
@@ -164,7 +169,7 @@ export const studyState = selector<Study | undefined>({
                 const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
                 const s: Study = {
                     ...response.data.study,
-                    samplesProjectionTable: buildSampleProjectionTable(response.data.study.studySampleProjectionSubsamplingTransposedList[0]),
+                    samplesProjectionTables: new Map(response.data.study.studySampleProjectionSubsamplingTransposedList.map(tl => [tl.projectionType, buildSampleProjectionTable(tl)])),
                     samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
                     studyOmicsTable,
                     studyOmicsMap: new Map(studyOmicsTable.objects().map(o => [(o as Omics).omicsId, (o as Omics)])),

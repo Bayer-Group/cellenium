@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
+import {
+    annotationGroupIdState,
+    highlightAnnotationState,
+    selectedAnnotationState, selectedProjectionState,
+    studyState
+} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -33,18 +38,19 @@ const ProjectionPlot = ({
 
 
     const study = useRecoilValue(studyState);
+    const projection = useRecoilValue(selectedProjectionState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
 
     const annotationProjectionData = React.useMemo(() => {
-        if (!study) {
+        if (!study || !study.samplesProjectionTables.get(projection)) {
             return undefined;
         }
 
         // @ts-ignore
         let samplesAnnotationProjectionTable = study.samplesAnnotationTable.params({annotationGroupId}).filter((d, p) => d.annotationGroupId === p.annotationGroupId);
-        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join_right(study.samplesProjectionTable, 'studySampleId')
+        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join_right(study.samplesProjectionTables.get(projection), 'studySampleId')
             .impute({annotationValueId: () => -1})
             .reify();
         const rangeX = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionX')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionX')) * 1.05];
@@ -57,7 +63,7 @@ const ProjectionPlot = ({
             rangeY,
             distinctAnnotationValueIds
         }
-    }, [annotationGroupId, study]);
+    }, [annotationGroupId, study, projection]);
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {

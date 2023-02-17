@@ -90,6 +90,7 @@ fragment StudyBasics on Study {
       annotationValueId
       studySampleIds
     }
+    projections
     studySampleProjectionSubsamplingTransposedList {
       projectionType
       studySampleId
@@ -160,7 +161,7 @@ query StudyBasics($studyId: Int!) {
 }
 
 
-query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection:ProjectionType) {
+query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection:String) {
   expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:$subsamplingProjection) {
     omicsId
     studySampleIds
