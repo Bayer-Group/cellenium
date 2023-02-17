@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zipfile import ZipFile
 
+import owlready2 as ow
 import pandas as pd
 import requests
 import sqlalchemy
@@ -164,6 +165,7 @@ class Dataimport(object):
         self.meshfn = './scratch/d2023.txt'
         self.ncitfn = './scratch/ncit.csv.gz'
         self.ncbitaxonomyfn = './scratch/taxdmp.zip'
+        self.cofn = './scratch/cl.owl'
 
     def __enter__(self):
         self.engine = sqlalchemy.create_engine(
@@ -182,6 +184,9 @@ class Dataimport(object):
         df.to_sql('ontology', con=self.engine, index=False, if_exists='append')
 
     def import_ncbi_taxonomy(self):
+
+        # not used as too much for the moment
+
         logging.info('importing NCBI taxonomy')
         # download
         url = 'https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip'
@@ -228,6 +233,36 @@ class Dataimport(object):
         hierarchy = hierarchy[['cid', 'parent_cid']].drop_duplicates()
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
+
+    def import_simplified_flat_taxonomy(self):
+        logging.info('importing simplified taxonomy for human, mouse, rat')
+        SPECIES_ONTID = 3
+        # make entry into ontology table
+        try:
+            self.add_ontology(name='taxonomy', ontid=SPECIES_ONTID)
+        except sqlalchemy.exc.IntegrityError:
+            logging.warning('Taxonomy already imported into ontology table')
+
+        concept = pd.DataFrame([
+            {"ont_code": 9606, "label": "Homo sapiens", "ontid": SPECIES_ONTID},
+            {"ont_code": 10116, "label": "Rattus norvegicus", "ontid": SPECIES_ONTID},
+            {"ont_code": 10090, "label": "Mus musculus", "ontid": SPECIES_ONTID}
+        ])
+        concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
+        # get ids
+        cids = pd.read_sql(f'SELECT cid, ont_code from concept where ontid = {SPECIES_ONTID}', con=self.engine)
+
+        synonym = pd.DataFrame([
+            {"ont_code": "9606", "synonym": "human"},
+            {"ont_code": "10116", "synonym": "rat"},
+            {"ont_code": "10090", "synonym": "mouse"}
+        ])
+
+        # construct the synonym table
+        logging.info('import the taxonomy concept_synonyms')
+        synonym = synonym.merge(cids, on='ont_code')
+        synonym.cid = synonym.cid.astype(int)
+        synonym[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
 
     def import_ncit(self):
         logging.info('importing NCIT')
@@ -324,6 +359,72 @@ class Dataimport(object):
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
 
+    def import_co(self):
+        logging.info('importing Cell Ontology')
+        CO_ONTID = 4
+        # download
+        url = 'http://purl.obolibrary.org/obo/cl.owl'
+        if not os.path.exists(self.cofn):
+            download(url, self.cofn)
+
+        # make entry into ontology table
+        try:
+            self.add_ontology(name='CO', ontid=CO_ONTID)
+        except sqlalchemy.exc.IntegrityError:
+            logging.warning('Cell ontology already imported into ontology table')
+
+        # load the ontology
+        onto = ow.get_ontology(url).load()
+        cls = [ele for ele in list(onto.classes()) if ele.iri.split('/')[-1].startswith('CL_')]
+
+        # parse the tree
+        concept = []
+        hierarchy = []
+        synonym = []
+        for nd in cls:
+            if nd.label:
+                label = nd.label[0]
+                ont_code = nd.iri.split('/')[-1]
+                concept.append({'label': label, 'ont_code': ont_code})
+                for par in nd.is_a:
+                    if type(par) == ow.entity.ThingClass:
+                        parent_ont_code = par.iri.split('/')[-1]
+                        if parent_ont_code.startswith('CL_'):
+                            hierarchy.append({'ont_code': ont_code, 'parent_ont_code': parent_ont_code})
+                if nd.hasExactSynonym:
+                    synonym.append({'ont_code': ont_code, 'synonym': nd.hasExactSynonym})
+        concept = pd.DataFrame(concept)
+        concept['ontid'] = CO_ONTID
+        concept = concept.drop_duplicates()
+        hierarchy = pd.DataFrame(hierarchy).explode('parent_ont_code')
+        synonym = pd.DataFrame(synonym)
+
+        # self.engine.execute('DELETE FROM concept WHERE ontid = 1')
+        concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
+
+        # get ids
+        cids = pd.read_sql(f'SELECT cid, ont_code from concept where ontid = {CO_ONTID}', con=self.engine)
+
+        # construct the synonym table
+        logging.info('import the CO concept_synonyms')
+        synonym = synonym.merge(cids, on='ont_code')
+        synonym = synonym.explode('synonym').drop_duplicates()
+        synonym[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
+
+        # construct the hierarchy table
+        logging.info('import the CO concept_hierarchy')
+        hierarchy = hierarchy.merge(cids, on='ont_code')[['cid', 'parent_ont_code']]
+        hierarchy = hierarchy.merge(cids, left_on='parent_ont_code', right_on='ont_code')[['cid_x', 'cid_y']].rename(
+            columns={
+                'cid_x': 'cid',
+                'cid_y': 'parent_cid'
+            })
+        hierarchy = hierarchy.dropna(subset=['parent_cid'])
+        hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
+        hierarchy = hierarchy[['cid', 'parent_cid']].drop_duplicates()
+        hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
+                         con=self.engine)
+
     def import_genes(self):
         # import gene mappings
         logging.info('importing gene mappings')
@@ -374,9 +475,12 @@ class Dataimport(object):
     def import_masterdata(self):
         self.import_mesh()
         self.import_ncit()
-        # self.import_ncbi_taxonomy()
+        #self.import_ncbi_taxonomy()
+        self.import_simplified_flat_taxonomy()
+        self.import_co()
+
         self.import_genes()
-        # self.import_antibodies()
+        self.import_antibodies()
         # TODO jasper
 
 

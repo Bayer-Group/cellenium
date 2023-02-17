@@ -17,7 +17,9 @@ const AnnotationFilterDisplay = () => {
                     <IconTrash/>
                 </ActionIcon>
             </Group>
-            <AnnotationFilterSelectBox/>
+            <Group>
+                <AnnotationFilterSelectBox/>
+            </Group>
         </Stack>
     );
 };

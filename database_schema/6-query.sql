@@ -119,13 +119,36 @@ SELECT s.study_id,
        ont.labels,
        ont.parent_ids
 FROM study s
-         cross join ont_codes_info('MeSH', s.disease_mesh_ids) ont;
+         cross join ont_codes_info('MeSH', s.disease_mesh_ids) ont
+union all
+SELECT s.study_id,
+       'taxonomy'                        ontology,
+       ARRAY [s.organism_tax_id]::text[] ont_codes,
+       ont.labels,
+       ont.parent_ids
+FROM study s
+         cross join ont_codes_info('taxonomy', ARRAY [s.organism_tax_id]::text[]) ont
+union all
+select study_cell_ontology_ids.study_id,
+       'CO'                          ontology,
+       study_cell_ontology_ids.ont_codes,
+       ont.labels,
+       array_agg(distinct parent_id) parent_ids
+from (select ssa.study_id, array_agg(distinct c.ont_code) ont_codes
+      from study_sample_annotation ssa
+               join annotation_value av on ssa.annotation_value_id = av.annotation_value_id and
+                                           av.annotation_group_id in (select annotation_group_id
+                                                                      from annotation_group
+                                                                      where display_group ilike '%cell%type%')
+               join concept c on lower(c.label) = lower(av.display_value) and
+                                 c.ontid = (select ontid from ontology where name = 'CO')
+      group by ssa.study_id) study_cell_ontology_ids
+         cross join ont_codes_info('CO', study_cell_ontology_ids.ont_codes) ont
+         cross join unnest(ont.parent_ids) parent_id
+group by study_cell_ontology_ids.study_id,
+         study_cell_ontology_ids.ont_codes,
+         ont.labels;
 comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
-
-
-select *
-from ont_codes_info('MeSH', ARRAY ['HEALTHY']);
-
 
 
 drop view if exists _all_used_ontology_ids cascade;

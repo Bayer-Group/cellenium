@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {VegaLite, View, VisualizationSpec} from "react-vega";
 import {DotPlotElementFragment} from "../../generated/types";
 import {ScenegraphEvent} from "vega";
@@ -13,12 +13,15 @@ function createSpec(annotationTitle: string, xAxis: "studyName" | "displaySymbol
             "y": {
                 "field": "annotationDisplayValue",
                 "type": "ordinal",
-                "title": annotationTitle
+                "title": "",
+                "axis": {"offset": 10}
             },
             "x": xAxis === "studyName" ? {
-                "field": "studyName", "type": "nominal", "title": "Study",
+                "field": "studyName", "type": "nominal", "title": "",
+                "axis": {"offset": 10}
             } : {
-                "field": "displaySymbol", "type": "nominal", "title": "Gene",
+                "field": "displaySymbol", "type": "nominal", "title": "",
+                "axis": {"offset": 10}
             },
             "size": {
                 "field": "exprSamplesFraction",
@@ -62,15 +65,11 @@ export function ExpressionDotPlot({
     return <VegaLite
         spec={spec}
         onNewView={(view) => setUpSelectionListener(view)}
-        // config={{circle: {
-        //     size: 10
-        // },
-        //     style: {
-        //     circle: {
-        //         size: 10,
-        //     }
-        //     }
-        // }}
+        config={{
+            view: {stroke: "transparent"}
+        }
+        }
+        actions={false}
         data={{
             "table": data
         }}/>

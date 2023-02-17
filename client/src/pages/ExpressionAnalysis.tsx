@@ -30,9 +30,9 @@ import {
 import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";
 
 const analysisTypes = [
-    {value: 'violinplot', label: 'Violin Plot'},
-    {value: 'projection', label: 'Projection Plot'},
-    {value: 'dotplot', label: 'Dot Plot'}
+    {value: 'violinplot', label: 'Violin plot'},
+    {value: 'projection', label: 'Projection plot'},
+    {value: 'dotplot', label: 'Dot plot'}
     /*
     {value: 'boxplot', label: 'Boxplot'},
         {value: 'dot', label: 'Dotplot'},
@@ -58,7 +58,7 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
     })
 
     if (data?.violinPlot) {
-        return <img src={data.violinPlot}/>;
+        return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} src={data.violinPlot}/>;
     }
     return <div>{loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/>}</div>
 }
@@ -66,12 +66,12 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
 function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
-    return <Group position={"center"}>
+    return <Stack align={'center'} style={{width: '100%'}}>
         {[...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
         </Stack>)}
-    </Group>;
+    </Stack>;
 }
 
 
@@ -94,7 +94,7 @@ function ProjectionPlots() {
 
     return <Group position={"center"}>
         {tablePerGene && [...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
-            <Title>{g.displaySymbol}</Title>
+            <Title order={3}>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy={'expression'} expressionTable={tablePerGene[i]}/>
         </Stack>)}
     </Group>;
@@ -131,13 +131,13 @@ function DotPlots() {
         return <Center style={{height: '100%', width: '100%'}}><Loader variant={'dots'} color={theme.colors.gray[5]}
                                                                        size={25}/></Center>;
     }
-    return <Group position={"center"}>
+    return <>
         {heatmapDisplayData &&
-            <ExpressionDotPlot data={heatmapDisplayData}
+            <Center style={{height: '100%', width: '100%'}}><ExpressionDotPlot data={heatmapDisplayData}
                                annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
-                               xAxis={"displaySymbol"}/>
+                                       xAxis={"displaySymbol"}/></Center>
         }
-    </Group>;
+    </>;
 }
 
 const ExpressionAnalysis = () => {
@@ -157,7 +157,7 @@ const ExpressionAnalysis = () => {
     return (
         <Group align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
-                <Stack>
+                <Stack spacing={'md'}>
                     <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType}
                                                      options={analysisTypes}/>
                     {(analysisType === 'violinplot' || analysisType == 'dotplot') && (<>
@@ -168,14 +168,15 @@ const ExpressionAnalysis = () => {
                 </Stack>
 
             </LeftSidePanel>
-            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1, paddingTop: 60}}
+            <main style={{height: '100vh', overflowY: 'scroll', flexGrow: 1}}
                   className={'plotContainer'}>
+
                 {analysisType === 'violinplot' && <ViolinPlots/>}
                 {analysisType === 'projection' && <ProjectionPlots/>}
                 {analysisType === 'dotplot' && <DotPlots/>}
                 {selectedGenes.length === 0 &&
-                    <Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>User gene
-                        store</Text></Text>}
+                    <Center style={{height: '100%', width: '100%'}}><Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>gene
+                        store</Text>.</Text></Center>}
             </main>
             <RightSidePanel>
                 <Stack>

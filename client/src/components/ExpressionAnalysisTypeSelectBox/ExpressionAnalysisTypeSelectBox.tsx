@@ -7,9 +7,10 @@ type Props = {
     selection: string;
     options: SelectBoxItem[];
 }
-const ExpressionAnalysisTypeSelectBox = ({selection, options, handleSelection}:Props) => {
+const ExpressionAnalysisTypeSelectBox = ({selection, options, handleSelection}: Props) => {
     return (
-        <Select label={'Select plot type'} value={selection} onChange={handleSelection} data={options} />
+        <Select style={{minWidth: 210, maxWidth: 210, width: 210}} labelProps={{size: 'xs'}} label={'Select plot type'} value={selection} onChange={handleSelection}
+                data={options}/>
     );
 };
 

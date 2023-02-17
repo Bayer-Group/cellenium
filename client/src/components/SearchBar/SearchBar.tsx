@@ -1,11 +1,12 @@
-import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {useEffect, useState} from "react";
-import {IconBinaryTree, IconSearch, IconX} from "@tabler/icons";
+import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, Badge, useMantineTheme} from '@mantine/core';
+import React, {forwardRef, useEffect, useState} from "react";
+import {IconBinaryTree, IconCalculator, IconSearch, IconX} from "@tabler/icons";
 import {useAutocompleteLazyQuery} from "../../generated/types";
 import {closeModal, openModal} from "@mantine/modals";
 import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
 import {OntologyItem} from "../../model";
 import SearchBadge from "../SearchBadge/SearchBadge";
+import {ontology2Color} from "../../pages/helper";
 
 type OfferingItem = {
     value: string;
@@ -13,7 +14,24 @@ type OfferingItem = {
     ontology: string;
 }
 
-type Props = {
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+    value: string;
+    ontology: string;
+    ontcode: string;
+}
+
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+    ({value, ontology, ontcode, ...others}: ItemProps, ref) => (
+        <div ref={ref} {...others}>
+            <Group position={'apart'} align={'center'} noWrap>
+                <Text>{value}</Text>
+                <Badge color={ontology2Color(ontology)}>{ontology}</Badge>
+            </Group>
+        </div>
+    )
+);
+
+interface Props {
     ontologies?: Map<string, OntologyItem>;
     onSearchElementsUpdate: (ontCodes: string[]) => void;
 }
@@ -96,7 +114,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
 
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
-                    Filter studies by disease, tissue, species, title/description
+                    Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO)
                 </Text>
 
                 < Group spacing={4} position={'left'} align={'center'}
@@ -118,13 +136,14 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
                             onChange={handleChange}
                             onItemSubmit={handleSubmit}
                             value={value}
+                            itemComponent={SelectItem}
                             variant='unstyled'
                             styles={{
                                 label: {fontWeight: 500, fontSize: '0.8rem', display: 'inline-block'},
                             }}
                             data={offerings}
                             size="md"
-                            placeholder={'lung, "multiple myelome", heart, mouse'}
+                            placeholder={'lung, cancer, heart'}
                             rightSection={
                                 <ActionIcon onClick={() => {
                                     setValue('');

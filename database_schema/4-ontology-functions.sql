@@ -548,45 +548,49 @@ CREATE FUNCTION concept_hierarchy_minimum_trees_parents_lists(query_ontology tex
         (
             cid                  int,
             ont_code             text,
-            label             text,
+            label                text,
             parent_cids          int[],
             parent_ont_code_path text[]
         )
 AS
 $$
-    begin
+begin
     if ontology_codes is not null then
-    return query
-with query_concepts as (select distinct c.cid, c.ontid
-                        from concept c
-                                 join ontology o on c.ontid = o.ontid
-                        where c.ont_code = any (ontology_codes)
-                          and o.name = query_ontology),
-     ordering_cids_and_all_parents as (with recursive concept_hier_cte(cid, parent_cid)
-                                                          as (select distinct null::integer, query_concepts.cid parent_cid
-                                                              from query_concepts
-                                                              union all
-                                                              select ch.cid, ch.parent_cid
-                                                              from concept_hierarchy ch,
-                                                                   concept_hier_cte
-                                                              where ch.cid = concept_hier_cte.parent_cid)
-                                       select distinct concept_hier_cte.cid, concept_hier_cte.parent_cid
-                                       from concept_hier_cte
-                                       where concept_hier_cte.cid is not null)
-select elems.cid, cid_c.ont_code, cid_c.label, elems.parent_cids, concept_cid_array_to_codes(elems.parent_cids)
-from unnest((select concept_paths
-             from
-                 _concept_hierarchy_minimum_trees_impl(
-                         array(
-                                 select (ch.cid, ch.parent_cid, 0.8)::concept_weighted_parent
-                                 from ordering_cids_and_all_parents ch
-                             ),
-                         (select array_agg(query_concepts.cid)
-                          from query_concepts)
-                     ))) as elems
-         join concept cid_c on elems.cid = cid_c.cid;
+        return query
+            with query_concepts as (select distinct c.cid, c.ontid
+                                    from concept c
+                                             join ontology o on c.ontid = o.ontid
+                                    where c.ont_code = any (ontology_codes)
+                                      and o.name = query_ontology),
+                 ordering_cids_and_all_parents as (with recursive concept_hier_cte(cid, parent_cid)
+                                                                      as (select distinct null::integer, query_concepts.cid parent_cid
+                                                                          from query_concepts
+                                                                          union all
+                                                                          select ch.cid, ch.parent_cid
+                                                                          from concept_hierarchy ch,
+                                                                               concept_hier_cte
+                                                                          where ch.cid = concept_hier_cte.parent_cid)
+                                                   select distinct concept_hier_cte.cid, concept_hier_cte.parent_cid
+                                                   from concept_hier_cte
+                                                   where concept_hier_cte.cid is not null)
+            select elems.cid,
+                   cid_c.ont_code,
+                   cid_c.label,
+                   elems.parent_cids,
+                   concept_cid_array_to_codes(elems.parent_cids)
+            from unnest((select concept_paths
+                         from
+                             _concept_hierarchy_minimum_trees_impl(
+                                     array(
+                                             select (ch.cid, ch.parent_cid, 0.8)::concept_weighted_parent
+                                             from ordering_cids_and_all_parents ch
+                                         ),
+                                     (select array_agg(query_concepts.cid)
+                                      from query_concepts)
+                                 ))) as elems
+                     join concept cid_c on elems.cid = cid_c.cid;
     end if;
-    end;
+end;
 $$ LANGUAGE plpgsql STABLE;
 
 /* similar to concept_all_parents_paths, but returns only one parent path (up to one root) per concept:
@@ -594,20 +598,22 @@ select * from concept_hierarchy_minimum_trees_parents_lists('NCIT', array ['C123
  */
 
 drop type if exists autocomplete_result;
-create type autocomplete_result as (
-ontology                       text,
-                ont_code                     text,
-                label                        text,
-                label_highlight              text,
-                is_synonym_of_preferred_term text
-                                   );
+create type autocomplete_result as
+(
+    ontology                     text,
+    ont_code                     text,
+    label                        text,
+    label_highlight              text,
+    is_synonym_of_preferred_term text
+);
 
 drop function if exists autocomplete;
 create function autocomplete(search_query text)
     returns setof autocomplete_result
-    language sql stable
-    as
-    $$
+    language sql
+    stable
+as
+$$
 with all_concepts_terms as (select cid, ontid, ont_code, label, label_tsvector, null::text is_synonym_of_preferred_term
                             from concept
                             union all
@@ -622,8 +628,8 @@ with all_concepts_terms as (select cid, ontid, ont_code, label, label_tsvector, 
      as_tsquery as (
          -- users may double-quote words to find them exactly, otherwise we assume a prefix search
          -- it is also possible to double-quote a phrase of multiple words
-         select --to_tsquery('simple','cdk | cdk:*') q
-                to_tsquery('simple', string_agg(
+         select --to_tsquery('english','cdk | cdk:*') q
+                to_tsquery('english', string_agg(
                         case
                             when right(split, 1) = '"' then replace(replace(split, '"', ''), ' ', ' <-> ')
                             else split || ' | ' || split || ':*' end,
@@ -664,12 +670,11 @@ select o.name ontology,
        sro.label_highlight,
        sro.is_synonym_of_preferred_term
 from search_results_ordered sro
-join ontology o on sro.ontid = o.ontid
+         join ontology o on sro.ontid = o.ontid
 where sro.ontology_row_number <= 20 /* don't exceed n hits per domain */
   and sro.deduplicate_synonym_hits = 1
 order by sro.rank desc, sro.ontology_row_number;
 $$;
-
 
 
 -- select * from autocomplete('bone');

@@ -1,7 +1,7 @@
 import React from 'react';
 import {ColorSwatch, createStyles, Grid, Group, Text} from "@mantine/core";
 import {useRecoilState} from "recoil";
-import {highlightAnnotationState, selectedAnnotationState} from "../../atoms";
+import {highlightAnnotationState, selectedAnnotationState, selectedGenesState} from "../../atoms";
 
 
 const useStyles = createStyles((theme) => ({
@@ -23,11 +23,13 @@ type Props = {
     isSelectable: boolean;
 }
 
-function Annotation({label, color, sampleCount, annotationId, isSelectable=false}: Props) {
+function Annotation({label, color, sampleCount, annotationId, isSelectable = false}: Props) {
     const {classes, cx} = useStyles();
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
-    const showBold = (selected===annotationId) ? 800 : "md";
+    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
+
+    const showBold = (selected === annotationId) ? 800 : "md";
     return (
         <Grid columns={12} pl={10} gutter={0} sx={{cursor: 'pointer'}} justify={'space-between'} align={'center'}
               onMouseOver={() => setHighlight(annotationId)}
@@ -37,6 +39,7 @@ function Annotation({label, color, sampleCount, annotationId, isSelectable=false
                   if (highlight === selected) {
                       setSelected(0)
                   } else {
+                      setSelectedGenes([]);
                       setSelected(annotationId)
                   }
               }}

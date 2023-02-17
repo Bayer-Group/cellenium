@@ -57,9 +57,9 @@ export const selectedAnnotationFilterState = atom<number[]>({
     default: []
 })
 
-export const selectedAnnotationState = atom<number | undefined>({
+export const selectedAnnotationState = atom<number>({
     key: "selectedAnnotation",
-    default: undefined
+    default: 0
 })
 
 export const highlightAnnotationState = atom<number>({

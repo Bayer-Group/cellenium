@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {
     correlationOmicsIdState,
     selectedAnnotationFilterState,
@@ -9,7 +9,6 @@ import {
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState,
     userGeneStoreOpenState
 } from "../atoms";
 import ColumnTable from 'arquero/dist/types/table/column-table';
@@ -52,8 +51,7 @@ const CoexpressionAnalysisPlot = () => {
     if (!data?.correlationTrianglePlot) {
         return <Center style={{height: '100%', width: '100%'}}><Text color={'dimmed'} size={'md'}>Please select at least
             2 genes
-            from the gene
-            store.</Text></Center>;
+            from the <Text span weight={800}>gene store</Text>.</Text></Center>;
     }
     return <Center style={{height: '100%', width: '100%'}}><img
         style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', objectFit: 'fill', overflow: 'hidden'}}
@@ -75,7 +73,9 @@ function CoexpressionAnalysis() {
     return (
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap={true}>
             <LeftSidePanel>
-                <AnnotationFilterDisplay/>
+                <Stack pt={5}>
+                    <AnnotationFilterDisplay/>
+                </Stack>
             </LeftSidePanel>
             <main style={{height: '100vh'}}>
                 <CoexpressionAnalysisPlot/>
@@ -86,8 +86,10 @@ function CoexpressionAnalysis() {
                     <UserGeneStore multiple={true} findCoexpressors={true}/>
                     <Space/>
                     <Divider size={"xs"} label={'Correlated genes'}/>
-                    {correlationOmicsId===undefined && <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
-                    {correlationOmicsId!==undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
+                    {correlationOmicsId === undefined &&
+                        <Text size={'xs'} color={'gray'}>No correlation exploration triggered yet.</Text>}
+                    {correlationOmicsId !== undefined &&
+                        <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId}/>}
                 </Stack>
             </RightSidePanel>
         </Group>
