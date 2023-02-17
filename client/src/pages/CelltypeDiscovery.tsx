@@ -18,7 +18,7 @@ import {SingleGeneSelection} from "../components/AddGene/SingleGeneSelection";
 import {Omics} from "../model";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import * as Plotly from "plotly.js";
-import {useSaveUserAnnotationMutation} from "../generated/types";
+import {InputMaybe, useSaveUserAnnotationMutation} from "../generated/types";
 import {showNotification} from "@mantine/notifications";
 
 interface PreparedPlot {
@@ -31,6 +31,7 @@ const plotlyConfig: Partial<Plotly.Config> = {
     responsive: true
 };
 
+const UNEXPRESSED_SAMPLE_ID = -100;
 
 function CoexpressionPlot({
                               stateOffset,
@@ -70,6 +71,14 @@ function CoexpressionPlot({
             // @ts-ignore
             sameSampleExprValues = sameSampleExprValues.params({filterSampleIds}).filter((d, p) => aq.op.includes(p.filterSampleIds, d.studySampleId, 0));
         }
+
+        // to show a dummy sample with 0 expression in both genes (not retrievable from the sparse DB data)
+        sameSampleExprValues = sameSampleExprValues.concat(aq.from([{
+            valueA: 0,
+            valueB: 0,
+            studySampleId: UNEXPRESSED_SAMPLE_ID
+        }]));
+
 
         const plot: Partial<Plotly.PlotData> = {
             type: 'scattergl',
@@ -168,11 +177,17 @@ function CelltypeDiscovery() {
     const setStudyReloadHelper = useSetRecoilState(studyReloadHelperState);
     const saveUserAnnotation = () => {
         if (study && selectedSampleIds && selectedSampleIds.length > 0) {
+
+            const omicsX = omicsAll[(celltypeDiscoveryCoexpressionSamples.length - 1) * 2];
+            const omicsY = omicsAll[(celltypeDiscoveryCoexpressionSamples.length - 1) * 2 + 1];
             saveUserAnnotationMutation({
                 variables: {
                     studyId: study.studyId,
                     annotationGroupName: annotationName,
-                    selectedSampleIds: selectedSampleIds.join(',')
+                    selectedSampleIds: selectedSampleIds.filter(id => id !== UNEXPRESSED_SAMPLE_ID).join(','),
+                    unexpressedSamplesOmicsIds: (selectedSampleIds.indexOf(UNEXPRESSED_SAMPLE_ID) !== -1 ?
+                            [omicsX?.omicsId, omicsY?.omicsId] : null
+                    ) as InputMaybe<number[]>
                 }
             }).then(value => {
                 showNotification({
