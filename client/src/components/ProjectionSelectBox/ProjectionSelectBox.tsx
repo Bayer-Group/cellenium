@@ -7,7 +7,10 @@ import {selectedProjectionState, studyState} from "../../atoms";
 const ProjectionSelectBox = () => {
     const study = useRecoilValue(studyState);
     const [projection, setProjection] = useRecoilState(selectedProjectionState);
-    const options = Array.from(study?.projections || []).map(p => ({value: p, label: p}));
+    const niceLabel = (value: string) => value.replace('umap', 'UMAP')
+        .replace('tsne', 't-SNE')
+        .replace('pca', 'PCA');
+    const options = Array.from(study?.projections || []).map(p => ({value: p, label: niceLabel(p)}));
 
     if (options.length === 1) {
         return <Text size={"xs"}>Projection: {options[0].label}</Text>
