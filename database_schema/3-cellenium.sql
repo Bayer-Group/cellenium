@@ -42,6 +42,21 @@ CREATE TABLE omics_gene
 );
 create unique index omics_gene_1 on omics_gene (ensembl_gene_id);
 
+CREATE TABLE omics_genome_range
+(
+    genomerange_id not null references omics_base primary key,
+    coordinate text NOT NULL
+)
+create unique index omics_genome_range on omics_genome_range (coordinate);
+
+CREATE TABLE omics_genome_range_gene
+(
+    genomerange_id int not null references omics_genome_range,
+    gene_id                 int not null references omics_gene
+);
+create unique index omics_genome_range_gene_1 on omics_genome_range_gene (genomerange_id, gene_id);
+
+
 -- cite-seq
 CREATE TABLE omics_protein_antibody_tag
 (
