@@ -11,6 +11,7 @@ from scanpy.pl._tools.scatterplots import _get_palette
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
+from muon import MuData
 from psycopg2.extras import Json
 from sqlalchemy import text
 
@@ -20,12 +21,12 @@ logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
 
 
-def import_study_omics(study_id: int, adata: AnnData):
+def import_study_omics(study_id: int, data: AnnData|MuData):
     logging.info('importing gene definitions of study')
     omics_df = pd.read_sql(
         "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
         engine,
-        params={'tax_id': int(adata.uns['cellenium']['taxonomy_id'])},
+        params={'tax_id': int(data.uns['cellenium']['taxonomy_id'])},
         index_col='omics_id')
     match_dfs = []
     for col in ['ensembl_gene_id', 'entrez_gene_ids', 'hgnc_symbols']:
@@ -38,53 +39,60 @@ def import_study_omics(study_id: int, adata: AnnData):
         match_dfs.append(match_df)
     match_df = pd.concat(match_dfs)
 
-    adata_genes_df = adata.var.copy()
-    adata_genes_df = adata_genes_df.reset_index(names='h5ad_var_key')
-    adata_genes_df = adata_genes_df.reset_index(names='h5ad_var_index')
-    adata_genes_df = adata_genes_df.merge(match_df, how='inner', left_on='h5ad_var_key', right_index=True)
-    adata_genes_df.drop_duplicates('omics_id', inplace=True)
-    adata_genes_df['study_id'] = study_id
-    import_df(adata_genes_df[['h5ad_var_index', 'omics_id', 'study_id']], 'study_omics')
-    return adata_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
+    data_genes_df = data.var.copy()
+    data_genes_df = data_genes_df.reset_index(names='h5ad_var_key')
+    data_genes_df = data_genes_df.reset_index(names='h5ad_var_index')
+    data_genes_df = data_genes_df.merge(match_df, how='inner', left_on='h5ad_var_key', right_index=True)
+    data_genes_df.drop_duplicates('omics_id', inplace=True)
+    data_genes_df['study_id'] = study_id
+    import_df(data_genes_df[['h5ad_var_index', 'omics_id', 'study_id']], 'study_omics')
+    return data_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
 
 
-def import_projection(adata, adata_samples_df, study_id, key):
+def import_projection(data, data_samples_df, study_id, key):
     projection_df = pd.DataFrame({
         'study_id': study_id,
-        'study_sample_id': adata_samples_df.study_sample_id,
+        'study_sample_id': data_samples_df.study_sample_id,
         'projection_type': key,
-        'projection': adata.obsm[f'X_{key}'][:, 0:2].tolist()
+        'projection': data.obsm[f'X_{key}'][:, 0:2].tolist()
     })
-    if f'{key}_density_sampled_indices' in adata.uns['cellenium']:
+    if f'{key}_density_sampled_indices' in data.uns['cellenium']:
         projection_df['display_subsampling'] = False
-        projection_df.loc[adata.uns['cellenium'][f'{key}_density_sampled_indices'], 'display_subsampling'] = True
+        projection_df.loc[data.uns['cellenium'][f'{key}_density_sampled_indices'], 'display_subsampling'] = True
     else:
         projection_df['display_subsampling'] = True
     import_df(projection_df, 'study_sample_projection')
 
 
-def _projection_list(adata: AnnData):
-    return adata.uns['cellenium'].get('import_projections', np.array(['umap'])).tolist()
+def _projection_list(data: AnnData|MuData, filetype='h5ad'):
+    if filetype=='h5ad':
+        return data.uns['cellenium'].get('import_projections', np.array(['umap'])).tolist()
+    else:
+        tmp = data.uns['cellenium'].get('import_projections')
+        retlist = []
+        for k in tmp.keys():
+            retlist.extend([f'{k}:{proj}' for proj in tmp[k]])
+        return retlist
 
 
-def import_study_sample(study_id: int, adata: AnnData):
+def import_study_sample(study_id: int, data: AnnData|MuData, file_extension = 'h5ad'):
     logging.info('importing sample definitions')
-    adata_samples_df = adata.obs.copy()
-    adata_samples_df = adata_samples_df.reset_index(names='h5ad_obs_key')
-    adata_samples_df = adata_samples_df.reset_index(names='h5ad_obs_index')
-    adata_samples_df['study_sample_id'] = range(1, len(adata_samples_df) + 1)
-    adata_samples_df = adata_samples_df[['study_sample_id', 'h5ad_obs_index']]
-    adata_samples_df['study_id'] = study_id
-    import_df(adata_samples_df, 'study_sample')
+    data_samples_df = data.obs.copy()
+    data_samples_df = data_samples_df.reset_index(names='h5ad_obs_key')
+    data_samples_df = data_samples_df.reset_index(names='h5ad_obs_index')
+    data_samples_df['study_sample_id'] = range(1, len(data_samples_df) + 1)
+    data_samples_df = data_samples_df[['study_sample_id', 'h5ad_obs_index']]
+    data_samples_df['study_id'] = study_id
+    import_df(data_samples_df, 'study_sample')
     with engine.connect() as connection:
         connection.execute(text("UPDATE study SET cell_count=:cell_count WHERE study_id=:study_id"), {
             'study_id': study_id,
-            'cell_count': len(adata_samples_df)
+            'cell_count': len(data_samples_df)
         })
-    for projection in _projection_list(adata):
-        import_projection(adata, adata_samples_df, study_id, projection)
+    for projection in _projection_list(data, file_extension):
+        import_projection(data, data_samples_df, study_id, projection)
 
-    return adata_samples_df
+    return data_samples_df
 
 
 def get_annotation_definition_df(h5ad_columns: List[str]):
@@ -96,13 +104,13 @@ def get_annotation_definition_df(h5ad_columns: List[str]):
     return annotation_definition_df
 
 
-def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnData):
+def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData|MuData):
     logging.info('importing sample annotations')
-    import_sample_annotations = adata.uns['cellenium']['main_sample_attributes'].tolist()
-    import_sample_annotations.extend(adata.uns['cellenium'].get('advanced_sample_attributes', []))
+    import_sample_annotations = data.uns['cellenium']['main_sample_attributes'].tolist()
+    import_sample_annotations.extend(data.uns['cellenium'].get('advanced_sample_attributes', []))
     secondary_sample_attributes = []
-    if adata.uns['cellenium'].get('secondary_sample_attributes') is not None:
-        secondary_sample_attributes = adata.uns['cellenium']['secondary_sample_attributes'].tolist()
+    if data.uns['cellenium'].get('secondary_sample_attributes') is not None:
+        secondary_sample_attributes = data.uns['cellenium']['secondary_sample_attributes'].tolist()
         import_sample_annotations.extend(secondary_sample_attributes)
 
     with engine.connect() as connection:
@@ -130,7 +138,7 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
                                    'ordering': import_sample_annotations.index(annotation_col)
                                })
 
-            values = adata.obs[annotation_col].unique().tolist()
+            values = data.obs[annotation_col].unique().tolist()
             for value in values:
                 r = connection.execute(text(
                     "SELECT annotation_value_id FROM annotation_value WHERE annotation_group_id=:annotation_group_id AND h5ad_value=:h5ad_value"),
@@ -150,14 +158,14 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
     annotation_definition_df = get_annotation_definition_df(import_sample_annotations)
 
     with engine.connect() as connection:
-        adata_sample_annotations = adata.obs.copy()
-        adata_sample_annotations = adata_sample_annotations.reset_index()
-        adata_sample_annotations = adata_sample_annotations.merge(adata_samples_df,
+        data_sample_annotations = data.obs.copy()
+        data_sample_annotations = data_sample_annotations.reset_index()
+        data_sample_annotations = data_sample_annotations.merge(data_samples_df,
                                                                   left_index=True, right_on='h5ad_obs_index')
         for h5ad_column in import_sample_annotations:
-            palette = _get_palette(adata, h5ad_column)
+            palette = _get_palette(data, h5ad_column)
 
-            h5ad_one_annotation_df = adata_sample_annotations[[h5ad_column, 'study_sample_id']].copy()
+            h5ad_one_annotation_df = data_sample_annotations[[h5ad_column, 'study_sample_id']].copy()
             one_annotation_definition_df = annotation_definition_df[annotation_definition_df.h5ad_column == h5ad_column]
             annotation_df = h5ad_one_annotation_df.merge(one_annotation_definition_df,
                                                          left_on=h5ad_column, right_on='h5ad_value')
@@ -171,12 +179,12 @@ def import_study_sample_annotation(study_id: int, adata_samples_df, adata: AnnDa
             import_df(annotation_df, 'study_sample_annotation')
 
 
-def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df, adata_samples_df, adata: AnnData):
+def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df, data_samples_df, data: AnnData|MuData):
     if layer_name is None:
-        layer_name = adata.uns['cellenium']['X_pseudolayer_name']
-        X = adata.X
+        layer_name = data.uns['cellenium']['X_pseudolayer_name']
+        X = data.X
     else:
-        X = adata.layers[layer_name]
+        X = data.layers[layer_name]
     logging.info(f'importing expression matrix {layer_name}')
 
     with engine.connect() as connection:
@@ -194,36 +202,36 @@ def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df
         sparse_X = sparse.csc_matrix(X)
 
         map_h5ad_var_index_to_omics_index = np.zeros(shape=[sparse_X.shape[1]], dtype=np.uint32)
-        for i, row in adata_genes_df.iterrows():
+        for i, row in data_genes_df.iterrows():
             map_h5ad_var_index_to_omics_index[row['h5ad_var_index']] = row['omics_id']
         map_h5ad_obs_index_to_studysample_index = np.zeros(shape=[sparse_X.shape[0]], dtype=np.uint32)
-        for i, row in adata_samples_df.iterrows():
+        for i, row in data_samples_df.iterrows():
             map_h5ad_obs_index_to_studysample_index[row['h5ad_obs_index']] = row['study_sample_id']
 
         for gene_i in tqdm.tqdm(range(0, sparse_X.shape[1]), desc=f'import expression matrix "{layer_name}"'):
             csc_gene_data = sparse.find(sparse_X.T[gene_i])
-            adata_cell_indexes = csc_gene_data[1]
-            adata_values = csc_gene_data[2]
+            data_cell_indexes = csc_gene_data[1]
+            data_values = csc_gene_data[2]
 
-            # omics_ids = map_h5ad_var_index_to_omics_index[adata_gene_indexes]
+            # omics_ids = map_h5ad_var_index_to_omics_index[data_gene_indexes]
             omics_id = map_h5ad_var_index_to_omics_index[gene_i]
             if omics_id > 0:
-                studysample_ids = map_h5ad_obs_index_to_studysample_index[adata_cell_indexes]
+                studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
                 connection.execute(text("""INSERT INTO expression (study_layer_id, omics_id, study_sample_ids, values)
                             VALUES (:study_layer_id, :omics_id, :study_sample_ids, :values)"""), {
                     'study_layer_id': study_layer_id,
                     'omics_id': omics_id,
                     'study_sample_ids': studysample_ids.tolist(),
-                    'values': adata_values.tolist()
+                    'values': data_values.tolist()
                 })
 
 
-def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData):
-    if 'differentially_expressed_genes' not in adata.uns['cellenium']:
+def import_differential_expression(study_id: int, data_genes_df, data: AnnData|MuData):
+    if 'differentially_expressed_genes' not in data.uns['cellenium']:
         return
     logging.info('importing differentially expressed genes')
-    df = adata.uns['cellenium']['differentially_expressed_genes']
-    df = df.merge(adata_genes_df, left_on='names', right_on='h5ad_var_key')
+    df = data.uns['cellenium']['differentially_expressed_genes']
+    df = df.merge(data_genes_df, left_on='names', right_on='h5ad_var_key')
     annotation_definition_df = get_annotation_definition_df(df['attribute_name'].unique().tolist())
     df = df.merge(annotation_definition_df, left_on=['attribute_name', 'ref_attr_value'],
                   right_on=['h5ad_column', 'h5ad_value'])
@@ -243,11 +251,12 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
 
 
 def import_study(filename: str, analyze_database: bool) -> int:
-    adata = sc.read_h5ad(filename)
+    data = sc.read_h5ad(filename)
+    file_extension = Path(filename).suffix
 
     def _config_optional_list(key: str):
-        if adata.uns['cellenium'].get(key) is not None:
-            return adata.uns['cellenium'][key].tolist()
+        if data.uns['cellenium'].get(key) is not None:
+            return data.uns['cellenium'][key].tolist()
         return None
 
     with engine.connect() as connection:
@@ -259,28 +268,28 @@ def import_study(filename: str, analyze_database: bool) -> int:
             RETURNING study_id"""), {
             'filename': Path(filename).relative_to("scratch").as_posix(),
             # filename inside scratch (scratch will be /h5ad_store in postgres docker)
-            'study_name': adata.uns['cellenium']['title'],
-            'description': adata.uns['cellenium']['description'],
-            'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
-            'disease_mesh_ids': adata.uns['cellenium']['mesh_disease_ids'].tolist(),
-            'organism_tax_id': adata.uns['cellenium']['taxonomy_id'],
-            'projections': _projection_list(adata),
+            'study_name': data.uns['cellenium']['title'],
+            'description': data.uns['cellenium']['description'],
+            'tissue_ncit_ids': data.uns['cellenium']['ncit_tissue_ids'].tolist(),
+            'disease_mesh_ids': data.uns['cellenium']['mesh_disease_ids'].tolist(),
+            'organism_tax_id': data.uns['cellenium']['taxonomy_id'],
+            'projections': _projection_list(data, file_extension)
             'reader_permissions': _config_optional_list('initial_reader_permissions'),
             'admin_permissions': _config_optional_list('initial_admin_permissions'),
-            'legacy_config': Json(adata.uns['cellenium'].get('legacy_config'),
+            'legacy_config': Json(data.uns['cellenium'].get('legacy_config'),
                                   dumps=lambda data: json.dumps(data, cls=NumpyEncoder))
         })
         study_id = r.fetchone()[0]
         logging.info("importing %s as study_id %s", filename, study_id)
 
-        adata_genes_df = import_study_omics(study_id, adata)
-        adata_samples_df = import_study_sample(study_id, adata)
-        import_study_sample_annotation(study_id, adata_samples_df, adata)
-        import_differential_expression(study_id, adata_genes_df, adata)
+        data_genes_df = import_study_omics(study_id, data)
+        data_samples_df = import_study_sample(study_id, data, file_extension)
+        import_study_sample_annotation(study_id, data_samples_df, data)
+        import_differential_expression(study_id, data_genes_df, data)
 
-        import_study_layer_expression(study_id, None, adata_genes_df, adata_samples_df, adata)
-        for layer_name in adata.layers.keys():
-            import_study_layer_expression(study_id, layer_name, adata_genes_df, adata_samples_df, adata)
+        import_study_layer_expression(study_id, None, data_genes_df, data_samples_df, data)
+        for layer_name in data.layers.keys():
+            import_study_layer_expression(study_id, layer_name, data_genes_df, data_samples_df, data)
 
         connection.execute(text("UPDATE study SET visible=True WHERE study_id=:study_id"), {'study_id': study_id})
         logging.info("updating postgres statistics...")
@@ -291,9 +300,9 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="cellenium study import tool")
-    parser.add_argument('filename', help='h5ad file created for cellenium (e.g. study_preparation.py scripts)',
+    parser.add_argument('filename', help='h5ad/h5mu file created for cellenium (e.g. using a jupyter lab notebook).',
                         type=str)
-    parser.add_argument('--analyze-database', action='store_true')
+    parser.add_argument('--analyze-database', help='analyses the database schem after insert of study', action='store_true')
     args = parser.parse_args()
     import_study(args.filename, args.analyze_database)
     logging.info('done')

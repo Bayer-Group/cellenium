@@ -1,14 +1,18 @@
-from typing import List
-import tqdm
-import scanpy as sc
-import pandas as pd
-import numpy as np
-import os
-import scipy
-from anndata import AnnData
 import logging
+import os
+from collections import defaultdict
 from pathlib import Path
+from typing import List, Dict
+
 import cello
+import numpy as np
+import pandas as pd
+import scanpy as sc
+import scipy
+import tqdm
+from anndata import AnnData
+from muon import MuData
+from muon import atac as ac
 
 import Density_Sampling.density_sampling as density_sampling
 
@@ -193,31 +197,39 @@ def add_differential_expression_tables(adata: AnnData, attributes: List[str], la
 
 
 def set_cellenium_metadata(
-        adata: AnnData,
+        data: AnnData | MuData,
         title: str,
         description: str,
         taxonomy_id: int,
         ncit_tissue_ids: List[str],
         mesh_disease_ids: List[str],
         X_pseudolayer_name: str,
-        main_sample_attributes: List[str],
+        main_sample_attributes: List[str] | Dict[str, List[str]],
         secondary_sample_attributes: List[str] = [],
         import_projections: List[str] = ['umap'],
         initial_reader_permissions: List[str] = None,
-        initial_admin_permissions: List[str] = None
+        initial_admin_permissions: List[str] = None,
+        modalities: List[str] = None
 ):
-    def _check_cell_annotation(attribute: str):
-        if a not in adata.obs.columns:
-            raise Exception(f"attribute {a} not in observations dataframe")
-        count_unique_values = len(adata.obs[a].unique())
+    def _check_cell_annotation(data, attribute: str):
+        if attribute not in data.obs.columns:
+            raise Exception(f"attribute {attribute} not in observations dataframe")
+        count_unique_values = len(data.obs[a].unique())
         if count_unique_values > 100:
-            raise Exception(f"attribute {a} has {count_unique_values} unique annotations, 100 is the maximum")
+            raise Exception(f"attribute {attribute} has {count_unique_values} unique annotations, 100 is the maximum")
 
-    d = _cellenium_uns_dictionary(adata)
+    d = _cellenium_uns_dictionary(data)
 
-    assert isinstance(main_sample_attributes, list)
-    for a in main_sample_attributes:
-        _check_cell_annotation(a)
+    assert isinstance(main_sample_attributes, list) or isinstance(main_sample_attributes, dict)
+
+    if not modalities:
+        for a in main_sample_attributes:
+            _check_cell_annotation(a)
+    else:
+        for modality in modalities:
+            for a in main_sample_attributes[modality]:
+                _check_cell_annotation(data.mod[modality], a)
+
     d['main_sample_attributes'] = main_sample_attributes
 
     assert title is not None
@@ -235,15 +247,26 @@ def set_cellenium_metadata(
     d['mesh_disease_ids'] = mesh_disease_ids
     assert X_pseudolayer_name is not None
     d['X_pseudolayer_name'] = X_pseudolayer_name
+
     for a in secondary_sample_attributes:
         _check_cell_annotation(a)
         if a in main_sample_attributes:
             raise Exception(
                 f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
     d['secondary_sample_attributes'] = secondary_sample_attributes
-    for p in import_projections:
-        assert adata.obsm[f'X_{p}'] is not None
-    d['import_projections'] = import_projections
+
+    if not modalities:
+        for p in import_projections:
+            assert data.obsm[f'X_{p}'] is not None
+        d['import_projections'] = import_projections
+    else:
+        collect = defaultdict(list)
+        for modality in modalities:
+            for p in import_projections:
+                assert data.mod[modality].obsm[f'X_{p}'] is not None
+                collect[modality].append(p)
+        d['import_projections'] = dict(collect)
+
     d['initial_reader_permissions'] = initial_reader_permissions
     d['initial_admin_permissions'] = initial_admin_permissions
 
@@ -325,6 +348,37 @@ def calculate_differentially_expressed_genes(
             result_dataframes.append(df)
     adata.uns.pop('rank_genes_groups', None)
     adata.uns.pop('rank_genes_groups_filtered', None)
+    result_dataframe = pd.concat(result_dataframes, axis=0).reset_index(drop=True)
+    logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
+                 result_dataframe['attribute_name'].unique().tolist())
+
+    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = result_dataframe.copy()
+    return result_dataframe
+
+
+def calculate_differential_peaks(
+        adata: AnnData,
+        diffexp_attributes: List[str],
+        npeaks=100
+):
+    result_dataframes = []
+    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc='differential peaks'):
+        valid_attribute_group_check = (adata.obs[diffexp_attribute].value_counts() > 1)
+        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
+
+        ac.tl.rank_peaks_groups(adata, diffexp_attribute, groups=attr_values, method='wilcoxon',
+                                use_raw=False,
+                                n_genes=npeaks)
+
+        for attr_value in attr_values:
+            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups", group=attr_value)
+            # remove filtered elements
+            df = df[~df["names"].isnull()]
+            df['ref_attr_value'] = attr_value
+            df['cmp_attr_value'] = '_OTHERS_'
+            df['attribute_name'] = diffexp_attribute
+            result_dataframes.append(df)
+    adata.uns.pop('rank_genes_groups', None)
     result_dataframe = pd.concat(result_dataframes, axis=0).reset_index(drop=True)
     logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
                  result_dataframe['attribute_name'].unique().tolist())
