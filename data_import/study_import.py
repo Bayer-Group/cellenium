@@ -2,7 +2,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import List
+from typing import List, Dict
 
 import numpy as np
 import pandas as pd
@@ -21,14 +21,35 @@ logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
 
 
-def import_study_omics(study_id: int, data: AnnData|MuData):
+def import_study_genomic_ranges(study:int, data: AnnData, metadata: Dict):
+    # get all existing genomic ranges
+    # check which ones exist
+    # get omics_id
+    # get h5ad_var_index
+    logging.info('importing genomic ranges')
+    omics_df = pd.read_sql(
+        "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
+        engine,
+        params={'tax_id': int(metadata['taxonomy_id'])},
+        index_col='omics_id')
+    match_dfs = []
+def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     logging.info('importing gene definitions of study')
     omics_df = pd.read_sql(
         "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
         engine,
-        params={'tax_id': int(data.uns['cellenium']['taxonomy_id'])},
+        params={'tax_id': int(metadata['taxonomy_id'])},
         index_col='omics_id')
     match_dfs = []
+
+    # generate the mapping gene identifier to omics_id from database
+    # could also be done more pandas-like
+    #
+    # cols = omics_df.columns.tolist()
+    # tmp = omics_df.explode('entrez_gene_ids').explode('hgnc_symbols').reset_index()
+    # match_df = tmp.melt(value_vars=cols, id_vars=['omics_id'], value_name='match_id')[['omics_id', 'match_id']] \
+    #    .drop_duplicates() \
+    #    .set_index('match_id')
     for col in ['ensembl_gene_id', 'entrez_gene_ids', 'hgnc_symbols']:
         match_df = pd.DataFrame(omics_df[[col]])
         match_df.rename(columns={col: 'match_id'}, inplace=True)
@@ -39,6 +60,7 @@ def import_study_omics(study_id: int, data: AnnData|MuData):
         match_dfs.append(match_df)
     match_df = pd.concat(match_dfs)
 
+    # now generate the dataframe to be inserted
     data_genes_df = data.var.copy()
     data_genes_df = data_genes_df.reset_index(names='h5ad_var_key')
     data_genes_df = data_genes_df.reset_index(names='h5ad_var_index')
@@ -273,7 +295,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
             'tissue_ncit_ids': data.uns['cellenium']['ncit_tissue_ids'].tolist(),
             'disease_mesh_ids': data.uns['cellenium']['mesh_disease_ids'].tolist(),
             'organism_tax_id': data.uns['cellenium']['taxonomy_id'],
-            'projections': _projection_list(data, file_extension)
+            'projections': _projection_list(data, file_extension),
             'reader_permissions': _config_optional_list('initial_reader_permissions'),
             'admin_permissions': _config_optional_list('initial_admin_permissions'),
             'legacy_config': Json(data.uns['cellenium'].get('legacy_config'),
@@ -281,11 +303,28 @@ def import_study(filename: str, analyze_database: bool) -> int:
         })
         study_id = r.fetchone()[0]
         logging.info("importing %s as study_id %s", filename, study_id)
+        if file_extension=='h5mu':
+            modalities = data.uns['cellenium']['modalities']
+        else:
+            modalities = {'rna':'gene'}
+        for modality in modalities.items():
+            data_type = modality[1] # the data_type
+            if file_extension == 'h5mu':
+                cur_data = data.mod[modality[0]]
+            else:
+                cur_data = data
+            meta_data = data.uns['cellenium']
+            if (data_type == 'gene'):
+                data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
+                import_differential_expression(study_id, data_genes_df, cur_data)
+            elif (data_type == 'region'):
+                data_genomic_range_df = import_study_genomic_ranges(study_id, cur_data, meta_data)
+            elif (data_type == 'protein_antibody_tag'):
+                data_protein_df = ''
 
-        data_genes_df = import_study_omics(study_id, data)
         data_samples_df = import_study_sample(study_id, data, file_extension)
         import_study_sample_annotation(study_id, data_samples_df, data)
-        import_differential_expression(study_id, data_genes_df, data)
+
 
         import_study_layer_expression(study_id, None, data_genes_df, data_samples_df, data)
         for layer_name in data.layers.keys():

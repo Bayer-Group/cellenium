@@ -209,7 +209,7 @@ def set_cellenium_metadata(
         import_projections: List[str] = ['umap'],
         initial_reader_permissions: List[str] = None,
         initial_admin_permissions: List[str] = None,
-        modalities: List[str] = None
+        modalities: List[Dict] = None
 ):
     def _check_cell_annotation(data, attribute: str):
         if attribute not in data.obs.columns:
@@ -226,7 +226,7 @@ def set_cellenium_metadata(
         for a in main_sample_attributes:
             _check_cell_annotation(a)
     else:
-        for modality in modalities:
+        for modality in modalities.keys():
             for a in main_sample_attributes[modality]:
                 _check_cell_annotation(data.mod[modality], a)
 
@@ -261,7 +261,7 @@ def set_cellenium_metadata(
         d['import_projections'] = import_projections
     else:
         collect = defaultdict(list)
-        for modality in modalities:
+        for modality in modalities.keys():
             for p in import_projections:
                 assert data.mod[modality].obsm[f'X_{p}'] is not None
                 collect[modality].append(p)
@@ -269,6 +269,7 @@ def set_cellenium_metadata(
 
     d['initial_reader_permissions'] = initial_reader_permissions
     d['initial_admin_permissions'] = initial_admin_permissions
+    d['modalities'] = modalities
 
 
 # cellenium meta data

@@ -40,21 +40,32 @@ CREATE TABLE omics_gene
     entrez_gene_ids text[],
     hgnc_symbols    text[]
 );
-create unique index omics_gene_1 on omics_gene (ensembl_gene_id);
+CREATE UNIQUE INDEX omics_gene_1 on omics_gene (ensembl_gene_id);
 
-CREATE TABLE omics_genome_range
+DROP TABLE IF EXISTS omics_genomic_range;
+CREATE TABLE omics_genomic_range
 (
-    genomerange_id not null references omics_base primary key,
-    coordinate text NOT NULL
-)
-create unique index omics_genome_range on omics_genome_range (coordinate);
-
-CREATE TABLE omics_genome_range_gene
-(
-    genomerange_id int not null references omics_genome_range,
-    gene_id                 int not null references omics_gene
+    genomic_range_id int  not null references omics_base primary key,
+    genomic_range    text NOT NULL
 );
-create unique index omics_genome_range_gene_1 on omics_genome_range_gene (genomerange_id, gene_id);
+
+DROP INDEX IF EXISTS omics_genome_range_1;
+CREATE UNIQUE INDEx omics_genome_range_1 on omics_genomic_range (genomic_range);
+
+DROP TABLE IF EXISTS omics_genomic_range_gene;
+CREATE TABLE omics_genomic_range_gene
+(
+    genomic_range_id int not null references omics_genomic_range,
+    gene_id          int not null references omics_gene
+);
+DROP INDEX IF EXISTS omics_genomic_range_gene_1;
+CREATE UNIQUE INDEX omics_genomic_range_gene_1 on omics_genomic_range_gene (genomic_range_id, gene_id);
+
+-- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
+-- insert into omics_genomic_range (genomic_range_id, genomic_range) values (100000, 'chr1:120-125');
+-- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 1);
+-- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 2);
+-- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 3);
 
 
 -- cite-seq
@@ -92,7 +103,7 @@ create unique index omics_transcription_factor_gene_1 on omics_transcription_fac
 -- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
 -- insert into omics_gene (gene_id, ensembl_gene_id, hgnc_symbols) values (1000000, 'ENSG00000102575', ARRAY ['ACP5']);
 
-
+DROP VIEW IF EXISTS omics_all;
 create view omics_all as
 select b.omics_id,
        b.omics_type,
@@ -102,16 +113,20 @@ select b.omics_id,
        og.ensembl_gene_id,
        og.entrez_gene_ids,
        og.hgnc_symbols,
-       coalesce(
-               array_agg(opatg.gene_id),
-               array_agg(otfg.gene_id)
-           ) linked_genes
+       ogr.genomic_range,
+        array_remove(array_agg(otfg.gene_id)||
+          array_agg(opatg.gene_id)||
+          array_agg(ogrg.gene_id), null ) as linked_genes
 from omics_base b
          left join omics_gene og on b.omics_id = og.gene_id
+         left join omics_genomic_range ogr on b.omics_id = ogr.genomic_range_id
+         left join omics_genomic_range_gene ogrg on b.omics_id = ogrg.genomic_range_id
          left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
-group by b.omics_id, b.omics_type, b.tax_id, b.display_symbol, b.display_name,
-         og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols;
+group by og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols, b.omics_id, b.omics_type, b.tax_id, b.display_symbol,
+         b.display_name, ogr.genomic_range;
+
+
 
 /*
 -- TODO add omics_region... tables, same style
