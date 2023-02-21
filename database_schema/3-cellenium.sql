@@ -42,10 +42,13 @@ CREATE TABLE omics_gene
 );
 CREATE UNIQUE INDEX omics_gene_1 on omics_gene (ensembl_gene_id);
 
-DROP TABLE IF EXISTS omics_genomic_range;
+DROP TABLE IF EXISTS omics_genomic_range CASCADE;
 CREATE TABLE omics_genomic_range
 (
     genomic_range_id int  not null references omics_base primary key,
+    chromosome text NOT NULL,
+    start_position int NOT NULL,
+    end_position int NOT NULL,
     genomic_range    text NOT NULL
 );
 
@@ -273,7 +276,7 @@ CREATE TABLE study_omics
     -- indexing the h5ad .uns['protein_X'] matrix in this study
     h5ad_var_index int not null,
     -- TODO add another h5ad_col_index for second h5ad file (ATAC-seq)? Or better use h5ad format to combine atac-seq into same h5ad file
-
+    -- TODO: AS --> should actually be fine as rna and atac have different omics_id
     -- region as seen in the actual study data before 'fuzzy' region matching with bedtools (expect same build, chromosome)
     region_start   int,
     region_end     int

@@ -7,12 +7,12 @@ from typing import List, Dict
 import numpy as np
 import pandas as pd
 import scanpy as sc
-from scanpy.pl._tools.scatterplots import _get_palette
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
 from muon import MuData
 from psycopg2.extras import Json
+from scanpy.pl._tools.scatterplots import _get_palette
 from sqlalchemy import text
 
 from postgres_utils import engine, import_df, NumpyEncoder
@@ -21,18 +21,72 @@ logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(
                     datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
 
 
-def import_study_genomic_ranges(study:int, data: AnnData, metadata: Dict):
-    # get all existing genomic ranges
-    # check which ones exist
-    # get omics_id
-    # get h5ad_var_index
+def import_genomic_ranges_base_and_study(study_id: int, data: AnnData, metadata: Dict):
+    # for the moment just put all in as the genomic ranges changes from study to study
+    # future we could intersect with transcription factor binding annotation and use
+    # those coordinates
     logging.info('importing genomic ranges')
+
     omics_df = pd.read_sql(
         "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
         engine,
         params={'tax_id': int(metadata['taxonomy_id'])},
         index_col='omics_id')
-    match_dfs = []
+    cols = omics_df.columns.tolist()
+    tmp = omics_df.explode('entrez_gene_ids').explode('hgnc_symbols').reset_index()
+    match_df = tmp.melt(value_vars=cols, id_vars=['omics_id'], value_name='match_id')[['omics_id', 'match_id']] \
+        .drop_duplicates() \
+        .set_index('match_id')
+
+    df_genomic_range = data.uns['atac']['peak_annotation'].reset_index()[['peak', 'gene_name']].rename(
+        columns={'peak': 'genomic_range'})
+
+    df_genomic_range = df_genomic_range.merge(match_df, left_on='gene_name', right_index=True, how='left')
+    df_genomic_range.omics_id = df_genomic_range.omics_id.astype('Int64')
+
+    df_genomic_range[['chromosome', 'start_position', 'end_position']] = df_genomic_range.genomic_range.str.extract('(.+):(\d+)-(\d+)',
+                                                                                                  expand=True)
+    df_genomic_range['omics_type'] = 'region'
+    df_genomic_range['tax_id'] = 9606
+    df_genomic_range[['display_name']] = df_genomic_range[['genomic_range']]
+    df_genomic_range[['display_symbol']] = df_genomic_range[['genomic_range']]
+
+    # get h5ad_var_index
+    h5ad_index = data.var.reset_index(names = 'h5ad_var_key').reset_index(names = 'h5ad_var_index')[['h5ad_var_index','h5ad_var_key']]
+
+    # insert into base
+    omics_base_insert = df_genomic_range[['omics_type', 'tax_id', 'display_name', 'display_symbol']].drop_duplicates()
+    import_df(omics_base_insert, 'omics_base')
+
+
+    max_id = pd.read_sql(
+        "SELECT max(omics_id) as max_omics_id FROM omics_base",
+        engine).max_omics_id.max()
+    omics_base_insert['omics_id'] = range(max_id - omics_base_insert.shape[0] +1, max_id +1 )
+
+    # insert into omics_genomic_range
+    omics_genomic_range_insert = df_genomic_range[
+        ['chromosome', 'start_position', 'end_position', 'genomic_range']].drop_duplicates().reset_index(drop=True) \
+        .merge(omics_base_insert[['display_name', 'omics_id']], left_on='genomic_range', right_on='display_name') \
+        .rename(columns={'omics_id': 'genomic_range_id'}).drop_duplicates()
+    import_df(omics_genomic_range_insert, 'omics_genomic_range')
+
+    # insert into omics_genomic_range_gene
+    omics_genomic_range_gene_insert = df_genomic_range[['omics_id', 'genomic_range']].dropna().drop_duplicates().reset_index(drop=True) \
+        .rename(columns={'omics_id': 'gene_id'}) \
+        .merge(omics_base_insert.set_index('display_symbol'), left_on='genomic_range', right_index=True)[
+        ['gene_id', 'omics_id']] \
+        .rename(columns={'omics_id': 'genomic_range_id'}) \
+        .drop_duplicates()
+    import_df(omics_genomic_range_gene_insert, 'omics_genomic_range_gene')
+
+    # insert into study_omics
+    study_omics_insert = omics_base_insert.merge(h5ad_index.set_index('h5ad_var_key'), left_on='display_name', right_index=True)[
+        ['omics_id', 'h5ad_var_index']] \
+        .drop_duplicates()
+    study_omics_insert['study_id'] = study_id
+    import_df(study_omics_insert, 'study_omics')
+
 def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     logging.info('importing gene definitions of study')
     omics_df = pd.read_sql(
@@ -50,6 +104,7 @@ def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     # match_df = tmp.melt(value_vars=cols, id_vars=['omics_id'], value_name='match_id')[['omics_id', 'match_id']] \
     #    .drop_duplicates() \
     #    .set_index('match_id')
+
     for col in ['ensembl_gene_id', 'entrez_gene_ids', 'hgnc_symbols']:
         match_df = pd.DataFrame(omics_df[[col]])
         match_df.rename(columns={col: 'match_id'}, inplace=True)
@@ -86,8 +141,8 @@ def import_projection(data, data_samples_df, study_id, key):
     import_df(projection_df, 'study_sample_projection')
 
 
-def _projection_list(data: AnnData|MuData, filetype='h5ad'):
-    if filetype=='h5ad':
+def _projection_list(data: AnnData | MuData, filetype='h5ad'):
+    if filetype == 'h5ad':
         return data.uns['cellenium'].get('import_projections', np.array(['umap'])).tolist()
     else:
         tmp = data.uns['cellenium'].get('import_projections')
@@ -97,7 +152,7 @@ def _projection_list(data: AnnData|MuData, filetype='h5ad'):
         return retlist
 
 
-def import_study_sample(study_id: int, data: AnnData|MuData, file_extension = 'h5ad'):
+def import_study_sample(study_id: int, data: AnnData | MuData, file_extension='h5ad'):
     logging.info('importing sample definitions')
     data_samples_df = data.obs.copy()
     data_samples_df = data_samples_df.reset_index(names='h5ad_obs_key')
@@ -126,7 +181,7 @@ def get_annotation_definition_df(h5ad_columns: List[str]):
     return annotation_definition_df
 
 
-def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData|MuData):
+def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData | MuData):
     logging.info('importing sample annotations')
     import_sample_annotations = data.uns['cellenium']['main_sample_attributes'].tolist()
     import_sample_annotations.extend(data.uns['cellenium'].get('advanced_sample_attributes', []))
@@ -183,7 +238,7 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
         data_sample_annotations = data.obs.copy()
         data_sample_annotations = data_sample_annotations.reset_index()
         data_sample_annotations = data_sample_annotations.merge(data_samples_df,
-                                                                  left_index=True, right_on='h5ad_obs_index')
+                                                                left_index=True, right_on='h5ad_obs_index')
         for h5ad_column in import_sample_annotations:
             palette = _get_palette(data, h5ad_column)
 
@@ -201,7 +256,8 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
             import_df(annotation_df, 'study_sample_annotation')
 
 
-def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df, data_samples_df, data: AnnData|MuData):
+def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df, data_samples_df,
+                                  data: AnnData | MuData):
     if layer_name is None:
         layer_name = data.uns['cellenium']['X_pseudolayer_name']
         X = data.X
@@ -248,7 +304,7 @@ def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df,
                 })
 
 
-def import_differential_expression(study_id: int, data_genes_df, data: AnnData|MuData):
+def import_differential_expression(study_id: int, data_genes_df, data: AnnData | MuData):
     if 'differentially_expressed_genes' not in data.uns['cellenium']:
         return
     logging.info('importing differentially expressed genes')
@@ -303,12 +359,12 @@ def import_study(filename: str, analyze_database: bool) -> int:
         })
         study_id = r.fetchone()[0]
         logging.info("importing %s as study_id %s", filename, study_id)
-        if file_extension=='h5mu':
+        if file_extension == 'h5mu':
             modalities = data.uns['cellenium']['modalities']
         else:
-            modalities = {'rna':'gene'}
+            modalities = {'rna': 'gene'}
         for modality in modalities.items():
-            data_type = modality[1] # the data_type
+            data_type = modality[1]  # the data_type
             if file_extension == 'h5mu':
                 cur_data = data.mod[modality[0]]
             else:
@@ -318,13 +374,13 @@ def import_study(filename: str, analyze_database: bool) -> int:
                 data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
                 import_differential_expression(study_id, data_genes_df, cur_data)
             elif (data_type == 'region'):
-                data_genomic_range_df = import_study_genomic_ranges(study_id, cur_data, meta_data)
+                data_genomic_range_df = import_genomic_ranges_base_and_study(study_id, cur_data, meta_data)
             elif (data_type == 'protein_antibody_tag'):
                 data_protein_df = ''
 
+# bald geschafft
         data_samples_df = import_study_sample(study_id, data, file_extension)
         import_study_sample_annotation(study_id, data_samples_df, data)
-
 
         import_study_layer_expression(study_id, None, data_genes_df, data_samples_df, data)
         for layer_name in data.layers.keys():
@@ -341,7 +397,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="cellenium study import tool")
     parser.add_argument('filename', help='h5ad/h5mu file created for cellenium (e.g. using a jupyter lab notebook).',
                         type=str)
-    parser.add_argument('--analyze-database', help='analyses the database schem after insert of study', action='store_true')
+    parser.add_argument('--analyze-database', help='analyses the database schem after insert of study',
+                        action='store_true')
     args = parser.parse_args()
     import_study(args.filename, args.analyze_database)
     logging.info('done')
