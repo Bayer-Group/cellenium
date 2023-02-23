@@ -9,16 +9,44 @@ CREATE TABLE study
     disease_mesh_ids   text[],
     cell_ontology_ids  text[],
     organism_tax_id    text,
-    --organism_label          text,
-    --ontology_ids_with_parents text[]   for search
-
     cell_count         int,
     projections        text[],
     visible            boolean default False,
+    import_started     boolean default False,
+    import_failed      boolean default False,
+    import_log         text,
     reader_permissions text[],
     admin_permissions  text[],
     legacy_config      jsonb
 );
+
+-- decide which studies can be analyzed by the current user:
+-- all studies which are open to everybody ("reader_permissions is null")
+-- and all studies which list of allowed groups has at least one group in common with the current user's groups
+create view study_visible_currentuser
+as
+select s.study_id
+from study s
+where s.reader_permissions is null
+   or s.reader_permissions && current_user_groups();
+grant select on study_visible_currentuser to postgraphile;
+
+create view study_administrable_currentuser
+as
+select s.study_id
+from study s
+where s.admin_permissions is null
+   or s.admin_permissions && current_user_groups();
+grant select on study_administrable_currentuser to postgraphile;
+
+ALTER TABLE study
+    ENABLE ROW LEVEL SECURITY;
+CREATE POLICY study_policy ON study FOR SELECT TO postgraphile
+    USING (
+        study_id in (select study_id
+                     from study_visible_currentuser)
+    );
+grant select on study to postgraphile;
 
 
 drop table if exists omics_base cascade;
@@ -32,6 +60,7 @@ CREATE TABLE omics_base
     display_symbol text       not null,
     display_name   text
 );
+grant select on omics_base to postgraphile;
 
 CREATE TABLE omics_gene
 (
@@ -40,6 +69,7 @@ CREATE TABLE omics_gene
     entrez_gene_ids text[],
     hgnc_symbols    text[]
 );
+grant select on omics_gene to postgraphile;
 create unique index omics_gene_1 on omics_gene (ensembl_gene_id);
 
 -- cite-seq
@@ -49,6 +79,7 @@ CREATE TABLE omics_protein_antibody_tag
     tax_id                  int  not null,
     antibody_symbol         text not null
 );
+grant select on omics_protein_antibody_tag to postgraphile;
 create unique index omics_protein_antibody_tag_1 on omics_protein_antibody_tag (tax_id, antibody_symbol);
 
 
@@ -57,6 +88,7 @@ CREATE TABLE omics_protein_antibody_tag_gene
     protein_antibody_tag_id int not null references omics_protein_antibody_tag,
     gene_id                 int not null references omics_gene
 );
+grant select on omics_protein_antibody_tag_gene to postgraphile;
 create unique index omics_protein_antibody_tag_gene_1 on omics_protein_antibody_tag_gene (protein_antibody_tag_id, gene_id);
 
 CREATE TABLE omics_transcription_factor
@@ -64,6 +96,7 @@ CREATE TABLE omics_transcription_factor
     omics_id         int  not null references omics_base primary key,
     jaspar_matrix_id text not null
 );
+grant select on omics_transcription_factor to postgraphile;
 create unique index omics_transcription_factor_1 on omics_transcription_factor (jaspar_matrix_id);
 
 
@@ -72,6 +105,7 @@ CREATE TABLE omics_transcription_factor_gene
     transcription_factor_id int not null references omics_transcription_factor,
     gene_id                 int not null references omics_gene
 );
+grant select on omics_transcription_factor_gene to postgraphile;
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
 
 -- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
@@ -97,6 +131,7 @@ from omics_base b
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
 group by b.omics_id, b.omics_type, b.tax_id, b.display_symbol, b.display_name,
          og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols;
+grant select on omics_all to postgraphile;
 
 /*
 -- TODO add omics_region... tables, same style
@@ -130,6 +165,7 @@ CREATE TABLE annotation_group
     h5ad_column         text not null,
     display_group       text not null
 );
+grant select on annotation_group to postgraphile;
 create unique index annotation_group_1 on annotation_group (h5ad_column);
 
 -- e.g. an annotation category value, like 'lymphocyte'
@@ -141,6 +177,7 @@ CREATE TABLE annotation_value
     h5ad_value          text not null,
     display_value       text not null
 );
+grant select on annotation_value to postgraphile;
 create unique index annotation_value_1 on annotation_value (annotation_group_id, h5ad_value);
 create index annotation_value_2 on annotation_value (annotation_group_id) include (annotation_value_id);
 create index annotation_value_3 on annotation_value (annotation_value_id) include (display_value, annotation_group_id);
@@ -158,6 +195,7 @@ CREATE TABLE study_annotation_group_ui
     ordering                           int     not null,
     differential_expression_calculated boolean not null
 );
+grant select on study_annotation_group_ui to postgraphile;
 
 CREATE TABLE study_sample
 (
@@ -171,6 +209,7 @@ CREATE TABLE study_sample
 
     h5ad_obs_index  int not null
 );
+grant select on study_sample to postgraphile;
 --create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
 
@@ -186,6 +225,7 @@ CREATE TABLE study_sample_projection
     -- subsampling reduces overlapping points in a projection
     display_subsampling boolean not null
 );
+grant select on study_sample_projection to postgraphile;
 
 CREATE VIEW study_sample_projection_subsampling_transposed
 as
@@ -198,6 +238,7 @@ where display_subsampling = True
 group by study_id, projection_type;
 comment on view study_sample_projection_subsampling_transposed is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
+grant select on study_sample_projection_subsampling_transposed to postgraphile;
 
 CREATE TABLE study_sample_annotation
 (
@@ -216,6 +257,7 @@ CREATE TABLE study_sample_annotation
 
     color               text
 );
+grant select on study_sample_annotation to postgraphile;
 create unique index study_sample_annotation_1 on study_sample_annotation (study_id, annotation_value_id);
 
 CREATE VIEW study_sample_annotation_subsampling
@@ -230,6 +272,7 @@ where ssp.display_subsampling = True
 group by ssa.study_id, ssa.annotation_value_id;
 comment on view study_sample_annotation_subsampling is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
+grant select on study_sample_annotation_subsampling to postgraphile;
 
 CREATE TABLE study_omics
 (
@@ -248,6 +291,7 @@ CREATE TABLE study_omics
     region_start   int,
     region_end     int
 );
+grant select on study_omics to postgraphile;
 create unique index study_omics_i1 on study_omics (study_id, omics_id);
 
 CREATE VIEW study_omics_transposed
@@ -262,6 +306,7 @@ from study_omics
 group by study_id;
 comment on view study_omics_transposed is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
+grant select on study_omics_transposed to postgraphile;
 
 
 CREATE TABLE differential_expression
@@ -292,12 +337,22 @@ CREATE TABLE differential_expression
 );
 create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
 
+ALTER TABLE differential_expression
+    ENABLE ROW LEVEL SECURITY;
+CREATE POLICY differential_expression_policy ON differential_expression FOR SELECT TO postgraphile
+    USING (
+        study_id in (select study_id
+                     from study_visible_currentuser)
+    );
+grant select on differential_expression to postgraphile;
+
 CREATE VIEW differential_expression_v
     with (security_invoker = true)
 AS
 SELECT de.*, ob.display_symbol, ob.display_name
 FROM differential_expression de
          JOIN omics_base ob on de.omics_id = ob.omics_id;
+grant select on differential_expression_v to postgraphile;
 
 CREATE TABLE study_layer
 (
@@ -310,6 +365,7 @@ CREATE TABLE study_layer
     layer          text       not null
 
 );
+grant select on study_layer to postgraphile;
 create unique index study_layer_ui1 on study_layer (study_id, layer);
 
 
@@ -326,6 +382,16 @@ CREATE TABLE expression
     values           real[]    not null
 
 ) partition by list (study_layer_id);
+
+ALTER TABLE expression
+    ENABLE ROW LEVEL SECURITY;
+CREATE POLICY expression_policy ON expression FOR SELECT TO postgraphile
+    USING (
+        study_layer_id in (select sl.study_layer_id
+                           from study_visible_currentuser
+                                    join study_layer sl on study_visible_currentuser.study_id = sl.study_id)
+    );
+grant select on expression to postgraphile;
 
 
 CREATE OR REPLACE PROCEDURE add_studylayer_partition(study_layer_id int)
