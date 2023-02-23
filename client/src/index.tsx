@@ -16,6 +16,7 @@ import OntologySandbox from "./pages/OntologySandbox";
 import {StudyPage} from "./pages/StudyPage";
 import MarkerGeneSearch from "./pages/MarkerGeneSearch";
 import CrossStudySearch from "./pages/CrossStudySearch";
+import StudyAdmin from "./pages/StudyAdmin";
 
 export const apolloCache = new InMemoryCache();
 
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
     {
         path: "/study/:studyId",
         element: <StudyPage/>,
+    },
+    {
+        path: "studyAdmin",
+        element: <StudyAdmin/>
     },
     {
         path: "ontologySandbox",

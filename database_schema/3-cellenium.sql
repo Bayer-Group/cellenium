@@ -46,7 +46,12 @@ CREATE POLICY study_policy ON study FOR SELECT TO postgraphile
         study_id in (select study_id
                      from study_visible_currentuser)
     );
-grant select on study to postgraphile;
+CREATE POLICY study_update_policy ON study FOR UPDATE TO postgraphile
+    USING (
+        study_id in (select study_id
+                     from study_administrable_currentuser)
+    );
+grant update on study to postgraphile;
 
 
 drop table if exists omics_base cascade;
