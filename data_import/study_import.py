@@ -27,6 +27,18 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     # future we could intersect with transcription factor binding annotation and use
     # those coordinates
     logging.info('importing genomic ranges')
+    existing_region_df = pd.read_sql(
+        "select omics_id, region from omics_all where tax_id=%(tax_id)s and omics_type='region' and region IS NOT NULL",
+        engine,
+        params={'tax_id': int(metadata['taxonomy_id'])},
+        index_col='omics_id')
+
+    cols = existing_region_df.columns.tolist()
+    tmp = existing_region_df.reset_index()
+    match_existing_region_df = tmp.melt(value_vars=cols, id_vars=['omics_id'], value_name='match_id')[['omics_id', 'match_id']] \
+        .drop_duplicates() \
+        .set_index('match_id')
+
 
     omics_df = pd.read_sql(
         "select omics_id, ensembl_gene_id, entrez_gene_ids, hgnc_symbols from omics_all where tax_id=%(tax_id)s and omics_type='gene'",
@@ -57,6 +69,7 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
 
     # insert into base
     omics_base_insert = df_region[['omics_type', 'tax_id', 'display_name', 'display_symbol']].drop_duplicates()
+
     import_df(omics_base_insert, 'omics_base')
 
 
