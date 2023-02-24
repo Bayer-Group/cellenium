@@ -51,6 +51,9 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.item()
         return json.JSONEncoder.default(self, obj)
 
+def list_to_pgarray(l):
+    return '{' + ','.join(l) + '}'
+
 
 def import_df(df, schema_and_table: str):
     """

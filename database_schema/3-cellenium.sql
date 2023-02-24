@@ -75,7 +75,38 @@ CREATE TABLE omics_gene
     hgnc_symbols    text[]
 );
 grant select on omics_gene to postgraphile;
-create unique index omics_gene_1 on omics_gene (ensembl_gene_id);
+CREATE UNIQUE INDEX omics_gene_1 on omics_gene (ensembl_gene_id);
+
+DROP TABLE IF EXISTS omics_region CASCADE;
+CREATE TABLE omics_region
+(
+    region_id int  not null references omics_base primary key,
+    chromosome text NOT NULL,
+    start_position int NOT NULL,
+    end_position int NOT NULL,
+    region    text NOT NULL
+);
+grant select on omics_region to postgraphile;
+
+DROP INDEX IF EXISTS omics_region_1;
+CREATE UNIQUE INDEx omics_region_1 on omics_region (region);
+
+DROP TABLE IF EXISTS omics_region_gene;
+CREATE TABLE omics_region_gene
+(
+    region_id int not null references omics_region,
+    gene_id          int not null references omics_gene
+);
+grant select on omics_region_gene to postgraphile;
+DROP INDEX IF EXISTS omics_region_gene_1;
+CREATE UNIQUE INDEX omics_region_gene_1 on omics_region_gene (region_id, gene_id);
+
+-- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
+-- insert into omics_region (region_id, region) values (100000, 'chr1:120-125');
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 1);
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 2);
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 3);
+
 
 -- cite-seq
 CREATE TABLE omics_protein_antibody_tag
@@ -116,7 +147,7 @@ create unique index omics_transcription_factor_gene_1 on omics_transcription_fac
 -- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
 -- insert into omics_gene (gene_id, ensembl_gene_id, hgnc_symbols) values (1000000, 'ENSG00000102575', ARRAY ['ACP5']);
 
-
+DROP VIEW IF EXISTS omics_all;
 create view omics_all as
 select b.omics_id,
        b.omics_type,
@@ -126,17 +157,20 @@ select b.omics_id,
        og.ensembl_gene_id,
        og.entrez_gene_ids,
        og.hgnc_symbols,
-       coalesce(
-               array_agg(opatg.gene_id),
-               array_agg(otfg.gene_id)
-           ) linked_genes
+       ogr.region,
+        array_remove(array_agg(otfg.gene_id)||
+          array_agg(opatg.gene_id)||
+          array_agg(ogrg.gene_id), null ) as linked_genes
 from omics_base b
          left join omics_gene og on b.omics_id = og.gene_id
+         left join omics_region ogr on b.omics_id = ogr.region_id
+         left join omics_region_gene ogrg on b.omics_id = ogrg.region_id
          left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
-group by b.omics_id, b.omics_type, b.tax_id, b.display_symbol, b.display_name,
-         og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols;
+group by og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols, b.omics_id, b.omics_type, b.tax_id, b.display_symbol,
+         b.display_name, ogr.region;
 grant select on omics_all to postgraphile;
+
 
 /*
 -- TODO add omics_region... tables, same style
@@ -168,10 +202,11 @@ CREATE TABLE annotation_group
 (
     annotation_group_id serial primary key,
     h5ad_column         text not null,
-    display_group       text not null
+    display_group       text not null,
+    modality text
 );
 grant select on annotation_group to postgraphile;
-create unique index annotation_group_1 on annotation_group (h5ad_column);
+create unique index annotation_group_1 on annotation_group (h5ad_column, modality);
 
 -- e.g. an annotation category value, like 'lymphocyte'
 CREATE TABLE annotation_value
@@ -226,6 +261,7 @@ CREATE TABLE study_sample_projection
         FOREIGN KEY (study_id, study_sample_id)
             REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
     projection_type     text    not null,
+    modality text,
     projection          real[]  not null,
     -- subsampling reduces overlapping points in a projection
     display_subsampling boolean not null
@@ -291,7 +327,7 @@ CREATE TABLE study_omics
     -- indexing the h5ad .uns['protein_X'] matrix in this study
     h5ad_var_index int not null,
     -- TODO add another h5ad_col_index for second h5ad file (ATAC-seq)? Or better use h5ad format to combine atac-seq into same h5ad file
-
+    -- TODO: AS --> should actually be fine as rna and atac have different omics_id
     -- region as seen in the actual study data before 'fuzzy' region matching with bedtools (expect same build, chromosome)
     region_start   int,
     region_end     int
@@ -371,7 +407,7 @@ CREATE TABLE study_layer
 
 );
 grant select on study_layer to postgraphile;
-create unique index study_layer_ui1 on study_layer (study_id, layer);
+create unique index study_layer_ui1 on study_layer (study_id, layer, omics_type);
 
 
 CREATE TABLE expression
