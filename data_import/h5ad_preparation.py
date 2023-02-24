@@ -267,6 +267,12 @@ def set_cellenium_metadata(
                 collect[modality].append(p)
         d['import_projections'] = dict(collect)
 
+        for modality in modalities.keys():
+            if 'cellenium' in data.mod[modality].uns:
+                data.mod[modality].uns['cellenium']['main_sample_attributes'] = d['main_sample_attributes'][modality]
+            else:
+                d.mod[modality].uns['cellenium'] = {'main_sample_attributes': d['main_sample_attributes'][modality]}
+
     d['initial_reader_permissions'] = initial_reader_permissions
     d['initial_admin_permissions'] = initial_admin_permissions
     d['modalities'] = modalities

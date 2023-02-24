@@ -42,33 +42,33 @@ CREATE TABLE omics_gene
 );
 CREATE UNIQUE INDEX omics_gene_1 on omics_gene (ensembl_gene_id);
 
-DROP TABLE IF EXISTS omics_genomic_range CASCADE;
-CREATE TABLE omics_genomic_range
+DROP TABLE IF EXISTS omics_region CASCADE;
+CREATE TABLE omics_region
 (
-    genomic_range_id int  not null references omics_base primary key,
+    region_id int  not null references omics_base primary key,
     chromosome text NOT NULL,
     start_position int NOT NULL,
     end_position int NOT NULL,
-    genomic_range    text NOT NULL
+    region    text NOT NULL
 );
 
-DROP INDEX IF EXISTS omics_genome_range_1;
-CREATE UNIQUE INDEx omics_genome_range_1 on omics_genomic_range (genomic_range);
+DROP INDEX IF EXISTS omics_region_1;
+CREATE UNIQUE INDEx omics_region_1 on omics_region (region);
 
-DROP TABLE IF EXISTS omics_genomic_range_gene;
-CREATE TABLE omics_genomic_range_gene
+DROP TABLE IF EXISTS omics_region_gene;
+CREATE TABLE omics_region_gene
 (
-    genomic_range_id int not null references omics_genomic_range,
+    region_id int not null references omics_region,
     gene_id          int not null references omics_gene
 );
-DROP INDEX IF EXISTS omics_genomic_range_gene_1;
-CREATE UNIQUE INDEX omics_genomic_range_gene_1 on omics_genomic_range_gene (genomic_range_id, gene_id);
+DROP INDEX IF EXISTS omics_region_gene_1;
+CREATE UNIQUE INDEX omics_region_gene_1 on omics_region_gene (region_id, gene_id);
 
 -- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
--- insert into omics_genomic_range (genomic_range_id, genomic_range) values (100000, 'chr1:120-125');
--- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 1);
--- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 2);
--- insert into omics_genomic_range_gene (genomic_range_id, gene_id) values (100000, 3);
+-- insert into omics_region (region_id, region) values (100000, 'chr1:120-125');
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 1);
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 2);
+-- insert into omics_region_gene (region_id, gene_id) values (100000, 3);
 
 
 -- cite-seq
@@ -116,18 +116,18 @@ select b.omics_id,
        og.ensembl_gene_id,
        og.entrez_gene_ids,
        og.hgnc_symbols,
-       ogr.genomic_range,
+       ogr.region,
         array_remove(array_agg(otfg.gene_id)||
           array_agg(opatg.gene_id)||
           array_agg(ogrg.gene_id), null ) as linked_genes
 from omics_base b
          left join omics_gene og on b.omics_id = og.gene_id
-         left join omics_genomic_range ogr on b.omics_id = ogr.genomic_range_id
-         left join omics_genomic_range_gene ogrg on b.omics_id = ogrg.genomic_range_id
+         left join omics_region ogr on b.omics_id = ogr.region_id
+         left join omics_region_gene ogrg on b.omics_id = ogrg.region_id
          left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
 group by og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols, b.omics_id, b.omics_type, b.tax_id, b.display_symbol,
-         b.display_name, ogr.genomic_range;
+         b.display_name, ogr.region;
 
 
 
@@ -161,9 +161,10 @@ CREATE TABLE annotation_group
 (
     annotation_group_id serial primary key,
     h5ad_column         text not null,
-    display_group       text not null
+    display_group       text not null,
+    modality text
 );
-create unique index annotation_group_1 on annotation_group (h5ad_column);
+create unique index annotation_group_1 on annotation_group (h5ad_column, modality);
 
 -- e.g. an annotation category value, like 'lymphocyte'
 CREATE TABLE annotation_value
@@ -215,6 +216,7 @@ CREATE TABLE study_sample_projection
         FOREIGN KEY (study_id, study_sample_id)
             REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
     projection_type     text    not null,
+    modality text,
     projection          real[]  not null,
     -- subsampling reduces overlapping points in a projection
     display_subsampling boolean not null
@@ -343,7 +345,7 @@ CREATE TABLE study_layer
     layer          text       not null
 
 );
-create unique index study_layer_ui1 on study_layer (study_id, layer);
+create unique index study_layer_ui1 on study_layer (study_id, layer, omics_type);
 
 
 CREATE TABLE expression
