@@ -101,6 +101,11 @@ grant select on omics_region_gene to postgraphile;
 DROP INDEX IF EXISTS omics_region_gene_1;
 CREATE UNIQUE INDEX omics_region_gene_1 on omics_region_gene (region_id, gene_id);
 
+-- TODO I had to add this to fix a postgraphile schema generation problem
+COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" IS E'@fieldName omics_region_newNameHere';
+
+
+
 -- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
 -- insert into omics_region (region_id, region) values (100000, 'chr1:120-125');
 -- insert into omics_region_gene (region_id, gene_id) values (100000, 1);
