@@ -249,4 +249,57 @@ mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $sele
   } 
 }
 
+fragment StudyAdminDetails on StudyAdminDetail {
+    studyId
+    studyName
+    description
+    filename
+    cellCount
+    tissueNcitIds
+    diseaseMeshIds
+    visible
+    externalWebsite
+    readerPermissions
+    readerPermissionGranted
+    adminPermissions
+    adminPermissionGranted
+}
+
+query studyAdminList {
+  studyAdminDetailsList {
+    ...StudyAdminDetails
+  }
+  userStudyUploadConfigured
+}
+
+mutation studyUpdate(
+    $studyId: Int!,
+    $studyName: String!,
+    $description: String,
+    $readerPermissions: [String!],
+    $adminPermissions: [String!],
+    $tissueNcitIds: [String!],
+    $diseaseMeshIds: [String!],
+    $visible: Boolean!,
+    $externalWebsite: String
+  ) {
+  updateStudy(input: {studyId: $studyId, patch: {
+    studyName: $studyName,
+    description: $description,
+    readerPermissions: $readerPermissions,
+    adminPermissions: $adminPermissions,
+    tissueNcitIds: $tissueNcitIds,
+    diseaseMeshIds: $diseaseMeshIds,
+    visible: $visible,
+    externalWebsite: $externalWebsite
+  }}) {
+    clientMutationId
+  }
+}
+
+mutation createS3TempCredentials {
+  createS3TempCredentials(input: {}) {
+    strings
+  }
+}
 `;

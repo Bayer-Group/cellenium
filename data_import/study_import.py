@@ -7,14 +7,15 @@ from typing import List, Dict
 import mudata
 import numpy as np
 import pandas as pd
+from scanpy.pl._tools.scatterplots import _get_palette
 import scanpy as sc
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
 from muon import MuData
 from psycopg2.extras import Json
-from scanpy.pl._tools.scatterplots import _get_palette
 from sqlalchemy import text
+import h5ad_open
 import io
 from postgres_utils import engine, import_df, NumpyEncoder, list_to_pgarray
 
@@ -400,7 +401,20 @@ def generate_dense_expression_df_for_import(adata: AnnData, samples_df:pd.DataFr
     df_ret['study_layer_id'] = study_layer_id
 
     return df_ret
+
+
 def import_study(filename: str, analyze_database: bool) -> int:
+    """
+    TODO enable S3 access as we had before:
+
+    adata = h5ad_open.h5ad_read(filename)
+    stored_filename = filename
+    if stored_filename.startswith('scratch'):
+        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+        stored_filename = Path(filename).relative_to("scratch").as_posix()
+    """
+
+
     file_extension = Path(filename).suffix
     file_extension = file_extension[1:] if file_extension.startswith('.') else file_extension
     if file_extension == 'h5ad':
@@ -420,6 +434,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
                :projections, :reader_permissions, :admin_permissions, :legacy_config
             )
             RETURNING study_id"""), {
+            # TODO 'filename': stored_filename,
             'filename': Path(filename).relative_to("scratch").as_posix(),
             # filename inside scratch (scratch will be /h5ad_store in postgres docker)
             'study_name': data.uns['cellenium']['title'],

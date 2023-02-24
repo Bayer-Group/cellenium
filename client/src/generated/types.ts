@@ -1093,6 +1093,53 @@ export type CreateOntologyPayload = {
   query: Maybe<Query>;
 };
 
+/** All input for the `createS3TempCredentials` mutation. */
+export type CreateS3TempCredentialsInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `createS3TempCredentials` mutation. */
+export type CreateS3TempCredentialsPayload = {
+  __typename?: 'CreateS3TempCredentialsPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  strings: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/** All input for the create `StudyAdministrableCurrentuser` mutation. */
+export type CreateStudyAdministrableCurrentuserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `StudyAdministrableCurrentuser` to be created by this mutation. */
+  studyAdministrableCurrentuser: StudyAdministrableCurrentuserInput;
+};
+
+/** The output of our create `StudyAdministrableCurrentuser` mutation. */
+export type CreateStudyAdministrableCurrentuserPayload = {
+  __typename?: 'CreateStudyAdministrableCurrentuserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  /** The `StudyAdministrableCurrentuser` that was created by this mutation. */
+  studyAdministrableCurrentuser: Maybe<StudyAdministrableCurrentuser>;
+};
+
 /** All input for the create `StudyAnnotationGroupUi` mutation. */
 export type CreateStudyAnnotationGroupUiInput = {
   /**
@@ -2258,8 +2305,11 @@ export type Mutation = {
   createOmicsTranscriptionFactorGene: Maybe<CreateOmicsTranscriptionFactorGenePayload>;
   /** Creates a single `Ontology`. */
   createOntology: Maybe<CreateOntologyPayload>;
+  createS3TempCredentials: Maybe<CreateS3TempCredentialsPayload>;
   /** Creates a single `Study`. */
   createStudy: Maybe<CreateStudyPayload>;
+  /** Creates a single `StudyAdministrableCurrentuser`. */
+  createStudyAdministrableCurrentuser: Maybe<CreateStudyAdministrableCurrentuserPayload>;
   /** Creates a single `StudyAnnotationGroupUi`. */
   createStudyAnnotationGroupUi: Maybe<CreateStudyAnnotationGroupUiPayload>;
   /** Creates a single `StudyLayer`. */
@@ -2455,8 +2505,20 @@ export type MutationCreateOntologyArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateS3TempCredentialsArgs = {
+  input: CreateS3TempCredentialsInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyArgs = {
   input: CreateStudyInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateStudyAdministrableCurrentuserArgs = {
+  input: CreateStudyAdministrableCurrentuserInput;
 };
 
 
@@ -3584,6 +3646,10 @@ export type Query = Node & {
   /** Reads a set of `Study`. */
   studiesList: Maybe<Array<Study>>;
   study: Maybe<Study>;
+  /** Reads a set of `StudyAdminDetail`. */
+  studyAdminDetailsList: Maybe<Array<StudyAdminDetail>>;
+  /** Reads a set of `StudyAdministrableCurrentuser`. */
+  studyAdministrableCurrentusersList: Maybe<Array<StudyAdministrableCurrentuser>>;
   /** Reads a set of `StudyAnnotationFrontendGroup`. */
   studyAnnotationFrontendGroupsList: Maybe<Array<StudyAnnotationFrontendGroup>>;
   /** Reads a set of `StudyAnnotationFrontendValue`. */
@@ -3624,6 +3690,7 @@ export type Query = Node & {
   treeOntologiesList: Maybe<Array<TreeOntology>>;
   /** Reads a set of `UserAnnotationGroup`. */
   userAnnotationGroupsList: Maybe<Array<UserAnnotationGroup>>;
+  userStudyUploadConfigured: Maybe<Scalars['Boolean']>;
   violinPlot: Maybe<Scalars['String']>;
 };
 
@@ -4025,6 +4092,26 @@ export type QueryStudyArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyAdminDetailsListArgs = {
+  condition: InputMaybe<StudyAdminDetailCondition>;
+  filter: InputMaybe<StudyAdminDetailFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAdminDetailsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryStudyAdministrableCurrentusersListArgs = {
+  condition: InputMaybe<StudyAdministrableCurrentuserCondition>;
+  filter: InputMaybe<StudyAdministrableCurrentuserFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyAdministrableCurrentusersOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendGroupsListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
   filter: InputMaybe<StudyAnnotationFrontendGroupFilter>;
@@ -4358,6 +4445,12 @@ export enum StudiesOrderBy {
   ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
   FilenameAsc = 'FILENAME_ASC',
   FilenameDesc = 'FILENAME_DESC',
+  ImportFailedAsc = 'IMPORT_FAILED_ASC',
+  ImportFailedDesc = 'IMPORT_FAILED_DESC',
+  ImportLogAsc = 'IMPORT_LOG_ASC',
+  ImportLogDesc = 'IMPORT_LOG_DESC',
+  ImportStartedAsc = 'IMPORT_STARTED_ASC',
+  ImportStartedDesc = 'IMPORT_STARTED_DESC',
   LegacyConfigAsc = 'LEGACY_CONFIG_ASC',
   LegacyConfigDesc = 'LEGACY_CONFIG_DESC',
   Natural = 'NATURAL',
@@ -4392,6 +4485,9 @@ export type Study = Node & {
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
   externalWebsite: Maybe<Scalars['String']>;
   filename: Maybe<Scalars['String']>;
+  importFailed: Maybe<Scalars['Boolean']>;
+  importLog: Maybe<Scalars['String']>;
+  importStarted: Maybe<Scalars['Boolean']>;
   legacyConfig: Maybe<Scalars['JSON']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
@@ -4520,6 +4616,161 @@ export type StudyUserAnnotationGroupsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
+
+export type StudyAdminDetail = {
+  __typename?: 'StudyAdminDetail';
+  adminPermissionGranted: Maybe<Scalars['Boolean']>;
+  adminPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
+  cellCount: Maybe<Scalars['Int']>;
+  description: Maybe<Scalars['String']>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  filename: Maybe<Scalars['String']>;
+  readerPermissionGranted: Maybe<Scalars['Boolean']>;
+  readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  visible: Maybe<Scalars['Boolean']>;
+};
+
+/**
+ * A condition to be used against `StudyAdminDetail` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type StudyAdminDetailCondition = {
+  /** Checks for equality with the object’s `adminPermissionGranted` field. */
+  adminPermissionGranted: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `adminPermissions` field. */
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `description` field. */
+  description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `filename` field. */
+  filename: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `readerPermissionGranted` field. */
+  readerPermissionGranted: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `readerPermissions` field. */
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `visible` field. */
+  visible: InputMaybe<Scalars['Boolean']>;
+};
+
+/** A filter to be used against `StudyAdminDetail` object types. All fields are combined with a logical ‘and.’ */
+export type StudyAdminDetailFilter = {
+  /** Filter by the object’s `adminPermissionGranted` field. */
+  adminPermissionGranted: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `adminPermissions` field. */
+  adminPermissions: InputMaybe<StringListFilter>;
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyAdminDetailFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `description` field. */
+  description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `filename` field. */
+  filename: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyAdminDetailFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyAdminDetailFilter>>;
+  /** Filter by the object’s `readerPermissionGranted` field. */
+  readerPermissionGranted: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `readerPermissions` field. */
+  readerPermissions: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `visible` field. */
+  visible: InputMaybe<BooleanFilter>;
+};
+
+/** Methods to use when ordering `StudyAdminDetail`. */
+export enum StudyAdminDetailsOrderBy {
+  AdminPermissionsAsc = 'ADMIN_PERMISSIONS_ASC',
+  AdminPermissionsDesc = 'ADMIN_PERMISSIONS_DESC',
+  AdminPermissionGrantedAsc = 'ADMIN_PERMISSION_GRANTED_ASC',
+  AdminPermissionGrantedDesc = 'ADMIN_PERMISSION_GRANTED_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
+  Natural = 'NATURAL',
+  ReaderPermissionsAsc = 'READER_PERMISSIONS_ASC',
+  ReaderPermissionsDesc = 'READER_PERMISSIONS_DESC',
+  ReaderPermissionGrantedAsc = 'READER_PERMISSION_GRANTED_ASC',
+  ReaderPermissionGrantedDesc = 'READER_PERMISSION_GRANTED_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  VisibleAsc = 'VISIBLE_ASC',
+  VisibleDesc = 'VISIBLE_DESC'
+}
+
+export type StudyAdministrableCurrentuser = {
+  __typename?: 'StudyAdministrableCurrentuser';
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `StudyAdministrableCurrentuser` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type StudyAdministrableCurrentuserCondition = {
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `StudyAdministrableCurrentuser` object types. All fields are combined with a logical ‘and.’ */
+export type StudyAdministrableCurrentuserFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyAdministrableCurrentuserFilter>>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyAdministrableCurrentuserFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyAdministrableCurrentuserFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `StudyAdministrableCurrentuser` */
+export type StudyAdministrableCurrentuserInput = {
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** Methods to use when ordering `StudyAdministrableCurrentuser`. */
+export enum StudyAdministrableCurrentusersOrderBy {
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
 
 export type StudyAnnotationFrontendGroup = {
   __typename?: 'StudyAnnotationFrontendGroup';
@@ -4762,6 +5013,12 @@ export type StudyCondition = {
   externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
   filename: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `importFailed` field. */
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `importLog` field. */
+  importLog: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `importStarted` field. */
+  importStarted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `legacyConfig` field. */
   legacyConfig: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
@@ -4798,6 +5055,12 @@ export type StudyFilter = {
   externalWebsite: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
   filename: InputMaybe<StringFilter>;
+  /** Filter by the object’s `importFailed` field. */
+  importFailed: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `importLog` field. */
+  importLog: InputMaybe<StringFilter>;
+  /** Filter by the object’s `importStarted` field. */
+  importStarted: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `legacyConfig` field. */
   legacyConfig: InputMaybe<JsonFilter>;
   /** Negates the expression. */
@@ -4829,6 +5092,9 @@ export type StudyInput = {
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  importLog: InputMaybe<Scalars['String']>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -5213,6 +5479,9 @@ export type StudyPatch = {
   diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  importLog: InputMaybe<Scalars['String']>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -6365,6 +6634,33 @@ export type SaveUserAnnotationMutationVariables = Exact<{
 
 export type SaveUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload', clientMutationId: string, integer: number } };
 
+export type StudyAdminDetailsFragment = { __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean };
+
+export type StudyAdminListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudyAdminListQuery = { __typename?: 'Query', userStudyUploadConfigured: boolean, studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean }> };
+
+export type StudyUpdateMutationVariables = Exact<{
+  studyId: Scalars['Int'];
+  studyName: Scalars['String'];
+  description: InputMaybe<Scalars['String']>;
+  readerPermissions: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  adminPermissions: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  visible: Scalars['Boolean'];
+  externalWebsite: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type StudyUpdateMutation = { __typename?: 'Mutation', updateStudy: { __typename?: 'UpdateStudyPayload', clientMutationId: string } };
+
+export type CreateS3TempCredentialsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateS3TempCredentialsMutation = { __typename?: 'Mutation', createS3TempCredentials: { __typename?: 'CreateS3TempCredentialsPayload', strings: Array<string> } };
+
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
   studyId
@@ -6483,6 +6779,23 @@ export const DotPlotElementFragmentDoc = gql`
   q3
   median
   exprSamplesFraction
+}
+    `;
+export const StudyAdminDetailsFragmentDoc = gql`
+    fragment StudyAdminDetails on StudyAdminDetail {
+  studyId
+  studyName
+  description
+  filename
+  cellCount
+  tissueNcitIds
+  diseaseMeshIds
+  visible
+  externalWebsite
+  readerPermissions
+  readerPermissionGranted
+  adminPermissions
+  adminPermissionGranted
 }
     `;
 export const CorrelatedgenesDocument = gql`
@@ -7151,3 +7464,111 @@ export function useSaveUserAnnotationMutation(baseOptions?: Apollo.MutationHookO
 export type SaveUserAnnotationMutationHookResult = ReturnType<typeof useSaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationResult = Apollo.MutationResult<SaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>;
+export const StudyAdminListDocument = gql`
+    query studyAdminList {
+  studyAdminDetailsList {
+    ...StudyAdminDetails
+  }
+  userStudyUploadConfigured
+}
+    ${StudyAdminDetailsFragmentDoc}`;
+
+/**
+ * __useStudyAdminListQuery__
+ *
+ * To run a query within a React component, call `useStudyAdminListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudyAdminListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudyAdminListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStudyAdminListQuery(baseOptions?: Apollo.QueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
+      }
+export function useStudyAdminListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
+        }
+export type StudyAdminListQueryHookResult = ReturnType<typeof useStudyAdminListQuery>;
+export type StudyAdminListLazyQueryHookResult = ReturnType<typeof useStudyAdminListLazyQuery>;
+export type StudyAdminListQueryResult = Apollo.QueryResult<StudyAdminListQuery, StudyAdminListQueryVariables>;
+export const StudyUpdateDocument = gql`
+    mutation studyUpdate($studyId: Int!, $studyName: String!, $description: String, $readerPermissions: [String!], $adminPermissions: [String!], $tissueNcitIds: [String!], $diseaseMeshIds: [String!], $visible: Boolean!, $externalWebsite: String) {
+  updateStudy(
+    input: {studyId: $studyId, patch: {studyName: $studyName, description: $description, readerPermissions: $readerPermissions, adminPermissions: $adminPermissions, tissueNcitIds: $tissueNcitIds, diseaseMeshIds: $diseaseMeshIds, visible: $visible, externalWebsite: $externalWebsite}}
+  ) {
+    clientMutationId
+  }
+}
+    `;
+
+/**
+ * __useStudyUpdateMutation__
+ *
+ * To run a mutation, you first call `useStudyUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudyUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studyUpdateMutation, { data, loading, error }] = useStudyUpdateMutation({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      studyName: // value for 'studyName'
+ *      description: // value for 'description'
+ *      readerPermissions: // value for 'readerPermissions'
+ *      adminPermissions: // value for 'adminPermissions'
+ *      tissueNcitIds: // value for 'tissueNcitIds'
+ *      diseaseMeshIds: // value for 'diseaseMeshIds'
+ *      visible: // value for 'visible'
+ *      externalWebsite: // value for 'externalWebsite'
+ *   },
+ * });
+ */
+export function useStudyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<StudyUpdateMutation, StudyUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyUpdateMutation, StudyUpdateMutationVariables>(StudyUpdateDocument, options);
+      }
+export type StudyUpdateMutationHookResult = ReturnType<typeof useStudyUpdateMutation>;
+export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutation>;
+export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
+export const CreateS3TempCredentialsDocument = gql`
+    mutation createS3TempCredentials {
+  createS3TempCredentials(input: {}) {
+    strings
+  }
+}
+    `;
+
+/**
+ * __useCreateS3TempCredentialsMutation__
+ *
+ * To run a mutation, you first call `useCreateS3TempCredentialsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateS3TempCredentialsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createS3TempCredentialsMutation, { data, loading, error }] = useCreateS3TempCredentialsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateS3TempCredentialsMutation(baseOptions?: Apollo.MutationHookOptions<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>(CreateS3TempCredentialsDocument, options);
+      }
+export type CreateS3TempCredentialsMutationHookResult = ReturnType<typeof useCreateS3TempCredentialsMutation>;
+export type CreateS3TempCredentialsMutationResult = Apollo.MutationResult<CreateS3TempCredentialsMutation>;
+export type CreateS3TempCredentialsMutationOptions = Apollo.BaseMutationOptions<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>;

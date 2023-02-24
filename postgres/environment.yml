@@ -13,6 +13,8 @@ dependencies:
   - networkx
   - python-jose
   - msal
+  - boto3
+  - smart_open
   - pip
   - git
   - make
