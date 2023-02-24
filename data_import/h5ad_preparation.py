@@ -224,7 +224,7 @@ def set_cellenium_metadata(
 
     if not modalities:
         for a in main_sample_attributes:
-            _check_cell_annotation(a)
+            _check_cell_annotation(data, a)
     else:
         for modality in modalities.keys():
             for a in main_sample_attributes[modality]:
@@ -249,7 +249,7 @@ def set_cellenium_metadata(
     d['X_pseudolayer_name'] = X_pseudolayer_name
 
     for a in secondary_sample_attributes:
-        _check_cell_annotation(a)
+        _check_cell_annotation(data, a)
         if a in main_sample_attributes:
             raise Exception(
                 f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
