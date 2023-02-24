@@ -4,5 +4,6 @@ scanpy~=1.9.1
 sqlalchemy~=1.4.46
 psycopg2-binary
 muon
+leidenalg
 boto3
 smart-open
