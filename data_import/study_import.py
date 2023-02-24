@@ -69,7 +69,7 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
 
     # insert into base
     omics_base_insert = df_region[['omics_type', 'tax_id', 'display_name', 'display_symbol']].drop_duplicates()
-
+    # but remove the ones which are already inserted
     import_df(omics_base_insert, 'omics_base')
 
 
