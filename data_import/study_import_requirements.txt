@@ -1,0 +1,8 @@
+pandas~=1.5.2
+numpy~=1.23.5
+scanpy~=1.9.1
+sqlalchemy~=1.4.46
+psycopg2-binary
+muon
+boto3
+smart-open

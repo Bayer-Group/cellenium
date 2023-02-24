@@ -269,6 +269,7 @@ query studyAdminList {
   studyAdminDetailsList {
     ...StudyAdminDetails
   }
+  userStudyUploadConfigured
 }
 
 mutation studyUpdate(
@@ -296,5 +297,9 @@ mutation studyUpdate(
   }
 }
 
-
+mutation createS3TempCredentials {
+  createS3TempCredentials(input: {}) {
+    strings
+  }
+}
 `;

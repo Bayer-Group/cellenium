@@ -1093,6 +1093,28 @@ export type CreateOntologyPayload = {
   query: Maybe<Query>;
 };
 
+/** All input for the `createS3TempCredentials` mutation. */
+export type CreateS3TempCredentialsInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `createS3TempCredentials` mutation. */
+export type CreateS3TempCredentialsPayload = {
+  __typename?: 'CreateS3TempCredentialsPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  strings: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 /** All input for the create `StudyAdministrableCurrentuser` mutation. */
 export type CreateStudyAdministrableCurrentuserInput = {
   /**
@@ -2283,6 +2305,7 @@ export type Mutation = {
   createOmicsTranscriptionFactorGene: Maybe<CreateOmicsTranscriptionFactorGenePayload>;
   /** Creates a single `Ontology`. */
   createOntology: Maybe<CreateOntologyPayload>;
+  createS3TempCredentials: Maybe<CreateS3TempCredentialsPayload>;
   /** Creates a single `Study`. */
   createStudy: Maybe<CreateStudyPayload>;
   /** Creates a single `StudyAdministrableCurrentuser`. */
@@ -2478,6 +2501,12 @@ export type MutationCreateOmicsTranscriptionFactorGeneArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOntologyArgs = {
   input: CreateOntologyInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateS3TempCredentialsArgs = {
+  input: CreateS3TempCredentialsInput;
 };
 
 
@@ -3661,6 +3690,7 @@ export type Query = Node & {
   treeOntologiesList: Maybe<Array<TreeOntology>>;
   /** Reads a set of `UserAnnotationGroup`. */
   userAnnotationGroupsList: Maybe<Array<UserAnnotationGroup>>;
+  userStudyUploadConfigured: Maybe<Scalars['Boolean']>;
   violinPlot: Maybe<Scalars['String']>;
 };
 
@@ -6609,7 +6639,7 @@ export type StudyAdminDetailsFragment = { __typename?: 'StudyAdminDetail', study
 export type StudyAdminListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudyAdminListQuery = { __typename?: 'Query', studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean }> };
+export type StudyAdminListQuery = { __typename?: 'Query', userStudyUploadConfigured: boolean, studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -6625,6 +6655,11 @@ export type StudyUpdateMutationVariables = Exact<{
 
 
 export type StudyUpdateMutation = { __typename?: 'Mutation', updateStudy: { __typename?: 'UpdateStudyPayload', clientMutationId: string } };
+
+export type CreateS3TempCredentialsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateS3TempCredentialsMutation = { __typename?: 'Mutation', createS3TempCredentials: { __typename?: 'CreateS3TempCredentialsPayload', strings: Array<string> } };
 
 export const StudyInfoFragmentDoc = gql`
     fragment StudyInfo on StudyOverview {
@@ -7434,6 +7469,7 @@ export const StudyAdminListDocument = gql`
   studyAdminDetailsList {
     ...StudyAdminDetails
   }
+  userStudyUploadConfigured
 }
     ${StudyAdminDetailsFragmentDoc}`;
 
@@ -7505,3 +7541,34 @@ export function useStudyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<
 export type StudyUpdateMutationHookResult = ReturnType<typeof useStudyUpdateMutation>;
 export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutation>;
 export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
+export const CreateS3TempCredentialsDocument = gql`
+    mutation createS3TempCredentials {
+  createS3TempCredentials(input: {}) {
+    strings
+  }
+}
+    `;
+
+/**
+ * __useCreateS3TempCredentialsMutation__
+ *
+ * To run a mutation, you first call `useCreateS3TempCredentialsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateS3TempCredentialsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createS3TempCredentialsMutation, { data, loading, error }] = useCreateS3TempCredentialsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateS3TempCredentialsMutation(baseOptions?: Apollo.MutationHookOptions<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>(CreateS3TempCredentialsDocument, options);
+      }
+export type CreateS3TempCredentialsMutationHookResult = ReturnType<typeof useCreateS3TempCredentialsMutation>;
+export type CreateS3TempCredentialsMutationResult = Apollo.MutationResult<CreateS3TempCredentialsMutation>;
+export type CreateS3TempCredentialsMutationOptions = Apollo.BaseMutationOptions<CreateS3TempCredentialsMutation, CreateS3TempCredentialsMutationVariables>;

@@ -98,8 +98,10 @@ $$
 
 from typing import List
 import pandas as pd
+from smart_open import open
 import scanpy as sc
 from anndata import AnnData
+import io
 
 
 def sql_query(query, fetch_results=True):
@@ -123,16 +125,33 @@ def sql_query(query, fetch_results=True):
         return
 
 
+def _read_h5ad(filename):
+    if filename.startswith('s3:'):
+        # AnnData's read_h5ad passes the "filename" parameter to h5py.File, which supports file-like objects in
+        # addition to filename strings. It is able to read an AnnData file directly from S3 using the python
+        # file-like object abstraction smart_open provides, however it seeks a lot and that causes read performance
+        # to drop significantly. So we're copying the h5ad file into an in-memory file and read from there.
+        s3_file_like_obj = open(filename, 'rb')
+        memory_file_like_obj = io.BytesIO(s3_file_like_obj.read())
+        s3_file_like_obj.close()
+        adata = sc.read_h5ad(memory_file_like_obj)
+        memory_file_like_obj.close()
+        return adata
+    else:
+        return sc.read_h5ad(filename)
+
+
 def read_h5ad(study_id: int):
     filename = sql_query(f"select filename from study where study_id = {study_id}")[0]['filename']
-    try:
-        import plpy
-        # running in postgres docker image
-        filename = f"/h5ad_store/{filename}"
-    except:
-        # running in devenv jupyter notebook
-        filename = f"../scratch/{filename}"
-    return sc.read(filename)
+    if not filename.startswith('s3:'):
+        try:
+            import plpy
+            # running in postgres docker image
+            filename = f"/h5ad_store/{filename}"
+        except:
+            # running in devenv jupyter notebook
+            filename = f"../scratch/{filename}"
+    return _read_h5ad(filename)
 
 
 #def add_custom_annotation(adata: AnnData, study_id:int, annotation_group_id:int):

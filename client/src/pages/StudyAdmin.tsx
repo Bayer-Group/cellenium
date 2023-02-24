@@ -8,21 +8,43 @@ import {
     Group,
     Loader,
     Space,
+    Stack,
     TextInput,
     Button,
     Box,
-    Divider
+    Modal
 } from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {
     InputMaybe,
-    StudyAdminDetailsFragment,
+    StudyAdminDetailsFragment, useCreateS3TempCredentialsMutation,
     useStudyAdminListQuery, useStudyUpdateMutation
 } from "../generated/types";
 import DataTable from 'react-data-table-component';
 import {showNotification} from "@mantine/notifications";
 
 function StudyAdmin() {
+    const [tempCredentialsModalOpened, setTempCredentialsModalOpened] = useState(false);
+    const [s3TempCredentials, setS3TempCredentials] = useState<string[]>([]);
+    const [createS3TempCredentialsMutation, {
+        loading: createS3TempCredentialsLoading
+    }] = useCreateS3TempCredentialsMutation();
+    const createTempCredentials = () => {
+        createS3TempCredentialsMutation().then((r) => {
+            if (r?.data?.createS3TempCredentials?.strings) {
+                setS3TempCredentials(r.data.createS3TempCredentials.strings);
+                setTempCredentialsModalOpened(true);
+            }
+        }).catch(reason => {
+            showNotification({
+                title: 'Could not create temporary credentials',
+                message: reason.message,
+                color: 'red'
+            });
+        });
+    };
+
+
     const {data, loading, refetch} = useStudyAdminListQuery();
 
     const columns = [
@@ -84,7 +106,6 @@ function StudyAdmin() {
         loading: studyUpdateLoading
     }] = useStudyUpdateMutation();
     const submit = () => {
-        console.log('SUBMIT')
         if (selectedStudy) {
             const splitToArray = (s: string) => {
                 const a = s.split(";").map(s => s.trim());
@@ -92,7 +113,7 @@ function StudyAdmin() {
                     return null;
                 }
                 return a;
-            }
+            };
 
             studyUpdateMutation({
                 variables: {
@@ -120,8 +141,42 @@ function StudyAdmin() {
     };
 
     return <Container fluid={true}>
+        <Modal
+            opened={tempCredentialsModalOpened}
+            onClose={() => setTempCredentialsModalOpened(false)}
+            title="AWS credentials for study upload"
+            size={"50em"}
+        >
+            <Stack>
+                <p>
+                    An h5ad scRNA expression data file needs to fulfill certain requirements to be of use in cellenium.
+                    Please use "h5ad_preparation.py" to ensure your file meets the requirements.
+                </p>
+                <p>
+                    The credentials below are personalized to {s3TempCredentials[3]} and valid for 12 hours.
+                    Access to the S3 bucket is logged. Please upload an h5ad study file as indicated below. After
+                    successful file transfer, wait and refresh the study list to see the results.
+                </p>
+                <pre style={{overflow: "auto", width: "100%"}}>
+{`export AWS_ACCESS_KEY_ID="${s3TempCredentials[0]}"
+export AWS_SECRET_ACCESS_KEY="${s3TempCredentials[1]}"
+export AWS_SESSION_TOKEN="${s3TempCredentials[2]}"
+
+aws s3 ls ${s3TempCredentials[4]}
+aws s3 cp --acl bucket-owner-full-control   new_study.h5ad   ${s3TempCredentials[4]}`}
+           </pre>
+            </Stack>
+        </Modal>
+
+
         <NavBar/>
         <Space h="xl"/>
+
+        {data?.userStudyUploadConfigured && <Group>
+            <Button onClick={createTempCredentials} loading={createS3TempCredentialsLoading}>
+                Study Upload: Create S3 Credentials
+            </Button>
+        </Group>}
 
         {loading && <Loader variant={'dots'} color={'gray'} size={'xl'}/>}
         <DataTable data={data?.studyAdminDetailsList || []}

@@ -6,13 +6,13 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-import scanpy as sc
 from scanpy.pl._tools.scatterplots import _get_palette
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
 from psycopg2.extras import Json
 from sqlalchemy import text
+import h5ad_open
 
 from postgres_utils import engine, import_df, NumpyEncoder
 
@@ -190,6 +190,7 @@ def import_study_layer_expression(study_id: int, layer_name: str, adata_genes_df
 
         connection.execute(text("call add_studylayer_partition(:study_layer_id)"),
                            {'study_layer_id': study_layer_id})
+        connection.connection.commit()
 
         sparse_X = sparse.csc_matrix(X)
 
@@ -243,7 +244,11 @@ def import_differential_expression(study_id: int, adata_genes_df, adata: AnnData
 
 
 def import_study(filename: str, analyze_database: bool) -> int:
-    adata = sc.read_h5ad(filename)
+    adata = h5ad_open.h5ad_read(filename)
+    stored_filename = filename
+    if stored_filename.startswith('scratch'):
+        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+        stored_filename = Path(filename).relative_to("scratch").as_posix()
 
     def _config_optional_list(key: str):
         if adata.uns['cellenium'].get(key) is not None:
@@ -257,8 +262,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
                :projections, :reader_permissions, :admin_permissions, :legacy_config
             )
             RETURNING study_id"""), {
-            'filename': Path(filename).relative_to("scratch").as_posix(),
-            # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+            'filename': stored_filename,
             'study_name': adata.uns['cellenium']['title'],
             'description': adata.uns['cellenium']['description'],
             'tissue_ncit_ids': adata.uns['cellenium']['ncit_tissue_ids'].tolist(),
@@ -291,7 +295,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="cellenium study import tool")
-    parser.add_argument('filename', help='h5ad file created for cellenium (e.g. study_preparation.py scripts)',
+    parser.add_argument('filename', help='h5ad file created for cellenium (e.g. from public_data/*.ipynb notebooks)',
                         type=str)
     parser.add_argument('--analyze-database', action='store_true')
     args = parser.parse_args()
