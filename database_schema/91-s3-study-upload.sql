@@ -10,7 +10,7 @@ $$
 import os
 
 return True if os.getenv('S3_IMPORTER_ROLE_ARN') else False
-$$
+$$;
 
 
 CREATE OR REPLACE FUNCTION create_s3_temp_credentials()
