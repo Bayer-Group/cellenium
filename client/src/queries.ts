@@ -95,6 +95,7 @@ fragment StudyBasics on Study {
       projectionType
       studySampleId
       projection
+      modality
     }
 }
 

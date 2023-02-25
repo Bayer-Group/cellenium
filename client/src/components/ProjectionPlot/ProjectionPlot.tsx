@@ -35,7 +35,6 @@ const ProjectionPlot = ({
                             showSampleIds,
                             disableSelection
                         }: Props) => {
-
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
 
@@ -46,6 +45,8 @@ const ProjectionPlot = ({
     const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
 
     const annotationProjectionData = React.useMemo(() => {
+        // @ts-ignore
+        console.log("HERE WE FIND", projection, study.samplesProjectionTables)
         if (!study || !study.samplesProjectionTables.get(projection)) {
             return undefined;
         }
@@ -69,9 +70,12 @@ const ProjectionPlot = ({
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {
+        console.log("I AM NOW IN", annotationProjectionData)
         if (!study || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
         }
+
+        console.log("HAVE A LOOK", annotationProjectionData)
         // the cells in selected annotation color
         return annotationProjectionData.distinctAnnotationValueIds.map(annotationValueId => {
             const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);

@@ -161,7 +161,6 @@ def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     data_genes_df.drop_duplicates('omics_id', inplace=True)
     data_genes_df['study_id'] = study_id
     import_df(data_genes_df[['h5ad_var_index', 'omics_id', 'study_id']], 'study_omics')
-    print(data_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']])
     return data_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
 
 
@@ -261,7 +260,7 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
             annotation_group_id = r[0]
 
             connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
-                                                                    VALUES (:study_id, :annotation_group_id, :is_primary, :ordering, False)"""),
+                                                                    VALUES (:study_id, :annotation_group_id, :is_primary, :ordering, True)"""),
                                {
                                    'study_id': study_id,
                                    'annotation_group_id': annotation_group_id,
@@ -381,13 +380,13 @@ def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df,
 '''
 
 
-def import_differential_expression(study_id: int, data_genes_df, data: AnnData | MuData):
+def import_differential_expression(study_id: int, data_genes_df, data: AnnData | MuData, modality=None):
     if 'differentially_expressed_genes' not in data.uns['cellenium']:
         return
     logging.info('importing differentially expressed genes')
     df = data.uns['cellenium']['differentially_expressed_genes']
     df = df.merge(data_genes_df, left_on='names', right_on='h5ad_var_key')
-    annotation_definition_df = get_annotation_definition_df(df['attribute_name'].unique().tolist())
+    annotation_definition_df = get_annotation_definition_df(df['attribute_name'].unique().tolist(), modality)
     df = df.merge(annotation_definition_df, left_on=['attribute_name', 'ref_attr_value'],
                   right_on=['h5ad_column', 'h5ad_value'])
     df['study_id'] = study_id
@@ -412,10 +411,8 @@ def generate_dense_expression_df_for_import(adata: AnnData, samples_df: pd.DataF
     df = df.T.join(data_genes_df.set_index('h5ad_var_key')[['omics_id']]).dropna()
     df.omics_id = df.omics_id.astype(int)
     df = df.set_index('omics_id').T
-
     # replace the index with study_sample_ids
     df = df.join(samples_df.set_index('h5ad_obs_key')[['study_sample_id']]).set_index('study_sample_id')
-
     # generate the to be imported dataframe
     collect = []
     for omics_id in tqdm.tqdm(df.columns):
@@ -488,11 +485,13 @@ def import_study(filename: str, analyze_database: bool) -> int:
             else:
                 cur_data = data
             meta_data = data.uns['cellenium']
+            print(data_type)
             if (data_type == 'gene'):
                 data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
-                import_differential_expression(study_id, data_genes_df, cur_data)
+                import_differential_expression(study_id, data_genes_df, cur_data, modality[0])
             elif (data_type == 'region'):
                 data_region_df = import_region_base_and_study(study_id, cur_data, meta_data)
+                # TODO import differential peaks
             elif (data_type == 'protein_antibody_tag'):
                 data_protein_df = ''
 

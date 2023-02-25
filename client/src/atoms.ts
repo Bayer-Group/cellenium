@@ -156,6 +156,7 @@ export const studyState = selector<Study | undefined>({
             const response = await responsePromise;
 
             if (response?.data?.study) {
+                console.log(response.data.study)
                 if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
                     throw Error('no projection data');
                 }
@@ -169,7 +170,7 @@ export const studyState = selector<Study | undefined>({
                 const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
                 const s: Study = {
                     ...response.data.study,
-                    samplesProjectionTables: new Map(response.data.study.studySampleProjectionSubsamplingTransposedList.map(tl => [tl.projectionType, buildSampleProjectionTable(tl)])),
+                    samplesProjectionTables: new Map(response.data.study.studySampleProjectionSubsamplingTransposedList.map(tl => [tl.modality?`${tl.modality}_${tl.projectionType}`:tl.projectionType, buildSampleProjectionTable(tl)])),
                     samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
                     studyOmicsTable,
                     studyOmicsMap: new Map(studyOmicsTable.objects().map(o => [(o as Omics).omicsId, (o as Omics)])),

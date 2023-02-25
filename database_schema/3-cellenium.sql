@@ -273,15 +273,16 @@ CREATE TABLE study_sample_projection
 );
 grant select on study_sample_projection to postgraphile;
 
-CREATE VIEW study_sample_projection_subsampling_transposed
+CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed
 as
 select study_id,
        projection_type,
+       modality,
        array_agg(study_sample_id order by study_sample_id) study_sample_id,
        array_agg(projection order by study_sample_id)      projection
 from study_sample_projection
 where display_subsampling = True
-group by study_id, projection_type;
+group by study_id, projection_type, modality;
 comment on view study_sample_projection_subsampling_transposed is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
 grant select on study_sample_projection_subsampling_transposed to postgraphile;
