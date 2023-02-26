@@ -9,7 +9,7 @@ import {
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
     selectedAnnotationFilterState,
@@ -17,16 +17,11 @@ import {
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState,
     userGeneStoreOpenState
 } from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
-import {
-    ExpressionByAnnotationFilter,
-    useExpressionByAnnotationQuery,
-    useExpressionViolinPlotQuery
-} from "../generated/types";
+import {useExpressionByAnnotationQuery, useExpressionViolinPlotQuery} from "../generated/types";
 import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";
 import ProjectionSelectBox from "../components/ProjectionSelectBox/ProjectionSelectBox";
 
@@ -57,7 +52,12 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
         },
         skip: !annotationGroupId || !studyId
     })
+    useEffect(() => {
+        if (data) {
+            console.log("GOT IT", data)
+        }
 
+    }, [data])
     if (data?.violinPlot) {
         return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} src={data.violinPlot}/>;
     }

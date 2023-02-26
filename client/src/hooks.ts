@@ -24,7 +24,7 @@ export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
         variables: {
             studyLayerId,
             omicsIds,
-            subsamplingProjection: (subsampling ? projection : null) as InputMaybe<string>
+            subsamplingProjection: (subsampling ? projection.split(':').pop() : null) as InputMaybe<string>
         },
         skip: omicsIds.length === 0
     });

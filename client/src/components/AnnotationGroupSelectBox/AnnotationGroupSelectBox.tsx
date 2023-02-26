@@ -32,6 +32,7 @@ function AnnotationGroupSelectBox() {
     const annotations: ItemProps[] = useMemo(() => {
         const anns: ItemProps[] = [];
         if (study) {
+            console.log("SHOW THIS", study.annotationGroupMap)
             study.annotationGroupMap.forEach((value, key) => {
                 anns.push({
                     value: key.toString(),
