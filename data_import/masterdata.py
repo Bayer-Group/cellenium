@@ -142,6 +142,7 @@ def get_antibody_mappings_from_biolegend():
                     len(set(['Description', 'Ensembl Gene Id']).intersection(df.columns)) == 2], axis=0).rename(
         columns={'Description': 'antibody_symbol', 'Ensembl Gene Id': 'ensembl_gene_id'})
     ab['display_symbol'] = ab['antibody_symbol']
+    ab['display_name'] = ab['antibody_symbol']
     ab.ensembl_gene_id = ab.ensembl_gene_id.str.split(',')
     ab = ab.explode('ensembl_gene_id')
     ab.ensembl_gene_id = ab.ensembl_gene_id.str.strip()
@@ -451,10 +452,10 @@ class Dataimport(object):
     def import_antibodies(self):
         logging.info('importing CITE-Seq antibodies')
         ab = get_antibody_mappings_from_biolegend()
-        ab_distinct = ab[['omics_type', 'tax_id', 'display_symbol', 'antibody_symbol']].drop_duplicates().reset_index(
+        ab_distinct = ab[['omics_type', 'tax_id', 'display_symbol', 'display_name','antibody_symbol']].drop_duplicates().reset_index(
             drop=True)
 
-        ab_distinct[['omics_type', 'tax_id', 'display_symbol']].to_sql('omics_base', if_exists='append',
+        ab_distinct[['omics_type', 'tax_id', 'display_symbol','display_name']].to_sql('omics_base', if_exists='append',
                                                                        index=False, con=self.engine)
         omics_ids = pd.read_sql(
             "SELECT omics_id from omics_base where omics_type = 'protein_antibody_tag' order by omics_id",
@@ -481,7 +482,6 @@ class Dataimport(object):
 
         self.import_genes()
         self.import_antibodies()
-        # TODO jasper
 
 
 if __name__ == '__main__':

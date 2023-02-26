@@ -170,6 +170,7 @@ from omics_base b
          left join omics_gene og on b.omics_id = og.gene_id
          left join omics_region ogr on b.omics_id = ogr.region_id
          left join omics_region_gene ogrg on b.omics_id = ogrg.region_id
+
          left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
          left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
 group by og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols, b.omics_id, b.omics_type, b.tax_id, b.display_symbol,
@@ -393,12 +394,13 @@ CREATE POLICY differential_expression_policy ON differential_expression FOR SELE
     );
 grant select on differential_expression to postgraphile;
 
-CREATE VIEW differential_expression_v
+CREATE OR REPLACE VIEW differential_expression_v
     with (security_invoker = true)
 AS
-SELECT de.*, ob.display_symbol, ob.display_name
+SELECT de.*, ob.omics_type, ob.display_symbol, ob.display_name, oa.linked_genes
 FROM differential_expression de
-         JOIN omics_base ob on de.omics_id = ob.omics_id;
+         JOIN omics_base ob on de.omics_id = ob.omics_id
+         JOIN omics_all oa on de.omics_id = oa.omics_id;
 grant select on differential_expression_v to postgraphile;
 
 CREATE TABLE study_layer

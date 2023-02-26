@@ -175,7 +175,6 @@ from ont_code_lists,
                                                    ont_code_lists.ont_codes) l;
 grant select on tree_ontology to postgraphile;
 
-
 create view study_annotation_frontend_group
 as
 select gui.study_id,
@@ -183,7 +182,8 @@ select gui.study_id,
        gui.is_primary,
        gui.ordering,
        gui.differential_expression_calculated,
-       g.display_group
+       g.display_group,
+       g.modality
 from study_annotation_group_ui gui
          join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
 comment on view study_annotation_frontend_group is

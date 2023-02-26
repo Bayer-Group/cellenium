@@ -179,7 +179,7 @@ const ExpressionAnalysis = () => {
             </main>
             <RightSidePanel>
                 <Stack>
-                    <Divider size={"xs"} label={'Gene store'}/>
+                    <Divider size={"xs"} label={'User store'}/>
                     <UserGeneStore multiple={true}/>
                 </Stack>
             </RightSidePanel>

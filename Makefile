@@ -1,4 +1,4 @@
-.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import
+.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import
 .SECONDARY:
 
 reset_database:
@@ -14,6 +14,10 @@ scratch/%.h5ad.imported: scratch/%.h5ad
 	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
 	echo "done" > $@
 
+scratch/%.h5mu.imported: scratch/%.h5mu
+	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
+	echo "done" > $@
+
 test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported
 
 normal_studydata_import: scratch/pancreas_atlas.h5ad.imported \
@@ -22,6 +26,9 @@ normal_studydata_import: scratch/pancreas_atlas.h5ad.imported \
   scratch/tabula_muris_senis_heart.h5ad.imported \
   scratch/tabula_muris_senis_liver.h5ad.imported \
   scratch/tabula_sapiens_kidney.h5ad.imported
+
+atac_studydata_import: scratch/brain3k_processed.h5mu.imported
+cite_studydata_import: scratch/pbmc3k_processed.h5mu.imported
 
 huge_studydata_880kcells_33kgenes_import: scratch/heart_failure_reichart2022.h5ad.imported
 

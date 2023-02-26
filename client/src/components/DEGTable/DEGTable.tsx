@@ -262,7 +262,7 @@ const DEGTable = ({annotationId}: Props) => {
                            expandableRowsComponent={ExpandedComponent}
                 />
             }
-            {data && data.differentialExpressionVsList.length > 0 && modality === 'rna' &&
+            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna'||modality==="prot") &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
