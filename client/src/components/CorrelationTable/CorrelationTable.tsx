@@ -134,7 +134,7 @@ const CorrelationTable = ({omicsId, studyId}: Props) => {
         return (<Stack align={'center'}>
             <Text color={'gray'} size={'xs'}>
                 A genome-wide correlation analysis takes some seconds. Please stay patient!
-                We are working on a massive speed-up in the meantime!
+                We are working on a speed-up in the meantime!
             </Text>
             <Loader variant={'dots'} color={'gray'}/>
         </Stack>)

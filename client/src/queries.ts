@@ -44,6 +44,7 @@ query deg($studyId: Int!, $annotationValueId: Int!) {
     displaySymbol
     pvalueAdj
     log2Foldchange
+    linkedGenes
   }
 }
 

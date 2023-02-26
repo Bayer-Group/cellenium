@@ -2004,6 +2004,7 @@ export type DifferentialExpressionV = {
   annotationValueId: Maybe<Scalars['Int']>;
   displayName: Maybe<Scalars['String']>;
   displaySymbol: Maybe<Scalars['String']>;
+  linkedGenes: Maybe<Array<Maybe<Scalars['Int']>>>;
   log2Foldchange: Maybe<Scalars['Float']>;
   omicsId: Maybe<Scalars['Int']>;
   pvalue: Maybe<Scalars['Float']>;
@@ -2023,6 +2024,8 @@ export type DifferentialExpressionVCondition = {
   displayName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displaySymbol` field. */
   displaySymbol: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `log2Foldchange` field. */
   log2Foldchange: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
@@ -2047,6 +2050,8 @@ export type DifferentialExpressionVFilter = {
   displayName: InputMaybe<StringFilter>;
   /** Filter by the object’s `displaySymbol` field. */
   displaySymbol: InputMaybe<StringFilter>;
+  /** Filter by the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<IntListFilter>;
   /** Filter by the object’s `log2Foldchange` field. */
   log2Foldchange: InputMaybe<FloatFilter>;
   /** Negates the expression. */
@@ -2073,6 +2078,8 @@ export enum DifferentialExpressionVsOrderBy {
   DisplayNameDesc = 'DISPLAY_NAME_DESC',
   DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
   DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  LinkedGenesAsc = 'LINKED_GENES_ASC',
+  LinkedGenesDesc = 'LINKED_GENES_DESC',
   Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
   Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
   Natural = 'NATURAL',
@@ -6917,7 +6924,7 @@ export type DegQueryVariables = Exact<{
 }>;
 
 
-export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number }> };
+export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
 
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -7262,6 +7269,7 @@ export const DegDocument = gql`
     displaySymbol
     pvalueAdj
     log2Foldchange
+    linkedGenes
   }
 }
     `;

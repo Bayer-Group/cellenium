@@ -96,6 +96,7 @@ const columns = memoize((clickHandler, handleColorClick) => [
                 omicsType: row.omicsType,
                 value: row.displaySymbol
             }
+            console.log("linked", row.linkedGenes)
             return (
                 <Group position={'center'} align={'center'} noWrap={true} spacing={0}>
                     <ActionIcon title={'superpose expression'}
