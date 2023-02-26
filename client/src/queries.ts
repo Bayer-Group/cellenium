@@ -40,6 +40,7 @@ query deg($studyId: Int!, $annotationValueId: Int!) {
     omicsId
     studyId
     annotationValueId
+    omicsType
     displayName
     displaySymbol
     pvalueAdj
@@ -62,6 +63,7 @@ fragment AnnotationGrp on StudyAnnotationFrontendGroup {
     isPrimary
     ordering
     displayGroup
+    modality
     differentialExpressionCalculated
     annotationValuesList {
       annotationValueId

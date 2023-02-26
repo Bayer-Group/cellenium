@@ -20,6 +20,7 @@ export type Omics = {
     value?: string;
     ontology?: string;
     taxId?: number;
+    linkedGenes?:number[];
 }
 
 export type Study = StudyBasicsFragment & {

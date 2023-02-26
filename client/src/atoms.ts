@@ -156,7 +156,6 @@ export const studyState = selector<Study | undefined>({
             const response = await responsePromise;
 
             if (response?.data?.study) {
-                console.log(response.data.study)
                 if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
                     throw Error('no projection data');
                 }

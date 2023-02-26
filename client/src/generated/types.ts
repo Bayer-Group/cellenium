@@ -2007,6 +2007,7 @@ export type DifferentialExpressionV = {
   linkedGenes: Maybe<Array<Maybe<Scalars['Int']>>>;
   log2Foldchange: Maybe<Scalars['Float']>;
   omicsId: Maybe<Scalars['Int']>;
+  omicsType: Maybe<OmicsType>;
   pvalue: Maybe<Scalars['Float']>;
   pvalueAdj: Maybe<Scalars['Float']>;
   score: Maybe<Scalars['Float']>;
@@ -2030,6 +2031,8 @@ export type DifferentialExpressionVCondition = {
   log2Foldchange: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
   omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `omicsType` field. */
+  omicsType: InputMaybe<OmicsType>;
   /** Checks for equality with the object’s `pvalue` field. */
   pvalue: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `pvalueAdj` field. */
@@ -2058,6 +2061,8 @@ export type DifferentialExpressionVFilter = {
   not: InputMaybe<DifferentialExpressionVFilter>;
   /** Filter by the object’s `omicsId` field. */
   omicsId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `omicsType` field. */
+  omicsType: InputMaybe<OmicsTypeFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<DifferentialExpressionVFilter>>;
   /** Filter by the object’s `pvalue` field. */
@@ -2085,6 +2090,8 @@ export enum DifferentialExpressionVsOrderBy {
   Natural = 'NATURAL',
   OmicsIdAsc = 'OMICS_ID_ASC',
   OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
   PvalueAdjAsc = 'PVALUE_ADJ_ASC',
   PvalueAdjDesc = 'PVALUE_ADJ_DESC',
   PvalueAsc = 'PVALUE_ASC',
@@ -5143,6 +5150,7 @@ export type StudyAnnotationFrontendGroup = {
   differentialExpressionCalculated: Maybe<Scalars['Boolean']>;
   displayGroup: Maybe<Scalars['String']>;
   isPrimary: Maybe<Scalars['Boolean']>;
+  modality: Maybe<Scalars['String']>;
   ordering: Maybe<Scalars['Int']>;
   /** Reads a single `Study` that is related to this `StudyAnnotationFrontendGroup`. */
   study: Maybe<Study>;
@@ -5171,6 +5179,8 @@ export type StudyAnnotationFrontendGroupCondition = {
   displayGroup: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `isPrimary` field. */
   isPrimary: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `modality` field. */
+  modality: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ordering` field. */
   ordering: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -5189,6 +5199,8 @@ export type StudyAnnotationFrontendGroupFilter = {
   displayGroup: InputMaybe<StringFilter>;
   /** Filter by the object’s `isPrimary` field. */
   isPrimary: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `modality` field. */
+  modality: InputMaybe<StringFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyAnnotationFrontendGroupFilter>;
   /** Checks for any expressions in this list. */
@@ -5209,6 +5221,8 @@ export enum StudyAnnotationFrontendGroupsOrderBy {
   DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
   IsPrimaryAsc = 'IS_PRIMARY_ASC',
   IsPrimaryDesc = 'IS_PRIMARY_DESC',
+  ModalityAsc = 'MODALITY_ASC',
+  ModalityDesc = 'MODALITY_DESC',
   Natural = 'NATURAL',
   OrderingAsc = 'ORDERING_ASC',
   OrderingDesc = 'ORDERING_DESC',
@@ -6924,16 +6938,16 @@ export type DegQueryVariables = Exact<{
 }>;
 
 
-export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
+export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, omicsType: OmicsType, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
 
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }>, treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
-export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
+export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, modality: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, modality: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
 
 export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
@@ -6963,7 +6977,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, modality: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -7110,6 +7124,7 @@ export const AnnotationGrpFragmentDoc = gql`
   isPrimary
   ordering
   displayGroup
+  modality
   differentialExpressionCalculated
   annotationValuesList {
     annotationValueId
@@ -7265,6 +7280,7 @@ export const DegDocument = gql`
     omicsId
     studyId
     annotationValueId
+    omicsType
     displayName
     displaySymbol
     pvalueAdj

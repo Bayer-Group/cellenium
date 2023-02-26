@@ -52,12 +52,7 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
         },
         skip: !annotationGroupId || !studyId
     })
-    useEffect(() => {
-        if (data) {
-            console.log("GOT IT", data)
-        }
 
-    }, [data])
     if (data?.violinPlot) {
         return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} src={data.violinPlot}/>;
     }

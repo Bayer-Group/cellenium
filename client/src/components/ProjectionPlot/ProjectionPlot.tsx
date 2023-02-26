@@ -46,7 +46,6 @@ const ProjectionPlot = ({
 
     const annotationProjectionData = React.useMemo(() => {
         // @ts-ignore
-        console.log("HERE WE FIND", projection, study.samplesProjectionTables)
         if (!study || !study.samplesProjectionTables.get(projection)) {
             return undefined;
         }
@@ -70,12 +69,10 @@ const ProjectionPlot = ({
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {
-        console.log("I AM NOW IN", annotationProjectionData)
         if (!study || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
         }
 
-        console.log("HAVE A LOOK", annotationProjectionData)
         // the cells in selected annotation color
         return annotationProjectionData.distinctAnnotationValueIds.map(annotationValueId => {
             const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
@@ -139,7 +136,7 @@ const ProjectionPlot = ({
             text: study.annotationValueMap.get(selectedAnnotation as number)?.displayValue,
             marker: {
                 size: 10,
-                opacity: 0.4,
+                opacity: 0.1,
                 color: colorBy === 'annotation'
                     ? study.annotationValueMap.get(selectedAnnotation)?.color
                     : '#dddddd',
