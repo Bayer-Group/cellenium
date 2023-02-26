@@ -258,7 +258,7 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
 
                 }).fetchone()
             annotation_group_id = r[0]
-
+# TODO: differentially_is_calculated is always true
             connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
                                                                     VALUES (:study_id, :annotation_group_id, :is_primary, :ordering, True)"""),
                                {
@@ -381,6 +381,7 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData |
     df.rename(
         columns={'pvals': 'pvalue', 'pvals_adj': 'pvalue_adj', 'scores': 'score', 'logfoldchanges': 'log2_foldchange'},
         inplace=True)
+    print("IMPORTING", df)
     import_df(df[['study_id', 'omics_id', 'annotation_value_id', 'pvalue', 'pvalue_adj', 'score', 'log2_foldchange']],
               'differential_expression')
     with engine.connect() as connection:

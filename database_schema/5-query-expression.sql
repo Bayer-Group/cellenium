@@ -37,7 +37,7 @@ def sql_query(query):
 
 
 def h5ad_read(filename):
-    if filename.startswith('s3:'):
+    if str(filename).startswith('s3:'):
         # AnnData's read_h5ad passes the "filename" parameter to h5py.File, which supports file-like objects in
         # addition to filename strings. It is able to read an AnnData file directly from S3 using the python
         # file-like object abstraction smart_open provides, however it seeks a lot and that causes read performance
