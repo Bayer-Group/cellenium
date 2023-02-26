@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTable from "react-data-table-component";
-import {ActionIcon, Group, Loader, Stack, Text} from "@mantine/core";
+import {ActionIcon, Center, Group, Loader, Stack, Text} from "@mantine/core";
 import {IconChevronDown, IconChevronRight, IconEye, IconPlus} from "@tabler/icons";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
@@ -70,7 +70,7 @@ const customStyles = {
 };
 const columns = memoize((clickHandler, handleColorClick) => [
     {
-        name: 'gene',
+        name: 'identifier',
         selector: (row: any) => <Text title={row.displaySymbol}>{row.displaySymbol}</Text>,
         sortable: true,
         width: '80px'
@@ -170,11 +170,12 @@ const ExpandedComponent = ({data}: any) => {
             return (
                 <Group spacing={'xs'}>
                     <Text size={'xs'}>{gene['displaySymbol']}</Text>
-                    <ActionIcon title={'add to gene store'} color={'blue.3'} onClick={() => showExpression(gene as Omics)}
+                    <ActionIcon title={'add to gene store'} color={'blue.3'}
+                                onClick={() => showExpression(gene as Omics)}
                                 size='xs'
                                 variant={"default"}><IconEye
                         size={12} color={'black'}/>
-                        </ActionIcon>
+                    </ActionIcon>
                     <ActionIcon title={'add to gene store'} color={'blue.3'} onClick={() => addToStore(gene as Omics)}
                                 size='xs'
                                 variant={"default"}><IconPlus
@@ -185,9 +186,14 @@ const ExpandedComponent = ({data}: any) => {
     });
     return (
         <pre>
-        {linkedGenes && linkedGenes.length > 0 &&
-            linkedGenes
-        }
+            <Center>
+                <Stack>
+            <Text weight={800} size={'xs'}>Corresponding gene(s)</Text>
+                {linkedGenes && linkedGenes.length > 0 &&
+                    linkedGenes
+                }
+                </Stack>
+        </Center>
         </pre>
     )
 }
@@ -246,7 +252,7 @@ const DEGTable = ({annotationId}: Props) => {
 
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
-            {data && data.differentialExpressionVsList.length > 0 && modality === 'atac' &&
+            {data && data.differentialExpressionVsList.length > 0 && (modality === 'atac' || modality === "prot") &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
@@ -262,7 +268,7 @@ const DEGTable = ({annotationId}: Props) => {
                            expandableRowsComponent={ExpandedComponent}
                 />
             }
-            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna'||modality==="prot") &&
+            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna') &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}

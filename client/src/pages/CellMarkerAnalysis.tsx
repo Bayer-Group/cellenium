@@ -85,7 +85,7 @@ function DifferentialExpressionAnalysis() {
                     <UserGeneStore multiple={false}/>
                     <Space h={'xs'}/>
                     <Stack>
-                        <Divider size={"xs"} label={'Differentially expressed genes'}/>
+                        <Divider size={"xs"} label={'Differential expression table'}/>
                         {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated?
                     null:<Text color={'red'} size={'xs'}>No DEGs calculated for selected group.</Text>}
                         {!selectedAnnotation &&
