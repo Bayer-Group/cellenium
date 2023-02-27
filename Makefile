@@ -4,21 +4,19 @@
 reset_database:
 	docker-compose exec postgres bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done'
 	PYTHONPATH=$$(pwd)/data_import python data_import/masterdata.py
-	rm -f scratch/*.h5ad.imported
+	rm -f scratch/*.imported
 
-scratch/%.h5ad: data_import/public_data/%.ipynb
+scratch/%: data_import/public_data/%.ipynb
 	@echo jupyter notebook $< is expected to produce h5ad file $@ and $@.html
 	PYTHONPATH=$$(pwd)/data_import jupyter nbconvert --execute --to html --stdout  $<  > $@.html
 
-scratch/%.h5ad.imported: scratch/%.h5ad
+scratch/%.imported: scratch/%
 	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
 	echo "done" > $@
 
-scratch/%.h5mu.imported: scratch/%.h5mu
-	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
-	echo "done" > $@
 
-test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported
+test_studydata_import: scratch/pancreas_atlas_subset.h5ad.imported \
+  scratch/brain3k_processed_subset.h5mu.imported
 
 normal_studydata_import: scratch/pancreas_atlas.h5ad.imported \
   scratch/blood_covid.h5ad.imported \
