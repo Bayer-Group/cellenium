@@ -249,6 +249,7 @@ const DEGTable = ({annotationId}: Props) => {
             })
         }
     }
+    console.log('XX', data?.differentialExpressionVsList)
 
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
@@ -268,7 +269,7 @@ const DEGTable = ({annotationId}: Props) => {
                            expandableRowsComponent={ExpandedComponent}
                 />
             }
-            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna') &&
+            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna' || !modality) &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
