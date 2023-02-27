@@ -245,13 +245,20 @@ class Dataimport(object):
             logging.warning('Taxonomy already imported into ontology table')
 
         concept = pd.DataFrame([
+            {"ont_code": -1, "label": "All species", "ontid": SPECIES_ONTID},
             {"ont_code": 9606, "label": "Homo sapiens", "ontid": SPECIES_ONTID},
             {"ont_code": 10116, "label": "Rattus norvegicus", "ontid": SPECIES_ONTID},
             {"ont_code": 10090, "label": "Mus musculus", "ontid": SPECIES_ONTID}
         ])
         concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
         # get ids
-        cids = pd.read_sql(f'SELECT cid, ont_code from concept where ontid = {SPECIES_ONTID}', con=self.engine)
+        cids = pd.read_sql(f'SELECT cid, ont_code from concept where ontid = {SPECIES_ONTID}', con=self.engine, index_col='ont_code')
+
+        parent_cid = cids.loc['-1','cid']
+        concept_hierarchy = cids.copy()
+        concept_hierarchy['parent_cid'] = parent_cid
+        concept_hierarchy = concept_hierarchy.drop('-1', axis = 0)
+        concept_hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False, con=self.engine)
 
         synonym = pd.DataFrame([
             {"ont_code": "9606", "synonym": "human"},
@@ -261,7 +268,7 @@ class Dataimport(object):
 
         # construct the synonym table
         logging.info('import the taxonomy concept_synonyms')
-        synonym = synonym.merge(cids, on='ont_code')
+        synonym = synonym.merge(cids, left_on='ont_code', right_index=True)
         synonym.cid = synonym.cid.astype(int)
         synonym[['cid', 'synonym']].to_sql('concept_synonym', if_exists='append', con=self.engine, index=False)
 
@@ -333,6 +340,7 @@ class Dataimport(object):
             columns={'MH': 'label', 'UI': 'ont_code'}).drop_duplicates().reset_index(drop=True)
         concept = concept[['ontid', 'ont_code', 'label']]
         concept = pd.concat([concept, pd.DataFrame({'ontid': [1], 'ont_code': ['HEALTHY'], 'label': ['Healthy']})])
+        concept = pd.concat([concept, pd.DataFrame({'ontid': [1], 'ont_code': ['DISEASESTATE'], 'label': ['Disease state']})])
         concept.to_sql('concept', if_exists='append', index=False, con=self.engine)
 
         # get ids
@@ -360,6 +368,15 @@ class Dataimport(object):
         hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
                          con=self.engine)
 
+        # now add a link to disease state
+        disease_state_cid = cids.query('ont_code == "DISEASESTATE"').cid.values[0]
+        all_cids_without_parent = list(set(cids.cid).difference(hierarchy.cid.tolist()))
+        print(all_cids_without_parent)
+        all_cids_without_parent.remove(disease_state_cid)
+        add_hierarchy = pd.DataFrame({'cid': all_cids_without_parent})
+        add_hierarchy['parent_cid'] = disease_state_cid
+        add_hierarchy.to_sql('concept_hierarchy', if_exists='append', index=False,
+                         con=self.engine)
     def import_co(self):
         logging.info('importing Cell Ontology')
         CO_ONTID = 4
@@ -480,8 +497,8 @@ class Dataimport(object):
         self.import_simplified_flat_taxonomy()
         self.import_co()
 
-        self.import_genes()
-        self.import_antibodies()
+        #self.import_genes()
+        #self.import_antibodies()
 
 
 if __name__ == '__main__':

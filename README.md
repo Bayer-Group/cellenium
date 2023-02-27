@@ -51,6 +51,12 @@ make reset_database test_studydata_import
 
 # 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
 make normal_studydata_import
+
+# we have one for atac
+make atac_studydata_import
+
+# and one for cite
+make cite_studydata_import
 ```
 
 The GraphQL API explorer is available at http://localhost:5000/postgraphile/graphiql . Postgraphile will listen
