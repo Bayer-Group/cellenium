@@ -246,7 +246,7 @@ def get_annotation_definition_df(h5ad_columns: List[str], modality=None):
     return annotation_definition_df
 
 
-def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData | MuData, modality=None):
+def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData, modality=None):
     logging.info('importing sample annotations')
     import_sample_annotations = data.uns['cellenium']['main_sample_attributes'].tolist()
     import_sample_annotations.extend(data.uns['cellenium'].get('advanced_sample_attributes', []))
@@ -305,9 +305,8 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
 
     with engine.connect() as connection:
         data_sample_annotations = data.obs.copy()
-        data_sample_annotations = data_sample_annotations.reset_index()
         data_sample_annotations = data_sample_annotations.merge(data_samples_df,
-                                                                left_index=True, right_on='h5ad_obs_index')
+                                                                left_index=True, right_on='h5ad_obs_key')
         for h5ad_column in import_sample_annotations:
             palette = _get_palette(data, h5ad_column)
 
@@ -350,6 +349,7 @@ def import_study_layer_expression(study_id: int, layer_name: int, data_genes_df,
         cursor.copy_from(f, 'expression', columns=['study_layer_id', 'omics_id', 'study_sample_ids', 'values'], sep='|')
         connection.connection.commit()
         cursor.close()
+        f.close()
 
 
 '''
