@@ -308,11 +308,12 @@ CREATE TABLE study_sample_annotation
 grant select on study_sample_annotation to postgraphile;
 create unique index study_sample_annotation_1 on study_sample_annotation (study_id, annotation_value_id);
 
-CREATE VIEW study_sample_annotation_subsampling
+-- contains all samples which appear in at least one projection
+CREATE or replace VIEW study_sample_annotation_subsampling
 as
 select ssa.study_id,
        ssa.annotation_value_id,
-       array_agg(ssp.study_sample_id) study_sample_ids
+       array_agg(distinct ssp.study_sample_id) study_sample_ids
 from study_sample_annotation ssa
          cross join unnest(ssa.study_sample_ids) sample_id
          join study_sample_projection ssp on ssp.study_id = ssa.study_id and ssp.study_sample_id = sample_id
