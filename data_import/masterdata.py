@@ -497,8 +497,8 @@ class Dataimport(object):
         self.import_simplified_flat_taxonomy()
         self.import_co()
 
-        #self.import_genes()
-        #self.import_antibodies()
+        self.import_genes()
+        self.import_antibodies()
 
 
 if __name__ == '__main__':
