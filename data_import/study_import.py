@@ -235,18 +235,17 @@ def import_study_sample(study_id: int, data: AnnData | MuData, file_extension):
     return data_samples_df
 
 
-def get_annotation_definition_df(h5ad_columns: List[str], modality=None):
-    annotation_definition_df = pd.read_sql("""select a.annotation_group_id, a.h5ad_column, av.annotation_value_id, av.h5ad_value, a.modality
+def get_annotation_definition_df(h5ad_columns: List[str]):
+    annotation_definition_df = pd.read_sql("""select a.annotation_group_id, a.h5ad_column, av.annotation_value_id, av.h5ad_value
             from annotation_group a
             join annotation_value av on av.annotation_group_id = a.annotation_group_id
-            where a.h5ad_column = any( %(h5ad_columns)s ) and modality = %(modality)s""", engine,
-                                           params={'h5ad_columns': h5ad_columns,
-                                                   'modality': modality if modality else ''})
+            where a.h5ad_column = any( %(h5ad_columns)s )""", engine,
+                                           params={'h5ad_columns': h5ad_columns})
 
     return annotation_definition_df
 
 
-def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData, modality=None):
+def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData):
     logging.info('importing sample annotations')
     import_sample_annotations = data.uns['cellenium']['main_sample_attributes'].tolist()
     import_sample_annotations.extend(data.uns['cellenium'].get('advanced_sample_attributes', []))
@@ -261,18 +260,15 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
 
             r = connection.execute(
                 text("""SELECT annotation_group_id
-                    FROM annotation_group WHERE h5ad_column=:h5ad_column AND modality=:modality"""), {
-                    'h5ad_column': annotation_col,
-                    'modality': modality
+                    FROM annotation_group WHERE h5ad_column=:h5ad_column"""), {
+                    'h5ad_column': annotation_col
                 }).fetchone()
             if r is None:
-                r = connection.execute(text("""INSERT INTO annotation_group (h5ad_column, display_group, modality)
-                            VALUES (:h5ad_column, :h5ad_column_display, :modality)
+                r = connection.execute(text("""INSERT INTO annotation_group (h5ad_column, display_group)
+                            VALUES (:h5ad_column, :h5ad_column_display)
                             RETURNING annotation_group_id"""), {
                     'h5ad_column': f'{annotation_col}',
-                    'h5ad_column_display': annotation_col_clean,
-                    'modality': modality
-
+                    'h5ad_column_display': annotation_col_clean
                 }).fetchone()
             annotation_group_id = r[0]
             connection.execute(text("""INSERT INTO study_annotation_group_ui (study_id, annotation_group_id, is_primary, ordering, differential_expression_calculated)
@@ -301,28 +297,27 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
                                            'h5ad_value_display': value.replace('_', ' ')
                                        })
 
-    annotation_definition_df = get_annotation_definition_df(import_sample_annotations, modality)
+    annotation_definition_df = get_annotation_definition_df(import_sample_annotations)
 
-    with engine.connect() as connection:
-        data_sample_annotations = data.obs.copy()
-        data_sample_annotations = data_sample_annotations.merge(data_samples_df,
-                                                                left_index=True, right_on='h5ad_obs_key')
-        for h5ad_column in import_sample_annotations:
-            palette = _get_palette(data, h5ad_column)
+    data_sample_annotations = data.obs.copy()
+    data_sample_annotations = data_sample_annotations.merge(data_samples_df,
+                                                            left_index=True, right_on='h5ad_obs_key')
+    for h5ad_column in import_sample_annotations:
+        palette = _get_palette(data, h5ad_column)
 
-            h5ad_one_annotation_df = data_sample_annotations[[h5ad_column, 'study_sample_id']].copy()
-            one_annotation_definition_df = annotation_definition_df[annotation_definition_df.h5ad_column == h5ad_column]
-            annotation_df = h5ad_one_annotation_df.merge(one_annotation_definition_df,
-                                                         left_on=h5ad_column, right_on='h5ad_value')
+        h5ad_one_annotation_df = data_sample_annotations[[h5ad_column, 'study_sample_id']].copy()
+        one_annotation_definition_df = annotation_definition_df[annotation_definition_df.h5ad_column == h5ad_column]
+        annotation_df = h5ad_one_annotation_df.merge(one_annotation_definition_df,
+                                                     left_on=h5ad_column, right_on='h5ad_value')
 
-            annotation_df['color'] = annotation_df.apply(lambda row: palette[row.h5ad_value], axis=1)
-            annotation_df = annotation_df[['study_sample_id', 'annotation_value_id', 'color']].copy()
-            annotation_df['study_id'] = study_id
-            annotation_df = annotation_df.groupby(['study_id', 'annotation_value_id', 'color'])[
-                'study_sample_id'].apply(
-                list).reset_index().rename(columns={'study_sample_id': 'study_sample_ids'})
+        annotation_df['color'] = annotation_df.apply(lambda row: palette[row.h5ad_value], axis=1)
+        annotation_df = annotation_df[['study_sample_id', 'annotation_value_id', 'color']].copy()
+        annotation_df['study_id'] = study_id
+        annotation_df = annotation_df.groupby(['study_id', 'annotation_value_id', 'color'])[
+            'study_sample_id'].apply(
+            list).reset_index().rename(columns={'study_sample_id': 'study_sample_ids'})
 
-            import_df(annotation_df, 'study_sample_annotation')
+        import_df(annotation_df, 'study_sample_annotation')
 
 
 def import_study_layer_expression(study_id: int, layer_name: int, data_genes_df, data_samples_df,
@@ -382,14 +377,14 @@ def import_study_layer_expression(study_id: int, layer_name: int, data_genes_df,
 '''
 
 
-def import_differential_expression(study_id: int, data_genes_df, data: AnnData | MuData, modality=None):
+def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
     if 'differentially_expressed_genes' not in data.uns['cellenium']:
         return
     logging.info('importing differentially expressed genes')
     df = data.uns['cellenium']['differentially_expressed_genes']
     df = df.merge(data_genes_df, left_on='names', right_on='h5ad_var_key')
 
-    annotation_definition_df = get_annotation_definition_df(df['attribute_name'].unique().tolist(), modality)
+    annotation_definition_df = get_annotation_definition_df(df['attribute_name'].unique().tolist())
     df = df.merge(annotation_definition_df, left_on=['attribute_name', 'ref_attr_value'],
                   right_on=['h5ad_column', 'h5ad_value'])
     df['study_id'] = study_id
@@ -507,7 +502,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
                 cur_data = data.mod[modality]
             else:
                 cur_data = data
-            import_study_sample_annotation(study_id, data_samples_df, cur_data, modality)
+            import_study_sample_annotation(study_id, data_samples_df, cur_data)
 
         for modality in modalities.items():
             data_type = modality[1]  # the data_type
@@ -518,17 +513,19 @@ def import_study(filename: str, analyze_database: bool) -> int:
             meta_data = data.uns['cellenium']
             if (data_type == 'gene'):
                 data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
-                import_differential_expression(study_id, data_genes_df, cur_data, modality[0])
+                import_differential_expression(study_id, data_genes_df, cur_data)
             elif (data_type == 'region'):
                 data_region_df = import_region_base_and_study(study_id, cur_data,
                                                               meta_data)  # since regions from study to study change we import those which are not yet in the database
-                import_differential_expression(study_id, data_region_df, cur_data, modality[0])
+                import_differential_expression(study_id, data_region_df, cur_data)
             elif (data_type == 'protein_antibody_tag'):
                 data_protein_df = import_study_protein_antibody_tag(study_id, cur_data, meta_data)
-                import_differential_expression(study_id, data_protein_df, cur_data, modality[0])
+                import_differential_expression(study_id, data_protein_df, cur_data)
 
 
-        study_layer_id = _generate_study_layer(study_id, 'umap', 'gene')
+        # TODO instead of 'layername' use the real layer name (admittedly these are invisible in the UI...)
+        # TODO the 'gene' omics type is useless as long as all modalities get imported into the same layer. Maybe remove omics type from layer
+        study_layer_id = _generate_study_layer(study_id, 'layername', 'gene')
         for modality in modalities.items():
             omics_type = modality[1]  # the data_type
             if file_extension == 'h5mu':

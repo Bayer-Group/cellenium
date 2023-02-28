@@ -182,8 +182,7 @@ select gui.study_id,
        gui.is_primary,
        gui.ordering,
        gui.differential_expression_calculated,
-       g.display_group,
-       g.modality
+       g.display_group
 from study_annotation_group_ui gui
          join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
 comment on view study_annotation_frontend_group is

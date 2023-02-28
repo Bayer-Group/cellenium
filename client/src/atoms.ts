@@ -165,14 +165,15 @@ export const studyState = selector<Study | undefined>({
                 if (response.data.study.studyOmicsTransposedList.length === 0) {
                     throw Error('no genes');
                 }
-                // do some computations, e.g. generate arquero table of a received record list...
                 const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
+                const omicsTypes = studyOmicsTable.rollup({omicsTypes: aq.op.array_agg_distinct('omicsType')}).array('omicsTypes')[0];
                 const s: Study = {
                     ...response.data.study,
                     samplesProjectionTables: new Map(response.data.study.studySampleProjectionSubsamplingTransposedList.map(tl => [tl.modality?`${tl.modality}:${tl.projectionType}`:tl.projectionType, buildSampleProjectionTable(tl)])),
                     samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
                     studyOmicsTable,
                     studyOmicsMap: new Map(studyOmicsTable.objects().map(o => [(o as Omics).omicsId, (o as Omics)])),
+                    omicsTypes,
                     annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
                     annotationValueMap: new Map(response.data.study.annotationGroupsList.map((g) => g.annotationValuesList).flat(2).map((v: any) => [v.annotationValueId, v]))
                 };

@@ -188,7 +188,7 @@ const ExpandedComponent = ({data}: any) => {
         <pre>
             <Center>
                 <Stack>
-            <Text weight={800} size={'xs'}>Corresponding gene(s)</Text>
+                {linkedGenes && linkedGenes.length > 0 && <Text weight={800} size={'xs'}>Corresponding gene(s)</Text>}
                 {linkedGenes && linkedGenes.length > 0 &&
                     linkedGenes
                 }
@@ -207,11 +207,6 @@ const DEGTable = ({annotationId}: Props) => {
     const study = useRecoilValue(studyState);
     const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
 
-    let selectedAGM = study?.annotationGroupMap;
-    let modality: string | undefined = 'rna';
-    if (annotationGroup && selectedAGM && selectedAGM.get(annotationGroup) !== undefined) {
-        modality = selectedAGM.get(annotationGroup)?.modality;
-    }
     const {data, error, loading} = useDegQuery({
         variables: {
             annotationValueId: annotationId,
@@ -249,11 +244,11 @@ const DEGTable = ({annotationId}: Props) => {
             })
         }
     }
-    console.log('XX', data?.differentialExpressionVsList)
 
     return (
         <Stack justify={'flex-start'} align={'center'} w={'100%'}>
-            {data && data.differentialExpressionVsList.length > 0 && (modality === 'atac' || modality === "prot") &&
+            {/* TODO ExpandedComponent can also link from gene to protein, so for a multi-omics study all omics row types can be expanded */}
+            {data && study && data.differentialExpressionVsList.length > 0 && study.omicsTypes.length > 1 &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}
@@ -269,7 +264,7 @@ const DEGTable = ({annotationId}: Props) => {
                            expandableRowsComponent={ExpandedComponent}
                 />
             }
-            {data && data.differentialExpressionVsList.length > 0 && (modality === 'rna' || !modality) &&
+            {data && study && data.differentialExpressionVsList.length > 0 && study.omicsTypes.length === 1 &&
                 <DataTable dense columns={columns(handleClick, handleColorClick)}
                            data={data.differentialExpressionVsList}
                            defaultSortFieldId={3}

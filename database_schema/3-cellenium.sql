@@ -208,11 +208,10 @@ CREATE TABLE annotation_group
 (
     annotation_group_id serial primary key,
     h5ad_column         text not null,
-    display_group       text not null,
-    modality text
+    display_group       text not null
 );
 grant select on annotation_group to postgraphile;
-create unique index annotation_group_1 on annotation_group (h5ad_column, modality);
+create unique index annotation_group_1 on annotation_group (h5ad_column);
 
 -- e.g. an annotation category value, like 'lymphocyte'
 CREATE TABLE annotation_value

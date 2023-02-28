@@ -1,4 +1,4 @@
-import {AnnotationGrpFragment, AnnotationValue, StudyBasicsFragment} from "./generated/types";
+import {AnnotationGrpFragment, AnnotationValue, OmicsType, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
 
@@ -30,6 +30,7 @@ export type Study = StudyBasicsFragment & {
     studyOmicsMap: Map<number, Omics>;
     annotationGroupMap: Map<number, AnnotationGrpFragment>;
     annotationValueMap: Map<number, AnnotationGrpFragment['annotationValuesList'][0]>;
+    omicsTypes: OmicsType[];
 };
 
 export type SelectBoxItem = {

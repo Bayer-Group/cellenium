@@ -63,7 +63,6 @@ fragment AnnotationGrp on StudyAnnotationFrontendGroup {
     isPrimary
     ordering
     displayGroup
-    modality
     differentialExpressionCalculated
     annotationValuesList {
       annotationValueId
