@@ -406,13 +406,12 @@ grant select on differential_expression_v to postgraphile;
 CREATE TABLE study_layer
 (
     study_layer_id serial primary key,
-    study_id       int        not null,
+    study_id       int  not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
-    omics_type     omics_type not null,
-    layer          text       not null
-
+    omics_type     omics_type,
+    layer          text not null
 );
 grant select on study_layer to postgraphile;
 create unique index study_layer_ui1 on study_layer (study_id, layer, omics_type);

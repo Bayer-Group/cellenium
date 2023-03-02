@@ -321,7 +321,7 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
         import_df(annotation_df, 'study_sample_annotation')
 
 
-def import_study_layer_expression(study_id: int, layer_name: int, data_genes_df, data_samples_df,
+def import_study_layer_expression(study_id: int, layer_name: str, data_genes_df, data_samples_df,
                                   data: AnnData, metadata, omics_type, study_layer_id: int):
     if layer_name is None:
         layer_name = metadata['X_pseudolayer_name']
@@ -412,6 +412,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
         stored_filename = Path(filename).relative_to("scratch").as_posix()
     """
 
+    logging.info(f'importing study from file {filename}')
     file_extension = Path(filename).suffix
     file_extension = file_extension[1:] if file_extension.startswith('.') else file_extension
     if file_extension == 'h5ad':
@@ -488,17 +489,14 @@ def import_study(filename: str, analyze_database: bool) -> int:
                 data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
                 import_differential_expression(study_id, data_genes_df, cur_data)
             elif (data_type == 'region'):
-                data_region_df = import_region_base_and_study(study_id, cur_data,
-                                                              meta_data)  # since regions from study to study change we import those which are not yet in the database
+                # since regions from study to study change we import those which are not yet in the database
+                data_region_df = import_region_base_and_study(study_id, cur_data, meta_data)
                 import_differential_expression(study_id, data_region_df, cur_data)
             elif (data_type == 'protein_antibody_tag'):
                 data_protein_df = import_study_protein_antibody_tag(study_id, cur_data, meta_data)
                 import_differential_expression(study_id, data_protein_df, cur_data)
 
-
-        # TODO instead of 'layername' use the real layer name (admittedly these are invisible in the UI...)
-        # TODO the 'gene' omics type is useless as long as all modalities get imported into the same layer. Maybe remove omics type from layer
-        study_layer_id = _generate_study_layer(study_id, 'layername', 'gene')
+        study_layer_id = _generate_study_layer(study_id, 'default-layer', None)
         for modality in modalities.items():
             omics_type = modality[1]  # the data_type
             if file_extension == 'h5mu':
@@ -509,21 +507,19 @@ def import_study(filename: str, analyze_database: bool) -> int:
                 cur_data_samples_df = data_samples_df.loc[data_samples_df.h5ad_obs_key.isin(cur_data.obs.index), :]
 
             meta_data = data.uns['cellenium']
-
             if omics_type == 'gene':
                 import_study_layer_expression(study_id, None, data_genes_df, cur_data_samples_df, cur_data, meta_data,
                                               omics_type, study_layer_id)
-            # TODO: layers, e.g. imputed matrices not supported yet
-            #                for layer_name in cur_data.layers.keys():
-            #                    import_study_layer_expression(study_id, layer_name, data_genes_df, cur_data_samples_df, cur_data,
-            #                                                  meta_data, omics_type)
+                # import more layers if they are present in the dataset (gene expression only
+                # see https://github.com/Bayer-Group/cellenium/issues/24
+                for layer_name in cur_data.layers.keys():
+                    further_study_layer_id = _generate_study_layer(study_id, layer_name, 'gene')
+                    import_study_layer_expression(study_id, layer_name, data_genes_df, cur_data_samples_df, cur_data,
+                                                  meta_data, omics_type, further_study_layer_id)
+
             if omics_type == 'region':
                 import_study_layer_expression(study_id, None, data_region_df, cur_data_samples_df, cur_data, meta_data,
                                               omics_type, study_layer_id)
-            # TODO: layers not supported yet
-            #                for layer_name in cur_data.layers.keys():
-            #                    import_study_layer_expression(study_id, layer_name, data_region_df, data_samples_df, cur_data,
-            #                                                  meta_data, omics_type)
             if omics_type == 'protein_antibody_tag':
                 import_study_layer_expression(study_id, None, data_protein_df, cur_data_samples_df, cur_data, meta_data,
                                               omics_type, study_layer_id)
