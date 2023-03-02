@@ -80,11 +80,11 @@ CREATE UNIQUE INDEX omics_gene_1 on omics_gene (ensembl_gene_id);
 DROP TABLE IF EXISTS omics_region CASCADE;
 CREATE TABLE omics_region
 (
-    region_id int  not null references omics_base primary key,
-    chromosome text NOT NULL,
-    start_position int NOT NULL,
-    end_position int NOT NULL,
-    region    text NOT NULL
+    region_id      int  not null references omics_base primary key,
+    chromosome     text NOT NULL,
+    start_position int  NOT NULL,
+    end_position   int  NOT NULL,
+    region         text NOT NULL
 );
 grant select on omics_region to postgraphile;
 
@@ -95,7 +95,7 @@ DROP TABLE IF EXISTS omics_region_gene;
 CREATE TABLE omics_region_gene
 (
     region_id int not null references omics_region,
-    gene_id          int not null references omics_gene
+    gene_id   int not null references omics_gene
 );
 grant select on omics_region_gene to postgraphile;
 DROP INDEX IF EXISTS omics_region_gene_1;
@@ -163,9 +163,9 @@ select b.omics_id,
        og.entrez_gene_ids,
        og.hgnc_symbols,
        ogr.region,
-        array_remove(array_agg(otfg.gene_id)||
-          array_agg(opatg.gene_id)||
-          array_agg(ogrg.gene_id), null ) as linked_genes
+       array_remove(array_agg(otfg.gene_id) ||
+                    array_agg(opatg.gene_id) ||
+                    array_agg(ogrg.gene_id), null) as linked_genes
 from omics_base b
          left join omics_gene og on b.omics_id = og.gene_id
          left join omics_region ogr on b.omics_id = ogr.region_id
@@ -244,15 +244,16 @@ grant select on study_annotation_group_ui to postgraphile;
 
 CREATE TABLE study_sample
 (
-    study_id        int not null,
+    study_id        int  not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    study_sample_id int not null,
+    study_sample_id int  not null,
     constraint pk_study_sample primary key (study_id, study_sample_id),
 
-    h5ad_obs_index  int not null
+    h5ad_obs_index  int  not null,
+    h5ad_obs_key    text not null
 );
 grant select on study_sample to postgraphile;
 --create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
@@ -266,7 +267,7 @@ CREATE TABLE study_sample_projection
         FOREIGN KEY (study_id, study_sample_id)
             REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
     projection_type     text    not null,
-    modality text,
+    modality            text,
     projection          real[]  not null,
     -- subsampling reduces overlapping points in a projection
     display_subsampling boolean not null

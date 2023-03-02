@@ -219,7 +219,7 @@ def import_study_sample(study_id: int, data: AnnData | MuData, file_extension):
     data_samples_df['study_sample_id'] = range(1, len(data_samples_df) + 1)
     data_samples_df = data_samples_df[['study_sample_id', 'h5ad_obs_index', 'h5ad_obs_key']]
     data_samples_df['study_id'] = study_id
-    import_df(data_samples_df[['study_sample_id', 'h5ad_obs_index', 'study_id']], 'study_sample')
+    import_df(data_samples_df[['study_sample_id', 'h5ad_obs_index', 'h5ad_obs_key', 'study_id']], 'study_sample')
     with engine.connect() as connection:
         connection.execute(text("UPDATE study SET cell_count=:cell_count WHERE study_id=:study_id"), {
             'study_id': study_id,
