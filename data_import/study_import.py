@@ -9,6 +9,7 @@ import mudata
 import numpy as np
 import pandas as pd
 import scanpy as sc
+import scipy.sparse as sparse
 import sys
 import tqdm
 from anndata import AnnData
@@ -330,51 +331,47 @@ def import_study_layer_expression(study_id: int, layer_name: int, data_genes_df,
     logging.info(f'importing expression matrix {layer_name} {omics_type}')
 
     with engine.connect() as connection:
-        df_expr = generate_dense_expression_df_for_import(data, data_samples_df, data_genes_df, study_layer_id)
-        df_expr = df_expr[['study_layer_id', 'omics_id', 'study_sample_ids', 'values']]
-
-        # write df to string
-        f = io.StringIO()
-        df_expr.to_csv(f, index=False, header=False, sep="|")
-        f.seek(0)
-
-        # send to db
-        cursor = connection.connection.cursor()
-        logging.info('write expression to DB')
-        cursor.copy_from(f, 'expression', columns=['study_layer_id', 'omics_id', 'study_sample_ids', 'values'], sep='|')
-        connection.connection.commit()
-        cursor.close()
-        f.close()
-
-
-'''
         sparse_X = sparse.csc_matrix(X)
 
         map_h5ad_var_index_to_omics_index = np.zeros(shape=[sparse_X.shape[1]], dtype=np.uint32)
         for i, row in data_genes_df.iterrows():
             map_h5ad_var_index_to_omics_index[row['h5ad_var_index']] = row['omics_id']
 
+        samples_of_modality_df = data.obs.join(
+            data_samples_df.set_index('h5ad_obs_key')[['study_sample_id']]).reset_index()
         map_h5ad_obs_index_to_studysample_index = np.zeros(shape=[sparse_X.shape[0]], dtype=np.uint32)
-        for i, row in data_samples_df.iterrows():
-            map_h5ad_obs_index_to_studysample_index[row['h5ad_obs_index']] = row['study_sample_id']
+        for i, row in samples_of_modality_df.iterrows():
+            map_h5ad_obs_index_to_studysample_index[i] = row['study_sample_id']
 
+        buffer = io.StringIO()
+        buffered_gene_cnt = 0
+        cursor = connection.connection.cursor()
         for gene_i in tqdm.tqdm(range(0, sparse_X.shape[1]), desc=f'import expression matrix "{layer_name}"'):
-            csc_gene_data = sparse.find(sparse_X.T[gene_i])
-            data_cell_indexes = csc_gene_data[1]
-            data_values = csc_gene_data[2]
-
-            # omics_ids = map_h5ad_var_index_to_omics_index[data_gene_indexes]
             omics_id = map_h5ad_var_index_to_omics_index[gene_i]
             if omics_id > 0:
-                studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
-                connection.execute(text("""INSERT INTO expression (study_layer_id, omics_id, study_sample_ids, values)
-                            VALUES (:study_layer_id, :omics_id, :study_sample_ids, :values)"""), {
-                    'study_layer_id': study_layer_id,
-                    'omics_id': omics_id,
-                    'study_sample_ids': studysample_ids.tolist(),
-                    'values': data_values.tolist()
-                })
-'''
+                csc_gene_data = sparse.find(sparse_X.T[gene_i])
+                data_cell_indexes = csc_gene_data[1]
+                data_values = csc_gene_data[2]
+                if data_values.size > 0:
+                    studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
+                    buffer.write(str(study_layer_id) + '|' + str(omics_id) + '|{')
+                    # the [None, :] reshaping is just a workaround to get np.savetxt into writing separators at all
+                    np.savetxt(buffer, studysample_ids[None, :], fmt='%i', delimiter=',', newline=' ')
+                    buffer.write('}|{')
+                    np.savetxt(buffer, data_values[None, :], fmt='%.8e', delimiter=',', newline=' ')
+                    buffer.write('}\n')
+                    buffered_gene_cnt += 1
+            if buffered_gene_cnt == 500 or (gene_i == sparse_X.shape[1] - 1 and buffered_gene_cnt > 0):
+                buffer.seek(0)
+                cursor.copy_from(buffer, 'expression',
+                                 columns=['study_layer_id', 'omics_id', 'study_sample_ids', 'values'],
+                                 sep='|')
+                buffer.close()
+                buffer = io.StringIO()
+                buffered_gene_cnt = 0
+        connection.connection.commit()
+        buffer.close()
+        cursor.close()
 
 
 def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
@@ -402,30 +399,6 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
                                'study_id': study_id,
                                'annotation_group_ids': df['annotation_group_id'].unique().tolist()
                            })
-
-
-def generate_dense_expression_df_for_import(adata: AnnData, samples_df: pd.DataFrame, data_genes_df: pd.DataFrame,
-                                            study_layer_id: int):
-    # replace columns with omics_ids
-    df = adata.to_df()
-    df = df.T.join(data_genes_df.set_index('h5ad_var_key')[['omics_id']]).dropna()
-    df.omics_id = df.omics_id.astype(int)
-    df = df.set_index('omics_id').T
-    # replace the index with study_sample_ids
-    df = df.join(samples_df.set_index('h5ad_obs_key')[['study_sample_id']]).set_index('study_sample_id')
-    # generate the to be imported dataframe
-    collect = []
-    for omics_id in tqdm.tqdm(df.columns):
-        tmp = df.loc[(df.loc[:, omics_id] > 0), omics_id]
-        study_sample_ids = tmp.index.astype(str).tolist()
-        values = tmp.astype(str).tolist()
-        if len(study_sample_ids) > 0:
-            collect.append(
-                {"study_sample_ids": list_to_pgarray(study_sample_ids), "values": list_to_pgarray(values),
-                 'omics_id': omics_id})
-    df_ret = pd.DataFrame(collect)
-    df_ret['study_layer_id'] = study_layer_id
-    return df_ret
 
 
 def import_study(filename: str, analyze_database: bool) -> int:
