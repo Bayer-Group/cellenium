@@ -3,6 +3,7 @@ dependencies:
   - python=3.10
   - postgresql-plpython=15.1
   - scanpy=1.9.*
+  - muon
   - pandas=1.5.*
   - numpy=1.23.*
   - numba
