@@ -168,7 +168,7 @@ const ExpandedComponent = ({data}: any) => {
         let gene = study?.studyOmicsMap.get(id);
         if (gene !== undefined)
             return (
-                <Group spacing={'xs'}>
+                <Group key={id} spacing={'xs'}>
                     <Text size={'xs'}>{gene['displaySymbol']}</Text>
                     <ActionIcon title={'add to gene store'} color={'blue.3'}
                                 onClick={() => showExpression(gene as Omics)}
