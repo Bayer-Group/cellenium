@@ -18,6 +18,7 @@ from psycopg2.extras import Json
 from scanpy.pl._tools.scatterplots import _get_palette
 from sqlalchemy import text
 
+import h5ad_open
 from postgres_utils import engine, import_df, NumpyEncoder, list_to_pgarray
 
 logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
@@ -163,6 +164,7 @@ def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     import_df(data_genes_df[['h5ad_var_index', 'omics_id', 'study_id']], 'study_omics')
     return data_genes_df[['h5ad_var_index', 'h5ad_var_key', 'omics_id']]
 
+
 def import_study_protein_antibody_tag(study_id: int, data: AnnData, metadata: Dict):
     logging.info('importing protein/antibody definitions of study')
     match_df = pd.read_sql(
@@ -201,7 +203,7 @@ def import_projection(data, data_samples_df, study_id, key, modality=None):
 
 
 def _projection_list(data: AnnData | MuData, filetype='h5ad'):
-    if filetype == 'h5ad':
+    if isinstance(data, AnnData):
         return data.uns['cellenium'].get('import_projections', np.array(['umap'])).tolist()
     else:
         tmp = data.uns['cellenium'].get('import_projections')
@@ -211,7 +213,7 @@ def _projection_list(data: AnnData | MuData, filetype='h5ad'):
         return retlist
 
 
-def import_study_sample(study_id: int, data: AnnData | MuData, file_extension):
+def import_study_sample(study_id: int, data: AnnData | MuData):
     logging.info('importing sample definitions')
     data_samples_df = data.obs.copy()
     data_samples_df = data_samples_df.reset_index(names='h5ad_obs_key')
@@ -225,8 +227,8 @@ def import_study_sample(study_id: int, data: AnnData | MuData, file_extension):
             'study_id': study_id,
             'cell_count': len(data_samples_df)
         })
-    if file_extension == 'h5ad':
-        for projection in _projection_list(data, file_extension):
+    if isinstance(data, AnnData):
+        for projection in _projection_list(data):
             import_projection(data, data_samples_df, study_id, projection)
     else:
         for modality, projections in data.uns['cellenium']['import_projections'].items():
@@ -413,12 +415,11 @@ def import_study(filename: str, analyze_database: bool) -> int:
     """
 
     logging.info(f'importing study from file {filename}')
-    file_extension = Path(filename).suffix
-    file_extension = file_extension[1:] if file_extension.startswith('.') else file_extension
-    if file_extension == 'h5ad':
-        data = sc.read_h5ad(filename)
-    else:
-        data = mudata.read_h5mu(filename)
+    data = h5ad_open.h5ad_h5mu_read(filename)
+    stored_filename = filename
+    if stored_filename.startswith('scratch'):
+        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+        stored_filename = Path(filename).relative_to("scratch").as_posix()
 
     def _config_optional_list(key: str):
         if data.uns['cellenium'].get(key) is not None:
@@ -449,15 +450,13 @@ def import_study(filename: str, analyze_database: bool) -> int:
                :projections, :reader_permissions, :admin_permissions, :legacy_config
             )
             RETURNING study_id"""), {
-            # TODO 'filename': stored_filename,
-            'filename': Path(filename).relative_to("scratch").as_posix(),
-            # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+            'filename': stored_filename,
             'study_name': data.uns['cellenium']['title'],
             'description': data.uns['cellenium']['description'],
             'tissue_ncit_ids': data.uns['cellenium']['ncit_tissue_ids'].tolist(),
             'disease_mesh_ids': data.uns['cellenium']['mesh_disease_ids'].tolist(),
             'organism_tax_id': data.uns['cellenium']['taxonomy_id'],
-            'projections': _projection_list(data, file_extension),
+            'projections': _projection_list(data),
             'reader_permissions': _config_optional_list('initial_reader_permissions'),
             'admin_permissions': _config_optional_list('initial_admin_permissions'),
             'legacy_config': Json(data.uns['cellenium'].get('legacy_config'),
@@ -465,14 +464,14 @@ def import_study(filename: str, analyze_database: bool) -> int:
         })
         study_id = r.fetchone()[0]
         logging.info("importing %s as study_id %s", filename, study_id)
-        if file_extension == 'h5mu':
+        if isinstance(data, MuData):
             modalities = data.uns['cellenium']['modalities']
         else:
             modalities = {'rna': 'gene'}
 
-        data_samples_df = import_study_sample(study_id, data, file_extension)
+        data_samples_df = import_study_sample(study_id, data)
         for modality in modalities.keys():
-            if file_extension == 'h5mu':
+            if isinstance(data, MuData):
                 cur_data = data.mod[modality]
             else:
                 cur_data = data
@@ -480,7 +479,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
         for modality in modalities.items():
             data_type = modality[1]  # the data_type
-            if file_extension == 'h5mu':
+            if isinstance(data, MuData):
                 cur_data = data.mod[modality[0]]
             else:
                 cur_data = data
@@ -499,7 +498,7 @@ def import_study(filename: str, analyze_database: bool) -> int:
         study_layer_id = _generate_study_layer(study_id, 'default-layer', None)
         for modality in modalities.items():
             omics_type = modality[1]  # the data_type
-            if file_extension == 'h5mu':
+            if isinstance(data, MuData):
                 cur_data = data.mod[modality[0]]
                 cur_data_samples_df = data_samples_df
             else:
