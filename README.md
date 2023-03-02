@@ -43,6 +43,8 @@ Cellenium setup, including execution of study data processing notebooks (initial
 to run).
 
 ```bash
+# builds docker images and runs the whole stack
+# until you run the "make reset_database" step below, error messages about the missing "postgraphile" user pile up... you can ignore them for now.
 docker-compose up
 conda env create -f data_import/environment.yml
 conda activate cellenium_import
