@@ -96,8 +96,7 @@ select s.study_id,
        s.cell_count,
        (select min(sl.study_layer_id)
         from study_layer sl
-        where sl.study_id = s.study_id
-          and omics_type = 'gene') default_study_layer_id
+        where sl.study_id = s.study_id) default_study_layer_id
 from study s
 where s.visible = True;
 grant select on study_overview to postgraphile;
