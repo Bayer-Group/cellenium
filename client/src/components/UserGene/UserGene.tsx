@@ -99,7 +99,10 @@ const UserGene = ({gene, multiple = false, findCoexpressors = false}: Props) => 
                 </Grid.Col>
 
                 <Grid.Col span={4}>
+                    <Group noWrap={true} spacing={1}>
                     <Text size={'xs'}>{gene.displaySymbol}</Text>
+                    <Text size={8}>({gene.omicsType})</Text>
+                        </Group>
                 </Grid.Col>
 
 

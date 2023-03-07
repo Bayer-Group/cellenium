@@ -6,7 +6,6 @@ var set = require('lodash.set');
 
 // see express-jwt implementation example
 var inspectJwtMiddleware = function (req, res, next) {
-    // console.log('all headers', req.headers);
     if (process.env.AUTH_HEADER_NAME) {
         header_value = req.headers[process.env.AUTH_HEADER_NAME];
         if (!header_value && process.env.AUTH_HEADER_MOCK_VALUE) {
@@ -32,7 +31,6 @@ app.use(
                 if (req.auth_header_value) {
                     settings["postgraphile.auth_header_value"] = req.auth_header_value;
                 }
-                // console.log('settings', settings);
                 return settings;
             },
             watchPg: !!process.env.OWNER_DATABASE_URL,

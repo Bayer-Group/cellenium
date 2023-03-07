@@ -84,7 +84,7 @@ function GeneSearchBar({humanOnly, onGeneSelection}: Props) {
             <SpeciesSelect data={speciesList} species={species} handleChange={setSpecies}/>
             <Stack spacing={0} style={{flexGrow: 1}}>
                 <Text size={'xs'} weight={800}>
-                    Enter gene symbol(s)
+                    Enter identifier(s)
                 </Text>
 
                 < Group spacing={4} position={'left'} align={'center'}

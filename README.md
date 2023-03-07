@@ -43,6 +43,8 @@ Cellenium setup, including execution of study data processing notebooks (initial
 to run).
 
 ```bash
+# builds docker images and runs the whole stack
+# until you run the "make reset_database" step below, error messages about the missing "postgraphile" user pile up... you can ignore them for now.
 docker-compose up
 conda env create -f data_import/environment.yml
 conda activate cellenium_import
@@ -51,6 +53,12 @@ make reset_database test_studydata_import
 
 # 'normal_studydata': real life studies (i.e. with full amount of cells and genes)
 make normal_studydata_import
+
+# we have one for atac
+make atac_studydata_import
+
+# and one for cite
+make cite_studydata_import
 ```
 
 The GraphQL API explorer is available at http://localhost:5000/postgraphile/graphiql . Postgraphile will listen

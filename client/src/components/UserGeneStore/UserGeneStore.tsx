@@ -30,14 +30,14 @@ const UserGeneStore = ({multiple = false, findCoexpressors=false}: Props) => {
                     </ActionIcon>
                     <Indicator color={indicatorColor} position={"middle-end"} inline offset={-20}
                                label={`${userGeneStore.length}`} size={20}>
-                        <Text size={'xs'}>Stored gene(s)</Text>
+                        <Text size={'xs'}>Stored genes/proteins/regions</Text>
                     </Indicator>
                 </Group>
             </Group>
             <Collapse in={storeOpened} transitionDuration={0} transitionTimingFunction="linear">
                 {userGeneStore.length === 0 ? <Text size={'xs'} color={'dimmed'}>No genes added yet.</Text> :
                     <Stack> <Group position={'left'} spacing={'xs'}>
-                        <Text size={'xs'} color={'dimmed'}>Remove all genes from store</Text>
+                        <Text size={'xs'} color={'dimmed'}>Remove everything from store</Text>
                         <ActionIcon size={'xs'} onClick={() => {
                             setSelectedGenes([]);
                             setUserGeneStore([]);

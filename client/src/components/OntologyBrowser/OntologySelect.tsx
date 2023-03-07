@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {SelectBoxItem} from "../../model";
-import {Select} from "@mantine/core";
+import {Center, SegmentedControl} from "@mantine/core";
 import {OntologyOverviewFragment} from "../../generated/types";
 
 type OSProps = {
@@ -17,6 +17,9 @@ const OntologySelect = ({ontologies, handleChange}: OSProps) => {
             label: ele.name
         }
     })
+    useEffect(()=>{
+        updateChange(selectOntologies[0].value)
+    },[]);
 
     function updateChange(item: string) {
         setValue(item)
@@ -24,15 +27,14 @@ const OntologySelect = ({ontologies, handleChange}: OSProps) => {
     }
 
     return (
-        <Select
-            value={value}
-            onChange={updateChange}
-            label={'Select ontology'}
-            placeholder={'Pick one'}
-            data={selectOntologies}
-        />
 
-
-    )
+        <Center>
+            <SegmentedControl
+                value={value}
+                onChange={updateChange}
+                data={selectOntologies}
+            />
+        </Center>
+    );
 }
 export default OntologySelect;

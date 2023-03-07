@@ -40,10 +40,12 @@ query deg($studyId: Int!, $annotationValueId: Int!) {
     omicsId
     studyId
     annotationValueId
+    omicsType
     displayName
     displaySymbol
     pvalueAdj
     log2Foldchange
+    linkedGenes
   }
 }
 
@@ -90,10 +92,12 @@ fragment StudyBasics on Study {
       annotationValueId
       studySampleIds
     }
+    projections
     studySampleProjectionSubsamplingTransposedList {
       projectionType
       studySampleId
       projection
+      modality
     }
 }
 
@@ -160,7 +164,7 @@ query StudyBasics($studyId: Int!) {
 }
 
 
-query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection:ProjectionType) {
+query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection:String) {
   expressionByOmicsIdsList(pStudyLayerId:$studyLayerId, pOmicsIds:$omicsIds, pSubsamplingProjection:$subsamplingProjection) {
     omicsId
     studySampleIds
@@ -241,11 +245,64 @@ query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $ann
   }
 }
 
-mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!) {
-  userAnnotationDefine(input: {pStudyId:$studyId, pAnnotationGroupName:$annotationGroupName, pSelectedSampleIds:$selectedSampleIds}) {
+mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
+  userAnnotationDefine(input: {pStudyId:$studyId, pAnnotationGroupName:$annotationGroupName, pSelectedSampleIds:$selectedSampleIds, pUnexpressedSamplesOmicsIds: $unexpressedSamplesOmicsIds}) {
     clientMutationId
     integer
   } 
 }
 
+fragment StudyAdminDetails on StudyAdminDetail {
+    studyId
+    studyName
+    description
+    filename
+    cellCount
+    tissueNcitIds
+    diseaseMeshIds
+    visible
+    externalWebsite
+    readerPermissions
+    readerPermissionGranted
+    adminPermissions
+    adminPermissionGranted
+}
+
+query studyAdminList {
+  studyAdminDetailsList {
+    ...StudyAdminDetails
+  }
+  userStudyUploadConfigured
+}
+
+mutation studyUpdate(
+    $studyId: Int!,
+    $studyName: String!,
+    $description: String,
+    $readerPermissions: [String!],
+    $adminPermissions: [String!],
+    $tissueNcitIds: [String!],
+    $diseaseMeshIds: [String!],
+    $visible: Boolean!,
+    $externalWebsite: String
+  ) {
+  updateStudy(input: {studyId: $studyId, patch: {
+    studyName: $studyName,
+    description: $description,
+    readerPermissions: $readerPermissions,
+    adminPermissions: $adminPermissions,
+    tissueNcitIds: $tissueNcitIds,
+    diseaseMeshIds: $diseaseMeshIds,
+    visible: $visible,
+    externalWebsite: $externalWebsite
+  }}) {
+    clientMutationId
+  }
+}
+
+mutation createS3TempCredentials {
+  createS3TempCredentials(input: {}) {
+    strings
+  }
+}
 `;

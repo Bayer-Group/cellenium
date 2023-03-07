@@ -96,11 +96,10 @@ select s.study_id,
        s.cell_count,
        (select min(sl.study_layer_id)
         from study_layer sl
-        where sl.study_id = s.study_id
-          and omics_type = 'gene') default_study_layer_id
+        where sl.study_id = s.study_id) default_study_layer_id
 from study s
 where s.visible = True;
-
+grant select on study_overview to postgraphile;
 
 CREATE VIEW study_overview_ontology
     with (security_invoker = true)
@@ -149,6 +148,7 @@ group by study_cell_ontology_ids.study_id,
          study_cell_ontology_ids.ont_codes,
          ont.labels;
 comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+grant select on study_overview_ontology to postgraphile;
 
 
 drop view if exists _all_used_ontology_ids cascade;
@@ -172,7 +172,7 @@ select ont_code_lists.ontology, l.*
 from ont_code_lists,
      concept_hierarchy_minimum_trees_parents_lists(ont_code_lists.ontology,
                                                    ont_code_lists.ont_codes) l;
-
+grant select on tree_ontology to postgraphile;
 
 create view study_annotation_frontend_group
 as
@@ -186,6 +186,8 @@ from study_annotation_group_ui gui
          join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
 comment on view study_annotation_frontend_group is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
+grant select on study_annotation_frontend_group to postgraphile;
+
 
 create view study_annotation_frontend_value
 as
@@ -199,3 +201,26 @@ from study_sample_annotation ssa
          join annotation_value v on ssa.annotation_value_id = v.annotation_value_id;
 comment on view study_annotation_frontend_value is
     E'@foreignKey (study_id, annotation_group_id) references study_annotation_frontend_group (study_id, annotation_group_id)|@fieldName group|@foreignFieldName annotationValues';
+grant select on study_annotation_frontend_value to postgraphile;
+
+
+drop view if exists study_admin_details cascade;
+create view study_admin_details
+as
+select s.study_id,
+       s.study_name,
+       s.filename,
+       s.description,
+       s.external_website,
+       s.cell_count,
+       s.visible,
+       s.reader_permissions,
+       s.admin_permissions,
+       s.disease_mesh_ids,
+       s.tissue_ncit_ids,
+       case when sv.study_id is not null then True else False end "reader_permission_granted",
+       case when sa.study_id is not null then True else False end "admin_permission_granted"
+from study s
+         left join study_visible_currentuser sv on sv.study_id = s.study_id
+         left join study_administrable_currentuser sa on sa.study_id = s.study_id;
+grant select on study_admin_details to postgraphile;

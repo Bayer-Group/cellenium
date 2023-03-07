@@ -17,6 +17,8 @@ import numpy as np
 import scipy
 # from numba import njit
 from pathlib import Path
+from smart_open import open
+import io
 
 
 def sql_query(query):
@@ -32,6 +34,22 @@ def sql_query(query):
             return [row._mapping for row in r.fetchall()]
     r = plpy.execute(query)
     return [row for row in r]
+
+
+def h5ad_read(filename):
+    if str(filename).startswith('s3:'):
+        # AnnData's read_h5ad passes the "filename" parameter to h5py.File, which supports file-like objects in
+        # addition to filename strings. It is able to read an AnnData file directly from S3 using the python
+        # file-like object abstraction smart_open provides, however it seeks a lot and that causes read performance
+        # to drop significantly. So we're copying the h5ad file into an in-memory file and read from there.
+        s3_file_like_obj = open(filename, 'rb')
+        memory_file_like_obj = io.BytesIO(s3_file_like_obj.read())
+        s3_file_like_obj.close()
+        adata = sc.read_h5ad(memory_file_like_obj)
+        memory_file_like_obj.close()
+        return adata
+    else:
+        return sc.read_h5ad(filename)
 
 
 # numba is disabled, the function crashes if the correlation result is empty, e.g.
@@ -56,10 +74,11 @@ data = sql_query(f"""
       ON s.study_id=so.study_id
     WHERE omics_id={omics_id} AND s.study_id={study_id}
     """)
-fn = Path('/h5ad_store') / Path(data[0].get('filename')).name
 goi = data[0].get('h5ad_var_index')
-
-adata = sc.read(fn)
+fn = data[0].get('filename')
+if not fn.startswith('s3:'):
+    fn = Path('/h5ad_store') / Path(fn).name
+adata = h5ad_read(fn)
 df = adata.X.T.todense()
 
 chunks = np.array_split([_ for _ in range(0, adata.n_vars) if _ != goi], 8)
@@ -97,7 +116,7 @@ create type expression_by_omics as
 
 drop function if exists expression_by_omics_ids;
 create function expression_by_omics_ids(p_study_layer_id int, p_omics_ids int[],
-                                        p_subsampling_projection projection_type)
+                                        p_subsampling_projection text)
     returns setof expression_by_omics
     language plpgsql
     immutable
@@ -108,7 +127,7 @@ $$
 begin
     -- we could use a study-level flag that determines if display_subsampling is False for any sample,
     -- and use the else branch in this case
-    if p_subsampling_projection is not null then
+    if p_subsampling_projection is not null and p_subsampling_projection != '' then
         return query select e.omics_id,
                             array_agg(sample_id order by sample_id) study_sample_ids,
                             array_agg(value order by sample_id)     values

@@ -1,6 +1,6 @@
 import {useEffect, useMemo} from 'react';
 import * as aq from 'arquero';
-import {InputMaybe, ProjectionType, useExpressionByOmicsIdsQuery} from "./generated/types";
+import {InputMaybe, useExpressionByOmicsIdsQuery} from "./generated/types";
 import {ExpressionTable} from "./model";
 import {useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState} from "recoil";
 import {
@@ -8,7 +8,7 @@ import {
     highlightAnnotationState,
     pageState,
     selectedAnnotationState,
-    selectedGenesState,
+    selectedGenesState, selectedProjectionState,
     studyIdState,
     studyLayerIdState,
     studyState,
@@ -18,12 +18,13 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
     const studyLayerId = useRecoilValue(studyLayerIdState);
+    const projection = useRecoilValue(selectedProjectionState);
 
     const {data, loading} = useExpressionByOmicsIdsQuery({
         variables: {
             studyLayerId,
             omicsIds,
-            subsamplingProjection: (subsampling ? ProjectionType.Umap : null ) as InputMaybe<ProjectionType>
+            subsamplingProjection: (subsampling ? projection.split(':').pop() : null) as InputMaybe<string>
         },
         skip: omicsIds.length === 0
     });
@@ -97,6 +98,7 @@ export function useSetStudyFromUrl() {
     const setUserGenes = useSetRecoilState(userGenesState);
     const setSelectedGenes = useSetRecoilState(selectedGenesState);
     const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
+    const setSelectedProjection = useSetRecoilState(selectedProjectionState);
     useEffect(() => {
         if (study && study.studyId === studyIdUrlParamInt) {
             setValidParam('page', setPage);
@@ -107,6 +109,7 @@ export function useSetStudyFromUrl() {
                 setUserGenes(o ? [o] : []);
                 setSelectedGenes(o ? [o] : []);
             });
+            setValidParam('projection', setSelectedProjection, study.projections[0]);
             // clear query parameters, as we don't plan to update them and it's not nice to leave stale data in the URL
             navigate(`/study/${studyId}`, {replace: true});
         }

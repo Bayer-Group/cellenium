@@ -9,17 +9,14 @@ dependencies:
   - graphviz
   - pip
   - pip:
-    - pandas~=1.5.2
-    - numpy~=1.23.5
-    - scipy~=1.10.0
+    - -r study_import_requirements.txt
     - requests
     - matplotlib~=3.6.3
     - seaborn
-    - scanpy~=1.9.1
-    - sqlalchemy~=1.4.46
-    - psycopg2-binary
     - jupyterlab
     - pybiomart
     - lxml
     - cello-classify
     - owlready2
+    - pysam
+    - mudatasets

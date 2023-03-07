@@ -91,7 +91,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
         if (ontologies) {
             openModal({
                 modalId: 'ontologyBrowser',
-                title: 'Ontology browser',
+                title: <Text weight={800}>Ontology browser</Text>,
                 children: <OntologyBrowser ontologyTrees={ontologies} handleAddOntologyItem={(item: OntologyItem) => {
                     setSelectedFilters([...selectedFilters, {
                         value: item.label,

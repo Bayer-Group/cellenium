@@ -18,6 +18,7 @@ import {
 } from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
+import ProjectionSelectBox from "../components/ProjectionSelectBox/ProjectionSelectBox";
 
 const ANNOTATIONS = [
     {label: "bone cell", color: "#1f77b4"},
@@ -68,6 +69,7 @@ function DifferentialExpressionAnalysis() {
         <Group style={{height: '100vh'}} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
             <LeftSidePanel>
                 <Stack>
+                    <ProjectionSelectBox />
                     {annotationGroupId && <AnnotationGroupSelectBox/>}
                     {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated?
                     null:<Text color={'red'} size={'xs'}>No DEGs calculated for selected group.</Text>}
@@ -83,7 +85,7 @@ function DifferentialExpressionAnalysis() {
                     <UserGeneStore multiple={false}/>
                     <Space h={'xs'}/>
                     <Stack>
-                        <Divider size={"xs"} label={'Differentially expressed genes'}/>
+                        <Divider size={"xs"} label={'Differential expression table'}/>
                         {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated?
                     null:<Text color={'red'} size={'xs'}>No DEGs calculated for selected group.</Text>}
                         {!selectedAnnotation &&

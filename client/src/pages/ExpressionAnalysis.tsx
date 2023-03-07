@@ -9,7 +9,7 @@ import {
     RightSidePanel,
     UserGeneStore
 } from "../components";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {useRecoilValue, useSetRecoilState} from "recoil";
 import {
     annotationGroupIdState,
     selectedAnnotationFilterState,
@@ -17,17 +17,13 @@ import {
     studyIdState,
     studyLayerIdState,
     studyState,
-    userGenesState,
     userGeneStoreOpenState
 } from "../atoms";
 import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
 import {useExpressionValues} from "../hooks";
-import {
-    ExpressionByAnnotationFilter,
-    useExpressionByAnnotationQuery,
-    useExpressionViolinPlotQuery
-} from "../generated/types";
+import {useExpressionByAnnotationQuery, useExpressionViolinPlotQuery} from "../generated/types";
 import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";
+import ProjectionSelectBox from "../components/ProjectionSelectBox/ProjectionSelectBox";
 
 const analysisTypes = [
     {value: 'violinplot', label: 'Violin plot'},
@@ -134,8 +130,8 @@ function DotPlots() {
     return <>
         {heatmapDisplayData &&
             <Center style={{height: '100%', width: '100%'}}><ExpressionDotPlot data={heatmapDisplayData}
-                               annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
-                                       xAxis={"displaySymbol"}/></Center>
+                                                                               annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || "group"}
+                                                                               xAxis={"displaySymbol"}/></Center>
         }
     </>;
 }
@@ -165,6 +161,8 @@ const ExpressionAnalysis = () => {
                         <Divider my="sm"/>
                         <AnnotationFilterDisplay/>
                     </>)}
+
+                    {analysisType === 'projection' && <ProjectionSelectBox/>}
                 </Stack>
 
             </LeftSidePanel>
@@ -175,12 +173,13 @@ const ExpressionAnalysis = () => {
                 {analysisType === 'projection' && <ProjectionPlots/>}
                 {analysisType === 'dotplot' && <DotPlots/>}
                 {selectedGenes.length === 0 &&
-                    <Center style={{height: '100%', width: '100%'}}><Text c={'dimmed'}>Please select gene(s) from the <Text span weight={800}>gene
-                        store</Text>.</Text></Center>}
+                    <Center style={{height: '100%', width: '100%'}}><Text c={'dimmed'}>Please select gene(s) from
+                        the <Text span weight={800}>gene
+                            store</Text>.</Text></Center>}
             </main>
             <RightSidePanel>
                 <Stack>
-                    <Divider size={"xs"} label={'Gene store'}/>
+                    <Divider size={"xs"} label={'User store'}/>
                     <UserGeneStore multiple={true}/>
                 </Stack>
             </RightSidePanel>

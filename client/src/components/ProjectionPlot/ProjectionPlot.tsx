@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, studyState} from "../../atoms";
+import {
+    annotationGroupIdState,
+    highlightAnnotationState,
+    selectedAnnotationState, selectedProjectionState,
+    studyState
+} from "../../atoms";
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from "plotly.js";
@@ -21,30 +26,33 @@ type Props = {
     colorBy: 'annotation' | 'expression';
     expressionTable?: ExpressionTable;
     showSampleIds?: number[] | null;
+    disableSelection?: boolean;
 }
 
 const ProjectionPlot = ({
                             colorBy,
                             expressionTable,
-                            showSampleIds
+                            showSampleIds,
+                            disableSelection
                         }: Props) => {
-
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
 
     const study = useRecoilValue(studyState);
+    const projection = useRecoilValue(selectedProjectionState);
     const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
-    const isSelectable = study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated;
+    const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
 
     const annotationProjectionData = React.useMemo(() => {
-        if (!study) {
+        // @ts-ignore
+        if (!study || !study.samplesProjectionTables.get(projection)) {
             return undefined;
         }
 
         // @ts-ignore
         let samplesAnnotationProjectionTable = study.samplesAnnotationTable.params({annotationGroupId}).filter((d, p) => d.annotationGroupId === p.annotationGroupId);
-        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join_right(study.samplesProjectionTable, 'studySampleId')
+        samplesAnnotationProjectionTable = samplesAnnotationProjectionTable.join_right(study.samplesProjectionTables.get(projection), 'studySampleId')
             .impute({annotationValueId: () => -1})
             .reify();
         const rangeX = [aq.agg(samplesAnnotationProjectionTable, aq.op.min('projectionX')) * 1.05, aq.agg(samplesAnnotationProjectionTable, aq.op.max('projectionX')) * 1.05];
@@ -57,13 +65,14 @@ const ProjectionPlot = ({
             rangeY,
             distinctAnnotationValueIds
         }
-    }, [annotationGroupId, study]);
+    }, [annotationGroupId, study, projection]);
 
     // one plotly data trace per category, so that we can assign categorical colors
     const annotationTraces = React.useMemo(() => {
         if (!study || !annotationProjectionData || colorBy !== 'annotation') {
             return undefined;
         }
+
         // the cells in selected annotation color
         return annotationProjectionData.distinctAnnotationValueIds.map(annotationValueId => {
             const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable.params({annotationValueId}).filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
@@ -127,7 +136,7 @@ const ProjectionPlot = ({
             text: study.annotationValueMap.get(selectedAnnotation as number)?.displayValue,
             marker: {
                 size: 10,
-                opacity: 0.4,
+                opacity: 0.1,
                 color: colorBy === 'annotation'
                     ? study.annotationValueMap.get(selectedAnnotation)?.color
                     : '#dddddd',

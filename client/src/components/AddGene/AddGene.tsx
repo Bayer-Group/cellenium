@@ -102,7 +102,7 @@ function AddGene({multipleSelected = false}: Props) {
     return (
         <Stack spacing={0}>
             <Text size={'xs'}>
-                Enter gene(s)
+                Enter identifiers(s)
             </Text>
             <Group align={'center'} spacing={0}>
                 <form onSubmit={(event) => handleSubmit(event)}>

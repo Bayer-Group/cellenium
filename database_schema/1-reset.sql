@@ -3,6 +3,22 @@ create schema public;
 create extension if not exists plpython3u;
 create extension if not exists pg_background;
 
+
+-- create postgraphile user (if not exists)
+DO
+$$
+    BEGIN
+        IF NOT EXISTS(SELECT
+                      FROM pg_roles
+                      WHERE rolname = 'postgraphile') THEN
+            create role postgraphile WITH LOGIN PASSWORD 'postgraphile';
+        END IF;
+    END
+$$;
+
+grant usage on schema public to postgraphile;
+
+
 create procedure _analyze_schema() as
 $$
 DECLARE
