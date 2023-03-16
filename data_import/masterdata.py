@@ -392,7 +392,7 @@ class Dataimport(object):
             logging.warning('Cell ontology already imported into ontology table')
 
         # load the ontology
-        onto = ow.get_ontology(url).load()
+        onto = ow.get_ontology(self.cofn).load()
         cls = [ele for ele in list(onto.classes()) if ele.iri.split('/')[-1].startswith('CL_')]
 
         # parse the tree
