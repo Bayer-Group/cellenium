@@ -52,3 +52,33 @@ Then select e.g. rows from the study table, expression table, or generate plots.
 will return less rows depending on the permission definition in each study record.
 
  */
+
+
+
+
+CREATE OR REPLACE FUNCTION current_user_email()
+    RETURNS text
+    LANGUAGE plpython3u
+    IMMUTABLE
+AS
+$$
+
+import plpy
+
+
+def get_token():
+    r = plpy.execute("SELECT current_setting('postgraphile.auth_header_value', TRUE)::VARCHAR token")
+    return [row for row in r][0]['token']
+
+
+def get_user_email():
+    token = get_token()
+    if not token:
+        return "anonymous"
+    return token.split(';')[0]
+
+
+return get_user_email()
+$$;
+
+-- for testing, like above, but the first fake auth header element is a string with the user's email address
