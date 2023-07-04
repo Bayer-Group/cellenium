@@ -1,6 +1,6 @@
-import {ActionIcon, Autocomplete, Group, Loader, Stack, Text, Badge, useMantineTheme} from '@mantine/core';
+import {ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {forwardRef, useEffect, useState} from "react";
-import {IconBinaryTree, IconCalculator, IconSearch, IconX} from "@tabler/icons";
+import {IconBinaryTree, IconSearch, IconX} from "@tabler/icons-react";
 import {useAutocompleteLazyQuery} from "../../generated/types";
 import {closeModal, openModal} from "@mantine/modals";
 import {OntologyBrowser} from "../OntologyBrowser/OntologyBrowser";
@@ -41,7 +41,7 @@ function SearchBar({ontologies, onSearchElementsUpdate}: Props) {
     const [value, setValue] = useState<string>('')
     const [offerings, setOfferings] = useState<OfferingItem[]>([]);
     const [selectedFilters, setSelectedFilters] = useState<OfferingItem[]>([]);
-    const [getAutocomplete, {data: autocompleteSuggestions, error, loading}] = useAutocompleteLazyQuery()
+    const [getAutocomplete, {data: autocompleteSuggestions, loading}] = useAutocompleteLazyQuery()
 
 
     useEffect(() => {

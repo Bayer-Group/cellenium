@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import ExpressionAnalysisTypeSelectBox
     from "../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox";
 import {Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme} from "@mantine/core";
@@ -54,7 +54,7 @@ function ViolinPlot({omicsId}: { omicsId: number }) {
     })
 
     if (data?.violinPlot) {
-        return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} src={data.violinPlot}/>;
+        return <img style={{width: '100%', objectFit: 'fill', overflow: 'hidden'}} alt="violin plot" src={data.violinPlot}/>;
     }
     return <div>{loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'}/>}</div>
 }
@@ -63,7 +63,7 @@ function ViolinPlots() {
     const selectedGenes = useRecoilValue(selectedGenesState);
 
     return <Stack align={'center'} style={{width: '100%'}}>
-        {[...selectedGenes].reverse().map((g, i) => <Stack key={g.omicsId} align={'center'}>
+        {[...selectedGenes].reverse().map((g) => <Stack key={g.omicsId} align={'center'}>
             <Title order={3}>{g.displaySymbol}</Title>
             <ViolinPlot omicsId={g.omicsId}/>
         </Stack>)}

@@ -1,9 +1,7 @@
-import React from 'react';
 import {DifferentialMarkerFragment} from "../../generated/types";
-import {Badge, Card, Container, createStyles, Group, Spoiler, Stack, Text, Anchor} from "@mantine/core";
+import {Card, Container, createStyles, Group, Stack, Text} from "@mantine/core";
 import {InlineFoldChangePlot} from "../InlineFoldChangePlot/InlineFoldChangePlot";
 import {Link} from "react-router-dom";
-import {ontology2Color} from "../../pages/helper";
 
 interface Props {
     data: DifferentialMarkerFragment;
@@ -21,7 +19,7 @@ const useStyles = createStyles((theme) => ({
 
 
 const MarkerCard = ({data}: Props) => {
-    const {classes, cx} = useStyles();
+    const {classes} = useStyles();
     const newStudyUrl = `/study/${data.study.studyId}?page=CellMarkerAnalysis&annotationGroupId=${data.annotationValue.annotationGroup.annotationGroupId}&annotationValueId=${data.annotationValueId}&omicsId=${data.omics.omicsId}`;
     return (
         <Card pr={0} shadow="sm" p="lg" radius="md" withBorder component={Link} to={newStudyUrl}>
@@ -40,7 +38,7 @@ const MarkerCard = ({data}: Props) => {
                     </Stack>
                 </Group>
             </Card.Section>
-            <Stack pt={10} >
+            <Stack pt={10}>
                 <Group position={'left'} spacing={'xs'} noWrap={true}>
                     <Stack align={'flex-start'}>
                         <Text fw={100} size={'xs'}>Gene</Text>

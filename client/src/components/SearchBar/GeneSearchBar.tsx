@@ -1,7 +1,6 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import {IconSearch, IconX} from "@tabler/icons";
-import {useStudiesWithMarkerGenesLazyQuery} from "../../generated/types";
+import {useMemo, useRef, useState} from "react";
+import {IconSearch, IconX} from "@tabler/icons-react";
 import {Omics} from "../../model";
 import SearchBadge from "../SearchBadge/SearchBadge";
 import _ from 'lodash';

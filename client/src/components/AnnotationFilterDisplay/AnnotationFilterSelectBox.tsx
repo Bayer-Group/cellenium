@@ -1,5 +1,5 @@
-import React, {useMemo, useState} from 'react';
-import {MultiSelect, Select, SelectItem} from '@mantine/core';
+import {useMemo} from 'react';
+import {MultiSelect, SelectItem} from '@mantine/core';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {selectedAnnotationFilterState, studyState} from "../../atoms";
 
@@ -9,7 +9,7 @@ const AnnotationFilterSelectBox = () => {
     const annotations: SelectItem[] = useMemo(() => {
         const anns: SelectItem[] = [];
         if (study) {
-            study.annotationGroupMap.forEach((value, key) => {
+            study.annotationGroupMap.forEach((value) => {
                 const groupName = value.displayGroup;
                 value.annotationValuesList.map((av) => anns.push({
                     value: av.annotationValueId.toString(),

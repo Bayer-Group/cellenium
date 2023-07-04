@@ -1,12 +1,8 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {MarkerCard, NavBar} from "../components";
 import {Center, Container, Grid, Loader, Space, Text, useMantineTheme} from "@mantine/core";
 import {GeneSearchBar} from "../components/SearchBar/GeneSearchBar";
-import {
-    DifferentialMarkerFragment,
-    useStudiesWithMarkerGenesLazyQuery,
-    useStudiesWithMarkerGenesQuery
-} from "../generated/types";
+import {DifferentialMarkerFragment, useStudiesWithMarkerGenesQuery} from "../generated/types";
 
 
 const MarkerGeneSearch = () => {

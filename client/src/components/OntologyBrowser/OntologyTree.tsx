@@ -1,5 +1,4 @@
-import React from 'react';
-import {Container, Group, Stack, Text} from "@mantine/core";
+import {Group, Stack, Text} from "@mantine/core";
 import {OntologyItem} from "../../model";
 import OntologyBranch from "./OntologyBranch";
 

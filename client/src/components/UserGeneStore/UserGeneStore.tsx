@@ -1,7 +1,6 @@
-import React from 'react';
 import {ActionIcon, Collapse, Group, Indicator, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AddGene} from "../AddGene/AddGene";
-import {IconChevronDown, IconChevronRight, IconTrashX} from "@tabler/icons";
+import {IconChevronDown, IconChevronRight, IconTrashX} from "@tabler/icons-react";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {selectedGenesState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState} from "../../atoms";
 import UserGene from "../UserGene/UserGene";
@@ -16,7 +15,7 @@ const UserGeneStore = ({multiple = false, findCoexpressors=false}: Props) => {
     const indicatorColor = useRecoilValue(userGeneStoreCounterColor);
     const theme = useMantineTheme()
     const [userGeneStore, setUserGeneStore] = useRecoilState(userGenesState);
-    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
+    const [, setSelectedGenes] = useRecoilState(selectedGenesState);
     return (
         <Stack>
             <AddGene multipleSelected={multiple}/>

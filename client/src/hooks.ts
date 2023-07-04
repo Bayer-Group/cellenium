@@ -58,7 +58,7 @@ export function useSetStudyFromUrl() {
     }>();
     const queryParams = new URLSearchParams(useLocation().search);
     const navigate = useNavigate();
-    const page = queryParams.get('page');
+    // const page = queryParams.get('page');
 
     const setValidParam = (queryParam: string, setter: (x: any) => void, defaultValue?: any) => {
         const value = queryParams.get(queryParam);

@@ -1,4 +1,3 @@
-import React from 'react';
 import {Select, SelectItem} from "@mantine/core";
 
 
@@ -7,6 +6,7 @@ interface Props {
     handleChange: Function;
     data: SelectItem[];
 }
+
 const SpeciesSelect = ({handleChange, species, data}: Props) => {
     return (
         <Select style={{borderColor: '#000'}} onChange={

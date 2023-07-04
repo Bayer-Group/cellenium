@@ -1,6 +1,5 @@
-import React from 'react';
-import {ActionIcon, Badge, useMantineTheme} from "@mantine/core";
-import {IconX} from "@tabler/icons";
+import {ActionIcon, Badge} from "@mantine/core";
+import {IconX} from "@tabler/icons-react";
 import {OfferingItem} from "../SearchBar/SearchBar";
 import {Omics} from "../../model";
 import {ontology2Color} from "../../pages/helper";
@@ -11,8 +10,6 @@ type Props = {
 }
 
 const SearchBadge = ({onRemove, item}: Props) => {
-
-    const theme = useMantineTheme();
 
 
     const removeButton = (

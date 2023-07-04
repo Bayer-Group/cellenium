@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {Container, Grid, Loader, Space} from "@mantine/core";
+import {useEffect, useMemo, useState} from 'react';
+import {Loader} from "@mantine/core";
 import {StudyInfoFragment, useStudiesQuery} from "../../generated/types";
 import {OntologyItem} from "../../model";
 import {generateOntologyTrees} from "../../pages/helper";

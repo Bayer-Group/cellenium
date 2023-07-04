@@ -1,4 +1,3 @@
-import React from 'react';
 import {Select, Stack} from '@mantine/core';
 import {SelectBoxItem} from "../../model";
 

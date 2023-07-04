@@ -82,10 +82,10 @@ export const studyReloadHelperState = atom<number>({
     default: 1
 });
 
-export const studyLayerIdDefinedState = atom<number>({
-    key: "studyLayerIdDefined",
-    default: undefined
-});
+// export const studyLayerIdDefinedState = atom<number>({
+//     key: "studyLayerIdDefined",
+//     default: undefined
+// });
 
 export const studyLayerIdState = selector<number>({
     key: "studyLayerId",
@@ -142,7 +142,7 @@ export const studyState = selector<Study | undefined>({
     key: "studyState",
     get: async ({get}) => {
         const studyId = get(studyIdState);
-        const studyReloadHelper = get(studyReloadHelperState);
+        // const studyReloadHelper = get(studyReloadHelperState);
         if (studyId) {
             const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
                 query: StudyBasicsDocument,
@@ -194,7 +194,7 @@ export const pageState = atom<string>({
 
 export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
     key: "allGenesState",
-    get: async ({get}) => {
+    get: async ({}) => {
         const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
             query: AllGenesDocument,
             fetchPolicy: 'no-cache'
@@ -208,7 +208,7 @@ export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined
 
 export const cellOAnnotationGroupIdState = selector<number | undefined>({
     key: "cellOAnnotationGroupIdState",
-    get: async ({get}) => {
+    get: async ({}) => {
         const annotationGroupIdData = await apolloClient.query<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>({
             query: CellOAnnotationGroupIdDocument,
             fetchPolicy: 'no-cache'

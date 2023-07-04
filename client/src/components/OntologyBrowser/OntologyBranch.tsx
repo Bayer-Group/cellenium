@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {OntologyItem} from "../../model";
 import OntologyNode from "./OntologyNode";
 

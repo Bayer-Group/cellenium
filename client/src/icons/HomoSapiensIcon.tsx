@@ -1,12 +1,11 @@
-import React from "react";
-import { ReactComponent as HomoSapiens } from "./svg/homo_sapiens.svg";
+import HomoSapiens from "./svg/homo_sapiens.svg";
 
 interface IHomoSapiens {
   size: number;
 }
 const HomoSapiensIcon = ({ size }: IHomoSapiens) => {
   return (
-      <HomoSapiens className="h-auto" style={{ width: size }}/>
+      <img src={HomoSapiens} className="h-auto" style={{ width: size }} alt="homo sapiens icon"/>
   );
 };
 

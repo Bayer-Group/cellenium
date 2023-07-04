@@ -1,24 +1,13 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useState} from 'react';
 import {NavBar} from "../components";
-import {
-    ActionIcon,
-    Checkbox,
-    Container,
-    Grid,
-    Group,
-    Loader,
-    Space,
-    Stack,
-    TextInput,
-    Button,
-    Box,
-    Modal
-} from "@mantine/core";
+import {Box, Button, Checkbox, Container, Group, Loader, Modal, Space, Stack, TextInput} from "@mantine/core";
 import {useForm} from '@mantine/form';
 import {
     InputMaybe,
-    StudyAdminDetailsFragment, useCreateS3TempCredentialsMutation,
-    useStudyAdminListQuery, useStudyUpdateMutation
+    StudyAdminDetailsFragment,
+    useCreateS3TempCredentialsMutation,
+    useStudyAdminListQuery,
+    useStudyUpdateMutation
 } from "../generated/types";
 import DataTable from 'react-data-table-component';
 import {showNotification} from "@mantine/notifications";

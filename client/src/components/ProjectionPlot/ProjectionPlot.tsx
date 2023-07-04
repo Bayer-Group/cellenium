@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import React from 'react';
+import {useRecoilState, useRecoilValue} from "recoil";
 import {
     annotationGroupIdState,
     highlightAnnotationState,
-    selectedAnnotationState, selectedProjectionState,
+    selectedAnnotationState,
+    selectedProjectionState,
     studyState
 } from "../../atoms";
 import Plot from 'react-plotly.js';

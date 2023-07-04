@@ -1,4 +1,4 @@
-import {AnnotationGrpFragment, AnnotationValue, OmicsType, StudyBasicsFragment} from "./generated/types";
+import {AnnotationGrpFragment, OmicsType, StudyBasicsFragment} from "./generated/types";
 import {internal} from 'arquero';
 
 
@@ -20,11 +20,11 @@ export type Omics = {
     value?: string;
     ontology?: string;
     taxId?: number;
-    linkedGenes?:number[];
+    linkedGenes?: number[];
 }
 
 export type Study = StudyBasicsFragment & {
-    samplesProjectionTables: Map<string,SamplesProjectionTable>;
+    samplesProjectionTables: Map<string, SamplesProjectionTable>;
     samplesAnnotationTable: SamplesAnnotationTable;
     studyOmicsTable: StudyOmicsTable;
     studyOmicsMap: Map<number, Omics>;
@@ -49,37 +49,37 @@ class DefinedTable extends internal.ColumnTable {
 }
 
 export class SamplesProjectionTable extends DefinedTable {
-    samplesProjectionTable = true;
+    // samplesProjectionTable = true;
 
     static definedTable(t: internal.ColumnTable): SamplesProjectionTable {
         DefinedTable.checkTable(t, ['studySampleId', 'projectionX', 'projectionY']);
         return t as SamplesProjectionTable;
     }
-};
+}
 
 export class SamplesAnnotationTable extends DefinedTable {
-    samplesAnnotationTable = true;
+    // samplesAnnotationTable = true;
 
     static definedTable(t: internal.ColumnTable): SamplesAnnotationTable {
         DefinedTable.checkTable(t, ['studySampleId', 'annotationValueId', 'annotationGroupId']);
         return t as SamplesAnnotationTable;
     }
-};
+}
 
 export class StudyOmicsTable extends DefinedTable {
-    StudyOmicsTable = true;
+    // StudyOmicsTable = true;
 
     static definedTable(t: internal.ColumnTable): StudyOmicsTable {
         DefinedTable.checkTable(t, ['omicsId', 'omicsType', 'value', 'displaySymbol', 'displayName']);
         return t as StudyOmicsTable;
     }
-};
+}
 
 export class ExpressionTable extends DefinedTable {
-    expressionTable = true;
+    // expressionTable = true;
 
     static definedTable(t: internal.ColumnTable): ExpressionTable {
         DefinedTable.checkTable(t, ['value', 'omicsId', 'studySampleId']);
         return t as ExpressionTable;
     }
-};
+}

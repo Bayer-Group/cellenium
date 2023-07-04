@@ -1,15 +1,8 @@
-import React from 'react';
 import {ActionIcon, Loader, Stack, Text} from "@mantine/core";
-import {IconPlus} from "@tabler/icons";
+import {IconPlus} from "@tabler/icons-react";
 import memoize from 'memoize-one';
-import {useRecoilState, useRecoilValue} from "recoil";
-import {
-    selectedGenesState,
-    studyState,
-    userGenesState,
-    userGeneStoreCounterColor,
-    userGeneStoreOpenState
-} from "../../atoms";
+import {useRecoilState} from "recoil";
+import {selectedGenesState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState} from "../../atoms";
 import {Omics} from "../../model";
 import _ from 'lodash';
 import {useCorrelatedgenesQuery} from "../../generated/types";
@@ -105,10 +98,10 @@ type Props = {
 const CorrelationTable = ({omicsId, studyId}: Props) => {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
     const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
-    const study = useRecoilValue(studyState);
-    const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
-    const {data, error, loading} = useCorrelatedgenesQuery({
+    const [, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
+    // const study = useRecoilValue(studyState);
+    const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
+    const {data, loading} = useCorrelatedgenesQuery({
         variables: {
             omicsId: omicsId,
             studyId: studyId
@@ -145,12 +138,12 @@ const CorrelationTable = ({omicsId, studyId}: Props) => {
         <Stack justify={'flex-start'} align={'flex-start'}>
             {data && data.getCorrelatedGenesList.length > 0 &&
 
-                    <DataTable dense columns={columns(handleClick)} data={data.getCorrelatedGenesList}
-                               defaultSortFieldId={3}
-                               defaultSortAsc={false}
-                               customStyles={customStyles} fixedHeader
-                               fixedHeaderScrollHeight="100%"
-                               noDataComponent={<Text>No data.</Text>}/>
+                <DataTable dense columns={columns(handleClick)} data={data.getCorrelatedGenesList}
+                           defaultSortFieldId={3}
+                           defaultSortAsc={false}
+                           customStyles={customStyles} fixedHeader
+                           fixedHeaderScrollHeight="100%"
+                           noDataComponent={<Text>No data.</Text>}/>
             }
             {data && data.getCorrelatedGenesList.length === 0 &&
                 <Text color={'dimmed'} size={'xs'}>

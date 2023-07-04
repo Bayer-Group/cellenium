@@ -3,7 +3,7 @@ import {OntologyItem} from "../model";
 
 export function ontology2Color(ontology: string) {
     console.log({ontology})
-    let color = '';
+    let color;
     switch (ontology) {
         case 'taxonomy':
             color = 'blue'//theme.colors.yellow[5];
@@ -29,7 +29,7 @@ export function ontology2Color(ontology: string) {
 
 export function generateOntologyTrees(nodeList: TreeOntologyOverviewFragment[]) {
     // @ts-ignore
-    const ontologies = [...new Set(nodeList.map(item => item.ontology))];
+    // const ontologies = [...new Set(nodeList.map(item => item.ontology))];
     const ontologyItemMap = new Map<string, OntologyItem>()
     const ontologyMap = new Map<string, OntologyItem>()
     // generate the nodes =

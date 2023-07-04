@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useState} from 'react';
 import {NavBar, StudyCard} from "../components";
 import {Container, Grid, Space} from "@mantine/core";
 import {StudyInfoFragment} from "../generated/types";

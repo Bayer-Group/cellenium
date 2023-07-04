@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
 import {AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore} from "../components";
 import {useRecoilValue, useSetRecoilState} from "recoil";
@@ -11,16 +11,15 @@ import {
     studyState,
     userGeneStoreOpenState
 } from "../atoms";
-import ColumnTable from 'arquero/dist/types/table/column-table';
 import {useExpressionCorrelationTrianglePlotQuery} from "../generated/types";
 
-interface PreparedPlot {
-    message?: string;
-    allSameSampleExprValues: ColumnTable[];
-    combinations: { dimX: number; dimY: number }[];
-    plotlyData: Partial<Plotly.PlotData>[];
-    plotlyLayout: Partial<Plotly.Layout>;
-}
+// interface PreparedPlot {
+//     message?: string;
+//     allSameSampleExprValues: ColumnTable[];
+//     combinations: { dimX: number; dimY: number }[];
+//     plotlyData: Partial<Plotly.PlotData>[];
+//     plotlyLayout: Partial<Plotly.Layout>;
+// }
 
 const CoexpressionAnalysisPlot = () => {
     const theme = useMantineTheme()
@@ -55,6 +54,7 @@ const CoexpressionAnalysisPlot = () => {
     }
     return <Center style={{height: '100%', width: '100%'}}><img
         style={{width: '100%', height: selectedGenes.length > 3 ? '100%' : '', objectFit: 'fill', overflow: 'hidden'}}
+        alt="correlation triangle plot"
         src={data.correlationTrianglePlot}/></Center>;
 };
 
@@ -94,6 +94,6 @@ function CoexpressionAnalysis() {
             </RightSidePanel>
         </Group>
     );
-};
+}
 
 export default CoexpressionAnalysis;

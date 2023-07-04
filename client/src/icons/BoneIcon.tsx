@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactComponent as Icon } from "./svg/bone.svg";
+import Icon from "./svg/bone.svg";
 
 interface Icon {
   size: number;
@@ -8,7 +7,7 @@ interface Icon {
 const BoneIcon = ({ size }: Icon) => {
   return (
     <div style={{ width: size }}>
-      <Icon />
+      <img src={Icon} alt="bone icon" />
     </div>
   );
 };

@@ -1,12 +1,10 @@
-import React from 'react';
 import DataTable from "react-data-table-component";
 import {ActionIcon, Center, Group, Loader, Stack, Text} from "@mantine/core";
-import {IconChevronDown, IconChevronRight, IconEye, IconPlus} from "@tabler/icons";
+import {IconChevronDown, IconChevronRight, IconEye, IconPlus} from "@tabler/icons-react";
 import {useDegQuery} from "../../generated/types";
 import memoize from 'memoize-one';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {
-    annotationGroupIdState,
     selectedGenesState,
     studyState,
     userGenesState,
@@ -129,8 +127,8 @@ type Props = {
 const ExpandedComponent = ({data}: any) => {
     const study = useRecoilValue(studyState);
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
-    const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
+    const [, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
+    const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
 
     function showExpression(gene: Omics) {
@@ -201,13 +199,13 @@ const ExpandedComponent = ({data}: any) => {
 
 const DEGTable = ({annotationId}: Props) => {
     const [userGenes, setUserGenes] = useRecoilState(userGenesState);
-    const [indicatorColor, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
+    const [, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
-    const annotationGroup = useRecoilValue(annotationGroupIdState);
+    // const annotationGroup = useRecoilValue(annotationGroupIdState);
     const study = useRecoilValue(studyState);
-    const [storeOpen, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
+    const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState)
 
-    const {data, error, loading} = useDegQuery({
+    const {data,  loading} = useDegQuery({
         variables: {
             annotationValueId: annotationId,
             studyId: study?.studyId || 0

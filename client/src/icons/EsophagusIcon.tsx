@@ -1,14 +1,15 @@
-import React from "react";
-import { ReactComponent as Icon } from "./svg/esophagus.svg";
+import Icon from "./svg/esophagus.svg";
+
 interface Icon {
-  size: number;
+    size: number;
 }
-const EsophagusIcon = ({ size }: Icon) => {
-  return (
-    <div style={{ width: size }}>
-      <Icon />
-    </div>
-  );
+
+const EsophagusIcon = ({size}: Icon) => {
+    return (
+        <div style={{width: size}}>
+            <img src={Icon} alt="esophagus icon"/>
+        </div>
+    );
 };
 
 export default EsophagusIcon;

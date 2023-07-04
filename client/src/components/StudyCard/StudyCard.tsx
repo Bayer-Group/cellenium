@@ -1,6 +1,5 @@
-import React from 'react';
 import {ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text} from '@mantine/core';
-import {IconExternalLink} from "@tabler/icons";
+import {IconExternalLink} from "@tabler/icons-react";
 import {Link} from "react-router-dom";
 import {StudyInfoFragment} from "../../generated/types";
 import {ontology2Color} from "../../pages/helper";

@@ -1,6 +1,6 @@
 import {ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme} from '@mantine/core';
 import React, {FormEvent, useState} from "react";
-import {IconArrowRight, IconX} from "@tabler/icons";
+import {IconArrowRight, IconX} from "@tabler/icons-react";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {
     selectedGenesState,
@@ -10,7 +10,6 @@ import {
     userGeneStoreOpenState
 } from "../../atoms";
 import {showNotification} from '@mantine/notifications';
-import {useForm} from '@mantine/form';
 import * as aq from 'arquero';
 import {Omics} from "../../model";
 
@@ -28,7 +27,7 @@ function AddGene({multipleSelected = false}: Props) {
     const setOpened = useSetRecoilState(userGeneStoreOpenState);
 
     const study = useRecoilValue(studyState);
-    const form = useForm();
+    // const form = useForm();
 
     function handleChange(inputString: string) {
         let newOfferings: Omics[] = [];

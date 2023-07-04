@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {ActionIcon, createStyles, Grid, Group, Text, Tooltip} from "@mantine/core";
-import {IconCalculator, IconEye, IconInfoCircle, IconX} from "@tabler/icons";
+import {IconCalculator, IconEye, IconInfoCircle, IconX} from "@tabler/icons-react";
 import {Omics} from "../../model";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {correlationOmicsIdState, selectedGenesState, studyState, userGenesState} from "../../atoms";
+import {useRecoilState} from "recoil";
+import {correlationOmicsIdState, selectedGenesState, userGenesState} from "../../atoms";
 
 
 const useStyles = createStyles((theme) => ({
@@ -30,7 +30,7 @@ const UserGene = ({gene, multiple = false, findCoexpressors = false}: Props) => 
     const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
     const [showInfo, setShowInfo] = useState(false)
     const [correlationOmicsId, setCorrelationOmicsId] = useRecoilState(correlationOmicsIdState);
-    const study = useRecoilValue(studyState);
+    // const study = useRecoilValue(studyState);
 
     function handleRemove(gene: Omics) {
         // remove from geneStore

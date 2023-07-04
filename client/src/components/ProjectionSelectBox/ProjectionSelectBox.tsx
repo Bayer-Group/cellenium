@@ -1,6 +1,4 @@
-import React from 'react';
 import {Select, Text} from "@mantine/core";
-import {SelectBoxItem} from "../../model";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {selectedProjectionState, studyState} from "../../atoms";
 

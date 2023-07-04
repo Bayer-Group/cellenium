@@ -1,13 +1,8 @@
-import {ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme} from '@mantine/core';
-import React, {FormEvent, useEffect, useState} from "react";
-import {IconArrowRight, IconX} from "@tabler/icons";
-import {useRecoilState, useRecoilValue} from "recoil";
-import {
-    studyState,
-
-} from "../../atoms";
-import {showNotification} from '@mantine/notifications';
-import {useForm} from '@mantine/form';
+import {ActionIcon, Autocomplete, AutocompleteItem} from '@mantine/core';
+import {useEffect, useState} from "react";
+import {IconX} from "@tabler/icons-react";
+import {useRecoilValue} from "recoil";
+import {studyState,} from "../../atoms";
 import * as aq from 'arquero';
 import {Omics} from "../../model";
 

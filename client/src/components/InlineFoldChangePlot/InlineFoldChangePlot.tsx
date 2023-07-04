@@ -1,4 +1,3 @@
-import React from 'react';
 import Plot from "react-plotly.js";
 import {useHalfAVolcanoQuery} from "../../generated/types";
 import {Loader} from "@mantine/core";
@@ -12,7 +11,7 @@ interface Props {
 };
 
 const InlineFoldChangePlot = ({studyId, annotationValueId, pval, log2fc}: Props) => {
-    const {data, error, loading} = useHalfAVolcanoQuery({
+    const {data, loading} = useHalfAVolcanoQuery({
         variables: {
             studyId: studyId,
             annotationValueId: annotationValueId
@@ -33,7 +32,7 @@ const InlineFoldChangePlot = ({studyId, annotationValueId, pval, log2fc}: Props)
                             x: data?.differentialExpressionsList.map((e) => e.log2Foldchange),
                             y: data?.differentialExpressionsList.map((e) => {
                                 let ppval = -1 * Math.log10(e.pvalueAdj)
-                                return ppval?ppval:0
+                                return ppval ? ppval : 0
                             }),
                             type: 'scatter',
                             mode: 'markers',

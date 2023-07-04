@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {Center, Group, Text} from "@mantine/core";
 import {LeftSidePanel} from "../components";
 import {SankeyPlot} from "../components/";

@@ -1,4 +1,3 @@
-import React from 'react';
 import {ColorSwatch, createStyles, Grid, Group, Text} from "@mantine/core";
 import {useRecoilState} from "recoil";
 import {highlightAnnotationState, selectedAnnotationState, selectedGenesState} from "../../atoms";
@@ -27,7 +26,7 @@ function Annotation({label, color, sampleCount, annotationId, isSelectable = fal
     const {classes, cx} = useStyles();
     const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
     const [selected, setSelected] = useRecoilState(selectedAnnotationState);
-    const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
+    const [, setSelectedGenes] = useRecoilState(selectedGenesState);
     const annotationIsSelected = selected === annotationId && isSelectable;
     const showBold = annotationIsSelected ? 800 : "md";
     return (

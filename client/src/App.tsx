@@ -1,4 +1,3 @@
-import React from 'react';
 import StudyList from "./pages/StudyList";
 
 function App() {

@@ -1,4 +1,3 @@
-import React from "react";
 import {Center, Loader} from "@mantine/core";
 
 function GlobalLoading() {

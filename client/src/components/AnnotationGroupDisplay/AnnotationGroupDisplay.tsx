@@ -1,4 +1,3 @@
-import React from 'react';
 import {Annotation} from "../Annotation/Annotation";
 import {Stack} from "@mantine/core";
 import {useRecoilState, useRecoilValue} from "recoil";
@@ -6,7 +5,7 @@ import {annotationGroupIdState, highlightAnnotationState, studyState} from "../.
 
 
 function AnnotationGroupDisplay({disableSelection}: { disableSelection?: boolean }) {
-    const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
+    const [, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
     const study = useRecoilValue(studyState);

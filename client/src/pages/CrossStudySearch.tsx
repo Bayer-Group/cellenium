@@ -1,11 +1,8 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {GeneSearchBar, NavBar} from "../components";
-import {Center, Container, Grid, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
-import {
-    DotPlotElementFragment, StudyInfoFragment,
-    useExpressionByAnnotationQuery
-} from "../generated/types";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {Center, Container, Group, Loader, Space, Stack, Text, useMantineTheme} from "@mantine/core";
+import {DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery} from "../generated/types";
+import {useRecoilValue} from "recoil";
 import {allGenesState, cellOAnnotationGroupIdState} from "../atoms";
 import {useNavigate} from "react-router-dom";
 import {ExpressionDotPlot} from "../components/ExpressionDotPlot/ExpressionDotPlot";

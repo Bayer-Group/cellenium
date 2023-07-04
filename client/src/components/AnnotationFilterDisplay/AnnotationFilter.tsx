@@ -1,10 +1,9 @@
-import React from 'react';
 import {useRecoilState, useRecoilValue} from "recoil";
-import {selectedAnnotationFilterState, selectedAnnotationState, studyState} from "../../atoms";
+import {selectedAnnotationFilterState, studyState} from "../../atoms";
 import {Stack, Text} from "@mantine/core";
 
 const AnnotationFilter = () => {
-    const [selectedAnnotationFilter, setSelectedAnnotationFilter] = useRecoilState(selectedAnnotationFilterState);
+    const [selectedAnnotationFilter, ] = useRecoilState(selectedAnnotationFilterState);
     const study = useRecoilValue(studyState);
     return (
         <Stack spacing={1}>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {SelectBoxItem} from "../../model";
 import {Center, SegmentedControl} from "@mantine/core";
 import {OntologyOverviewFragment} from "../../generated/types";

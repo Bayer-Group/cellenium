@@ -1,10 +1,10 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {VegaLite, View, VisualizationSpec} from "react-vega";
 import {DotPlotElementFragment} from "../../generated/types";
 import {ScenegraphEvent} from "vega";
 
 
-function createSpec(annotationTitle: string, xAxis: "studyName" | "displaySymbol") {
+function createSpec(xAxis: "studyName" | "displaySymbol") {
     return {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {"name": "table"},
@@ -51,7 +51,7 @@ export function ExpressionDotPlot({
                                           xAxis: "studyName" | "displaySymbol",
                                           onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void
                                       }) {
-    const spec = useMemo(() => createSpec(annotationTitle, xAxis), [annotationTitle, xAxis]);
+    const spec = useMemo(() => createSpec(xAxis), [annotationTitle, xAxis]);
 
     const setUpSelectionListener = (view: View) => {
         view.addEventListener("click", (event, item) => {

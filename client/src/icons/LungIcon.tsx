@@ -1,12 +1,11 @@
-import React from "react";
-import { ReactComponent as Icon } from "./svg/lung.svg";
+import Icon from "./svg/lung.svg";
 interface IMouseIcon {
   size: number;
 }
 const LungIcon = ({ size }: IMouseIcon) => {
   return (
     <div style={{ width: size }}>
-      <Icon />
+        <img src={Icon} alt="lung icon" />
     </div>
   );
 };

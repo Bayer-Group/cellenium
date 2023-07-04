@@ -1,9 +1,8 @@
 import React, {forwardRef, useMemo, useState} from 'react';
 import {Group, Select, Text} from '@mantine/core';
-import {SelectBoxItem} from "../../model";
 import {useRecoilState, useRecoilValue} from "recoil";
 import {annotationGroupIdState, selectedAnnotationState, studyState} from "../../atoms";
-import {IconCalculator} from "@tabler/icons";
+import {IconCalculator} from "@tabler/icons-react";
 
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -27,7 +26,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 function AnnotationGroupSelectBox() {
     const study = useRecoilValue(studyState);
     const [annotationGroupId, setAnnotationGroupId] = useRecoilState(annotationGroupIdState);
-    const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
+    const [, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
     const [value, setValue] = useState<string | undefined>();
     const annotations: ItemProps[] = useMemo(() => {
         const anns: ItemProps[] = [];

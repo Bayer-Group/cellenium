@@ -1,8 +1,6 @@
-import React from 'react';
 import {OntologyItem} from "../../model";
 import {ActionIcon, createStyles, Group, Text, useMantineTheme} from "@mantine/core";
-import {IconCaretRight, IconCaretDown, IconChevronDown, IconChevronRight} from "@tabler/icons";
-
+import {IconChevronDown, IconChevronRight} from "@tabler/icons-react";
 
 
 const useStyles = createStyles((theme) => ({
@@ -26,7 +24,7 @@ type Props = {
 }
 const OntologyNode = ({item, selected, hasChildren, level, onToggle, handleAddOntologyItem}: Props) => {
     const theme = useMantineTheme();
-    const {cx, classes} = useStyles();
+    const {classes} = useStyles();
     return (
         <Group pl={`${level * 10}px`} spacing={0}>
             {hasChildren && <ActionIcon size='xs' variant={'subtle'} onClick={onToggle}>

@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {ReactComponent as ProjPlotIcon} from "../../images/logo.svg";
+import ProjPlotIcon from "../../images/logo.svg";
 import {Burger, Container, createStyles, Group, Header, Title} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {NavLink} from "react-router-dom";
@@ -56,10 +55,10 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-interface LinkProps {
-    label: string;
-    link: string;
-}
+// interface LinkProps {
+//     label: string;
+//     link: string;
+// }
 
 const mainLinks = [{link: '/', label: 'Single study analysis'},
     {link: '/crossstudy', label: 'Cross-study analysis'},
@@ -69,12 +68,7 @@ const mainLinks = [{link: '/', label: 'Single study analysis'},
 function NavBar() {
     const [opened, {toggle}] = useDisclosure(false);
     const {classes, cx} = useStyles();
-    const [active, setActive] = useState(0);
-    let activeStyle = {
-        textDecoration: "underline",
-        color: 'black'
-    };
-    const mainItems = mainLinks.map((item, index) => (
+    const mainItems = mainLinks.map((item) => (
         <NavLink
             to={item.link}
             key={item.label}
@@ -91,7 +85,7 @@ function NavBar() {
             <Container className={classes.inner} fluid={true}>
                 <NavLink to={'/'} style={{textDecoration: 'none', color: 'black'}}>
                     <Group spacing={5}>
-                        <ProjPlotIcon/>
+                        <img src={ProjPlotIcon} alt="proj plot icon"/>
                         <Title>cellenium</Title>
                     </Group>
                 </NavLink>

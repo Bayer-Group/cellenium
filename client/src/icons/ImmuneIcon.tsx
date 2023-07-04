@@ -1,14 +1,15 @@
-import React from "react";
-import { ReactComponent as Icon } from "./svg/immune_system.svg";
+import Icon from "./svg/immune_system.svg";
+
 interface Icon {
-  size: number;
+    size: number;
 }
-const ImmuneIcon = ({ size }: Icon) => {
-  return (
-    <div style={{ width: size }}>
-      <Icon />
-    </div>
-  );
+
+const ImmuneIcon = ({size}: Icon) => {
+    return (
+        <div style={{width: size}}>
+            <img src={Icon} alt="immune system icon"/>
+        </div>
+    );
 };
 
 export default ImmuneIcon;

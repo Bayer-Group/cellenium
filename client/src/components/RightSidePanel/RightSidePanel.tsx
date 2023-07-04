@@ -1,4 +1,3 @@
-import React from 'react';
 import {createStyles, Navbar, Stack} from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
@@ -20,7 +19,7 @@ type Props = {
 }
 
 function RightSidePanel({children}: Props) {
-    const {classes, cx} = useStyles();
+    const {classes} = useStyles();
 
     return (
         <Navbar height={'100vh'} width={{sm: 300}} style={{overflowY: 'scroll', minWidth: 300}}>

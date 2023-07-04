@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {useAnnotationValueCoocurrenceQuery} from "../../generated/types";
 import {ResponsiveSankey} from '@nivo/sankey'
 import {Center, Loader} from "@mantine/core";
@@ -15,7 +15,7 @@ const SankeyPlot = ({
                         annotationGroupId1, annotationGroupId2, studyId, annotationValues1,
                         annotationValues2
                     }: Props) => {
-    const {data, error, loading} = useAnnotationValueCoocurrenceQuery({
+    const {data, loading} = useAnnotationValueCoocurrenceQuery({
         variables: {
             studyId,
             annotationGroupId1,
@@ -68,10 +68,10 @@ const SankeyPlot = ({
 
     return (
         <Center style={{width: '100%', height: '100%'}}>
-                            {loading && <Loader variant={'dots'} color={'gray'} size={'xl'}/>}
+            {loading && <Loader variant={'dots'} color={'gray'} size={'xl'}/>}
 
             {sankeyData && sankeyData.nodes.length > 0 && <div style={{width: '90%', height: '100%'}}>
-                 <ResponsiveSankey
+                <ResponsiveSankey
                     data={sankeyData}
                     label={"label"}
                     margin={{top: 40, right: 250, bottom: 40, left: 250}}

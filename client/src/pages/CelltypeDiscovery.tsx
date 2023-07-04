@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Box, Button, Group, Loader, Overlay, Stack, Text, TextInput} from "@mantine/core";
 import {AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel} from "../components";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
@@ -132,7 +132,7 @@ function CelltypeDiscovery() {
     const annotationGroupId = useRecoilValue(annotationGroupIdState);
     const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
     const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
-    const [selected, setSelected] = useRecoilState(selectedAnnotationState);
+    const [_, setSelected] = useRecoilState(selectedAnnotationState);
 
     useEffect(() => {
         setSelected(0)
@@ -171,7 +171,6 @@ function CelltypeDiscovery() {
     };
     const [annotationName, setAnnotationName] = useState("");
     const [saveUserAnnotationMutation, {
-        data: saveUserAnnotationResult,
         loading: saveUserAnnotationLoading
     }] = useSaveUserAnnotationMutation();
     const setStudyReloadHelper = useSetRecoilState(studyReloadHelperState);
@@ -189,7 +188,7 @@ function CelltypeDiscovery() {
                             [omicsX?.omicsId, omicsY?.omicsId] : null
                     ) as InputMaybe<number[]>
                 }
-            }).then(value => {
+            }).then(() => {
                 showNotification({
                     title: 'Successfully saved user annotation',
                     message: 'Differentially expressed genes are calculated in the background and will appear later.',
@@ -224,7 +223,7 @@ function CelltypeDiscovery() {
             </main>
             <RightSidePanel>
                 <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-                    {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((z, i) => (
+                    {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((_, i) => (
                         <Box sx={{height: 350, position: 'relative'}} key={i}>
                             {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
                             {i < celltypeDiscoveryCoexpressionSamples.length - 1 &&
@@ -254,6 +253,6 @@ function CelltypeDiscovery() {
             </RightSidePanel>
         </Group>
     );
-};
+}
 
 export default CelltypeDiscovery;
