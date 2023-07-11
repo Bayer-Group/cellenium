@@ -5,7 +5,7 @@ interface Icon {
 const BreastIcon = ({ size }: Icon) => {
   return (
     <div style={{ width: size }}>
-        <img src={Icon} alt="breast icon" />
+      <img src={Icon} alt="breast icon" />
     </div>
   );
 };

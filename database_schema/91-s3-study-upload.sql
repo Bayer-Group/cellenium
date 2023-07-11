@@ -8,7 +8,6 @@ AS
 $$
 
 import os
-
 return True if os.getenv('S3_IMPORTER_ROLE_ARN') else False
 $$;
 

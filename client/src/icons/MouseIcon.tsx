@@ -5,7 +5,12 @@ interface IMouseIcon {
 }
 const MouseIcon = ({ size }: IMouseIcon) => {
   return (
-      <img src={MusMusculus} className="h-auto" style={{ width: size }} alt="mus musculus icon" />
+    <img
+      src={MusMusculus}
+      className="h-auto"
+      style={{ width: size }}
+      alt="mus musculus icon"
+    />
   );
 };
 

@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5002",
   "dependencies": {
     "@apollo/client": "^3.7.3",
     "@emotion/react": "^11.10.5",
@@ -49,7 +48,9 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "codegen": "yarn run graphql-codegen"
+    "codegen": "yarn run graphql-codegen",
+    "format": "prettier . --write",
+    "check-format": "prettier . --check"
   },
   "eslintConfig": {
     "extends": [
@@ -74,6 +75,7 @@
     "@graphql-codegen/client-preset": "^1.2.4",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@vitejs/plugin-react": "^4.0.1",
+    "prettier": "^3.0.0",
     "vite": "^4.3.9",
     "vite-plugin-svgr": "^3.2.0"
   }

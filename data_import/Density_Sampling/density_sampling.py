@@ -51,7 +51,7 @@ from tempfile import NamedTemporaryFile
 from functools import reduce
 import tqdm
 
-__all__ = ['get_local_densities', 'density_sampling']
+__all__ = ["get_local_densities", "density_sampling"]
 
 
 def get_chunk_size(N, n):
@@ -84,14 +84,16 @@ def median_min_distance(data, metric):
 
     data = np.atleast_2d(data)
 
-    nearest_distances = kneighbors_graph(data, 1, mode='distance', metric=metric, include_self=False).data
+    nearest_distances = kneighbors_graph(
+        data, 1, mode="distance", metric=metric, include_self=False
+    ).data
 
     median_min_dist = np.median(nearest_distances, overwrite_input=True)
 
     return round(median_min_dist, 4)
 
 
-def get_local_densities(data, kernel_mult=2.0, metric='manhattan'):
+def get_local_densities(data, kernel_mult=2.0, metric="manhattan"):
     """For each sample point of the data-set 'data', estimate a local density in feature
         space by counting the number of neighboring data-points within a particular
         region centered around that sample point.
@@ -129,7 +131,9 @@ def get_local_densities(data, kernel_mult=2.0, metric='manhattan'):
     N_samples = data.shape[0]
 
     if 8.0 * get_chunk_size(N_samples, 1) > N_samples:
-        A = radius_neighbors_graph(data, kernel_width, mode='connectivity', metric=metric, include_self=True)
+        A = radius_neighbors_graph(
+            data, kernel_width, mode="connectivity", metric=metric, include_self=True
+        )
 
         rows, _ = A.nonzero()
         # remove the memmap array usage for now, has an issue...  and why do we need it anyway?
@@ -147,20 +151,28 @@ def get_local_densities(data, kernel_mult=2.0, metric='manhattan'):
 
         chunks_size = get_chunk_size(N_samples, 2)
         for i in tqdm.tqdm(range(0, N_samples, chunks_size)):
-            chunk = data[i:min(i + chunks_size, N_samples)]
+            chunk = data[i : min(i + chunks_size, N_samples)]
 
             D = pairwise_distances(chunk, data, metric, n_jobs=1)
 
-            D = (D <= kernel_width)
+            D = D <= kernel_width
 
-            local_densities[i + np.arange(min(chunks_size, N_samples - i))] = D.sum(axis=1)
+            local_densities[i + np.arange(min(chunks_size, N_samples - i))] = D.sum(
+                axis=1
+            )
 
     return local_densities
 
 
-def density_sampling(data, local_densities=None, metric='manhattan',
-                     kernel_mult=2.0, outlier_percentile=0.01,
-                     target_percentile=0.05, desired_samples=None):
+def density_sampling(
+    data,
+    local_densities=None,
+    metric="manhattan",
+    kernel_mult=2.0,
+    outlier_percentile=0.01,
+    target_percentile=0.05,
+    desired_samples=None,
+):
     """The i-th sample point of the data-set 'data' is selected by density sampling
         with a probability given by:
 
@@ -227,8 +239,10 @@ def density_sampling(data, local_densities=None, metric='manhattan',
         local_densities = get_local_densities(data, kernel_mult, metric)
 
     if reduce(operator.mul, local_densities.shape, 1) != max(local_densities.shape):
-        raise ValueError("\nERROR: Density_Sampling: density_sampling: problem with "
-                         "the dimensions of the vector of local densities provided.\n")
+        raise ValueError(
+            "\nERROR: Density_Sampling: density_sampling: problem with "
+            "the dimensions of the vector of local densities provided.\n"
+        )
     else:
         local_densities = np.reshape(local_densities, local_densities.size)
 
@@ -275,7 +289,7 @@ def density_sampling(data, local_densities=None, metric='manhattan',
     return samples_kept
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
@@ -283,25 +297,24 @@ if __name__ == '__main__':
     from sklearn.decomposition import PCA
     from time import sleep
 
-
     def plot_PCA(X_reduced, Y, title):
         fig = plt.figure(1, figsize=(10, 8))
         ax = Axes3D(fig, elev=-150, azim=110)
 
-        ax.scatter(X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=Y,
-                   cmap=plt.cm.Paired)
+        ax.scatter(
+            X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=Y, cmap=plt.cm.Paired
+        )
 
-        ax.set_title('First three PCA direction for {title}'.format(**locals()))
-        ax.set_xlabel('1st eigenvector')
+        ax.set_title("First three PCA direction for {title}".format(**locals()))
+        ax.set_xlabel("1st eigenvector")
         ax.w_xaxis.set_ticklabels([])
-        ax.set_ylabel('2nd eigenvector')
+        ax.set_ylabel("2nd eigenvector")
         ax.w_yaxis.set_ticklabels([])
-        ax.set_zlabel('3rd eigenvector')
+        ax.set_zlabel("3rd eigenvector")
         ax.w_zaxis.set_ticklabels([])
 
         plt.show(block=False)
         sleep(3)
         plt.close()
-
 
     doctest.testmod()

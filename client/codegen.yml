@@ -3,20 +3,20 @@ schema:
 overwrite: true
 documents: "./src/**/!(*.d).{ts,tsx}"
 generates:
- src/generated/types.ts:
-   plugins:
-     - add:
-         content: '/* eslint-disable */'
-     - "typescript"
-     - "typescript-operations"
-     - "typescript-react-apollo"
-   config:
-     withHOC: false
-     withHooks: true
-     withComponent: false
-     withMutationFn: false
-     # These two hacks modify the resulting typescript types to
-     # not have the "?" optional syntax on attributes and effectively
-     # disable the Maybe type. E.g. postgres views have nullable columns.
-     avoidOptionals: true
-     maybeValue: T
+  src/generated/types.ts:
+    plugins:
+      - add:
+          content: "/* eslint-disable */"
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHOC: false
+      withHooks: true
+      withComponent: false
+      withMutationFn: false
+      # These two hacks modify the resulting typescript types to
+      # not have the "?" optional syntax on attributes and effectively
+      # disable the Maybe type. E.g. postgres views have nullable columns.
+      avoidOptionals: true
+      maybeValue: T

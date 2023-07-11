@@ -16,12 +16,15 @@ from muon import atac as ac
 
 import Density_Sampling.density_sampling as density_sampling
 
-logging.basicConfig(format='%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s',
-                    datefmt='%Y%m%d-%H%M%S', level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s",
+    datefmt="%Y%m%d-%H%M%S",
+    level=logging.INFO,
+)
 
 # default to the .gitignore-d scratch directory in this repo
-basedir = Path(__file__).parent.parent.joinpath('scratch').resolve()
-logging.info('local study files stored in: %s', basedir)
+basedir = Path(__file__).parent.parent.joinpath("scratch").resolve()
+logging.info("local study files stored in: %s", basedir)
 
 
 # downloads an H5AD file and returns the file handle
@@ -37,26 +40,29 @@ def get_h5ad_from_url(url: str, filename: str) -> AnnData:
 def get_sfaira_h5ad(sfaira_id: str) -> AnnData:
     # sfaira depends on tensorflow, we haven't included it in environment.yml, install when needed
     import sfaira
-    datadir = basedir.joinpath('sfaira/data/')
-    metadir = basedir.joinpath('sfaira/meta/')
-    cachedir = basedir.joinpath('sfaira/cache/')
+
+    datadir = basedir.joinpath("sfaira/data/")
+    metadir = basedir.joinpath("sfaira/meta/")
+    cachedir = basedir.joinpath("sfaira/cache/")
 
     ds = sfaira.data.Universe(data_path=datadir, meta_path=metadir, cache_path=cachedir)
     ds.subset(key="id", values=[sfaira_id])
     ds.download(verbose=1)
     ds.load(verbose=1)
     ds.datasets[sfaira_id].streamline_metadata(
-        schema="sfaira")  # convert the metadata annotation to the sfaira standard
+        schema="sfaira"
+    )  # convert the metadata annotation to the sfaira standard
     adata = ds.datasets[sfaira_id].adata  # get the anndata object
     return adata
 
 
 def jupyter_h5ad_overview(adata: AnnData):
     from IPython.display import display, HTML, display_pretty
+
     pd.set_option("display.max_columns", 100)
 
     def _header(h):
-        display(HTML(f'<h2>{h}</h2>'))
+        display(HTML(f"<h2>{h}</h2>"))
 
     def _df(title, df):
         _header(title)
@@ -67,14 +73,14 @@ def jupyter_h5ad_overview(adata: AnnData):
         display(m.shape)
         display_pretty(m)
 
-    _df('obs', adata.obs)
-    _df('var', adata.var)
-    _matrix('X', adata.X)
+    _df("obs", adata.obs)
+    _df("var", adata.var)
+    _matrix("X", adata.X)
     if adata.raw is not None:
-        _matrix('raw', adata.raw)
+        _matrix("raw", adata.raw)
     for layer in adata.layers:
         _matrix(f'layer "{layer}"', adata.layers[layer])
-    _header('uns')
+    _header("uns")
     display_pretty(adata.uns)
 
 
@@ -99,9 +105,9 @@ def validate_gene_ids(adata: AnnData, taxonomy_id: int):
     # cellenium recognizes HGNC Symbols and Ensembl Gene IDs in the annotation index.
     # Simple validation which checks some housekeeping genes.
     require_ids = {
-        9606: ['ATF1', 'ENSG00000123268'],
-        10090: ['Atf1', 'ENSMUSG00000023027'],
-        10116: ['Atf1', 'ENSRNOG00000061088']
+        9606: ["ATF1", "ENSG00000123268"],
+        10090: ["Atf1", "ENSMUSG00000023027"],
+        10116: ["Atf1", "ENSRNOG00000061088"],
     }
     ids = require_ids[taxonomy_id]
     for id in ids:
@@ -113,8 +119,10 @@ def validate_gene_ids(adata: AnnData, taxonomy_id: int):
 # checks if the matrix at .X (or layer) is sparse, if not make it so
 def make_sparse(adata: AnnData, layer=None):
     if not scipy.sparse.issparse(_get_X_or_layer(adata, layer)):
-        _set_X_or_layer(adata, layer, scipy.sparse.csr_matrix(_get_X_or_layer(adata, layer)))
-        logging.info('make_sparse: conversion to sparse matrix done')
+        _set_X_or_layer(
+            adata, layer, scipy.sparse.csr_matrix(_get_X_or_layer(adata, layer))
+        )
+        logging.info("make_sparse: conversion to sparse matrix done")
 
 
 def filter_outliers(adata: AnnData):
@@ -133,18 +141,26 @@ def make_norm_expression(adata: AnnData, layer=None):
     if isinteger(adata, layer):
         sc.pp.normalize_total(adata, target_sum=1e4, layer=layer, inplace=True)
         sc.pp.log1p(adata, layer=layer)
-        logging.info('make_norm_expression: integer values detected - applied normalize_total and log')
+        logging.info(
+            "make_norm_expression: integer values detected - applied normalize_total and log"
+        )
     else:
         if np.max(scipy.sparse.find(_get_X_or_layer(adata, layer))[2]) > 1000:
             sc.pp.log1p(adata, layer=layer)
-            logging.info('make_norm_expression: high values detected - applied log')
+            logging.info("make_norm_expression: high values detected - applied log")
         else:
-            logging.info('make_norm_expression: no transformations necessary')
+            logging.info("make_norm_expression: no transformations necessary")
 
 
-def adata_subset_for_testing(adata, cells_filter_attribute, cells_filter_values, n_top_genes):
-    query = np.array([s in cells_filter_values for s in adata.obs[cells_filter_attribute]])
-    sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes, batch_key=cells_filter_attribute, subset=True)
+def adata_subset_for_testing(
+    adata, cells_filter_attribute, cells_filter_values, n_top_genes
+):
+    query = np.array(
+        [s in cells_filter_values for s in adata.obs[cells_filter_attribute]]
+    )
+    sc.pp.highly_variable_genes(
+        adata, n_top_genes=n_top_genes, batch_key=cells_filter_attribute, subset=True
+    )
     adata_sub = adata[query].copy()
     adata_sub = adata_sub[:, adata.var_names].copy()
     return adata_sub
@@ -152,7 +168,9 @@ def adata_subset_for_testing(adata, cells_filter_attribute, cells_filter_values,
 
 # basic umap calculation, doesn't take batch effect into account
 def calculate_umap(adata: AnnData, layer=None):
-    sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer=layer, inplace=True)
+    sc.pp.highly_variable_genes(
+        adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer=layer, inplace=True
+    )
     pca = sc.pp.scale(_get_X_or_layer(adata, layer)[:, adata.var.highly_variable])
     adata.obsm["X_pca"] = sc.pp.pca(pca)
     sc.pp.neighbors(adata, n_pcs=20, copy=False)
@@ -170,9 +188,12 @@ def add_umap(adata: AnnData, layer=None):
 
 def density_sample_umap(adata: AnnData, desired_samples=50000):
     if len(adata.obs) > desired_samples:
-        sampled_indices = density_sampling.density_sampling(adata.obsm['X_umap'], metric='euclidean',
-                                                            desired_samples=desired_samples)
-        _cellenium_uns_dictionary(adata)['umap_density_sampled_indices'] = sampled_indices
+        sampled_indices = density_sampling.density_sampling(
+            adata.obsm["X_umap"], metric="euclidean", desired_samples=desired_samples
+        )
+        _cellenium_uns_dictionary(adata)[
+            "umap_density_sampled_indices"
+        ] = sampled_indices
 
 
 # add cellenium stuff to harmonize metadata
@@ -183,44 +204,50 @@ def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
 
 
 def _cellenium_uns_dictionary(adata: AnnData) -> dict:
-    d = adata.uns.get('cellenium', {})
-    adata.uns['cellenium'] = d
+    d = adata.uns.get("cellenium", {})
+    adata.uns["cellenium"] = d
     return d
 
 
 # add differential expression table to the anndata object
 # TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
-def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
+def add_differential_expression_tables(
+    adata: AnnData, attributes: List[str], layer: str
+):
     diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
-    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = diff_exp
+    _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = diff_exp
     return adata
 
 
 def set_cellenium_metadata(
-        data: AnnData | MuData,
-        title: str,
-        description: str,
-        taxonomy_id: int,
-        ncit_tissue_ids: List[str],
-        mesh_disease_ids: List[str],
-        X_pseudolayer_name: str,
-        main_sample_attributes: List[str] | Dict[str, List[str]],
-        secondary_sample_attributes: List[str] = [],
-        import_projections: List[str] = ['umap'],
-        initial_reader_permissions: List[str] = None,
-        initial_admin_permissions: List[str] = None,
-        modalities: List[Dict] = None
+    data: AnnData | MuData,
+    title: str,
+    description: str,
+    taxonomy_id: int,
+    ncit_tissue_ids: List[str],
+    mesh_disease_ids: List[str],
+    X_pseudolayer_name: str,
+    main_sample_attributes: List[str] | Dict[str, List[str]],
+    secondary_sample_attributes: List[str] = [],
+    import_projections: List[str] = ["umap"],
+    initial_reader_permissions: List[str] = None,
+    initial_admin_permissions: List[str] = None,
+    modalities: List[Dict] = None,
 ):
     def _check_cell_annotation(data, attribute: str):
         if attribute not in data.obs.columns:
             raise Exception(f"attribute {attribute} not in observations dataframe")
         count_unique_values = len(data.obs[a].unique())
         if count_unique_values > 100:
-            raise Exception(f"attribute {attribute} has {count_unique_values} unique annotations, 100 is the maximum")
+            raise Exception(
+                f"attribute {attribute} has {count_unique_values} unique annotations, 100 is the maximum"
+            )
 
     d = _cellenium_uns_dictionary(data)
 
-    assert isinstance(main_sample_attributes, list) or isinstance(main_sample_attributes, dict)
+    assert isinstance(main_sample_attributes, list) or isinstance(
+        main_sample_attributes, dict
+    )
 
     if not modalities:
         for a in main_sample_attributes:
@@ -230,64 +257,69 @@ def set_cellenium_metadata(
             for a in main_sample_attributes[modality]:
                 _check_cell_annotation(data.mod[modality], a)
 
-    d['main_sample_attributes'] = main_sample_attributes
+    d["main_sample_attributes"] = main_sample_attributes
 
     assert title is not None
-    d['title'] = title
-    d['description'] = description
+    d["title"] = title
+    d["description"] = description
     assert isinstance(taxonomy_id, int)
-    d['taxonomy_id'] = taxonomy_id
+    d["taxonomy_id"] = taxonomy_id
     if ncit_tissue_ids is None:
         ncit_tissue_ids = []
     assert isinstance(ncit_tissue_ids, list)
-    d['ncit_tissue_ids'] = ncit_tissue_ids
+    d["ncit_tissue_ids"] = ncit_tissue_ids
     if mesh_disease_ids is None:
         mesh_disease_ids = []
     assert isinstance(mesh_disease_ids, list)
-    d['mesh_disease_ids'] = mesh_disease_ids
+    d["mesh_disease_ids"] = mesh_disease_ids
     assert X_pseudolayer_name is not None
-    d['X_pseudolayer_name'] = X_pseudolayer_name
+    d["X_pseudolayer_name"] = X_pseudolayer_name
 
     for a in secondary_sample_attributes:
         _check_cell_annotation(data, a)
         if a in main_sample_attributes:
             raise Exception(
-                f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
-    d['secondary_sample_attributes'] = secondary_sample_attributes
+                f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed"
+            )
+    d["secondary_sample_attributes"] = secondary_sample_attributes
 
     if not modalities:
         for p in import_projections:
-            assert data.obsm[f'X_{p}'] is not None
-        d['import_projections'] = import_projections
+            assert data.obsm[f"X_{p}"] is not None
+        d["import_projections"] = import_projections
     else:
         collect = defaultdict(list)
         for modality in modalities.keys():
             for p in import_projections:
-                assert data.mod[modality].obsm[f'X_{p}'] is not None
+                assert data.mod[modality].obsm[f"X_{p}"] is not None
                 collect[modality].append(p)
-        d['import_projections'] = dict(collect)
+        d["import_projections"] = dict(collect)
 
         for modality in modalities.keys():
-            if 'cellenium' in data.mod[modality].uns:
-                data.mod[modality].uns['cellenium']['main_sample_attributes'] = d['main_sample_attributes'][modality]
+            if "cellenium" in data.mod[modality].uns:
+                data.mod[modality].uns["cellenium"]["main_sample_attributes"] = d[
+                    "main_sample_attributes"
+                ][modality]
             else:
-                d.mod[modality].uns['cellenium'] = {'main_sample_attributes': d['main_sample_attributes'][modality]}
+                d.mod[modality].uns["cellenium"] = {
+                    "main_sample_attributes": d["main_sample_attributes"][modality]
+                }
 
-    d['initial_reader_permissions'] = initial_reader_permissions
-    d['initial_admin_permissions'] = initial_admin_permissions
-    d['modalities'] = modalities
+    d["initial_reader_permissions"] = initial_reader_permissions
+    d["initial_admin_permissions"] = initial_admin_permissions
+    d["modalities"] = modalities
 
 
 # cellenium meta data
 def cellenium_settings(
-        adata: AnnData,
-        title: str,
-        description: str,
-        taxonomy_id: str,
-        ncit_tissue_id: List[str],
-        mesh_disease_id: List[str],
-        pubmed_id: str,
-        data_source: str
+    adata: AnnData,
+    title: str,
+    description: str,
+    taxonomy_id: str,
+    ncit_tissue_id: List[str],
+    mesh_disease_id: List[str],
+    pubmed_id: str,
+    data_source: str,
 ):
     d = _cellenium_uns_dictionary(adata)
 
@@ -297,28 +329,38 @@ def cellenium_settings(
     #        raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
 
     # d['main_sample_attributes'] = main_sample_attributes
-    d['title'] = title
-    d['description'] = description
-    d['taxonomy_id'] = taxonomy_id
-    d['ncit_tissue_id'] = ncit_tissue_id
-    d['mesh_disease_id'] = mesh_disease_id
-    d['pubmed_id'] = pubmed_id
-    d['data_source'] = data_source
+    d["title"] = title
+    d["description"] = description
+    d["taxonomy_id"] = taxonomy_id
+    d["ncit_tissue_id"] = ncit_tissue_id
+    d["mesh_disease_id"] = mesh_disease_id
+    d["pubmed_id"] = pubmed_id
+    d["data_source"] = data_source
 
 
 # add cellenium meta data to AnnData.uns,
-def add_cellenium_settings(adata: AnnData,
-                           title: str,
-                           description: str,
-                           taxonomy_id: str,
-                           ncit_tissue_id: List[str],
-                           mesh_disease_id: List[str],
-                           pubmed_id: str,
-                           data_source: str
-                           ):
-    ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(',')]
-    mesh_disease_id = [x.strip() for x in mesh_disease_id.split(',')]
-    cellenium_settings(adata, title, description, taxonomy_id, ncit_tissue_id, mesh_disease_id, pubmed_id, data_source)
+def add_cellenium_settings(
+    adata: AnnData,
+    title: str,
+    description: str,
+    taxonomy_id: str,
+    ncit_tissue_id: List[str],
+    mesh_disease_id: List[str],
+    pubmed_id: str,
+    data_source: str,
+):
+    ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(",")]
+    mesh_disease_id = [x.strip() for x in mesh_disease_id.split(",")]
+    cellenium_settings(
+        adata,
+        title,
+        description,
+        taxonomy_id,
+        ncit_tissue_id,
+        mesh_disease_id,
+        pubmed_id,
+        data_source,
+    )
     # TODO: add fuzzy matching to detect main cell type attributes
     # TODO: add fuzzy matching of cell types to cell ontology
     return adata
@@ -326,86 +368,122 @@ def add_cellenium_settings(adata: AnnData,
 
 # calculate differentially expressed genes using rank_genes_groups from scanpy
 def calculate_differentially_expressed_genes(
-        adata: AnnData,
-        diffexp_attributes: List[str],
-        ngenes=100,
-        diff_exp_min_group_expr=0.1,
-        diff_exp_min_group_fc=0.5,
-        diff_exp_max_notgroup_expr=1
+    adata: AnnData,
+    diffexp_attributes: List[str],
+    ngenes=100,
+    diff_exp_min_group_expr=0.1,
+    diff_exp_min_group_fc=0.5,
+    diff_exp_max_notgroup_expr=1,
 ):
     result_dataframes = []
-    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc='diff.exp. genes'):
-        valid_attribute_group_check = (adata.obs[diffexp_attribute].value_counts() > 1)
-        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
+    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="diff.exp. genes"):
+        valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
+        attr_values = valid_attribute_group_check.index[
+            valid_attribute_group_check
+        ].tolist()
 
-        sc.tl.rank_genes_groups(adata, diffexp_attribute, groups=attr_values, method='wilcoxon',
-                                use_raw=False,
-                                n_genes=ngenes)
-        sc.tl.filter_rank_genes_groups(adata, min_in_group_fraction=diff_exp_min_group_expr,
-                                       min_fold_change=diff_exp_min_group_fc,
-                                       max_out_group_fraction=diff_exp_max_notgroup_expr, use_raw=False,
-                                       key="rank_genes_groups", key_added="rank_genes_groups_filtered")
+        sc.tl.rank_genes_groups(
+            adata,
+            diffexp_attribute,
+            groups=attr_values,
+            method="wilcoxon",
+            use_raw=False,
+            n_genes=ngenes,
+        )
+        sc.tl.filter_rank_genes_groups(
+            adata,
+            min_in_group_fraction=diff_exp_min_group_expr,
+            min_fold_change=diff_exp_min_group_fc,
+            max_out_group_fraction=diff_exp_max_notgroup_expr,
+            use_raw=False,
+            key="rank_genes_groups",
+            key_added="rank_genes_groups_filtered",
+        )
         for attr_value in attr_values:
-            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups_filtered", group=attr_value)
+            df = sc.get.rank_genes_groups_df(
+                adata, key="rank_genes_groups_filtered", group=attr_value
+            )
             # remove filtered elements
             df = df[~df["names"].isnull()]
-            df['ref_attr_value'] = attr_value
-            df['cmp_attr_value'] = '_OTHERS_'
-            df['attribute_name'] = diffexp_attribute
+            df["ref_attr_value"] = attr_value
+            df["cmp_attr_value"] = "_OTHERS_"
+            df["attribute_name"] = diffexp_attribute
             result_dataframes.append(df)
-    adata.uns.pop('rank_genes_groups', None)
-    adata.uns.pop('rank_genes_groups_filtered', None)
+    adata.uns.pop("rank_genes_groups", None)
+    adata.uns.pop("rank_genes_groups_filtered", None)
     result_dataframe = pd.concat(result_dataframes, axis=0).reset_index(drop=True)
-    logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
-                 result_dataframe['attribute_name'].unique().tolist())
+    logging.info(
+        "calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
+        result_dataframe["attribute_name"].unique().tolist(),
+    )
 
-    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = result_dataframe.copy()
+    _cellenium_uns_dictionary(adata)[
+        "differentially_expressed_genes"
+    ] = result_dataframe.copy()
     return result_dataframe
 
 
 def calculate_differential_peaks(
-        adata: AnnData,
-        diffexp_attributes: List[str],
-        npeaks=100
+    adata: AnnData, diffexp_attributes: List[str], npeaks=100
 ):
     result_dataframes = []
-    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc='differential peaks'):
-        valid_attribute_group_check = (adata.obs[diffexp_attribute].value_counts() > 1)
-        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
+    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="differential peaks"):
+        valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
+        attr_values = valid_attribute_group_check.index[
+            valid_attribute_group_check
+        ].tolist()
 
-        ac.tl.rank_peaks_groups(adata, diffexp_attribute, groups=attr_values, method='wilcoxon',
-                                use_raw=False,
-                                n_genes=npeaks)
+        ac.tl.rank_peaks_groups(
+            adata,
+            diffexp_attribute,
+            groups=attr_values,
+            method="wilcoxon",
+            use_raw=False,
+            n_genes=npeaks,
+        )
 
         for attr_value in attr_values:
-            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups", group=attr_value)
+            df = sc.get.rank_genes_groups_df(
+                adata, key="rank_genes_groups", group=attr_value
+            )
             # remove filtered elements
             df = df[~df["names"].isnull()]
-            df['ref_attr_value'] = attr_value
-            df['cmp_attr_value'] = '_OTHERS_'
-            df['attribute_name'] = diffexp_attribute
+            df["ref_attr_value"] = attr_value
+            df["cmp_attr_value"] = "_OTHERS_"
+            df["attribute_name"] = diffexp_attribute
             result_dataframes.append(df)
-    adata.uns.pop('rank_genes_groups', None)
+    adata.uns.pop("rank_genes_groups", None)
     result_dataframe = pd.concat(result_dataframes, axis=0).reset_index(drop=True)
-    logging.info("calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
-                 result_dataframe['attribute_name'].unique().tolist())
+    logging.info(
+        "calculate_differentially_expressed_genes: found a list of genes for these attributes: %s",
+        result_dataframe["attribute_name"].unique().tolist(),
+    )
 
-    _cellenium_uns_dictionary(adata)['differentially_expressed_genes'] = result_dataframe.copy()
+    _cellenium_uns_dictionary(adata)[
+        "differentially_expressed_genes"
+    ] = result_dataframe.copy()
     return result_dataframe
 
 
 def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute: str):
-    if adata.uns['cellenium']['taxonomy_id'] != 9606:
-        logging.info('skipping CellO classification, taxonomy_id is not human')
+    if adata.uns["cellenium"]["taxonomy_id"] != 9606:
+        logging.info("skipping CellO classification, taxonomy_id is not human")
         return
     resource_dir = basedir.joinpath(f"cello_resources")
     os.makedirs(resource_dir, exist_ok=True)
     # Mahmoud: CellO makes mistakes sometimes due to ribosomal protein genes, so would be good to filter them out before the CellO call
     remove_ribo = adata.var_names.str.startswith(("RPS", "RPL"))
     adata_cello = adata[:, ~remove_ribo].copy()
-    cello.scanpy_cello(adata_cello, clust_key=cello_clustering_attribute, rsrc_loc=resource_dir, term_ids=True)
-    adata.obs['CellO_celltype'] = adata.obs.join(adata_cello.obs['Most specific cell type'])['Most specific cell type']
+    cello.scanpy_cello(
+        adata_cello,
+        clust_key=cello_clustering_attribute,
+        rsrc_loc=resource_dir,
+        term_ids=True,
+    )
+    adata.obs["CellO_celltype"] = adata.obs.join(
+        adata_cello.obs["Most specific cell type"]
+    )["Most specific cell type"]
 
-    updated_sample_attributes = ['CellO_celltype']
-    updated_sample_attributes.extend(adata.uns['cellenium']['main_sample_attributes'])
-    adata.uns['cellenium']['main_sample_attributes'] = updated_sample_attributes
+    updated_sample_attributes = ["CellO_celltype"]
+    updated_sample_attributes.extend(adata.uns["cellenium"]["main_sample_attributes"])
+    adata.uns["cellenium"]["main_sample_attributes"] = updated_sample_attributes

@@ -5,7 +5,7 @@ interface Icon {
 const KidneyIcon = ({ size }: Icon) => {
   return (
     <div style={{ width: size }}>
-        <img src={Kidneys} alt="kidney icon" />
+      <img src={Kidneys} alt="kidney icon" />
     </div>
   );
 };

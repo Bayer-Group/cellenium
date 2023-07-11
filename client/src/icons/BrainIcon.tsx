@@ -5,7 +5,7 @@ interface Icon {
 const BrainIcon = ({ size }: Icon) => {
   return (
     <div style={{ width: size }}>
-        <img src={Icon} alt="brain icon" />
+      <img src={Icon} alt="brain icon" />
     </div>
   );
 };

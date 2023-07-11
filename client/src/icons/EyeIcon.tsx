@@ -5,7 +5,7 @@ interface Icon {
 const EyeIcon = ({ size }: Icon) => {
   return (
     <div style={{ width: size }}>
-        <img src={Icon} alt="eye icon" />
+      <img src={Icon} alt="eye icon" />
     </div>
   );
 };

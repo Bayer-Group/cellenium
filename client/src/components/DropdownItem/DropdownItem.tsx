@@ -1,7 +1,7 @@
-import {FC} from 'react';
+import { FC } from "react";
 
 const DropdownItem: FC<any> = () => {
-    return <div>re</div>
+  return <div>re</div>;
 };
 
-export  {DropdownItem};
+export { DropdownItem };

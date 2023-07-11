@@ -1225,6 +1225,29 @@ export type CreateStudyAnnotationGroupUiPayload = {
   studyAnnotationGroupUi: Maybe<StudyAnnotationGroupUi>;
 };
 
+/** All input for the `createStudyForCurrentUser` mutation. */
+export type CreateStudyForCurrentUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  name: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `createStudyForCurrentUser` mutation. */
+export type CreateStudyForCurrentUserPayload = {
+  __typename?: 'CreateStudyForCurrentUserPayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
 /** All input for the create `Study` mutation. */
 export type CreateStudyInput = {
   /**
@@ -2424,6 +2447,7 @@ export type Mutation = {
   createStudyAdministrableCurrentuser: Maybe<CreateStudyAdministrableCurrentuserPayload>;
   /** Creates a single `StudyAnnotationGroupUi`. */
   createStudyAnnotationGroupUi: Maybe<CreateStudyAnnotationGroupUiPayload>;
+  createStudyForCurrentUser: Maybe<CreateStudyForCurrentUserPayload>;
   /** Creates a single `StudyLayer`. */
   createStudyLayer: Maybe<CreateStudyLayerPayload>;
   /** Creates a single `StudyOmic`. */
@@ -2657,6 +2681,12 @@ export type MutationCreateStudyAdministrableCurrentuserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyAnnotationGroupUiArgs = {
   input: CreateStudyAnnotationGroupUiInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateStudyForCurrentUserArgs = {
+  input: CreateStudyForCurrentUserInput;
 };
 
 
@@ -3914,6 +3944,7 @@ export type Query = Node & {
   /** Reads a set of `Concept`. */
   conceptsList: Maybe<Array<Concept>>;
   correlationTrianglePlot: Maybe<Scalars['String']>;
+  currentUserEmail: Maybe<Scalars['String']>;
   currentUserGroups: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads a set of `DifferentialExpressionV`. */
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
@@ -4808,6 +4839,10 @@ export enum StudiesOrderBy {
   FilenameDesc = 'FILENAME_DESC',
   ImportFailedAsc = 'IMPORT_FAILED_ASC',
   ImportFailedDesc = 'IMPORT_FAILED_DESC',
+  ImportFileAsc = 'IMPORT_FILE_ASC',
+  ImportFileDesc = 'IMPORT_FILE_DESC',
+  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
+  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
   ImportLogAsc = 'IMPORT_LOG_ASC',
   ImportLogDesc = 'IMPORT_LOG_DESC',
   ImportStartedAsc = 'IMPORT_STARTED_ASC',
@@ -4847,6 +4882,8 @@ export type Study = Node & {
   externalWebsite: Maybe<Scalars['String']>;
   filename: Maybe<Scalars['String']>;
   importFailed: Maybe<Scalars['Boolean']>;
+  importFile: Maybe<Scalars['String']>;
+  importFinished: Maybe<Scalars['Boolean']>;
   importLog: Maybe<Scalars['String']>;
   importStarted: Maybe<Scalars['Boolean']>;
   legacyConfig: Maybe<Scalars['JSON']>;
@@ -4987,6 +5024,9 @@ export type StudyAdminDetail = {
   diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
   externalWebsite: Maybe<Scalars['String']>;
   filename: Maybe<Scalars['String']>;
+  importFailed: Maybe<Scalars['Boolean']>;
+  importFinished: Maybe<Scalars['Boolean']>;
+  importStarted: Maybe<Scalars['Boolean']>;
   readerPermissionGranted: Maybe<Scalars['Boolean']>;
   readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
   studyId: Maybe<Scalars['Int']>;
@@ -5014,6 +5054,12 @@ export type StudyAdminDetailCondition = {
   externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
   filename: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `importFailed` field. */
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `importFinished` field. */
+  importFinished: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `importStarted` field. */
+  importStarted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `readerPermissionGranted` field. */
   readerPermissionGranted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `readerPermissions` field. */
@@ -5046,6 +5092,12 @@ export type StudyAdminDetailFilter = {
   externalWebsite: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
   filename: InputMaybe<StringFilter>;
+  /** Filter by the object’s `importFailed` field. */
+  importFailed: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `importFinished` field. */
+  importFinished: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `importStarted` field. */
+  importStarted: InputMaybe<BooleanFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyAdminDetailFilter>;
   /** Checks for any expressions in this list. */
@@ -5080,6 +5132,12 @@ export enum StudyAdminDetailsOrderBy {
   ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
   FilenameAsc = 'FILENAME_ASC',
   FilenameDesc = 'FILENAME_DESC',
+  ImportFailedAsc = 'IMPORT_FAILED_ASC',
+  ImportFailedDesc = 'IMPORT_FAILED_DESC',
+  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
+  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
+  ImportStartedAsc = 'IMPORT_STARTED_ASC',
+  ImportStartedDesc = 'IMPORT_STARTED_DESC',
   Natural = 'NATURAL',
   ReaderPermissionsAsc = 'READER_PERMISSIONS_ASC',
   ReaderPermissionsDesc = 'READER_PERMISSIONS_DESC',
@@ -5376,6 +5434,10 @@ export type StudyCondition = {
   filename: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importFailed` field. */
   importFailed: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `importFile` field. */
+  importFile: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `importFinished` field. */
+  importFinished: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importLog` field. */
   importLog: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importStarted` field. */
@@ -5418,6 +5480,10 @@ export type StudyFilter = {
   filename: InputMaybe<StringFilter>;
   /** Filter by the object’s `importFailed` field. */
   importFailed: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `importFile` field. */
+  importFile: InputMaybe<StringFilter>;
+  /** Filter by the object’s `importFinished` field. */
+  importFinished: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `importLog` field. */
   importLog: InputMaybe<StringFilter>;
   /** Filter by the object’s `importStarted` field. */
@@ -5454,6 +5520,8 @@ export type StudyInput = {
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
   importFailed: InputMaybe<Scalars['Boolean']>;
+  importFile: InputMaybe<Scalars['String']>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
   importLog: InputMaybe<Scalars['String']>;
   importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
@@ -5471,7 +5539,7 @@ export type StudyLayer = Node & {
   layer: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
-  omicsType: OmicsType;
+  omicsType: Maybe<OmicsType>;
   /** Reads a single `Study` that is related to this `StudyLayer`. */
   study: Maybe<Study>;
   studyId: Scalars['Int'];
@@ -5514,7 +5582,7 @@ export type StudyLayerFilter = {
 /** An input for mutations affecting `StudyLayer` */
 export type StudyLayerInput = {
   layer: Scalars['String'];
-  omicsType: OmicsType;
+  omicsType: InputMaybe<OmicsType>;
   studyId: Scalars['Int'];
   studyLayerId: InputMaybe<Scalars['Int']>;
 };
@@ -5841,6 +5909,8 @@ export type StudyPatch = {
   externalWebsite: InputMaybe<Scalars['String']>;
   filename: InputMaybe<Scalars['String']>;
   importFailed: InputMaybe<Scalars['Boolean']>;
+  importFile: InputMaybe<Scalars['String']>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
   importLog: InputMaybe<Scalars['String']>;
   importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
@@ -5856,6 +5926,7 @@ export type StudyPatch = {
 export type StudySample = Node & {
   __typename?: 'StudySample';
   h5AdObsIndex: Scalars['Int'];
+  h5AdObsKey: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   /** Reads a single `Study` that is related to this `StudySample`. */
@@ -5997,6 +6068,8 @@ export enum StudySampleAnnotationsOrderBy {
 export type StudySampleCondition = {
   /** Checks for equality with the object’s `h5AdObsIndex` field. */
   h5AdObsIndex: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `h5AdObsKey` field. */
+  h5AdObsKey: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleId` field. */
@@ -6009,6 +6082,8 @@ export type StudySampleFilter = {
   and: InputMaybe<Array<StudySampleFilter>>;
   /** Filter by the object’s `h5AdObsIndex` field. */
   h5AdObsIndex: InputMaybe<IntFilter>;
+  /** Filter by the object’s `h5AdObsKey` field. */
+  h5AdObsKey: InputMaybe<StringFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudySampleFilter>;
   /** Checks for any expressions in this list. */
@@ -6022,6 +6097,7 @@ export type StudySampleFilter = {
 /** An input for mutations affecting `StudySample` */
 export type StudySampleInput = {
   h5AdObsIndex: Scalars['Int'];
+  h5AdObsKey: Scalars['String'];
   studyId: Scalars['Int'];
   studySampleId: Scalars['Int'];
 };
@@ -6029,6 +6105,7 @@ export type StudySampleInput = {
 /** Represents an update to a `StudySample`. Fields that are set will be updated. */
 export type StudySamplePatch = {
   h5AdObsIndex: InputMaybe<Scalars['Int']>;
+  h5AdObsKey: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studySampleId: InputMaybe<Scalars['Int']>;
 };
@@ -6180,6 +6257,8 @@ export enum StudySampleProjectionsOrderBy {
 export enum StudySamplesOrderBy {
   H5AdObsIndexAsc = 'H5AD_OBS_INDEX_ASC',
   H5AdObsIndexDesc = 'H5AD_OBS_INDEX_DESC',
+  H5AdObsKeyAsc = 'H5AD_OBS_KEY_ASC',
+  H5AdObsKeyDesc = 'H5AD_OBS_KEY_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
@@ -6931,7 +7010,7 @@ export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ _
 
 export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number, omicsType: OmicsType }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
 
 export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
@@ -6961,7 +7040,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number, omicsType: OmicsType }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -7051,12 +7130,12 @@ export type SaveUserAnnotationMutationVariables = Exact<{
 
 export type SaveUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload', clientMutationId: string, integer: number } };
 
-export type StudyAdminDetailsFragment = { __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean };
+export type StudyAdminDetailsFragment = { __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean, importStarted: boolean, importFailed: boolean, importFinished: boolean };
 
 export type StudyAdminListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudyAdminListQuery = { __typename?: 'Query', userStudyUploadConfigured: boolean, studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean }> };
+export type StudyAdminListQuery = { __typename?: 'Query', userStudyUploadConfigured: boolean, studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean, importStarted: boolean, importFailed: boolean, importFinished: boolean }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -7072,6 +7151,20 @@ export type StudyUpdateMutationVariables = Exact<{
 
 
 export type StudyUpdateMutation = { __typename?: 'Mutation', updateStudy: { __typename?: 'UpdateStudyPayload', clientMutationId: string } };
+
+export type StudyCreateMutationVariables = Exact<{
+  studyName: Scalars['String'];
+}>;
+
+
+export type StudyCreateMutation = { __typename?: 'Mutation', createStudyForCurrentUser: { __typename?: 'CreateStudyForCurrentUserPayload', boolean: boolean } };
+
+export type StudyDeleteMutationVariables = Exact<{
+  studyId: Scalars['Int'];
+}>;
+
+
+export type StudyDeleteMutation = { __typename?: 'Mutation', deleteStudy: { __typename?: 'DeleteStudyPayload', study: { __typename?: 'Study', studyId: number } } };
 
 export type CreateS3TempCredentialsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -7124,7 +7217,6 @@ export const StudyBasicsFragmentDoc = gql`
   studyLayersList {
     layer
     studyLayerId
-    omicsType
   }
   studyOmicsTransposedList {
     displayName
@@ -7215,6 +7307,9 @@ export const StudyAdminDetailsFragmentDoc = gql`
   readerPermissionGranted
   adminPermissions
   adminPermissionGranted
+  importStarted
+  importFailed
+  importFinished
 }
     `;
 export const CorrelatedgenesDocument = gql`
@@ -7962,6 +8057,72 @@ export function useStudyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<
 export type StudyUpdateMutationHookResult = ReturnType<typeof useStudyUpdateMutation>;
 export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutation>;
 export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
+export const StudyCreateDocument = gql`
+    mutation studyCreate($studyName: String!) {
+  createStudyForCurrentUser(input: {name: $studyName}) {
+    boolean
+  }
+}
+    `;
+
+/**
+ * __useStudyCreateMutation__
+ *
+ * To run a mutation, you first call `useStudyCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudyCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studyCreateMutation, { data, loading, error }] = useStudyCreateMutation({
+ *   variables: {
+ *      studyName: // value for 'studyName'
+ *   },
+ * });
+ */
+export function useStudyCreateMutation(baseOptions?: Apollo.MutationHookOptions<StudyCreateMutation, StudyCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyCreateMutation, StudyCreateMutationVariables>(StudyCreateDocument, options);
+      }
+export type StudyCreateMutationHookResult = ReturnType<typeof useStudyCreateMutation>;
+export type StudyCreateMutationResult = Apollo.MutationResult<StudyCreateMutation>;
+export type StudyCreateMutationOptions = Apollo.BaseMutationOptions<StudyCreateMutation, StudyCreateMutationVariables>;
+export const StudyDeleteDocument = gql`
+    mutation studyDelete($studyId: Int!) {
+  deleteStudy(input: {studyId: $studyId}) {
+    study {
+      studyId
+    }
+  }
+}
+    `;
+
+/**
+ * __useStudyDeleteMutation__
+ *
+ * To run a mutation, you first call `useStudyDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudyDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studyDeleteMutation, { data, loading, error }] = useStudyDeleteMutation({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useStudyDeleteMutation(baseOptions?: Apollo.MutationHookOptions<StudyDeleteMutation, StudyDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyDeleteMutation, StudyDeleteMutationVariables>(StudyDeleteDocument, options);
+      }
+export type StudyDeleteMutationHookResult = ReturnType<typeof useStudyDeleteMutation>;
+export type StudyDeleteMutationResult = Apollo.MutationResult<StudyDeleteMutation>;
+export type StudyDeleteMutationOptions = Apollo.BaseMutationOptions<StudyDeleteMutation, StudyDeleteMutationVariables>;
 export const CreateS3TempCredentialsDocument = gql`
     mutation createS3TempCredentials {
   createS3TempCredentials(input: {}) {

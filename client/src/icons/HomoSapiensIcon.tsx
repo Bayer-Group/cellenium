@@ -5,7 +5,12 @@ interface IHomoSapiens {
 }
 const HomoSapiensIcon = ({ size }: IHomoSapiens) => {
   return (
-      <img src={HomoSapiens} className="h-auto" style={{ width: size }} alt="homo sapiens icon"/>
+    <img
+      src={HomoSapiens}
+      className="h-auto"
+      style={{ width: size }}
+      alt="homo sapiens icon"
+    />
   );
 };
 

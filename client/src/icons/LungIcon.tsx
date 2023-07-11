@@ -5,7 +5,7 @@ interface IMouseIcon {
 const LungIcon = ({ size }: IMouseIcon) => {
   return (
     <div style={{ width: size }}>
-        <img src={Icon} alt="lung icon" />
+      <img src={Icon} alt="lung icon" />
     </div>
   );
 };

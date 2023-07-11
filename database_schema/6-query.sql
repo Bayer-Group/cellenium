@@ -218,6 +218,9 @@ select s.study_id,
        s.admin_permissions,
        s.disease_mesh_ids,
        s.tissue_ncit_ids,
+       s.import_started,
+       s.import_failed,
+       s.import_finished,
        case when sv.study_id is not null then True else False end "reader_permission_granted",
        case when sa.study_id is not null then True else False end "admin_permission_granted"
 from study s

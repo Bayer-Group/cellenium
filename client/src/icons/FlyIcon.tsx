@@ -5,7 +5,7 @@ interface Icon {
 }
 const FlyIcon = ({ size }: Icon) => {
   return (
-      <img src={Fly} className="h-auto" style={{ width: size }} alt="fly icon"/>
+    <img src={Fly} className="h-auto" style={{ width: size }} alt="fly icon" />
   );
 };
 

@@ -1,5 +1,5 @@
-FROM python:3.10-slim AS build
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake
+FROM python:3.10 AS build
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update && apt upgrade && apt-get install -y --fix-missing build-essential cmake
 
 COPY ./pipeline/batch/requirements.txt .
 RUN pip install --target=/opt/requirements -r ./requirements.txt
