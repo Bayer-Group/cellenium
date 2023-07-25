@@ -10,6 +10,12 @@ terraform {
     }
   }
 
+  backend "s3" {
+    bucket = var.terraform_remote_state_bucket
+    region = "eu-central-1"
+  }
+
+
   required_version = ">= 1.2.0"
 }
 

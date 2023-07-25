@@ -511,6 +511,7 @@ class Dataimport(object):
             logging.warning("Cell ontology already imported into ontology table")
 
         # load the ontology
+        print(url)
         onto = ow.get_ontology(url).load()
         cls = [
             ele
@@ -666,7 +667,10 @@ class Dataimport(object):
         self.import_ncit()
         # self.import_ncbi_taxonomy()
         self.import_simplified_flat_taxonomy()
-        self.import_co()
+        try:
+            self.import_co()
+        except Exception as e:
+            logging.warning("could not import CO")
 
         self.import_genes()
         self.import_antibodies()

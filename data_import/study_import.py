@@ -2,7 +2,8 @@ import argparse
 import io
 import json
 import logging
-from pathlib import Path
+import pathlib
+from upath import UPath
 from typing import List, Dict
 
 import numpy as np
@@ -23,13 +24,19 @@ from postgres_utils import (
     get_local_db_engine,
 )
 
+IS_AWS_DEPLOYMENT = os.environ.get("AWS") is not None
+
 logging.basicConfig(
+    level=logging.INFO,
     format="%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s",
     datefmt="%Y%m%d-%H%M%S",
-    level=logging.INFO,
+    handlers=[
+        logging.FileHandler("./study_import.log"),
+        logging.StreamHandler()
+    ] if IS_AWS_DEPLOYMENT else [logging.StreamHandler()]
 )
 
-if os.environ.get("AWS") is not None:
+if IS_AWS_DEPLOYMENT:
     engine = get_aws_db_engine()
 else:
     engine = get_local_db_engine(os.environ.get("ENGINE_URL"))
@@ -116,8 +123,8 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     ].drop_duplicates()
     # but not the ones which are already inserted
     regions_not_in_df = omics_base_insert.loc[
-        ~omics_base_insert.display_name.isin(match_existing_region_df.index), :
-    ]
+                        ~omics_base_insert.display_name.isin(match_existing_region_df.index), :
+                        ]
     import_df(regions_not_in_df, "omics_base", engine)
 
     match_existing_region_df = get_all_regions(int(metadata["taxonomy_id"]))
@@ -141,8 +148,8 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     )
     # but not the ones which are already inserted
     omics_regions_not_in_df = omics_region_insert.loc[
-        omics_region_insert.region.isin(regions_not_in_df.display_name), :
-    ]
+                              omics_region_insert.region.isin(regions_not_in_df.display_name), :
+                              ]
     import_df(omics_regions_not_in_df, "omics_region", engine)
 
     # insert into omics_region_gene
@@ -163,8 +170,8 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     # but not the ones in
     all_region_ids = get_all_regions_ids_already_in(metadata["taxonomy_id"])
     omics_region_gene_not_in_df = omics_region_gene_insert.loc[
-        ~omics_region_gene_insert.region_id.isin(all_region_ids), :
-    ]
+                                  ~omics_region_gene_insert.region_id.isin(all_region_ids), :
+                                  ]
     import_df(omics_region_gene_not_in_df, "omics_region_gene", engine)
 
     # insert into study_omics
@@ -422,7 +429,7 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
         ].copy()
         one_annotation_definition_df = annotation_definition_df[
             annotation_definition_df.h5ad_column == h5ad_column
-        ]
+            ]
         annotation_df = h5ad_one_annotation_df.merge(
             one_annotation_definition_df, left_on=h5ad_column, right_on="h5ad_value"
         )
@@ -447,14 +454,14 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
 
 
 def import_study_layer_expression(
-    study_id: int,
-    layer_name: str | None,
-    data_genes_df,
-    data_samples_df,
-    data: AnnData,
-    metadata,
-    omics_type,
-    study_layer_id: int,
+        study_id: int,
+        layer_name: str | None,
+        data_genes_df,
+        data_samples_df,
+        data: AnnData,
+        metadata,
+        omics_type,
+        study_layer_id: int,
 ):
     if layer_name is None:
         layer_name = metadata["X_pseudolayer_name"]
@@ -485,7 +492,7 @@ def import_study_layer_expression(
         buffered_gene_cnt = 0
         cursor = connection.connection.cursor()
         for gene_i in tqdm.tqdm(
-            range(0, sparse_X.shape[1]), desc=f'import expression matrix "{layer_name}"'
+                range(0, sparse_X.shape[1]), desc=f'import expression matrix "{layer_name}"'
         ):
             omics_id = map_h5ad_var_index_to_omics_index[gene_i]
             if omics_id > 0:
@@ -516,7 +523,7 @@ def import_study_layer_expression(
                     buffer.write("}\n")
                     buffered_gene_cnt += 1
             if buffered_gene_cnt == 500 or (
-                gene_i == sparse_X.shape[1] - 1 and buffered_gene_cnt > 0
+                    gene_i == sparse_X.shape[1] - 1 and buffered_gene_cnt > 0
             ):
                 buffer.seek(0)
                 cursor.copy_from(
@@ -595,29 +602,85 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         )
 
 
-def import_study(filename: str, analyze_database: bool) -> int:
-    """
-    TODO enable S3 access as we had before:
-
-    adata = h5ad_open.h5ad_read(filename)
-    stored_filename = filename
-    if stored_filename.startswith('scratch'):
-        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
-        stored_filename = Path(filename).relative_to("scratch").as_posix()
-    """
-
-    logging.info(f"importing study from file {filename}")
-    data = h5ad_open.h5ad_h5mu_read(filename)
-    stored_filename = filename
-    if stored_filename.startswith("scratch"):
-        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
-        stored_filename = Path(filename).relative_to("scratch").as_posix()
-
+def create_update_study_from_file(data: AnnData, stored_filename: str):
     def _config_optional_list(key: str):
         if data.uns["cellenium"].get(key) is not None:
             return data.uns["cellenium"][key].tolist()
         return None
 
+    study_data = {
+        "filename": stored_filename,
+        "study_name": data.uns["cellenium"]["title"],
+        "description": data.uns["cellenium"]["description"],
+        "tissue_ncit_ids": data.uns["cellenium"]["ncit_tissue_ids"].tolist(),
+        "disease_mesh_ids": data.uns["cellenium"]["mesh_disease_ids"].tolist(),
+        "organism_tax_id": data.uns["cellenium"]["taxonomy_id"],
+        "projections": _projection_list(data),
+        "reader_permissions": _config_optional_list(
+            "initial_reader_permissions"
+        ),
+        "admin_permissions": _config_optional_list("initial_admin_permissions"),
+        "legacy_config": Json(
+            data.uns["cellenium"].get("legacy_config"),
+            dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
+        ),
+        "import_finished": False,
+    }
+
+    with engine.connect() as connection:
+        if IS_AWS_DEPLOYMENT:
+            r = connection.execute(
+                text(
+                    """
+                    SELECT study_id FROM study WHERE filename = :filename
+                    """
+                ),
+                dict(filename=stored_filename)
+            )
+            study_id = r.fetchone()
+            if study_id is None:
+                raise Exception(f"Study with filename {stored_filename} not found")
+            study_id = study_id[0]
+            study_data["study_id"] = study_id
+
+            connection.execute(
+                text(""" 
+                        UPDATE study SET 
+                        filename = :filename,
+                        study_name = :study_name,
+                        description = :description,
+                        tissue_ncit_ids = :tissue_ncit_ids,
+                        disease_mesh_ids = :disease_mesh_ids,
+                        organism_tax_id = :organism_tax_id,
+                        projections = :projections,
+                        reader_permissions = :reader_permissions,
+                        admin_permissions = :admin_permissions,
+                        legacy_config = :legacy_config,
+                        import_finished = :import_finished,
+                        import_started = true
+                        WHERE study_id = :study_id
+                    """),
+                study_data
+            )
+            connection.connection.commit()
+        else:
+
+            r = connection.execute(
+                text(
+                    """INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
+                   projections, reader_permissions, admin_permissions, legacy_config)
+                VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
+                   :projections, :reader_permissions, :admin_permissions, :legacy_config
+                )
+                RETURNING study_id"""
+                ),
+                study_data,
+            )
+            study_id = r.fetchone()[0]
+    return study_id
+
+
+def import_study_save(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
     def _generate_study_layer(study_id, layer_name, omics_type=None):
         with engine.connect() as connection:
             r = connection.execute(
@@ -638,144 +701,156 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
         return study_layer_id
 
-    with engine.connect() as connection:
-        r = connection.execute(
-            text(
-                """INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
-               projections, reader_permissions, admin_permissions, legacy_config)
-            VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
-               :projections, :reader_permissions, :admin_permissions, :legacy_config
-            )
-            RETURNING study_id"""
-            ),
-            {
-                "filename": stored_filename,
-                "study_name": data.uns["cellenium"]["title"],
-                "description": data.uns["cellenium"]["description"],
-                "tissue_ncit_ids": data.uns["cellenium"]["ncit_tissue_ids"].tolist(),
-                "disease_mesh_ids": data.uns["cellenium"]["mesh_disease_ids"].tolist(),
-                "organism_tax_id": data.uns["cellenium"]["taxonomy_id"],
-                "projections": _projection_list(data),
-                "reader_permissions": _config_optional_list(
-                    "initial_reader_permissions"
-                ),
-                "admin_permissions": _config_optional_list("initial_admin_permissions"),
-                "legacy_config": Json(
-                    data.uns["cellenium"].get("legacy_config"),
-                    dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
-                ),
-                "import_finished": False,
-            },
-        )
-        study_id = r.fetchone()[0]
-        logging.info("importing %s as study_id %s", filename, study_id)
+    logging.info("importing %s as study_id %s", filename, study_id)
+    if isinstance(data, MuData):
+        modalities = data.uns["cellenium"]["modalities"]
+    else:
+        modalities = {"rna": "gene"}
+
+    data_samples_df = import_study_sample(study_id, data)
+    for modality in modalities.keys():
         if isinstance(data, MuData):
-            modalities = data.uns["cellenium"]["modalities"]
+            cur_data = data.mod[modality]
         else:
-            modalities = {"rna": "gene"}
+            cur_data = data
+        import_study_sample_annotation(study_id, data_samples_df, cur_data)
 
-        data_samples_df = import_study_sample(study_id, data)
-        for modality in modalities.keys():
-            if isinstance(data, MuData):
-                cur_data = data.mod[modality]
-            else:
-                cur_data = data
-            import_study_sample_annotation(study_id, data_samples_df, cur_data)
+    for modality in modalities.items():
+        data_type = modality[1]  # the data_type
+        if isinstance(data, MuData):
+            cur_data = data.mod[modality[0]]
+        else:
+            cur_data = data
+        meta_data = data.uns["cellenium"]
+        if data_type == "gene":
+            data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
+            import_differential_expression(study_id, data_genes_df, cur_data)
+        elif data_type == "region":
+            # since regions from study to study change we import those which are not yet in the database
+            data_region_df = import_region_base_and_study(
+                study_id, cur_data, meta_data
+            )
+            import_differential_expression(study_id, data_region_df, cur_data)
+        elif data_type == "protein_antibody_tag":
+            data_protein_df = import_study_protein_antibody_tag(
+                study_id, cur_data, meta_data
+            )
+            import_differential_expression(study_id, data_protein_df, cur_data)
 
-        for modality in modalities.items():
-            data_type = modality[1]  # the data_type
-            if isinstance(data, MuData):
-                cur_data = data.mod[modality[0]]
-            else:
-                cur_data = data
-            meta_data = data.uns["cellenium"]
-            if data_type == "gene":
-                data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
-                import_differential_expression(study_id, data_genes_df, cur_data)
-            elif data_type == "region":
-                # since regions from study to study change we import those which are not yet in the database
-                data_region_df = import_region_base_and_study(
-                    study_id, cur_data, meta_data
+    study_layer_id = _generate_study_layer(study_id, "default-layer", None)
+    for modality in modalities.items():
+        omics_type = modality[1]  # the data_type
+        if isinstance(data, MuData):
+            cur_data = data.mod[modality[0]]
+            cur_data_samples_df = data_samples_df
+        else:
+            cur_data = data
+            cur_data_samples_df = data_samples_df.loc[
+                                  data_samples_df.h5ad_obs_key.isin(cur_data.obs.index), :
+                                  ]
+
+        meta_data = data.uns["cellenium"]
+        if omics_type == "gene":
+            import_study_layer_expression(
+                study_id,
+                None,
+                data_genes_df,
+                cur_data_samples_df,
+                cur_data,
+                meta_data,
+                omics_type,
+                study_layer_id,
+            )
+            # import more layers if they are present in the dataset (gene expression only
+            # see https://github.com/Bayer-Group/cellenium/issues/24
+            for layer_name in cur_data.layers.keys():
+                further_study_layer_id = _generate_study_layer(
+                    study_id, layer_name, "gene"
                 )
-                import_differential_expression(study_id, data_region_df, cur_data)
-            elif data_type == "protein_antibody_tag":
-                data_protein_df = import_study_protein_antibody_tag(
-                    study_id, cur_data, meta_data
-                )
-                import_differential_expression(study_id, data_protein_df, cur_data)
-
-        study_layer_id = _generate_study_layer(study_id, "default-layer", None)
-        for modality in modalities.items():
-            omics_type = modality[1]  # the data_type
-            if isinstance(data, MuData):
-                cur_data = data.mod[modality[0]]
-                cur_data_samples_df = data_samples_df
-            else:
-                cur_data = data
-                cur_data_samples_df = data_samples_df.loc[
-                    data_samples_df.h5ad_obs_key.isin(cur_data.obs.index), :
-                ]
-
-            meta_data = data.uns["cellenium"]
-            if omics_type == "gene":
                 import_study_layer_expression(
                     study_id,
-                    None,
+                    layer_name,
                     data_genes_df,
                     cur_data_samples_df,
                     cur_data,
                     meta_data,
                     omics_type,
-                    study_layer_id,
-                )
-                # import more layers if they are present in the dataset (gene expression only
-                # see https://github.com/Bayer-Group/cellenium/issues/24
-                for layer_name in cur_data.layers.keys():
-                    further_study_layer_id = _generate_study_layer(
-                        study_id, layer_name, "gene"
-                    )
-                    import_study_layer_expression(
-                        study_id,
-                        layer_name,
-                        data_genes_df,
-                        cur_data_samples_df,
-                        cur_data,
-                        meta_data,
-                        omics_type,
-                        further_study_layer_id,
-                    )
-
-            if omics_type == "region":
-                import_study_layer_expression(
-                    study_id,
-                    None,
-                    data_region_df,
-                    cur_data_samples_df,
-                    cur_data,
-                    meta_data,
-                    omics_type,
-                    study_layer_id,
-                )
-            if omics_type == "protein_antibody_tag":
-                import_study_layer_expression(
-                    study_id,
-                    None,
-                    data_protein_df,
-                    cur_data_samples_df,
-                    cur_data,
-                    meta_data,
-                    omics_type,
-                    study_layer_id,
+                    further_study_layer_id,
                 )
 
+        if omics_type == "region":
+            import_study_layer_expression(
+                study_id,
+                None,
+                data_region_df,
+                cur_data_samples_df,
+                cur_data,
+                meta_data,
+                omics_type,
+                study_layer_id,
+            )
+        if omics_type == "protein_antibody_tag":
+            import_study_layer_expression(
+                study_id,
+                None,
+                data_protein_df,
+                cur_data_samples_df,
+                cur_data,
+                meta_data,
+                omics_type,
+                study_layer_id,
+            )
+
+    with engine.connect() as connection:
         connection.execute(
-            text("UPDATE study SET visible=True WHERE study_id=:study_id"),
+            text("UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id"),
             {"study_id": study_id},
         )
         logging.info("updating postgres statistics...")
         if analyze_database:
             connection.execute(text("call _analyze_schema()"))
-        return study_id
+    return study_id
+
+
+def import_study(filename: str, analyze_database: bool) -> int:
+    """
+    TODO enable S3 access as we had before:
+
+    adata = h5ad_open.h5ad_read(filename)
+    stored_filename = filename
+    if stored_filename.startswith('scratch'):
+        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+        stored_filename = Path(filename).relative_to("scratch").as_posix()
+    """
+
+    logging.info(f"importing study from file {filename}")
+    data = h5ad_open.h5ad_h5mu_read(filename)
+    stored_filename = UPath(filename).name
+    if stored_filename.startswith("scratch"):
+        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
+        stored_filename = UPath(filename).relative_to("scratch").as_posix()
+
+    study_id = create_update_study_from_file(data, stored_filename)
+
+    try:
+        import_study_save(data, study_id, filename, analyze_database)
+    except Exception as e:
+        logging.error("import failed")
+        logging.error(e)
+        with engine.connect() as connection:
+            log = str()
+            if pathlib.Path("./study_import.log").exists():
+                with open("./study_import.log", "rb") as f:
+                    log = f.read()
+            connection.execute(
+                text(
+                    "UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"
+                ),
+                {"study_id": study_id, "log": log},
+            )
+        if not IS_AWS_DEPLOYMENT:
+            # failed import has been written to db, no need to trigger the failed batch lambda
+            raise e
 
 
 if __name__ == "__main__":

@@ -371,12 +371,6 @@ gql`
     }
   }
 
-  mutation studyCreate($studyName: String!) {
-    createStudyForCurrentUser(input: { name: $studyName }) {
-      boolean
-    }
-  }
-
   mutation studyDelete($studyId: Int!) {
     deleteStudy(input: { studyId: $studyId }) {
       study {
@@ -385,9 +379,9 @@ gql`
     }
   }
 
-  mutation createS3TempCredentials {
-    createS3TempCredentials(input: {}) {
-      strings
+  mutation createStudyUpload($studyName: String!, $filetype: String!) {
+    createStudyUpload(input: { studyName: $studyName, filetype: $filetype }) {
+      json
     }
   }
 `;

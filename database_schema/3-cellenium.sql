@@ -15,8 +15,8 @@ CREATE TABLE study
     import_started     boolean default False,
     import_finished    boolean default False,
     import_failed      boolean default False,
-    import_file        text,
     import_log         text,
+    import_file        text, --- s3 file path
     reader_permissions text[],
     admin_permissions  text[],
     legacy_config      jsonb

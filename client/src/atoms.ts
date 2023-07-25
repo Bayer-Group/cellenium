@@ -137,14 +137,15 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
       annotationValueId: "annotationValueId",
     });
   // samplesTable.print();
-  const annotationGroupsValuesTable = aq
+  let annotationGroupsValuesTable = aq
     .from(s.annotationGroupsList)
     .unroll("annotationValuesList")
-    // @ts-ignore
     .derive({
-      annotationValueId: (r) => r?.annotationValuesList.annotationValueId,
+      // @ts-ignore
+      annotationValueId: (d) => d.annotationValuesList.annotationValueId,
     })
     .select("annotationGroupId", "annotationValueId");
+
   // annotationGroupsValuesTable.print();
   const annotatedSamplesTable = samplesTable
     .join(annotationGroupsValuesTable, "annotationValueId")

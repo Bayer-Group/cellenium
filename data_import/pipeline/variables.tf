@@ -4,7 +4,11 @@ variable "local_docker_host" {
 }
 
 variable vpc_id {
-  default = ""
+
+}
+
+variable terraform_remote_state_bucket {
+  default = "cellenium-terraform-state"
 }
 
 variable "cellenium_batch_job_definition_name" {
@@ -38,24 +42,19 @@ variable "cellenium_db_password" {
 }
 
 variable "cellenium_db_ip" {
-  default   = ""
   sensitive = true
 }
 
 variable "cellenium_db_port" {
-  default   = "5432"
   sensitive = true
 }
 
 variable "cellenium_db_name" {
-  default   = "postgres"
   sensitive = true
 }
 
 variable "cellenium_ec2_access_security_group_id" {
-  default = ""
 }
 
 variable "cellenium_ec2_access_security_group_port" {
-  default = 5001
 }

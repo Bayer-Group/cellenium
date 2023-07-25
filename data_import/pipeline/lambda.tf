@@ -4,9 +4,16 @@ resource "null_resource" "lambda_layer_zip" {
   }
 }
 
-resource "null_resource" "lambda_zip" {
+resource "null_resource" "lambda_submit_zip" {
   provisioner "local-exec" {
-    command = "make build_lambda"
+    command = "make build_lambda_submit"
+  }
+}
+
+
+resource "null_resource" "lambda_failed_zip" {
+  provisioner "local-exec" {
+    command = "make build_lambda_failed"
   }
 }
 
@@ -137,8 +144,8 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
   handler       = "lambda_function.lambda_handler"
 
   runtime          = "python3.10"
-  depends_on       = [null_resource.lambda_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
-  source_code_hash = "$filebase64sha256(./lambda/lambda_function.py)"
+  depends_on       = [null_resource.lambda_submit_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
+  source_code_hash = "$filebase64sha256(./lambda_submit/lambda_function.py)"
   layers           = [aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy.arn]
 
   timeout     = 60
@@ -158,6 +165,36 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
     }
   }
 }
+
+
+
+resource "aws_lambda_function" "failed_study_import_lambda" {
+  filename      = "./lambda_failed.zip"
+  function_name = "cellenium_submit_study_import"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "lambda_function.lambda_handler"
+
+  runtime          = "python3.10"
+  depends_on       = [null_resource.lambda_failed_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
+  source_code_hash = "$filebase64sha256(./lambda_failed/lambda_function.py)"
+  layers           = [aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy.arn]
+
+  timeout     = 60
+  memory_size = 512
+
+    vpc_config {
+      # Every subnet should be able to reach an EFS mount target in the same Availability Zone. Cross-AZ mounts are not permitted.
+      subnet_ids         = data.aws_subnets.default_vpc_subnets.ids
+      security_group_ids = [aws_security_group.cellenium_study_import_lambda_security_group.id]
+    }
+
+  environment {
+    variables = {
+      AWS_DB_SECRET        = var.cellenium_db_secret_name
+    }
+  }
+}
+
 
 resource "aws_lambda_permission" "allow_bucket" {
   statement_id  = "AllowExecutionFromS3Bucket"
@@ -179,3 +216,25 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   depends_on = [aws_lambda_function.submit_study_import_lambda, aws_lambda_permission.allow_bucket]
 }
 
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.cellenium_s3_bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.submit_study_import_lambda.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".h5mu"
+  }
+
+  depends_on = [aws_lambda_function.submit_study_import_lambda, aws_lambda_permission.allow_bucket]
+}
+
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_foo" {
+    statement_id = "AllowExecutionFromCloudWatch"
+    action = "lambda:InvokeFunction"
+    function_name = aws_lambda_function.failed_study_import_lambda.function_name
+    principal = "events.amazonaws.com"
+    source_arn = aws_cloudwatch_event_rule.aws_cloudwatch_event_rule.arn
+
+  depends_on = [aws_lambda_function.failed_study_import_lambda]
+}

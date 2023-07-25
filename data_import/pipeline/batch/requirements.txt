@@ -7,3 +7,4 @@ muon~=0.1.5
 leidenalg~=0.9.1
 boto3~=1.26.155
 smart-open~=6.3.0
+universal-pathlib~=0.0.24

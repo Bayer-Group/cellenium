@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader } from "@mantine/core";
+import { Group, Loader } from "@mantine/core";
 import { StudyInfoFragment, useStudiesQuery } from "../../generated/types";
 import { OntologyItem } from "../../model";
 import { generateOntologyTrees } from "../../pages/helper";
@@ -50,13 +50,19 @@ function StudySearchBar({
   useEffect(() => onStudyListUpdate(filteredStudies || []), [filteredStudies]);
 
   if (loading) {
-    return <Loader variant={"dots"} />;
+    return (
+      <Group position="center" mt="5rem">
+        <Loader variant={"dots"} />
+      </Group>
+    );
   }
   return (
-    <SearchBar
-      ontologies={ontologyTrees}
-      onSearchElementsUpdate={setSearchOntCodes}
-    />
+    <>
+      <SearchBar
+        ontologies={ontologyTrees}
+        onSearchElementsUpdate={setSearchOntCodes}
+      />
+    </>
   );
 }
 

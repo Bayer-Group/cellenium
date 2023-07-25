@@ -1,4 +1,4 @@
-.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import build_lambda_package build_docker_image
+.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import
 .SECONDARY:
 
 reset_database:
@@ -32,16 +32,3 @@ cite_studydata_import: scratch/pbmc3k_processed.h5mu.imported
 huge_studydata_880kcells_33kgenes_import: scratch/heart_failure_reichart2022.h5ad.imported
 
 huge_studydata_880kcells_50genes_import: scratch/heart_failure_reichart2022_gene_subset.h5ad.imported
-
-build_lambda_layer:
-	set -e
-	rm -rf lambda_build
-	rm -rf lambda.zip
-	mkdir -p lambda_build/python
-	docker run --platform linux/amd64 --volume $(shell pwd)/data_import/pipeline/lambda:/opt/requirements --volume $(shell pwd)/lambda_build:/opt/lambda --rm python:3.10.12 /bin/bash -c "pip install -r /opt/requirements/lambda_requirements.txt -t /opt/lambda/python"
-	cd lambda_build && zip -r ../lambda.zip . && cd ..
-	rm -rf lambda_build
-
-build_docker_image:
-	set -e
-	docker buildx build --platform linux/amd64 -t cellenium_data_import -f ./data_import/pipeline/batch/Dockerfile ./data_import

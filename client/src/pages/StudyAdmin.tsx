@@ -7,6 +7,7 @@ import {
   Group,
   Loader,
   Modal,
+  Select,
   Space,
   Stack,
   Text,
@@ -18,9 +19,8 @@ import { IconDotsVertical, IconPlus, IconX } from "@tabler/icons-react";
 import {
   InputMaybe,
   StudyAdminDetailsFragment,
-  useCreateS3TempCredentialsMutation,
+  useCreateStudyUploadMutation,
   useStudyAdminListQuery,
-  useStudyCreateMutation,
   useStudyDeleteMutation,
   useStudyUpdateMutation,
 } from "../generated/types";
@@ -64,7 +64,7 @@ function DeleteStudyModal({
   }, [study, deleteStudyMutation, reset]);
 
   return (
-    <Modal opened={opened && study !== undefined} onClose={() => {}}>
+    <Modal opened={opened} onClose={reset}>
       <Stack>
         <Text weight="bold" size="xl">
           Delete Study
@@ -106,6 +106,7 @@ function CreateStudyModal({
   const form = useForm({
     initialValues: {
       studyName: "",
+      filetype: ".h5ad",
     },
     validate: (values) => {
       const errors: Record<string, string> = {};
@@ -116,12 +117,14 @@ function CreateStudyModal({
     },
   });
 
-  const [createStudyMutation, { loading }] = useStudyCreateMutation();
+  const [createStudyUploadMutation, { loading }] =
+    useCreateStudyUploadMutation();
 
   const createStudy = useCallback(() => {
-    createStudyMutation({
+    createStudyUploadMutation({
       variables: {
         studyName: form.values.studyName,
+        filetype: form.values.filetype,
       },
     })
       .then(() => {
@@ -135,9 +138,7 @@ function CreateStudyModal({
           color: "red",
         });
       });
-  }, [form, createStudyMutation, reset]);
-
-  console.log(form.values);
+  }, [form, createStudyUploadMutation, reset]);
 
   return (
     <Modal opened={opened} onClose={reset}>
@@ -147,6 +148,12 @@ function CreateStudyModal({
         </Text>
         <Form>
           <TextInput label="Study Title" {...form.getInputProps("studyName")} />
+          <Select
+            data={[".h5ad", ".h5mu"]}
+            label="Filetype"
+            placeholder="Select a filetype"
+            {...form.getInputProps("filetype")}
+          />
         </Form>
         <Group position="right">
           <Button
@@ -165,30 +172,24 @@ function CreateStudyModal({
 
 export function NewStudyAdmin() {
   const [newStudyModalOpen, setNewStudyModalOpen] = useState(false);
-  const [s3TempCredentials, setS3TempCredentials] = useState<string[]>([]);
-  const [
-    createS3TempCredentialsMutation,
-    { loading: createS3TempCredentialsLoading },
-  ] = useCreateS3TempCredentialsMutation();
-  const createTempCredentials = () => {
-    createS3TempCredentialsMutation()
-      .then((r) => {
-        if (r?.data?.createS3TempCredentials?.strings) {
-          setS3TempCredentials(r.data.createS3TempCredentials.strings);
-          setNewStudyModalOpen(true);
-        }
-      })
-      .catch((reason) => {
-        showNotification({
-          title: "Could not create temporary credentials",
-          message: reason.message,
-          color: "red",
-        });
-      });
-  };
+  // const createTempCredentials = () => {
+  //   createS3TempCredentialsMutation()
+  //     .then((r) => {
+  //       if (r?.data?.createS3TempCredentials?.strings) {
+  //         setS3TempCredentials(r.data.createS3TempCredentials.strings);
+  //         setNewStudyModalOpen(true);
+  //       }
+  //     })
+  //     .catch((reason) => {
+  //       showNotification({
+  //         title: "Could not create temporary credentials",
+  //         message: reason.message,
+  //         color: "red",
+  //       });
+  //     });
+  // };
 
   const { data, loading, refetch } = useStudyAdminListQuery();
-
   const [selectedStudy, setSelectedStudy] = useState<
     StudyAdminDetailsFragment | undefined
   >(undefined);
@@ -405,21 +406,13 @@ export function NewStudyAdmin() {
       <Space h="xl" />
       <Stack px="md">
         <Group position="right">
-          <Button onClick={() => setNewStudyModalOpen(true)}>
-            <Group spacing="xs">
-              <IconPlus />
-              <span>New Study</span>
-            </Group>
-          </Button>
           {data?.userStudyUploadConfigured && (
-            <Group>
-              <Button
-                onClick={createTempCredentials}
-                loading={createS3TempCredentialsLoading}
-              >
-                Study Upload: Create S3 Credentials
-              </Button>
-            </Group>
+            <Button onClick={() => setNewStudyModalOpen(true)}>
+              <Group spacing="xs">
+                <IconPlus />
+                <span>New Study</span>
+              </Group>
+            </Button>
           )}
         </Group>
 
@@ -433,8 +426,6 @@ export function NewStudyAdmin() {
         <DataTable
           data={data?.studyAdminDetailsList || []}
           columns={columns}
-          selectableRows
-          selectableRowsSingle
           onSelectedRowsChange={(state) =>
             selectStudy(
               state.selectedRows.length === 1

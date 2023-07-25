@@ -53,7 +53,7 @@ resource "aws_iam_role" "batch_execution_role" {
           ],
           "Resource" = ["*"]
         },
-                {
+        {
           "Effect" = "Allow",
           "Action" = [
             "logs:DescribeLogGroups"
@@ -215,3 +215,41 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
   })
 }
 
+
+# sns topic for failed batch job
+resource "aws_cloudwatch_event_rule" "aws_cloudwatch_event_rule" {
+  name = "cellenium_batch_job_failed_rule"
+  description = "calls a lambda function is a batch import job failed."
+
+
+  event_pattern = jsonencode({
+    "detail-type" : [
+      "Batch Job State Change"
+    ],
+    "source" : [
+      "aws.batch"
+    ],
+    "detail" : {
+      "status" : [
+        "FAILED"
+      ]
+    }
+  })
+}
+
+
+resource "aws_cloudwatch_event_target" "cellenium_batch_job_failed_lambda_target" {
+
+   rule      = aws_cloudwatch_event_rule.aws_cloudwatch_event_rule.name
+   target_id = aws_cloudwatch_event_rule.aws_cloudwatch_event_rule.name
+   arn       = var.sns_topic_arn
+
+   input_transformer {
+     input_paths = {
+       gdid     = "$.detail.id",
+       region   = "$.detail.region",
+       instanceid = "$.detail.resource.instanceDetails.instanceId"
+     }
+     input_template = "\"GuardDuty Finding for the BOA313 Workshop on Terraform and AWS Security Solutions. | ID:<gdid> | The EC2 instance: <instanceid>, may be compromised and should be investigated. Go to https://console.aws.amazon.com/guardduty/home?region=<region>#/findings?macros=current&fId=<gdid>\""
+   }
+ }

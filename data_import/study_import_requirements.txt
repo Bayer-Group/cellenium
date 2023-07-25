@@ -6,3 +6,4 @@ psycopg2-binary
 muon
 boto3
 smart-open
+universal_pathlib

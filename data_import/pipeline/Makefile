@@ -11,10 +11,15 @@ build_lambda_layer:
 	rm -rf lambda_build
 
 
-build_lambda:
+build_lambda_submit:
 	set -e
 	rm -rf lambda.zip
-	cd lambda && zip -r ../lambda.zip . && cd ..
+	cd lambda_submit && zip -r ../lambda_submit.zip . && cd ..
+
+build_lambda_submit:
+	set -e
+	rm -rf lambda.zip
+	cd lambda_failed && zip -r ../lambda_failed.zip . && cd ..
 
 build_batch:
 	set -e

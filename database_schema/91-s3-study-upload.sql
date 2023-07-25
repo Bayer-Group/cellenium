@@ -81,3 +81,74 @@ def aws_credentials_for_bucket_user_prefix():
 return aws_credentials_for_bucket_user_prefix()
 $$;
 
+
+
+CREATE OR REPLACE FUNCTION create_study_upload(IN filetype text, IN study_name text)
+    RETURNS json
+    LANGUAGE plpython3u
+    VOLATILE
+AS
+    $$
+    import plpy
+    import boto3
+    from botocore.exceptions import ClientError
+    from jose import jwt
+    import pathlib
+    import json
+    import os
+    import uuid
+    import logging
+    import re
+
+    def get_token():
+        r = plpy.execute("SELECT current_setting('postgraphile.auth_header_value', TRUE)::VARCHAR token")
+        return [row for row in r][0]['token']
+
+
+    def get_username():
+        try:
+            claims = jwt.get_unverified_claims(get_token())
+            return claims['unique_name']
+        except Exception as e:
+            return "anonymous"
+
+    if filetype not in [".h5ad", ".h5mu"]:
+        raise Exception("filetype must be one of .h5ad or .h5mu")
+
+    # if 'S3_BUCKET' not in os.environ:
+    #     raise Exception("S3_BUCKET environment variable not set")
+    #
+    # s3_client = boto3.client("s3")
+
+    username = get_username()
+    s3_prefix = f"/input/{username}/"
+    study_name_cleaned = re.sub('[^0-9a-zA-Z]+', '*', study_name)
+    s3_key = f"{s3_prefix}{study_name_cleaned}.{filetype}"
+
+    # check if key_exists
+    # try:
+    #     s3_client.head_object(Bucket=os.environ['S3_BUCKET'], Key=s3_key)
+    #     s3_key = f"{s3_prefix}{study_name_cleaned}_{uuid.uuid4()}.{filetype}"
+    # except ClientError as e:
+    #     if e.response['Error']['Code'] != '404':
+    #         raise e
+    #
+    # try:
+    #     response = s3_client.generate_presigned_post(
+    #         os.environ['S3_BUCKET'],
+    #         s3_key,
+    #         Fields=None,
+    #         Conditions=None,
+    #         ExpiresIn=60**60*12, # 12 hours
+    #     )
+    # except ClientError as e:
+    #     logging.error(e)
+    #     return None
+
+    response = dict()
+    plan = plpy.prepare("INSERT INTO study (study_name, filename, visible, import_started, import_file) VALUES ($1, $2, $3, $4, $5)", ["text", "text", "bool", "bool", "text"])
+    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key])
+
+    # The response contains the presigned URL and required fields
+    return json.dumps(response)
+    $$

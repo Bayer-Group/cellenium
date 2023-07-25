@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.WARNING)
 client = boto3.client("batch")
 s3 = boto3.client("s3")
 
-REQUIRED_ENV_VARIABLES = ["BATCH_JOB_DEFINITION", "BATCH_JOB_QUEUE", "AWS_DB_SECRET"]
+REQUIRED_ENV_VARIABLES = ["AWS_DB_SECRET"]
 
 
 def get_aws_db_engine():
@@ -43,28 +43,28 @@ def lambda_handler(event, context):
     if not all(map(lambda var: os.environ.get(var, False), REQUIRED_ENV_VARIABLES)):
         raise RuntimeError(f"Missing required environment variable")
 
-    engine = get_aws_db_engine()
-    with engine.connect() as connection:
-        rs = connection.execute(
-            text("SELECT study_id FROM public.study WHERE "), timeout=10
-        )
-        study_ids = [r[0] for r in rs]
-        print(study_ids)
 
-    bucket = event["Records"][0]["s3"]["bucket"]["name"]
-    key = parse.unquote_plus(
-        event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
-    )
-
-    if pathlib.Path(key).suffix != ".h5ad":
-        logging.warning(f"Deleting {key}")
-        s3.delete_object(Bucket=bucket, Key=key)
-        return
-
-    response = client.submit_job(
-        jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
-        jobName="".join(e for e in key if e.isalnum()),
-        jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
-        parameters={"filename": f"s3://{bucket}/{key}", "analyze-database": "true"},
-    )
-    print(response)
+    # engine = get_aws_db_engine()
+    # with engine.connect() as connection:
+    #     rs = connection.execute(
+    #         text("UPDATE public.study SET import_failed=true WHERE study_id=%s".format()), timeout=10
+    #     )
+    #     study_ids = [r[0] for r in rs]
+    #
+    # bucket = event["Records"][0]["s3"]["bucket"]["name"]
+    # key = parse.unquote_plus(
+    #     event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
+    # )
+    #
+    # if pathlib.Path(key).suffix != ".h5ad":
+    #     logging.warning(f"Deleting {key}")
+    #     s3.delete_object(Bucket=bucket, Key=key)
+    #     return
+    #
+    # response = client.submit_job(
+    #     jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
+    #     jobName="".join(e for e in key if e.isalnum()),
+    #     jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
+    #     parameters={"filename": f"s3://{bucket}/{key}", "analyze-database": "true"},
+    # )
+    return "function ran", event
