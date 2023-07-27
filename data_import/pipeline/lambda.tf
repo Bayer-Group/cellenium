@@ -46,7 +46,7 @@ resource "aws_lambda_layer_version" "lambda_layer_psycopg2_sqlalchemy" {
   compatible_runtimes      = ["python3.10"]
   compatible_architectures = ["x86_64"]
   depends_on               = [null_resource.lambda_layer_zip]
-  source_code_hash         = "$filebase64sha256(./lambda/requirements.zip)"
+  source_code_hash         = "$filebase64sha256(./lambda_layer/requirements.zip)"
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -138,7 +138,7 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy_attachment_batch_s
 
 
 resource "aws_lambda_function" "submit_study_import_lambda" {
-  filename      = "./lambda.zip"
+  filename      = "./lambda_submit.zip"
   function_name = "cellenium_submit_study_import"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
@@ -170,7 +170,7 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
 
 resource "aws_lambda_function" "failed_study_import_lambda" {
   filename      = "./lambda_failed.zip"
-  function_name = "cellenium_submit_study_import"
+  function_name = "cellenium_failed_study_import"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
 
@@ -204,7 +204,7 @@ resource "aws_lambda_permission" "allow_bucket" {
   source_arn    = aws_s3_bucket.cellenium_s3_bucket.arn
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
+resource "aws_s3_bucket_notification" "bucket_notification_h5ad" {
   bucket = aws_s3_bucket.cellenium_s3_bucket.id
 
   lambda_function {
@@ -216,7 +216,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   depends_on = [aws_lambda_function.submit_study_import_lambda, aws_lambda_permission.allow_bucket]
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
+resource "aws_s3_bucket_notification" "bucket_notification_h5mu" {
   bucket = aws_s3_bucket.cellenium_s3_bucket.id
 
   lambda_function {
@@ -229,7 +229,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 }
 
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_foo" {
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_failed_study_import_lambda" {
     statement_id = "AllowExecutionFromCloudWatch"
     action = "lambda:InvokeFunction"
     function_name = aws_lambda_function.failed_study_import_lambda.function_name

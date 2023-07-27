@@ -242,14 +242,5 @@ resource "aws_cloudwatch_event_target" "cellenium_batch_job_failed_lambda_target
 
    rule      = aws_cloudwatch_event_rule.aws_cloudwatch_event_rule.name
    target_id = aws_cloudwatch_event_rule.aws_cloudwatch_event_rule.name
-   arn       = var.sns_topic_arn
-
-   input_transformer {
-     input_paths = {
-       gdid     = "$.detail.id",
-       region   = "$.detail.region",
-       instanceid = "$.detail.resource.instanceDetails.instanceId"
-     }
-     input_template = "\"GuardDuty Finding for the BOA313 Workshop on Terraform and AWS Security Solutions. | ID:<gdid> | The EC2 instance: <instanceid>, may be compromised and should be investigated. Go to https://console.aws.amazon.com/guardduty/home?region=<region>#/findings?macros=current&fId=<gdid>\""
-   }
+   arn       = aws_lambda_function.failed_study_import_lambda.arn
  }

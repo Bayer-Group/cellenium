@@ -1,4 +1,4 @@
-.PHONY = build_lambda_layer build_lambda_submit build_lambda_failed build_docker_image
+.PHONY = build_lambda_layer build_lambda_submit build_lambda_failed
 .SECONDARY:
 
 build_lambda_layer:
@@ -20,7 +20,3 @@ build_lambda_failed:
 	set -e
 	rm -rf lambda.zip
 	cd lambda_failed && zip -r ../lambda_failed.zip . && cd ..
-
-build_batch:
-	set -e
-	docker buildx build --platform linux/amd64 -t cellenium_data_import -f ./batch/Dockerfile ./..

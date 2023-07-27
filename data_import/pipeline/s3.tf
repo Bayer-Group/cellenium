@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "cellenium_s3_bucket" {
     Name = "Cellenium Study Import"
   }
 
-#  lifecycle {
-#    prevent_destroy = true
-#  }
+  lifecycle {
+    prevent_destroy = true
+  }
 }

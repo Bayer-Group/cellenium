@@ -10,11 +10,10 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = var.terraform_remote_state_bucket
-    region = "eu-central-1"
-  }
-
+#  backend "s3" {
+#    bucket = var.terraform_remote_state_bucket
+#    region = "eu-central-1"
+#  }
 
   required_version = ">= 1.2.0"
 }
@@ -32,7 +31,6 @@ provider "docker" {
 
 provider "aws" {
   region  = "eu-central-1"
-  profile = "steffenlab"
 }
 
 data "aws_vpc" "vpc" {
@@ -55,7 +53,6 @@ data "aws_ecr_authorization_token" "token" {}
 
 resource "aws_secretsmanager_secret" "db_secret" {
   name = var.cellenium_db_secret_name
-
   recovery_window_in_days = 0
 }
 
