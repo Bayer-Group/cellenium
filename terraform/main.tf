@@ -5,12 +5,6 @@ terraform {
       version = "~> 4.16"
     }
   }
-
-  #  backend "s3" {
-  #    bucket = var.terraform_remote_state_bucket
-  #    region = "eu-central-1"
-  #  }
-
   required_version = ">= 1.5.0"
 }
 

@@ -52,7 +52,15 @@ resource "aws_iam_role" "batch_execution_role" {
             "logs:DescribeLogGroups"
           ],
           "Resource" = ["*"]
-        }
+        },
+        {
+        Action = [
+          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters"
+        ]
+        Effect   = "Allow"
+        Resource = ["*"]
+        # Resource = [aws_batch_compute_environment.cellenium_study_import_compute_environment.ecs_cluster_arn]
+      }
       ]
     })
   }
@@ -84,10 +92,11 @@ resource "aws_iam_role_policy" "manage_ecs" {
     Statement = [
       {
         Action = [
-          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters", "ecs:DeleteCluster"
+          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters"
         ]
         Effect   = "Allow"
-        Resource = [aws_batch_compute_environment.cellenium_study_import_compute_environment.ecs_cluster_arn]
+        Resource = ["*"]
+        # Resource = [aws_batch_compute_environment.cellenium_study_import_compute_environment.ecs_cluster_arn]
       },
     ]
   })

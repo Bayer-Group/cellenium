@@ -31,8 +31,3 @@ variable "bucket_name" {
   type = string
   default = "cellenium-study-import"
 }
-
-variable "prevent_destroy" {
-  type = bool
-  default = true
-}

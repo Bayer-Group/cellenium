@@ -4,16 +4,6 @@ variable "docker_host" {
   default = "unix:///var/run/docker.sock"
 }
 
-variable "prevent_destroy_s3_bucket" {
-  type = bool
-  default = true
-}
-
-variable "terraform_remote_state_bucket" {
-  type = string
-  description = "The name of the S3 bucket used for storing remote state"
-}
-
 variable "ec2_security_group_id" {
   type = string
 }
