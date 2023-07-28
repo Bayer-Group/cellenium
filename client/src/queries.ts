@@ -332,6 +332,7 @@ gql`
     importStarted
     importFailed
     importFinished
+    hasImportLog
   }
 
   query studyAdminList {
@@ -339,6 +340,13 @@ gql`
       ...StudyAdminDetails
     }
     userStudyUploadConfigured
+  }
+  
+   query studyLogs($studyId: Int!) {
+        studyImportLogsList(condition: {studyId: $studyId}) {
+        importFile
+        importLog
+      }
   }
 
   mutation studyUpdate(

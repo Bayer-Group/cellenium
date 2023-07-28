@@ -115,10 +115,10 @@ AS
     if filetype not in [".h5ad", ".h5mu"]:
         raise Exception("filetype must be one of .h5ad or .h5mu")
 
-    # if 'S3_BUCKET' not in os.environ:
-    #     raise Exception("S3_BUCKET environment variable not set")
-    #
-    # s3_client = boto3.client("s3")
+    if 'S3_BUCKET' not in os.environ:
+        raise Exception("S3_BUCKET environment variable not set")
+
+    s3_client = boto3.client("s3")
 
     username = get_username()
     s3_prefix = f"/input/{username}/"
@@ -126,25 +126,20 @@ AS
     s3_key = f"{s3_prefix}{study_name_cleaned}.{filetype}"
 
     # check if key_exists
-    # try:
-    #     s3_client.head_object(Bucket=os.environ['S3_BUCKET'], Key=s3_key)
-    #     s3_key = f"{s3_prefix}{study_name_cleaned}_{uuid.uuid4()}.{filetype}"
-    # except ClientError as e:
-    #     if e.response['Error']['Code'] != '404':
-    #         raise e
-    #
-    # try:
-    #     response = s3_client.generate_presigned_post(
-    #         os.environ['S3_BUCKET'],
-    #         s3_key,
-    #         Fields=None,
-    #         Conditions=None,
-    #         ExpiresIn=60**60*12, # 12 hours
-    #     )
-    # except ClientError as e:
-    #     logging.error(e)
-    #     return None
+    try:
+        s3_client.head_object(Bucket=os.environ['S3_BUCKET'], Key=s3_key)
+        s3_key = f"{s3_prefix}{study_name_cleaned}_{uuid.uuid4()}.{filetype}"
+    except ClientError as e:
+        if e.response['Error']['Code'] != '404':
+            raise e
 
+    response = s3_client.generate_presigned_post(
+        os.environ['S3_BUCKET'],
+        s3_key,
+        Fields=None,
+        Conditions=None,
+        ExpiresIn=60**60*12, # 12 hours
+    )
     response = dict()
     plan = plpy.prepare("INSERT INTO study (study_name, filename, visible, import_started, import_file) VALUES ($1, $2, $3, $4, $5)", ["text", "text", "bool", "bool", "text"])
     plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key])

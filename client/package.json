@@ -45,7 +45,7 @@
     "yarn": "^1.22.19"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --debug",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "serve": "vite preview",
     "codegen": "yarn run graphql-codegen",
@@ -75,9 +75,10 @@
     "@graphql-codegen/client-preset": "^1.2.4",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@vitejs/plugin-react": "^4.0.1",
+    "cross-env": "^7.0.3",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.0.0",
     "vite": "^4.3.9",
-    "vite-plugin-svgr": "^3.2.0",
-    "cross-env": "^7.0.3"
+    "vite-plugin-svgr": "^3.2.0"
   }
 }
