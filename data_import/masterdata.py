@@ -679,7 +679,7 @@ class Dataimport(object):
 if __name__ == "__main__":
     db_config = {
         "host": "localhost",
-        "port": 5001,
+        "port": 6001,
         "user": "postgres",
         "password": "postgres",
         "dbname": "postgres",

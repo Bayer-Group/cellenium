@@ -107,5 +107,5 @@ def get_aws_db_engine():
 
 def get_local_db_engine(url: str):
     if url is None:
-        url = f"postgresql://postgres:postgres@localhost:5001/postgres"
+        url = f"postgresql://postgres:postgres@localhost:6001/postgres"
     return create_engine(url=url)

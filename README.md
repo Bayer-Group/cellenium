@@ -63,10 +63,10 @@ make atac_studydata_import
 make cite_studydata_import
 ```
 
-The GraphQL API explorer is available at http://localhost:5000/postgraphile/graphiql . Postgraphile will listen
+The GraphQL API explorer is available at http://localhost:6000/postgraphile/graphiql . Postgraphile will listen
 to changes in the database schema and the updated API is visible immediately.
 
-The cellenium webapp 'production build' static site is hosted in the 'client' container, see http://localhost:5002/ .
+The cellenium webapp 'production build' static site is hosted in the 'client' container, see http://localhost:6002/ .
 For development, you run `(cd client && yarn && yarn start)` to install the webapp's dependencies and have
 a hot-reloaded webapp.
 
