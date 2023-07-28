@@ -8,9 +8,9 @@ services:
     environment:
       - PGPORT=6001
       - POSTGRES_PASSWORD=postgres
-      # the S3... variables can be defined to enable a feature that displays temporary credentials fpr h5ad study upload by users
-      #- S3_BUCKET=${S3_BUCKET}
-      #- S3_IMPORTER_ROLE_ARN=${S3_IMPORTER_ROLE_ARN}
+      # the follwing variables can be defined to enable a feature that displays temporary credentials fpr h5ad study upload by users
+      - S3_BUCKET
+      - USER_STUDY_UPLOAD_CONFIGURED
       # AWS credentials - can be omitted if deployed in AWS context (e.g. role is assigned to EC2 / ECS container etc.)
       # AWS access is required if study h5ad files shall be stored in AWS only, not necessary by default.
       #- AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}

@@ -8,7 +8,7 @@ AS
 $$
 
 import os
-return True if os.getenv('S3_IMPORTER_ROLE_ARN') else False
+return True if os.getenv('USER_STUDY_UPLOAD_CONFIGURED') else False
 $$;
 
 
@@ -97,7 +97,6 @@ AS
     import json
     import os
     import uuid
-    import logging
     import re
 
     def get_token():
@@ -140,7 +139,6 @@ AS
         Conditions=None,
         ExpiresIn=60**60*12, # 12 hours
     )
-    response = dict()
     plan = plpy.prepare("INSERT INTO study (study_name, filename, visible, import_started, import_file) VALUES ($1, $2, $3, $4, $5)", ["text", "text", "bool", "bool", "text"])
     plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key])
 
