@@ -33,30 +33,53 @@ resource "null_resource" "lambda_failed_zip" {
 }
 
 resource "aws_security_group" "cellenium_study_import_lambda_security_group" {
-  name        = "cellenium_study_import_lambda_security_group"
+  name        = "${data.aws_caller_identity.current.account_id}-${var.lambda_security_group}"
   description = "Security group for cellenium study import with AWS Batch"
   vpc_id      = data.aws_vpc.vpc.id
-
-  egress {
-    from_port       = var.ec2_security_group_port
-    to_port         = var.ec2_security_group_port
-    protocol        = "TCP"
-    security_groups = [var.ec2_security_group_id]
-  }
 }
 
-resource "aws_security_group_rule" "cellenium_study_import_lambda_security_group_rule" {
-  type              = "egress"
+resource "aws_security_group_rule" "cellenium_study_import_lambda_ingress_security_group_rule" {
+  type              = "ingress"
   from_port         = 0
   to_port           = 65535
-  protocol          = "TCP"
-  cidr_blocks       = [data.aws_vpc.vpc.cidr_block]
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
 }
 
+resource "aws_security_group_rule" "cellenium_study_import_lambda_egress_security_group_rule" {
+  type              = "egress"
+  from_port         = var.ec2_security_group_port
+  to_port           = var.ec2_security_group_port
+  protocol          = "tcp"
+  source_security_group_id = var.ec2_security_group_id
+  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
+}
+
+
+resource "aws_security_group_rule" "cellenium_study_import_lambda_egress_internet_security_group_rule" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
+}
+
+resource "aws_security_group_rule" "cellenium_study_import_security_group_rule_ec2" {
+  type                     = "ingress"
+  from_port                = var.ec2_security_group_port
+  to_port                  = var.ec2_security_group_port
+  protocol                 = "TCP"
+  source_security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
+  security_group_id        = var.ec2_security_group_id
+  description              = "${data.aws_caller_identity.current.account_id}-cellenium-lambda-access"
+}
+
+
 resource "aws_lambda_layer_version" "lambda_layer_psycopg2_sqlalchemy" {
   filename   = "${path.module}/lambda_layer.zip"
-  layer_name = "Python310Psycopg2SQLAlchemy"
+  layer_name = "${data.aws_caller_identity.current.account_id}-${var.lambda_layer_name}"
 
   compatible_runtimes      = ["python3.10"]
   compatible_architectures = ["x86_64"]
@@ -67,7 +90,7 @@ resource "aws_lambda_layer_version" "lambda_layer_psycopg2_sqlalchemy" {
 
 resource "aws_lambda_function" "submit_study_import_lambda" {
   filename      = "${path.module}/lambda_submit.zip"
-  function_name = "cellenium_submit_study_import"
+  function_name = "${data.aws_caller_identity.current.account_id}-${var.submit_study_import_lambda_function_name}"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
 
@@ -80,13 +103,13 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
   memory_size = 512
 
   vpc_config {
-    subnet_ids         = data.aws_subnets.default_vpc_subnets.ids
+    subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.cellenium_study_import_lambda_security_group.id]
   }
 
   environment {
     variables = {
-      AWS_DB_SECRET        = var.db_secret_name
+      AWS_DB_SECRET        = var.db_secret_arn
       BATCH_JOB_DEFINITION = var.batch_job_definition_name
       BATCH_JOB_QUEUE      = var.batch_queue_name
     }
@@ -96,7 +119,7 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
 
 resource "aws_lambda_function" "failed_study_import_lambda" {
   filename      = "${path.module}/lambda_failed.zip"
-  function_name = "cellenium_failed_study_import"
+  function_name = "${data.aws_caller_identity.current.account_id}-${var.failed_study_import_lambda_function_name}"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
 
@@ -109,13 +132,13 @@ resource "aws_lambda_function" "failed_study_import_lambda" {
   memory_size = 512
 
   vpc_config {
-    subnet_ids         = data.aws_subnets.default_vpc_subnets.ids
+    subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.cellenium_study_import_lambda_security_group.id]
   }
 
   environment {
     variables = {
-      AWS_DB_SECRET = var.db_secret_name
+      AWS_DB_SECRET = var.db_secret_id
     }
   }
 }
@@ -129,25 +152,12 @@ resource "aws_lambda_permission" "allow_bucket" {
   source_arn    = var.s3_bucket_arn
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification_h5ad" {
+resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = var.s3_bucket_id
 
   lambda_function {
     lambda_function_arn = aws_lambda_function.submit_study_import_lambda.arn
     events              = ["s3:ObjectCreated:*"]
-    filter_suffix       = ".h5ad"
-  }
-
-  depends_on = [aws_lambda_function.submit_study_import_lambda, aws_lambda_permission.allow_bucket]
-}
-
-resource "aws_s3_bucket_notification" "bucket_notification_h5mu" {
-  bucket = var.s3_bucket_id
-
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.submit_study_import_lambda.arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_suffix       = ".h5mu"
   }
 
   depends_on = [aws_lambda_function.submit_study_import_lambda, aws_lambda_permission.allow_bucket]

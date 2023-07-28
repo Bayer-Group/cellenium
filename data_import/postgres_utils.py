@@ -94,11 +94,11 @@ def get_aws_db_engine():
             "SecretString"
         ]
     )
-    db = secret_values["dbname"]
-    db_host = secret_values["host"]
-    db_port = secret_values["port"]
-    db_user = secret_values["username"]
-    db_password = secret_values["password"]
+    db = secret_values["DB"]
+    db_host = secret_values["IP"]
+    db_port = secret_values["PORT"]
+    db_user = secret_values["USER"]
+    db_password = secret_values["PASSWORD"]
 
     return create_engine(
         url=f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db}"

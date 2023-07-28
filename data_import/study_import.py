@@ -632,7 +632,7 @@ def create_update_study_from_file(data: AnnData, stored_filename: str):
             r = connection.execute(
                 text(
                     """
-                    SELECT study_id FROM study WHERE filename = :filename
+                    SELECT study_id FROM study WHERE import_file = :filename
                     """
                 ),
                 dict(filename=stored_filename)

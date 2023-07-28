@@ -32,6 +32,10 @@ variable "vpc_id" {
   type = string
 }
 
+variable "subnet_ids" {
+  type = list(string)
+}
+
 variable "s3_bucket_name" {
   type = string
 }
@@ -72,10 +76,35 @@ variable "batch_queue_arn" {
   type = string
 }
 
-variable "db_secret_name" {
+variable "db_secret_id" {
   type = string
 }
 
 variable "db_secret_arn" {
   type = string
+}
+
+variable "failed_study_import_lambda_function_name" {
+  type    = string
+  default = "cellenium-failed-study-import"
+}
+
+variable "submit_study_import_lambda_function_name" {
+  type    = string
+  default = "cellenium-submit-study-import"
+}
+
+variable "lambda_layer_name" {
+  type    = string
+  default = "Python310Psycopg2SQLAlchemy"
+}
+
+variable "lambda_security_group" {
+  type    = string
+  default = "cellenium_study_import_lambda_security_group"
+}
+
+variable "import_role_name" {
+  type    = string
+  default = "cellenium_study_import_lambda_role"
 }

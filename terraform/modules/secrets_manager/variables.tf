@@ -28,31 +28,31 @@ variable "aws_region" {
 }
 
 variable "secret_name" {
-  type = string
+  type    = string
   default = "cellenium-db-credentials"
 }
 
 variable "user" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "password" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "ip" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "port" {
-  type = number
+  type      = number
   sensitive = true
 }
 
 variable "db_name" {
-  type = string
+  type      = string
   sensitive = true
 }

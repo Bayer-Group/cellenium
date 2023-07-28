@@ -15,17 +15,17 @@ provider "aws" {
 
 module "cellenium_study_import_s3" {
   source = "./modules/s3"
-  prevent_destroy = var.prevent_destroy_s3_bucket
 }
 
 
 module "cellenium_study_import_lambda" {
   source = "./modules/lambda"
 
-  vpc_id = var.vpc_id
+  vpc_id                           = var.vpc_id
+  subnet_ids                        = var.subnet_ids
   batch_job_definition_name        = module.cellenium_study_import_batch.batch_job_definition_name
   batch_queue_name                 = module.cellenium_study_import_batch.batch_queue_name
-  db_secret_name                   = module.cellenium_db_secret.secret_name
+  db_secret_id                     = module.cellenium_db_secret.secret_id
   db_secret_arn                    = module.cellenium_db_secret.secret_arn
   ec2_security_group_id            = var.ec2_security_group_id
   ec2_security_group_port          = var.ec2_security_group_port
@@ -43,11 +43,12 @@ module "cellenium_study_import_batch" {
 
   bucket_arn              = module.cellenium_study_import_s3.s3_bucket_arn
   db_secret_arn           = module.cellenium_db_secret.secret_arn
-  db_secret_name          = module.cellenium_db_secret.secret_name
+  db_secret_id            = module.cellenium_db_secret.secret_id
   ec2_security_group_id   = var.ec2_security_group_id
   ec2_security_group_port = var.ec2_security_group_port
   failed_lambda_arn       = module.cellenium_study_import_lambda.failed_lambda_arn
   vpc_id                  = var.vpc_id
+  subnet_ids               = var.subnet_ids
   docker_host             = var.docker_host
 }
 

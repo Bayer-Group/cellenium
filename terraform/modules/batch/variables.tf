@@ -29,43 +29,46 @@ variable "aws_region" {
 
 
 variable "docker_host" {
-  type = string
+  type        = string
   description = "The local docker host to use for building and pushing images, identify by using `docker context ls`"
-  default = "unix:///var/run/docker.sock"
+  default     = "unix:///var/run/docker.sock"
 }
 
-variable vpc_id {
-  type = string
-  sensitive = true
+variable "vpc_id" {
+  type      = string
+}
+
+variable "subnet_ids" {
+  type      = list(string)
 }
 
 variable "ecr_repository_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import"
 }
 
 variable "job_definition_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-jd"
 }
 
 variable "job_queue_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-queue"
 }
 
 variable "compute_environment_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-compute-environment"
 }
 
 variable "compute_environment_type" {
-  type = string
+  type    = string
   default = "FARGATE"
 }
 
 variable "security_group_name" {
-  type = string
+  type    = string
   default = "cellenium_study_import_batch_security_group"
 }
 
@@ -78,28 +81,28 @@ variable "ec2_security_group_port" {
 }
 
 variable "failed_batch_cloudwatch_rule_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-failed-batch-rule"
 }
 
 variable "batch_import_role_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-batch-role"
 }
 
 variable "manage_ecs_policy_name" {
-  type = string
+  type    = string
   default = "cellenium_manage_ecs"
 }
 
 
 variable "batch_import_policy_name" {
-  type = string
+  type    = string
   default = "cellenium-study-import-batch-policy"
 }
 
 
-variable "db_secret_name" {
+variable "db_secret_id" {
   type = string
 }
 variable "db_secret_arn" {

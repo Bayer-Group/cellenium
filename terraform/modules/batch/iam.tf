@@ -35,6 +35,7 @@ resource "aws_iam_role" "batch_execution_role" {
           ],
           "Resource" = [
             var.bucket_arn,
+            "${var.bucket_arn}/*"
           ]
         },
         {
@@ -49,18 +50,24 @@ resource "aws_iam_role" "batch_execution_role" {
         {
           "Effect" = "Allow",
           "Action" = [
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:BatchGetImage",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
             "logs:DescribeLogGroups"
           ],
           "Resource" = ["*"]
         },
         {
-        Action = [
-          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters"
-        ]
-        Effect   = "Allow"
-        Resource = ["*"]
-        # Resource = [aws_batch_compute_environment.cellenium_study_import_compute_environment.ecs_cluster_arn]
-      }
+          Action = [
+            "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters"
+          ]
+          Effect   = "Allow"
+          Resource = ["*"]
+          # Resource = [aws_batch_compute_environment.cellenium_study_import_compute_environment.ecs_cluster_arn]
+        }
       ]
     })
   }
@@ -88,7 +95,7 @@ resource "aws_iam_role_policy" "manage_ecs" {
   role = aws_iam_role.batch_execution_role.id
 
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Action = [

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_role" {
-  name = "cellenium_study_import_lambda_role"
+  name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}"
 
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"
@@ -15,7 +15,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   inline_policy {
-    name = "cellenium_study_import_lambda_policy"
+    name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}-inline-policy"
 
     policy = jsonencode({
       Version   = "2012-10-17"
@@ -48,11 +48,19 @@ resource "aws_iam_role" "lambda_role" {
           ]
           Effect   = "Allow"
           Resource = [
-            "${var.batch_job_definition_arn}:*",
+            var.batch_job_definition_arn,
             var.batch_queue_arn,
           ]
         },
-/*        {
+        {
+          Action = [
+            "batch:TagResource",
+            "logs:GetLogEvents"
+          ]
+          Effect   = "Allow"
+          Resource = ["*"]
+        },
+        /*        {
           Action = [
             "ecr:GetAuthorizationToken",
             "ecr:BatchCheckLayerAvailability",
