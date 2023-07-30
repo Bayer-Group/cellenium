@@ -86,14 +86,14 @@ resource "aws_security_group_rule" "cellenium_study_import_security_group_rule_e
   description              = "${data.aws_caller_identity.current.account_id}-cellenium-batch-access"
 }
 
-resource "aws_security_group_rule" "cellenium_study_import_batch_ingress_security_group_rule" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.cellenium_study_import_batch_security_group.id
-}
+#resource "aws_security_group_rule" "cellenium_study_import_batch_ingress_security_group_rule" {
+#  type              = "ingress"
+#  from_port         = 0
+#  to_port           = 65535
+#  protocol          = "TCP"
+#  cidr_blocks       = ["0.0.0.0/0"]
+#  security_group_id = aws_security_group.cellenium_study_import_batch_security_group.id
+#}
 
 
 resource "aws_batch_compute_environment" "cellenium_study_import_compute_environment" {

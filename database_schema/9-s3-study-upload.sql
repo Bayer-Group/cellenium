@@ -128,8 +128,11 @@ AS
     s3_client = boto3.client("s3", config=Config(signature_version='s3v4'), region_name=os.environ['AWS_REGION'], **kwargs)
 
     username = get_username()
-    s3_prefix = f"/input/{username}/"
-    study_name_cleaned = re.sub('[^0-9a-zA-Z]+', '*', study_name)
+    cleaned_username = re.sub('[^0-9a-zA-Z]+', '', username)
+    s3_prefix = f"input/{cleaned_username}/"
+    study_name_cleaned = re.sub('[^0-9a-zA-Z]+', '', study_name)
+    if len(study_name_cleaned) == 0:
+        study_name_cleaned = str(uuid.uuid4())
     s3_key = f"{s3_prefix}{study_name_cleaned}{filetype}"
 
     # check if key_exists
@@ -154,7 +157,7 @@ AS
     plan = plpy.prepare(
         "INSERT INTO study (study_name, filename, visible, import_started, import_file, reader_permissions, admin_permissions) VALUES ($1, $2, $3, $4, $5, $6, $7)",
         ["text", "text", "bool", "bool", "text", "text[]", "text[]"])
-    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key, user_access, user_access])
+    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, f"s3://{os.environ['S3_BUCKET']}/{s3_key}", user_access, user_access])
     # The response contains the presigned URL and required fields
     return json.dumps(response)
     $$;

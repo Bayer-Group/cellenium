@@ -6,6 +6,7 @@ resource "null_resource" "lambda_layer_zip" {
 
   triggers = {
     source_code_hash = filebase64sha256("${path.module}/lambda_layer/requirements.txt")
+    zip_file         = fileexists("${path.module}/lambda_layer.zip") ? "1": uuid()
   }
 }
 
@@ -17,6 +18,7 @@ resource "null_resource" "lambda_submit_zip" {
 
   triggers = {
     source_code_hash = filebase64sha256("${path.module}/lambda_submit/lambda_function.py")
+    zip_file         = fileexists("${path.module}/lambda_submit.zip") ? "1": uuid()
   }
 }
 
@@ -29,6 +31,7 @@ resource "null_resource" "lambda_failed_zip" {
 
   triggers = {
     source_code_hash = filebase64sha256("${path.module}/lambda_failed/lambda_function.py")
+    zip_file         = fileexists("${path.module}/lambda_failed.zip") ? "1": uuid()
   }
 }
 
@@ -38,22 +41,22 @@ resource "aws_security_group" "cellenium_study_import_lambda_security_group" {
   vpc_id      = data.aws_vpc.vpc.id
 }
 
-resource "aws_security_group_rule" "cellenium_study_import_lambda_ingress_security_group_rule" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 65535
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
-}
+#resource "aws_security_group_rule" "cellenium_study_import_lambda_ingress_security_group_rule" {
+#  type              = "ingress"
+#  from_port         = 0
+#  to_port           = 65535
+#  protocol          = "tcp"
+#  cidr_blocks       = ["0.0.0.0/0"]
+#  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
+#}
 
 resource "aws_security_group_rule" "cellenium_study_import_lambda_egress_security_group_rule" {
-  type              = "egress"
-  from_port         = var.ec2_security_group_port
-  to_port           = var.ec2_security_group_port
-  protocol          = "tcp"
+  type                     = "egress"
+  from_port                = var.ec2_security_group_port
+  to_port                  = var.ec2_security_group_port
+  protocol                 = "tcp"
   source_security_group_id = var.ec2_security_group_id
-  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
+  security_group_id        = aws_security_group.cellenium_study_import_lambda_security_group.id
 }
 
 

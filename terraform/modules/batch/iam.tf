@@ -2,17 +2,17 @@ resource "aws_iam_role" "batch_execution_role" {
   name = "${data.aws_caller_identity.current.account_id}-${var.batch_import_role_name}"
 
   assume_role_policy = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Allow",
+        Effect = "Allow",
         Principal = {
           Service = "batch.amazonaws.com"
         },
         Action = "sts:AssumeRole"
       },
       {
-        Effect    = "Allow",
+        Effect = "Allow",
         Principal = {
           Service = "ecs-tasks.amazonaws.com"
         },
@@ -25,7 +25,7 @@ resource "aws_iam_role" "batch_execution_role" {
     name = "${data.aws_caller_identity.current.account_id}-${var.batch_import_policy_name}"
 
     policy = jsonencode({
-      Version   = "2012-10-17"
+      Version = "2012-10-17"
       Statement = [
         {
           "Effect" = "Allow",
@@ -95,7 +95,7 @@ resource "aws_iam_role_policy" "manage_ecs" {
   role = aws_iam_role.batch_execution_role.id
 
   policy = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       {
         Action = [

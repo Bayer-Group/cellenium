@@ -17,15 +17,20 @@ export function StudyAdmin() {
   const [selectedDeleteStudy, setSelectedDeleteStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
   const [selectedLogStudy, setSelectedLogStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
 
+  const resetNewStudyModal = useCallback(() => {
+    setNewStudyModalOpen(false);
+    void refetch();
+  }, [setNewStudyModalOpen, refetch]);
+
   const resetDeleteModal = useCallback(() => {
     setSelectedDeleteStudy(undefined);
     void refetch();
-  }, []);
+  }, [setSelectedDeleteStudy, refetch]);
 
   const resetEditModal = useCallback(() => {
     setSelectedEditStudy(undefined);
     void refetch();
-  }, []);
+  }, [setSelectedEditStudy, refetch]);
 
   const columns = [
     {
@@ -87,14 +92,7 @@ export function StudyAdmin() {
   return (
     <Container fluid={true}>
       <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />
-
-      <CreateStudyModal
-        opened={newStudyModalOpen}
-        reset={() => {
-          setNewStudyModalOpen(false);
-          void refetch();
-        }}
-      />
+      {newStudyModalOpen && <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />}
       <DeleteStudyModal study={selectedDeleteStudy} reset={resetDeleteModal} opened={selectedDeleteStudy !== undefined} />
       <StudyLogModal opened={selectedLogStudy !== undefined} study={selectedLogStudy} reset={() => setSelectedLogStudy(undefined)} />
       <NavBar />

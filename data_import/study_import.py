@@ -602,14 +602,14 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         )
 
 
-def create_update_study_from_file(data: AnnData, stored_filename: str):
+def create_update_study_from_file(data: AnnData, stored_filename: UPath):
     def _config_optional_list(key: str):
         if data.uns["cellenium"].get(key) is not None:
             return data.uns["cellenium"][key].tolist()
         return None
 
     study_data = {
-        "filename": stored_filename,
+        "filename": str(stored_filename),
         "study_name": data.uns["cellenium"]["title"],
         "description": data.uns["cellenium"]["description"],
         "tissue_ncit_ids": data.uns["cellenium"]["ncit_tissue_ids"].tolist(),
@@ -635,7 +635,7 @@ def create_update_study_from_file(data: AnnData, stored_filename: str):
                     SELECT study_id FROM study WHERE import_file = :filename
                     """
                 ),
-                dict(filename=stored_filename)
+                dict(filename=str(stored_filename))
             )
             study_id = r.fetchone()
             if study_id is None:
@@ -680,7 +680,7 @@ def create_update_study_from_file(data: AnnData, stored_filename: str):
     return study_id
 
 
-def import_study_save(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
+def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
     def _generate_study_layer(study_id, layer_name, omics_type=None):
         with engine.connect() as connection:
             r = connection.execute(
@@ -825,15 +825,15 @@ def import_study(filename: str, analyze_database: bool) -> int:
 
     logging.info(f"importing study from file {filename}")
     data = h5ad_open.h5ad_h5mu_read(filename)
-    stored_filename = UPath(filename).name
-    if stored_filename.startswith("scratch"):
+    stored_filename = UPath(filename)
+    if filename.startswith("scratch"):
         # filename inside scratch (scratch will be /h5ad_store in postgres docker)
         stored_filename = UPath(filename).relative_to("scratch").as_posix()
 
     study_id = create_update_study_from_file(data, stored_filename)
 
     try:
-        import_study_save(data, study_id, filename, analyze_database)
+        import_study_safe(data, study_id, filename, analyze_database)
     except Exception as e:
         logging.error("import failed")
         logging.error(e)

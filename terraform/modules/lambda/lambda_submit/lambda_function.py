@@ -51,7 +51,9 @@ def lambda_handler(event, context):
         event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
     )
 
-    logging.info(f"Processing {key}")
+    logging.info(f"Processing {key} {bucket}")
+    if not key.startswith("s3://"):
+        key = f"s3://{bucket}/{key}"
 
     engine = get_aws_db_engine()
     with engine.begin() as connection:
@@ -73,7 +75,7 @@ def lambda_handler(event, context):
         jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
         jobName="".join(e for e in key if e.isalnum()),
         jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
-        parameters={"filename": f"s3://{bucket}/{key}", "analyze-database": "--analyze-database"},
+        parameters={"filename": key, "analyze-database": "--analyze-database"},
         tags={
             'studyId': str(study_ids[0])
         },

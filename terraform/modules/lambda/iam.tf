@@ -2,11 +2,11 @@ resource "aws_iam_role" "lambda_role" {
   name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}"
 
   assume_role_policy = jsonencode({
-    Version   = "2012-10-17"
+    Version = "2012-10-17"
     Statement = [
       {
-        Action    = "sts:AssumeRole"
-        Effect    = "Allow"
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -18,7 +18,7 @@ resource "aws_iam_role" "lambda_role" {
     name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}-inline-policy"
 
     policy = jsonencode({
-      Version   = "2012-10-17"
+      Version = "2012-10-17"
       Statement = [
         {
           Action = [
@@ -27,7 +27,7 @@ resource "aws_iam_role" "lambda_role" {
             "s3:DeleteObject",
             "s3:ListBucket"
           ]
-          Effect   = "Allow"
+          Effect = "Allow"
           Resource = [
             var.s3_bucket_arn,
             "${var.s3_bucket_arn}/*"
@@ -46,7 +46,7 @@ resource "aws_iam_role" "lambda_role" {
           Action = [
             "batch:SubmitJob"
           ]
-          Effect   = "Allow"
+          Effect = "Allow"
           Resource = [
             var.batch_job_definition_arn,
             var.batch_queue_arn,

@@ -100,7 +100,7 @@ function NavBar() {
           </Group>
         </NavLink>
         <div className={classes.links}>
-          <Group spacing={0} position="right" className={classes.mainLinks}>
+          <Group spacing="sm" position="right" className={classes.mainLinks}>
             {mainItems}
           </Group>
         </div>

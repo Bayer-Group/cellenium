@@ -19,6 +19,7 @@ services:
       #- AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
     ports:
       - "5001:5001"
+    restart: always
     volumes:
       - postgresdata:/var/lib/postgresql/data
       - ./database_schema:/database_schema
@@ -27,10 +28,11 @@ services:
   postgraphile:
     build:
       context: ./postgraphile
+    restart: always
     environment:
       # study-level permissions are not in effect until permissions are set in the study table,
       # these are demo examples for testing:
-      # - AUTH_HEADER_NAME=authorization
+      - AUTH_HEADER_NAME
       # - AUTH_HEADER_MOCK_VALUE=Group1;Group2
       - DATABASE_URL=postgres://postgraphile:postgraphile@postgres:5001/postgres
       # the postgraphile database user is sufficient for the API;
@@ -42,6 +44,7 @@ services:
       - "5000:5000"
 
   client:
+    restart: always
     build:
       context: ./client
     ports:

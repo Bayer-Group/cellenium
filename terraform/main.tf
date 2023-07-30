@@ -22,7 +22,7 @@ module "cellenium_study_import_lambda" {
   source = "./modules/lambda"
 
   vpc_id                           = var.vpc_id
-  subnet_ids                        = var.subnet_ids
+  subnet_ids                       = var.subnet_ids
   batch_job_definition_name        = module.cellenium_study_import_batch.batch_job_definition_name
   batch_queue_name                 = module.cellenium_study_import_batch.batch_queue_name
   db_secret_id                     = module.cellenium_db_secret.secret_id
@@ -48,7 +48,7 @@ module "cellenium_study_import_batch" {
   ec2_security_group_port = var.ec2_security_group_port
   failed_lambda_arn       = module.cellenium_study_import_lambda.failed_lambda_arn
   vpc_id                  = var.vpc_id
-  subnet_ids               = var.subnet_ids
+  subnet_ids              = var.subnet_ids
   docker_host             = var.docker_host
 }
 
