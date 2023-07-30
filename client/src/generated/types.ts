@@ -1218,29 +1218,6 @@ export type CreateStudyAnnotationGroupUiPayload = {
   studyAnnotationGroupUi: Maybe<StudyAnnotationGroupUi>;
 };
 
-/** All input for the `createStudyForCurrentUser` mutation. */
-export type CreateStudyForCurrentUserInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  studyName: InputMaybe<Scalars["String"]>;
-};
-
-/** The output of our `createStudyForCurrentUser` mutation. */
-export type CreateStudyForCurrentUserPayload = {
-  __typename?: "CreateStudyForCurrentUserPayload";
-  boolean: Maybe<Scalars["Boolean"]>;
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId: Maybe<Scalars["String"]>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query: Maybe<Query>;
-};
-
 /** All input for the create `Study` mutation. */
 export type CreateStudyInput = {
   /**
@@ -2464,7 +2441,6 @@ export type Mutation = {
   createStudyAdministrableCurrentuser: Maybe<CreateStudyAdministrableCurrentuserPayload>;
   /** Creates a single `StudyAnnotationGroupUi`. */
   createStudyAnnotationGroupUi: Maybe<CreateStudyAnnotationGroupUiPayload>;
-  createStudyForCurrentUser: Maybe<CreateStudyForCurrentUserPayload>;
   /** Creates a single `StudyLayer`. */
   createStudyLayer: Maybe<CreateStudyLayerPayload>;
   /** Creates a single `StudyOmic`. */
@@ -2679,11 +2655,6 @@ export type MutationCreateStudyAdministrableCurrentuserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyAnnotationGroupUiArgs = {
   input: CreateStudyAnnotationGroupUiInput;
-};
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationCreateStudyForCurrentUserArgs = {
-  input: CreateStudyForCurrentUserInput;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -3962,6 +3933,8 @@ export type Query = Node & {
   studyAnnotationGroupUisList: Maybe<Array<StudyAnnotationGroupUi>>;
   /** Reads a single `Study` using its globally unique `ID`. */
   studyByNodeId: Maybe<Study>;
+  /** Reads a set of `StudyImportLog`. */
+  studyImportLogsList: Maybe<Array<StudyImportLog>>;
   studyLayer: Maybe<StudyLayer>;
   /** Reads a single `StudyLayer` using its globally unique `ID`. */
   studyLayerByNodeId: Maybe<StudyLayer>;
@@ -4429,6 +4402,15 @@ export type QueryStudyByNodeIdArgs = {
 };
 
 /** The root query type which gives access points into the data universe. */
+export type QueryStudyImportLogsListArgs = {
+  condition: InputMaybe<StudyImportLogCondition>;
+  filter: InputMaybe<StudyImportLogFilter>;
+  first: InputMaybe<Scalars["Int"]>;
+  offset: InputMaybe<Scalars["Int"]>;
+  orderBy: InputMaybe<Array<StudyImportLogsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudyLayerArgs = {
   studyLayerId: Scalars["Int"];
 };
@@ -4889,6 +4871,7 @@ export type StudyAdminDetail = {
   diseaseMeshIds: Maybe<Array<Maybe<Scalars["String"]>>>;
   externalWebsite: Maybe<Scalars["String"]>;
   filename: Maybe<Scalars["String"]>;
+  hasImportLog: Maybe<Scalars["Boolean"]>;
   importFailed: Maybe<Scalars["Boolean"]>;
   importFinished: Maybe<Scalars["Boolean"]>;
   importStarted: Maybe<Scalars["Boolean"]>;
@@ -4919,6 +4902,8 @@ export type StudyAdminDetailCondition = {
   externalWebsite: InputMaybe<Scalars["String"]>;
   /** Checks for equality with the object’s `filename` field. */
   filename: InputMaybe<Scalars["String"]>;
+  /** Checks for equality with the object’s `hasImportLog` field. */
+  hasImportLog: InputMaybe<Scalars["Boolean"]>;
   /** Checks for equality with the object’s `importFailed` field. */
   importFailed: InputMaybe<Scalars["Boolean"]>;
   /** Checks for equality with the object’s `importFinished` field. */
@@ -4957,6 +4942,8 @@ export type StudyAdminDetailFilter = {
   externalWebsite: InputMaybe<StringFilter>;
   /** Filter by the object’s `filename` field. */
   filename: InputMaybe<StringFilter>;
+  /** Filter by the object’s `hasImportLog` field. */
+  hasImportLog: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `importFailed` field. */
   importFailed: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `importFinished` field. */
@@ -4997,6 +4984,8 @@ export enum StudyAdminDetailsOrderBy {
   ExternalWebsiteDesc = "EXTERNAL_WEBSITE_DESC",
   FilenameAsc = "FILENAME_ASC",
   FilenameDesc = "FILENAME_DESC",
+  HasImportLogAsc = "HAS_IMPORT_LOG_ASC",
+  HasImportLogDesc = "HAS_IMPORT_LOG_DESC",
   ImportFailedAsc = "IMPORT_FAILED_ASC",
   ImportFailedDesc = "IMPORT_FAILED_DESC",
   ImportFinishedAsc = "IMPORT_FINISHED_ASC",
@@ -5373,6 +5362,53 @@ export type StudyFilter = {
   /** Filter by the object’s `visible` field. */
   visible: InputMaybe<BooleanFilter>;
 };
+
+export type StudyImportLog = {
+  __typename?: "StudyImportLog";
+  importFile: Maybe<Scalars["String"]>;
+  importLog: Maybe<Scalars["String"]>;
+  studyId: Maybe<Scalars["Int"]>;
+};
+
+/**
+ * A condition to be used against `StudyImportLog` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type StudyImportLogCondition = {
+  /** Checks for equality with the object’s `importFile` field. */
+  importFile: InputMaybe<Scalars["String"]>;
+  /** Checks for equality with the object’s `importLog` field. */
+  importLog: InputMaybe<Scalars["String"]>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars["Int"]>;
+};
+
+/** A filter to be used against `StudyImportLog` object types. All fields are combined with a logical ‘and.’ */
+export type StudyImportLogFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<StudyImportLogFilter>>;
+  /** Filter by the object’s `importFile` field. */
+  importFile: InputMaybe<StringFilter>;
+  /** Filter by the object’s `importLog` field. */
+  importLog: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<StudyImportLogFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<StudyImportLogFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** Methods to use when ordering `StudyImportLog`. */
+export enum StudyImportLogsOrderBy {
+  ImportFileAsc = "IMPORT_FILE_ASC",
+  ImportFileDesc = "IMPORT_FILE_DESC",
+  ImportLogAsc = "IMPORT_LOG_ASC",
+  ImportLogDesc = "IMPORT_LOG_DESC",
+  Natural = "NATURAL",
+  StudyIdAsc = "STUDY_ID_ASC",
+  StudyIdDesc = "STUDY_ID_DESC",
+}
 
 /** An input for mutations affecting `Study` */
 export type StudyInput = {
@@ -7337,6 +7373,7 @@ export type StudyAdminDetailsFragment = {
   importStarted: boolean;
   importFailed: boolean;
   importFinished: boolean;
+  hasImportLog: boolean;
 };
 
 export type StudyAdminListQueryVariables = Exact<{ [key: string]: never }>;
@@ -7362,6 +7399,20 @@ export type StudyAdminListQuery = {
     importStarted: boolean;
     importFailed: boolean;
     importFinished: boolean;
+    hasImportLog: boolean;
+  }>;
+};
+
+export type StudyLogsQueryVariables = Exact<{
+  studyId: Scalars["Int"];
+}>;
+
+export type StudyLogsQuery = {
+  __typename?: "Query";
+  studyImportLogsList: Array<{
+    __typename?: "StudyImportLog";
+    importFile: string;
+    importLog: string;
   }>;
 };
 
@@ -7544,6 +7595,7 @@ export const StudyAdminDetailsFragmentDoc = gql`
     importStarted
     importFailed
     importFinished
+    hasImportLog
   }
 `;
 export const CorrelatedgenesDocument = gql`
@@ -8665,6 +8717,60 @@ export type StudyAdminListLazyQueryHookResult = ReturnType<
 export type StudyAdminListQueryResult = Apollo.QueryResult<
   StudyAdminListQuery,
   StudyAdminListQueryVariables
+>;
+export const StudyLogsDocument = gql`
+  query studyLogs($studyId: Int!) {
+    studyImportLogsList(condition: { studyId: $studyId }) {
+      importFile
+      importLog
+    }
+  }
+`;
+
+/**
+ * __useStudyLogsQuery__
+ *
+ * To run a query within a React component, call `useStudyLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudyLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudyLogsQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useStudyLogsQuery(
+  baseOptions: Apollo.QueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<StudyLogsQuery, StudyLogsQueryVariables>(
+    StudyLogsDocument,
+    options,
+  );
+}
+export function useStudyLogsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudyLogsQuery,
+    StudyLogsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<StudyLogsQuery, StudyLogsQueryVariables>(
+    StudyLogsDocument,
+    options,
+  );
+}
+export type StudyLogsQueryHookResult = ReturnType<typeof useStudyLogsQuery>;
+export type StudyLogsLazyQueryHookResult = ReturnType<
+  typeof useStudyLogsLazyQuery
+>;
+export type StudyLogsQueryResult = Apollo.QueryResult<
+  StudyLogsQuery,
+  StudyLogsQueryVariables
 >;
 export const StudyUpdateDocument = gql`
   mutation studyUpdate(

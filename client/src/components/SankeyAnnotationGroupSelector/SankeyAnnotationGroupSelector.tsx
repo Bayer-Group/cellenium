@@ -24,8 +24,10 @@ function SankeyAnnotationGroupSelector({
         label="Select annotation group 1"
         labelProps={{ size: "xs" }}
         placeholder="Pick one"
-        transitionDuration={80}
-        transitionTimingFunction="ease"
+        transitionProps={{
+          duration: 80,
+          timingFunction: "ease",
+        }}
         data={annotationGroups}
       />
       <Select
@@ -34,8 +36,10 @@ function SankeyAnnotationGroupSelector({
         label="Select annotation group 2"
         labelProps={{ size: "xs" }}
         placeholder="Pick one"
-        transitionDuration={80}
-        transitionTimingFunction="ease"
+        transitionProps={{
+          duration: 80,
+          timingFunction: "ease",
+        }}
         data={annotationGroups.filter((ele) => ele.value !== value1)}
       />
     </Stack>

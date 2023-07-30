@@ -91,6 +91,7 @@ AS
     $$
     import plpy
     import boto3
+    from botocore.client import Config
     from botocore.exceptions import ClientError
     from jose import jwt
     import pathlib
@@ -102,7 +103,6 @@ AS
     def get_token():
         r = plpy.execute("SELECT current_setting('postgraphile.auth_header_value', TRUE)::VARCHAR token")
         return [row for row in r][0]['token']
-
 
     def get_username():
         try:
@@ -116,13 +116,21 @@ AS
 
     if 'S3_BUCKET' not in os.environ:
         raise Exception("S3_BUCKET environment variable not set")
+    if 'AWS_REGION' not in os.environ:
+        raise Exception("AWS_REGION environment variable not set")
 
-    s3_client = boto3.client("s3")
+    kwargs = dict()
+    if all([key in os.environ for key in ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"]]):
+        kwargs = dict(aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+                      aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+                      aws_session_token=os.environ['AWS_SESSION_TOKEN'])
+
+    s3_client = boto3.client("s3", config=Config(signature_version='s3v4'), region_name=os.environ['AWS_REGION'], **kwargs)
 
     username = get_username()
     s3_prefix = f"/input/{username}/"
     study_name_cleaned = re.sub('[^0-9a-zA-Z]+', '*', study_name)
-    s3_key = f"{s3_prefix}{study_name_cleaned}.{filetype}"
+    s3_key = f"{s3_prefix}{study_name_cleaned}{filetype}"
 
     # check if key_exists
     try:
@@ -131,17 +139,24 @@ AS
     except ClientError as e:
         if e.response['Error']['Code'] != '404':
             raise e
-
     response = s3_client.generate_presigned_post(
         os.environ['S3_BUCKET'],
         s3_key,
         Fields=None,
         Conditions=None,
-        ExpiresIn=60**60*12, # 12 hours
+        ExpiresIn=60 * 60 * 12,  # 12 hours
     )
-    plan = plpy.prepare("INSERT INTO study (study_name, filename, visible, import_started, import_file) VALUES ($1, $2, $3, $4, $5)", ["text", "text", "bool", "bool", "text"])
-    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key])
 
+    if username == "anonymous":
+        user_access = None
+    else:
+        user_access = [username]
+    plan = plpy.prepare(
+        "INSERT INTO study (study_name, filename, visible, import_started, import_file, reader_permissions, admin_permissions) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        ["text", "text", "bool", "bool", "text", "text[]", "text[]"])
+    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, s3_key, user_access, user_access])
     # The response contains the presigned URL and required fields
     return json.dumps(response)
-    $$
+    $$;
+grant insert, select, update, delete on study to postgraphile;
+grant usage, select ON sequence study_study_id_seq TO postgraphile;

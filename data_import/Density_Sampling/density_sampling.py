@@ -151,7 +151,7 @@ def get_local_densities(data, kernel_mult=2.0, metric="manhattan"):
 
         chunks_size = get_chunk_size(N_samples, 2)
         for i in tqdm.tqdm(range(0, N_samples, chunks_size)):
-            chunk = data[i : min(i + chunks_size, N_samples)]
+            chunk = data[i: min(i + chunks_size, N_samples)]
 
             D = pairwise_distances(chunk, data, metric, n_jobs=1)
 

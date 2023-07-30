@@ -69,8 +69,10 @@ function AnnotationGroupSelectBox() {
       labelProps={{ size: "xs" }}
       itemComponent={SelectItem}
       placeholder="Pick one"
-      transitionDuration={80}
-      transitionTimingFunction="ease"
+      transitionProps={{
+        duration: 80,
+        timingFunction: "ease",
+      }}
       data={annotations as any}
     />
   );

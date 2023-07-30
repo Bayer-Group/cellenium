@@ -4,12 +4,13 @@ services:
   postgres:
     build:
       context: ./postgres
-    command: postgres -c 'port=6001' -c 'temp_buffers=200MB' -c 'work_mem=200MB'
+    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB'
     environment:
-      - PGPORT=6001
+      - PGPORT=5001
       - POSTGRES_PASSWORD=postgres
       # the follwing variables can be defined to enable a feature that displays temporary credentials fpr h5ad study upload by users
       - S3_BUCKET
+      - AWS_REGION
       - USER_STUDY_UPLOAD_CONFIGURED
       # AWS credentials - can be omitted if deployed in AWS context (e.g. role is assigned to EC2 / ECS container etc.)
       # AWS access is required if study h5ad files shall be stored in AWS only, not necessary by default.
@@ -17,7 +18,7 @@ services:
       #- AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       #- AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
     ports:
-      - "6001:6001"
+      - "5001:5001"
     volumes:
       - postgresdata:/var/lib/postgresql/data
       - ./database_schema:/database_schema
@@ -31,20 +32,20 @@ services:
       # these are demo examples for testing:
       # - AUTH_HEADER_NAME=authorization
       # - AUTH_HEADER_MOCK_VALUE=Group1;Group2
-      - DATABASE_URL=postgres://postgraphile:postgraphile@postgres:6001/postgres
+      - DATABASE_URL=postgres://postgraphile:postgraphile@postgres:5001/postgres
       # the postgraphile database user is sufficient for the API;
       # during development it is helpful to enable database schema watching in postgres,
       # which needs more permissions. (optional environment variable)
-      - OWNER_DATABASE_URL=postgres://postgres:postgres@postgres:6001/postgres
-      - PORT=6000
+      - OWNER_DATABASE_URL=postgres://postgres:postgres@postgres:5001/postgres
+      - PORT=5000
     ports:
-      - "6000:6000"
+      - "5000:5000"
 
   client:
     build:
       context: ./client
     ports:
-      - "6002:6002"
+      - "5002:5002"
 
 volumes:
   postgresdata:

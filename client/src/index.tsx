@@ -16,13 +16,13 @@ import StudyList from "./pages/StudyList";
 import { GlobalLoading } from "./pages/GlobalLoading";
 import { RecoilRoot } from "recoil";
 import ErrorPage from "./pages/ErrorPage";
-import { NotificationsProvider } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import OntologySandbox from "./pages/OntologySandbox";
 import { StudyPage } from "./pages/StudyPage";
 import MarkerGeneSearch from "./pages/MarkerGeneSearch";
 import CrossStudySearch from "./pages/CrossStudySearch";
-import { NewStudyAdmin } from "./pages/StudyAdmin";
+import { StudyAdmin } from "./pages/StudyAdmin";
 
 export const apolloCache = new InMemoryCache();
 
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: "study-admin",
-    element: <NewStudyAdmin />,
+    element: <StudyAdmin />,
   },
   {
     path: "ontology-sandbox",
@@ -80,13 +80,12 @@ root.render(
     >
       <RecoilRoot>
         <React.Suspense fallback={<GlobalLoading />}>
-          <NotificationsProvider zIndex={10000000} position={"top-right"}>
-            <ModalsProvider>
-              <Container style={{ padding: 0 }} fluid={true}>
-                <RouterProvider router={router} />
-              </Container>
-            </ModalsProvider>
-          </NotificationsProvider>
+          <Notifications />
+          <ModalsProvider>
+            <Container style={{ padding: 0 }} fluid={true}>
+              <RouterProvider router={router} />
+            </Container>
+          </ModalsProvider>
         </React.Suspense>
       </RecoilRoot>
     </MantineProvider>

@@ -341,12 +341,12 @@ gql`
     }
     userStudyUploadConfigured
   }
-  
-   query studyLogs($studyId: Int!) {
-        studyImportLogsList(condition: {studyId: $studyId}) {
-        importFile
-        importLog
-      }
+
+  query studyLogs($studyId: Int!) {
+    studyImportLogsList(condition: { studyId: $studyId }) {
+      importFile
+      importLog
+    }
   }
 
   mutation studyUpdate(

@@ -16,7 +16,6 @@ FROM study
 WHERE legacy_config ->> 'studytype' = 'RNA-seq';
 
 
-
 DROP MATERIALIZED VIEW IF EXISTS studies_single_cell;
 CREATE MATERIALIZED VIEW studies_single_cell AS
 SELECT study_id,

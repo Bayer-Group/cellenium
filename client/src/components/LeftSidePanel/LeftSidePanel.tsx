@@ -148,7 +148,9 @@ function LeftSidePanel({ children }: Props) {
       label={link.label}
       position="right"
       withArrow
-      transitionDuration={0}
+      transitionProps={{
+        duration: 0,
+      }}
       key={link.label}
     >
       <UnstyledButton
