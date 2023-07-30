@@ -9,7 +9,7 @@ import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal.tsx'
 import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal.tsx';
 import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal.tsx';
 
-export function StudyAdmin() {
+export default function StudyAdmin() {
   const [newStudyModalOpen, setNewStudyModalOpen] = useState(false);
 
   const { data, loading, refetch, error } = useStudyAdminListQuery();
@@ -111,7 +111,7 @@ export function StudyAdmin() {
 
         {loading && (
           <Group position="center">
-            <Loader variant="dots" color="gray" size="xl" />
+            <Loader variant="dots" color="blue" size="md" />
           </Group>
         )}
         {!loading && data ? <DataTable data={data?.studyAdminDetailsList || []} columns={columns} /> : null}

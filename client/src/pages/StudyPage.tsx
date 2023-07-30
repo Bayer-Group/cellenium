@@ -8,7 +8,7 @@ import AnnotationComparison from './AnnotationComparison';
 import UserAnnotation from './UserAnnotation';
 import CelltypeDiscovery from './CelltypeDiscovery';
 
-export function StudyPage() {
+export default function StudyPage() {
   useSetStudyFromUrl();
   const page = useRecoilValue(pageState);
 

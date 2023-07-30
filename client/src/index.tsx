@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -6,17 +6,11 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheO
 import { Container, MantineProvider } from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import StudyList from './pages/StudyList';
 import { GlobalLoading } from './pages/GlobalLoading';
 import { RecoilRoot } from 'recoil';
 import ErrorPage from './pages/ErrorPage';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
-import OntologySandbox from './pages/OntologySandbox';
-import { StudyPage } from './pages/StudyPage';
-import MarkerGeneSearch from './pages/MarkerGeneSearch';
-import CrossStudySearch from './pages/CrossStudySearch';
-import { StudyAdmin } from './pages/StudyAdmin';
 
 export const apolloCache = new InMemoryCache();
 
@@ -28,6 +22,13 @@ const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: apolloCache,
   link,
 });
+
+const StudyList = lazy(() => import('./pages/StudyList'));
+const MarkerGeneSearch = lazy(() => import('./pages/MarkerGeneSearch'));
+const CrossStudySearch = lazy(() => import('./pages/CrossStudySearch'));
+const StudyPage = lazy(() => import('./pages/StudyPage'));
+const StudyAdmin = lazy(() => import('./pages/StudyAdmin'));
+const OntologySandbox = lazy(() => import('./pages/OntologySandbox'));
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
     element: <OntologySandbox />,
   },
 ]);
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
