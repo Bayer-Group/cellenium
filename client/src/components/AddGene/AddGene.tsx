@@ -1,25 +1,11 @@
-import {
-  ActionIcon,
-  Autocomplete,
-  AutocompleteItem,
-  Group,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
-import React, { FormEvent, useState } from "react";
-import { IconArrowRight, IconX } from "@tabler/icons-react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  selectedGenesState,
-  studyState,
-  userGenesState,
-  userGeneStoreCounterColor,
-  userGeneStoreOpenState,
-} from "../../atoms";
-import { showNotification } from "@mantine/notifications";
-import * as aq from "arquero";
-import { Omics } from "../../model";
+import { ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme } from '@mantine/core';
+import React, { FormEvent, useState } from 'react';
+import { IconArrowRight, IconX } from '@tabler/icons-react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { selectedGenesState, studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
+import { showNotification } from '@mantine/notifications';
+import * as aq from 'arquero';
+import { Omics } from '../../model';
 
 interface Props {
   multipleSelected?: boolean;
@@ -27,7 +13,7 @@ interface Props {
 
 function AddGene({ multipleSelected = false }: Props) {
   const [offerings, setOfferings] = useState<Omics[]>([]);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const theme = useMantineTheme();
   const [userGenes, setUserGenes] = useRecoilState(userGenesState);
   const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
@@ -42,19 +28,9 @@ function AddGene({ multipleSelected = false }: Props) {
     if (inputString.length > 0) {
       // @ts-ignore
       newOfferings = study?.studyOmicsTable
-        .filter(
-          aq.escape((t: any) =>
-            aq.op.startswith(
-              t.displaySymbol.toLowerCase(),
-              inputString.toLowerCase(),
-              0,
-            ),
-          ),
-        )
+        .filter(aq.escape((t: any) => aq.op.startswith(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0)))
         .objects();
-      newOfferings = newOfferings.sort((a, b) =>
-        a.displaySymbol.localeCompare(b.displaySymbol),
-      );
+      newOfferings = newOfferings.sort((a, b) => a.displaySymbol.localeCompare(b.displaySymbol));
     }
     setOfferings(newOfferings);
     setValue(inputString);
@@ -62,21 +38,21 @@ function AddGene({ multipleSelected = false }: Props) {
 
   function handleItemSubmit(item: Omics) {
     setOfferings([]);
-    setValue("");
+    setValue('');
     if (userGenes.filter((g) => g.omicsId === item.omicsId).length === 1) {
       showNotification({
-        title: "Your input is already in the store!",
+        title: 'Your input is already in the store!',
         message: "It's not a problem, really!",
-        color: "red",
+        color: 'red',
         autoClose: 1000,
       });
     } else {
       if (multipleSelected) setSelectedGenes([...selectedGenes, item]);
       else setSelectedGenes([item]);
       setUserGenes([...userGenes, item]);
-      setIndicatorColor("pink");
+      setIndicatorColor('pink');
       setTimeout(() => {
-        setIndicatorColor("blue");
+        setIndicatorColor('blue');
       }, 100);
       setOpened(true);
     }
@@ -84,28 +60,24 @@ function AddGene({ multipleSelected = false }: Props) {
 
   function handleSubmit(event: React.MouseEvent | FormEvent) {
     event.preventDefault();
-    const addGene: Omics[] = offerings.filter(
-      (g) => g.displaySymbol.toLowerCase() === value.toLowerCase(),
-    );
+    const addGene: Omics[] = offerings.filter((g) => g.displaySymbol.toLowerCase() === value.toLowerCase());
 
-    if (value === "") return;
+    if (value === '') return;
 
-    setValue("");
+    setValue('');
     setOfferings([]);
     if (addGene.length === 0) {
       showNotification({
-        title: "Provide a valid selection!",
-        message: "Please choose from the autocompletion list!",
-        color: "red",
+        title: 'Provide a valid selection!',
+        message: 'Please choose from the autocompletion list!',
+        color: 'red',
         autoClose: 5000,
       });
-    } else if (
-      userGenes.filter((g) => g.omicsId === addGene[0].omicsId).length === 1
-    ) {
+    } else if (userGenes.filter((g) => g.omicsId === addGene[0].omicsId).length === 1) {
       showNotification({
-        title: "Your input is already in the store!",
+        title: 'Your input is already in the store!',
         message: "It's not a problem, really!",
-        color: "red",
+        color: 'red',
         autoClose: 1000,
       });
     } else if (addGene.length === 1) {
@@ -118,8 +90,8 @@ function AddGene({ multipleSelected = false }: Props) {
 
   return (
     <Stack spacing={0}>
-      <Text size={"xs"}>Enter identifiers(s)</Text>
-      <Group align={"center"} spacing={0}>
+      <Text size={'xs'}>Enter identifiers(s)</Text>
+      <Group align={'center'} spacing={0}>
         <form onSubmit={(event) => handleSubmit(event)}>
           <Autocomplete
             value={value}
@@ -133,7 +105,7 @@ function AddGene({ multipleSelected = false }: Props) {
             rightSection={
               <ActionIcon
                 onClick={() => {
-                  setValue("");
+                  setValue('');
                   setOfferings([]);
                 }}
               >

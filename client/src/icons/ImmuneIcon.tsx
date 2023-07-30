@@ -1,4 +1,4 @@
-import Icon from "./svg/immune_system.svg";
+import Icon from './svg/immune_system.svg';
 
 interface Icon {
   size: number;

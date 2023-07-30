@@ -1,6 +1,6 @@
-import Plot from "react-plotly.js";
-import { useHalfAVolcanoQuery } from "../../generated/types";
-import { Loader } from "@mantine/core";
+import Plot from 'react-plotly.js';
+import { useHalfAVolcanoQuery } from '../../generated/types';
+import { Loader } from '@mantine/core';
 
 interface Props {
   studyId: number;
@@ -9,19 +9,14 @@ interface Props {
   log2fc: number;
 }
 
-const InlineFoldChangePlot = ({
-  studyId,
-  annotationValueId,
-  pval,
-  log2fc,
-}: Props) => {
+const InlineFoldChangePlot = ({ studyId, annotationValueId, pval, log2fc }: Props) => {
   const { data, loading } = useHalfAVolcanoQuery({
     variables: {
       studyId: studyId,
       annotationValueId: annotationValueId,
     },
   });
-  if (loading) return <Loader variant={"dots"} />;
+  if (loading) return <Loader variant={'dots'} />;
   return (
     <>
       {
@@ -38,16 +33,16 @@ const InlineFoldChangePlot = ({
                 let ppval = -1 * Math.log10(e.pvalueAdj);
                 return ppval ? ppval : 0;
               }),
-              type: "scatter",
-              mode: "markers",
-              marker: { color: "lightblue", size: 3 },
+              type: 'scatter',
+              mode: 'markers',
+              marker: { color: 'lightblue', size: 3 },
               showlegend: false,
             },
             {
               x: [log2fc],
               y: [-1 * Math.log10(pval)],
               marker: {
-                color: "red",
+                color: 'red',
                 size: 5,
               },
               showlegend: false,
@@ -63,10 +58,10 @@ const InlineFoldChangePlot = ({
               visible: true,
               fixedrange: true,
               showgrid: false,
-              title: "log2FC",
+              title: 'log2FC',
               titlefont: {
                 size: 10,
-                color: "grey",
+                color: 'grey',
               },
               tickfont: {
                 size: 6,
@@ -76,11 +71,11 @@ const InlineFoldChangePlot = ({
               visible: true,
               fixedrange: true,
               showgrid: false,
-              title: "-log(padj)",
+              title: '-log(padj)',
               titlefont: {
-                family: "Arial, sans-serif",
+                family: 'Arial, sans-serif',
                 size: 10,
-                color: "grey",
+                color: 'grey',
               },
               tickfont: {
                 size: 6,

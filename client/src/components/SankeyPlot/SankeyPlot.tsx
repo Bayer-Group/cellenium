@@ -1,7 +1,7 @@
-import { useMemo } from "react";
-import { useAnnotationValueCoocurrenceQuery } from "../../generated/types";
-import { ResponsiveSankey } from "@nivo/sankey";
-import { Center, Loader } from "@mantine/core";
+import { useMemo } from 'react';
+import { useAnnotationValueCoocurrenceQuery } from '../../generated/types';
+import { ResponsiveSankey } from '@nivo/sankey';
+import { Center, Loader } from '@mantine/core';
 
 interface Props {
   annotationGroupId1: number;
@@ -11,13 +11,7 @@ interface Props {
   studyId: number;
 }
 
-const SankeyPlot = ({
-  annotationGroupId1,
-  annotationGroupId2,
-  studyId,
-  annotationValues1,
-  annotationValues2,
-}: Props) => {
+const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotationValues1, annotationValues2 }: Props) => {
   const { data, loading } = useAnnotationValueCoocurrenceQuery({
     variables: {
       studyId,
@@ -49,10 +43,7 @@ const SankeyPlot = ({
       const links: any = [];
       data.annotationValueCoocurrenceList
         .filter((nd) => {
-          return (
-            vals1.includes(nd.annotationValueId1) &&
-            vals2.includes(nd.annotationValueId2)
-          );
+          return vals1.includes(nd.annotationValueId1) && vals2.includes(nd.annotationValueId2);
         })
         .map((nd) => {
           links.push({
@@ -70,34 +61,28 @@ const SankeyPlot = ({
       nodes: [],
       links: [],
     };
-  }, [
-    data,
-    annotationGroupId1,
-    annotationGroupId2,
-    annotationValues1,
-    annotationValues2,
-  ]);
+  }, [data, annotationGroupId1, annotationGroupId2, annotationValues1, annotationValues2]);
 
   return (
-    <Center style={{ width: "100%", height: "100%" }}>
-      {loading && <Loader variant={"dots"} color={"gray"} size={"xl"} />}
+    <Center style={{ width: '100%', height: '100%' }}>
+      {loading && <Loader variant={'dots'} color={'gray'} size={'xl'} />}
 
       {sankeyData && sankeyData.nodes.length > 0 && (
-        <div style={{ width: "90%", height: "100%" }}>
+        <div style={{ width: '90%', height: '100%' }}>
           <ResponsiveSankey
             data={sankeyData}
-            label={"label"}
+            label={'label'}
             margin={{ top: 40, right: 250, bottom: 40, left: 250 }}
             align="justify"
-            colors={{ scheme: "category10" }}
+            colors={{ scheme: 'category10' }}
             nodeOpacity={1}
             nodeHoverOthersOpacity={0.35}
             nodeThickness={18}
             nodeSpacing={24}
             nodeBorderWidth={0}
             nodeBorderColor={{
-              from: "color",
-              modifiers: [["darker", 0.8]],
+              from: 'color',
+              modifiers: [['darker', 0.8]],
             }}
             nodeBorderRadius={3}
             linkOpacity={0.5}
@@ -108,8 +93,8 @@ const SankeyPlot = ({
             labelOrientation="horizontal"
             labelPadding={16}
             labelTextColor={{
-              from: "color",
-              modifiers: [["darker", 1]],
+              from: 'color',
+              modifiers: [['darker', 1]],
             }}
           />
         </div>

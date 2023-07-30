@@ -1,5 +1,5 @@
-import { Select, Stack } from "@mantine/core";
-import { SelectBoxItem } from "../../model";
+import { Select, Stack } from '@mantine/core';
+import { SelectBoxItem } from '../../model';
 
 interface Props {
   annotationGroups: SelectBoxItem[];
@@ -9,24 +9,18 @@ interface Props {
   value2: string | undefined;
 }
 
-function SankeyAnnotationGroupSelector({
-  annotationGroups,
-  value1,
-  value2,
-  handleChange1,
-  handleChange2,
-}: Props) {
+function SankeyAnnotationGroupSelector({ annotationGroups, value1, value2, handleChange1, handleChange2 }: Props) {
   return (
     <Stack spacing={10}>
       <Select
         value={value1}
         onChange={(value) => handleChange1(value)}
         label="Select annotation group 1"
-        labelProps={{ size: "xs" }}
+        labelProps={{ size: 'xs' }}
         placeholder="Pick one"
         transitionProps={{
           duration: 80,
-          timingFunction: "ease",
+          timingFunction: 'ease',
         }}
         data={annotationGroups}
       />
@@ -34,11 +28,11 @@ function SankeyAnnotationGroupSelector({
         value={value2}
         onChange={(value) => handleChange2(value)}
         label="Select annotation group 2"
-        labelProps={{ size: "xs" }}
+        labelProps={{ size: 'xs' }}
         placeholder="Pick one"
         transitionProps={{
           duration: 80,
-          timingFunction: "ease",
+          timingFunction: 'ease',
         }}
         data={annotationGroups.filter((ele) => ele.value !== value1)}
       />

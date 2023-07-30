@@ -1,10 +1,10 @@
-import { ActionIcon, Autocomplete, AutocompleteItem } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { IconX } from "@tabler/icons-react";
-import { useRecoilValue } from "recoil";
-import { studyState } from "../../atoms";
-import * as aq from "arquero";
-import { Omics } from "../../model";
+import { ActionIcon, Autocomplete, AutocompleteItem } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { IconX } from '@tabler/icons-react';
+import { useRecoilValue } from 'recoil';
+import { studyState } from '../../atoms';
+import * as aq from 'arquero';
+import { Omics } from '../../model';
 
 interface Props {
   selection: Omics | null;
@@ -13,10 +13,10 @@ interface Props {
 
 function SingleGeneSelection({ selection, onSelectionChange }: Props) {
   const [offerings, setOfferings] = useState<Omics[]>([]);
-  const [value, setValue] = useState(selection ? selection.displaySymbol : "");
+  const [value, setValue] = useState(selection ? selection.displaySymbol : '');
   useEffect(() => {
     if (value !== selection?.displaySymbol) {
-      if (selection && value === "") {
+      if (selection && value === '') {
         setValue(selection.displaySymbol);
       }
     }
@@ -28,15 +28,7 @@ function SingleGeneSelection({ selection, onSelectionChange }: Props) {
     if (inputString.length > 0) {
       // @ts-ignore
       newOfferings = study?.studyOmicsTable
-        .filter(
-          aq.escape((t: any) =>
-            aq.op.includes(
-              t.displaySymbol.toLowerCase(),
-              inputString.toLowerCase(),
-              0,
-            ),
-          ),
-        )
+        .filter(aq.escape((t: any) => aq.op.includes(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0)))
         .objects();
     }
     setOfferings(newOfferings);
@@ -54,7 +46,7 @@ function SingleGeneSelection({ selection, onSelectionChange }: Props) {
     <Autocomplete
       value={value}
       radius={0}
-      size={"xs"}
+      size={'xs'}
       onChange={handleChange}
       onBlur={() => handleItemSubmit(offerings[0])}
       data={offerings as AutocompleteItem[]}
@@ -64,7 +56,7 @@ function SingleGeneSelection({ selection, onSelectionChange }: Props) {
       rightSection={
         <ActionIcon
           onClick={() => {
-            setValue("");
+            setValue('');
             setOfferings([]);
             onSelectionChange(null);
           }}

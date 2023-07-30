@@ -1,80 +1,75 @@
-import { ActionIcon, Loader, Stack, Text } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
-import memoize from "memoize-one";
-import { useRecoilState } from "recoil";
-import {
-  selectedGenesState,
-  userGenesState,
-  userGeneStoreCounterColor,
-  userGeneStoreOpenState,
-} from "../../atoms";
-import { Omics } from "../../model";
-import _ from "lodash";
-import { useCorrelatedgenesQuery } from "../../generated/types";
-import DataTable from "react-data-table-component";
+import { ActionIcon, Loader, Stack, Text } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
+import memoize from 'memoize-one';
+import { useRecoilState } from 'recoil';
+import { selectedGenesState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
+import { Omics } from '../../model';
+import _ from 'lodash';
+import { useCorrelatedgenesQuery } from '../../generated/types';
+import DataTable from 'react-data-table-component';
 
 const customStyles = {
   table: {
     style: {
-      backgroundColor: "transparent",
-      marginRight: "10",
-      overflow: "hidden",
+      backgroundColor: 'transparent',
+      marginRight: '10',
+      overflow: 'hidden',
     },
   },
   header: {
     style: {
-      paddingLeft: "2px",
-      backgroundColor: "transparent",
+      paddingLeft: '2px',
+      backgroundColor: 'transparent',
     },
   },
   head: {
     style: {
-      paddingLeft: "2px",
-      backgroundColor: "transparent",
+      paddingLeft: '2px',
+      backgroundColor: 'transparent',
     },
   },
   headRow: {
     style: {
-      paddingLeft: "2px",
-      backgroundColor: "transparent",
+      paddingLeft: '2px',
+      backgroundColor: 'transparent',
     },
   },
   rows: {
     style: {
-      minHeight: "72px", // override the row height
-      backgroundColor: "transparent",
+      minHeight: '72px', // override the row height
+      backgroundColor: 'transparent',
     },
   },
   headCells: {
     style: {
-      paddingLeft: "2px", // override the cell padding for head cells
-      paddingRight: "2px",
-      backgroundColor: "transparent",
+      paddingLeft: '2px', // override the cell padding for head cells
+      paddingRight: '2px',
+      backgroundColor: 'transparent',
     },
   },
   cells: {
     style: {
-      paddingLeft: "2px", // override the cell padding for data cells
-      paddingRight: "2px",
-      backgroundColor: "transparent",
+      paddingLeft: '2px', // override the cell padding for data cells
+      paddingRight: '2px',
+      backgroundColor: 'transparent',
     },
   },
 };
 const columns = memoize((clickHandler) => [
   {
-    name: "gene",
+    name: 'gene',
     selector: (row: any) => row.displaySymbol,
     sortable: true,
-    width: "80px",
+    width: '80px',
   },
   {
-    name: "r",
+    name: 'r',
     selector: (row: any) => row.r.toFixed(2),
     sortable: true,
-    width: "70px",
+    width: '70px',
   },
   {
-    name: "",
+    name: '',
     cell: (row: any) => {
       let gene = {
         omicsId: row.omicsId,
@@ -84,17 +79,12 @@ const columns = memoize((clickHandler) => [
         value: row.displaySymbol,
       };
       return (
-        <ActionIcon
-          color={"blue.3"}
-          onClick={() => clickHandler(gene)}
-          size="xs"
-          variant={"default"}
-        >
-          <IconPlus size={12} color={"black"} />
+        <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size="xs" variant={'default'}>
+          <IconPlus size={12} color={'black'} />
         </ActionIcon>
       );
     },
-    width: "20px",
+    width: '20px',
   },
 ]);
 
@@ -121,29 +111,28 @@ const CorrelationTable = ({ omicsId, studyId }: Props) => {
     if (check.length === 0) {
       setSelectedGenes([...selectedGenes, gene]);
 
-      setIndicatorColor("pink");
+      setIndicatorColor('pink');
       setUserGenes(_.union(userGenes, [gene]));
       setStoreOpen(false);
       setTimeout(() => {
-        setIndicatorColor("blue");
+        setIndicatorColor('blue');
       }, 200);
     }
   }
 
   if (loading) {
     return (
-      <Stack align={"center"}>
-        <Text color={"gray"} size={"xs"}>
-          A genome-wide correlation analysis takes some seconds. Please stay
-          patient! We are working on a speed-up in the meantime!
+      <Stack align={'center'}>
+        <Text color={'gray'} size={'xs'}>
+          A genome-wide correlation analysis takes some seconds. Please stay patient! We are working on a speed-up in the meantime!
         </Text>
-        <Loader variant={"dots"} color={"gray"} />
+        <Loader variant={'dots'} color={'gray'} />
       </Stack>
     );
   }
 
   return (
-    <Stack justify={"flex-start"} align={"flex-start"}>
+    <Stack justify={'flex-start'} align={'flex-start'}>
       {data && data.getCorrelatedGenesList.length > 0 && (
         <DataTable
           dense
@@ -158,7 +147,7 @@ const CorrelationTable = ({ omicsId, studyId }: Props) => {
         />
       )}
       {data && data.getCorrelatedGenesList.length === 0 && (
-        <Text color={"dimmed"} size={"xs"}>
+        <Text color={'dimmed'} size={'xs'}>
           No correlated genes with Pearson r&gt;=0.2 found.
         </Text>
       )}

@@ -1,4 +1,4 @@
-import StudyList from "./pages/StudyList";
+import StudyList from './pages/StudyList';
 
 function App() {
   return (

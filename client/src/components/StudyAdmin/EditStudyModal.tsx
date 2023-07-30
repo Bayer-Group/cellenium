@@ -1,45 +1,23 @@
-import {
-  InputMaybe,
-  StudyAdminDetailsFragment,
-  useStudyUpdateMutation,
-} from "../../generated/types.ts";
-import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import { useEffect } from "react";
-import {
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
-import { Form } from "react-router-dom";
+import { InputMaybe, StudyAdminDetailsFragment, useStudyUpdateMutation } from '../../generated/types.ts';
+import { useForm } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
+import { useEffect } from 'react';
+import { Button, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import { Form } from 'react-router-dom';
 
-export function EditStudyModal({
-  opened,
-  reset,
-  study,
-}: {
-  opened: boolean;
-  reset: () => void;
-  study: StudyAdminDetailsFragment | undefined;
-}) {
-  const [studyUpdateMutation, { loading: studyUpdateLoading }] =
-    useStudyUpdateMutation();
+export function EditStudyModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
+  const [studyUpdateMutation, { loading: studyUpdateLoading }] = useStudyUpdateMutation();
 
   const form = useForm({
     initialValues: {
-      studyName: "",
-      description: "",
-      readerPermissions: "",
-      adminPermissions: "",
-      tissueNcitIds: "",
-      diseaseMeshIds: "",
+      studyName: '',
+      description: '',
+      readerPermissions: '',
+      adminPermissions: '',
+      tissueNcitIds: '',
+      diseaseMeshIds: '',
       visible: false,
-      externalWebsite: "",
+      externalWebsite: '',
     },
     validate: {},
   });
@@ -47,8 +25,8 @@ export function EditStudyModal({
   const submit = () => {
     if (study) {
       const splitToArray = (s: string) => {
-        const a = s.split(";").map((s) => s.trim());
-        if (a.length === 1 && a[0] === "") {
+        const a = s.split(';').map((s) => s.trim());
+        if (a.length === 1 && a[0] === '') {
           return null;
         }
         return a;
@@ -59,18 +37,10 @@ export function EditStudyModal({
           studyId: study.studyId,
           studyName: form.values.studyName,
           description: form.values.description,
-          readerPermissions: splitToArray(
-            form.values.readerPermissions,
-          ) as InputMaybe<string[]>,
-          adminPermissions: splitToArray(
-            form.values.adminPermissions,
-          ) as InputMaybe<string[]>,
-          tissueNcitIds: splitToArray(form.values.tissueNcitIds) as InputMaybe<
-            string[]
-          >,
-          diseaseMeshIds: splitToArray(
-            form.values.diseaseMeshIds,
-          ) as InputMaybe<string[]>,
+          readerPermissions: splitToArray(form.values.readerPermissions) as InputMaybe<string[]>,
+          adminPermissions: splitToArray(form.values.adminPermissions) as InputMaybe<string[]>,
+          tissueNcitIds: splitToArray(form.values.tissueNcitIds) as InputMaybe<string[]>,
+          diseaseMeshIds: splitToArray(form.values.diseaseMeshIds) as InputMaybe<string[]>,
           visible: form.values.visible,
           externalWebsite: form.values.externalWebsite,
         },
@@ -80,9 +50,9 @@ export function EditStudyModal({
         })
         .catch((reason) => {
           showNotification({
-            title: "Could not save study changes",
+            title: 'Could not save study changes',
             message: reason.message,
-            color: "red",
+            color: 'red',
           });
         });
     }
@@ -90,14 +60,14 @@ export function EditStudyModal({
 
   useEffect(() => {
     form.setValues({
-      studyName: study?.studyName || "",
-      description: study?.description || "",
-      readerPermissions: (study?.readerPermissions || []).join("; "),
-      adminPermissions: (study?.adminPermissions || []).join("; "),
-      tissueNcitIds: (study?.tissueNcitIds || []).join("; "),
-      diseaseMeshIds: (study?.diseaseMeshIds || []).join("; "),
+      studyName: study?.studyName || '',
+      description: study?.description || '',
+      readerPermissions: (study?.readerPermissions || []).join('; '),
+      adminPermissions: (study?.adminPermissions || []).join('; '),
+      tissueNcitIds: (study?.tissueNcitIds || []).join('; '),
+      diseaseMeshIds: (study?.diseaseMeshIds || []).join('; '),
       visible: study?.visible || false,
-      externalWebsite: study?.externalWebsite || "",
+      externalWebsite: study?.externalWebsite || '',
     });
   }, [study]);
 
@@ -114,42 +84,19 @@ export function EditStudyModal({
           Edit Study
         </Text>
         <Form>
-          <TextInput label="Title" {...form.getInputProps("studyName")} />
-          <Textarea
-            label="Description"
-            {...form.getInputProps("description")}
-          />
-          <TextInput
-            label="Reader Permissions, separate multiple groups / usernames with ;"
-            {...form.getInputProps("readerPermissions")}
-          />
-          <TextInput
-            label="Admin Permissions, separate multiple groups / usernames with ;"
-            {...form.getInputProps("adminPermissions")}
-          />
-          <Checkbox
-            mt="md"
-            label="Study is visible"
-            {...form.getInputProps("visible", { type: "checkbox" })}
-          />
-          <TextInput
-            label="Tissue NCIT IDs, separate multiple with ;"
-            {...form.getInputProps("tissueNcitIds")}
-          />
+          <TextInput label="Title" {...form.getInputProps('studyName')} />
+          <Textarea label="Description" {...form.getInputProps('description')} />
+          <TextInput label="Reader Permissions, separate multiple groups / usernames with ;" {...form.getInputProps('readerPermissions')} />
+          <TextInput label="Admin Permissions, separate multiple groups / usernames with ;" {...form.getInputProps('adminPermissions')} />
+          <Checkbox mt="md" label="Study is visible" {...form.getInputProps('visible', { type: 'checkbox' })} />
+          <TextInput label="Tissue NCIT IDs, separate multiple with ;" {...form.getInputProps('tissueNcitIds')} />
           <TextInput
             label="Disease MeSH IDs, separate multiple with ; and use the pseudo-ID HEALTHY to indicate 'not diseased'"
-            {...form.getInputProps("diseaseMeshIds")}
+            {...form.getInputProps('diseaseMeshIds')}
           />
-          <TextInput
-            label="External Website"
-            {...form.getInputProps("externalWebsite")}
-          />
+          <TextInput label="External Website" {...form.getInputProps('externalWebsite')} />
           <Group position="right" mt="md">
-            <Button
-              disabled={!study?.adminPermissionGranted}
-              onClick={submit}
-              loading={studyUpdateLoading}
-            >
+            <Button disabled={!study?.adminPermissionGranted} onClick={submit} loading={studyUpdateLoading}>
               Save Changes
             </Button>
           </Group>

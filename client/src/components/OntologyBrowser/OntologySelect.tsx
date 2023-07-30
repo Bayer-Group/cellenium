@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { SelectBoxItem } from "../../model";
-import { Center, SegmentedControl } from "@mantine/core";
-import { OntologyOverviewFragment } from "../../generated/types";
+import { useEffect, useState } from 'react';
+import { SelectBoxItem } from '../../model';
+import { Center, SegmentedControl } from '@mantine/core';
+import { OntologyOverviewFragment } from '../../generated/types';
 
 type OSProps = {
   handleChange: any;
@@ -28,11 +28,7 @@ const OntologySelect = ({ ontologies, handleChange }: OSProps) => {
 
   return (
     <Center>
-      <SegmentedControl
-        value={value}
-        onChange={updateChange}
-        data={selectOntologies}
-      />
+      <SegmentedControl value={value} onChange={updateChange} data={selectOntologies} />
     </Center>
   );
 };

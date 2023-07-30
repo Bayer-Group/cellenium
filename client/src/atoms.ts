@@ -1,12 +1,6 @@
-import { atom, selector } from "recoil";
-import {
-  Omics,
-  SamplesAnnotationTable,
-  SamplesProjectionTable,
-  Study,
-  StudyOmicsTable,
-} from "./model";
-import { apolloClient } from "./index";
+import { atom, selector } from 'recoil';
+import { Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable } from './model';
+import { apolloClient } from './index';
 import {
   AllGenesDocument,
   AllGenesQuery,
@@ -19,72 +13,70 @@ import {
   StudyBasicsFragment,
   StudyBasicsQuery,
   StudyBasicsQueryVariables,
-} from "./generated/types";
-import * as aq from "arquero";
+} from './generated/types';
+import * as aq from 'arquero';
 
 export const correlationOmicsIdState = atom<number>({
-  key: "coexpressionOmicsId",
+  key: 'coexpressionOmicsId',
   default: undefined,
 });
 
 export const userGeneStoreOpenState = atom<boolean>({
-  key: "usergenestoreopen",
+  key: 'usergenestoreopen',
   default: false,
 });
 export const userGeneStoreCounterColor = atom<string>({
-  key: "usergenestorecountercolor",
-  default: "blue",
+  key: 'usergenestorecountercolor',
+  default: 'blue',
 });
 
 export const selectedGenesState = atom<Omics[]>({
-  key: "selectedGenes",
+  key: 'selectedGenes',
   default: [],
 });
 
 export const userGenesState = atom<Omics[]>({
-  key: "userGenes",
+  key: 'userGenes',
   default: [],
 });
 
 export const celltypeDiscoveryGenesState = atom<(Omics | null)[]>({
-  key: "celltypeDiscoveryGenesState",
+  key: 'celltypeDiscoveryGenesState',
   default: [null, null],
 });
 
-export const celltypeDiscoveryCoexpressionSamplesState = atom<
-  (number[] | null)[]
->({
-  key: "celltypeDiscoveryCoexpressionSamplesState",
+export const celltypeDiscoveryCoexpressionSamplesState = atom<(number[] | null)[]>({
+  key: 'celltypeDiscoveryCoexpressionSamplesState',
   default: [null],
 });
 
 export const selectedAnnotationFilterState = atom<number[]>({
-  key: "selectedAnnotationFilter",
+  key: 'selectedAnnotationFilter',
   default: [],
 });
 
 export const selectedAnnotationState = atom<number>({
-  key: "selectedAnnotation",
+  key: 'selectedAnnotation',
   default: 0,
 });
 
 export const highlightAnnotationState = atom<number>({
-  key: "highlightAnnotation",
+  key: 'highlightAnnotation',
   default: 0,
 });
 
 export const annotationGroupIdState = atom<number | undefined>({
-  key: "annotationGroupId",
+  key: 'annotationGroupId',
   default: undefined,
 });
 
 export const studyIdState = atom<number>({
-  key: "studyId",
+  key: 'studyId',
   default: undefined,
 });
 
 export const studyReloadHelperState = atom<number>({
-  key: "studyReloadHelper",
+  key: 'studyReloadHelper',
   default: 1,
 });
 
@@ -94,7 +86,7 @@ export const studyReloadHelperState = atom<number>({
 // });
 
 export const studyLayerIdState = selector<number>({
-  key: "studyLayerId",
+  key: 'studyLayerId',
   get: ({ get }) => {
     const study = get(studyState);
     if (study) {
@@ -106,23 +98,16 @@ export const studyLayerIdState = selector<number>({
 });
 
 export const selectedProjectionState = atom<string>({
-  key: "selectedProjection",
-  default: "",
+  key: 'selectedProjection',
+  default: '',
 });
 
-function buildSampleProjectionTable(d: {
-  studySampleId: number[];
-  projection: number[];
-}) {
+function buildSampleProjectionTable(d: { studySampleId: number[]; projection: number[] }) {
   return SamplesProjectionTable.definedTable(
     aq.table({
       studySampleId: d.studySampleId,
-      projectionX: Array.from(Array(d.projection?.length / 2).keys()).map(
-        (i) => d.projection[i * 2],
-      ),
-      projectionY: Array.from(Array(d.projection?.length / 2).keys()).map(
-        (i) => d.projection[i * 2 + 1],
-      ),
+      projectionX: Array.from(Array(d.projection?.length / 2).keys()).map((i) => d.projection[i * 2]),
+      projectionY: Array.from(Array(d.projection?.length / 2).keys()).map((i) => d.projection[i * 2 + 1]),
     }),
   );
 }
@@ -130,35 +115,28 @@ function buildSampleProjectionTable(d: {
 function buildSampleAnnotationTable(s: StudyBasicsFragment) {
   const samplesTable = aq
     .from(s.studySampleAnnotationSubsamplingList)
-    .select(aq.not(["__typename"]))
-    .unroll("studySampleIds")
+    .select(aq.not(['__typename']))
+    .unroll('studySampleIds')
     .select({
-      studySampleIds: "studySampleId",
-      annotationValueId: "annotationValueId",
+      studySampleIds: 'studySampleId',
+      annotationValueId: 'annotationValueId',
     });
   // samplesTable.print();
   let annotationGroupsValuesTable = aq
     .from(s.annotationGroupsList)
-    .unroll("annotationValuesList")
+    .unroll('annotationValuesList')
     .derive({
       // @ts-ignore
       annotationValueId: (d) => d.annotationValuesList.annotationValueId,
     })
-    .select("annotationGroupId", "annotationValueId");
+    .select('annotationGroupId', 'annotationValueId');
 
   // annotationGroupsValuesTable.print();
-  const annotatedSamplesTable = samplesTable
-    .join(annotationGroupsValuesTable, "annotationValueId")
-    .reify();
+  const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
   return SamplesAnnotationTable.definedTable(annotatedSamplesTable);
 }
 
-function buildOmicsTable(d: {
-  displaySymbol: string[];
-  displayName: string[];
-  omicsType: string[];
-  omicsId: number[];
-}) {
+function buildOmicsTable(d: { displaySymbol: string[]; displayName: string[]; omicsType: string[]; omicsId: number[] }) {
   const retTable = aq.table({
     value: d.displaySymbol,
     displaySymbol: d.displaySymbol,
@@ -170,74 +148,47 @@ function buildOmicsTable(d: {
 }
 
 export const studyState = selector<Study | undefined>({
-  key: "studyState",
+  key: 'studyState',
   get: async ({ get }) => {
     const studyId = get(studyIdState);
     // const studyReloadHelper = get(studyReloadHelperState);
     if (studyId) {
-      const responsePromise = apolloClient.query<
-        StudyBasicsQuery,
-        StudyBasicsQueryVariables
-      >({
+      const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
         query: StudyBasicsDocument,
         variables: {
           studyId,
         },
-        fetchPolicy: "network-only",
+        fetchPolicy: 'network-only',
       });
       // console.log('REFETCH', studyReloadHelper)
       // could do multiple queries in parallel ... but maybe not needed
       const response = await responsePromise;
 
       if (response?.data?.study) {
-        if (
-          response.data.study.studySampleProjectionSubsamplingTransposedList[0]
-            .projection.length === 0
-        ) {
-          throw Error("no projection data");
+        if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
+          throw Error('no projection data');
         }
-        if (
-          response.data.study.studySampleAnnotationSubsamplingList.length === 0
-        ) {
-          throw Error("no study annotations");
+        if (response.data.study.studySampleAnnotationSubsamplingList.length === 0) {
+          throw Error('no study annotations');
         }
         if (response.data.study.studyOmicsTransposedList.length === 0) {
-          throw Error("no genes");
+          throw Error('no genes');
         }
-        const studyOmicsTable = buildOmicsTable(
-          response.data.study.studyOmicsTransposedList[0],
-        );
-        const omicsTypes = studyOmicsTable
-          .rollup({ omicsTypes: aq.op.array_agg_distinct("omicsType") })
-          .array("omicsTypes")[0];
+        const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
+        const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
         const s: Study = {
           ...response.data.study,
           samplesProjectionTables: new Map(
-            response.data.study.studySampleProjectionSubsamplingTransposedList.map(
-              (tl) => [
-                tl.modality
-                  ? `${tl.modality}:${tl.projectionType}`
-                  : tl.projectionType,
-                buildSampleProjectionTable(tl),
-              ],
-            ),
-          ),
-          samplesAnnotationTable: buildSampleAnnotationTable(
-            response.data.study,
-          ),
-          studyOmicsTable,
-          studyOmicsMap: new Map(
-            studyOmicsTable
-              .objects()
-              .map((o) => [(o as Omics).omicsId, o as Omics]),
-          ),
-          omicsTypes,
-          annotationGroupMap: new Map(
-            response.data.study.annotationGroupsList.map((g) => [
-              g.annotationGroupId,
-              g,
+            response.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
+              tl.modality ? `${tl.modality}:${tl.projectionType}` : tl.projectionType,
+              buildSampleProjectionTable(tl),
             ]),
           ),
+          samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
+          studyOmicsTable,
+          studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
+          omicsTypes,
+          annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
           annotationValueMap: new Map(
             response.data.study.annotationGroupsList
               .map((g) => g.annotationValuesList)
@@ -255,46 +206,32 @@ export const studyState = selector<Study | undefined>({
 });
 
 export const pageState = atom<string>({
-  key: "page",
-  default: "CellMarkerAnalysis",
+  key: 'page',
+  default: 'CellMarkerAnalysis',
 });
 
-export const allGenesState = selector<
-  Map<number, OmicsGeneFragment> | undefined
->({
-  key: "allGenesState",
+export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
+  key: 'allGenesState',
   get: async ({}) => {
-    const allGenes = await apolloClient.query<
-      AllGenesQuery,
-      AllGenesQueryVariables
-    >({
+    const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
       query: AllGenesDocument,
-      fetchPolicy: "no-cache",
+      fetchPolicy: 'no-cache',
     });
     if (allGenes?.data) {
-      return new Map(
-        allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [
-          o.omicsId,
-          o,
-        ]),
-      );
+      return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
     }
   },
 });
 
 export const cellOAnnotationGroupIdState = selector<number | undefined>({
-  key: "cellOAnnotationGroupIdState",
+  key: 'cellOAnnotationGroupIdState',
   get: async ({}) => {
-    const annotationGroupIdData = await apolloClient.query<
-      CellOAnnotationGroupIdQuery,
-      CellOAnnotationGroupIdQueryVariables
-    >({
+    const annotationGroupIdData = await apolloClient.query<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>({
       query: CellOAnnotationGroupIdDocument,
-      fetchPolicy: "no-cache",
+      fetchPolicy: 'no-cache',
     });
     if (annotationGroupIdData?.data) {
-      return annotationGroupIdData.data.annotationGroupsList[0]
-        .annotationGroupId;
+      return annotationGroupIdData.data.annotationGroupsList[0].annotationGroupId;
     }
   },
 });

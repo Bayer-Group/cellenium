@@ -1,4 +1,4 @@
-import Icon from "./svg/BinaryTree.svg";
+import Icon from './svg/BinaryTree.svg';
 
 interface Icon {
   size?: string;

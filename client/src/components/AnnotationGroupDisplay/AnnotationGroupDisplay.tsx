@@ -1,17 +1,9 @@
-import { Annotation } from "../Annotation/Annotation";
-import { Stack } from "@mantine/core";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  annotationGroupIdState,
-  highlightAnnotationState,
-  studyState,
-} from "../../atoms";
+import { Annotation } from '../Annotation/Annotation';
+import { Stack } from '@mantine/core';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { annotationGroupIdState, highlightAnnotationState, studyState } from '../../atoms';
 
-function AnnotationGroupDisplay({
-  disableSelection,
-}: {
-  disableSelection?: boolean;
-}) {
+function AnnotationGroupDisplay({ disableSelection }: { disableSelection?: boolean }) {
   const [, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
@@ -20,18 +12,10 @@ function AnnotationGroupDisplay({
   if (!study || !annotationGroupId) {
     return <></>;
   }
-  const annotations =
-    study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
-  const isSelectable = disableSelection
-    ? false
-    : (study.annotationGroupMap.get(annotationGroupId)
-        ?.differentialExpressionCalculated as boolean);
+  const annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
+  const isSelectable = disableSelection ? false : (study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated as boolean);
   return (
-    <Stack
-      spacing={2}
-      onMouseLeave={() => setHighlightAnnotation(0)}
-      style={{ maxWidth: 205 }}
-    >
+    <Stack spacing={2} onMouseLeave={() => setHighlightAnnotation(0)} style={{ maxWidth: 205 }}>
       {annotations !== undefined &&
         annotations.map((annot) => {
           return (

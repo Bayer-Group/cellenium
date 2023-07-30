@@ -1,31 +1,11 @@
-import { useEffect } from "react";
-import {
-  AnnotationGroupDisplay,
-  AnnotationGroupSelectBox,
-  DEGTable,
-  LeftSidePanel,
-  RightSidePanel,
-  UserGeneStore,
-} from "../components";
-import {
-  Divider,
-  Group,
-  Loader,
-  Space,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  annotationGroupIdState,
-  selectedAnnotationState,
-  selectedGenesState,
-  studyState,
-} from "../atoms";
-import ProjectionPlot from "../components/ProjectionPlot/ProjectionPlot";
-import { useExpressionValues } from "../hooks";
-import ProjectionSelectBox from "../components/ProjectionSelectBox/ProjectionSelectBox";
+import { useEffect } from 'react';
+import { AnnotationGroupDisplay, AnnotationGroupSelectBox, DEGTable, LeftSidePanel, RightSidePanel, UserGeneStore } from '../components';
+import { Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState } from '../atoms';
+import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
+import { useExpressionValues } from '../hooks';
+import ProjectionSelectBox from '../components/ProjectionSelectBox/ProjectionSelectBox';
 
 // const ANNOTATIONS = [
 //     {label: "bone cell", color: "#1f77b4"},
@@ -54,17 +34,15 @@ function ProjectionPlotWithOptionalExpression() {
   if (loading) {
     return (
       <div>
-        <Loader variant={"dots"} color={theme.colors.gray[5]} size={"xl"} />
+        <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'} />
       </div>
     );
   }
 
   return (
     <div>
-      {table && (
-        <ProjectionPlot colorBy={"annotation"} expressionTable={table} />
-      )}
-      {table === undefined && <ProjectionPlot colorBy={"annotation"} />}
+      {table && <ProjectionPlot colorBy={'annotation'} expressionTable={table} />}
+      {table === undefined && <ProjectionPlot colorBy={'annotation'} />}
     </div>
   );
 }
@@ -82,21 +60,13 @@ function DifferentialExpressionAnalysis() {
     return <></>;
   }
   return (
-    <Group
-      style={{ height: "100vh" }}
-      align={"flex-start"}
-      position={"apart"}
-      spacing={"xs"}
-      noWrap
-    >
+    <Group style={{ height: '100vh' }} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
       <LeftSidePanel>
         <Stack>
           <ProjectionSelectBox />
           {annotationGroupId && <AnnotationGroupSelectBox />}
-          {annotationGroupId &&
-          study.annotationGroupMap.get(annotationGroupId)
-            ?.differentialExpressionCalculated ? null : (
-            <Text color={"red"} size={"xs"}>
+          {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated ? null : (
+            <Text color={'red'} size={'xs'}>
               No DEGs calculated for selected group.
             </Text>
           )}
@@ -106,29 +76,22 @@ function DifferentialExpressionAnalysis() {
       <main>{<ProjectionPlotWithOptionalExpression />}</main>
       <RightSidePanel>
         <Stack>
-          <Divider size={"xs"} label={"Gene store"} />
+          <Divider size={'xs'} label={'Gene store'} />
           <UserGeneStore multiple={false} />
-          <Space h={"xs"} />
+          <Space h={'xs'} />
           <Stack>
-            <Divider size={"xs"} label={"Differential expression table"} />
-            {annotationGroupId &&
-            study.annotationGroupMap.get(annotationGroupId)
-              ?.differentialExpressionCalculated ? null : (
-              <Text color={"red"} size={"xs"}>
+            <Divider size={'xs'} label={'Differential expression table'} />
+            {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated ? null : (
+              <Text color={'red'} size={'xs'}>
                 No DEGs calculated for selected group.
               </Text>
             )}
-            {!selectedAnnotation &&
-              study.annotationGroupMap.get(annotationGroupId as number)
-                ?.differentialExpressionCalculated === true && (
-                <Text size="xs" color="dimmed">
-                  Select cells in the plot or via the selection panel on the
-                  left-hand side.
-                </Text>
-              )}
-            {selectedAnnotation !== undefined && (
-              <DEGTable annotationId={selectedAnnotation} />
+            {!selectedAnnotation && study.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated === true && (
+              <Text size="xs" color="dimmed">
+                Select cells in the plot or via the selection panel on the left-hand side.
+              </Text>
             )}
+            {selectedAnnotation !== undefined && <DEGTable annotationId={selectedAnnotation} />}
           </Stack>
         </Stack>
       </RightSidePanel>

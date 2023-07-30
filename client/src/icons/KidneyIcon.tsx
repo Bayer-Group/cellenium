@@ -1,4 +1,4 @@
-import Kidneys from "./svg/kidneys.svg";
+import Kidneys from './svg/kidneys.svg';
 interface Icon {
   size: number;
 }

@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 gql`
   query correlatedgenes($studyId: Int!, $omicsId: Int!) {
@@ -33,12 +33,7 @@ gql`
   }
 
   query deg($studyId: Int!, $annotationValueId: Int!) {
-    differentialExpressionVsList(
-      filter: {
-        annotationValueId: { equalTo: $annotationValueId }
-        studyId: { equalTo: $studyId }
-      }
-    ) {
+    differentialExpressionVsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
       omicsId
       studyId
       annotationValueId
@@ -129,10 +124,7 @@ gql`
   }
 
   query studiesWithMarkerGenes($omicsIds: [Int!]!) {
-    differentialExpressionsList(
-      filter: { omicsId: { in: $omicsIds } }
-      orderBy: LOG2_FOLDCHANGE_DESC
-    ) {
+    differentialExpressionsList(filter: { omicsId: { in: $omicsIds } }, orderBy: LOG2_FOLDCHANGE_DESC) {
       ...DifferentialMarker
     }
   }
@@ -168,29 +160,15 @@ gql`
     }
   }
 
-  query ExpressionByOmicsIds(
-    $studyLayerId: Int!
-    $omicsIds: [Int!]!
-    $subsamplingProjection: String
-  ) {
-    expressionByOmicsIdsList(
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: $omicsIds
-      pSubsamplingProjection: $subsamplingProjection
-    ) {
+  query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: String) {
+    expressionByOmicsIdsList(pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pSubsamplingProjection: $subsamplingProjection) {
       omicsId
       studySampleIds
       values
     }
   }
 
-  query ExpressionViolinPlot(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsId: Int!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
+  query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
     violinPlot(
       pStudyId: $studyId
       pStudyLayerId: $studyLayerId
@@ -200,18 +178,8 @@ gql`
     )
   }
 
-  query ExpressionCorrelationTrianglePlot(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsIds: [Int!]!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
-    correlationTrianglePlot(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: $omicsIds
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-    )
+  query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+    correlationTrianglePlot(pStudyId: $studyId, pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
   }
 
   query autocomplete($query: String!) {
@@ -244,12 +212,7 @@ gql`
     exprSamplesFraction
   }
 
-  query expressionByAnnotation(
-    $studyLayerIds: [Int!]!
-    $omicsIds: [Int!]!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
+  query expressionByAnnotation($studyLayerIds: [Int!]!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
     expressionByAnnotationList(
       pStudyLayerIds: $studyLayerIds
       pOmicsIds: $omicsIds
@@ -261,47 +224,27 @@ gql`
   }
 
   query CellOAnnotationGroupId {
-    annotationGroupsList(
-      filter: { h5AdColumn: { equalTo: "CellO_celltype" } }
-    ) {
+    annotationGroupsList(filter: { h5AdColumn: { equalTo: "CellO_celltype" } }) {
       annotationGroupId
     }
   }
 
   query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
-    differentialExpressionsList(
-      filter: {
-        annotationValueId: { equalTo: $annotationValueId }
-        studyId: { equalTo: $studyId }
-      }
-    ) {
+    differentialExpressionsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
       log2Foldchange
       pvalueAdj
     }
   }
 
-  query annotationValueCoocurrence(
-    $studyId: Int!
-    $annotationGroupId1: Int!
-    $annotationGroupId2: Int!
-  ) {
-    annotationValueCoocurrenceList(
-      studyId: $studyId
-      annotationGroupId1: $annotationGroupId1
-      annotationGroupId2: $annotationGroupId2
-    ) {
+  query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
+    annotationValueCoocurrenceList(studyId: $studyId, annotationGroupId1: $annotationGroupId1, annotationGroupId2: $annotationGroupId2) {
       annotationValueId1
       annotationValueId2
       occurrence
     }
   }
 
-  mutation SaveUserAnnotation(
-    $studyId: Int!
-    $annotationGroupName: String!
-    $selectedSampleIds: String!
-    $unexpressedSamplesOmicsIds: [Int!]
-  ) {
+  mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
     userAnnotationDefine(
       input: {
         pStudyId: $studyId

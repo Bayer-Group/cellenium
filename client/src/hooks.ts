@@ -1,13 +1,8 @@
-import { useEffect, useMemo } from "react";
-import * as aq from "arquero";
-import { InputMaybe, useExpressionByOmicsIdsQuery } from "./generated/types";
-import { ExpressionTable } from "./model";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from "recoil";
+import { useEffect, useMemo } from 'react';
+import * as aq from 'arquero';
+import { InputMaybe, useExpressionByOmicsIdsQuery } from './generated/types';
+import { ExpressionTable } from './model';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
   annotationGroupIdState,
   highlightAnnotationState,
@@ -19,8 +14,8 @@ import {
   studyLayerIdState,
   studyState,
   userGenesState,
-} from "./atoms";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+} from './atoms';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
   const studyLayerId = useRecoilValue(studyLayerIdState);
@@ -30,9 +25,7 @@ export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
     variables: {
       studyLayerId,
       omicsIds,
-      subsamplingProjection: (subsampling
-        ? projection.split(":").pop()
-        : null) as InputMaybe<string>,
+      subsamplingProjection: (subsampling ? projection.split(':').pop() : null) as InputMaybe<string>,
     },
     skip: omicsIds.length === 0,
   });
@@ -42,10 +35,8 @@ export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
       // records contain two arrays, sampleIds and values, which have the same length and corresponding values.
       // unfold both arrays and put values side by side in new rows.
       if (t.numRows() > 0) {
-        const sampleIds = t
-          .unroll("studySampleIds")
-          .select({ studySampleIds: "studySampleId" });
-        t = t.unroll("values").select({ values: "value", omicsId: "omicsId" });
+        const sampleIds = t.unroll('studySampleIds').select({ studySampleIds: 'studySampleId' });
+        t = t.unroll('values').select({ values: 'value', omicsId: 'omicsId' });
         t = t.assign(sampleIds).reify();
         return {
           table: ExpressionTable.definedTable(t),
@@ -68,14 +59,10 @@ export function useSetStudyFromUrl() {
   const navigate = useNavigate();
   // const page = queryParams.get('page');
 
-  const setValidParam = (
-    queryParam: string,
-    setter: (x: any) => void,
-    defaultValue?: any,
-  ) => {
+  const setValidParam = (queryParam: string, setter: (x: any) => void, defaultValue?: any) => {
     const value = queryParams.get(queryParam);
     if (value) {
-      if (queryParam.endsWith("Id")) {
+      if (queryParam.endsWith('Id')) {
         const numericValue = Number(value);
         setter(numericValue);
       } else {
@@ -113,19 +100,15 @@ export function useSetStudyFromUrl() {
   const setSelectedProjection = useSetRecoilState(selectedProjectionState);
   useEffect(() => {
     if (study && study.studyId === studyIdUrlParamInt) {
-      setValidParam("page", setPage);
-      setValidParam(
-        "annotationGroupId",
-        setAnnotationGroupId,
-        study.annotationGroupsList[0].annotationGroupId,
-      );
-      setValidParam("annotationValueId", setSelectedAnnotation);
-      setValidParam("omicsId", (omicsId: number) => {
+      setValidParam('page', setPage);
+      setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
+      setValidParam('annotationValueId', setSelectedAnnotation);
+      setValidParam('omicsId', (omicsId: number) => {
         const o = study.studyOmicsMap.get(omicsId);
         setUserGenes(o ? [o] : []);
         setSelectedGenes(o ? [o] : []);
       });
-      setValidParam("projection", setSelectedProjection, study.projections[0]);
+      setValidParam('projection', setSelectedProjection, study.projections[0]);
       // clear query parameters, as we don't plan to update them and it's not nice to leave stale data in the URL
       navigate(`/study/${studyId}`, { replace: true });
     }

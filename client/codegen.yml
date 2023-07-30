@@ -1,15 +1,15 @@
 schema:
-  - "http://localhost:5002/postgraphile/"
+  - 'http://localhost:5002/postgraphile/'
 overwrite: true
-documents: "./src/**/!(*.d).{ts,tsx}"
+documents: './src/**/!(*.d).{ts,tsx}'
 generates:
   src/generated/types.ts:
     plugins:
       - add:
-          content: "/* eslint-disable */"
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
+          content: '/* eslint-disable */'
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
     config:
       withHOC: false
       withHooks: true

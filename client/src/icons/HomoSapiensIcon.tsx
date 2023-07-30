@@ -1,17 +1,10 @@
-import HomoSapiens from "./svg/homo_sapiens.svg";
+import HomoSapiens from './svg/homo_sapiens.svg';
 
 interface IHomoSapiens {
   size: number;
 }
 const HomoSapiensIcon = ({ size }: IHomoSapiens) => {
-  return (
-    <img
-      src={HomoSapiens}
-      className="h-auto"
-      style={{ width: size }}
-      alt="homo sapiens icon"
-    />
-  );
+  return <img src={HomoSapiens} className="h-auto" style={{ width: size }} alt="homo sapiens icon" />;
 };
 
 export default HomoSapiensIcon;

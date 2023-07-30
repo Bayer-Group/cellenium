@@ -1,4 +1,4 @@
-import Heart from "./svg/heart.svg";
+import Heart from './svg/heart.svg';
 
 interface IMouseIcon {
   size: number;

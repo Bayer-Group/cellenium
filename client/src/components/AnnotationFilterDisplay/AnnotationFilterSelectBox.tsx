@@ -1,12 +1,11 @@
-import { useMemo } from "react";
-import { MultiSelect, SelectItem } from "@mantine/core";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedAnnotationFilterState, studyState } from "../../atoms";
+import { useMemo } from 'react';
+import { MultiSelect, SelectItem } from '@mantine/core';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { selectedAnnotationFilterState, studyState } from '../../atoms';
 
 const AnnotationFilterSelectBox = () => {
   const study = useRecoilValue(studyState);
-  const [selectedAnnotationFilter, setSelectedAnnotationFilter] =
-    useRecoilState(selectedAnnotationFilterState);
+  const [selectedAnnotationFilter, setSelectedAnnotationFilter] = useRecoilState(selectedAnnotationFilterState);
   const annotations: SelectItem[] = useMemo(() => {
     const anns: SelectItem[] = [];
     if (study) {

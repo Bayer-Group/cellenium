@@ -1,4 +1,4 @@
-import Icon from "./svg/ovary.svg";
+import Icon from './svg/ovary.svg';
 
 interface Icon {
   size: number;

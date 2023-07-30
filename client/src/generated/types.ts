@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T;
 export type InputMaybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -24,14 +24,14 @@ export type Scalars = {
 };
 
 export type AnnotationGroup = Node & {
-  __typename?: "AnnotationGroup";
-  annotationGroupId: Scalars["Int"];
+  __typename?: 'AnnotationGroup';
+  annotationGroupId: Scalars['Int'];
   /** Reads and enables pagination through a set of `AnnotationValue`. */
   annotationValuesList: Array<AnnotationValue>;
-  displayGroup: Scalars["String"];
-  h5AdColumn: Scalars["String"];
+  displayGroup: Scalars['String'];
+  h5AdColumn: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
   /** Reads and enables pagination through a set of `UserAnnotationGroup`. */
@@ -41,27 +41,26 @@ export type AnnotationGroup = Node & {
 export type AnnotationGroupAnnotationValuesListArgs = {
   condition: InputMaybe<AnnotationValueCondition>;
   filter: InputMaybe<AnnotationValueFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
 
 export type AnnotationGroupStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
-export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdListArgs =
-  {
-    condition: InputMaybe<UserAnnotationGroupCondition>;
-    filter: InputMaybe<UserAnnotationGroupFilter>;
-    first: InputMaybe<Scalars["Int"]>;
-    offset: InputMaybe<Scalars["Int"]>;
-    orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
-  };
+export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdListArgs = {
+  condition: InputMaybe<UserAnnotationGroupCondition>;
+  filter: InputMaybe<UserAnnotationGroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
+};
 
 /**
  * A condition to be used against `AnnotationGroup` object types. All fields are
@@ -69,11 +68,11 @@ export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdListArg
  */
 export type AnnotationGroupCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `displayGroup` field. */
-  displayGroup: InputMaybe<Scalars["String"]>;
+  displayGroup: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `h5AdColumn` field. */
-  h5AdColumn: InputMaybe<Scalars["String"]>;
+  h5AdColumn: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `AnnotationGroup` object types. All fields are combined with a logical ‘and.’ */
@@ -94,43 +93,43 @@ export type AnnotationGroupFilter = {
 
 /** An input for mutations affecting `AnnotationGroup` */
 export type AnnotationGroupInput = {
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
-  displayGroup: Scalars["String"];
-  h5AdColumn: Scalars["String"];
+  annotationGroupId: InputMaybe<Scalars['Int']>;
+  displayGroup: Scalars['String'];
+  h5AdColumn: Scalars['String'];
 };
 
 /** Represents an update to a `AnnotationGroup`. Fields that are set will be updated. */
 export type AnnotationGroupPatch = {
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
-  displayGroup: InputMaybe<Scalars["String"]>;
-  h5AdColumn: InputMaybe<Scalars["String"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
+  displayGroup: InputMaybe<Scalars['String']>;
+  h5AdColumn: InputMaybe<Scalars['String']>;
 };
 
 /** Methods to use when ordering `AnnotationGroup`. */
 export enum AnnotationGroupsOrderBy {
-  AnnotationGroupIdAsc = "ANNOTATION_GROUP_ID_ASC",
-  AnnotationGroupIdDesc = "ANNOTATION_GROUP_ID_DESC",
-  DisplayGroupAsc = "DISPLAY_GROUP_ASC",
-  DisplayGroupDesc = "DISPLAY_GROUP_DESC",
-  H5AdColumnAsc = "H5AD_COLUMN_ASC",
-  H5AdColumnDesc = "H5AD_COLUMN_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
+  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
+  H5AdColumnAsc = 'H5AD_COLUMN_ASC',
+  H5AdColumnDesc = 'H5AD_COLUMN_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 export type AnnotationValue = Node & {
-  __typename?: "AnnotationValue";
+  __typename?: 'AnnotationValue';
   /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
   annotationGroup: Maybe<AnnotationGroup>;
-  annotationGroupId: Scalars["Int"];
-  annotationValueId: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
+  annotationValueId: Scalars['Int'];
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsList: Array<DifferentialExpression>;
-  displayValue: Scalars["String"];
-  h5AdValue: Scalars["String"];
+  displayValue: Scalars['String'];
+  h5AdValue: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
 };
@@ -138,16 +137,16 @@ export type AnnotationValue = Node & {
 export type AnnotationValueDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
 export type AnnotationValueStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
   filter: InputMaybe<StudySampleAnnotationFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
@@ -157,21 +156,21 @@ export type AnnotationValueStudySampleAnnotationsListArgs = {
  */
 export type AnnotationValueCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `displayValue` field. */
-  displayValue: InputMaybe<Scalars["String"]>;
+  displayValue: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `h5AdValue` field. */
-  h5AdValue: InputMaybe<Scalars["String"]>;
+  h5AdValue: InputMaybe<Scalars['String']>;
 };
 
 /** The return type of our `annotationValueCoocurrence` query. */
 export type AnnotationValueCoocurrenceRecord = {
-  __typename?: "AnnotationValueCoocurrenceRecord";
-  annotationValueId1: Maybe<Scalars["Int"]>;
-  annotationValueId2: Maybe<Scalars["Int"]>;
-  occurrence: Maybe<Scalars["Int"]>;
+  __typename?: 'AnnotationValueCoocurrenceRecord';
+  annotationValueId1: Maybe<Scalars['Int']>;
+  annotationValueId2: Maybe<Scalars['Int']>;
+  occurrence: Maybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `AnnotationValueCoocurrenceRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -210,42 +209,42 @@ export type AnnotationValueFilter = {
 
 /** An input for mutations affecting `AnnotationValue` */
 export type AnnotationValueInput = {
-  annotationGroupId: Scalars["Int"];
-  annotationValueId: InputMaybe<Scalars["Int"]>;
-  displayValue: Scalars["String"];
-  h5AdValue: Scalars["String"];
+  annotationGroupId: Scalars['Int'];
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  displayValue: Scalars['String'];
+  h5AdValue: Scalars['String'];
 };
 
 /** Represents an update to a `AnnotationValue`. Fields that are set will be updated. */
 export type AnnotationValuePatch = {
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
-  annotationValueId: InputMaybe<Scalars["Int"]>;
-  displayValue: InputMaybe<Scalars["String"]>;
-  h5AdValue: InputMaybe<Scalars["String"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  displayValue: InputMaybe<Scalars['String']>;
+  h5AdValue: InputMaybe<Scalars['String']>;
 };
 
 /** Methods to use when ordering `AnnotationValue`. */
 export enum AnnotationValuesOrderBy {
-  AnnotationGroupIdAsc = "ANNOTATION_GROUP_ID_ASC",
-  AnnotationGroupIdDesc = "ANNOTATION_GROUP_ID_DESC",
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  DisplayValueAsc = "DISPLAY_VALUE_ASC",
-  DisplayValueDesc = "DISPLAY_VALUE_DESC",
-  H5AdValueAsc = "H5AD_VALUE_ASC",
-  H5AdValueDesc = "H5AD_VALUE_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  DisplayValueAsc = 'DISPLAY_VALUE_ASC',
+  DisplayValueDesc = 'DISPLAY_VALUE_DESC',
+  H5AdValueAsc = 'H5AD_VALUE_ASC',
+  H5AdValueDesc = 'H5AD_VALUE_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 export type AutocompleteResult = {
-  __typename?: "AutocompleteResult";
-  isSynonymOfPreferredTerm: Maybe<Scalars["String"]>;
-  label: Maybe<Scalars["String"]>;
-  labelHighlight: Maybe<Scalars["String"]>;
-  ontCode: Maybe<Scalars["String"]>;
-  ontology: Maybe<Scalars["String"]>;
+  __typename?: 'AutocompleteResult';
+  isSynonymOfPreferredTerm: Maybe<Scalars['String']>;
+  label: Maybe<Scalars['String']>;
+  labelHighlight: Maybe<Scalars['String']>;
+  ontCode: Maybe<Scalars['String']>;
+  ontology: Maybe<Scalars['String']>;
 };
 
 /** A filter to be used against `AutocompleteResult` object types. All fields are combined with a logical ‘and.’ */
@@ -271,38 +270,38 @@ export type AutocompleteResultFilter = {
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
 export type BooleanFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars["Boolean"]>;
+  distinctFrom: InputMaybe<Scalars['Boolean']>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars["Boolean"]>;
+  equalTo: InputMaybe<Scalars['Boolean']>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars["Boolean"]>;
+  greaterThan: InputMaybe<Scalars['Boolean']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars["Boolean"]>;
+  greaterThanOrEqualTo: InputMaybe<Scalars['Boolean']>;
   /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars["Boolean"]>>;
+  in: InputMaybe<Array<Scalars['Boolean']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars["Boolean"]>;
+  lessThan: InputMaybe<Scalars['Boolean']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars["Boolean"]>;
+  lessThanOrEqualTo: InputMaybe<Scalars['Boolean']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars["Boolean"]>;
+  notDistinctFrom: InputMaybe<Scalars['Boolean']>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars["Boolean"]>;
+  notEqualTo: InputMaybe<Scalars['Boolean']>;
   /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars["Boolean"]>>;
+  notIn: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
 export type BoxplotValue = {
-  __typename?: "BoxplotValue";
-  median: Maybe<Scalars["Float"]>;
-  n: Maybe<Scalars["Int"]>;
-  outliers: Maybe<Array<Maybe<Scalars["Float"]>>>;
-  q1: Maybe<Scalars["Float"]>;
-  q1Whisker: Maybe<Scalars["Float"]>;
-  q3: Maybe<Scalars["Float"]>;
-  q3Whisker: Maybe<Scalars["Float"]>;
+  __typename?: 'BoxplotValue';
+  median: Maybe<Scalars['Float']>;
+  n: Maybe<Scalars['Int']>;
+  outliers: Maybe<Array<Maybe<Scalars['Float']>>>;
+  q1: Maybe<Scalars['Float']>;
+  q1Whisker: Maybe<Scalars['Float']>;
+  q3: Maybe<Scalars['Float']>;
+  q3Whisker: Maybe<Scalars['Float']>;
 };
 
 /** A filter to be used against `BoxplotValue` object types. All fields are combined with a logical ‘and.’ */
@@ -330,7 +329,7 @@ export type BoxplotValueFilter = {
 };
 
 export type Concept = Node & {
-  __typename?: "Concept";
+  __typename?: 'Concept';
   /** Reads and enables pagination through a set of `Concept`. */
   allChildrenList: Maybe<Array<Maybe<Concept>>>;
   /** Reads and enables pagination through a set of `Concept`. */
@@ -338,10 +337,8 @@ export type Concept = Node & {
   allParentsPathsList: Maybe<Array<Maybe<ConceptAllParentsPathsRecord>>>;
   /** Reads and enables pagination through a set of `Concept`. */
   childrenDepthLimitList: Maybe<Array<Maybe<Concept>>>;
-  childrenPathsDepthLimitList: Maybe<
-    Array<Maybe<ConceptChildrenPathsDepthLimitRecord>>
-  >;
-  cid: Scalars["Int"];
+  childrenPathsDepthLimitList: Maybe<Array<Maybe<ConceptChildrenPathsDepthLimitRecord>>>;
+  cid: Scalars['Int'];
   /** Reads and enables pagination through a set of `ConceptHierarchy`. */
   conceptHierarchiesByCidList: Array<ConceptHierarchy>;
   /** Reads and enables pagination through a set of `ConceptHierarchy`. */
@@ -352,12 +349,12 @@ export type Concept = Node & {
   directChildrenList: Maybe<Array<Maybe<Concept>>>;
   /** Reads and enables pagination through a set of `Concept`. */
   directParentsList: Maybe<Array<Maybe<Concept>>>;
-  label: Maybe<Scalars["String"]>;
-  labelTsvector: Maybe<Scalars["String"]>;
+  label: Maybe<Scalars['String']>;
+  labelTsvector: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
-  ontCode: Maybe<Scalars["String"]>;
-  ontid: Maybe<Scalars["Int"]>;
+  nodeId: Scalars['ID'];
+  ontCode: Maybe<Scalars['String']>;
+  ontid: Maybe<Scalars['Int']>;
   /** Reads a single `Ontology` that is related to this `Concept`. */
   ontologyByOntid: Maybe<Ontology>;
   /** Reads and enables pagination through a set of `Concept`. */
@@ -366,77 +363,77 @@ export type Concept = Node & {
 
 export type ConceptAllChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptAllParentsListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptAllParentsPathsListArgs = {
   filter: InputMaybe<ConceptAllParentsPathsRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptChildrenDepthLimitListArgs = {
-  depthLimit: InputMaybe<Scalars["Int"]>;
+  depthLimit: InputMaybe<Scalars['Int']>;
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptChildrenPathsDepthLimitListArgs = {
-  depthLimit: InputMaybe<Scalars["Int"]>;
+  depthLimit: InputMaybe<Scalars['Int']>;
   filter: InputMaybe<ConceptChildrenPathsDepthLimitRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptConceptHierarchiesByCidListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
   filter: InputMaybe<ConceptHierarchyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
 export type ConceptConceptHierarchiesByParentCidListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
   filter: InputMaybe<ConceptHierarchyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
 export type ConceptConceptSynonymsByCidListArgs = {
   condition: InputMaybe<ConceptSynonymCondition>;
   filter: InputMaybe<ConceptSynonymFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
 
 export type ConceptDirectChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptDirectParentsListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptTestPotentialChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  potentialChildrenCodes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  potentialChildrenCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** All input for the `conceptAllChildrenPaths` mutation. */
@@ -445,18 +442,18 @@ export type ConceptAllChildrenPathsInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   conceptInp: InputMaybe<ConceptInput>;
 };
 
 /** The output of our `conceptAllChildrenPaths` mutation. */
 export type ConceptAllChildrenPathsPayload = {
-  __typename?: "ConceptAllChildrenPathsPayload";
+  __typename?: 'ConceptAllChildrenPathsPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   results: Maybe<Array<Maybe<ConceptAllChildrenPathsRecord>>>;
@@ -464,16 +461,16 @@ export type ConceptAllChildrenPathsPayload = {
 
 /** The return type of our `conceptAllChildrenPaths` mutation. */
 export type ConceptAllChildrenPathsRecord = {
-  __typename?: "ConceptAllChildrenPathsRecord";
-  cidPath: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  ontCodePath: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'ConceptAllChildrenPathsRecord';
+  cidPath: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ontCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** The return type of our `allParentsPaths` query. */
 export type ConceptAllParentsPathsRecord = {
-  __typename?: "ConceptAllParentsPathsRecord";
-  cidPath: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  ontCodePath: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'ConceptAllParentsPathsRecord';
+  cidPath: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ontCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `ConceptAllParentsPathsRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -492,9 +489,9 @@ export type ConceptAllParentsPathsRecordFilter = {
 
 /** The return type of our `childrenPathsDepthLimit` query. */
 export type ConceptChildrenPathsDepthLimitRecord = {
-  __typename?: "ConceptChildrenPathsDepthLimitRecord";
-  cidPath: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  ontCodePath: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'ConceptChildrenPathsDepthLimitRecord';
+  cidPath: Maybe<Array<Maybe<Scalars['Int']>>>;
+  ontCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `ConceptChildrenPathsDepthLimitRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -514,15 +511,15 @@ export type ConceptChildrenPathsDepthLimitRecordFilter = {
 /** A condition to be used against `Concept` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type ConceptCondition = {
   /** Checks for equality with the object’s `cid` field. */
-  cid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `label` field. */
-  label: InputMaybe<Scalars["String"]>;
+  label: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `labelTsvector` field. */
-  labelTsvector: InputMaybe<Scalars["String"]>;
+  labelTsvector: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontCode` field. */
-  ontCode: InputMaybe<Scalars["String"]>;
+  ontCode: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontid` field. */
-  ontid: InputMaybe<Scalars["Int"]>;
+  ontid: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `Concept` object types. All fields are combined with a logical ‘and.’ */
@@ -545,21 +542,21 @@ export type ConceptFilter = {
 
 /** Methods to use when ordering `ConceptHierarchy`. */
 export enum ConceptHierarchiesOrderBy {
-  CidAsc = "CID_ASC",
-  CidDesc = "CID_DESC",
-  Natural = "NATURAL",
-  ParentCidAsc = "PARENT_CID_ASC",
-  ParentCidDesc = "PARENT_CID_DESC",
+  CidAsc = 'CID_ASC',
+  CidDesc = 'CID_DESC',
+  Natural = 'NATURAL',
+  ParentCidAsc = 'PARENT_CID_ASC',
+  ParentCidDesc = 'PARENT_CID_DESC',
 }
 
 export type ConceptHierarchy = {
-  __typename?: "ConceptHierarchy";
-  cid: Maybe<Scalars["Int"]>;
+  __typename?: 'ConceptHierarchy';
+  cid: Maybe<Scalars['Int']>;
   /** Reads a single `Concept` that is related to this `ConceptHierarchy`. */
   conceptByCid: Maybe<Concept>;
   /** Reads a single `Concept` that is related to this `ConceptHierarchy`. */
   conceptByParentCid: Maybe<Concept>;
-  parentCid: Maybe<Scalars["Int"]>;
+  parentCid: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -568,9 +565,9 @@ export type ConceptHierarchy = {
  */
 export type ConceptHierarchyCondition = {
   /** Checks for equality with the object’s `cid` field. */
-  cid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `parentCid` field. */
-  parentCid: InputMaybe<Scalars["Int"]>;
+  parentCid: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `ConceptHierarchy` object types. All fields are combined with a logical ‘and.’ */
@@ -589,18 +586,18 @@ export type ConceptHierarchyFilter = {
 
 /** An input for mutations affecting `ConceptHierarchy` */
 export type ConceptHierarchyInput = {
-  cid: InputMaybe<Scalars["Int"]>;
-  parentCid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
+  parentCid: InputMaybe<Scalars['Int']>;
 };
 
 /** The return type of our `conceptHierarchyMinimumTreesParentsLists` query. */
 export type ConceptHierarchyMinimumTreesParentsListsRecord = {
-  __typename?: "ConceptHierarchyMinimumTreesParentsListsRecord";
-  cid: Maybe<Scalars["Int"]>;
-  label: Maybe<Scalars["String"]>;
-  ontCode: Maybe<Scalars["String"]>;
-  parentCids: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  parentOntCodePath: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'ConceptHierarchyMinimumTreesParentsListsRecord';
+  cid: Maybe<Scalars['Int']>;
+  label: Maybe<Scalars['String']>;
+  ontCode: Maybe<Scalars['String']>;
+  parentCids: Maybe<Array<Maybe<Scalars['Int']>>>;
+  parentOntCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `ConceptHierarchyMinimumTreesParentsListsRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -625,35 +622,35 @@ export type ConceptHierarchyMinimumTreesParentsListsRecordFilter = {
 
 /** An input for mutations affecting `Concept` */
 export type ConceptInput = {
-  cid: InputMaybe<Scalars["Int"]>;
-  label: InputMaybe<Scalars["String"]>;
-  labelTsvector: InputMaybe<Scalars["String"]>;
-  ontCode: InputMaybe<Scalars["String"]>;
-  ontid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
+  label: InputMaybe<Scalars['String']>;
+  labelTsvector: InputMaybe<Scalars['String']>;
+  ontCode: InputMaybe<Scalars['String']>;
+  ontid: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `Concept`. Fields that are set will be updated. */
 export type ConceptPatch = {
-  cid: InputMaybe<Scalars["Int"]>;
-  label: InputMaybe<Scalars["String"]>;
-  labelTsvector: InputMaybe<Scalars["String"]>;
-  ontCode: InputMaybe<Scalars["String"]>;
-  ontid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
+  label: InputMaybe<Scalars['String']>;
+  labelTsvector: InputMaybe<Scalars['String']>;
+  ontCode: InputMaybe<Scalars['String']>;
+  ontid: InputMaybe<Scalars['Int']>;
 };
 
 export type ConceptPath = {
-  __typename?: "ConceptPath";
-  cid: Maybe<Scalars["Int"]>;
-  parentCids: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  __typename?: 'ConceptPath';
+  cid: Maybe<Scalars['Int']>;
+  parentCids: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 export type ConceptSynonym = {
-  __typename?: "ConceptSynonym";
-  cid: Scalars["Int"];
+  __typename?: 'ConceptSynonym';
+  cid: Scalars['Int'];
   /** Reads a single `Concept` that is related to this `ConceptSynonym`. */
   conceptByCid: Maybe<Concept>;
-  synonym: Maybe<Scalars["String"]>;
-  synonymTsvector: Maybe<Scalars["String"]>;
+  synonym: Maybe<Scalars['String']>;
+  synonymTsvector: Maybe<Scalars['String']>;
 };
 
 /**
@@ -662,11 +659,11 @@ export type ConceptSynonym = {
  */
 export type ConceptSynonymCondition = {
   /** Checks for equality with the object’s `cid` field. */
-  cid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `synonym` field. */
-  synonym: InputMaybe<Scalars["String"]>;
+  synonym: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `synonymTsvector` field. */
-  synonymTsvector: InputMaybe<Scalars["String"]>;
+  synonymTsvector: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `ConceptSynonym` object types. All fields are combined with a logical ‘and.’ */
@@ -685,50 +682,50 @@ export type ConceptSynonymFilter = {
 
 /** An input for mutations affecting `ConceptSynonym` */
 export type ConceptSynonymInput = {
-  cid: Scalars["Int"];
-  synonym: InputMaybe<Scalars["String"]>;
-  synonymTsvector: InputMaybe<Scalars["String"]>;
+  cid: Scalars['Int'];
+  synonym: InputMaybe<Scalars['String']>;
+  synonymTsvector: InputMaybe<Scalars['String']>;
 };
 
 /** Methods to use when ordering `ConceptSynonym`. */
 export enum ConceptSynonymsOrderBy {
-  CidAsc = "CID_ASC",
-  CidDesc = "CID_DESC",
-  Natural = "NATURAL",
-  SynonymAsc = "SYNONYM_ASC",
-  SynonymDesc = "SYNONYM_DESC",
-  SynonymTsvectorAsc = "SYNONYM_TSVECTOR_ASC",
-  SynonymTsvectorDesc = "SYNONYM_TSVECTOR_DESC",
+  CidAsc = 'CID_ASC',
+  CidDesc = 'CID_DESC',
+  Natural = 'NATURAL',
+  SynonymAsc = 'SYNONYM_ASC',
+  SynonymDesc = 'SYNONYM_DESC',
+  SynonymTsvectorAsc = 'SYNONYM_TSVECTOR_ASC',
+  SynonymTsvectorDesc = 'SYNONYM_TSVECTOR_DESC',
 }
 
 export type ConceptTreeElement = {
-  __typename?: "ConceptTreeElement";
-  cid: Maybe<Scalars["Int"]>;
-  level: Maybe<Scalars["Int"]>;
+  __typename?: 'ConceptTreeElement';
+  cid: Maybe<Scalars['Int']>;
+  level: Maybe<Scalars['Int']>;
 };
 
 /** An input for mutations affecting `ConceptWeightedParent` */
 export type ConceptWeightedParentInput = {
-  cid: InputMaybe<Scalars["Int"]>;
-  parentCid: InputMaybe<Scalars["Int"]>;
-  semanticRelationshipWeight: InputMaybe<Scalars["Float"]>;
+  cid: InputMaybe<Scalars['Int']>;
+  parentCid: InputMaybe<Scalars['Int']>;
+  semanticRelationshipWeight: InputMaybe<Scalars['Float']>;
 };
 
 /** Methods to use when ordering `Concept`. */
 export enum ConceptsOrderBy {
-  CidAsc = "CID_ASC",
-  CidDesc = "CID_DESC",
-  LabelAsc = "LABEL_ASC",
-  LabelDesc = "LABEL_DESC",
-  LabelTsvectorAsc = "LABEL_TSVECTOR_ASC",
-  LabelTsvectorDesc = "LABEL_TSVECTOR_DESC",
-  Natural = "NATURAL",
-  OntidAsc = "ONTID_ASC",
-  OntidDesc = "ONTID_DESC",
-  OntCodeAsc = "ONT_CODE_ASC",
-  OntCodeDesc = "ONT_CODE_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  CidAsc = 'CID_ASC',
+  CidDesc = 'CID_DESC',
+  LabelAsc = 'LABEL_ASC',
+  LabelDesc = 'LABEL_DESC',
+  LabelTsvectorAsc = 'LABEL_TSVECTOR_ASC',
+  LabelTsvectorDesc = 'LABEL_TSVECTOR_DESC',
+  Natural = 'NATURAL',
+  OntidAsc = 'ONTID_ASC',
+  OntidDesc = 'ONTID_DESC',
+  OntCodeAsc = 'ONT_CODE_ASC',
+  OntCodeDesc = 'ONT_CODE_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 /** All input for the create `AnnotationGroup` mutation. */
@@ -739,19 +736,19 @@ export type CreateAnnotationGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our create `AnnotationGroup` mutation. */
 export type CreateAnnotationGroupPayload = {
-  __typename?: "CreateAnnotationGroupPayload";
+  __typename?: 'CreateAnnotationGroupPayload';
   /** The `AnnotationGroup` that was created by this mutation. */
   annotationGroup: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -764,12 +761,12 @@ export type CreateAnnotationValueInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our create `AnnotationValue` mutation. */
 export type CreateAnnotationValuePayload = {
-  __typename?: "CreateAnnotationValuePayload";
+  __typename?: 'CreateAnnotationValuePayload';
   /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
   annotationGroup: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was created by this mutation. */
@@ -778,7 +775,7 @@ export type CreateAnnotationValuePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -789,19 +786,19 @@ export type CreateConceptHierarchyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `ConceptHierarchy` to be created by this mutation. */
   conceptHierarchy: ConceptHierarchyInput;
 };
 
 /** The output of our create `ConceptHierarchy` mutation. */
 export type CreateConceptHierarchyPayload = {
-  __typename?: "CreateConceptHierarchyPayload";
+  __typename?: 'CreateConceptHierarchyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `Concept` that is related to this `ConceptHierarchy`. */
   conceptByCid: Maybe<Concept>;
   /** Reads a single `Concept` that is related to this `ConceptHierarchy`. */
@@ -818,19 +815,19 @@ export type CreateConceptInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `Concept` to be created by this mutation. */
   concept: ConceptInput;
 };
 
 /** The output of our create `Concept` mutation. */
 export type CreateConceptPayload = {
-  __typename?: "CreateConceptPayload";
+  __typename?: 'CreateConceptPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `Concept` that was created by this mutation. */
   concept: Maybe<Concept>;
   /** Reads a single `Ontology` that is related to this `Concept`. */
@@ -845,19 +842,19 @@ export type CreateConceptSynonymInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `ConceptSynonym` to be created by this mutation. */
   conceptSynonym: ConceptSynonymInput;
 };
 
 /** The output of our create `ConceptSynonym` mutation. */
 export type CreateConceptSynonymPayload = {
-  __typename?: "CreateConceptSynonymPayload";
+  __typename?: 'CreateConceptSynonymPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `Concept` that is related to this `ConceptSynonym`. */
   conceptByCid: Maybe<Concept>;
   /** The `ConceptSynonym` that was created by this mutation. */
@@ -872,21 +869,21 @@ export type CreateDifferentialExpressionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `DifferentialExpression` to be created by this mutation. */
   differentialExpression: DifferentialExpressionInput;
 };
 
 /** The output of our create `DifferentialExpression` mutation. */
 export type CreateDifferentialExpressionPayload = {
-  __typename?: "CreateDifferentialExpressionPayload";
+  __typename?: 'CreateDifferentialExpressionPayload';
   /** Reads a single `AnnotationValue` that is related to this `DifferentialExpression`. */
   annotationValue: Maybe<AnnotationValue>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `DifferentialExpression` that was created by this mutation. */
   differentialExpression: Maybe<DifferentialExpression>;
   /** Reads a single `OmicsBase` that is related to this `DifferentialExpression`. */
@@ -903,19 +900,19 @@ export type CreateOmicsBaseInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsBase` to be created by this mutation. */
   omicsBase: OmicsBaseInput;
 };
 
 /** The output of our create `OmicsBase` mutation. */
 export type CreateOmicsBasePayload = {
-  __typename?: "CreateOmicsBasePayload";
+  __typename?: 'CreateOmicsBasePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsBase` that was created by this mutation. */
   omicsBase: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -928,19 +925,19 @@ export type CreateOmicsGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsGene` to be created by this mutation. */
   omicsGene: OmicsGeneInput;
 };
 
 /** The output of our create `OmicsGene` mutation. */
 export type CreateOmicsGenePayload = {
-  __typename?: "CreateOmicsGenePayload";
+  __typename?: 'CreateOmicsGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsGene`. */
   gene: Maybe<OmicsBase>;
   /** The `OmicsGene` that was created by this mutation. */
@@ -955,19 +952,19 @@ export type CreateOmicsProteinAntibodyTagGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsProteinAntibodyTagGene` to be created by this mutation. */
   omicsProteinAntibodyTagGene: OmicsProteinAntibodyTagGeneInput;
 };
 
 /** The output of our create `OmicsProteinAntibodyTagGene` mutation. */
 export type CreateOmicsProteinAntibodyTagGenePayload = {
-  __typename?: "CreateOmicsProteinAntibodyTagGenePayload";
+  __typename?: 'CreateOmicsProteinAntibodyTagGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsGene` that is related to this `OmicsProteinAntibodyTagGene`. */
   gene: Maybe<OmicsGene>;
   /** The `OmicsProteinAntibodyTagGene` that was created by this mutation. */
@@ -984,19 +981,19 @@ export type CreateOmicsProteinAntibodyTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsProteinAntibodyTag` to be created by this mutation. */
   omicsProteinAntibodyTag: OmicsProteinAntibodyTagInput;
 };
 
 /** The output of our create `OmicsProteinAntibodyTag` mutation. */
 export type CreateOmicsProteinAntibodyTagPayload = {
-  __typename?: "CreateOmicsProteinAntibodyTagPayload";
+  __typename?: 'CreateOmicsProteinAntibodyTagPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsProteinAntibodyTag` that was created by this mutation. */
   omicsProteinAntibodyTag: Maybe<OmicsProteinAntibodyTag>;
   /** Reads a single `OmicsBase` that is related to this `OmicsProteinAntibodyTag`. */
@@ -1011,19 +1008,19 @@ export type CreateOmicsRegionGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsRegionGene` to be created by this mutation. */
   omicsRegionGene: OmicsRegionGeneInput;
 };
 
 /** The output of our create `OmicsRegionGene` mutation. */
 export type CreateOmicsRegionGenePayload = {
-  __typename?: "CreateOmicsRegionGenePayload";
+  __typename?: 'CreateOmicsRegionGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsGene` that is related to this `OmicsRegionGene`. */
   gene: Maybe<OmicsGene>;
   /** The `OmicsRegionGene` that was created by this mutation. */
@@ -1040,19 +1037,19 @@ export type CreateOmicsRegionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsRegion` to be created by this mutation. */
   omicsRegion: OmicsRegionInput;
 };
 
 /** The output of our create `OmicsRegion` mutation. */
 export type CreateOmicsRegionPayload = {
-  __typename?: "CreateOmicsRegionPayload";
+  __typename?: 'CreateOmicsRegionPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsRegion` that was created by this mutation. */
   omicsRegion: Maybe<OmicsRegion>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
@@ -1067,19 +1064,19 @@ export type CreateOmicsTranscriptionFactorGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsTranscriptionFactorGene` to be created by this mutation. */
   omicsTranscriptionFactorGene: OmicsTranscriptionFactorGeneInput;
 };
 
 /** The output of our create `OmicsTranscriptionFactorGene` mutation. */
 export type CreateOmicsTranscriptionFactorGenePayload = {
-  __typename?: "CreateOmicsTranscriptionFactorGenePayload";
+  __typename?: 'CreateOmicsTranscriptionFactorGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsGene` that is related to this `OmicsTranscriptionFactorGene`. */
   gene: Maybe<OmicsGene>;
   /** The `OmicsTranscriptionFactorGene` that was created by this mutation. */
@@ -1096,19 +1093,19 @@ export type CreateOmicsTranscriptionFactorInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `OmicsTranscriptionFactor` to be created by this mutation. */
   omicsTranscriptionFactor: OmicsTranscriptionFactorInput;
 };
 
 /** The output of our create `OmicsTranscriptionFactor` mutation. */
 export type CreateOmicsTranscriptionFactorPayload = {
-  __typename?: "CreateOmicsTranscriptionFactorPayload";
+  __typename?: 'CreateOmicsTranscriptionFactorPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsTranscriptionFactor`. */
   omics: Maybe<OmicsBase>;
   /** The `OmicsTranscriptionFactor` that was created by this mutation. */
@@ -1123,19 +1120,19 @@ export type CreateOntologyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `Ontology` to be created by this mutation. */
   ontology: OntologyInput;
 };
 
 /** The output of our create `Ontology` mutation. */
 export type CreateOntologyPayload = {
-  __typename?: "CreateOntologyPayload";
+  __typename?: 'CreateOntologyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `Ontology` that was created by this mutation. */
   ontology: Maybe<Ontology>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1148,20 +1145,20 @@ export type CreateS3TempCredentialsInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our `createS3TempCredentials` mutation. */
 export type CreateS3TempCredentialsPayload = {
-  __typename?: "CreateS3TempCredentialsPayload";
+  __typename?: 'CreateS3TempCredentialsPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
-  strings: Maybe<Array<Maybe<Scalars["String"]>>>;
+  strings: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** All input for the create `StudyAdministrableCurrentuser` mutation. */
@@ -1170,19 +1167,19 @@ export type CreateStudyAdministrableCurrentuserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyAdministrableCurrentuser` to be created by this mutation. */
   studyAdministrableCurrentuser: StudyAdministrableCurrentuserInput;
 };
 
 /** The output of our create `StudyAdministrableCurrentuser` mutation. */
 export type CreateStudyAdministrableCurrentuserPayload = {
-  __typename?: "CreateStudyAdministrableCurrentuserPayload";
+  __typename?: 'CreateStudyAdministrableCurrentuserPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `StudyAdministrableCurrentuser` that was created by this mutation. */
@@ -1195,21 +1192,21 @@ export type CreateStudyAnnotationGroupUiInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyAnnotationGroupUi` to be created by this mutation. */
   studyAnnotationGroupUi: StudyAnnotationGroupUiInput;
 };
 
 /** The output of our create `StudyAnnotationGroupUi` mutation. */
 export type CreateStudyAnnotationGroupUiPayload = {
-  __typename?: "CreateStudyAnnotationGroupUiPayload";
+  __typename?: 'CreateStudyAnnotationGroupUiPayload';
   /** Reads a single `AnnotationGroup` that is related to this `StudyAnnotationGroupUi`. */
   annotationGroup: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudyAnnotationGroupUi`. */
@@ -1224,7 +1221,7 @@ export type CreateStudyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `Study` to be created by this mutation. */
   study: StudyInput;
 };
@@ -1235,19 +1232,19 @@ export type CreateStudyLayerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyLayer` to be created by this mutation. */
   studyLayer: StudyLayerInput;
 };
 
 /** The output of our create `StudyLayer` mutation. */
 export type CreateStudyLayerPayload = {
-  __typename?: "CreateStudyLayerPayload";
+  __typename?: 'CreateStudyLayerPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudyLayer`. */
@@ -1262,19 +1259,19 @@ export type CreateStudyOmicInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyOmic` to be created by this mutation. */
   studyOmic: StudyOmicInput;
 };
 
 /** The output of our create `StudyOmic` mutation. */
 export type CreateStudyOmicPayload = {
-  __typename?: "CreateStudyOmicPayload";
+  __typename?: 'CreateStudyOmicPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsBase` that is related to this `StudyOmic`. */
   omics: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1291,19 +1288,19 @@ export type CreateStudyOverviewInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyOverview` to be created by this mutation. */
   studyOverview: StudyOverviewInput;
 };
 
 /** The output of our create `StudyOverview` mutation. */
 export type CreateStudyOverviewPayload = {
-  __typename?: "CreateStudyOverviewPayload";
+  __typename?: 'CreateStudyOverviewPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `StudyOverview` that was created by this mutation. */
@@ -1312,12 +1309,12 @@ export type CreateStudyOverviewPayload = {
 
 /** The output of our create `Study` mutation. */
 export type CreateStudyPayload = {
-  __typename?: "CreateStudyPayload";
+  __typename?: 'CreateStudyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `Study` that was created by this mutation. */
@@ -1330,21 +1327,21 @@ export type CreateStudySampleAnnotationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudySampleAnnotation` to be created by this mutation. */
   studySampleAnnotation: StudySampleAnnotationInput;
 };
 
 /** The output of our create `StudySampleAnnotation` mutation. */
 export type CreateStudySampleAnnotationPayload = {
-  __typename?: "CreateStudySampleAnnotationPayload";
+  __typename?: 'CreateStudySampleAnnotationPayload';
   /** Reads a single `AnnotationValue` that is related to this `StudySampleAnnotation`. */
   annotationValue: Maybe<AnnotationValue>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudySampleAnnotation`. */
@@ -1359,19 +1356,19 @@ export type CreateStudySampleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudySample` to be created by this mutation. */
   studySample: StudySampleInput;
 };
 
 /** The output of our create `StudySample` mutation. */
 export type CreateStudySamplePayload = {
-  __typename?: "CreateStudySamplePayload";
+  __typename?: 'CreateStudySamplePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudySample`. */
@@ -1386,19 +1383,19 @@ export type CreateStudySampleProjectionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudySampleProjection` to be created by this mutation. */
   studySampleProjection: StudySampleProjectionInput;
 };
 
 /** The output of our create `StudySampleProjection` mutation. */
 export type CreateStudySampleProjectionPayload = {
-  __typename?: "CreateStudySampleProjectionPayload";
+  __typename?: 'CreateStudySampleProjectionPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `StudySampleProjection` that was created by this mutation. */
@@ -1413,20 +1410,20 @@ export type CreateStudyUploadInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  filetype: InputMaybe<Scalars["String"]>;
-  studyName: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
+  filetype: InputMaybe<Scalars['String']>;
+  studyName: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our `createStudyUpload` mutation. */
 export type CreateStudyUploadPayload = {
-  __typename?: "CreateStudyUploadPayload";
+  __typename?: 'CreateStudyUploadPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  json: Maybe<Scalars["JSON"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  json: Maybe<Scalars['JSON']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -1437,19 +1434,19 @@ export type CreateStudyVisibleCurrentuserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `StudyVisibleCurrentuser` to be created by this mutation. */
   studyVisibleCurrentuser: StudyVisibleCurrentuserInput;
 };
 
 /** The output of our create `StudyVisibleCurrentuser` mutation. */
 export type CreateStudyVisibleCurrentuserPayload = {
-  __typename?: "CreateStudyVisibleCurrentuserPayload";
+  __typename?: 'CreateStudyVisibleCurrentuserPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `StudyVisibleCurrentuser` that was created by this mutation. */
@@ -1462,19 +1459,19 @@ export type CreateUserAnnotationGroupInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The `UserAnnotationGroup` to be created by this mutation. */
   userAnnotationGroup: UserAnnotationGroupInput;
 };
 
 /** The output of our create `UserAnnotationGroup` mutation. */
 export type CreateUserAnnotationGroupPayload = {
-  __typename?: "CreateUserAnnotationGroupPayload";
+  __typename?: 'CreateUserAnnotationGroupPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `AnnotationGroup` that is related to this `UserAnnotationGroup`. */
@@ -1491,32 +1488,32 @@ export type DeleteAnnotationGroupByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `AnnotationGroup` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteAnnotationGroup` mutation. */
 export type DeleteAnnotationGroupInput = {
-  annotationGroupId: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our delete `AnnotationGroup` mutation. */
 export type DeleteAnnotationGroupPayload = {
-  __typename?: "DeleteAnnotationGroupPayload";
+  __typename?: 'DeleteAnnotationGroupPayload';
   /** The `AnnotationGroup` that was deleted by this mutation. */
   annotationGroup: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedAnnotationGroupNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedAnnotationGroupNodeId: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -1527,24 +1524,24 @@ export type DeleteAnnotationValueByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `AnnotationValue` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteAnnotationValue` mutation. */
 export type DeleteAnnotationValueInput = {
-  annotationValueId: Scalars["Int"];
+  annotationValueId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our delete `AnnotationValue` mutation. */
 export type DeleteAnnotationValuePayload = {
-  __typename?: "DeleteAnnotationValuePayload";
+  __typename?: 'DeleteAnnotationValuePayload';
   /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
   annotationGroup: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was deleted by this mutation. */
@@ -1553,8 +1550,8 @@ export type DeleteAnnotationValuePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedAnnotationValueNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedAnnotationValueNodeId: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -1565,32 +1562,32 @@ export type DeleteConceptByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Concept` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteConcept` mutation. */
 export type DeleteConceptInput = {
-  cid: Scalars["Int"];
+  cid: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our delete `Concept` mutation. */
 export type DeleteConceptPayload = {
-  __typename?: "DeleteConceptPayload";
+  __typename?: 'DeleteConceptPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `Concept` that was deleted by this mutation. */
   concept: Maybe<Concept>;
-  deletedConceptNodeId: Maybe<Scalars["ID"]>;
+  deletedConceptNodeId: Maybe<Scalars['ID']>;
   /** Reads a single `Ontology` that is related to this `Concept`. */
   ontologyByOntid: Maybe<Ontology>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1603,9 +1600,9 @@ export type DeleteOmicsBaseByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsBase` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOmicsBase` mutation. */
@@ -1614,19 +1611,19 @@ export type DeleteOmicsBaseInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  omicsId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  omicsId: Scalars['Int'];
 };
 
 /** The output of our delete `OmicsBase` mutation. */
 export type DeleteOmicsBasePayload = {
-  __typename?: "DeleteOmicsBasePayload";
+  __typename?: 'DeleteOmicsBasePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOmicsBaseNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOmicsBaseNodeId: Maybe<Scalars['ID']>;
   /** The `OmicsBase` that was deleted by this mutation. */
   omicsBase: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1639,9 +1636,9 @@ export type DeleteOmicsGeneByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsGene` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOmicsGene` mutation. */
@@ -1650,19 +1647,19 @@ export type DeleteOmicsGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  geneId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  geneId: Scalars['Int'];
 };
 
 /** The output of our delete `OmicsGene` mutation. */
 export type DeleteOmicsGenePayload = {
-  __typename?: "DeleteOmicsGenePayload";
+  __typename?: 'DeleteOmicsGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOmicsGeneNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOmicsGeneNodeId: Maybe<Scalars['ID']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsGene`. */
   gene: Maybe<OmicsBase>;
   /** The `OmicsGene` that was deleted by this mutation. */
@@ -1677,9 +1674,9 @@ export type DeleteOmicsProteinAntibodyTagByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsProteinAntibodyTag` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOmicsProteinAntibodyTag` mutation. */
@@ -1688,19 +1685,19 @@ export type DeleteOmicsProteinAntibodyTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  proteinAntibodyTagId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  proteinAntibodyTagId: Scalars['Int'];
 };
 
 /** The output of our delete `OmicsProteinAntibodyTag` mutation. */
 export type DeleteOmicsProteinAntibodyTagPayload = {
-  __typename?: "DeleteOmicsProteinAntibodyTagPayload";
+  __typename?: 'DeleteOmicsProteinAntibodyTagPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOmicsProteinAntibodyTagNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOmicsProteinAntibodyTagNodeId: Maybe<Scalars['ID']>;
   /** The `OmicsProteinAntibodyTag` that was deleted by this mutation. */
   omicsProteinAntibodyTag: Maybe<OmicsProteinAntibodyTag>;
   /** Reads a single `OmicsBase` that is related to this `OmicsProteinAntibodyTag`. */
@@ -1715,9 +1712,9 @@ export type DeleteOmicsRegionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsRegion` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOmicsRegion` mutation. */
@@ -1726,19 +1723,19 @@ export type DeleteOmicsRegionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  regionId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  regionId: Scalars['Int'];
 };
 
 /** The output of our delete `OmicsRegion` mutation. */
 export type DeleteOmicsRegionPayload = {
-  __typename?: "DeleteOmicsRegionPayload";
+  __typename?: 'DeleteOmicsRegionPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOmicsRegionNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOmicsRegionNodeId: Maybe<Scalars['ID']>;
   /** The `OmicsRegion` that was deleted by this mutation. */
   omicsRegion: Maybe<OmicsRegion>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
@@ -1753,9 +1750,9 @@ export type DeleteOmicsTranscriptionFactorByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsTranscriptionFactor` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOmicsTranscriptionFactor` mutation. */
@@ -1764,19 +1761,19 @@ export type DeleteOmicsTranscriptionFactorInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  omicsId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  omicsId: Scalars['Int'];
 };
 
 /** The output of our delete `OmicsTranscriptionFactor` mutation. */
 export type DeleteOmicsTranscriptionFactorPayload = {
-  __typename?: "DeleteOmicsTranscriptionFactorPayload";
+  __typename?: 'DeleteOmicsTranscriptionFactorPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOmicsTranscriptionFactorNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOmicsTranscriptionFactorNodeId: Maybe<Scalars['ID']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsTranscriptionFactor`. */
   omics: Maybe<OmicsBase>;
   /** The `OmicsTranscriptionFactor` that was deleted by this mutation. */
@@ -1791,9 +1788,9 @@ export type DeleteOntologyByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ontology` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteOntology` mutation. */
@@ -1802,19 +1799,19 @@ export type DeleteOntologyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  ontid: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  ontid: Scalars['Int'];
 };
 
 /** The output of our delete `Ontology` mutation. */
 export type DeleteOntologyPayload = {
-  __typename?: "DeleteOntologyPayload";
+  __typename?: 'DeleteOntologyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedOntologyNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedOntologyNodeId: Maybe<Scalars['ID']>;
   /** The `Ontology` that was deleted by this mutation. */
   ontology: Maybe<Ontology>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1827,9 +1824,9 @@ export type DeleteStudyByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Study` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteStudy` mutation. */
@@ -1838,8 +1835,8 @@ export type DeleteStudyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  studyId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  studyId: Scalars['Int'];
 };
 
 /** All input for the `deleteStudyLayerByNodeId` mutation. */
@@ -1848,9 +1845,9 @@ export type DeleteStudyLayerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `StudyLayer` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteStudyLayer` mutation. */
@@ -1859,19 +1856,19 @@ export type DeleteStudyLayerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  studyLayerId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  studyLayerId: Scalars['Int'];
 };
 
 /** The output of our delete `StudyLayer` mutation. */
 export type DeleteStudyLayerPayload = {
-  __typename?: "DeleteStudyLayerPayload";
+  __typename?: 'DeleteStudyLayerPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedStudyLayerNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedStudyLayerNodeId: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudyLayer`. */
@@ -1882,13 +1879,13 @@ export type DeleteStudyLayerPayload = {
 
 /** The output of our delete `Study` mutation. */
 export type DeleteStudyPayload = {
-  __typename?: "DeleteStudyPayload";
+  __typename?: 'DeleteStudyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedStudyNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedStudyNodeId: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `Study` that was deleted by this mutation. */
@@ -1901,9 +1898,9 @@ export type DeleteStudySampleByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `StudySample` to be deleted. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** All input for the `deleteStudySample` mutation. */
@@ -1912,20 +1909,20 @@ export type DeleteStudySampleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
 };
 
 /** The output of our delete `StudySample` mutation. */
 export type DeleteStudySamplePayload = {
-  __typename?: "DeleteStudySamplePayload";
+  __typename?: 'DeleteStudySamplePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  deletedStudySampleNodeId: Maybe<Scalars["ID"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  deletedStudySampleNodeId: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudySample`. */
@@ -1935,20 +1932,20 @@ export type DeleteStudySamplePayload = {
 };
 
 export type DifferentialExpression = {
-  __typename?: "DifferentialExpression";
+  __typename?: 'DifferentialExpression';
   /** Reads a single `AnnotationValue` that is related to this `DifferentialExpression`. */
   annotationValue: Maybe<AnnotationValue>;
-  annotationValueId: Scalars["Int"];
-  log2Foldchange: Maybe<Scalars["Float"]>;
+  annotationValueId: Scalars['Int'];
+  log2Foldchange: Maybe<Scalars['Float']>;
   /** Reads a single `OmicsBase` that is related to this `DifferentialExpression`. */
   omics: Maybe<OmicsBase>;
-  omicsId: Scalars["Int"];
-  pvalue: Maybe<Scalars["Float"]>;
-  pvalueAdj: Maybe<Scalars["Float"]>;
-  score: Maybe<Scalars["Float"]>;
+  omicsId: Scalars['Int'];
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  score: Maybe<Scalars['Float']>;
   /** Reads a single `Study` that is related to this `DifferentialExpression`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /**
@@ -1957,19 +1954,19 @@ export type DifferentialExpression = {
  */
 export type DifferentialExpressionCondition = {
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `log2Foldchange` field. */
-  log2Foldchange: InputMaybe<Scalars["Float"]>;
+  log2Foldchange: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `pvalue` field. */
-  pvalue: InputMaybe<Scalars["Float"]>;
+  pvalue: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `pvalueAdj` field. */
-  pvalueAdj: InputMaybe<Scalars["Float"]>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `score` field. */
-  score: InputMaybe<Scalars["Float"]>;
+  score: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `DifferentialExpression` object types. All fields are combined with a logical ‘and.’ */
@@ -1998,28 +1995,28 @@ export type DifferentialExpressionFilter = {
 
 /** An input for mutations affecting `DifferentialExpression` */
 export type DifferentialExpressionInput = {
-  annotationValueId: Scalars["Int"];
-  log2Foldchange: InputMaybe<Scalars["Float"]>;
-  omicsId: Scalars["Int"];
-  pvalue: InputMaybe<Scalars["Float"]>;
-  pvalueAdj: InputMaybe<Scalars["Float"]>;
-  score: InputMaybe<Scalars["Float"]>;
-  studyId: Scalars["Int"];
+  annotationValueId: Scalars['Int'];
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  omicsId: Scalars['Int'];
+  pvalue: InputMaybe<Scalars['Float']>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  score: InputMaybe<Scalars['Float']>;
+  studyId: Scalars['Int'];
 };
 
 export type DifferentialExpressionV = {
-  __typename?: "DifferentialExpressionV";
-  annotationValueId: Maybe<Scalars["Int"]>;
-  displayName: Maybe<Scalars["String"]>;
-  displaySymbol: Maybe<Scalars["String"]>;
-  linkedGenes: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  log2Foldchange: Maybe<Scalars["Float"]>;
-  omicsId: Maybe<Scalars["Int"]>;
+  __typename?: 'DifferentialExpressionV';
+  annotationValueId: Maybe<Scalars['Int']>;
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  linkedGenes: Maybe<Array<Maybe<Scalars['Int']>>>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
   omicsType: Maybe<OmicsType>;
-  pvalue: Maybe<Scalars["Float"]>;
-  pvalueAdj: Maybe<Scalars["Float"]>;
-  score: Maybe<Scalars["Float"]>;
-  studyId: Maybe<Scalars["Int"]>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -2028,27 +2025,27 @@ export type DifferentialExpressionV = {
  */
 export type DifferentialExpressionVCondition = {
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `displayName` field. */
-  displayName: InputMaybe<Scalars["String"]>;
+  displayName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<Scalars["String"]>;
+  displaySymbol: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `linkedGenes` field. */
-  linkedGenes: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `log2Foldchange` field. */
-  log2Foldchange: InputMaybe<Scalars["Float"]>;
+  log2Foldchange: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<OmicsType>;
   /** Checks for equality with the object’s `pvalue` field. */
-  pvalue: InputMaybe<Scalars["Float"]>;
+  pvalue: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `pvalueAdj` field. */
-  pvalueAdj: InputMaybe<Scalars["Float"]>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `score` field. */
-  score: InputMaybe<Scalars["Float"]>;
+  score: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `DifferentialExpressionV` object types. All fields are combined with a logical ‘and.’ */
@@ -2085,63 +2082,63 @@ export type DifferentialExpressionVFilter = {
 
 /** Methods to use when ordering `DifferentialExpressionV`. */
 export enum DifferentialExpressionVsOrderBy {
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  DisplayNameAsc = "DISPLAY_NAME_ASC",
-  DisplayNameDesc = "DISPLAY_NAME_DESC",
-  DisplaySymbolAsc = "DISPLAY_SYMBOL_ASC",
-  DisplaySymbolDesc = "DISPLAY_SYMBOL_DESC",
-  LinkedGenesAsc = "LINKED_GENES_ASC",
-  LinkedGenesDesc = "LINKED_GENES_DESC",
-  Log2FoldchangeAsc = "LOG2_FOLDCHANGE_ASC",
-  Log2FoldchangeDesc = "LOG2_FOLDCHANGE_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  OmicsTypeAsc = "OMICS_TYPE_ASC",
-  OmicsTypeDesc = "OMICS_TYPE_DESC",
-  PvalueAdjAsc = "PVALUE_ADJ_ASC",
-  PvalueAdjDesc = "PVALUE_ADJ_DESC",
-  PvalueAsc = "PVALUE_ASC",
-  PvalueDesc = "PVALUE_DESC",
-  ScoreAsc = "SCORE_ASC",
-  ScoreDesc = "SCORE_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  LinkedGenesAsc = 'LINKED_GENES_ASC',
+  LinkedGenesDesc = 'LINKED_GENES_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 /** Methods to use when ordering `DifferentialExpression`. */
 export enum DifferentialExpressionsOrderBy {
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  Log2FoldchangeAsc = "LOG2_FOLDCHANGE_ASC",
-  Log2FoldchangeDesc = "LOG2_FOLDCHANGE_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  PvalueAdjAsc = "PVALUE_ADJ_ASC",
-  PvalueAdjDesc = "PVALUE_ADJ_DESC",
-  PvalueAsc = "PVALUE_ASC",
-  PvalueDesc = "PVALUE_DESC",
-  ScoreAsc = "SCORE_ASC",
-  ScoreDesc = "SCORE_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type ExpressionByAnnotation = {
-  __typename?: "ExpressionByAnnotation";
-  annotationDisplayValue: Maybe<Scalars["String"]>;
-  annotationValueId: Maybe<Scalars["Int"]>;
+  __typename?: 'ExpressionByAnnotation';
+  annotationDisplayValue: Maybe<Scalars['String']>;
+  annotationValueId: Maybe<Scalars['Int']>;
   boxplotParams: Maybe<BoxplotValue>;
-  exprSamplesFraction: Maybe<Scalars["Float"]>;
-  mean: Maybe<Scalars["Float"]>;
-  median: Maybe<Scalars["Float"]>;
-  omicsId: Maybe<Scalars["Int"]>;
-  q3: Maybe<Scalars["Float"]>;
-  studyLayerId: Maybe<Scalars["Int"]>;
-  valueCount: Maybe<Scalars["Int"]>;
-  values: Maybe<Array<Maybe<Scalars["Float"]>>>;
+  exprSamplesFraction: Maybe<Scalars['Float']>;
+  mean: Maybe<Scalars['Float']>;
+  median: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  q3: Maybe<Scalars['Float']>;
+  studyLayerId: Maybe<Scalars['Int']>;
+  valueCount: Maybe<Scalars['Int']>;
+  values: Maybe<Array<Maybe<Scalars['Float']>>>;
 };
 
 /** A filter to be used against `ExpressionByAnnotation` object types. All fields are combined with a logical ‘and.’ */
@@ -2177,10 +2174,10 @@ export type ExpressionByAnnotationFilter = {
 };
 
 export type ExpressionByOmic = {
-  __typename?: "ExpressionByOmic";
-  omicsId: Maybe<Scalars["Int"]>;
-  studySampleIds: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  values: Maybe<Array<Maybe<Scalars["Float"]>>>;
+  __typename?: 'ExpressionByOmic';
+  omicsId: Maybe<Scalars['Int']>;
+  studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  values: Maybe<Array<Maybe<Scalars['Float']>>>;
 };
 
 /** A filter to be used against `ExpressionByOmic` object types. All fields are combined with a logical ‘and.’ */
@@ -2202,76 +2199,76 @@ export type ExpressionByOmicFilter = {
 /** A filter to be used against Float fields. All fields are combined with a logical ‘and.’ */
 export type FloatFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars["Float"]>;
+  distinctFrom: InputMaybe<Scalars['Float']>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars["Float"]>;
+  equalTo: InputMaybe<Scalars['Float']>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars["Float"]>;
+  greaterThan: InputMaybe<Scalars['Float']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars["Float"]>;
+  greaterThanOrEqualTo: InputMaybe<Scalars['Float']>;
   /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars["Float"]>>;
+  in: InputMaybe<Array<Scalars['Float']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars["Float"]>;
+  lessThan: InputMaybe<Scalars['Float']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars["Float"]>;
+  lessThanOrEqualTo: InputMaybe<Scalars['Float']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars["Float"]>;
+  notDistinctFrom: InputMaybe<Scalars['Float']>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars["Float"]>;
+  notEqualTo: InputMaybe<Scalars['Float']>;
   /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars["Float"]>>;
+  notIn: InputMaybe<Array<Scalars['Float']>>;
 };
 
 /** A filter to be used against Float List fields. All fields are combined with a logical ‘and.’ */
 export type FloatListFilter = {
   /** Any array item is equal to the specified value. */
-  anyEqualTo: InputMaybe<Scalars["Float"]>;
+  anyEqualTo: InputMaybe<Scalars['Float']>;
   /** Any array item is greater than the specified value. */
-  anyGreaterThan: InputMaybe<Scalars["Float"]>;
+  anyGreaterThan: InputMaybe<Scalars['Float']>;
   /** Any array item is greater than or equal to the specified value. */
-  anyGreaterThanOrEqualTo: InputMaybe<Scalars["Float"]>;
+  anyGreaterThanOrEqualTo: InputMaybe<Scalars['Float']>;
   /** Any array item is less than the specified value. */
-  anyLessThan: InputMaybe<Scalars["Float"]>;
+  anyLessThan: InputMaybe<Scalars['Float']>;
   /** Any array item is less than or equal to the specified value. */
-  anyLessThanOrEqualTo: InputMaybe<Scalars["Float"]>;
+  anyLessThanOrEqualTo: InputMaybe<Scalars['Float']>;
   /** Any array item is not equal to the specified value. */
-  anyNotEqualTo: InputMaybe<Scalars["Float"]>;
+  anyNotEqualTo: InputMaybe<Scalars['Float']>;
   /** Contained by the specified list of values. */
-  containedBy: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  containedBy: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Contains the specified list of values. */
-  contains: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  contains: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  distinctFrom: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  equalTo: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  greaterThan: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  lessThan: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  notEqualTo: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Overlaps the specified list of values. */
-  overlaps: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  overlaps: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
 };
 
 /** The return type of our `getCorrelatedGenes` query. */
 export type GetCorrelatedGenesRecord = {
-  __typename?: "GetCorrelatedGenesRecord";
-  displayName: Maybe<Scalars["String"]>;
-  displaySymbol: Maybe<Scalars["String"]>;
-  omicsId: Maybe<Scalars["Int"]>;
-  r: Maybe<Scalars["Float"]>;
+  __typename?: 'GetCorrelatedGenesRecord';
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  omicsId: Maybe<Scalars['Int']>;
+  r: Maybe<Scalars['Float']>;
 };
 
 /** A filter to be used against `GetCorrelatedGenesRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -2295,114 +2292,114 @@ export type GetCorrelatedGenesRecordFilter = {
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars["Int"]>;
+  distinctFrom: InputMaybe<Scalars['Int']>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars["Int"]>;
+  equalTo: InputMaybe<Scalars['Int']>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars["Int"]>;
+  greaterThan: InputMaybe<Scalars['Int']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars["Int"]>;
+  greaterThanOrEqualTo: InputMaybe<Scalars['Int']>;
   /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars["Int"]>>;
+  in: InputMaybe<Array<Scalars['Int']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars["Int"]>;
+  lessThan: InputMaybe<Scalars['Int']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars["Int"]>;
+  lessThanOrEqualTo: InputMaybe<Scalars['Int']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars["Int"]>;
+  notDistinctFrom: InputMaybe<Scalars['Int']>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars["Int"]>;
+  notEqualTo: InputMaybe<Scalars['Int']>;
   /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars["Int"]>>;
+  notIn: InputMaybe<Array<Scalars['Int']>>;
 };
 
 /** A filter to be used against Int List fields. All fields are combined with a logical ‘and.’ */
 export type IntListFilter = {
   /** Any array item is equal to the specified value. */
-  anyEqualTo: InputMaybe<Scalars["Int"]>;
+  anyEqualTo: InputMaybe<Scalars['Int']>;
   /** Any array item is greater than the specified value. */
-  anyGreaterThan: InputMaybe<Scalars["Int"]>;
+  anyGreaterThan: InputMaybe<Scalars['Int']>;
   /** Any array item is greater than or equal to the specified value. */
-  anyGreaterThanOrEqualTo: InputMaybe<Scalars["Int"]>;
+  anyGreaterThanOrEqualTo: InputMaybe<Scalars['Int']>;
   /** Any array item is less than the specified value. */
-  anyLessThan: InputMaybe<Scalars["Int"]>;
+  anyLessThan: InputMaybe<Scalars['Int']>;
   /** Any array item is less than or equal to the specified value. */
-  anyLessThanOrEqualTo: InputMaybe<Scalars["Int"]>;
+  anyLessThanOrEqualTo: InputMaybe<Scalars['Int']>;
   /** Any array item is not equal to the specified value. */
-  anyNotEqualTo: InputMaybe<Scalars["Int"]>;
+  anyNotEqualTo: InputMaybe<Scalars['Int']>;
   /** Contained by the specified list of values. */
-  containedBy: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  containedBy: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Contains the specified list of values. */
-  contains: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  contains: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  distinctFrom: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  equalTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  greaterThan: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  lessThan: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  notEqualTo: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Overlaps the specified list of values. */
-  overlaps: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  overlaps: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
 export type JsonFilter = {
   /** Contained by the specified JSON. */
-  containedBy: InputMaybe<Scalars["JSON"]>;
+  containedBy: InputMaybe<Scalars['JSON']>;
   /** Contains the specified JSON. */
-  contains: InputMaybe<Scalars["JSON"]>;
+  contains: InputMaybe<Scalars['JSON']>;
   /** Contains all of the specified keys. */
-  containsAllKeys: InputMaybe<Array<Scalars["String"]>>;
+  containsAllKeys: InputMaybe<Array<Scalars['String']>>;
   /** Contains any of the specified keys. */
-  containsAnyKeys: InputMaybe<Array<Scalars["String"]>>;
+  containsAnyKeys: InputMaybe<Array<Scalars['String']>>;
   /** Contains the specified key. */
-  containsKey: InputMaybe<Scalars["String"]>;
+  containsKey: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars["JSON"]>;
+  distinctFrom: InputMaybe<Scalars['JSON']>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars["JSON"]>;
+  equalTo: InputMaybe<Scalars['JSON']>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars["JSON"]>;
+  greaterThan: InputMaybe<Scalars['JSON']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars["JSON"]>;
+  greaterThanOrEqualTo: InputMaybe<Scalars['JSON']>;
   /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars["JSON"]>>;
+  in: InputMaybe<Array<Scalars['JSON']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars["JSON"]>;
+  lessThan: InputMaybe<Scalars['JSON']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars["JSON"]>;
+  lessThanOrEqualTo: InputMaybe<Scalars['JSON']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars["JSON"]>;
+  notDistinctFrom: InputMaybe<Scalars['JSON']>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars["JSON"]>;
+  notEqualTo: InputMaybe<Scalars['JSON']>;
   /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars["JSON"]>>;
+  notIn: InputMaybe<Array<Scalars['JSON']>>;
 };
 
 export type MinimumTreesResult = {
-  __typename?: "MinimumTreesResult";
+  __typename?: 'MinimumTreesResult';
   conceptPaths: Maybe<Array<Maybe<ConceptPath>>>;
   conceptTreeElements: Maybe<Array<Maybe<ConceptTreeElement>>>;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   conceptAllChildrenPaths: Maybe<ConceptAllChildrenPathsPayload>;
   /** Creates a single `AnnotationGroup`. */
   createAnnotationGroup: Maybe<CreateAnnotationGroupPayload>;
@@ -2950,21 +2947,21 @@ export type MutationUserAnnotationDefineArgs = {
 /** An object with a globally unique `ID`. */
 export type Node = {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 export type OmicsAll = {
-  __typename?: "OmicsAll";
-  displayName: Maybe<Scalars["String"]>;
-  displaySymbol: Maybe<Scalars["String"]>;
-  ensemblGeneId: Maybe<Scalars["String"]>;
-  entrezGeneIds: Maybe<Array<Maybe<Scalars["String"]>>>;
-  hgncSymbols: Maybe<Array<Maybe<Scalars["String"]>>>;
-  linkedGenes: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  omicsId: Maybe<Scalars["Int"]>;
+  __typename?: 'OmicsAll';
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  ensemblGeneId: Maybe<Scalars['String']>;
+  entrezGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  hgncSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
+  linkedGenes: Maybe<Array<Maybe<Scalars['Int']>>>;
+  omicsId: Maybe<Scalars['Int']>;
   omicsType: Maybe<OmicsType>;
-  region: Maybe<Scalars["String"]>;
-  taxId: Maybe<Scalars["Int"]>;
+  region: Maybe<Scalars['String']>;
+  taxId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -2973,25 +2970,25 @@ export type OmicsAll = {
  */
 export type OmicsAllCondition = {
   /** Checks for equality with the object’s `displayName` field. */
-  displayName: InputMaybe<Scalars["String"]>;
+  displayName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<Scalars["String"]>;
+  displaySymbol: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ensemblGeneId` field. */
-  ensemblGeneId: InputMaybe<Scalars["String"]>;
+  ensemblGeneId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `entrezGeneIds` field. */
-  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `hgncSymbols` field. */
-  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `linkedGenes` field. */
-  linkedGenes: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<OmicsType>;
   /** Checks for equality with the object’s `region` field. */
-  region: InputMaybe<Scalars["String"]>;
+  region: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `taxId` field. */
-  taxId: InputMaybe<Scalars["Int"]>;
+  taxId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsAll` object types. All fields are combined with a logical ‘and.’ */
@@ -3026,40 +3023,40 @@ export type OmicsAllFilter = {
 
 /** Methods to use when ordering `OmicsAll`. */
 export enum OmicsAllsOrderBy {
-  DisplayNameAsc = "DISPLAY_NAME_ASC",
-  DisplayNameDesc = "DISPLAY_NAME_DESC",
-  DisplaySymbolAsc = "DISPLAY_SYMBOL_ASC",
-  DisplaySymbolDesc = "DISPLAY_SYMBOL_DESC",
-  EnsemblGeneIdAsc = "ENSEMBL_GENE_ID_ASC",
-  EnsemblGeneIdDesc = "ENSEMBL_GENE_ID_DESC",
-  EntrezGeneIdsAsc = "ENTREZ_GENE_IDS_ASC",
-  EntrezGeneIdsDesc = "ENTREZ_GENE_IDS_DESC",
-  HgncSymbolsAsc = "HGNC_SYMBOLS_ASC",
-  HgncSymbolsDesc = "HGNC_SYMBOLS_DESC",
-  LinkedGenesAsc = "LINKED_GENES_ASC",
-  LinkedGenesDesc = "LINKED_GENES_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  OmicsTypeAsc = "OMICS_TYPE_ASC",
-  OmicsTypeDesc = "OMICS_TYPE_DESC",
-  RegionAsc = "REGION_ASC",
-  RegionDesc = "REGION_DESC",
-  TaxIdAsc = "TAX_ID_ASC",
-  TaxIdDesc = "TAX_ID_DESC",
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  EnsemblGeneIdAsc = 'ENSEMBL_GENE_ID_ASC',
+  EnsemblGeneIdDesc = 'ENSEMBL_GENE_ID_DESC',
+  EntrezGeneIdsAsc = 'ENTREZ_GENE_IDS_ASC',
+  EntrezGeneIdsDesc = 'ENTREZ_GENE_IDS_DESC',
+  HgncSymbolsAsc = 'HGNC_SYMBOLS_ASC',
+  HgncSymbolsDesc = 'HGNC_SYMBOLS_DESC',
+  LinkedGenesAsc = 'LINKED_GENES_ASC',
+  LinkedGenesDesc = 'LINKED_GENES_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  RegionAsc = 'REGION_ASC',
+  RegionDesc = 'REGION_DESC',
+  TaxIdAsc = 'TAX_ID_ASC',
+  TaxIdDesc = 'TAX_ID_DESC',
 }
 
 export type OmicsBase = Node & {
-  __typename?: "OmicsBase";
+  __typename?: 'OmicsBase';
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsByOmicsIdList: Array<DifferentialExpression>;
-  displayName: Maybe<Scalars["String"]>;
-  displaySymbol: Scalars["String"];
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads a single `OmicsGene` that is related to this `OmicsBase`. */
   omicsGeneByGeneId: Maybe<OmicsGene>;
-  omicsId: Scalars["Int"];
+  omicsId: Scalars['Int'];
   /** Reads a single `OmicsProteinAntibodyTag` that is related to this `OmicsBase`. */
   omicsProteinAntibodyTagByProteinAntibodyTagId: Maybe<OmicsProteinAntibodyTag>;
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsBase`. */
@@ -3069,22 +3066,22 @@ export type OmicsBase = Node & {
   omics_region_newNameHere: Maybe<OmicsRegion>;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsIdList: Array<StudyOmic>;
-  taxId: Scalars["Int"];
+  taxId: Scalars['Int'];
 };
 
 export type OmicsBaseDifferentialExpressionsByOmicsIdListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
 export type OmicsBaseStudyOmicsByOmicsIdListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
   filter: InputMaybe<StudyOmicFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
 
@@ -3094,15 +3091,15 @@ export type OmicsBaseStudyOmicsByOmicsIdListArgs = {
  */
 export type OmicsBaseCondition = {
   /** Checks for equality with the object’s `displayName` field. */
-  displayName: InputMaybe<Scalars["String"]>;
+  displayName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<Scalars["String"]>;
+  displaySymbol: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<OmicsType>;
   /** Checks for equality with the object’s `taxId` field. */
-  taxId: InputMaybe<Scalars["Int"]>;
+  taxId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsBase` object types. All fields are combined with a logical ‘and.’ */
@@ -3127,49 +3124,49 @@ export type OmicsBaseFilter = {
 
 /** An input for mutations affecting `OmicsBase` */
 export type OmicsBaseInput = {
-  displayName: InputMaybe<Scalars["String"]>;
-  displaySymbol: Scalars["String"];
-  omicsId: InputMaybe<Scalars["Int"]>;
+  displayName: InputMaybe<Scalars['String']>;
+  displaySymbol: Scalars['String'];
+  omicsId: InputMaybe<Scalars['Int']>;
   omicsType: OmicsType;
-  taxId: Scalars["Int"];
+  taxId: Scalars['Int'];
 };
 
 /** Represents an update to a `OmicsBase`. Fields that are set will be updated. */
 export type OmicsBasePatch = {
-  displayName: InputMaybe<Scalars["String"]>;
-  displaySymbol: InputMaybe<Scalars["String"]>;
-  omicsId: InputMaybe<Scalars["Int"]>;
+  displayName: InputMaybe<Scalars['String']>;
+  displaySymbol: InputMaybe<Scalars['String']>;
+  omicsId: InputMaybe<Scalars['Int']>;
   omicsType: InputMaybe<OmicsType>;
-  taxId: InputMaybe<Scalars["Int"]>;
+  taxId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `OmicsBase`. */
 export enum OmicsBasesOrderBy {
-  DisplayNameAsc = "DISPLAY_NAME_ASC",
-  DisplayNameDesc = "DISPLAY_NAME_DESC",
-  DisplaySymbolAsc = "DISPLAY_SYMBOL_ASC",
-  DisplaySymbolDesc = "DISPLAY_SYMBOL_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  OmicsTypeAsc = "OMICS_TYPE_ASC",
-  OmicsTypeDesc = "OMICS_TYPE_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  TaxIdAsc = "TAX_ID_ASC",
-  TaxIdDesc = "TAX_ID_DESC",
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  TaxIdAsc = 'TAX_ID_ASC',
+  TaxIdDesc = 'TAX_ID_DESC',
 }
 
 export type OmicsGene = Node & {
-  __typename?: "OmicsGene";
-  ensemblGeneId: Scalars["String"];
-  entrezGeneIds: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'OmicsGene';
+  ensemblGeneId: Scalars['String'];
+  entrezGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads a single `OmicsBase` that is related to this `OmicsGene`. */
   gene: Maybe<OmicsBase>;
-  geneId: Scalars["Int"];
-  hgncSymbols: Maybe<Array<Maybe<Scalars["String"]>>>;
+  geneId: Scalars['Int'];
+  hgncSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `OmicsProteinAntibodyTagGene`. */
   omicsProteinAntibodyTagGenesByGeneIdList: Array<OmicsProteinAntibodyTagGene>;
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
@@ -3181,24 +3178,24 @@ export type OmicsGene = Node & {
 export type OmicsGeneOmicsProteinAntibodyTagGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
   filter: InputMaybe<OmicsProteinAntibodyTagGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
 
 export type OmicsGeneOmicsRegionGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
   filter: InputMaybe<OmicsRegionGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
 
 export type OmicsGeneOmicsTranscriptionFactorGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
   filter: InputMaybe<OmicsTranscriptionFactorGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
 
@@ -3208,13 +3205,13 @@ export type OmicsGeneOmicsTranscriptionFactorGenesByGeneIdListArgs = {
  */
 export type OmicsGeneCondition = {
   /** Checks for equality with the object’s `ensemblGeneId` field. */
-  ensemblGeneId: InputMaybe<Scalars["String"]>;
+  ensemblGeneId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `entrezGeneIds` field. */
-  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `geneId` field. */
-  geneId: InputMaybe<Scalars["Int"]>;
+  geneId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `hgncSymbols` field. */
-  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `OmicsGene` object types. All fields are combined with a logical ‘and.’ */
@@ -3237,56 +3234,55 @@ export type OmicsGeneFilter = {
 
 /** An input for mutations affecting `OmicsGene` */
 export type OmicsGeneInput = {
-  ensemblGeneId: Scalars["String"];
-  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  geneId: Scalars["Int"];
-  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  ensemblGeneId: Scalars['String'];
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  geneId: Scalars['Int'];
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** Represents an update to a `OmicsGene`. Fields that are set will be updated. */
 export type OmicsGenePatch = {
-  ensemblGeneId: InputMaybe<Scalars["String"]>;
-  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  geneId: InputMaybe<Scalars["Int"]>;
-  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  geneId: InputMaybe<Scalars['Int']>;
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** Methods to use when ordering `OmicsGene`. */
 export enum OmicsGenesOrderBy {
-  EnsemblGeneIdAsc = "ENSEMBL_GENE_ID_ASC",
-  EnsemblGeneIdDesc = "ENSEMBL_GENE_ID_DESC",
-  EntrezGeneIdsAsc = "ENTREZ_GENE_IDS_ASC",
-  EntrezGeneIdsDesc = "ENTREZ_GENE_IDS_DESC",
-  GeneIdAsc = "GENE_ID_ASC",
-  GeneIdDesc = "GENE_ID_DESC",
-  HgncSymbolsAsc = "HGNC_SYMBOLS_ASC",
-  HgncSymbolsDesc = "HGNC_SYMBOLS_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  EnsemblGeneIdAsc = 'ENSEMBL_GENE_ID_ASC',
+  EnsemblGeneIdDesc = 'ENSEMBL_GENE_ID_DESC',
+  EntrezGeneIdsAsc = 'ENTREZ_GENE_IDS_ASC',
+  EntrezGeneIdsDesc = 'ENTREZ_GENE_IDS_DESC',
+  GeneIdAsc = 'GENE_ID_ASC',
+  GeneIdDesc = 'GENE_ID_DESC',
+  HgncSymbolsAsc = 'HGNC_SYMBOLS_ASC',
+  HgncSymbolsDesc = 'HGNC_SYMBOLS_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 export type OmicsProteinAntibodyTag = Node & {
-  __typename?: "OmicsProteinAntibodyTag";
-  antibodySymbol: Scalars["String"];
+  __typename?: 'OmicsProteinAntibodyTag';
+  antibodySymbol: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `OmicsProteinAntibodyTagGene`. */
   omicsProteinAntibodyTagGenesByProteinAntibodyTagIdList: Array<OmicsProteinAntibodyTagGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsProteinAntibodyTag`. */
   proteinAntibodyTag: Maybe<OmicsBase>;
-  proteinAntibodyTagId: Scalars["Int"];
-  taxId: Scalars["Int"];
+  proteinAntibodyTagId: Scalars['Int'];
+  taxId: Scalars['Int'];
 };
 
-export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibodyTagIdListArgs =
-  {
-    condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
-    filter: InputMaybe<OmicsProteinAntibodyTagGeneFilter>;
-    first: InputMaybe<Scalars["Int"]>;
-    offset: InputMaybe<Scalars["Int"]>;
-    orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
-  };
+export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibodyTagIdListArgs = {
+  condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
+  filter: InputMaybe<OmicsProteinAntibodyTagGeneFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
+};
 
 /**
  * A condition to be used against `OmicsProteinAntibodyTag` object types. All
@@ -3294,11 +3290,11 @@ export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibody
  */
 export type OmicsProteinAntibodyTagCondition = {
   /** Checks for equality with the object’s `antibodySymbol` field. */
-  antibodySymbol: InputMaybe<Scalars["String"]>;
+  antibodySymbol: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `proteinAntibodyTagId` field. */
-  proteinAntibodyTagId: InputMaybe<Scalars["Int"]>;
+  proteinAntibodyTagId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `taxId` field. */
-  taxId: InputMaybe<Scalars["Int"]>;
+  taxId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsProteinAntibodyTag` object types. All fields are combined with a logical ‘and.’ */
@@ -3318,13 +3314,13 @@ export type OmicsProteinAntibodyTagFilter = {
 };
 
 export type OmicsProteinAntibodyTagGene = {
-  __typename?: "OmicsProteinAntibodyTagGene";
+  __typename?: 'OmicsProteinAntibodyTagGene';
   /** Reads a single `OmicsGene` that is related to this `OmicsProteinAntibodyTagGene`. */
   gene: Maybe<OmicsGene>;
-  geneId: Scalars["Int"];
+  geneId: Scalars['Int'];
   /** Reads a single `OmicsProteinAntibodyTag` that is related to this `OmicsProteinAntibodyTagGene`. */
   proteinAntibodyTag: Maybe<OmicsProteinAntibodyTag>;
-  proteinAntibodyTagId: Scalars["Int"];
+  proteinAntibodyTagId: Scalars['Int'];
 };
 
 /**
@@ -3333,9 +3329,9 @@ export type OmicsProteinAntibodyTagGene = {
  */
 export type OmicsProteinAntibodyTagGeneCondition = {
   /** Checks for equality with the object’s `geneId` field. */
-  geneId: InputMaybe<Scalars["Int"]>;
+  geneId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `proteinAntibodyTagId` field. */
-  proteinAntibodyTagId: InputMaybe<Scalars["Int"]>;
+  proteinAntibodyTagId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsProteinAntibodyTagGene` object types. All fields are combined with a logical ‘and.’ */
@@ -3354,66 +3350,66 @@ export type OmicsProteinAntibodyTagGeneFilter = {
 
 /** An input for mutations affecting `OmicsProteinAntibodyTagGene` */
 export type OmicsProteinAntibodyTagGeneInput = {
-  geneId: Scalars["Int"];
-  proteinAntibodyTagId: Scalars["Int"];
+  geneId: Scalars['Int'];
+  proteinAntibodyTagId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `OmicsProteinAntibodyTagGene`. */
 export enum OmicsProteinAntibodyTagGenesOrderBy {
-  GeneIdAsc = "GENE_ID_ASC",
-  GeneIdDesc = "GENE_ID_DESC",
-  Natural = "NATURAL",
-  ProteinAntibodyTagIdAsc = "PROTEIN_ANTIBODY_TAG_ID_ASC",
-  ProteinAntibodyTagIdDesc = "PROTEIN_ANTIBODY_TAG_ID_DESC",
+  GeneIdAsc = 'GENE_ID_ASC',
+  GeneIdDesc = 'GENE_ID_DESC',
+  Natural = 'NATURAL',
+  ProteinAntibodyTagIdAsc = 'PROTEIN_ANTIBODY_TAG_ID_ASC',
+  ProteinAntibodyTagIdDesc = 'PROTEIN_ANTIBODY_TAG_ID_DESC',
 }
 
 /** An input for mutations affecting `OmicsProteinAntibodyTag` */
 export type OmicsProteinAntibodyTagInput = {
-  antibodySymbol: Scalars["String"];
-  proteinAntibodyTagId: Scalars["Int"];
-  taxId: Scalars["Int"];
+  antibodySymbol: Scalars['String'];
+  proteinAntibodyTagId: Scalars['Int'];
+  taxId: Scalars['Int'];
 };
 
 /** Represents an update to a `OmicsProteinAntibodyTag`. Fields that are set will be updated. */
 export type OmicsProteinAntibodyTagPatch = {
-  antibodySymbol: InputMaybe<Scalars["String"]>;
-  proteinAntibodyTagId: InputMaybe<Scalars["Int"]>;
-  taxId: InputMaybe<Scalars["Int"]>;
+  antibodySymbol: InputMaybe<Scalars['String']>;
+  proteinAntibodyTagId: InputMaybe<Scalars['Int']>;
+  taxId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `OmicsProteinAntibodyTag`. */
 export enum OmicsProteinAntibodyTagsOrderBy {
-  AntibodySymbolAsc = "ANTIBODY_SYMBOL_ASC",
-  AntibodySymbolDesc = "ANTIBODY_SYMBOL_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  ProteinAntibodyTagIdAsc = "PROTEIN_ANTIBODY_TAG_ID_ASC",
-  ProteinAntibodyTagIdDesc = "PROTEIN_ANTIBODY_TAG_ID_DESC",
-  TaxIdAsc = "TAX_ID_ASC",
-  TaxIdDesc = "TAX_ID_DESC",
+  AntibodySymbolAsc = 'ANTIBODY_SYMBOL_ASC',
+  AntibodySymbolDesc = 'ANTIBODY_SYMBOL_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  ProteinAntibodyTagIdAsc = 'PROTEIN_ANTIBODY_TAG_ID_ASC',
+  ProteinAntibodyTagIdDesc = 'PROTEIN_ANTIBODY_TAG_ID_DESC',
+  TaxIdAsc = 'TAX_ID_ASC',
+  TaxIdDesc = 'TAX_ID_DESC',
 }
 
 export type OmicsRegion = Node & {
-  __typename?: "OmicsRegion";
-  chromosome: Scalars["String"];
-  endPosition: Scalars["Int"];
+  __typename?: 'OmicsRegion';
+  chromosome: Scalars['String'];
+  endPosition: Scalars['Int'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
   omicsRegionGenesByRegionIdList: Array<OmicsRegionGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
   omics_region_newNameHere: Maybe<OmicsBase>;
-  region: Scalars["String"];
-  regionId: Scalars["Int"];
-  startPosition: Scalars["Int"];
+  region: Scalars['String'];
+  regionId: Scalars['Int'];
+  startPosition: Scalars['Int'];
 };
 
 export type OmicsRegionOmicsRegionGenesByRegionIdListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
   filter: InputMaybe<OmicsRegionGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
 
@@ -3423,15 +3419,15 @@ export type OmicsRegionOmicsRegionGenesByRegionIdListArgs = {
  */
 export type OmicsRegionCondition = {
   /** Checks for equality with the object’s `chromosome` field. */
-  chromosome: InputMaybe<Scalars["String"]>;
+  chromosome: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `endPosition` field. */
-  endPosition: InputMaybe<Scalars["Int"]>;
+  endPosition: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `region` field. */
-  region: InputMaybe<Scalars["String"]>;
+  region: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `regionId` field. */
-  regionId: InputMaybe<Scalars["Int"]>;
+  regionId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startPosition` field. */
-  startPosition: InputMaybe<Scalars["Int"]>;
+  startPosition: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsRegion` object types. All fields are combined with a logical ‘and.’ */
@@ -3455,13 +3451,13 @@ export type OmicsRegionFilter = {
 };
 
 export type OmicsRegionGene = {
-  __typename?: "OmicsRegionGene";
+  __typename?: 'OmicsRegionGene';
   /** Reads a single `OmicsGene` that is related to this `OmicsRegionGene`. */
   gene: Maybe<OmicsGene>;
-  geneId: Scalars["Int"];
+  geneId: Scalars['Int'];
   /** Reads a single `OmicsRegion` that is related to this `OmicsRegionGene`. */
   region: Maybe<OmicsRegion>;
-  regionId: Scalars["Int"];
+  regionId: Scalars['Int'];
 };
 
 /**
@@ -3470,9 +3466,9 @@ export type OmicsRegionGene = {
  */
 export type OmicsRegionGeneCondition = {
   /** Checks for equality with the object’s `geneId` field. */
-  geneId: InputMaybe<Scalars["Int"]>;
+  geneId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `regionId` field. */
-  regionId: InputMaybe<Scalars["Int"]>;
+  regionId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsRegionGene` object types. All fields are combined with a logical ‘and.’ */
@@ -3491,74 +3487,73 @@ export type OmicsRegionGeneFilter = {
 
 /** An input for mutations affecting `OmicsRegionGene` */
 export type OmicsRegionGeneInput = {
-  geneId: Scalars["Int"];
-  regionId: Scalars["Int"];
+  geneId: Scalars['Int'];
+  regionId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `OmicsRegionGene`. */
 export enum OmicsRegionGenesOrderBy {
-  GeneIdAsc = "GENE_ID_ASC",
-  GeneIdDesc = "GENE_ID_DESC",
-  Natural = "NATURAL",
-  RegionIdAsc = "REGION_ID_ASC",
-  RegionIdDesc = "REGION_ID_DESC",
+  GeneIdAsc = 'GENE_ID_ASC',
+  GeneIdDesc = 'GENE_ID_DESC',
+  Natural = 'NATURAL',
+  RegionIdAsc = 'REGION_ID_ASC',
+  RegionIdDesc = 'REGION_ID_DESC',
 }
 
 /** An input for mutations affecting `OmicsRegion` */
 export type OmicsRegionInput = {
-  chromosome: Scalars["String"];
-  endPosition: Scalars["Int"];
-  region: Scalars["String"];
-  regionId: Scalars["Int"];
-  startPosition: Scalars["Int"];
+  chromosome: Scalars['String'];
+  endPosition: Scalars['Int'];
+  region: Scalars['String'];
+  regionId: Scalars['Int'];
+  startPosition: Scalars['Int'];
 };
 
 /** Represents an update to a `OmicsRegion`. Fields that are set will be updated. */
 export type OmicsRegionPatch = {
-  chromosome: InputMaybe<Scalars["String"]>;
-  endPosition: InputMaybe<Scalars["Int"]>;
-  region: InputMaybe<Scalars["String"]>;
-  regionId: InputMaybe<Scalars["Int"]>;
-  startPosition: InputMaybe<Scalars["Int"]>;
+  chromosome: InputMaybe<Scalars['String']>;
+  endPosition: InputMaybe<Scalars['Int']>;
+  region: InputMaybe<Scalars['String']>;
+  regionId: InputMaybe<Scalars['Int']>;
+  startPosition: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `OmicsRegion`. */
 export enum OmicsRegionsOrderBy {
-  ChromosomeAsc = "CHROMOSOME_ASC",
-  ChromosomeDesc = "CHROMOSOME_DESC",
-  EndPositionAsc = "END_POSITION_ASC",
-  EndPositionDesc = "END_POSITION_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  RegionAsc = "REGION_ASC",
-  RegionDesc = "REGION_DESC",
-  RegionIdAsc = "REGION_ID_ASC",
-  RegionIdDesc = "REGION_ID_DESC",
-  StartPositionAsc = "START_POSITION_ASC",
-  StartPositionDesc = "START_POSITION_DESC",
+  ChromosomeAsc = 'CHROMOSOME_ASC',
+  ChromosomeDesc = 'CHROMOSOME_DESC',
+  EndPositionAsc = 'END_POSITION_ASC',
+  EndPositionDesc = 'END_POSITION_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  RegionAsc = 'REGION_ASC',
+  RegionDesc = 'REGION_DESC',
+  RegionIdAsc = 'REGION_ID_ASC',
+  RegionIdDesc = 'REGION_ID_DESC',
+  StartPositionAsc = 'START_POSITION_ASC',
+  StartPositionDesc = 'START_POSITION_DESC',
 }
 
 export type OmicsTranscriptionFactor = Node & {
-  __typename?: "OmicsTranscriptionFactor";
-  jasparMatrixId: Scalars["String"];
+  __typename?: 'OmicsTranscriptionFactor';
+  jasparMatrixId: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads a single `OmicsBase` that is related to this `OmicsTranscriptionFactor`. */
   omics: Maybe<OmicsBase>;
-  omicsId: Scalars["Int"];
+  omicsId: Scalars['Int'];
   /** Reads and enables pagination through a set of `OmicsTranscriptionFactorGene`. */
   omicsTranscriptionFactorGenesByTranscriptionFactorIdList: Array<OmicsTranscriptionFactorGene>;
 };
 
-export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscriptionFactorIdListArgs =
-  {
-    condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
-    filter: InputMaybe<OmicsTranscriptionFactorGeneFilter>;
-    first: InputMaybe<Scalars["Int"]>;
-    offset: InputMaybe<Scalars["Int"]>;
-    orderBy: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
-  };
+export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscriptionFactorIdListArgs = {
+  condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
+  filter: InputMaybe<OmicsTranscriptionFactorGeneFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
+};
 
 /**
  * A condition to be used against `OmicsTranscriptionFactor` object types. All
@@ -3566,9 +3561,9 @@ export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscription
  */
 export type OmicsTranscriptionFactorCondition = {
   /** Checks for equality with the object’s `jasparMatrixId` field. */
-  jasparMatrixId: InputMaybe<Scalars["String"]>;
+  jasparMatrixId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsTranscriptionFactor` object types. All fields are combined with a logical ‘and.’ */
@@ -3586,13 +3581,13 @@ export type OmicsTranscriptionFactorFilter = {
 };
 
 export type OmicsTranscriptionFactorGene = {
-  __typename?: "OmicsTranscriptionFactorGene";
+  __typename?: 'OmicsTranscriptionFactorGene';
   /** Reads a single `OmicsGene` that is related to this `OmicsTranscriptionFactorGene`. */
   gene: Maybe<OmicsGene>;
-  geneId: Scalars["Int"];
+  geneId: Scalars['Int'];
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsTranscriptionFactorGene`. */
   transcriptionFactor: Maybe<OmicsTranscriptionFactor>;
-  transcriptionFactorId: Scalars["Int"];
+  transcriptionFactorId: Scalars['Int'];
 };
 
 /**
@@ -3601,9 +3596,9 @@ export type OmicsTranscriptionFactorGene = {
  */
 export type OmicsTranscriptionFactorGeneCondition = {
   /** Checks for equality with the object’s `geneId` field. */
-  geneId: InputMaybe<Scalars["Int"]>;
+  geneId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `transcriptionFactorId` field. */
-  transcriptionFactorId: InputMaybe<Scalars["Int"]>;
+  transcriptionFactorId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `OmicsTranscriptionFactorGene` object types. All fields are combined with a logical ‘and.’ */
@@ -3622,47 +3617,47 @@ export type OmicsTranscriptionFactorGeneFilter = {
 
 /** An input for mutations affecting `OmicsTranscriptionFactorGene` */
 export type OmicsTranscriptionFactorGeneInput = {
-  geneId: Scalars["Int"];
-  transcriptionFactorId: Scalars["Int"];
+  geneId: Scalars['Int'];
+  transcriptionFactorId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `OmicsTranscriptionFactorGene`. */
 export enum OmicsTranscriptionFactorGenesOrderBy {
-  GeneIdAsc = "GENE_ID_ASC",
-  GeneIdDesc = "GENE_ID_DESC",
-  Natural = "NATURAL",
-  TranscriptionFactorIdAsc = "TRANSCRIPTION_FACTOR_ID_ASC",
-  TranscriptionFactorIdDesc = "TRANSCRIPTION_FACTOR_ID_DESC",
+  GeneIdAsc = 'GENE_ID_ASC',
+  GeneIdDesc = 'GENE_ID_DESC',
+  Natural = 'NATURAL',
+  TranscriptionFactorIdAsc = 'TRANSCRIPTION_FACTOR_ID_ASC',
+  TranscriptionFactorIdDesc = 'TRANSCRIPTION_FACTOR_ID_DESC',
 }
 
 /** An input for mutations affecting `OmicsTranscriptionFactor` */
 export type OmicsTranscriptionFactorInput = {
-  jasparMatrixId: Scalars["String"];
-  omicsId: Scalars["Int"];
+  jasparMatrixId: Scalars['String'];
+  omicsId: Scalars['Int'];
 };
 
 /** Represents an update to a `OmicsTranscriptionFactor`. Fields that are set will be updated. */
 export type OmicsTranscriptionFactorPatch = {
-  jasparMatrixId: InputMaybe<Scalars["String"]>;
-  omicsId: InputMaybe<Scalars["Int"]>;
+  jasparMatrixId: InputMaybe<Scalars['String']>;
+  omicsId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `OmicsTranscriptionFactor`. */
 export enum OmicsTranscriptionFactorsOrderBy {
-  JasparMatrixIdAsc = "JASPAR_MATRIX_ID_ASC",
-  JasparMatrixIdDesc = "JASPAR_MATRIX_ID_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  JasparMatrixIdAsc = 'JASPAR_MATRIX_ID_ASC',
+  JasparMatrixIdDesc = 'JASPAR_MATRIX_ID_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 export enum OmicsType {
-  Gene = "GENE",
-  ProteinAntibodyTag = "PROTEIN_ANTIBODY_TAG",
-  Region = "REGION",
-  TranscriptionFactor = "TRANSCRIPTION_FACTOR",
+  Gene = 'GENE',
+  ProteinAntibodyTag = 'PROTEIN_ANTIBODY_TAG',
+  Region = 'REGION',
+  TranscriptionFactor = 'TRANSCRIPTION_FACTOR',
 }
 
 /** A filter to be used against OmicsType fields. All fields are combined with a logical ‘and.’ */
@@ -3678,7 +3673,7 @@ export type OmicsTypeFilter = {
   /** Included in the specified list. */
   in: InputMaybe<Array<OmicsType>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
   lessThan: InputMaybe<OmicsType>;
   /** Less than or equal to the specified value. */
@@ -3718,7 +3713,7 @@ export type OmicsTypeListFilter = {
   /** Greater than or equal to the specified value. */
   greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<OmicsType>>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
   lessThan: InputMaybe<Array<InputMaybe<OmicsType>>>;
   /** Less than or equal to the specified value. */
@@ -3733,9 +3728,9 @@ export type OmicsTypeListFilter = {
 
 /** The return type of our `ontCodesInfo` query. */
 export type OntCodesInfoRecord = {
-  __typename?: "OntCodesInfoRecord";
-  labels: Maybe<Array<Maybe<Scalars["String"]>>>;
-  parentIds: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'OntCodesInfoRecord';
+  labels: Maybe<Array<Maybe<Scalars['String']>>>;
+  parentIds: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `OntCodesInfoRecord` object types. All fields are combined with a logical ‘and.’ */
@@ -3754,30 +3749,30 @@ export type OntCodesInfoRecordFilter = {
 
 /** Methods to use when ordering `Ontology`. */
 export enum OntologiesOrderBy {
-  NameAsc = "NAME_ASC",
-  NameDesc = "NAME_DESC",
-  Natural = "NATURAL",
-  OntidAsc = "ONTID_ASC",
-  OntidDesc = "ONTID_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  Natural = 'NATURAL',
+  OntidAsc = 'ONTID_ASC',
+  OntidDesc = 'ONTID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
 export type Ontology = Node & {
-  __typename?: "Ontology";
+  __typename?: 'Ontology';
   /** Reads and enables pagination through a set of `Concept`. */
   conceptsByOntidList: Array<Concept>;
-  name: Maybe<Scalars["String"]>;
+  name: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
-  ontid: Scalars["Int"];
+  nodeId: Scalars['ID'];
+  ontid: Scalars['Int'];
 };
 
 export type OntologyConceptsByOntidListArgs = {
   condition: InputMaybe<ConceptCondition>;
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptsOrderBy>>;
 };
 
@@ -3787,9 +3782,9 @@ export type OntologyConceptsByOntidListArgs = {
  */
 export type OntologyCondition = {
   /** Checks for equality with the object’s `name` field. */
-  name: InputMaybe<Scalars["String"]>;
+  name: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontid` field. */
-  ontid: InputMaybe<Scalars["Int"]>;
+  ontid: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `Ontology` object types. All fields are combined with a logical ‘and.’ */
@@ -3808,24 +3803,24 @@ export type OntologyFilter = {
 
 /** An input for mutations affecting `Ontology` */
 export type OntologyInput = {
-  name: InputMaybe<Scalars["String"]>;
-  ontid: Scalars["Int"];
+  name: InputMaybe<Scalars['String']>;
+  ontid: Scalars['Int'];
 };
 
 /** Represents an update to a `Ontology`. Fields that are set will be updated. */
 export type OntologyPatch = {
-  name: InputMaybe<Scalars["String"]>;
-  ontid: InputMaybe<Scalars["Int"]>;
+  name: InputMaybe<Scalars['String']>;
+  ontid: InputMaybe<Scalars['Int']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
-  __typename?: "Query";
+  __typename?: 'Query';
   /** Reads a set of `_AllUsedOntologyId`. */
   _allUsedOntologyIdsList: Maybe<Array<_AllUsedOntologyId>>;
   _conceptHierarchyMinimumTreesImpl: Maybe<MinimumTreesResult>;
   _finalBoxplot: Maybe<BoxplotValue>;
-  _semanticOrderImpl: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  _semanticOrderImpl: Maybe<Array<Maybe<Scalars['Int']>>>;
   annotationGroup: Maybe<AnnotationGroup>;
   /** Reads a single `AnnotationGroup` using its globally unique `ID`. */
   annotationGroupByNodeId: Maybe<AnnotationGroup>;
@@ -3834,9 +3829,7 @@ export type Query = Node & {
   annotationValue: Maybe<AnnotationValue>;
   /** Reads a single `AnnotationValue` using its globally unique `ID`. */
   annotationValueByNodeId: Maybe<AnnotationValue>;
-  annotationValueCoocurrenceList: Maybe<
-    Array<Maybe<AnnotationValueCoocurrenceRecord>>
-  >;
+  annotationValueCoocurrenceList: Maybe<Array<Maybe<AnnotationValueCoocurrenceRecord>>>;
   /** Reads a set of `AnnotationValue`. */
   annotationValuesList: Maybe<Array<AnnotationValue>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
@@ -3844,21 +3837,19 @@ export type Query = Node & {
   concept: Maybe<Concept>;
   /** Reads a single `Concept` using its globally unique `ID`. */
   conceptByNodeId: Maybe<Concept>;
-  conceptCidArrayToCodes: Maybe<Array<Maybe<Scalars["String"]>>>;
+  conceptCidArrayToCodes: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads a set of `ConceptHierarchy`. */
   conceptHierarchiesList: Maybe<Array<ConceptHierarchy>>;
-  conceptHierarchyMinimumTreesParentsListsList: Maybe<
-    Array<Maybe<ConceptHierarchyMinimumTreesParentsListsRecord>>
-  >;
+  conceptHierarchyMinimumTreesParentsListsList: Maybe<Array<Maybe<ConceptHierarchyMinimumTreesParentsListsRecord>>>;
   /** Reads a set of `ConceptSynonym`. */
   conceptSynonymsList: Maybe<Array<ConceptSynonym>>;
   /** Reads and enables pagination through a set of `Concept`. */
   conceptsInSemanticOrderList: Maybe<Array<Maybe<Concept>>>;
   /** Reads a set of `Concept`. */
   conceptsList: Maybe<Array<Concept>>;
-  correlationTrianglePlot: Maybe<Scalars["String"]>;
-  currentUserEmail: Maybe<Scalars["String"]>;
-  currentUserGroups: Maybe<Array<Maybe<Scalars["String"]>>>;
+  correlationTrianglePlot: Maybe<Scalars['String']>;
+  currentUserEmail: Maybe<Scalars['String']>;
+  currentUserGroups: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads a set of `DifferentialExpressionV`. */
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
@@ -3871,7 +3862,7 @@ export type Query = Node & {
   /** Fetches an object given its globally unique `ID`. */
   node: Maybe<Node>;
   /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads a set of `OmicsAll`. */
   omicsAllsList: Maybe<Array<OmicsAll>>;
   omicsBase: Maybe<OmicsBase>;
@@ -3922,9 +3913,7 @@ export type Query = Node & {
   /** Reads a set of `StudyAdminDetail`. */
   studyAdminDetailsList: Maybe<Array<StudyAdminDetail>>;
   /** Reads a set of `StudyAdministrableCurrentuser`. */
-  studyAdministrableCurrentusersList: Maybe<
-    Array<StudyAdministrableCurrentuser>
-  >;
+  studyAdministrableCurrentusersList: Maybe<Array<StudyAdministrableCurrentuser>>;
   /** Reads a set of `StudyAnnotationFrontendGroup`. */
   studyAnnotationFrontendGroupsList: Maybe<Array<StudyAnnotationFrontendGroup>>;
   /** Reads a set of `StudyAnnotationFrontendValue`. */
@@ -3950,17 +3939,13 @@ export type Query = Node & {
   studyOverviewsList: Maybe<Array<StudyOverview>>;
   studySample: Maybe<StudySample>;
   /** Reads a set of `StudySampleAnnotationSubsampling`. */
-  studySampleAnnotationSubsamplingsList: Maybe<
-    Array<StudySampleAnnotationSubsampling>
-  >;
+  studySampleAnnotationSubsamplingsList: Maybe<Array<StudySampleAnnotationSubsampling>>;
   /** Reads a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Maybe<Array<StudySampleAnnotation>>;
   /** Reads a single `StudySample` using its globally unique `ID`. */
   studySampleByNodeId: Maybe<StudySample>;
   /** Reads a set of `StudySampleProjectionSubsamplingTransposed`. */
-  studySampleProjectionSubsamplingTransposedsList: Maybe<
-    Array<StudySampleProjectionSubsamplingTransposed>
-  >;
+  studySampleProjectionSubsamplingTransposedsList: Maybe<Array<StudySampleProjectionSubsamplingTransposed>>;
   /** Reads a set of `StudySampleProjection`. */
   studySampleProjectionsList: Maybe<Array<StudySampleProjection>>;
   /** Reads a set of `StudySample`. */
@@ -3971,166 +3956,166 @@ export type Query = Node & {
   treeOntologiesList: Maybe<Array<TreeOntology>>;
   /** Reads a set of `UserAnnotationGroup`. */
   userAnnotationGroupsList: Maybe<Array<UserAnnotationGroup>>;
-  userStudyUploadConfigured: Maybe<Scalars["Boolean"]>;
-  violinPlot: Maybe<Scalars["String"]>;
+  userStudyUploadConfigured: Maybe<Scalars['Boolean']>;
+  violinPlot: Maybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type Query_AllUsedOntologyIdsListArgs = {
   condition: InputMaybe<_AllUsedOntologyIdCondition>;
   filter: InputMaybe<_AllUsedOntologyIdFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<_AllUsedOntologyIdsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type Query_ConceptHierarchyMinimumTreesImplArgs = {
-  cidsLeaves: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  cidsLeaves: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   fullgraph: InputMaybe<Array<InputMaybe<ConceptWeightedParentInput>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type Query_FinalBoxplotArgs = {
-  a: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  a: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type Query_SemanticOrderImplArgs = {
-  cidsToOrder: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  cidsToOrder: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   fullgraph: InputMaybe<Array<InputMaybe<ConceptWeightedParentInput>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupArgs = {
-  annotationGroupId: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupsListArgs = {
   condition: InputMaybe<AnnotationGroupCondition>;
   filter: InputMaybe<AnnotationGroupFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationGroupsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueArgs = {
-  annotationValueId: Scalars["Int"];
+  annotationValueId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueCoocurrenceListArgs = {
-  annotationGroupId1: InputMaybe<Scalars["Int"]>;
-  annotationGroupId2: InputMaybe<Scalars["Int"]>;
+  annotationGroupId1: InputMaybe<Scalars['Int']>;
+  annotationGroupId2: InputMaybe<Scalars['Int']>;
   filter: InputMaybe<AnnotationValueCoocurrenceRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  studyId: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValuesListArgs = {
   condition: InputMaybe<AnnotationValueCondition>;
   filter: InputMaybe<AnnotationValueFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAutocompleteListArgs = {
   filter: InputMaybe<AutocompleteResultFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  searchQuery: InputMaybe<Scalars["String"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  searchQuery: InputMaybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptArgs = {
-  cid: Scalars["Int"];
+  cid: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptCidArrayToCodesArgs = {
-  arg0: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  arg0: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchiesListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
   filter: InputMaybe<ConceptHierarchyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchyMinimumTreesParentsListsListArgs = {
   filter: InputMaybe<ConceptHierarchyMinimumTreesParentsListsRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  ontologyCodes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  queryOntology: InputMaybe<Scalars["String"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  ontologyCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  queryOntology: InputMaybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptSynonymsListArgs = {
   condition: InputMaybe<ConceptSynonymCondition>;
   filter: InputMaybe<ConceptSynonymFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsInSemanticOrderListArgs = {
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  ontologyCodes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  queryOntology: InputMaybe<Scalars["String"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  ontologyCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  queryOntology: InputMaybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsListArgs = {
   condition: InputMaybe<ConceptCondition>;
   filter: InputMaybe<ConceptFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCorrelationTrianglePlotArgs = {
-  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pStudyId: InputMaybe<Scalars["Int"]>;
-  pStudyLayerId: InputMaybe<Scalars["Int"]>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryDifferentialExpressionVsListArgs = {
   condition: InputMaybe<DifferentialExpressionVCondition>;
   filter: InputMaybe<DifferentialExpressionVFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionVsOrderBy>>;
 };
 
@@ -4138,109 +4123,109 @@ export type QueryDifferentialExpressionVsListArgs = {
 export type QueryDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByAnnotationListArgs = {
   filter: InputMaybe<ExpressionByAnnotationFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  pAnnotationGroupId: InputMaybe<Scalars["Int"]>;
-  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pStudyLayerIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyLayerIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByOmicsIdsListArgs = {
   filter: InputMaybe<ExpressionByOmicFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pStudyLayerId: InputMaybe<Scalars["Int"]>;
-  pSubsamplingProjection: InputMaybe<Scalars["String"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
+  pSubsamplingProjection: InputMaybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGetCorrelatedGenesListArgs = {
   filter: InputMaybe<GetCorrelatedGenesRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  omicsId: InputMaybe<Scalars["Int"]>;
-  studyId: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  omicsId: InputMaybe<Scalars['Int']>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsAllsListArgs = {
   condition: InputMaybe<OmicsAllCondition>;
   filter: InputMaybe<OmicsAllFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsAllsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBaseArgs = {
-  omicsId: Scalars["Int"];
+  omicsId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBaseByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBasesListArgs = {
   condition: InputMaybe<OmicsBaseCondition>;
   filter: InputMaybe<OmicsBaseFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsBasesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGeneArgs = {
-  geneId: Scalars["Int"];
+  geneId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGeneByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGenesListArgs = {
   condition: InputMaybe<OmicsGeneCondition>;
   filter: InputMaybe<OmicsGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsGenesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagArgs = {
-  proteinAntibodyTagId: Scalars["Int"];
+  proteinAntibodyTagId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagGenesListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
   filter: InputMaybe<OmicsProteinAntibodyTagGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
 
@@ -4248,27 +4233,27 @@ export type QueryOmicsProteinAntibodyTagGenesListArgs = {
 export type QueryOmicsProteinAntibodyTagsListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagCondition>;
   filter: InputMaybe<OmicsProteinAntibodyTagFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionArgs = {
-  regionId: Scalars["Int"];
+  regionId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionGenesListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
   filter: InputMaybe<OmicsRegionGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
 
@@ -4276,27 +4261,27 @@ export type QueryOmicsRegionGenesListArgs = {
 export type QueryOmicsRegionsListArgs = {
   condition: InputMaybe<OmicsRegionCondition>;
   filter: InputMaybe<OmicsRegionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorArgs = {
-  omicsId: Scalars["Int"];
+  omicsId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorGenesListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
   filter: InputMaybe<OmicsTranscriptionFactorGeneFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
 
@@ -4304,59 +4289,59 @@ export type QueryOmicsTranscriptionFactorGenesListArgs = {
 export type QueryOmicsTranscriptionFactorsListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorCondition>;
   filter: InputMaybe<OmicsTranscriptionFactorFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntCodesInfoListArgs = {
   filter: InputMaybe<OntCodesInfoRecordFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  pOntCodes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  pOntology: InputMaybe<Scalars["String"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pOntCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  pOntology: InputMaybe<Scalars['String']>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologiesListArgs = {
   condition: InputMaybe<OntologyCondition>;
   filter: InputMaybe<OntologyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OntologiesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologyArgs = {
-  ontid: Scalars["Int"];
+  ontid: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologyByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudiesListArgs = {
   condition: InputMaybe<StudyCondition>;
   filter: InputMaybe<StudyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudiesOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyArgs = {
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAdminDetailsListArgs = {
   condition: InputMaybe<StudyAdminDetailCondition>;
   filter: InputMaybe<StudyAdminDetailFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAdminDetailsOrderBy>>;
 };
 
@@ -4364,8 +4349,8 @@ export type QueryStudyAdminDetailsListArgs = {
 export type QueryStudyAdministrableCurrentusersListArgs = {
   condition: InputMaybe<StudyAdministrableCurrentuserCondition>;
   filter: InputMaybe<StudyAdministrableCurrentuserFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAdministrableCurrentusersOrderBy>>;
 };
 
@@ -4373,8 +4358,8 @@ export type QueryStudyAdministrableCurrentusersListArgs = {
 export type QueryStudyAnnotationFrontendGroupsListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
   filter: InputMaybe<StudyAnnotationFrontendGroupFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
 };
 
@@ -4382,8 +4367,8 @@ export type QueryStudyAnnotationFrontendGroupsListArgs = {
 export type QueryStudyAnnotationFrontendValuesListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
   filter: InputMaybe<StudyAnnotationFrontendValueFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
 
@@ -4391,41 +4376,41 @@ export type QueryStudyAnnotationFrontendValuesListArgs = {
 export type QueryStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyImportLogsListArgs = {
   condition: InputMaybe<StudyImportLogCondition>;
   filter: InputMaybe<StudyImportLogFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyImportLogsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayerArgs = {
-  studyLayerId: Scalars["Int"];
+  studyLayerId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayerByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayersListArgs = {
   condition: InputMaybe<StudyLayerCondition>;
   filter: InputMaybe<StudyLayerFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyLayersOrderBy>>;
 };
 
@@ -4433,8 +4418,8 @@ export type QueryStudyLayersListArgs = {
 export type QueryStudyOmicsListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
   filter: InputMaybe<StudyOmicFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
 
@@ -4442,8 +4427,8 @@ export type QueryStudyOmicsListArgs = {
 export type QueryStudyOmicsTransposedsListArgs = {
   condition: InputMaybe<StudyOmicsTransposedCondition>;
   filter: InputMaybe<StudyOmicsTransposedFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
 };
 
@@ -4451,8 +4436,8 @@ export type QueryStudyOmicsTransposedsListArgs = {
 export type QueryStudyOverviewOntologiesListArgs = {
   condition: InputMaybe<StudyOverviewOntologyCondition>;
   filter: InputMaybe<StudyOverviewOntologyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
 
@@ -4460,23 +4445,23 @@ export type QueryStudyOverviewOntologiesListArgs = {
 export type QueryStudyOverviewsListArgs = {
   condition: InputMaybe<StudyOverviewCondition>;
   filter: InputMaybe<StudyOverviewFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOverviewsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleArgs = {
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationSubsamplingsListArgs = {
   condition: InputMaybe<StudySampleAnnotationSubsamplingCondition>;
   filter: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
 };
 
@@ -4484,33 +4469,31 @@ export type QueryStudySampleAnnotationSubsamplingsListArgs = {
 export type QueryStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
   filter: InputMaybe<StudySampleAnnotationFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleByNodeIdArgs = {
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionSubsamplingTransposedsListArgs = {
   condition: InputMaybe<StudySampleProjectionSubsamplingTransposedCondition>;
   filter: InputMaybe<StudySampleProjectionSubsamplingTransposedFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  orderBy: InputMaybe<
-    Array<StudySampleProjectionSubsamplingTransposedsOrderBy>
-  >;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionsListArgs = {
   condition: InputMaybe<StudySampleProjectionCondition>;
   filter: InputMaybe<StudySampleProjectionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
 
@@ -4518,8 +4501,8 @@ export type QueryStudySampleProjectionsListArgs = {
 export type QueryStudySamplesListArgs = {
   condition: InputMaybe<StudySampleCondition>;
   filter: InputMaybe<StudySampleFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
 };
 
@@ -4527,8 +4510,8 @@ export type QueryStudySamplesListArgs = {
 export type QueryStudyVisibleCurrentusersListArgs = {
   condition: InputMaybe<StudyVisibleCurrentuserCondition>;
   filter: InputMaybe<StudyVisibleCurrentuserFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyVisibleCurrentusersOrderBy>>;
 };
 
@@ -4536,8 +4519,8 @@ export type QueryStudyVisibleCurrentusersListArgs = {
 export type QueryTreeOntologiesListArgs = {
   condition: InputMaybe<TreeOntologyCondition>;
   filter: InputMaybe<TreeOntologyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<TreeOntologiesOrderBy>>;
 };
 
@@ -4545,215 +4528,215 @@ export type QueryTreeOntologiesListArgs = {
 export type QueryUserAnnotationGroupsListArgs = {
   condition: InputMaybe<UserAnnotationGroupCondition>;
   filter: InputMaybe<UserAnnotationGroupFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
 export type QueryViolinPlotArgs = {
-  pAnnotationGroupId: InputMaybe<Scalars["Int"]>;
-  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
-  pOmicsId: InputMaybe<Scalars["Int"]>;
-  pStudyId: InputMaybe<Scalars["Int"]>;
-  pStudyLayerId: InputMaybe<Scalars["Int"]>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Scalars["String"]>;
+  distinctFrom: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive: InputMaybe<Scalars["String"]>;
+  distinctFromInsensitive: InputMaybe<Scalars['String']>;
   /** Ends with the specified string (case-sensitive). */
-  endsWith: InputMaybe<Scalars["String"]>;
+  endsWith: InputMaybe<Scalars['String']>;
   /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive: InputMaybe<Scalars["String"]>;
+  endsWithInsensitive: InputMaybe<Scalars['String']>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Scalars["String"]>;
+  equalTo: InputMaybe<Scalars['String']>;
   /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive: InputMaybe<Scalars["String"]>;
+  equalToInsensitive: InputMaybe<Scalars['String']>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Scalars["String"]>;
+  greaterThan: InputMaybe<Scalars['String']>;
   /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive: InputMaybe<Scalars["String"]>;
+  greaterThanInsensitive: InputMaybe<Scalars['String']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Scalars["String"]>;
+  greaterThanOrEqualTo: InputMaybe<Scalars['String']>;
   /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive: InputMaybe<Scalars["String"]>;
+  greaterThanOrEqualToInsensitive: InputMaybe<Scalars['String']>;
   /** Included in the specified list. */
-  in: InputMaybe<Array<Scalars["String"]>>;
+  in: InputMaybe<Array<Scalars['String']>>;
   /** Included in the specified list (case-insensitive). */
-  inInsensitive: InputMaybe<Array<Scalars["String"]>>;
+  inInsensitive: InputMaybe<Array<Scalars['String']>>;
   /** Contains the specified string (case-sensitive). */
-  includes: InputMaybe<Scalars["String"]>;
+  includes: InputMaybe<Scalars['String']>;
   /** Contains the specified string (case-insensitive). */
-  includesInsensitive: InputMaybe<Scalars["String"]>;
+  includesInsensitive: InputMaybe<Scalars['String']>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Scalars["String"]>;
+  lessThan: InputMaybe<Scalars['String']>;
   /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive: InputMaybe<Scalars["String"]>;
+  lessThanInsensitive: InputMaybe<Scalars['String']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Scalars["String"]>;
+  lessThanOrEqualTo: InputMaybe<Scalars['String']>;
   /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive: InputMaybe<Scalars["String"]>;
+  lessThanOrEqualToInsensitive: InputMaybe<Scalars['String']>;
   /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like: InputMaybe<Scalars["String"]>;
+  like: InputMaybe<Scalars['String']>;
   /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive: InputMaybe<Scalars["String"]>;
+  likeInsensitive: InputMaybe<Scalars['String']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Scalars["String"]>;
+  notDistinctFrom: InputMaybe<Scalars['String']>;
   /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive: InputMaybe<Scalars["String"]>;
+  notDistinctFromInsensitive: InputMaybe<Scalars['String']>;
   /** Does not end with the specified string (case-sensitive). */
-  notEndsWith: InputMaybe<Scalars["String"]>;
+  notEndsWith: InputMaybe<Scalars['String']>;
   /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive: InputMaybe<Scalars["String"]>;
+  notEndsWithInsensitive: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Scalars["String"]>;
+  notEqualTo: InputMaybe<Scalars['String']>;
   /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive: InputMaybe<Scalars["String"]>;
+  notEqualToInsensitive: InputMaybe<Scalars['String']>;
   /** Not included in the specified list. */
-  notIn: InputMaybe<Array<Scalars["String"]>>;
+  notIn: InputMaybe<Array<Scalars['String']>>;
   /** Not included in the specified list (case-insensitive). */
-  notInInsensitive: InputMaybe<Array<Scalars["String"]>>;
+  notInInsensitive: InputMaybe<Array<Scalars['String']>>;
   /** Does not contain the specified string (case-sensitive). */
-  notIncludes: InputMaybe<Scalars["String"]>;
+  notIncludes: InputMaybe<Scalars['String']>;
   /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive: InputMaybe<Scalars["String"]>;
+  notIncludesInsensitive: InputMaybe<Scalars['String']>;
   /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike: InputMaybe<Scalars["String"]>;
+  notLike: InputMaybe<Scalars['String']>;
   /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive: InputMaybe<Scalars["String"]>;
+  notLikeInsensitive: InputMaybe<Scalars['String']>;
   /** Does not start with the specified string (case-sensitive). */
-  notStartsWith: InputMaybe<Scalars["String"]>;
+  notStartsWith: InputMaybe<Scalars['String']>;
   /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive: InputMaybe<Scalars["String"]>;
+  notStartsWithInsensitive: InputMaybe<Scalars['String']>;
   /** Starts with the specified string (case-sensitive). */
-  startsWith: InputMaybe<Scalars["String"]>;
+  startsWith: InputMaybe<Scalars['String']>;
   /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive: InputMaybe<Scalars["String"]>;
+  startsWithInsensitive: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against String List fields. All fields are combined with a logical ‘and.’ */
 export type StringListFilter = {
   /** Any array item is equal to the specified value. */
-  anyEqualTo: InputMaybe<Scalars["String"]>;
+  anyEqualTo: InputMaybe<Scalars['String']>;
   /** Any array item is greater than the specified value. */
-  anyGreaterThan: InputMaybe<Scalars["String"]>;
+  anyGreaterThan: InputMaybe<Scalars['String']>;
   /** Any array item is greater than or equal to the specified value. */
-  anyGreaterThanOrEqualTo: InputMaybe<Scalars["String"]>;
+  anyGreaterThanOrEqualTo: InputMaybe<Scalars['String']>;
   /** Any array item is less than the specified value. */
-  anyLessThan: InputMaybe<Scalars["String"]>;
+  anyLessThan: InputMaybe<Scalars['String']>;
   /** Any array item is less than or equal to the specified value. */
-  anyLessThanOrEqualTo: InputMaybe<Scalars["String"]>;
+  anyLessThanOrEqualTo: InputMaybe<Scalars['String']>;
   /** Any array item is not equal to the specified value. */
-  anyNotEqualTo: InputMaybe<Scalars["String"]>;
+  anyNotEqualTo: InputMaybe<Scalars['String']>;
   /** Contained by the specified list of values. */
-  containedBy: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  containedBy: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Contains the specified list of values. */
-  contains: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  contains: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  distinctFrom: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Equal to the specified value. */
-  equalTo: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  equalTo: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Greater than the specified value. */
-  greaterThan: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  greaterThan: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  greaterThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull: InputMaybe<Scalars["Boolean"]>;
+  isNull: InputMaybe<Scalars['Boolean']>;
   /** Less than the specified value. */
-  lessThan: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  lessThan: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  lessThanOrEqualTo: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  notDistinctFrom: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Not equal to the specified value. */
-  notEqualTo: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  notEqualTo: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Overlaps the specified list of values. */
-  overlaps: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  overlaps: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** Methods to use when ordering `Study`. */
 export enum StudiesOrderBy {
-  AdminPermissionsAsc = "ADMIN_PERMISSIONS_ASC",
-  AdminPermissionsDesc = "ADMIN_PERMISSIONS_DESC",
-  CellCountAsc = "CELL_COUNT_ASC",
-  CellCountDesc = "CELL_COUNT_DESC",
-  CellOntologyIdsAsc = "CELL_ONTOLOGY_IDS_ASC",
-  CellOntologyIdsDesc = "CELL_ONTOLOGY_IDS_DESC",
-  DescriptionAsc = "DESCRIPTION_ASC",
-  DescriptionDesc = "DESCRIPTION_DESC",
-  DiseaseMeshIdsAsc = "DISEASE_MESH_IDS_ASC",
-  DiseaseMeshIdsDesc = "DISEASE_MESH_IDS_DESC",
-  ExternalWebsiteAsc = "EXTERNAL_WEBSITE_ASC",
-  ExternalWebsiteDesc = "EXTERNAL_WEBSITE_DESC",
-  FilenameAsc = "FILENAME_ASC",
-  FilenameDesc = "FILENAME_DESC",
-  ImportFailedAsc = "IMPORT_FAILED_ASC",
-  ImportFailedDesc = "IMPORT_FAILED_DESC",
-  ImportFileAsc = "IMPORT_FILE_ASC",
-  ImportFileDesc = "IMPORT_FILE_DESC",
-  ImportFinishedAsc = "IMPORT_FINISHED_ASC",
-  ImportFinishedDesc = "IMPORT_FINISHED_DESC",
-  ImportLogAsc = "IMPORT_LOG_ASC",
-  ImportLogDesc = "IMPORT_LOG_DESC",
-  ImportStartedAsc = "IMPORT_STARTED_ASC",
-  ImportStartedDesc = "IMPORT_STARTED_DESC",
-  LegacyConfigAsc = "LEGACY_CONFIG_ASC",
-  LegacyConfigDesc = "LEGACY_CONFIG_DESC",
-  Natural = "NATURAL",
-  OrganismTaxIdAsc = "ORGANISM_TAX_ID_ASC",
-  OrganismTaxIdDesc = "ORGANISM_TAX_ID_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  ProjectionsAsc = "PROJECTIONS_ASC",
-  ProjectionsDesc = "PROJECTIONS_DESC",
-  ReaderPermissionsAsc = "READER_PERMISSIONS_ASC",
-  ReaderPermissionsDesc = "READER_PERMISSIONS_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudyNameAsc = "STUDY_NAME_ASC",
-  StudyNameDesc = "STUDY_NAME_DESC",
-  TissueNcitIdsAsc = "TISSUE_NCIT_IDS_ASC",
-  TissueNcitIdsDesc = "TISSUE_NCIT_IDS_DESC",
-  VisibleAsc = "VISIBLE_ASC",
-  VisibleDesc = "VISIBLE_DESC",
+  AdminPermissionsAsc = 'ADMIN_PERMISSIONS_ASC',
+  AdminPermissionsDesc = 'ADMIN_PERMISSIONS_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
+  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
+  ImportFailedAsc = 'IMPORT_FAILED_ASC',
+  ImportFailedDesc = 'IMPORT_FAILED_DESC',
+  ImportFileAsc = 'IMPORT_FILE_ASC',
+  ImportFileDesc = 'IMPORT_FILE_DESC',
+  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
+  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
+  ImportLogAsc = 'IMPORT_LOG_ASC',
+  ImportLogDesc = 'IMPORT_LOG_DESC',
+  ImportStartedAsc = 'IMPORT_STARTED_ASC',
+  ImportStartedDesc = 'IMPORT_STARTED_DESC',
+  LegacyConfigAsc = 'LEGACY_CONFIG_ASC',
+  LegacyConfigDesc = 'LEGACY_CONFIG_DESC',
+  Natural = 'NATURAL',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  ProjectionsAsc = 'PROJECTIONS_ASC',
+  ProjectionsDesc = 'PROJECTIONS_DESC',
+  ReaderPermissionsAsc = 'READER_PERMISSIONS_ASC',
+  ReaderPermissionsDesc = 'READER_PERMISSIONS_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  VisibleAsc = 'VISIBLE_ASC',
+  VisibleDesc = 'VISIBLE_DESC',
 }
 
 export type Study = Node & {
-  __typename?: "Study";
-  adminPermissions: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'Study';
+  adminPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup`. */
   annotationGroupsList: Array<StudyAnnotationFrontendGroup>;
-  cellCount: Maybe<Scalars["Int"]>;
-  cellOntologyIds: Maybe<Array<Maybe<Scalars["String"]>>>;
-  description: Maybe<Scalars["String"]>;
+  cellCount: Maybe<Scalars['Int']>;
+  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  description: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsList: Array<DifferentialExpression>;
-  diseaseMeshIds: Maybe<Array<Maybe<Scalars["String"]>>>;
-  externalWebsite: Maybe<Scalars["String"]>;
-  filename: Maybe<Scalars["String"]>;
-  importFailed: Maybe<Scalars["Boolean"]>;
-  importFile: Maybe<Scalars["String"]>;
-  importFinished: Maybe<Scalars["Boolean"]>;
-  importLog: Maybe<Scalars["String"]>;
-  importStarted: Maybe<Scalars["Boolean"]>;
-  legacyConfig: Maybe<Scalars["JSON"]>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  filename: Maybe<Scalars['String']>;
+  importFailed: Maybe<Scalars['Boolean']>;
+  importFile: Maybe<Scalars['String']>;
+  importFinished: Maybe<Scalars['Boolean']>;
+  importLog: Maybe<Scalars['String']>;
+  importStarted: Maybe<Scalars['Boolean']>;
+  legacyConfig: Maybe<Scalars['JSON']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
-  organismTaxId: Maybe<Scalars["String"]>;
-  projections: Maybe<Array<Maybe<Scalars["String"]>>>;
-  readerPermissions: Maybe<Array<Maybe<Scalars["String"]>>>;
+  nodeId: Scalars['ID'];
+  organismTaxId: Maybe<Scalars['String']>;
+  projections: Maybe<Array<Maybe<Scalars['String']>>>;
+  readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUisList: Array<StudyAnnotationGroupUi>;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
   /** Reads and enables pagination through a set of `StudyLayer`. */
   studyLayersList: Array<StudyLayer>;
-  studyName: Scalars["String"];
+  studyName: Scalars['String'];
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsList: Array<StudyOmic>;
   /** Reads and enables pagination through a set of `StudyOmicsTransposed`. */
@@ -4766,121 +4749,119 @@ export type Study = Node & {
   studySampleProjectionSubsamplingTransposedList: Array<StudySampleProjectionSubsamplingTransposed>;
   /** Reads and enables pagination through a set of `StudySample`. */
   studySamplesList: Array<StudySample>;
-  tissueNcitIds: Maybe<Array<Maybe<Scalars["String"]>>>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `UserAnnotationGroup`. */
   userAnnotationGroupsList: Array<UserAnnotationGroup>;
-  visible: Maybe<Scalars["Boolean"]>;
+  visible: Maybe<Scalars['Boolean']>;
 };
 
 export type StudyAnnotationGroupsListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
   filter: InputMaybe<StudyAnnotationFrontendGroupFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
 };
 
 export type StudyDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
 export type StudyStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
 export type StudyStudyLayersListArgs = {
   condition: InputMaybe<StudyLayerCondition>;
   filter: InputMaybe<StudyLayerFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyLayersOrderBy>>;
 };
 
 export type StudyStudyOmicsListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
   filter: InputMaybe<StudyOmicFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
 
 export type StudyStudyOmicsTransposedListArgs = {
   condition: InputMaybe<StudyOmicsTransposedCondition>;
   filter: InputMaybe<StudyOmicsTransposedFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
 };
 
 export type StudyStudySampleAnnotationSubsamplingListArgs = {
   condition: InputMaybe<StudySampleAnnotationSubsamplingCondition>;
   filter: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
 };
 
 export type StudyStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
   filter: InputMaybe<StudySampleAnnotationFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
 export type StudyStudySampleProjectionSubsamplingTransposedListArgs = {
   condition: InputMaybe<StudySampleProjectionSubsamplingTransposedCondition>;
   filter: InputMaybe<StudySampleProjectionSubsamplingTransposedFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
-  orderBy: InputMaybe<
-    Array<StudySampleProjectionSubsamplingTransposedsOrderBy>
-  >;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
 
 export type StudyStudySamplesListArgs = {
   condition: InputMaybe<StudySampleCondition>;
   filter: InputMaybe<StudySampleFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
 };
 
 export type StudyUserAnnotationGroupsListArgs = {
   condition: InputMaybe<UserAnnotationGroupCondition>;
   filter: InputMaybe<UserAnnotationGroupFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
 
 export type StudyAdminDetail = {
-  __typename?: "StudyAdminDetail";
-  adminPermissionGranted: Maybe<Scalars["Boolean"]>;
-  adminPermissions: Maybe<Array<Maybe<Scalars["String"]>>>;
-  cellCount: Maybe<Scalars["Int"]>;
-  description: Maybe<Scalars["String"]>;
-  diseaseMeshIds: Maybe<Array<Maybe<Scalars["String"]>>>;
-  externalWebsite: Maybe<Scalars["String"]>;
-  filename: Maybe<Scalars["String"]>;
-  hasImportLog: Maybe<Scalars["Boolean"]>;
-  importFailed: Maybe<Scalars["Boolean"]>;
-  importFinished: Maybe<Scalars["Boolean"]>;
-  importStarted: Maybe<Scalars["Boolean"]>;
-  readerPermissionGranted: Maybe<Scalars["Boolean"]>;
-  readerPermissions: Maybe<Array<Maybe<Scalars["String"]>>>;
-  studyId: Maybe<Scalars["Int"]>;
-  studyName: Maybe<Scalars["String"]>;
-  tissueNcitIds: Maybe<Array<Maybe<Scalars["String"]>>>;
-  visible: Maybe<Scalars["Boolean"]>;
+  __typename?: 'StudyAdminDetail';
+  adminPermissionGranted: Maybe<Scalars['Boolean']>;
+  adminPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
+  cellCount: Maybe<Scalars['Int']>;
+  description: Maybe<Scalars['String']>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  filename: Maybe<Scalars['String']>;
+  hasImportLog: Maybe<Scalars['Boolean']>;
+  importFailed: Maybe<Scalars['Boolean']>;
+  importFinished: Maybe<Scalars['Boolean']>;
+  importStarted: Maybe<Scalars['Boolean']>;
+  readerPermissionGranted: Maybe<Scalars['Boolean']>;
+  readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  visible: Maybe<Scalars['Boolean']>;
 };
 
 /**
@@ -4889,39 +4870,39 @@ export type StudyAdminDetail = {
  */
 export type StudyAdminDetailCondition = {
   /** Checks for equality with the object’s `adminPermissionGranted` field. */
-  adminPermissionGranted: InputMaybe<Scalars["Boolean"]>;
+  adminPermissionGranted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `adminPermissions` field. */
-  adminPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `cellCount` field. */
-  cellCount: InputMaybe<Scalars["Int"]>;
+  cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `description` field. */
-  description: InputMaybe<Scalars["String"]>;
+  description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<Scalars["String"]>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
-  filename: InputMaybe<Scalars["String"]>;
+  filename: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `hasImportLog` field. */
-  hasImportLog: InputMaybe<Scalars["Boolean"]>;
+  hasImportLog: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importFailed` field. */
-  importFailed: InputMaybe<Scalars["Boolean"]>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importFinished` field. */
-  importFinished: InputMaybe<Scalars["Boolean"]>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importStarted` field. */
-  importStarted: InputMaybe<Scalars["Boolean"]>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `readerPermissionGranted` field. */
-  readerPermissionGranted: InputMaybe<Scalars["Boolean"]>;
+  readerPermissionGranted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `readerPermissions` field. */
-  readerPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
-  studyName: InputMaybe<Scalars["String"]>;
+  studyName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `visible` field. */
-  visible: InputMaybe<Scalars["Boolean"]>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 /** A filter to be used against `StudyAdminDetail` object types. All fields are combined with a logical ‘and.’ */
@@ -4970,46 +4951,46 @@ export type StudyAdminDetailFilter = {
 
 /** Methods to use when ordering `StudyAdminDetail`. */
 export enum StudyAdminDetailsOrderBy {
-  AdminPermissionsAsc = "ADMIN_PERMISSIONS_ASC",
-  AdminPermissionsDesc = "ADMIN_PERMISSIONS_DESC",
-  AdminPermissionGrantedAsc = "ADMIN_PERMISSION_GRANTED_ASC",
-  AdminPermissionGrantedDesc = "ADMIN_PERMISSION_GRANTED_DESC",
-  CellCountAsc = "CELL_COUNT_ASC",
-  CellCountDesc = "CELL_COUNT_DESC",
-  DescriptionAsc = "DESCRIPTION_ASC",
-  DescriptionDesc = "DESCRIPTION_DESC",
-  DiseaseMeshIdsAsc = "DISEASE_MESH_IDS_ASC",
-  DiseaseMeshIdsDesc = "DISEASE_MESH_IDS_DESC",
-  ExternalWebsiteAsc = "EXTERNAL_WEBSITE_ASC",
-  ExternalWebsiteDesc = "EXTERNAL_WEBSITE_DESC",
-  FilenameAsc = "FILENAME_ASC",
-  FilenameDesc = "FILENAME_DESC",
-  HasImportLogAsc = "HAS_IMPORT_LOG_ASC",
-  HasImportLogDesc = "HAS_IMPORT_LOG_DESC",
-  ImportFailedAsc = "IMPORT_FAILED_ASC",
-  ImportFailedDesc = "IMPORT_FAILED_DESC",
-  ImportFinishedAsc = "IMPORT_FINISHED_ASC",
-  ImportFinishedDesc = "IMPORT_FINISHED_DESC",
-  ImportStartedAsc = "IMPORT_STARTED_ASC",
-  ImportStartedDesc = "IMPORT_STARTED_DESC",
-  Natural = "NATURAL",
-  ReaderPermissionsAsc = "READER_PERMISSIONS_ASC",
-  ReaderPermissionsDesc = "READER_PERMISSIONS_DESC",
-  ReaderPermissionGrantedAsc = "READER_PERMISSION_GRANTED_ASC",
-  ReaderPermissionGrantedDesc = "READER_PERMISSION_GRANTED_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudyNameAsc = "STUDY_NAME_ASC",
-  StudyNameDesc = "STUDY_NAME_DESC",
-  TissueNcitIdsAsc = "TISSUE_NCIT_IDS_ASC",
-  TissueNcitIdsDesc = "TISSUE_NCIT_IDS_DESC",
-  VisibleAsc = "VISIBLE_ASC",
-  VisibleDesc = "VISIBLE_DESC",
+  AdminPermissionsAsc = 'ADMIN_PERMISSIONS_ASC',
+  AdminPermissionsDesc = 'ADMIN_PERMISSIONS_DESC',
+  AdminPermissionGrantedAsc = 'ADMIN_PERMISSION_GRANTED_ASC',
+  AdminPermissionGrantedDesc = 'ADMIN_PERMISSION_GRANTED_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  FilenameAsc = 'FILENAME_ASC',
+  FilenameDesc = 'FILENAME_DESC',
+  HasImportLogAsc = 'HAS_IMPORT_LOG_ASC',
+  HasImportLogDesc = 'HAS_IMPORT_LOG_DESC',
+  ImportFailedAsc = 'IMPORT_FAILED_ASC',
+  ImportFailedDesc = 'IMPORT_FAILED_DESC',
+  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
+  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
+  ImportStartedAsc = 'IMPORT_STARTED_ASC',
+  ImportStartedDesc = 'IMPORT_STARTED_DESC',
+  Natural = 'NATURAL',
+  ReaderPermissionsAsc = 'READER_PERMISSIONS_ASC',
+  ReaderPermissionsDesc = 'READER_PERMISSIONS_DESC',
+  ReaderPermissionGrantedAsc = 'READER_PERMISSION_GRANTED_ASC',
+  ReaderPermissionGrantedDesc = 'READER_PERMISSION_GRANTED_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  VisibleAsc = 'VISIBLE_ASC',
+  VisibleDesc = 'VISIBLE_DESC',
 }
 
 export type StudyAdministrableCurrentuser = {
-  __typename?: "StudyAdministrableCurrentuser";
-  studyId: Maybe<Scalars["Int"]>;
+  __typename?: 'StudyAdministrableCurrentuser';
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -5018,7 +4999,7 @@ export type StudyAdministrableCurrentuser = {
  */
 export type StudyAdministrableCurrentuserCondition = {
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyAdministrableCurrentuser` object types. All fields are combined with a logical ‘and.’ */
@@ -5035,35 +5016,35 @@ export type StudyAdministrableCurrentuserFilter = {
 
 /** An input for mutations affecting `StudyAdministrableCurrentuser` */
 export type StudyAdministrableCurrentuserInput = {
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `StudyAdministrableCurrentuser`. */
 export enum StudyAdministrableCurrentusersOrderBy {
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyAnnotationFrontendGroup = {
-  __typename?: "StudyAnnotationFrontendGroup";
-  annotationGroupId: Maybe<Scalars["Int"]>;
+  __typename?: 'StudyAnnotationFrontendGroup';
+  annotationGroupId: Maybe<Scalars['Int']>;
   /** Reads and enables pagination through a set of `StudyAnnotationFrontendValue`. */
   annotationValuesList: Array<StudyAnnotationFrontendValue>;
-  differentialExpressionCalculated: Maybe<Scalars["Boolean"]>;
-  displayGroup: Maybe<Scalars["String"]>;
-  isPrimary: Maybe<Scalars["Boolean"]>;
-  ordering: Maybe<Scalars["Int"]>;
+  differentialExpressionCalculated: Maybe<Scalars['Boolean']>;
+  displayGroup: Maybe<Scalars['String']>;
+  isPrimary: Maybe<Scalars['Boolean']>;
+  ordering: Maybe<Scalars['Int']>;
   /** Reads a single `Study` that is related to this `StudyAnnotationFrontendGroup`. */
   study: Maybe<Study>;
-  studyId: Maybe<Scalars["Int"]>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
   filter: InputMaybe<StudyAnnotationFrontendValueFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
 
@@ -5073,17 +5054,17 @@ export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
  */
 export type StudyAnnotationFrontendGroupCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated: InputMaybe<Scalars["Boolean"]>;
+  differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `displayGroup` field. */
-  displayGroup: InputMaybe<Scalars["String"]>;
+  displayGroup: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `isPrimary` field. */
-  isPrimary: InputMaybe<Scalars["Boolean"]>;
+  isPrimary: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `ordering` field. */
-  ordering: InputMaybe<Scalars["Int"]>;
+  ordering: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyAnnotationFrontendGroup` object types. All fields are combined with a logical ‘and.’ */
@@ -5110,31 +5091,31 @@ export type StudyAnnotationFrontendGroupFilter = {
 
 /** Methods to use when ordering `StudyAnnotationFrontendGroup`. */
 export enum StudyAnnotationFrontendGroupsOrderBy {
-  AnnotationGroupIdAsc = "ANNOTATION_GROUP_ID_ASC",
-  AnnotationGroupIdDesc = "ANNOTATION_GROUP_ID_DESC",
-  DifferentialExpressionCalculatedAsc = "DIFFERENTIAL_EXPRESSION_CALCULATED_ASC",
-  DifferentialExpressionCalculatedDesc = "DIFFERENTIAL_EXPRESSION_CALCULATED_DESC",
-  DisplayGroupAsc = "DISPLAY_GROUP_ASC",
-  DisplayGroupDesc = "DISPLAY_GROUP_DESC",
-  IsPrimaryAsc = "IS_PRIMARY_ASC",
-  IsPrimaryDesc = "IS_PRIMARY_DESC",
-  Natural = "NATURAL",
-  OrderingAsc = "ORDERING_ASC",
-  OrderingDesc = "ORDERING_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
+  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
+  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
+  IsPrimaryAsc = 'IS_PRIMARY_ASC',
+  IsPrimaryDesc = 'IS_PRIMARY_DESC',
+  Natural = 'NATURAL',
+  OrderingAsc = 'ORDERING_ASC',
+  OrderingDesc = 'ORDERING_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyAnnotationFrontendValue = {
-  __typename?: "StudyAnnotationFrontendValue";
-  annotationGroupId: Maybe<Scalars["Int"]>;
-  annotationValueId: Maybe<Scalars["Int"]>;
-  color: Maybe<Scalars["String"]>;
-  displayValue: Maybe<Scalars["String"]>;
+  __typename?: 'StudyAnnotationFrontendValue';
+  annotationGroupId: Maybe<Scalars['Int']>;
+  annotationValueId: Maybe<Scalars['Int']>;
+  color: Maybe<Scalars['String']>;
+  displayValue: Maybe<Scalars['String']>;
   /** Reads a single `StudyAnnotationFrontendGroup` that is related to this `StudyAnnotationFrontendValue`. */
   group: Maybe<StudyAnnotationFrontendGroup>;
-  sampleCount: Maybe<Scalars["Int"]>;
-  studyId: Maybe<Scalars["Int"]>;
+  sampleCount: Maybe<Scalars['Int']>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -5143,17 +5124,17 @@ export type StudyAnnotationFrontendValue = {
  */
 export type StudyAnnotationFrontendValueCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `color` field. */
-  color: InputMaybe<Scalars["String"]>;
+  color: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displayValue` field. */
-  displayValue: InputMaybe<Scalars["String"]>;
+  displayValue: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `sampleCount` field. */
-  sampleCount: InputMaybe<Scalars["Int"]>;
+  sampleCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyAnnotationFrontendValue` object types. All fields are combined with a logical ‘and.’ */
@@ -5180,32 +5161,32 @@ export type StudyAnnotationFrontendValueFilter = {
 
 /** Methods to use when ordering `StudyAnnotationFrontendValue`. */
 export enum StudyAnnotationFrontendValuesOrderBy {
-  AnnotationGroupIdAsc = "ANNOTATION_GROUP_ID_ASC",
-  AnnotationGroupIdDesc = "ANNOTATION_GROUP_ID_DESC",
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  ColorAsc = "COLOR_ASC",
-  ColorDesc = "COLOR_DESC",
-  DisplayValueAsc = "DISPLAY_VALUE_ASC",
-  DisplayValueDesc = "DISPLAY_VALUE_DESC",
-  Natural = "NATURAL",
-  SampleCountAsc = "SAMPLE_COUNT_ASC",
-  SampleCountDesc = "SAMPLE_COUNT_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  ColorAsc = 'COLOR_ASC',
+  ColorDesc = 'COLOR_DESC',
+  DisplayValueAsc = 'DISPLAY_VALUE_ASC',
+  DisplayValueDesc = 'DISPLAY_VALUE_DESC',
+  Natural = 'NATURAL',
+  SampleCountAsc = 'SAMPLE_COUNT_ASC',
+  SampleCountDesc = 'SAMPLE_COUNT_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyAnnotationGroupUi = {
-  __typename?: "StudyAnnotationGroupUi";
+  __typename?: 'StudyAnnotationGroupUi';
   /** Reads a single `AnnotationGroup` that is related to this `StudyAnnotationGroupUi`. */
   annotationGroup: Maybe<AnnotationGroup>;
-  annotationGroupId: Scalars["Int"];
-  differentialExpressionCalculated: Scalars["Boolean"];
-  isPrimary: Scalars["Boolean"];
-  ordering: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
+  differentialExpressionCalculated: Scalars['Boolean'];
+  isPrimary: Scalars['Boolean'];
+  ordering: Scalars['Int'];
   /** Reads a single `Study` that is related to this `StudyAnnotationGroupUi`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /**
@@ -5214,15 +5195,15 @@ export type StudyAnnotationGroupUi = {
  */
 export type StudyAnnotationGroupUiCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars["Int"]>;
+  annotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated: InputMaybe<Scalars["Boolean"]>;
+  differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `isPrimary` field. */
-  isPrimary: InputMaybe<Scalars["Boolean"]>;
+  isPrimary: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `ordering` field. */
-  ordering: InputMaybe<Scalars["Int"]>;
+  ordering: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyAnnotationGroupUi` object types. All fields are combined with a logical ‘and.’ */
@@ -5247,70 +5228,70 @@ export type StudyAnnotationGroupUiFilter = {
 
 /** An input for mutations affecting `StudyAnnotationGroupUi` */
 export type StudyAnnotationGroupUiInput = {
-  annotationGroupId: Scalars["Int"];
-  differentialExpressionCalculated: Scalars["Boolean"];
-  isPrimary: Scalars["Boolean"];
-  ordering: Scalars["Int"];
-  studyId: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
+  differentialExpressionCalculated: Scalars['Boolean'];
+  isPrimary: Scalars['Boolean'];
+  ordering: Scalars['Int'];
+  studyId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `StudyAnnotationGroupUi`. */
 export enum StudyAnnotationGroupUisOrderBy {
-  AnnotationGroupIdAsc = "ANNOTATION_GROUP_ID_ASC",
-  AnnotationGroupIdDesc = "ANNOTATION_GROUP_ID_DESC",
-  DifferentialExpressionCalculatedAsc = "DIFFERENTIAL_EXPRESSION_CALCULATED_ASC",
-  DifferentialExpressionCalculatedDesc = "DIFFERENTIAL_EXPRESSION_CALCULATED_DESC",
-  IsPrimaryAsc = "IS_PRIMARY_ASC",
-  IsPrimaryDesc = "IS_PRIMARY_DESC",
-  Natural = "NATURAL",
-  OrderingAsc = "ORDERING_ASC",
-  OrderingDesc = "ORDERING_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
+  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
+  IsPrimaryAsc = 'IS_PRIMARY_ASC',
+  IsPrimaryDesc = 'IS_PRIMARY_DESC',
+  Natural = 'NATURAL',
+  OrderingAsc = 'ORDERING_ASC',
+  OrderingDesc = 'ORDERING_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 /** A condition to be used against `Study` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type StudyCondition = {
   /** Checks for equality with the object’s `adminPermissions` field. */
-  adminPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `cellCount` field. */
-  cellCount: InputMaybe<Scalars["Int"]>;
+  cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `cellOntologyIds` field. */
-  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `description` field. */
-  description: InputMaybe<Scalars["String"]>;
+  description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<Scalars["String"]>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `filename` field. */
-  filename: InputMaybe<Scalars["String"]>;
+  filename: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importFailed` field. */
-  importFailed: InputMaybe<Scalars["Boolean"]>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importFile` field. */
-  importFile: InputMaybe<Scalars["String"]>;
+  importFile: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importFinished` field. */
-  importFinished: InputMaybe<Scalars["Boolean"]>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `importLog` field. */
-  importLog: InputMaybe<Scalars["String"]>;
+  importLog: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importStarted` field. */
-  importStarted: InputMaybe<Scalars["Boolean"]>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `legacyConfig` field. */
-  legacyConfig: InputMaybe<Scalars["JSON"]>;
+  legacyConfig: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
-  organismTaxId: InputMaybe<Scalars["String"]>;
+  organismTaxId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `projections` field. */
-  projections: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `readerPermissions` field. */
-  readerPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
-  studyName: InputMaybe<Scalars["String"]>;
+  studyName: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `visible` field. */
-  visible: InputMaybe<Scalars["Boolean"]>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 /** A filter to be used against `Study` object types. All fields are combined with a logical ‘and.’ */
@@ -5364,10 +5345,10 @@ export type StudyFilter = {
 };
 
 export type StudyImportLog = {
-  __typename?: "StudyImportLog";
-  importFile: Maybe<Scalars["String"]>;
-  importLog: Maybe<Scalars["String"]>;
-  studyId: Maybe<Scalars["Int"]>;
+  __typename?: 'StudyImportLog';
+  importFile: Maybe<Scalars['String']>;
+  importLog: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -5376,11 +5357,11 @@ export type StudyImportLog = {
  */
 export type StudyImportLogCondition = {
   /** Checks for equality with the object’s `importFile` field. */
-  importFile: InputMaybe<Scalars["String"]>;
+  importFile: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `importLog` field. */
-  importLog: InputMaybe<Scalars["String"]>;
+  importLog: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyImportLog` object types. All fields are combined with a logical ‘and.’ */
@@ -5401,49 +5382,49 @@ export type StudyImportLogFilter = {
 
 /** Methods to use when ordering `StudyImportLog`. */
 export enum StudyImportLogsOrderBy {
-  ImportFileAsc = "IMPORT_FILE_ASC",
-  ImportFileDesc = "IMPORT_FILE_DESC",
-  ImportLogAsc = "IMPORT_LOG_ASC",
-  ImportLogDesc = "IMPORT_LOG_DESC",
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  ImportFileAsc = 'IMPORT_FILE_ASC',
+  ImportFileDesc = 'IMPORT_FILE_DESC',
+  ImportLogAsc = 'IMPORT_LOG_ASC',
+  ImportLogDesc = 'IMPORT_LOG_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 /** An input for mutations affecting `Study` */
 export type StudyInput = {
-  adminPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  cellCount: InputMaybe<Scalars["Int"]>;
-  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  description: InputMaybe<Scalars["String"]>;
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  externalWebsite: InputMaybe<Scalars["String"]>;
-  filename: InputMaybe<Scalars["String"]>;
-  importFailed: InputMaybe<Scalars["Boolean"]>;
-  importFile: InputMaybe<Scalars["String"]>;
-  importFinished: InputMaybe<Scalars["Boolean"]>;
-  importLog: InputMaybe<Scalars["String"]>;
-  importStarted: InputMaybe<Scalars["Boolean"]>;
-  legacyConfig: InputMaybe<Scalars["JSON"]>;
-  organismTaxId: InputMaybe<Scalars["String"]>;
-  projections: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  readerPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  studyId: InputMaybe<Scalars["Int"]>;
-  studyName: Scalars["String"];
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  visible: InputMaybe<Scalars["Boolean"]>;
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description: InputMaybe<Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  filename: InputMaybe<Scalars['String']>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  importFile: InputMaybe<Scalars['String']>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
+  importLog: InputMaybe<Scalars['String']>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
+  legacyConfig: InputMaybe<Scalars['JSON']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
+  projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: Scalars['String'];
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 export type StudyLayer = Node & {
-  __typename?: "StudyLayer";
-  layer: Scalars["String"];
+  __typename?: 'StudyLayer';
+  layer: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   omicsType: Maybe<OmicsType>;
   /** Reads a single `Study` that is related to this `StudyLayer`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
-  studyLayerId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
 };
 
 /**
@@ -5452,13 +5433,13 @@ export type StudyLayer = Node & {
  */
 export type StudyLayerCondition = {
   /** Checks for equality with the object’s `layer` field. */
-  layer: InputMaybe<Scalars["String"]>;
+  layer: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<OmicsType>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyLayerId` field. */
-  studyLayerId: InputMaybe<Scalars["Int"]>;
+  studyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyLayer` object types. All fields are combined with a logical ‘and.’ */
@@ -5481,46 +5462,46 @@ export type StudyLayerFilter = {
 
 /** An input for mutations affecting `StudyLayer` */
 export type StudyLayerInput = {
-  layer: Scalars["String"];
+  layer: Scalars['String'];
   omicsType: InputMaybe<OmicsType>;
-  studyId: Scalars["Int"];
-  studyLayerId: InputMaybe<Scalars["Int"]>;
+  studyId: Scalars['Int'];
+  studyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `StudyLayer`. Fields that are set will be updated. */
 export type StudyLayerPatch = {
-  layer: InputMaybe<Scalars["String"]>;
+  layer: InputMaybe<Scalars['String']>;
   omicsType: InputMaybe<OmicsType>;
-  studyId: InputMaybe<Scalars["Int"]>;
-  studyLayerId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyLayerId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `StudyLayer`. */
 export enum StudyLayersOrderBy {
-  LayerAsc = "LAYER_ASC",
-  LayerDesc = "LAYER_DESC",
-  Natural = "NATURAL",
-  OmicsTypeAsc = "OMICS_TYPE_ASC",
-  OmicsTypeDesc = "OMICS_TYPE_DESC",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudyLayerIdAsc = "STUDY_LAYER_ID_ASC",
-  StudyLayerIdDesc = "STUDY_LAYER_ID_DESC",
+  LayerAsc = 'LAYER_ASC',
+  LayerDesc = 'LAYER_DESC',
+  Natural = 'NATURAL',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
+  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
 }
 
 export type StudyOmic = {
-  __typename?: "StudyOmic";
-  h5AdVarIndex: Scalars["Int"];
+  __typename?: 'StudyOmic';
+  h5AdVarIndex: Scalars['Int'];
   /** Reads a single `OmicsBase` that is related to this `StudyOmic`. */
   omics: Maybe<OmicsBase>;
-  omicsId: Scalars["Int"];
-  regionEnd: Maybe<Scalars["Int"]>;
-  regionStart: Maybe<Scalars["Int"]>;
+  omicsId: Scalars['Int'];
+  regionEnd: Maybe<Scalars['Int']>;
+  regionStart: Maybe<Scalars['Int']>;
   /** Reads a single `Study` that is related to this `StudyOmic`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /**
@@ -5529,15 +5510,15 @@ export type StudyOmic = {
  */
 export type StudyOmicCondition = {
   /** Checks for equality with the object’s `h5AdVarIndex` field. */
-  h5AdVarIndex: InputMaybe<Scalars["Int"]>;
+  h5AdVarIndex: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Scalars["Int"]>;
+  omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `regionEnd` field. */
-  regionEnd: InputMaybe<Scalars["Int"]>;
+  regionEnd: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `regionStart` field. */
-  regionStart: InputMaybe<Scalars["Int"]>;
+  regionStart: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyOmic` object types. All fields are combined with a logical ‘and.’ */
@@ -5562,37 +5543,37 @@ export type StudyOmicFilter = {
 
 /** An input for mutations affecting `StudyOmic` */
 export type StudyOmicInput = {
-  h5AdVarIndex: Scalars["Int"];
-  omicsId: Scalars["Int"];
-  regionEnd: InputMaybe<Scalars["Int"]>;
-  regionStart: InputMaybe<Scalars["Int"]>;
-  studyId: Scalars["Int"];
+  h5AdVarIndex: Scalars['Int'];
+  omicsId: Scalars['Int'];
+  regionEnd: InputMaybe<Scalars['Int']>;
+  regionStart: InputMaybe<Scalars['Int']>;
+  studyId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `StudyOmic`. */
 export enum StudyOmicsOrderBy {
-  H5AdVarIndexAsc = "H5AD_VAR_INDEX_ASC",
-  H5AdVarIndexDesc = "H5AD_VAR_INDEX_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  RegionEndAsc = "REGION_END_ASC",
-  RegionEndDesc = "REGION_END_DESC",
-  RegionStartAsc = "REGION_START_ASC",
-  RegionStartDesc = "REGION_START_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  H5AdVarIndexAsc = 'H5AD_VAR_INDEX_ASC',
+  H5AdVarIndexDesc = 'H5AD_VAR_INDEX_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  RegionEndAsc = 'REGION_END_ASC',
+  RegionEndDesc = 'REGION_END_DESC',
+  RegionStartAsc = 'REGION_START_ASC',
+  RegionStartDesc = 'REGION_START_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyOmicsTransposed = {
-  __typename?: "StudyOmicsTransposed";
-  displayName: Maybe<Array<Maybe<Scalars["String"]>>>;
-  displaySymbol: Maybe<Array<Maybe<Scalars["String"]>>>;
-  omicsId: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  __typename?: 'StudyOmicsTransposed';
+  displayName: Maybe<Array<Maybe<Scalars['String']>>>;
+  displaySymbol: Maybe<Array<Maybe<Scalars['String']>>>;
+  omicsId: Maybe<Array<Maybe<Scalars['Int']>>>;
   omicsType: Maybe<Array<Maybe<OmicsType>>>;
   /** Reads a single `Study` that is related to this `StudyOmicsTransposed`. */
   study: Maybe<Study>;
-  studyId: Maybe<Scalars["Int"]>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -5601,15 +5582,15 @@ export type StudyOmicsTransposed = {
  */
 export type StudyOmicsTransposedCondition = {
   /** Checks for equality with the object’s `displayName` field. */
-  displayName: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  displayName: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  displaySymbol: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  omicsId: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<Array<InputMaybe<OmicsType>>>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyOmicsTransposed` object types. All fields are combined with a logical ‘and.’ */
@@ -5634,27 +5615,27 @@ export type StudyOmicsTransposedFilter = {
 
 /** Methods to use when ordering `StudyOmicsTransposed`. */
 export enum StudyOmicsTransposedsOrderBy {
-  DisplayNameAsc = "DISPLAY_NAME_ASC",
-  DisplayNameDesc = "DISPLAY_NAME_DESC",
-  DisplaySymbolAsc = "DISPLAY_SYMBOL_ASC",
-  DisplaySymbolDesc = "DISPLAY_SYMBOL_DESC",
-  Natural = "NATURAL",
-  OmicsIdAsc = "OMICS_ID_ASC",
-  OmicsIdDesc = "OMICS_ID_DESC",
-  OmicsTypeAsc = "OMICS_TYPE_ASC",
-  OmicsTypeDesc = "OMICS_TYPE_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyOverview = {
-  __typename?: "StudyOverview";
-  cellCount: Maybe<Scalars["Int"]>;
-  defaultStudyLayerId: Maybe<Scalars["Int"]>;
-  description: Maybe<Scalars["String"]>;
-  externalWebsite: Maybe<Scalars["String"]>;
-  studyId: Maybe<Scalars["Int"]>;
-  studyName: Maybe<Scalars["String"]>;
+  __typename?: 'StudyOverview';
+  cellCount: Maybe<Scalars['Int']>;
+  defaultStudyLayerId: Maybe<Scalars['Int']>;
+  description: Maybe<Scalars['String']>;
+  externalWebsite: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
   studyOntologyList: Array<StudyOverviewOntology>;
 };
@@ -5662,8 +5643,8 @@ export type StudyOverview = {
 export type StudyOverviewStudyOntologyListArgs = {
   condition: InputMaybe<StudyOverviewOntologyCondition>;
   filter: InputMaybe<StudyOverviewOntologyFilter>;
-  first: InputMaybe<Scalars["Int"]>;
-  offset: InputMaybe<Scalars["Int"]>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
 
@@ -5673,17 +5654,17 @@ export type StudyOverviewStudyOntologyListArgs = {
  */
 export type StudyOverviewCondition = {
   /** Checks for equality with the object’s `cellCount` field. */
-  cellCount: InputMaybe<Scalars["Int"]>;
+  cellCount: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `defaultStudyLayerId` field. */
-  defaultStudyLayerId: InputMaybe<Scalars["Int"]>;
+  defaultStudyLayerId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `description` field. */
-  description: InputMaybe<Scalars["String"]>;
+  description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<Scalars["String"]>;
+  externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
-  studyName: InputMaybe<Scalars["String"]>;
+  studyName: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `StudyOverview` object types. All fields are combined with a logical ‘and.’ */
@@ -5710,38 +5691,38 @@ export type StudyOverviewFilter = {
 
 /** An input for mutations affecting `StudyOverview` */
 export type StudyOverviewInput = {
-  cellCount: InputMaybe<Scalars["Int"]>;
-  defaultStudyLayerId: InputMaybe<Scalars["Int"]>;
-  description: InputMaybe<Scalars["String"]>;
-  externalWebsite: InputMaybe<Scalars["String"]>;
-  studyId: InputMaybe<Scalars["Int"]>;
-  studyName: InputMaybe<Scalars["String"]>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  defaultStudyLayerId: InputMaybe<Scalars['Int']>;
+  description: InputMaybe<Scalars['String']>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
 };
 
 /** Methods to use when ordering `StudyOverviewOntology`. */
 export enum StudyOverviewOntologiesOrderBy {
-  LabelsAsc = "LABELS_ASC",
-  LabelsDesc = "LABELS_DESC",
-  Natural = "NATURAL",
-  OntologyAsc = "ONTOLOGY_ASC",
-  OntologyDesc = "ONTOLOGY_DESC",
-  OntCodesAsc = "ONT_CODES_ASC",
-  OntCodesDesc = "ONT_CODES_DESC",
-  ParentIdsAsc = "PARENT_IDS_ASC",
-  ParentIdsDesc = "PARENT_IDS_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  LabelsAsc = 'LABELS_ASC',
+  LabelsDesc = 'LABELS_DESC',
+  Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
+  OntCodesAsc = 'ONT_CODES_ASC',
+  OntCodesDesc = 'ONT_CODES_DESC',
+  ParentIdsAsc = 'PARENT_IDS_ASC',
+  ParentIdsDesc = 'PARENT_IDS_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type StudyOverviewOntology = {
-  __typename?: "StudyOverviewOntology";
-  labels: Maybe<Array<Maybe<Scalars["String"]>>>;
-  ontCodes: Maybe<Array<Maybe<Scalars["String"]>>>;
-  ontology: Maybe<Scalars["String"]>;
-  parentIds: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'StudyOverviewOntology';
+  labels: Maybe<Array<Maybe<Scalars['String']>>>;
+  ontCodes: Maybe<Array<Maybe<Scalars['String']>>>;
+  ontology: Maybe<Scalars['String']>;
+  parentIds: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads a single `StudyOverview` that is related to this `StudyOverviewOntology`. */
   study: Maybe<StudyOverview>;
-  studyId: Maybe<Scalars["Int"]>;
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -5750,15 +5731,15 @@ export type StudyOverviewOntology = {
  */
 export type StudyOverviewOntologyCondition = {
   /** Checks for equality with the object’s `labels` field. */
-  labels: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  labels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `ontCodes` field. */
-  ontCodes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  ontCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `ontology` field. */
-  ontology: InputMaybe<Scalars["String"]>;
+  ontology: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `parentIds` field. */
-  parentIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  parentIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyOverviewOntology` object types. All fields are combined with a logical ‘and.’ */
@@ -5783,78 +5764,77 @@ export type StudyOverviewOntologyFilter = {
 
 /** Methods to use when ordering `StudyOverview`. */
 export enum StudyOverviewsOrderBy {
-  CellCountAsc = "CELL_COUNT_ASC",
-  CellCountDesc = "CELL_COUNT_DESC",
-  DefaultStudyLayerIdAsc = "DEFAULT_STUDY_LAYER_ID_ASC",
-  DefaultStudyLayerIdDesc = "DEFAULT_STUDY_LAYER_ID_DESC",
-  DescriptionAsc = "DESCRIPTION_ASC",
-  DescriptionDesc = "DESCRIPTION_DESC",
-  ExternalWebsiteAsc = "EXTERNAL_WEBSITE_ASC",
-  ExternalWebsiteDesc = "EXTERNAL_WEBSITE_DESC",
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudyNameAsc = "STUDY_NAME_ASC",
-  StudyNameDesc = "STUDY_NAME_DESC",
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  DefaultStudyLayerIdAsc = 'DEFAULT_STUDY_LAYER_ID_ASC',
+  DefaultStudyLayerIdDesc = 'DEFAULT_STUDY_LAYER_ID_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
 }
 
 /** Represents an update to a `Study`. Fields that are set will be updated. */
 export type StudyPatch = {
-  adminPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  cellCount: InputMaybe<Scalars["Int"]>;
-  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  description: InputMaybe<Scalars["String"]>;
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  externalWebsite: InputMaybe<Scalars["String"]>;
-  filename: InputMaybe<Scalars["String"]>;
-  importFailed: InputMaybe<Scalars["Boolean"]>;
-  importFile: InputMaybe<Scalars["String"]>;
-  importFinished: InputMaybe<Scalars["Boolean"]>;
-  importLog: InputMaybe<Scalars["String"]>;
-  importStarted: InputMaybe<Scalars["Boolean"]>;
-  legacyConfig: InputMaybe<Scalars["JSON"]>;
-  organismTaxId: InputMaybe<Scalars["String"]>;
-  projections: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  readerPermissions: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  studyId: InputMaybe<Scalars["Int"]>;
-  studyName: InputMaybe<Scalars["String"]>;
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
-  visible: InputMaybe<Scalars["Boolean"]>;
+  adminPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description: InputMaybe<Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  filename: InputMaybe<Scalars['String']>;
+  importFailed: InputMaybe<Scalars['Boolean']>;
+  importFile: InputMaybe<Scalars['String']>;
+  importFinished: InputMaybe<Scalars['Boolean']>;
+  importLog: InputMaybe<Scalars['String']>;
+  importStarted: InputMaybe<Scalars['Boolean']>;
+  legacyConfig: InputMaybe<Scalars['JSON']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
+  projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  visible: InputMaybe<Scalars['Boolean']>;
 };
 
 export type StudySample = Node & {
-  __typename?: "StudySample";
-  h5AdObsIndex: Scalars["Int"];
-  h5AdObsKey: Scalars["String"];
+  __typename?: 'StudySample';
+  h5AdObsIndex: Scalars['Int'];
+  h5AdObsKey: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** Reads a single `Study` that is related to this `StudySample`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
   /** Reads and enables pagination through a set of `StudySampleProjection`. */
   studySampleProjectionsByStudyIdAndStudySampleIdList: Array<StudySampleProjection>;
 };
 
-export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdListArgs =
-  {
-    condition: InputMaybe<StudySampleProjectionCondition>;
-    filter: InputMaybe<StudySampleProjectionFilter>;
-    first: InputMaybe<Scalars["Int"]>;
-    offset: InputMaybe<Scalars["Int"]>;
-    orderBy: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
-  };
+export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdListArgs = {
+  condition: InputMaybe<StudySampleProjectionCondition>;
+  filter: InputMaybe<StudySampleProjectionFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
+};
 
 export type StudySampleAnnotation = {
-  __typename?: "StudySampleAnnotation";
+  __typename?: 'StudySampleAnnotation';
   /** Reads a single `AnnotationValue` that is related to this `StudySampleAnnotation`. */
   annotationValue: Maybe<AnnotationValue>;
-  annotationValueId: Scalars["Int"];
-  color: Maybe<Scalars["String"]>;
+  annotationValueId: Scalars['Int'];
+  color: Maybe<Scalars['String']>;
   /** Reads a single `Study` that is related to this `StudySampleAnnotation`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
-  studySampleIds: Array<Maybe<Scalars["Int"]>>;
+  studyId: Scalars['Int'];
+  studySampleIds: Array<Maybe<Scalars['Int']>>;
 };
 
 /**
@@ -5863,13 +5843,13 @@ export type StudySampleAnnotation = {
  */
 export type StudySampleAnnotationCondition = {
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `color` field. */
-  color: InputMaybe<Scalars["String"]>;
+  color: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleIds` field. */
-  studySampleIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  studySampleIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** A filter to be used against `StudySampleAnnotation` object types. All fields are combined with a logical ‘and.’ */
@@ -5892,19 +5872,19 @@ export type StudySampleAnnotationFilter = {
 
 /** An input for mutations affecting `StudySampleAnnotation` */
 export type StudySampleAnnotationInput = {
-  annotationValueId: Scalars["Int"];
-  color: InputMaybe<Scalars["String"]>;
-  studyId: Scalars["Int"];
-  studySampleIds: Array<InputMaybe<Scalars["Int"]>>;
+  annotationValueId: Scalars['Int'];
+  color: InputMaybe<Scalars['String']>;
+  studyId: Scalars['Int'];
+  studySampleIds: Array<InputMaybe<Scalars['Int']>>;
 };
 
 export type StudySampleAnnotationSubsampling = {
-  __typename?: "StudySampleAnnotationSubsampling";
-  annotationValueId: Maybe<Scalars["Int"]>;
+  __typename?: 'StudySampleAnnotationSubsampling';
+  annotationValueId: Maybe<Scalars['Int']>;
   /** Reads a single `Study` that is related to this `StudySampleAnnotationSubsampling`. */
   study: Maybe<Study>;
-  studyId: Maybe<Scalars["Int"]>;
-  studySampleIds: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  studyId: Maybe<Scalars['Int']>;
+  studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 /**
@@ -5913,11 +5893,11 @@ export type StudySampleAnnotationSubsampling = {
  */
 export type StudySampleAnnotationSubsamplingCondition = {
   /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars["Int"]>;
+  annotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleIds` field. */
-  studySampleIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  studySampleIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** A filter to be used against `StudySampleAnnotationSubsampling` object types. All fields are combined with a logical ‘and.’ */
@@ -5938,26 +5918,26 @@ export type StudySampleAnnotationSubsamplingFilter = {
 
 /** Methods to use when ordering `StudySampleAnnotationSubsampling`. */
 export enum StudySampleAnnotationSubsamplingsOrderBy {
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudySampleIdsAsc = "STUDY_SAMPLE_IDS_ASC",
-  StudySampleIdsDesc = "STUDY_SAMPLE_IDS_DESC",
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC',
 }
 
 /** Methods to use when ordering `StudySampleAnnotation`. */
 export enum StudySampleAnnotationsOrderBy {
-  AnnotationValueIdAsc = "ANNOTATION_VALUE_ID_ASC",
-  AnnotationValueIdDesc = "ANNOTATION_VALUE_ID_DESC",
-  ColorAsc = "COLOR_ASC",
-  ColorDesc = "COLOR_DESC",
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudySampleIdsAsc = "STUDY_SAMPLE_IDS_ASC",
-  StudySampleIdsDesc = "STUDY_SAMPLE_IDS_DESC",
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  ColorAsc = 'COLOR_ASC',
+  ColorDesc = 'COLOR_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC',
 }
 
 /**
@@ -5966,13 +5946,13 @@ export enum StudySampleAnnotationsOrderBy {
  */
 export type StudySampleCondition = {
   /** Checks for equality with the object’s `h5AdObsIndex` field. */
-  h5AdObsIndex: InputMaybe<Scalars["Int"]>;
+  h5AdObsIndex: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `h5AdObsKey` field. */
-  h5AdObsKey: InputMaybe<Scalars["String"]>;
+  h5AdObsKey: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleId` field. */
-  studySampleId: InputMaybe<Scalars["Int"]>;
+  studySampleId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudySample` object types. All fields are combined with a logical ‘and.’ */
@@ -5995,28 +5975,28 @@ export type StudySampleFilter = {
 
 /** An input for mutations affecting `StudySample` */
 export type StudySampleInput = {
-  h5AdObsIndex: Scalars["Int"];
-  h5AdObsKey: Scalars["String"];
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  h5AdObsIndex: Scalars['Int'];
+  h5AdObsKey: Scalars['String'];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
 };
 
 /** Represents an update to a `StudySample`. Fields that are set will be updated. */
 export type StudySamplePatch = {
-  h5AdObsIndex: InputMaybe<Scalars["Int"]>;
-  h5AdObsKey: InputMaybe<Scalars["String"]>;
-  studyId: InputMaybe<Scalars["Int"]>;
-  studySampleId: InputMaybe<Scalars["Int"]>;
+  h5AdObsIndex: InputMaybe<Scalars['Int']>;
+  h5AdObsKey: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studySampleId: InputMaybe<Scalars['Int']>;
 };
 
 export type StudySampleProjection = {
-  __typename?: "StudySampleProjection";
-  displaySubsampling: Scalars["Boolean"];
-  modality: Maybe<Scalars["String"]>;
-  projection: Array<Maybe<Scalars["Float"]>>;
-  projectionType: Scalars["String"];
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  __typename?: 'StudySampleProjection';
+  displaySubsampling: Scalars['Boolean'];
+  modality: Maybe<Scalars['String']>;
+  projection: Array<Maybe<Scalars['Float']>>;
+  projectionType: Scalars['String'];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
   /** Reads a single `StudySample` that is related to this `StudySampleProjection`. */
   studyStudySample: Maybe<StudySample>;
 };
@@ -6027,17 +6007,17 @@ export type StudySampleProjection = {
  */
 export type StudySampleProjectionCondition = {
   /** Checks for equality with the object’s `displaySubsampling` field. */
-  displaySubsampling: InputMaybe<Scalars["Boolean"]>;
+  displaySubsampling: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `modality` field. */
-  modality: InputMaybe<Scalars["String"]>;
+  modality: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `projection` field. */
-  projection: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  projection: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Checks for equality with the object’s `projectionType` field. */
-  projectionType: InputMaybe<Scalars["String"]>;
+  projectionType: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleId` field. */
-  studySampleId: InputMaybe<Scalars["Int"]>;
+  studySampleId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudySampleProjection` object types. All fields are combined with a logical ‘and.’ */
@@ -6064,23 +6044,23 @@ export type StudySampleProjectionFilter = {
 
 /** An input for mutations affecting `StudySampleProjection` */
 export type StudySampleProjectionInput = {
-  displaySubsampling: Scalars["Boolean"];
-  modality: InputMaybe<Scalars["String"]>;
-  projection: Array<InputMaybe<Scalars["Float"]>>;
-  projectionType: Scalars["String"];
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  displaySubsampling: Scalars['Boolean'];
+  modality: InputMaybe<Scalars['String']>;
+  projection: Array<InputMaybe<Scalars['Float']>>;
+  projectionType: Scalars['String'];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
 };
 
 export type StudySampleProjectionSubsamplingTransposed = {
-  __typename?: "StudySampleProjectionSubsamplingTransposed";
-  modality: Maybe<Scalars["String"]>;
-  projection: Maybe<Array<Maybe<Scalars["Float"]>>>;
-  projectionType: Maybe<Scalars["String"]>;
+  __typename?: 'StudySampleProjectionSubsamplingTransposed';
+  modality: Maybe<Scalars['String']>;
+  projection: Maybe<Array<Maybe<Scalars['Float']>>>;
+  projectionType: Maybe<Scalars['String']>;
   /** Reads a single `Study` that is related to this `StudySampleProjectionSubsamplingTransposed`. */
   study: Maybe<Study>;
-  studyId: Maybe<Scalars["Int"]>;
-  studySampleId: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  studyId: Maybe<Scalars['Int']>;
+  studySampleId: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 /**
@@ -6089,15 +6069,15 @@ export type StudySampleProjectionSubsamplingTransposed = {
  */
 export type StudySampleProjectionSubsamplingTransposedCondition = {
   /** Checks for equality with the object’s `modality` field. */
-  modality: InputMaybe<Scalars["String"]>;
+  modality: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `projection` field. */
-  projection: InputMaybe<Array<InputMaybe<Scalars["Float"]>>>;
+  projection: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Checks for equality with the object’s `projectionType` field. */
-  projectionType: InputMaybe<Scalars["String"]>;
+  projectionType: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleId` field. */
-  studySampleId: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  studySampleId: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** A filter to be used against `StudySampleProjectionSubsamplingTransposed` object types. All fields are combined with a logical ‘and.’ */
@@ -6122,54 +6102,54 @@ export type StudySampleProjectionSubsamplingTransposedFilter = {
 
 /** Methods to use when ordering `StudySampleProjectionSubsamplingTransposed`. */
 export enum StudySampleProjectionSubsamplingTransposedsOrderBy {
-  ModalityAsc = "MODALITY_ASC",
-  ModalityDesc = "MODALITY_DESC",
-  Natural = "NATURAL",
-  ProjectionAsc = "PROJECTION_ASC",
-  ProjectionDesc = "PROJECTION_DESC",
-  ProjectionTypeAsc = "PROJECTION_TYPE_ASC",
-  ProjectionTypeDesc = "PROJECTION_TYPE_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudySampleIdAsc = "STUDY_SAMPLE_ID_ASC",
-  StudySampleIdDesc = "STUDY_SAMPLE_ID_DESC",
+  ModalityAsc = 'MODALITY_ASC',
+  ModalityDesc = 'MODALITY_DESC',
+  Natural = 'NATURAL',
+  ProjectionAsc = 'PROJECTION_ASC',
+  ProjectionDesc = 'PROJECTION_DESC',
+  ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
+  ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
 }
 
 /** Methods to use when ordering `StudySampleProjection`. */
 export enum StudySampleProjectionsOrderBy {
-  DisplaySubsamplingAsc = "DISPLAY_SUBSAMPLING_ASC",
-  DisplaySubsamplingDesc = "DISPLAY_SUBSAMPLING_DESC",
-  ModalityAsc = "MODALITY_ASC",
-  ModalityDesc = "MODALITY_DESC",
-  Natural = "NATURAL",
-  ProjectionAsc = "PROJECTION_ASC",
-  ProjectionDesc = "PROJECTION_DESC",
-  ProjectionTypeAsc = "PROJECTION_TYPE_ASC",
-  ProjectionTypeDesc = "PROJECTION_TYPE_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudySampleIdAsc = "STUDY_SAMPLE_ID_ASC",
-  StudySampleIdDesc = "STUDY_SAMPLE_ID_DESC",
+  DisplaySubsamplingAsc = 'DISPLAY_SUBSAMPLING_ASC',
+  DisplaySubsamplingDesc = 'DISPLAY_SUBSAMPLING_DESC',
+  ModalityAsc = 'MODALITY_ASC',
+  ModalityDesc = 'MODALITY_DESC',
+  Natural = 'NATURAL',
+  ProjectionAsc = 'PROJECTION_ASC',
+  ProjectionDesc = 'PROJECTION_DESC',
+  ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
+  ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
 }
 
 /** Methods to use when ordering `StudySample`. */
 export enum StudySamplesOrderBy {
-  H5AdObsIndexAsc = "H5AD_OBS_INDEX_ASC",
-  H5AdObsIndexDesc = "H5AD_OBS_INDEX_DESC",
-  H5AdObsKeyAsc = "H5AD_OBS_KEY_ASC",
-  H5AdObsKeyDesc = "H5AD_OBS_KEY_DESC",
-  Natural = "NATURAL",
-  PrimaryKeyAsc = "PRIMARY_KEY_ASC",
-  PrimaryKeyDesc = "PRIMARY_KEY_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
-  StudySampleIdAsc = "STUDY_SAMPLE_ID_ASC",
-  StudySampleIdDesc = "STUDY_SAMPLE_ID_DESC",
+  H5AdObsIndexAsc = 'H5AD_OBS_INDEX_ASC',
+  H5AdObsIndexDesc = 'H5AD_OBS_INDEX_DESC',
+  H5AdObsKeyAsc = 'H5AD_OBS_KEY_ASC',
+  H5AdObsKeyDesc = 'H5AD_OBS_KEY_DESC',
+  Natural = 'NATURAL',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
 }
 
 export type StudyVisibleCurrentuser = {
-  __typename?: "StudyVisibleCurrentuser";
-  studyId: Maybe<Scalars["Int"]>;
+  __typename?: 'StudyVisibleCurrentuser';
+  studyId: Maybe<Scalars['Int']>;
 };
 
 /**
@@ -6178,7 +6158,7 @@ export type StudyVisibleCurrentuser = {
  */
 export type StudyVisibleCurrentuserCondition = {
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `StudyVisibleCurrentuser` object types. All fields are combined with a logical ‘and.’ */
@@ -6195,41 +6175,41 @@ export type StudyVisibleCurrentuserFilter = {
 
 /** An input for mutations affecting `StudyVisibleCurrentuser` */
 export type StudyVisibleCurrentuserInput = {
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** Methods to use when ordering `StudyVisibleCurrentuser`. */
 export enum StudyVisibleCurrentusersOrderBy {
-  Natural = "NATURAL",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 /** Methods to use when ordering `TreeOntology`. */
 export enum TreeOntologiesOrderBy {
-  CidAsc = "CID_ASC",
-  CidDesc = "CID_DESC",
-  LabelAsc = "LABEL_ASC",
-  LabelDesc = "LABEL_DESC",
-  Natural = "NATURAL",
-  OntologyAsc = "ONTOLOGY_ASC",
-  OntologyDesc = "ONTOLOGY_DESC",
-  OntCodeAsc = "ONT_CODE_ASC",
-  OntCodeDesc = "ONT_CODE_DESC",
-  ParentCidsAsc = "PARENT_CIDS_ASC",
-  ParentCidsDesc = "PARENT_CIDS_DESC",
-  ParentOntCodePathAsc = "PARENT_ONT_CODE_PATH_ASC",
-  ParentOntCodePathDesc = "PARENT_ONT_CODE_PATH_DESC",
+  CidAsc = 'CID_ASC',
+  CidDesc = 'CID_DESC',
+  LabelAsc = 'LABEL_ASC',
+  LabelDesc = 'LABEL_DESC',
+  Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
+  OntCodeAsc = 'ONT_CODE_ASC',
+  OntCodeDesc = 'ONT_CODE_DESC',
+  ParentCidsAsc = 'PARENT_CIDS_ASC',
+  ParentCidsDesc = 'PARENT_CIDS_DESC',
+  ParentOntCodePathAsc = 'PARENT_ONT_CODE_PATH_ASC',
+  ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC',
 }
 
 export type TreeOntology = {
-  __typename?: "TreeOntology";
-  cid: Maybe<Scalars["Int"]>;
-  label: Maybe<Scalars["String"]>;
-  ontCode: Maybe<Scalars["String"]>;
-  ontology: Maybe<Scalars["String"]>;
-  parentCids: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  parentOntCodePath: Maybe<Array<Maybe<Scalars["String"]>>>;
+  __typename?: 'TreeOntology';
+  cid: Maybe<Scalars['Int']>;
+  label: Maybe<Scalars['String']>;
+  ontCode: Maybe<Scalars['String']>;
+  ontology: Maybe<Scalars['String']>;
+  parentCids: Maybe<Array<Maybe<Scalars['Int']>>>;
+  parentOntCodePath: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 /**
@@ -6238,17 +6218,17 @@ export type TreeOntology = {
  */
 export type TreeOntologyCondition = {
   /** Checks for equality with the object’s `cid` field. */
-  cid: InputMaybe<Scalars["Int"]>;
+  cid: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `label` field. */
-  label: InputMaybe<Scalars["String"]>;
+  label: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontCode` field. */
-  ontCode: InputMaybe<Scalars["String"]>;
+  ontCode: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontology` field. */
-  ontology: InputMaybe<Scalars["String"]>;
+  ontology: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `parentCids` field. */
-  parentCids: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  parentCids: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `parentOntCodePath` field. */
-  parentOntCodePath: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+  parentOntCodePath: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** A filter to be used against `TreeOntology` object types. All fields are combined with a logical ‘and.’ */
@@ -6279,35 +6259,35 @@ export type UpdateAnnotationGroupByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `AnnotationGroup` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `AnnotationGroup` being updated. */
   patch: AnnotationGroupPatch;
 };
 
 /** All input for the `updateAnnotationGroup` mutation. */
 export type UpdateAnnotationGroupInput = {
-  annotationGroupId: Scalars["Int"];
+  annotationGroupId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `AnnotationGroup` being updated. */
   patch: AnnotationGroupPatch;
 };
 
 /** The output of our update `AnnotationGroup` mutation. */
 export type UpdateAnnotationGroupPayload = {
-  __typename?: "UpdateAnnotationGroupPayload";
+  __typename?: 'UpdateAnnotationGroupPayload';
   /** The `AnnotationGroup` that was updated by this mutation. */
   annotationGroup: Maybe<AnnotationGroup>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -6318,28 +6298,28 @@ export type UpdateAnnotationValueByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `AnnotationValue` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `AnnotationValue` being updated. */
   patch: AnnotationValuePatch;
 };
 
 /** All input for the `updateAnnotationValue` mutation. */
 export type UpdateAnnotationValueInput = {
-  annotationValueId: Scalars["Int"];
+  annotationValueId: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `AnnotationValue` being updated. */
   patch: AnnotationValuePatch;
 };
 
 /** The output of our update `AnnotationValue` mutation. */
 export type UpdateAnnotationValuePayload = {
-  __typename?: "UpdateAnnotationValuePayload";
+  __typename?: 'UpdateAnnotationValuePayload';
   /** Reads a single `AnnotationGroup` that is related to this `AnnotationValue`. */
   annotationGroup: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was updated by this mutation. */
@@ -6348,7 +6328,7 @@ export type UpdateAnnotationValuePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -6359,33 +6339,33 @@ export type UpdateConceptByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Concept` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Concept` being updated. */
   patch: ConceptPatch;
 };
 
 /** All input for the `updateConcept` mutation. */
 export type UpdateConceptInput = {
-  cid: Scalars["Int"];
+  cid: Scalars['Int'];
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Concept` being updated. */
   patch: ConceptPatch;
 };
 
 /** The output of our update `Concept` mutation. */
 export type UpdateConceptPayload = {
-  __typename?: "UpdateConceptPayload";
+  __typename?: 'UpdateConceptPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `Concept` that was updated by this mutation. */
   concept: Maybe<Concept>;
   /** Reads a single `Ontology` that is related to this `Concept`. */
@@ -6400,9 +6380,9 @@ export type UpdateOmicsBaseByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsBase` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `OmicsBase` being updated. */
   patch: OmicsBasePatch;
 };
@@ -6413,20 +6393,20 @@ export type UpdateOmicsBaseInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  omicsId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  omicsId: Scalars['Int'];
   /** An object where the defined keys will be set on the `OmicsBase` being updated. */
   patch: OmicsBasePatch;
 };
 
 /** The output of our update `OmicsBase` mutation. */
 export type UpdateOmicsBasePayload = {
-  __typename?: "UpdateOmicsBasePayload";
+  __typename?: 'UpdateOmicsBasePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsBase` that was updated by this mutation. */
   omicsBase: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -6439,9 +6419,9 @@ export type UpdateOmicsGeneByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsGene` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `OmicsGene` being updated. */
   patch: OmicsGenePatch;
 };
@@ -6452,20 +6432,20 @@ export type UpdateOmicsGeneInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  geneId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  geneId: Scalars['Int'];
   /** An object where the defined keys will be set on the `OmicsGene` being updated. */
   patch: OmicsGenePatch;
 };
 
 /** The output of our update `OmicsGene` mutation. */
 export type UpdateOmicsGenePayload = {
-  __typename?: "UpdateOmicsGenePayload";
+  __typename?: 'UpdateOmicsGenePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsGene`. */
   gene: Maybe<OmicsBase>;
   /** The `OmicsGene` that was updated by this mutation. */
@@ -6480,9 +6460,9 @@ export type UpdateOmicsProteinAntibodyTagByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsProteinAntibodyTag` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `OmicsProteinAntibodyTag` being updated. */
   patch: OmicsProteinAntibodyTagPatch;
 };
@@ -6493,20 +6473,20 @@ export type UpdateOmicsProteinAntibodyTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `OmicsProteinAntibodyTag` being updated. */
   patch: OmicsProteinAntibodyTagPatch;
-  proteinAntibodyTagId: Scalars["Int"];
+  proteinAntibodyTagId: Scalars['Int'];
 };
 
 /** The output of our update `OmicsProteinAntibodyTag` mutation. */
 export type UpdateOmicsProteinAntibodyTagPayload = {
-  __typename?: "UpdateOmicsProteinAntibodyTagPayload";
+  __typename?: 'UpdateOmicsProteinAntibodyTagPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsProteinAntibodyTag` that was updated by this mutation. */
   omicsProteinAntibodyTag: Maybe<OmicsProteinAntibodyTag>;
   /** Reads a single `OmicsBase` that is related to this `OmicsProteinAntibodyTag`. */
@@ -6521,9 +6501,9 @@ export type UpdateOmicsRegionByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsRegion` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `OmicsRegion` being updated. */
   patch: OmicsRegionPatch;
 };
@@ -6534,20 +6514,20 @@ export type UpdateOmicsRegionInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `OmicsRegion` being updated. */
   patch: OmicsRegionPatch;
-  regionId: Scalars["Int"];
+  regionId: Scalars['Int'];
 };
 
 /** The output of our update `OmicsRegion` mutation. */
 export type UpdateOmicsRegionPayload = {
-  __typename?: "UpdateOmicsRegionPayload";
+  __typename?: 'UpdateOmicsRegionPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `OmicsRegion` that was updated by this mutation. */
   omicsRegion: Maybe<OmicsRegion>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
@@ -6562,9 +6542,9 @@ export type UpdateOmicsTranscriptionFactorByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `OmicsTranscriptionFactor` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `OmicsTranscriptionFactor` being updated. */
   patch: OmicsTranscriptionFactorPatch;
 };
@@ -6575,20 +6555,20 @@ export type UpdateOmicsTranscriptionFactorInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  omicsId: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  omicsId: Scalars['Int'];
   /** An object where the defined keys will be set on the `OmicsTranscriptionFactor` being updated. */
   patch: OmicsTranscriptionFactorPatch;
 };
 
 /** The output of our update `OmicsTranscriptionFactor` mutation. */
 export type UpdateOmicsTranscriptionFactorPayload = {
-  __typename?: "UpdateOmicsTranscriptionFactorPayload";
+  __typename?: 'UpdateOmicsTranscriptionFactorPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Reads a single `OmicsBase` that is related to this `OmicsTranscriptionFactor`. */
   omics: Maybe<OmicsBase>;
   /** The `OmicsTranscriptionFactor` that was updated by this mutation. */
@@ -6603,9 +6583,9 @@ export type UpdateOntologyByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ontology` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Ontology` being updated. */
   patch: OntologyPatch;
 };
@@ -6616,20 +6596,20 @@ export type UpdateOntologyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  ontid: Scalars["Int"];
+  clientMutationId: InputMaybe<Scalars['String']>;
+  ontid: Scalars['Int'];
   /** An object where the defined keys will be set on the `Ontology` being updated. */
   patch: OntologyPatch;
 };
 
 /** The output of our update `Ontology` mutation. */
 export type UpdateOntologyPayload = {
-  __typename?: "UpdateOntologyPayload";
+  __typename?: 'UpdateOntologyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** The `Ontology` that was updated by this mutation. */
   ontology: Maybe<Ontology>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -6642,9 +6622,9 @@ export type UpdateStudyByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Study` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Study` being updated. */
   patch: StudyPatch;
 };
@@ -6655,10 +6635,10 @@ export type UpdateStudyInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Study` being updated. */
   patch: StudyPatch;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /** All input for the `updateStudyLayerByNodeId` mutation. */
@@ -6667,9 +6647,9 @@ export type UpdateStudyLayerByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `StudyLayer` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `StudyLayer` being updated. */
   patch: StudyLayerPatch;
 };
@@ -6680,20 +6660,20 @@ export type UpdateStudyLayerInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `StudyLayer` being updated. */
   patch: StudyLayerPatch;
-  studyLayerId: Scalars["Int"];
+  studyLayerId: Scalars['Int'];
 };
 
 /** The output of our update `StudyLayer` mutation. */
 export type UpdateStudyLayerPayload = {
-  __typename?: "UpdateStudyLayerPayload";
+  __typename?: 'UpdateStudyLayerPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudyLayer`. */
@@ -6704,12 +6684,12 @@ export type UpdateStudyLayerPayload = {
 
 /** The output of our update `Study` mutation. */
 export type UpdateStudyPayload = {
-  __typename?: "UpdateStudyPayload";
+  __typename?: 'UpdateStudyPayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** The `Study` that was updated by this mutation. */
@@ -6722,9 +6702,9 @@ export type UpdateStudySampleByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `StudySample` to be updated. */
-  nodeId: Scalars["ID"];
+  nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `StudySample` being updated. */
   patch: StudySamplePatch;
 };
@@ -6735,21 +6715,21 @@ export type UpdateStudySampleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
+  clientMutationId: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `StudySample` being updated. */
   patch: StudySamplePatch;
-  studyId: Scalars["Int"];
-  studySampleId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  studySampleId: Scalars['Int'];
 };
 
 /** The output of our update `StudySample` mutation. */
 export type UpdateStudySamplePayload = {
-  __typename?: "UpdateStudySamplePayload";
+  __typename?: 'UpdateStudySamplePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
+  clientMutationId: Maybe<Scalars['String']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
   /** Reads a single `Study` that is related to this `StudySample`. */
@@ -6764,35 +6744,35 @@ export type UserAnnotationDefineInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId: InputMaybe<Scalars["String"]>;
-  pAnnotationGroupName: InputMaybe<Scalars["String"]>;
-  pSelectedSampleIds: InputMaybe<Scalars["String"]>;
-  pStudyId: InputMaybe<Scalars["Int"]>;
-  pUnexpressedSamplesOmicsIds: InputMaybe<Array<InputMaybe<Scalars["Int"]>>>;
+  clientMutationId: InputMaybe<Scalars['String']>;
+  pAnnotationGroupName: InputMaybe<Scalars['String']>;
+  pSelectedSampleIds: InputMaybe<Scalars['String']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pUnexpressedSamplesOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
 /** The output of our `userAnnotationDefine` mutation. */
 export type UserAnnotationDefinePayload = {
-  __typename?: "UserAnnotationDefinePayload";
+  __typename?: 'UserAnnotationDefinePayload';
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId: Maybe<Scalars["String"]>;
-  integer: Maybe<Scalars["Int"]>;
+  clientMutationId: Maybe<Scalars['String']>;
+  integer: Maybe<Scalars['Int']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
 
 export type UserAnnotationGroup = {
-  __typename?: "UserAnnotationGroup";
-  calculateDifferentialExpression: Scalars["Boolean"];
+  __typename?: 'UserAnnotationGroup';
+  calculateDifferentialExpression: Scalars['Boolean'];
   /** Reads a single `AnnotationGroup` that is related to this `UserAnnotationGroup`. */
   savedAsAnnotationGroup: Maybe<AnnotationGroup>;
-  savedAsAnnotationGroupId: Scalars["Int"];
+  savedAsAnnotationGroupId: Scalars['Int'];
   /** Reads a single `Study` that is related to this `UserAnnotationGroup`. */
   study: Maybe<Study>;
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 };
 
 /**
@@ -6801,11 +6781,11 @@ export type UserAnnotationGroup = {
  */
 export type UserAnnotationGroupCondition = {
   /** Checks for equality with the object’s `calculateDifferentialExpression` field. */
-  calculateDifferentialExpression: InputMaybe<Scalars["Boolean"]>;
+  calculateDifferentialExpression: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `savedAsAnnotationGroupId` field. */
-  savedAsAnnotationGroupId: InputMaybe<Scalars["Int"]>;
+  savedAsAnnotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars["Int"]>;
+  studyId: InputMaybe<Scalars['Int']>;
 };
 
 /** A filter to be used against `UserAnnotationGroup` object types. All fields are combined with a logical ‘and.’ */
@@ -6826,26 +6806,26 @@ export type UserAnnotationGroupFilter = {
 
 /** An input for mutations affecting `UserAnnotationGroup` */
 export type UserAnnotationGroupInput = {
-  calculateDifferentialExpression: Scalars["Boolean"];
-  savedAsAnnotationGroupId: Scalars["Int"];
-  studyId: Scalars["Int"];
+  calculateDifferentialExpression: Scalars['Boolean'];
+  savedAsAnnotationGroupId: Scalars['Int'];
+  studyId: Scalars['Int'];
 };
 
 /** Methods to use when ordering `UserAnnotationGroup`. */
 export enum UserAnnotationGroupsOrderBy {
-  CalculateDifferentialExpressionAsc = "CALCULATE_DIFFERENTIAL_EXPRESSION_ASC",
-  CalculateDifferentialExpressionDesc = "CALCULATE_DIFFERENTIAL_EXPRESSION_DESC",
-  Natural = "NATURAL",
-  SavedAsAnnotationGroupIdAsc = "SAVED_AS_ANNOTATION_GROUP_ID_ASC",
-  SavedAsAnnotationGroupIdDesc = "SAVED_AS_ANNOTATION_GROUP_ID_DESC",
-  StudyIdAsc = "STUDY_ID_ASC",
-  StudyIdDesc = "STUDY_ID_DESC",
+  CalculateDifferentialExpressionAsc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_ASC',
+  CalculateDifferentialExpressionDesc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_DESC',
+  Natural = 'NATURAL',
+  SavedAsAnnotationGroupIdAsc = 'SAVED_AS_ANNOTATION_GROUP_ID_ASC',
+  SavedAsAnnotationGroupIdDesc = 'SAVED_AS_ANNOTATION_GROUP_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
 }
 
 export type _AllUsedOntologyId = {
-  __typename?: "_AllUsedOntologyId";
-  ontCode: Maybe<Scalars["String"]>;
-  ontology: Maybe<Scalars["String"]>;
+  __typename?: '_AllUsedOntologyId';
+  ontCode: Maybe<Scalars['String']>;
+  ontology: Maybe<Scalars['String']>;
 };
 
 /**
@@ -6854,9 +6834,9 @@ export type _AllUsedOntologyId = {
  */
 export type _AllUsedOntologyIdCondition = {
   /** Checks for equality with the object’s `ontCode` field. */
-  ontCode: InputMaybe<Scalars["String"]>;
+  ontCode: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `ontology` field. */
-  ontology: InputMaybe<Scalars["String"]>;
+  ontology: InputMaybe<Scalars['String']>;
 };
 
 /** A filter to be used against `_AllUsedOntologyId` object types. All fields are combined with a logical ‘and.’ */
@@ -6875,22 +6855,22 @@ export type _AllUsedOntologyIdFilter = {
 
 /** Methods to use when ordering `_AllUsedOntologyId`. */
 export enum _AllUsedOntologyIdsOrderBy {
-  Natural = "NATURAL",
-  OntologyAsc = "ONTOLOGY_ASC",
-  OntologyDesc = "ONTOLOGY_DESC",
-  OntCodeAsc = "ONT_CODE_ASC",
-  OntCodeDesc = "ONT_CODE_DESC",
+  Natural = 'NATURAL',
+  OntologyAsc = 'ONTOLOGY_ASC',
+  OntologyDesc = 'ONTOLOGY_DESC',
+  OntCodeAsc = 'ONT_CODE_ASC',
+  OntCodeDesc = 'ONT_CODE_DESC',
 }
 
 export type CorrelatedgenesQueryVariables = Exact<{
-  studyId: Scalars["Int"];
-  omicsId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  omicsId: Scalars['Int'];
 }>;
 
 export type CorrelatedgenesQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   getCorrelatedGenesList: Array<{
-    __typename?: "GetCorrelatedGenesRecord";
+    __typename?: 'GetCorrelatedGenesRecord';
     displayName: string;
     displaySymbol: string;
     omicsId: number;
@@ -6899,7 +6879,7 @@ export type CorrelatedgenesQuery = {
 };
 
 export type StudyInfoFragment = {
-  __typename?: "StudyOverview";
+  __typename?: 'StudyOverview';
   studyId: number;
   studyName: string;
   description: string;
@@ -6907,7 +6887,7 @@ export type StudyInfoFragment = {
   externalWebsite: string;
   defaultStudyLayerId: number;
   studyOntologyList: Array<{
-    __typename?: "StudyOverviewOntology";
+    __typename?: 'StudyOverviewOntology';
     ontCodes: Array<string>;
     labels: Array<string>;
     ontology: string;
@@ -6916,7 +6896,7 @@ export type StudyInfoFragment = {
 };
 
 export type TreeOntologyOverviewFragment = {
-  __typename?: "TreeOntology";
+  __typename?: 'TreeOntology';
   label: string;
   ontCode: string;
   ontology: string;
@@ -6924,14 +6904,14 @@ export type TreeOntologyOverviewFragment = {
 };
 
 export type DegQueryVariables = Exact<{
-  studyId: Scalars["Int"];
-  annotationValueId: Scalars["Int"];
+  studyId: Scalars['Int'];
+  annotationValueId: Scalars['Int'];
 }>;
 
 export type DegQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   differentialExpressionVsList: Array<{
-    __typename?: "DifferentialExpressionV";
+    __typename?: 'DifferentialExpressionV';
     omicsId: number;
     studyId: number;
     annotationValueId: number;
@@ -6947,9 +6927,9 @@ export type DegQuery = {
 export type StudiesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type StudiesQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   studyOverviewsList: Array<{
-    __typename?: "StudyOverview";
+    __typename?: 'StudyOverview';
     studyId: number;
     studyName: string;
     description: string;
@@ -6957,7 +6937,7 @@ export type StudiesQuery = {
     externalWebsite: string;
     defaultStudyLayerId: number;
     studyOntologyList: Array<{
-      __typename?: "StudyOverviewOntology";
+      __typename?: 'StudyOverviewOntology';
       ontCodes: Array<string>;
       labels: Array<string>;
       ontology: string;
@@ -6965,7 +6945,7 @@ export type StudiesQuery = {
     }>;
   }>;
   treeOntologiesList: Array<{
-    __typename?: "TreeOntology";
+    __typename?: 'TreeOntology';
     label: string;
     ontCode: string;
     ontology: string;
@@ -6974,14 +6954,14 @@ export type StudiesQuery = {
 };
 
 export type AnnotationGrpFragment = {
-  __typename?: "StudyAnnotationFrontendGroup";
+  __typename?: 'StudyAnnotationFrontendGroup';
   annotationGroupId: number;
   isPrimary: boolean;
   ordering: number;
   displayGroup: string;
   differentialExpressionCalculated: boolean;
   annotationValuesList: Array<{
-    __typename?: "StudyAnnotationFrontendValue";
+    __typename?: 'StudyAnnotationFrontendValue';
     annotationValueId: number;
     displayValue: string;
     color: string;
@@ -6990,31 +6970,31 @@ export type AnnotationGrpFragment = {
 };
 
 export type StudyBasicsFragment = {
-  __typename?: "Study";
+  __typename?: 'Study';
   studyId: number;
   studyName: string;
   projections: Array<string>;
   studyLayersList: Array<{
-    __typename?: "StudyLayer";
+    __typename?: 'StudyLayer';
     layer: string;
     studyLayerId: number;
   }>;
   studyOmicsTransposedList: Array<{
-    __typename?: "StudyOmicsTransposed";
+    __typename?: 'StudyOmicsTransposed';
     displayName: Array<string>;
     displaySymbol: Array<string>;
     omicsId: Array<number>;
     omicsType: Array<OmicsType>;
   }>;
   annotationGroupsList: Array<{
-    __typename?: "StudyAnnotationFrontendGroup";
+    __typename?: 'StudyAnnotationFrontendGroup';
     annotationGroupId: number;
     isPrimary: boolean;
     ordering: number;
     displayGroup: string;
     differentialExpressionCalculated: boolean;
     annotationValuesList: Array<{
-      __typename?: "StudyAnnotationFrontendValue";
+      __typename?: 'StudyAnnotationFrontendValue';
       annotationValueId: number;
       displayValue: string;
       color: string;
@@ -7022,12 +7002,12 @@ export type StudyBasicsFragment = {
     }>;
   }>;
   studySampleAnnotationSubsamplingList: Array<{
-    __typename?: "StudySampleAnnotationSubsampling";
+    __typename?: 'StudySampleAnnotationSubsampling';
     annotationValueId: number;
     studySampleIds: Array<number>;
   }>;
   studySampleProjectionSubsamplingTransposedList: Array<{
-    __typename?: "StudySampleProjectionSubsamplingTransposed";
+    __typename?: 'StudySampleProjectionSubsamplingTransposed';
     projectionType: string;
     studySampleId: Array<number>;
     projection: Array<number>;
@@ -7036,23 +7016,23 @@ export type StudyBasicsFragment = {
 };
 
 export type DifferentialMarkerFragment = {
-  __typename?: "DifferentialExpression";
+  __typename?: 'DifferentialExpression';
   annotationValueId: number;
   log2Foldchange: number;
   pvalueAdj: number;
   score: number;
-  study: { __typename?: "Study"; studyName: string; studyId: number };
+  study: { __typename?: 'Study'; studyName: string; studyId: number };
   annotationValue: {
-    __typename?: "AnnotationValue";
+    __typename?: 'AnnotationValue';
     displayValue: string;
     annotationGroup: {
-      __typename?: "AnnotationGroup";
+      __typename?: 'AnnotationGroup';
       displayGroup: string;
       annotationGroupId: number;
     };
   };
   omics: {
-    __typename?: "OmicsBase";
+    __typename?: 'OmicsBase';
     displaySymbol: string;
     taxId: number;
     omicsId: number;
@@ -7062,29 +7042,29 @@ export type DifferentialMarkerFragment = {
 };
 
 export type StudiesWithMarkerGenesQueryVariables = Exact<{
-  omicsIds: Array<Scalars["Int"]> | Scalars["Int"];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 export type StudiesWithMarkerGenesQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   differentialExpressionsList: Array<{
-    __typename?: "DifferentialExpression";
+    __typename?: 'DifferentialExpression';
     annotationValueId: number;
     log2Foldchange: number;
     pvalueAdj: number;
     score: number;
-    study: { __typename?: "Study"; studyName: string; studyId: number };
+    study: { __typename?: 'Study'; studyName: string; studyId: number };
     annotationValue: {
-      __typename?: "AnnotationValue";
+      __typename?: 'AnnotationValue';
       displayValue: string;
       annotationGroup: {
-        __typename?: "AnnotationGroup";
+        __typename?: 'AnnotationGroup';
         displayGroup: string;
         annotationGroupId: number;
       };
     };
     omics: {
-      __typename?: "OmicsBase";
+      __typename?: 'OmicsBase';
       displaySymbol: string;
       taxId: number;
       omicsId: number;
@@ -7095,7 +7075,7 @@ export type StudiesWithMarkerGenesQuery = {
 };
 
 export type OmicsGeneFragment = {
-  __typename?: "OmicsBase";
+  __typename?: 'OmicsBase';
   displayName: string;
   displaySymbol: string;
   omicsId: number;
@@ -7105,9 +7085,9 @@ export type OmicsGeneFragment = {
 export type AllGenesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AllGenesQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   omicsBasesList: Array<{
-    __typename?: "OmicsBase";
+    __typename?: 'OmicsBase';
     displayName: string;
     displaySymbol: string;
     omicsId: number;
@@ -7118,15 +7098,15 @@ export type AllGenesQuery = {
 };
 
 export type StudyOmicsQueryVariables = Exact<{
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 }>;
 
 export type StudyOmicsQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   studyOmicsList: Array<{
-    __typename?: "StudyOmic";
+    __typename?: 'StudyOmic';
     omics: {
-      __typename?: "OmicsBase";
+      __typename?: 'OmicsBase';
       omicsId: number;
       displayName: string;
       displaySymbol: string;
@@ -7135,37 +7115,37 @@ export type StudyOmicsQuery = {
 };
 
 export type StudyBasicsQueryVariables = Exact<{
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 }>;
 
 export type StudyBasicsQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   study: {
-    __typename?: "Study";
+    __typename?: 'Study';
     studyId: number;
     studyName: string;
     projections: Array<string>;
     studyLayersList: Array<{
-      __typename?: "StudyLayer";
+      __typename?: 'StudyLayer';
       layer: string;
       studyLayerId: number;
     }>;
     studyOmicsTransposedList: Array<{
-      __typename?: "StudyOmicsTransposed";
+      __typename?: 'StudyOmicsTransposed';
       displayName: Array<string>;
       displaySymbol: Array<string>;
       omicsId: Array<number>;
       omicsType: Array<OmicsType>;
     }>;
     annotationGroupsList: Array<{
-      __typename?: "StudyAnnotationFrontendGroup";
+      __typename?: 'StudyAnnotationFrontendGroup';
       annotationGroupId: number;
       isPrimary: boolean;
       ordering: number;
       displayGroup: string;
       differentialExpressionCalculated: boolean;
       annotationValuesList: Array<{
-        __typename?: "StudyAnnotationFrontendValue";
+        __typename?: 'StudyAnnotationFrontendValue';
         annotationValueId: number;
         displayValue: string;
         color: string;
@@ -7173,12 +7153,12 @@ export type StudyBasicsQuery = {
       }>;
     }>;
     studySampleAnnotationSubsamplingList: Array<{
-      __typename?: "StudySampleAnnotationSubsampling";
+      __typename?: 'StudySampleAnnotationSubsampling';
       annotationValueId: number;
       studySampleIds: Array<number>;
     }>;
     studySampleProjectionSubsamplingTransposedList: Array<{
-      __typename?: "StudySampleProjectionSubsamplingTransposed";
+      __typename?: 'StudySampleProjectionSubsamplingTransposed';
       projectionType: string;
       studySampleId: Array<number>;
       projection: Array<number>;
@@ -7188,15 +7168,15 @@ export type StudyBasicsQuery = {
 };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
-  studyLayerId: Scalars["Int"];
-  omicsIds: Array<Scalars["Int"]> | Scalars["Int"];
-  subsamplingProjection: InputMaybe<Scalars["String"]>;
+  studyLayerId: Scalars['Int'];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  subsamplingProjection: InputMaybe<Scalars['String']>;
 }>;
 
 export type ExpressionByOmicsIdsQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   expressionByOmicsIdsList: Array<{
-    __typename?: "ExpressionByOmic";
+    __typename?: 'ExpressionByOmic';
     omicsId: number;
     studySampleIds: Array<number>;
     values: Array<number>;
@@ -7204,38 +7184,38 @@ export type ExpressionByOmicsIdsQuery = {
 };
 
 export type ExpressionViolinPlotQueryVariables = Exact<{
-  studyId: Scalars["Int"];
-  studyLayerId: Scalars["Int"];
-  omicsId: Scalars["Int"];
-  annotationGroupId: Scalars["Int"];
-  excludeAnnotationValueIds: Array<Scalars["Int"]> | Scalars["Int"];
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 export type ExpressionViolinPlotQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   violinPlot: string;
 };
 
 export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
-  studyId: Scalars["Int"];
-  studyLayerId: Scalars["Int"];
-  omicsIds: Array<Scalars["Int"]> | Scalars["Int"];
-  excludeAnnotationValueIds: Array<Scalars["Int"]> | Scalars["Int"];
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 export type ExpressionCorrelationTrianglePlotQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   correlationTrianglePlot: string;
 };
 
 export type AutocompleteQueryVariables = Exact<{
-  query: Scalars["String"];
+  query: Scalars['String'];
 }>;
 
 export type AutocompleteQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   autocompleteList: Array<{
-    __typename?: "AutocompleteResult";
+    __typename?: 'AutocompleteResult';
     isSynonymOfPreferredTerm: string;
     label: string;
     labelHighlight: string;
@@ -7245,7 +7225,7 @@ export type AutocompleteQuery = {
 };
 
 export type OntologyOverviewFragment = {
-  __typename?: "Ontology";
+  __typename?: 'Ontology';
   name: string;
   ontid: number;
   nodeId: string;
@@ -7254,9 +7234,9 @@ export type OntologyOverviewFragment = {
 export type OntologiesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type OntologiesQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   ontologiesList: Array<{
-    __typename?: "Ontology";
+    __typename?: 'Ontology';
     name: string;
     ontid: number;
     nodeId: string;
@@ -7264,7 +7244,7 @@ export type OntologiesQuery = {
 };
 
 export type DotPlotElementFragment = {
-  __typename?: "ExpressionByAnnotation";
+  __typename?: 'ExpressionByAnnotation';
   studyLayerId: number;
   omicsId: number;
   annotationValueId: number;
@@ -7275,16 +7255,16 @@ export type DotPlotElementFragment = {
 };
 
 export type ExpressionByAnnotationQueryVariables = Exact<{
-  studyLayerIds: Array<Scalars["Int"]> | Scalars["Int"];
-  omicsIds: Array<Scalars["Int"]> | Scalars["Int"];
-  annotationGroupId: Scalars["Int"];
-  excludeAnnotationValueIds: Array<Scalars["Int"]> | Scalars["Int"];
+  studyLayerIds: Array<Scalars['Int']> | Scalars['Int'];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 export type ExpressionByAnnotationQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   expressionByAnnotationList: Array<{
-    __typename?: "ExpressionByAnnotation";
+    __typename?: 'ExpressionByAnnotation';
     studyLayerId: number;
     omicsId: number;
     annotationValueId: number;
@@ -7300,37 +7280,37 @@ export type CellOAnnotationGroupIdQueryVariables = Exact<{
 }>;
 
 export type CellOAnnotationGroupIdQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   annotationGroupsList: Array<{
-    __typename?: "AnnotationGroup";
+    __typename?: 'AnnotationGroup';
     annotationGroupId: number;
   }>;
 };
 
 export type HalfAVolcanoQueryVariables = Exact<{
-  annotationValueId: Scalars["Int"];
-  studyId: Scalars["Int"];
+  annotationValueId: Scalars['Int'];
+  studyId: Scalars['Int'];
 }>;
 
 export type HalfAVolcanoQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   differentialExpressionsList: Array<{
-    __typename?: "DifferentialExpression";
+    __typename?: 'DifferentialExpression';
     log2Foldchange: number;
     pvalueAdj: number;
   }>;
 };
 
 export type AnnotationValueCoocurrenceQueryVariables = Exact<{
-  studyId: Scalars["Int"];
-  annotationGroupId1: Scalars["Int"];
-  annotationGroupId2: Scalars["Int"];
+  studyId: Scalars['Int'];
+  annotationGroupId1: Scalars['Int'];
+  annotationGroupId2: Scalars['Int'];
 }>;
 
 export type AnnotationValueCoocurrenceQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   annotationValueCoocurrenceList: Array<{
-    __typename?: "AnnotationValueCoocurrenceRecord";
+    __typename?: 'AnnotationValueCoocurrenceRecord';
     annotationValueId1: number;
     annotationValueId2: number;
     occurrence: number;
@@ -7338,25 +7318,23 @@ export type AnnotationValueCoocurrenceQuery = {
 };
 
 export type SaveUserAnnotationMutationVariables = Exact<{
-  studyId: Scalars["Int"];
-  annotationGroupName: Scalars["String"];
-  selectedSampleIds: Scalars["String"];
-  unexpressedSamplesOmicsIds: InputMaybe<
-    Array<Scalars["Int"]> | Scalars["Int"]
-  >;
+  studyId: Scalars['Int'];
+  annotationGroupName: Scalars['String'];
+  selectedSampleIds: Scalars['String'];
+  unexpressedSamplesOmicsIds: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
 export type SaveUserAnnotationMutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   userAnnotationDefine: {
-    __typename?: "UserAnnotationDefinePayload";
+    __typename?: 'UserAnnotationDefinePayload';
     clientMutationId: string;
     integer: number;
   };
 };
 
 export type StudyAdminDetailsFragment = {
-  __typename?: "StudyAdminDetail";
+  __typename?: 'StudyAdminDetail';
   studyId: number;
   studyName: string;
   description: string;
@@ -7379,10 +7357,10 @@ export type StudyAdminDetailsFragment = {
 export type StudyAdminListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type StudyAdminListQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   userStudyUploadConfigured: boolean;
   studyAdminDetailsList: Array<{
-    __typename?: "StudyAdminDetail";
+    __typename?: 'StudyAdminDetail';
     studyId: number;
     studyName: string;
     description: string;
@@ -7404,55 +7382,55 @@ export type StudyAdminListQuery = {
 };
 
 export type StudyLogsQueryVariables = Exact<{
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 }>;
 
 export type StudyLogsQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
   studyImportLogsList: Array<{
-    __typename?: "StudyImportLog";
+    __typename?: 'StudyImportLog';
     importFile: string;
     importLog: string;
   }>;
 };
 
 export type StudyUpdateMutationVariables = Exact<{
-  studyId: Scalars["Int"];
-  studyName: Scalars["String"];
-  description: InputMaybe<Scalars["String"]>;
-  readerPermissions: InputMaybe<Array<Scalars["String"]> | Scalars["String"]>;
-  adminPermissions: InputMaybe<Array<Scalars["String"]> | Scalars["String"]>;
-  tissueNcitIds: InputMaybe<Array<Scalars["String"]> | Scalars["String"]>;
-  diseaseMeshIds: InputMaybe<Array<Scalars["String"]> | Scalars["String"]>;
-  visible: Scalars["Boolean"];
-  externalWebsite: InputMaybe<Scalars["String"]>;
+  studyId: Scalars['Int'];
+  studyName: Scalars['String'];
+  description: InputMaybe<Scalars['String']>;
+  readerPermissions: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  adminPermissions: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  visible: Scalars['Boolean'];
+  externalWebsite: InputMaybe<Scalars['String']>;
 }>;
 
 export type StudyUpdateMutation = {
-  __typename?: "Mutation";
-  updateStudy: { __typename?: "UpdateStudyPayload"; clientMutationId: string };
+  __typename?: 'Mutation';
+  updateStudy: { __typename?: 'UpdateStudyPayload'; clientMutationId: string };
 };
 
 export type StudyDeleteMutationVariables = Exact<{
-  studyId: Scalars["Int"];
+  studyId: Scalars['Int'];
 }>;
 
 export type StudyDeleteMutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   deleteStudy: {
-    __typename?: "DeleteStudyPayload";
-    study: { __typename?: "Study"; studyId: number };
+    __typename?: 'DeleteStudyPayload';
+    study: { __typename?: 'Study'; studyId: number };
   };
 };
 
 export type CreateStudyUploadMutationVariables = Exact<{
-  studyName: Scalars["String"];
-  filetype: Scalars["String"];
+  studyName: Scalars['String'];
+  filetype: Scalars['String'];
 }>;
 
 export type CreateStudyUploadMutation = {
-  __typename?: "Mutation";
-  createStudyUpload: { __typename?: "CreateStudyUploadPayload"; json: any };
+  __typename?: 'Mutation';
+  createStudyUpload: { __typename?: 'CreateStudyUploadPayload'; json: any };
 };
 
 export const StudyInfoFragmentDoc = gql`
@@ -7626,48 +7604,20 @@ export const CorrelatedgenesDocument = gql`
  *   },
  * });
  */
-export function useCorrelatedgenesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    CorrelatedgenesQuery,
-    CorrelatedgenesQueryVariables
-  >,
-) {
+export function useCorrelatedgenesQuery(baseOptions: Apollo.QueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(
-    CorrelatedgenesDocument,
-    options,
-  );
+  return Apollo.useQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
 }
-export function useCorrelatedgenesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CorrelatedgenesQuery,
-    CorrelatedgenesQueryVariables
-  >,
-) {
+export function useCorrelatedgenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    CorrelatedgenesQuery,
-    CorrelatedgenesQueryVariables
-  >(CorrelatedgenesDocument, options);
+  return Apollo.useLazyQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
 }
-export type CorrelatedgenesQueryHookResult = ReturnType<
-  typeof useCorrelatedgenesQuery
->;
-export type CorrelatedgenesLazyQueryHookResult = ReturnType<
-  typeof useCorrelatedgenesLazyQuery
->;
-export type CorrelatedgenesQueryResult = Apollo.QueryResult<
-  CorrelatedgenesQuery,
-  CorrelatedgenesQueryVariables
->;
+export type CorrelatedgenesQueryHookResult = ReturnType<typeof useCorrelatedgenesQuery>;
+export type CorrelatedgenesLazyQueryHookResult = ReturnType<typeof useCorrelatedgenesLazyQuery>;
+export type CorrelatedgenesQueryResult = Apollo.QueryResult<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>;
 export const DegDocument = gql`
   query deg($studyId: Int!, $annotationValueId: Int!) {
-    differentialExpressionVsList(
-      filter: {
-        annotationValueId: { equalTo: $annotationValueId }
-        studyId: { equalTo: $studyId }
-      }
-    ) {
+    differentialExpressionVsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
       omicsId
       studyId
       annotationValueId
@@ -7698,15 +7648,11 @@ export const DegDocument = gql`
  *   },
  * });
  */
-export function useDegQuery(
-  baseOptions: Apollo.QueryHookOptions<DegQuery, DegQueryVariables>,
-) {
+export function useDegQuery(baseOptions: Apollo.QueryHookOptions<DegQuery, DegQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<DegQuery, DegQueryVariables>(DegDocument, options);
 }
-export function useDegLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<DegQuery, DegQueryVariables>,
-) {
+export function useDegLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DegQuery, DegQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<DegQuery, DegQueryVariables>(DegDocument, options);
 }
@@ -7741,39 +7687,20 @@ export const StudiesDocument = gql`
  *   },
  * });
  */
-export function useStudiesQuery(
-  baseOptions?: Apollo.QueryHookOptions<StudiesQuery, StudiesQueryVariables>,
-) {
+export function useStudiesQuery(baseOptions?: Apollo.QueryHookOptions<StudiesQuery, StudiesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudiesQuery, StudiesQueryVariables>(
-    StudiesDocument,
-    options,
-  );
+  return Apollo.useQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
 }
-export function useStudiesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudiesQuery,
-    StudiesQueryVariables
-  >,
-) {
+export function useStudiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudiesQuery, StudiesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudiesQuery, StudiesQueryVariables>(
-    StudiesDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
 }
 export type StudiesQueryHookResult = ReturnType<typeof useStudiesQuery>;
 export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
-export type StudiesQueryResult = Apollo.QueryResult<
-  StudiesQuery,
-  StudiesQueryVariables
->;
+export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
 export const StudiesWithMarkerGenesDocument = gql`
   query studiesWithMarkerGenes($omicsIds: [Int!]!) {
-    differentialExpressionsList(
-      filter: { omicsId: { in: $omicsIds } }
-      orderBy: LOG2_FOLDCHANGE_DESC
-    ) {
+    differentialExpressionsList(filter: { omicsId: { in: $omicsIds } }, orderBy: LOG2_FOLDCHANGE_DESC) {
       ...DifferentialMarker
     }
   }
@@ -7796,40 +7723,19 @@ export const StudiesWithMarkerGenesDocument = gql`
  *   },
  * });
  */
-export function useStudiesWithMarkerGenesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    StudiesWithMarkerGenesQuery,
-    StudiesWithMarkerGenesQueryVariables
-  >,
-) {
+export function useStudiesWithMarkerGenesQuery(baseOptions: Apollo.QueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    StudiesWithMarkerGenesQuery,
-    StudiesWithMarkerGenesQueryVariables
-  >(StudiesWithMarkerGenesDocument, options);
+  return Apollo.useQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
 }
 export function useStudiesWithMarkerGenesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudiesWithMarkerGenesQuery,
-    StudiesWithMarkerGenesQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    StudiesWithMarkerGenesQuery,
-    StudiesWithMarkerGenesQueryVariables
-  >(StudiesWithMarkerGenesDocument, options);
+  return Apollo.useLazyQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
 }
-export type StudiesWithMarkerGenesQueryHookResult = ReturnType<
-  typeof useStudiesWithMarkerGenesQuery
->;
-export type StudiesWithMarkerGenesLazyQueryHookResult = ReturnType<
-  typeof useStudiesWithMarkerGenesLazyQuery
->;
-export type StudiesWithMarkerGenesQueryResult = Apollo.QueryResult<
-  StudiesWithMarkerGenesQuery,
-  StudiesWithMarkerGenesQueryVariables
->;
+export type StudiesWithMarkerGenesQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesQuery>;
+export type StudiesWithMarkerGenesLazyQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesLazyQuery>;
+export type StudiesWithMarkerGenesQueryResult = Apollo.QueryResult<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>;
 export const AllGenesDocument = gql`
   query allGenes {
     omicsBasesList(filter: { omicsType: { equalTo: GENE } }) {
@@ -7856,35 +7762,17 @@ export const AllGenesDocument = gql`
  *   },
  * });
  */
-export function useAllGenesQuery(
-  baseOptions?: Apollo.QueryHookOptions<AllGenesQuery, AllGenesQueryVariables>,
-) {
+export function useAllGenesQuery(baseOptions?: Apollo.QueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AllGenesQuery, AllGenesQueryVariables>(
-    AllGenesDocument,
-    options,
-  );
+  return Apollo.useQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
 }
-export function useAllGenesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AllGenesQuery,
-    AllGenesQueryVariables
-  >,
-) {
+export function useAllGenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AllGenesQuery, AllGenesQueryVariables>(
-    AllGenesDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
 }
 export type AllGenesQueryHookResult = ReturnType<typeof useAllGenesQuery>;
-export type AllGenesLazyQueryHookResult = ReturnType<
-  typeof useAllGenesLazyQuery
->;
-export type AllGenesQueryResult = Apollo.QueryResult<
-  AllGenesQuery,
-  AllGenesQueryVariables
->;
+export type AllGenesLazyQueryHookResult = ReturnType<typeof useAllGenesLazyQuery>;
+export type AllGenesQueryResult = Apollo.QueryResult<AllGenesQuery, AllGenesQueryVariables>;
 export const StudyOmicsDocument = gql`
   query studyOmics($studyId: Int!) {
     studyOmicsList(filter: { studyId: { equalTo: $studyId } }) {
@@ -7913,38 +7801,17 @@ export const StudyOmicsDocument = gql`
  *   },
  * });
  */
-export function useStudyOmicsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    StudyOmicsQuery,
-    StudyOmicsQueryVariables
-  >,
-) {
+export function useStudyOmicsQuery(baseOptions: Apollo.QueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(
-    StudyOmicsDocument,
-    options,
-  );
+  return Apollo.useQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
 }
-export function useStudyOmicsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudyOmicsQuery,
-    StudyOmicsQueryVariables
-  >,
-) {
+export function useStudyOmicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(
-    StudyOmicsDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
 }
 export type StudyOmicsQueryHookResult = ReturnType<typeof useStudyOmicsQuery>;
-export type StudyOmicsLazyQueryHookResult = ReturnType<
-  typeof useStudyOmicsLazyQuery
->;
-export type StudyOmicsQueryResult = Apollo.QueryResult<
-  StudyOmicsQuery,
-  StudyOmicsQueryVariables
->;
+export type StudyOmicsLazyQueryHookResult = ReturnType<typeof useStudyOmicsLazyQuery>;
+export type StudyOmicsQueryResult = Apollo.QueryResult<StudyOmicsQuery, StudyOmicsQueryVariables>;
 export const StudyBasicsDocument = gql`
   query StudyBasics($studyId: Int!) {
     study(studyId: $studyId) {
@@ -7970,49 +7837,20 @@ export const StudyBasicsDocument = gql`
  *   },
  * });
  */
-export function useStudyBasicsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    StudyBasicsQuery,
-    StudyBasicsQueryVariables
-  >,
-) {
+export function useStudyBasicsQuery(baseOptions: Apollo.QueryHookOptions<StudyBasicsQuery, StudyBasicsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(
-    StudyBasicsDocument,
-    options,
-  );
+  return Apollo.useQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
 }
-export function useStudyBasicsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudyBasicsQuery,
-    StudyBasicsQueryVariables
-  >,
-) {
+export function useStudyBasicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasicsQuery, StudyBasicsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(
-    StudyBasicsDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
 }
 export type StudyBasicsQueryHookResult = ReturnType<typeof useStudyBasicsQuery>;
-export type StudyBasicsLazyQueryHookResult = ReturnType<
-  typeof useStudyBasicsLazyQuery
->;
-export type StudyBasicsQueryResult = Apollo.QueryResult<
-  StudyBasicsQuery,
-  StudyBasicsQueryVariables
->;
+export type StudyBasicsLazyQueryHookResult = ReturnType<typeof useStudyBasicsLazyQuery>;
+export type StudyBasicsQueryResult = Apollo.QueryResult<StudyBasicsQuery, StudyBasicsQueryVariables>;
 export const ExpressionByOmicsIdsDocument = gql`
-  query ExpressionByOmicsIds(
-    $studyLayerId: Int!
-    $omicsIds: [Int!]!
-    $subsamplingProjection: String
-  ) {
-    expressionByOmicsIdsList(
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: $omicsIds
-      pSubsamplingProjection: $subsamplingProjection
-    ) {
+  query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: String) {
+    expressionByOmicsIdsList(pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pSubsamplingProjection: $subsamplingProjection) {
       omicsId
       studySampleIds
       values
@@ -8038,48 +7876,19 @@ export const ExpressionByOmicsIdsDocument = gql`
  *   },
  * });
  */
-export function useExpressionByOmicsIdsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ExpressionByOmicsIdsQuery,
-    ExpressionByOmicsIdsQueryVariables
-  >,
-) {
+export function useExpressionByOmicsIdsQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ExpressionByOmicsIdsQuery,
-    ExpressionByOmicsIdsQueryVariables
-  >(ExpressionByOmicsIdsDocument, options);
+  return Apollo.useQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
 }
-export function useExpressionByOmicsIdsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ExpressionByOmicsIdsQuery,
-    ExpressionByOmicsIdsQueryVariables
-  >,
-) {
+export function useExpressionByOmicsIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ExpressionByOmicsIdsQuery,
-    ExpressionByOmicsIdsQueryVariables
-  >(ExpressionByOmicsIdsDocument, options);
+  return Apollo.useLazyQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
 }
-export type ExpressionByOmicsIdsQueryHookResult = ReturnType<
-  typeof useExpressionByOmicsIdsQuery
->;
-export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<
-  typeof useExpressionByOmicsIdsLazyQuery
->;
-export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<
-  ExpressionByOmicsIdsQuery,
-  ExpressionByOmicsIdsQueryVariables
->;
+export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsQuery>;
+export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
+export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
 export const ExpressionViolinPlotDocument = gql`
-  query ExpressionViolinPlot(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsId: Int!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
+  query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
     violinPlot(
       pStudyId: $studyId
       pStudyLayerId: $studyLayerId
@@ -8110,53 +7919,20 @@ export const ExpressionViolinPlotDocument = gql`
  *   },
  * });
  */
-export function useExpressionViolinPlotQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ExpressionViolinPlotQuery,
-    ExpressionViolinPlotQueryVariables
-  >,
-) {
+export function useExpressionViolinPlotQuery(baseOptions: Apollo.QueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ExpressionViolinPlotQuery,
-    ExpressionViolinPlotQueryVariables
-  >(ExpressionViolinPlotDocument, options);
+  return Apollo.useQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
 }
-export function useExpressionViolinPlotLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ExpressionViolinPlotQuery,
-    ExpressionViolinPlotQueryVariables
-  >,
-) {
+export function useExpressionViolinPlotLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ExpressionViolinPlotQuery,
-    ExpressionViolinPlotQueryVariables
-  >(ExpressionViolinPlotDocument, options);
+  return Apollo.useLazyQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
 }
-export type ExpressionViolinPlotQueryHookResult = ReturnType<
-  typeof useExpressionViolinPlotQuery
->;
-export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<
-  typeof useExpressionViolinPlotLazyQuery
->;
-export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<
-  ExpressionViolinPlotQuery,
-  ExpressionViolinPlotQueryVariables
->;
+export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressionViolinPlotQuery>;
+export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
+export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
 export const ExpressionCorrelationTrianglePlotDocument = gql`
-  query ExpressionCorrelationTrianglePlot(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsIds: [Int!]!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
-    correlationTrianglePlot(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: $omicsIds
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-    )
+  query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+    correlationTrianglePlot(pStudyId: $studyId, pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
   }
 `;
 
@@ -8180,35 +7956,25 @@ export const ExpressionCorrelationTrianglePlotDocument = gql`
  * });
  */
 export function useExpressionCorrelationTrianglePlotQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ExpressionCorrelationTrianglePlotQuery,
-    ExpressionCorrelationTrianglePlotQueryVariables
-  >,
+  baseOptions: Apollo.QueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ExpressionCorrelationTrianglePlotQuery,
-    ExpressionCorrelationTrianglePlotQueryVariables
-  >(ExpressionCorrelationTrianglePlotDocument, options);
+  return Apollo.useQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(
+    ExpressionCorrelationTrianglePlotDocument,
+    options,
+  );
 }
 export function useExpressionCorrelationTrianglePlotLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ExpressionCorrelationTrianglePlotQuery,
-    ExpressionCorrelationTrianglePlotQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ExpressionCorrelationTrianglePlotQuery,
-    ExpressionCorrelationTrianglePlotQueryVariables
-  >(ExpressionCorrelationTrianglePlotDocument, options);
+  return Apollo.useLazyQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(
+    ExpressionCorrelationTrianglePlotDocument,
+    options,
+  );
 }
-export type ExpressionCorrelationTrianglePlotQueryHookResult = ReturnType<
-  typeof useExpressionCorrelationTrianglePlotQuery
->;
-export type ExpressionCorrelationTrianglePlotLazyQueryHookResult = ReturnType<
-  typeof useExpressionCorrelationTrianglePlotLazyQuery
->;
+export type ExpressionCorrelationTrianglePlotQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotQuery>;
+export type ExpressionCorrelationTrianglePlotLazyQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotLazyQuery>;
 export type ExpressionCorrelationTrianglePlotQueryResult = Apollo.QueryResult<
   ExpressionCorrelationTrianglePlotQuery,
   ExpressionCorrelationTrianglePlotQueryVariables
@@ -8241,40 +8007,17 @@ export const AutocompleteDocument = gql`
  *   },
  * });
  */
-export function useAutocompleteQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    AutocompleteQuery,
-    AutocompleteQueryVariables
-  >,
-) {
+export function useAutocompleteQuery(baseOptions: Apollo.QueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AutocompleteQuery, AutocompleteQueryVariables>(
-    AutocompleteDocument,
-    options,
-  );
+  return Apollo.useQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
 }
-export function useAutocompleteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AutocompleteQuery,
-    AutocompleteQueryVariables
-  >,
-) {
+export function useAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AutocompleteQuery, AutocompleteQueryVariables>(
-    AutocompleteDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
 }
-export type AutocompleteQueryHookResult = ReturnType<
-  typeof useAutocompleteQuery
->;
-export type AutocompleteLazyQueryHookResult = ReturnType<
-  typeof useAutocompleteLazyQuery
->;
-export type AutocompleteQueryResult = Apollo.QueryResult<
-  AutocompleteQuery,
-  AutocompleteQueryVariables
->;
+export type AutocompleteQueryHookResult = ReturnType<typeof useAutocompleteQuery>;
+export type AutocompleteLazyQueryHookResult = ReturnType<typeof useAutocompleteLazyQuery>;
+export type AutocompleteQueryResult = Apollo.QueryResult<AutocompleteQuery, AutocompleteQueryVariables>;
 export const OntologiesDocument = gql`
   query ontologies {
     ontologiesList {
@@ -8299,45 +8042,19 @@ export const OntologiesDocument = gql`
  *   },
  * });
  */
-export function useOntologiesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    OntologiesQuery,
-    OntologiesQueryVariables
-  >,
-) {
+export function useOntologiesQuery(baseOptions?: Apollo.QueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OntologiesQuery, OntologiesQueryVariables>(
-    OntologiesDocument,
-    options,
-  );
+  return Apollo.useQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
 }
-export function useOntologiesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    OntologiesQuery,
-    OntologiesQueryVariables
-  >,
-) {
+export function useOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<OntologiesQuery, OntologiesQueryVariables>(
-    OntologiesDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
 }
 export type OntologiesQueryHookResult = ReturnType<typeof useOntologiesQuery>;
-export type OntologiesLazyQueryHookResult = ReturnType<
-  typeof useOntologiesLazyQuery
->;
-export type OntologiesQueryResult = Apollo.QueryResult<
-  OntologiesQuery,
-  OntologiesQueryVariables
->;
+export type OntologiesLazyQueryHookResult = ReturnType<typeof useOntologiesLazyQuery>;
+export type OntologiesQueryResult = Apollo.QueryResult<OntologiesQuery, OntologiesQueryVariables>;
 export const ExpressionByAnnotationDocument = gql`
-  query expressionByAnnotation(
-    $studyLayerIds: [Int!]!
-    $omicsIds: [Int!]!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-  ) {
+  query expressionByAnnotation($studyLayerIds: [Int!]!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
     expressionByAnnotationList(
       pStudyLayerIds: $studyLayerIds
       pOmicsIds: $omicsIds
@@ -8369,45 +8086,22 @@ export const ExpressionByAnnotationDocument = gql`
  *   },
  * });
  */
-export function useExpressionByAnnotationQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ExpressionByAnnotationQuery,
-    ExpressionByAnnotationQueryVariables
-  >,
-) {
+export function useExpressionByAnnotationQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    ExpressionByAnnotationQuery,
-    ExpressionByAnnotationQueryVariables
-  >(ExpressionByAnnotationDocument, options);
+  return Apollo.useQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
 }
 export function useExpressionByAnnotationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ExpressionByAnnotationQuery,
-    ExpressionByAnnotationQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ExpressionByAnnotationQuery,
-    ExpressionByAnnotationQueryVariables
-  >(ExpressionByAnnotationDocument, options);
+  return Apollo.useLazyQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
 }
-export type ExpressionByAnnotationQueryHookResult = ReturnType<
-  typeof useExpressionByAnnotationQuery
->;
-export type ExpressionByAnnotationLazyQueryHookResult = ReturnType<
-  typeof useExpressionByAnnotationLazyQuery
->;
-export type ExpressionByAnnotationQueryResult = Apollo.QueryResult<
-  ExpressionByAnnotationQuery,
-  ExpressionByAnnotationQueryVariables
->;
+export type ExpressionByAnnotationQueryHookResult = ReturnType<typeof useExpressionByAnnotationQuery>;
+export type ExpressionByAnnotationLazyQueryHookResult = ReturnType<typeof useExpressionByAnnotationLazyQuery>;
+export type ExpressionByAnnotationQueryResult = Apollo.QueryResult<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>;
 export const CellOAnnotationGroupIdDocument = gql`
   query CellOAnnotationGroupId {
-    annotationGroupsList(
-      filter: { h5AdColumn: { equalTo: "CellO_celltype" } }
-    ) {
+    annotationGroupsList(filter: { h5AdColumn: { equalTo: "CellO_celltype" } }) {
       annotationGroupId
     }
   }
@@ -8428,48 +8122,22 @@ export const CellOAnnotationGroupIdDocument = gql`
  *   },
  * });
  */
-export function useCellOAnnotationGroupIdQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    CellOAnnotationGroupIdQuery,
-    CellOAnnotationGroupIdQueryVariables
-  >,
-) {
+export function useCellOAnnotationGroupIdQuery(baseOptions?: Apollo.QueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    CellOAnnotationGroupIdQuery,
-    CellOAnnotationGroupIdQueryVariables
-  >(CellOAnnotationGroupIdDocument, options);
+  return Apollo.useQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
 }
 export function useCellOAnnotationGroupIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CellOAnnotationGroupIdQuery,
-    CellOAnnotationGroupIdQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    CellOAnnotationGroupIdQuery,
-    CellOAnnotationGroupIdQueryVariables
-  >(CellOAnnotationGroupIdDocument, options);
+  return Apollo.useLazyQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
 }
-export type CellOAnnotationGroupIdQueryHookResult = ReturnType<
-  typeof useCellOAnnotationGroupIdQuery
->;
-export type CellOAnnotationGroupIdLazyQueryHookResult = ReturnType<
-  typeof useCellOAnnotationGroupIdLazyQuery
->;
-export type CellOAnnotationGroupIdQueryResult = Apollo.QueryResult<
-  CellOAnnotationGroupIdQuery,
-  CellOAnnotationGroupIdQueryVariables
->;
+export type CellOAnnotationGroupIdQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdQuery>;
+export type CellOAnnotationGroupIdLazyQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdLazyQuery>;
+export type CellOAnnotationGroupIdQueryResult = Apollo.QueryResult<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>;
 export const HalfAVolcanoDocument = gql`
   query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
-    differentialExpressionsList(
-      filter: {
-        annotationValueId: { equalTo: $annotationValueId }
-        studyId: { equalTo: $studyId }
-      }
-    ) {
+    differentialExpressionsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
       log2Foldchange
       pvalueAdj
     }
@@ -8493,51 +8161,20 @@ export const HalfAVolcanoDocument = gql`
  *   },
  * });
  */
-export function useHalfAVolcanoQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    HalfAVolcanoQuery,
-    HalfAVolcanoQueryVariables
-  >,
-) {
+export function useHalfAVolcanoQuery(baseOptions: Apollo.QueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(
-    HalfAVolcanoDocument,
-    options,
-  );
+  return Apollo.useQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
 }
-export function useHalfAVolcanoLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    HalfAVolcanoQuery,
-    HalfAVolcanoQueryVariables
-  >,
-) {
+export function useHalfAVolcanoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(
-    HalfAVolcanoDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
 }
-export type HalfAVolcanoQueryHookResult = ReturnType<
-  typeof useHalfAVolcanoQuery
->;
-export type HalfAVolcanoLazyQueryHookResult = ReturnType<
-  typeof useHalfAVolcanoLazyQuery
->;
-export type HalfAVolcanoQueryResult = Apollo.QueryResult<
-  HalfAVolcanoQuery,
-  HalfAVolcanoQueryVariables
->;
+export type HalfAVolcanoQueryHookResult = ReturnType<typeof useHalfAVolcanoQuery>;
+export type HalfAVolcanoLazyQueryHookResult = ReturnType<typeof useHalfAVolcanoLazyQuery>;
+export type HalfAVolcanoQueryResult = Apollo.QueryResult<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>;
 export const AnnotationValueCoocurrenceDocument = gql`
-  query annotationValueCoocurrence(
-    $studyId: Int!
-    $annotationGroupId1: Int!
-    $annotationGroupId2: Int!
-  ) {
-    annotationValueCoocurrenceList(
-      studyId: $studyId
-      annotationGroupId1: $annotationGroupId1
-      annotationGroupId2: $annotationGroupId2
-    ) {
+  query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
+    annotationValueCoocurrenceList(studyId: $studyId, annotationGroupId1: $annotationGroupId1, annotationGroupId2: $annotationGroupId2) {
       annotationValueId1
       annotationValueId2
       occurrence
@@ -8564,46 +8201,22 @@ export const AnnotationValueCoocurrenceDocument = gql`
  * });
  */
 export function useAnnotationValueCoocurrenceQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    AnnotationValueCoocurrenceQuery,
-    AnnotationValueCoocurrenceQueryVariables
-  >,
+  baseOptions: Apollo.QueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    AnnotationValueCoocurrenceQuery,
-    AnnotationValueCoocurrenceQueryVariables
-  >(AnnotationValueCoocurrenceDocument, options);
+  return Apollo.useQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
 }
 export function useAnnotationValueCoocurrenceLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AnnotationValueCoocurrenceQuery,
-    AnnotationValueCoocurrenceQueryVariables
-  >,
+  baseOptions?: Apollo.LazyQueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    AnnotationValueCoocurrenceQuery,
-    AnnotationValueCoocurrenceQueryVariables
-  >(AnnotationValueCoocurrenceDocument, options);
+  return Apollo.useLazyQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
 }
-export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<
-  typeof useAnnotationValueCoocurrenceQuery
->;
-export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<
-  typeof useAnnotationValueCoocurrenceLazyQuery
->;
-export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<
-  AnnotationValueCoocurrenceQuery,
-  AnnotationValueCoocurrenceQueryVariables
->;
+export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceQuery>;
+export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceLazyQuery>;
+export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>;
 export const SaveUserAnnotationDocument = gql`
-  mutation SaveUserAnnotation(
-    $studyId: Int!
-    $annotationGroupName: String!
-    $selectedSampleIds: String!
-    $unexpressedSamplesOmicsIds: [Int!]
-  ) {
+  mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
     userAnnotationDefine(
       input: {
         pStudyId: $studyId
@@ -8638,27 +8251,13 @@ export const SaveUserAnnotationDocument = gql`
  *   },
  * });
  */
-export function useSaveUserAnnotationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SaveUserAnnotationMutation,
-    SaveUserAnnotationMutationVariables
-  >,
-) {
+export function useSaveUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    SaveUserAnnotationMutation,
-    SaveUserAnnotationMutationVariables
-  >(SaveUserAnnotationDocument, options);
+  return Apollo.useMutation<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>(SaveUserAnnotationDocument, options);
 }
-export type SaveUserAnnotationMutationHookResult = ReturnType<
-  typeof useSaveUserAnnotationMutation
->;
-export type SaveUserAnnotationMutationResult =
-  Apollo.MutationResult<SaveUserAnnotationMutation>;
-export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<
-  SaveUserAnnotationMutation,
-  SaveUserAnnotationMutationVariables
->;
+export type SaveUserAnnotationMutationHookResult = ReturnType<typeof useSaveUserAnnotationMutation>;
+export type SaveUserAnnotationMutationResult = Apollo.MutationResult<SaveUserAnnotationMutation>;
+export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>;
 export const StudyAdminListDocument = gql`
   query studyAdminList {
     studyAdminDetailsList {
@@ -8684,40 +8283,17 @@ export const StudyAdminListDocument = gql`
  *   },
  * });
  */
-export function useStudyAdminListQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    StudyAdminListQuery,
-    StudyAdminListQueryVariables
-  >,
-) {
+export function useStudyAdminListQuery(baseOptions?: Apollo.QueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(
-    StudyAdminListDocument,
-    options,
-  );
+  return Apollo.useQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
 }
-export function useStudyAdminListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudyAdminListQuery,
-    StudyAdminListQueryVariables
-  >,
-) {
+export function useStudyAdminListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(
-    StudyAdminListDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
 }
-export type StudyAdminListQueryHookResult = ReturnType<
-  typeof useStudyAdminListQuery
->;
-export type StudyAdminListLazyQueryHookResult = ReturnType<
-  typeof useStudyAdminListLazyQuery
->;
-export type StudyAdminListQueryResult = Apollo.QueryResult<
-  StudyAdminListQuery,
-  StudyAdminListQueryVariables
->;
+export type StudyAdminListQueryHookResult = ReturnType<typeof useStudyAdminListQuery>;
+export type StudyAdminListLazyQueryHookResult = ReturnType<typeof useStudyAdminListLazyQuery>;
+export type StudyAdminListQueryResult = Apollo.QueryResult<StudyAdminListQuery, StudyAdminListQueryVariables>;
 export const StudyLogsDocument = gql`
   query studyLogs($studyId: Int!) {
     studyImportLogsList(condition: { studyId: $studyId }) {
@@ -8743,35 +8319,17 @@ export const StudyLogsDocument = gql`
  *   },
  * });
  */
-export function useStudyLogsQuery(
-  baseOptions: Apollo.QueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>,
-) {
+export function useStudyLogsQuery(baseOptions: Apollo.QueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyLogsQuery, StudyLogsQueryVariables>(
-    StudyLogsDocument,
-    options,
-  );
+  return Apollo.useQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
 }
-export function useStudyLogsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    StudyLogsQuery,
-    StudyLogsQueryVariables
-  >,
-) {
+export function useStudyLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyLogsQuery, StudyLogsQueryVariables>(
-    StudyLogsDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
 }
 export type StudyLogsQueryHookResult = ReturnType<typeof useStudyLogsQuery>;
-export type StudyLogsLazyQueryHookResult = ReturnType<
-  typeof useStudyLogsLazyQuery
->;
-export type StudyLogsQueryResult = Apollo.QueryResult<
-  StudyLogsQuery,
-  StudyLogsQueryVariables
->;
+export type StudyLogsLazyQueryHookResult = ReturnType<typeof useStudyLogsLazyQuery>;
+export type StudyLogsQueryResult = Apollo.QueryResult<StudyLogsQuery, StudyLogsQueryVariables>;
 export const StudyUpdateDocument = gql`
   mutation studyUpdate(
     $studyId: Int!
@@ -8829,27 +8387,13 @@ export const StudyUpdateDocument = gql`
  *   },
  * });
  */
-export function useStudyUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    StudyUpdateMutation,
-    StudyUpdateMutationVariables
-  >,
-) {
+export function useStudyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<StudyUpdateMutation, StudyUpdateMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<StudyUpdateMutation, StudyUpdateMutationVariables>(
-    StudyUpdateDocument,
-    options,
-  );
+  return Apollo.useMutation<StudyUpdateMutation, StudyUpdateMutationVariables>(StudyUpdateDocument, options);
 }
-export type StudyUpdateMutationHookResult = ReturnType<
-  typeof useStudyUpdateMutation
->;
-export type StudyUpdateMutationResult =
-  Apollo.MutationResult<StudyUpdateMutation>;
-export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<
-  StudyUpdateMutation,
-  StudyUpdateMutationVariables
->;
+export type StudyUpdateMutationHookResult = ReturnType<typeof useStudyUpdateMutation>;
+export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutation>;
+export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
 export const StudyDeleteDocument = gql`
   mutation studyDelete($studyId: Int!) {
     deleteStudy(input: { studyId: $studyId }) {
@@ -8877,27 +8421,13 @@ export const StudyDeleteDocument = gql`
  *   },
  * });
  */
-export function useStudyDeleteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    StudyDeleteMutation,
-    StudyDeleteMutationVariables
-  >,
-) {
+export function useStudyDeleteMutation(baseOptions?: Apollo.MutationHookOptions<StudyDeleteMutation, StudyDeleteMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<StudyDeleteMutation, StudyDeleteMutationVariables>(
-    StudyDeleteDocument,
-    options,
-  );
+  return Apollo.useMutation<StudyDeleteMutation, StudyDeleteMutationVariables>(StudyDeleteDocument, options);
 }
-export type StudyDeleteMutationHookResult = ReturnType<
-  typeof useStudyDeleteMutation
->;
-export type StudyDeleteMutationResult =
-  Apollo.MutationResult<StudyDeleteMutation>;
-export type StudyDeleteMutationOptions = Apollo.BaseMutationOptions<
-  StudyDeleteMutation,
-  StudyDeleteMutationVariables
->;
+export type StudyDeleteMutationHookResult = ReturnType<typeof useStudyDeleteMutation>;
+export type StudyDeleteMutationResult = Apollo.MutationResult<StudyDeleteMutation>;
+export type StudyDeleteMutationOptions = Apollo.BaseMutationOptions<StudyDeleteMutation, StudyDeleteMutationVariables>;
 export const CreateStudyUploadDocument = gql`
   mutation createStudyUpload($studyName: String!, $filetype: String!) {
     createStudyUpload(input: { studyName: $studyName, filetype: $filetype }) {
@@ -8924,24 +8454,10 @@ export const CreateStudyUploadDocument = gql`
  *   },
  * });
  */
-export function useCreateStudyUploadMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateStudyUploadMutation,
-    CreateStudyUploadMutationVariables
-  >,
-) {
+export function useCreateStudyUploadMutation(baseOptions?: Apollo.MutationHookOptions<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateStudyUploadMutation,
-    CreateStudyUploadMutationVariables
-  >(CreateStudyUploadDocument, options);
+  return Apollo.useMutation<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>(CreateStudyUploadDocument, options);
 }
-export type CreateStudyUploadMutationHookResult = ReturnType<
-  typeof useCreateStudyUploadMutation
->;
-export type CreateStudyUploadMutationResult =
-  Apollo.MutationResult<CreateStudyUploadMutation>;
-export type CreateStudyUploadMutationOptions = Apollo.BaseMutationOptions<
-  CreateStudyUploadMutation,
-  CreateStudyUploadMutationVariables
->;
+export type CreateStudyUploadMutationHookResult = ReturnType<typeof useCreateStudyUploadMutation>;
+export type CreateStudyUploadMutationResult = Apollo.MutationResult<CreateStudyUploadMutation>;
+export type CreateStudyUploadMutationOptions = Apollo.BaseMutationOptions<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>;

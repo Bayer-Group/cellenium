@@ -1,22 +1,7 @@
-import { useEffect } from "react";
-import {
-  Center,
-  Divider,
-  Group,
-  Loader,
-  Space,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
-import {
-  AnnotationFilterDisplay,
-  CorrelationTable,
-  LeftSidePanel,
-  RightSidePanel,
-  UserGeneStore,
-} from "../components";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useEffect } from 'react';
+import { Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
+import { AnnotationFilterDisplay, CorrelationTable, LeftSidePanel, RightSidePanel, UserGeneStore } from '../components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   correlationOmicsIdState,
   selectedAnnotationFilterState,
@@ -25,8 +10,8 @@ import {
   studyLayerIdState,
   studyState,
   userGeneStoreOpenState,
-} from "../atoms";
-import { useExpressionCorrelationTrianglePlotQuery } from "../generated/types";
+} from '../atoms';
+import { useExpressionCorrelationTrianglePlotQuery } from '../generated/types';
 
 // interface PreparedPlot {
 //     message?: string;
@@ -59,16 +44,16 @@ const CoexpressionAnalysisPlot = () => {
 
   if (loading) {
     return (
-      <Center style={{ height: "100%", width: "100%" }}>
-        <Loader variant={"dots"} color={theme.colors.gray[5]} size={"xl"} />
+      <Center style={{ height: '100%', width: '100%' }}>
+        <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'} />
       </Center>
     );
   }
   if (!data?.correlationTrianglePlot) {
     return (
-      <Center style={{ height: "100%", width: "100%" }}>
-        <Text color={"dimmed"} size={"md"}>
-          Please select at least 2 genes from the{" "}
+      <Center style={{ height: '100%', width: '100%' }}>
+        <Text color={'dimmed'} size={'md'}>
+          Please select at least 2 genes from the{' '}
           <Text span weight={800}>
             gene store
           </Text>
@@ -78,13 +63,13 @@ const CoexpressionAnalysisPlot = () => {
     );
   }
   return (
-    <Center style={{ height: "100%", width: "100%" }}>
+    <Center style={{ height: '100%', width: '100%' }}>
       <img
         style={{
-          width: "100%",
-          height: selectedGenes.length > 3 ? "100%" : "",
-          objectFit: "fill",
-          overflow: "hidden",
+          width: '100%',
+          height: selectedGenes.length > 3 ? '100%' : '',
+          objectFit: 'fill',
+          overflow: 'hidden',
         }}
         alt="correlation triangle plot"
         src={data.correlationTrianglePlot}
@@ -102,45 +87,34 @@ function CoexpressionAnalysis() {
   }, []);
   if (!study) {
     return (
-      <Center style={{ height: "100%", width: "100%" }}>
-        <Loader variant={"dots"} color={"gray"} />{" "}
+      <Center style={{ height: '100%', width: '100%' }}>
+        <Loader variant={'dots'} color={'gray'} />{' '}
       </Center>
     );
   }
 
   return (
-    <Group
-      style={{ height: "100vh" }}
-      align={"flex-start"}
-      position={"apart"}
-      spacing={"xs"}
-      noWrap={true}
-    >
+    <Group style={{ height: '100vh' }} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap={true}>
       <LeftSidePanel>
         <Stack pt={5}>
           <AnnotationFilterDisplay />
         </Stack>
       </LeftSidePanel>
-      <main style={{ height: "100vh" }}>
+      <main style={{ height: '100vh' }}>
         <CoexpressionAnalysisPlot />
       </main>
       <RightSidePanel>
         <Stack>
-          <Divider size={"xs"} label={"Gene store"} />
+          <Divider size={'xs'} label={'Gene store'} />
           <UserGeneStore multiple={true} findCoexpressors={true} />
           <Space />
-          <Divider size={"xs"} label={"Correlated genes"} />
+          <Divider size={'xs'} label={'Correlated genes'} />
           {correlationOmicsId === undefined && (
-            <Text size={"xs"} color={"gray"}>
+            <Text size={'xs'} color={'gray'}>
               No correlation exploration triggered yet.
             </Text>
           )}
-          {correlationOmicsId !== undefined && (
-            <CorrelationTable
-              omicsId={correlationOmicsId}
-              studyId={study.studyId}
-            />
-          )}
+          {correlationOmicsId !== undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId} />}
         </Stack>
       </RightSidePanel>
     </Group>

@@ -1,42 +1,27 @@
-import { useForm } from "@mantine/form";
-import { useCreateStudyUploadMutation } from "../../generated/types.ts";
-import { useCallback } from "react";
-import { showNotification } from "@mantine/notifications";
-import {
-  Button,
-  Group,
-  Modal,
-  Select,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
-import { Form } from "react-router-dom";
-import { Prism } from "@mantine/prism";
+import { useForm } from '@mantine/form';
+import { useCreateStudyUploadMutation } from '../../generated/types.ts';
+import { useCallback } from 'react';
+import { showNotification } from '@mantine/notifications';
+import { Button, Group, Modal, Select, Stack, Text, TextInput } from '@mantine/core';
+import { Form } from 'react-router-dom';
+import { Prism } from '@mantine/prism';
 
-export function CreateStudyModal({
-  opened,
-  reset,
-}: {
-  opened: boolean;
-  reset: () => void;
-}) {
+export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: () => void }) {
   const form = useForm({
     initialValues: {
-      studyName: "",
-      filetype: ".h5ad",
+      studyName: '',
+      filetype: '.h5ad',
     },
     validate: (values) => {
       const errors: Record<string, string> = {};
-      if (values.studyName === "") {
-        errors.studyName = "Study name is required";
+      if (values.studyName === '') {
+        errors.studyName = 'Study name is required';
       }
       return errors;
     },
   });
 
-  const [createStudyUploadMutation, { data: studyUploadData, loading, error }] =
-    useCreateStudyUploadMutation();
+  const [createStudyUploadMutation, { data: studyUploadData, loading, error }] = useCreateStudyUploadMutation();
 
   const createStudy = useCallback(() => {
     createStudyUploadMutation({
@@ -46,9 +31,9 @@ export function CreateStudyModal({
       },
     }).catch((reason: any) => {
       showNotification({
-        title: "Could not create study",
+        title: 'Could not create study',
         message: reason.message,
-        color: "red",
+        color: 'red',
       });
       form.reset();
       reset();
@@ -69,40 +54,22 @@ export function CreateStudyModal({
           Create Study
         </Text>
         <Form>
-          <TextInput
-            label="Study Title"
-            {...form.getInputProps("studyName")}
-            disabled={
-              loading || studyUploadData !== undefined || error !== undefined
-            }
-          />
+          <TextInput label="Study Title" {...form.getInputProps('studyName')} disabled={loading || studyUploadData !== undefined || error !== undefined} />
           <Select
-            data={[".h5ad", ".h5mu"]}
+            data={['.h5ad', '.h5mu']}
             label="Filetype"
             placeholder="Select a filetype"
-            {...form.getInputProps("filetype")}
-            disabled={
-              loading || studyUploadData !== undefined || error !== undefined
-            }
+            {...form.getInputProps('filetype')}
+            disabled={loading || studyUploadData !== undefined || error !== undefined}
           />
         </Form>
         {studyUploadData !== undefined && (
           <>
-            <Text>
-              Please upload your study file using the following curl command
-              (replace &lt;PATH_TO_YOUR_FILE&gt; with the path to your file):
-            </Text>
-            <Prism
-              language="bash"
-              copyLabel="Command code to clipboard"
-              copiedLabel="Command copied to clipboard"
-            >
-              {`curl -v ${Object.entries(
-                studyUploadData?.createStudyUpload.json["fields"],
-              )
-                .map(([key, value]) => "-F " + key + "=" + value)
-                .join(" ")} -F file=@<PATH_TO_YOUR_FILE> ${studyUploadData
-                ?.createStudyUpload.json["url"]}`}
+            <Text>Please upload your study file using the following curl command (replace &lt;PATH_TO_YOUR_FILE&gt; with the path to your file):</Text>
+            <Prism language="bash" copyLabel="Command code to clipboard" copiedLabel="Command copied to clipboard">
+              {`curl -v ${Object.entries(studyUploadData?.createStudyUpload.json['fields'])
+                .map(([key, value]) => '-F ' + key + '=' + value)
+                .join(' ')} -F file=@<PATH_TO_YOUR_FILE> ${studyUploadData?.createStudyUpload.json['url']}`}
             </Prism>
           </>
         )}
@@ -112,12 +79,7 @@ export function CreateStudyModal({
             color="blue"
             onClick={createStudy}
             loading={loading}
-            disabled={
-              !form.isValid() ||
-              loading ||
-              studyUploadData !== undefined ||
-              error !== undefined
-            }
+            disabled={!form.isValid() || loading || studyUploadData !== undefined || error !== undefined}
           >
             Create
           </Button>
