@@ -2,38 +2,46 @@ import argparse
 import io
 import json
 import logging
-import os
 import pathlib
-from typing import Dict, List
+from upath import UPath
+from typing import List, Dict
 
-import h5ad_open
 import numpy as np
 import pandas as pd
 import scipy.sparse as sparse
 import tqdm
 from anndata import AnnData
 from muon import MuData
-from postgres_utils import (
-    NumpyEncoder,
-    get_aws_db_engine,
-    get_local_db_engine,
-    import_df,
-)
 from psycopg2.extras import Json
 from scanpy.plotting._tools.scatterplots import _get_palette
 from sqlalchemy import text
-from upath import UPath
+import os
+import h5ad_open
+from postgres_utils import (
+    import_df,
+    NumpyEncoder,
+    get_aws_db_engine,
+    get_local_db_engine,
+)
 
+# true if this code is running in AWS Batch instead of locally (e.g. make target). In AWS Batch mode, the user has
+# already registered a study in the web UI and the import code here is triggered by the S3 file upload.
 IS_AWS_DEPLOYMENT = os.environ.get("AWS") is not None
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s",
     datefmt="%Y%m%d-%H%M%S",
-    handlers=[logging.FileHandler("./study_import.log"), logging.StreamHandler()] if IS_AWS_DEPLOYMENT else [logging.StreamHandler()],
+    handlers=[
+        logging.FileHandler("./study_import.log"),
+        logging.StreamHandler()
+    ] if IS_AWS_DEPLOYMENT else [logging.StreamHandler()]
 )
 
-engine = get_aws_db_engine() if IS_AWS_DEPLOYMENT else get_local_db_engine(os.environ.get("ENGINE_URL"))
+if IS_AWS_DEPLOYMENT:
+    engine = get_aws_db_engine()
+else:
+    engine = get_local_db_engine(os.environ.get("ENGINE_URL"))
 
 
 def get_all_regions(tax_id):
@@ -47,7 +55,9 @@ def get_all_regions(tax_id):
     cols = existing_region_df.columns.tolist()
     tmp = existing_region_df.reset_index()
     match_existing_region_df = (
-        tmp.melt(value_vars=cols, id_vars=["omics_id"], value_name="match_id")[["omics_id", "match_id"]]
+        tmp.melt(value_vars=cols, id_vars=["omics_id"], value_name="match_id")[
+            ["omics_id", "match_id"]
+        ]
         .drop_duplicates()
         .set_index("match_id")
     )
@@ -55,7 +65,9 @@ def get_all_regions(tax_id):
 
 
 def get_all_regions_ids_already_in(tax_id):
-    existing_region_ids_df = pd.read_sql("select region_id from omics_region_gene", engine)
+    existing_region_ids_df = pd.read_sql(
+        "select region_id from omics_region_gene", engine
+    )
     return existing_region_ids_df.region_id.tolist()
 
 
@@ -76,33 +88,51 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     cols = omics_df.columns.tolist()
     tmp = omics_df.explode("entrez_gene_ids").explode("hgnc_symbols").reset_index()
     match_df = (
-        tmp.melt(value_vars=cols, id_vars=["omics_id"], value_name="match_id")[["omics_id", "match_id"]]
+        tmp.melt(value_vars=cols, id_vars=["omics_id"], value_name="match_id")[
+            ["omics_id", "match_id"]
+        ]
         .drop_duplicates()
         .set_index("match_id")
     )
 
-    df_region = data.uns["atac"]["peak_annotation"].reset_index()[["peak", "gene_name"]].rename(columns={"peak": "region"})
+    df_region = (
+        data.uns["atac"]["peak_annotation"]
+        .reset_index()[["peak", "gene_name"]]
+        .rename(columns={"peak": "region"})
+    )
 
-    df_region = df_region.merge(match_df, left_on="gene_name", right_index=True, how="left")
+    df_region = df_region.merge(
+        match_df, left_on="gene_name", right_index=True, how="left"
+    )
     df_region.omics_id = df_region.omics_id.astype("Int64")
 
-    df_region[["chromosome", "start_position", "end_position"]] = df_region.region.str.extract(r"(.+):(\d+)-(\d+)", expand=True)
+    df_region[
+        ["chromosome", "start_position", "end_position"]
+    ] = df_region.region.str.extract(r"(.+):(\d+)-(\d+)", expand=True)
     df_region["omics_type"] = "region"
     df_region["tax_id"] = int(metadata["taxonomy_id"])
     df_region[["display_name"]] = df_region[["region"]]
     df_region[["display_symbol"]] = df_region[["region"]]
 
     # get h5ad_var_index
-    h5ad_index = data.var.reset_index(names="h5ad_var_key").reset_index(names="h5ad_var_index")[["h5ad_var_index", "h5ad_var_key"]]
+    h5ad_index = data.var.reset_index(names="h5ad_var_key").reset_index(
+        names="h5ad_var_index"
+    )[["h5ad_var_index", "h5ad_var_key"]]
 
     # insert into base
-    omics_base_insert = df_region[["omics_type", "tax_id", "display_name", "display_symbol"]].drop_duplicates()
+    omics_base_insert = df_region[
+        ["omics_type", "tax_id", "display_name", "display_symbol"]
+    ].drop_duplicates()
     # but not the ones which are already inserted
-    regions_not_in_df = omics_base_insert.loc[~omics_base_insert.display_name.isin(match_existing_region_df.index), :]
+    regions_not_in_df = omics_base_insert.loc[
+                        ~omics_base_insert.display_name.isin(match_existing_region_df.index), :
+                        ]
     import_df(regions_not_in_df, "omics_base", engine)
 
     match_existing_region_df = get_all_regions(int(metadata["taxonomy_id"]))
-    omics_base_insert = omics_base_insert.merge(match_existing_region_df, left_on="display_name", right_index=True)
+    omics_base_insert = omics_base_insert.merge(
+        match_existing_region_df, left_on="display_name", right_index=True
+    )
 
     # insert into omics_region
     omics_region_insert = (
@@ -119,7 +149,9 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
         .drop("display_name", axis=1)
     )
     # but not the ones which are already inserted
-    omics_regions_not_in_df = omics_region_insert.loc[omics_region_insert.region.isin(regions_not_in_df.display_name), :]
+    omics_regions_not_in_df = omics_region_insert.loc[
+                              omics_region_insert.region.isin(regions_not_in_df.display_name), :
+                              ]
     import_df(omics_regions_not_in_df, "omics_region", engine)
 
     # insert into omics_region_gene
@@ -139,7 +171,9 @@ def import_region_base_and_study(study_id: int, data: AnnData, metadata: Dict):
     )
     # but not the ones in
     all_region_ids = get_all_regions_ids_already_in(metadata["taxonomy_id"])
-    omics_region_gene_not_in_df = omics_region_gene_insert.loc[~omics_region_gene_insert.region_id.isin(all_region_ids), :]
+    omics_region_gene_not_in_df = omics_region_gene_insert.loc[
+                                  ~omics_region_gene_insert.region_id.isin(all_region_ids), :
+                                  ]
     import_df(omics_region_gene_not_in_df, "omics_region_gene", engine)
 
     # insert into study_omics
@@ -190,10 +224,14 @@ def import_study_omics_genes(study_id: int, data: AnnData, metadata: Dict):
     data_genes_df = data.var.copy()
     data_genes_df = data_genes_df.reset_index(names="h5ad_var_key")
     data_genes_df = data_genes_df.reset_index(names="h5ad_var_index")
-    data_genes_df = data_genes_df.merge(match_df, how="inner", left_on="h5ad_var_key", right_index=True)
+    data_genes_df = data_genes_df.merge(
+        match_df, how="inner", left_on="h5ad_var_key", right_index=True
+    )
     data_genes_df.drop_duplicates("omics_id", inplace=True)
     data_genes_df["study_id"] = study_id
-    import_df(data_genes_df[["h5ad_var_index", "omics_id", "study_id"]], "study_omics", engine)
+    import_df(
+        data_genes_df[["h5ad_var_index", "omics_id", "study_id"]], "study_omics", engine
+    )
     return data_genes_df[["h5ad_var_index", "h5ad_var_key", "omics_id"]]
 
 
@@ -210,15 +248,21 @@ def import_study_protein_antibody_tag(study_id: int, data: AnnData, metadata: Di
     data_genes_df = data.var.copy()
     data_genes_df = data_genes_df.reset_index(names="h5ad_var_key")
     data_genes_df = data_genes_df.reset_index(names="h5ad_var_index")
-    data_genes_df = data_genes_df.merge(match_df, how="inner", left_on="h5ad_var_key", right_index=True)
+    data_genes_df = data_genes_df.merge(
+        match_df, how="inner", left_on="h5ad_var_key", right_index=True
+    )
     data_genes_df.drop_duplicates("omics_id", inplace=True)
     data_genes_df["study_id"] = study_id
-    import_df(data_genes_df[["h5ad_var_index", "omics_id", "study_id"]], "study_omics", engine)
+    import_df(
+        data_genes_df[["h5ad_var_index", "omics_id", "study_id"]], "study_omics", engine
+    )
     return data_genes_df[["h5ad_var_index", "h5ad_var_key", "omics_id"]]
 
 
 def import_projection(data, data_samples_df, study_id, key, modality=None):
-    study_sample_ids = data.obs.merge(data_samples_df, left_index=True, right_on="h5ad_obs_key")["study_sample_id"].tolist()
+    study_sample_ids = data.obs.merge(
+        data_samples_df, left_index=True, right_on="h5ad_obs_key"
+    )["study_sample_id"].tolist()
     projection_df = pd.DataFrame(
         {
             "study_id": study_id,
@@ -241,11 +285,13 @@ def import_projection(data, data_samples_df, study_id, key, modality=None):
 
 def _projection_list(data: AnnData | MuData, filetype="h5ad"):
     if isinstance(data, AnnData):
-        return data.uns["cellenium"].get("import_projections", np.array(["umap"])).tolist()
+        return (
+            data.uns["cellenium"].get("import_projections", np.array(["umap"])).tolist()
+        )
     else:
         tmp = data.uns["cellenium"].get("import_projections")
         retlist = []
-        for k in tmp:
+        for k in tmp.keys():
             retlist.extend([f"{k}:{proj}" for proj in tmp[k]])
         return retlist
 
@@ -256,10 +302,14 @@ def import_study_sample(study_id: int, data: AnnData | MuData):
     data_samples_df = data_samples_df.reset_index(names="h5ad_obs_key")
     data_samples_df = data_samples_df.reset_index(names="h5ad_obs_index")
     data_samples_df["study_sample_id"] = range(1, len(data_samples_df) + 1)
-    data_samples_df = data_samples_df[["study_sample_id", "h5ad_obs_index", "h5ad_obs_key"]]
+    data_samples_df = data_samples_df[
+        ["study_sample_id", "h5ad_obs_index", "h5ad_obs_key"]
+    ]
     data_samples_df["study_id"] = study_id
     import_df(
-        data_samples_df[["study_sample_id", "h5ad_obs_index", "h5ad_obs_key", "study_id"]],
+        data_samples_df[
+            ["study_sample_id", "h5ad_obs_index", "h5ad_obs_key", "study_id"]
+        ],
         "study_sample",
         engine,
     )
@@ -272,9 +322,13 @@ def import_study_sample(study_id: int, data: AnnData | MuData):
         for projection in _projection_list(data):
             import_projection(data, data_samples_df, study_id, projection)
     else:
-        for modality, projections in data.uns["cellenium"]["import_projections"].items():
+        for modality, projections in data.uns["cellenium"][
+            "import_projections"
+        ].items():
             for projection in projections:
-                import_projection(data.mod[modality], data_samples_df, study_id, projection, modality)
+                import_projection(
+                    data.mod[modality], data_samples_df, study_id, projection, modality
+                )
 
     return data_samples_df
 
@@ -295,10 +349,14 @@ def get_annotation_definition_df(h5ad_columns: List[str]):
 def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData):
     logging.info("importing sample annotations")
     import_sample_annotations = data.uns["cellenium"]["main_sample_attributes"].tolist()
-    import_sample_annotations.extend(data.uns["cellenium"].get("advanced_sample_attributes", []))
+    import_sample_annotations.extend(
+        data.uns["cellenium"].get("advanced_sample_attributes", [])
+    )
     secondary_sample_attributes = []
     if data.uns["cellenium"].get("secondary_sample_attributes") is not None:
-        secondary_sample_attributes = data.uns["cellenium"]["secondary_sample_attributes"].tolist()
+        secondary_sample_attributes = data.uns["cellenium"][
+            "secondary_sample_attributes"
+        ].tolist()
         import_sample_annotations.extend(secondary_sample_attributes)
 
     with engine.connect() as connection:
@@ -362,19 +420,33 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
     annotation_definition_df = get_annotation_definition_df(import_sample_annotations)
 
     data_sample_annotations = data.obs.copy()
-    data_sample_annotations = data_sample_annotations.merge(data_samples_df, left_index=True, right_on="h5ad_obs_key")
+    data_sample_annotations = data_sample_annotations.merge(
+        data_samples_df, left_index=True, right_on="h5ad_obs_key"
+    )
     for h5ad_column in import_sample_annotations:
         palette = _get_palette(data, h5ad_column)
 
-        h5ad_one_annotation_df = data_sample_annotations[[h5ad_column, "study_sample_id"]].copy()
-        one_annotation_definition_df = annotation_definition_df[annotation_definition_df.h5ad_column == h5ad_column]
-        annotation_df = h5ad_one_annotation_df.merge(one_annotation_definition_df, left_on=h5ad_column, right_on="h5ad_value")
+        h5ad_one_annotation_df = data_sample_annotations[
+            [h5ad_column, "study_sample_id"]
+        ].copy()
+        one_annotation_definition_df = annotation_definition_df[
+            annotation_definition_df.h5ad_column == h5ad_column
+            ]
+        annotation_df = h5ad_one_annotation_df.merge(
+            one_annotation_definition_df, left_on=h5ad_column, right_on="h5ad_value"
+        )
 
-        annotation_df["color"] = annotation_df.apply(lambda row, pal=palette: pal[row.h5ad_value], axis=1)
-        annotation_df = annotation_df[["study_sample_id", "annotation_value_id", "color"]].copy()
+        annotation_df["color"] = annotation_df.apply(
+            lambda row: palette[row.h5ad_value], axis=1
+        )
+        annotation_df = annotation_df[
+            ["study_sample_id", "annotation_value_id", "color"]
+        ].copy()
         annotation_df["study_id"] = study_id
         annotation_df = (
-            annotation_df.groupby(["study_id", "annotation_value_id", "color"])["study_sample_id"]
+            annotation_df.groupby(["study_id", "annotation_value_id", "color"])[
+                "study_sample_id"
+            ]
             .apply(list)
             .reset_index()
             .rename(columns={"study_sample_id": "study_sample_ids"})
@@ -384,45 +456,55 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
 
 
 def import_study_layer_expression(
-    study_id: int,
-    layer_name: str | None,
-    data_genes_df,
-    data_samples_df,
-    data: AnnData,
-    metadata,
-    omics_type,
-    study_layer_id: int,
+        study_id: int,
+        layer_name: str | None,
+        data_genes_df,
+        data_samples_df,
+        data: AnnData,
+        metadata,
+        omics_type,
+        study_layer_id: int,
 ):
     if layer_name is None:
         layer_name = metadata["X_pseudolayer_name"]
-        x = data.X
+        X = data.X
     else:
-        x = data.layers[layer_name]
+        X = data.layers[layer_name]
     logging.info(f"importing expression matrix {layer_name} {omics_type}")
 
     with engine.connect() as connection:
-        sparse_x = sparse.csc_matrix(x)
+        sparse_X = sparse.csc_matrix(X)
 
-        map_h5ad_var_index_to_omics_index = np.zeros(shape=[sparse_x.shape[1]], dtype=np.uint32)
-        for _, row in data_genes_df.iterrows():
+        map_h5ad_var_index_to_omics_index = np.zeros(
+            shape=[sparse_X.shape[1]], dtype=np.uint32
+        )
+        for i, row in data_genes_df.iterrows():
             map_h5ad_var_index_to_omics_index[row["h5ad_var_index"]] = row["omics_id"]
 
-        samples_of_modality_df = data.obs.join(data_samples_df.set_index("h5ad_obs_key")[["study_sample_id"]]).reset_index()
-        map_h5ad_obs_index_to_studysample_index = np.zeros(shape=[sparse_x.shape[0]], dtype=np.uint32)
+        samples_of_modality_df = data.obs.join(
+            data_samples_df.set_index("h5ad_obs_key")[["study_sample_id"]]
+        ).reset_index()
+        map_h5ad_obs_index_to_studysample_index = np.zeros(
+            shape=[sparse_X.shape[0]], dtype=np.uint32
+        )
         for i, row in samples_of_modality_df.iterrows():
             map_h5ad_obs_index_to_studysample_index[i] = row["study_sample_id"]
 
         buffer = io.StringIO()
         buffered_gene_cnt = 0
         cursor = connection.connection.cursor()
-        for gene_i in tqdm.tqdm(range(0, sparse_x.shape[1]), desc=f'import expression matrix "{layer_name}"'):
+        for gene_i in tqdm.tqdm(
+                range(0, sparse_X.shape[1]), desc=f'import expression matrix "{layer_name}"'
+        ):
             omics_id = map_h5ad_var_index_to_omics_index[gene_i]
             if omics_id > 0:
-                csc_gene_data = sparse.find(sparse_x.T[gene_i])
+                csc_gene_data = sparse.find(sparse_X.T[gene_i])
                 data_cell_indexes = csc_gene_data[1]
                 data_values = csc_gene_data[2]
                 if data_values.size > 0:
-                    studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
+                    studysample_ids = map_h5ad_obs_index_to_studysample_index[
+                        data_cell_indexes
+                    ]
                     buffer.write(str(study_layer_id) + "|" + str(omics_id) + "|{")
                     # the [None, :] reshaping is just a workaround to get np.savetxt into writing separators at all
                     np.savetxt(
@@ -442,7 +524,9 @@ def import_study_layer_expression(
                     )
                     buffer.write("}\n")
                     buffered_gene_cnt += 1
-            if buffered_gene_cnt == 500 or (gene_i == sparse_x.shape[1] - 1 and buffered_gene_cnt > 0):
+            if buffered_gene_cnt == 500 or (
+                    gene_i == sparse_X.shape[1] - 1 and buffered_gene_cnt > 0
+            ):
                 buffer.seek(0)
                 cursor.copy_from(
                     buffer,
@@ -470,14 +554,18 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
     df = data.uns["cellenium"]["differentially_expressed_genes"]
     df = df.merge(data_genes_df, left_on="names", right_on="h5ad_var_key")
 
-    annotation_definition_df = get_annotation_definition_df(df["attribute_name"].unique().tolist())
+    annotation_definition_df = get_annotation_definition_df(
+        df["attribute_name"].unique().tolist()
+    )
     df = df.merge(
         annotation_definition_df,
         left_on=["attribute_name", "ref_attr_value"],
         right_on=["h5ad_column", "h5ad_value"],
     )
     df["study_id"] = study_id
-    df.logfoldchanges = df.logfoldchanges.fillna(-1)  # TODO: this is as muon puts logfoldchange to NaN
+    df.logfoldchanges = df.logfoldchanges.fillna(
+        -1
+    )  # TODO: this is as muon puts logfoldchange to NaN
     df.rename(
         columns={
             "pvals": "pvalue",
@@ -516,21 +604,53 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         )
 
 
-def create_update_study_from_file(data: AnnData, stored_filename: UPath):
+def get_or_create_study_id(stored_filename: UPath) -> int:
+    with engine.connect() as connection:
+        if IS_AWS_DEPLOYMENT:
+            r = connection.execute(
+                text(
+                    """
+                    SELECT study_id FROM study WHERE import_file = :filename
+                    """
+                ),
+                dict(filename=str(stored_filename))
+            )
+            study_row = r.fetchone()
+            if study_row is None:
+                raise Exception(f"Study with filename {stored_filename} not found")
+            study_id = study_row[0]
+            return study_id
+        else:
+            r = connection.execute(
+                text(
+                    """INSERT INTO study (filename, study_name)
+                VALUES (:filename, :filename)
+                RETURNING study_id"""
+                ),
+                dict(filename=str(stored_filename)),
+            )
+            study_id = r.fetchone()[0]
+            return study_id
+
+
+
+def update_study_from_file(study_id: int, data: AnnData):
     def _config_optional_list(key: str):
         if data.uns["cellenium"].get(key) is not None:
             return data.uns["cellenium"][key].tolist()
         return None
 
     study_data = {
-        "filename": str(stored_filename),
+        "study_id": study_id,
         "study_name": data.uns["cellenium"]["title"],
         "description": data.uns["cellenium"]["description"],
         "tissue_ncit_ids": data.uns["cellenium"]["ncit_tissue_ids"].tolist(),
         "disease_mesh_ids": data.uns["cellenium"]["mesh_disease_ids"].tolist(),
         "organism_tax_id": data.uns["cellenium"]["taxonomy_id"],
         "projections": _projection_list(data),
-        "reader_permissions": _config_optional_list("initial_reader_permissions"),
+        "reader_permissions": _config_optional_list(
+            "initial_reader_permissions"
+        ),
         "admin_permissions": _config_optional_list("initial_admin_permissions"),
         "legacy_config": Json(
             data.uns["cellenium"].get("legacy_config"),
@@ -540,57 +660,24 @@ def create_update_study_from_file(data: AnnData, stored_filename: UPath):
     }
 
     with engine.connect() as connection:
-        if IS_AWS_DEPLOYMENT:
-            r = connection.execute(
-                text(
-                    """
-                    SELECT study_id FROM study WHERE import_file = :filename
-                    """
-                ),
-                {"filename": str(stored_filename)},
-            )
-            study_id = r.fetchone()
-            if study_id is None:
-                raise Exception(f"Study with filename {stored_filename} not found")
-            study_id = study_id[0]
-            study_data["study_id"] = study_id
-
-            connection.execute(
-                text(
-                    """
-                        UPDATE study SET
-                        filename = :filename,
-                        study_name = :study_name,
-                        description = :description,
-                        tissue_ncit_ids = :tissue_ncit_ids,
-                        disease_mesh_ids = :disease_mesh_ids,
-                        organism_tax_id = :organism_tax_id,
-                        projections = :projections,
-                        reader_permissions = :reader_permissions,
-                        admin_permissions = :admin_permissions,
-                        legacy_config = :legacy_config,
-                        import_finished = :import_finished,
-                        import_started = true
-                        WHERE study_id = :study_id
-                    """
-                ),
-                study_data,
-            )
-            connection.connection.commit()
-        else:
-            r = connection.execute(
-                text(
-                    """INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
-                   projections, reader_permissions, admin_permissions, legacy_config)
-                VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
-                   :projections, :reader_permissions, :admin_permissions, :legacy_config
-                )
-                RETURNING study_id"""
-                ),
-                study_data,
-            )
-            study_id = r.fetchone()[0]
-    return study_id
+        connection.execute(
+            text(""" 
+                    UPDATE study SET 
+                    study_name = :study_name,
+                    description = :description,
+                    tissue_ncit_ids = :tissue_ncit_ids,
+                    disease_mesh_ids = :disease_mesh_ids,
+                    organism_tax_id = :organism_tax_id,
+                    projections = :projections,
+                    reader_permissions = :reader_permissions,
+                    admin_permissions = :admin_permissions,
+                    legacy_config = :legacy_config,
+                    import_finished = :import_finished,
+                    import_started = true
+                    WHERE study_id = :study_id
+                """),
+            study_data
+        )
 
 
 def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
@@ -615,26 +702,39 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
         return study_layer_id
 
     logging.info("importing %s as study_id %s", filename, study_id)
-    modalities = data.uns["cellenium"]["modalities"] if isinstance(data, MuData) else {"rna": "gene"}
+    if isinstance(data, MuData):
+        modalities = data.uns["cellenium"]["modalities"]
+    else:
+        modalities = {"rna": "gene"}
 
     data_samples_df = import_study_sample(study_id, data)
-    for modality in modalities:
-        cur_data = data.mod[modality] if isinstance(data, MuData) else data
+    for modality in modalities.keys():
+        if isinstance(data, MuData):
+            cur_data = data.mod[modality]
+        else:
+            cur_data = data
         import_study_sample_annotation(study_id, data_samples_df, cur_data)
 
     for modality in modalities.items():
         data_type = modality[1]  # the data_type
-        cur_data = data.mod[modality[0]] if isinstance(data, MuData) else data
+        if isinstance(data, MuData):
+            cur_data = data.mod[modality[0]]
+        else:
+            cur_data = data
         meta_data = data.uns["cellenium"]
         if data_type == "gene":
             data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
             import_differential_expression(study_id, data_genes_df, cur_data)
         elif data_type == "region":
             # since regions from study to study change we import those which are not yet in the database
-            data_region_df = import_region_base_and_study(study_id, cur_data, meta_data)
+            data_region_df = import_region_base_and_study(
+                study_id, cur_data, meta_data
+            )
             import_differential_expression(study_id, data_region_df, cur_data)
         elif data_type == "protein_antibody_tag":
-            data_protein_df = import_study_protein_antibody_tag(study_id, cur_data, meta_data)
+            data_protein_df = import_study_protein_antibody_tag(
+                study_id, cur_data, meta_data
+            )
             import_differential_expression(study_id, data_protein_df, cur_data)
 
     study_layer_id = _generate_study_layer(study_id, "default-layer", None)
@@ -645,7 +745,9 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             cur_data_samples_df = data_samples_df
         else:
             cur_data = data
-            cur_data_samples_df = data_samples_df.loc[data_samples_df.h5ad_obs_key.isin(cur_data.obs.index), :]
+            cur_data_samples_df = data_samples_df.loc[
+                                  data_samples_df.h5ad_obs_key.isin(cur_data.obs.index), :
+                                  ]
 
         meta_data = data.uns["cellenium"]
         if omics_type == "gene":
@@ -661,8 +763,10 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             )
             # import more layers if they are present in the dataset (gene expression only
             # see https://github.com/Bayer-Group/cellenium/issues/24
-            for layer_name in cur_data.layers:
-                further_study_layer_id = _generate_study_layer(study_id, layer_name, "gene")
+            for layer_name in cur_data.layers.keys():
+                further_study_layer_id = _generate_study_layer(
+                    study_id, layer_name, "gene"
+                )
                 import_study_layer_expression(
                     study_id,
                     layer_name,
@@ -702,8 +806,8 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             text("UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id"),
             {"study_id": study_id},
         )
-        logging.info("updating postgres statistics...")
         if analyze_database:
+            logging.info("updating postgres statistics...")
             connection.execute(text("call _analyze_schema()"))
     return study_id
 
@@ -726,25 +830,25 @@ def import_study(filename: str, analyze_database: bool) -> int:
         # filename inside scratch (scratch will be /h5ad_store in postgres docker)
         stored_filename = UPath(filename).relative_to("scratch").as_posix()
 
-    study_id = create_update_study_from_file(data, stored_filename)
-
+    study_id = get_or_create_study_id(stored_filename)
     try:
+        update_study_from_file(study_id, data)
         import_study_safe(data, study_id, filename, analyze_database)
     except Exception as e:
-        logging.error("import failed")
-        logging.error(e)
-        with engine.connect() as connection:
-            log = ""
-            if pathlib.Path("./study_import.log").exists():
-                with open("./study_import.log", "rb") as f:
-                    log = f.read()
-            connection.execute(
-                text("UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"),
-                {"study_id": study_id, "log": log},
-            )
-        if not IS_AWS_DEPLOYMENT:
-            # failed import has been written to db, no need to trigger the failed batch lambda
-            raise e
+        logging.exception("import failed for file %s", filename)
+        if IS_AWS_DEPLOYMENT:
+            with engine.connect() as connection:
+                log = str()
+                if pathlib.Path("./study_import.log").exists():
+                    with open("./study_import.log", "r") as f:
+                        log = f.read()
+                connection.execute(
+                    text(
+                        "UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"
+                    ),
+                    {"study_id": study_id, "log": log},
+                )
+        exit(1)
 
 
 if __name__ == "__main__":
