@@ -1,10 +1,10 @@
 import json
-import pathlib
-import boto3
-from urllib import parse
-import os
 import logging
+import os
+import pathlib
+from urllib import parse
 
+import boto3
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
 
@@ -43,8 +43,8 @@ def get_aws_db_engine():
 
 
 def lambda_handler(event, context):
-    if not all(map(lambda var: os.environ.get(var, False), REQUIRED_ENV_VARIABLES)):
-        raise RuntimeError(f"Missing required environment variable")
+    if not all(os.environ.get(var, False) for var in REQUIRED_ENV_VARIABLES):
+        raise RuntimeError("Missing required environment variable")
 
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     key = parse.unquote_plus(
@@ -58,7 +58,7 @@ def lambda_handler(event, context):
     engine = get_aws_db_engine()
     with engine.begin() as connection:
         rs = connection.execute(
-            text(f"SELECT study_id FROM public.study WHERE import_file=:key"), dict(key=key)
+            text("SELECT study_id FROM public.study WHERE import_file=:key"), {"key": key}
         )
         study_ids = [r[0] for r in rs]
         logging.info(f"Study ids: {study_ids}")

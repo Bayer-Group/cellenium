@@ -21,3 +21,5 @@ dependencies:
     - pysam
     - mudatasets
     - leidenalg
+    - black[jupyter]
+    - ruff

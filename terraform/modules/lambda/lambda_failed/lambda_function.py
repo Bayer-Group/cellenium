@@ -40,27 +40,27 @@ def get_aws_db_engine():
 
 
 def lambda_handler(event, context):
-    if not all(map(lambda var: os.environ.get(var, False), REQUIRED_ENV_VARIABLES)):
-        raise RuntimeError(f"Missing required environment variable")
+    if not all(os.environ.get(var, False) for var in REQUIRED_ENV_VARIABLES):
+        raise RuntimeError("Missing required environment variable")
 
     logging.info(event)
     logging.info(context)
 
     engine = get_aws_db_engine()
 
-    detail = event.get("detail", dict())
+    detail = event.get("detail", {})
     if detail.get("status") != "FAILED":
         return
 
     with engine.begin() as connection:
 
-        study_id = detail.get("tags", dict()).get("study_id")
+        study_id = detail.get("tags", {}).get("study_id")
 
         file_url = None
-        if detail.get("parameters", dict()).get("filename") is not None:
-            file_url = detail.get("parameters", dict()).get("filename")
-        elif detail.get("container", dict()).get("command") is not None:
-            file_url = detail.get("container", dict()).get("command")[1]
+        if detail.get("parameters", {}).get("filename") is not None:
+            file_url = detail.get("parameters", {}).get("filename")
+        elif detail.get("container", {}).get("command") is not None:
+            file_url = detail.get("container", {}).get("command")[1]
 
         bucket = None
         key = None
@@ -73,7 +73,7 @@ def lambda_handler(event, context):
                 return
 
             rs = connection.execute(
-                text(f"SELECT study_id FROM public.study WHERE import_file=:file_name"), dict(file_name=key)
+                text("SELECT study_id FROM public.study WHERE import_file=:file_name"), {"file_name": key}
             )
             study_ids = [r[0] for r in rs]
             if len(study_ids) != 1:
@@ -84,12 +84,12 @@ def lambda_handler(event, context):
         logging.info(f"Setting study {study_id} to failed")
 
         connection.execute(
-            text("UPDATE public.study SET import_failed=true WHERE study_id=:study_id"), dict(study_id=study_id)
+            text("UPDATE public.study SET import_failed=true WHERE study_id=:study_id"), {"study_id": study_id}
         )
 
 
     logs_client = boto3.client("logs")
-    log_stream_name = detail.get("container", dict()).get("logStreamName")
+    log_stream_name = detail.get("container", {}).get("logStreamName")
     if log_stream_name is not None:
         try:
             events = logs_client.get_log_events(logStreamName=log_stream_name, logGroupName="/aws/batch/job")
@@ -109,7 +109,7 @@ def lambda_handler(event, context):
             with engine.begin() as connection:
                 connection.execute(
                     text("UPDATE public.study SET import_log=:log WHERE study_id=:study_id"),
-                    dict(study_id=study_id, log=log)
+                    {"study_id": study_id, "log": log}
                 )
 
         except Exception as e:

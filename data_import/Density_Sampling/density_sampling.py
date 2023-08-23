@@ -41,15 +41,13 @@ ArXiv preprint [q-bio.QM, stat.AP, stat.CO, stat.ML]: http://arxiv.org/abs/1601.
 """
 
 import numbers
-import numpy as np
 import operator
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.neighbors import kneighbors_graph
-from sklearn.neighbors import radius_neighbors_graph
-from sys import exit
-from tempfile import NamedTemporaryFile
 from functools import reduce
+
+import numpy as np
 import tqdm
+from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.neighbors import kneighbors_graph, radius_neighbors_graph
 
 __all__ = ["get_local_densities", "density_sampling"]
 
@@ -84,9 +82,7 @@ def median_min_distance(data, metric):
 
     data = np.atleast_2d(data)
 
-    nearest_distances = kneighbors_graph(
-        data, 1, mode="distance", metric=metric, include_self=False
-    ).data
+    nearest_distances = kneighbors_graph(data, 1, mode="distance", metric=metric, include_self=False).data
 
     median_min_dist = np.median(nearest_distances, overwrite_input=True)
 
@@ -124,18 +120,17 @@ def get_local_densities(data, kernel_mult=2.0, metric="manhattan"):
 
     data = np.atleast_2d(data)
 
-    assert isinstance(kernel_mult, numbers.Real) and kernel_mult > 0
+    assert isinstance(kernel_mult, numbers.Real)
+    assert kernel_mult > 0
 
     kernel_width = kernel_mult * median_min_distance(data, metric)
 
-    N_samples = data.shape[0]
+    n_samples = data.shape[0]
 
-    if 8.0 * get_chunk_size(N_samples, 1) > N_samples:
-        A = radius_neighbors_graph(
-            data, kernel_width, mode="connectivity", metric=metric, include_self=True
-        )
+    if 8.0 * get_chunk_size(n_samples, 1) > n_samples:
+        a = radius_neighbors_graph(data, kernel_width, mode="connectivity", metric=metric, include_self=True)
 
-        rows, _ = A.nonzero()
+        rows, _ = a.nonzero()
         # remove the memmap array usage for now, has an issue...  and why do we need it anyway?
         # with NamedTemporaryFile('w', delete = True, dir = './') as file_name:
         #     fp = np.memmap(file_name, dtype = int, mode = 'w+', shape = rows.shape)
@@ -143,23 +138,21 @@ def get_local_densities(data, kernel_mult=2.0, metric="manhattan"):
         #     _, counts = np.unique(fp, return_counts = True)
         _, counts = np.unique(rows, return_counts=True)
 
-        local_densities = np.zeros(N_samples, dtype=int)
-        for i in range(N_samples):
+        local_densities = np.zeros(n_samples, dtype=int)
+        for i in range(n_samples):
             local_densities[i] = counts[i]
     else:
-        local_densities = np.zeros(N_samples, dtype=int)
+        local_densities = np.zeros(n_samples, dtype=int)
 
-        chunks_size = get_chunk_size(N_samples, 2)
-        for i in tqdm.tqdm(range(0, N_samples, chunks_size)):
-            chunk = data[i: min(i + chunks_size, N_samples)]
+        chunks_size = get_chunk_size(n_samples, 2)
+        for i in tqdm.tqdm(range(0, n_samples, chunks_size)):
+            chunk = data[i : min(i + chunks_size, n_samples)]
 
-            D = pairwise_distances(chunk, data, metric, n_jobs=1)
+            d = pairwise_distances(chunk, data, metric, n_jobs=1)
 
-            D = D <= kernel_width
+            d = kernel_width >= d
 
-            local_densities[i + np.arange(min(chunks_size, N_samples - i))] = D.sum(
-                axis=1
-            )
+            local_densities[i + np.arange(min(chunks_size, n_samples - i))] = d.sum(axis=1)
 
     return local_densities
 
@@ -231,7 +224,8 @@ def density_sampling(
     data = np.atleast_2d(data)
 
     for x in (kernel_mult, outlier_percentile, target_percentile):
-        assert isinstance(x, numbers.Real) and x > 0
+        assert isinstance(x, numbers.Real)
+        assert x > 0
     for x in (outlier_percentile, target_percentile):
         assert x <= 1.0
 
@@ -240,8 +234,7 @@ def density_sampling(
 
     if reduce(operator.mul, local_densities.shape, 1) != max(local_densities.shape):
         raise ValueError(
-            "\nERROR: Density_Sampling: density_sampling: problem with "
-            "the dimensions of the vector of local densities provided.\n"
+            "\nERROR: Density_Sampling: density_sampling: problem with " "the dimensions of the vector of local densities provided.\n"
         )
     else:
         local_densities = np.reshape(local_densities, local_densities.size)
@@ -250,15 +243,15 @@ def density_sampling(
     target_density = np.percentile(local_densities, target_percentile)
 
     samples_kept = np.where(local_densities > outlier_density)[0]
-    N_kept = samples_kept.size
+    n_kept = samples_kept.size
 
     local_densities = local_densities[samples_kept]
 
     if desired_samples is None:
         probs = np.divide(target_density + 0.0, local_densities)
-        ind = np.where(probs > random_state.uniform(size=N_kept))[0]
+        ind = np.where(probs > random_state.uniform(size=n_kept))[0]
         samples_kept = samples_kept[ind]
-    elif desired_samples <= N_kept:
+    elif desired_samples <= n_kept:
         sorted_densities = np.sort(local_densities)
 
         temp = np.reciprocal(sorted_densities[::-1].astype(float))
@@ -266,14 +259,14 @@ def density_sampling(
 
         target_density = (desired_samples + 0.0) / cdf[0]
         if target_density > sorted_densities[0]:
-            temp = desired_samples - np.arange(1.0, N_kept + 1.0)
+            temp = desired_samples - np.arange(1.0, n_kept + 1.0)
             possible_targets = np.divide(temp, cdf)
 
             ind = np.argmax(possible_targets < sorted_densities)
             target_density = possible_targets[ind]
 
         probs = np.divide(target_density + 0.0, local_densities)
-        ind = np.where(probs > random_state.uniform(size=N_kept))[0]
+        ind = np.where(probs > random_state.uniform(size=n_kept))[0]
         samples_kept = samples_kept[ind]
     else:
         # print("\nERROR: Density_Sampling: density_sampling: 'desired_samples' has been "
@@ -291,19 +284,16 @@ def density_sampling(
 
 if __name__ == "__main__":
     import doctest
+    from time import sleep
+
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
-    from sklearn import datasets
-    from sklearn.decomposition import PCA
-    from time import sleep
 
     def plot_PCA(X_reduced, Y, title):
         fig = plt.figure(1, figsize=(10, 8))
         ax = Axes3D(fig, elev=-150, azim=110)
 
-        ax.scatter(
-            X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=Y, cmap=plt.cm.Paired
-        )
+        ax.scatter(X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=Y, cmap=plt.cm.Paired)
 
         ax.set_title("First three PCA direction for {title}".format(**locals()))
         ax.set_xlabel("1st eigenvector")

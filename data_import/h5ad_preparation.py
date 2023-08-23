@@ -2,9 +2,10 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List, Optional
 
 import cello
+import Density_Sampling.density_sampling as density_sampling
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -13,8 +14,6 @@ import tqdm
 from anndata import AnnData
 from muon import MuData
 from muon import atac as ac
-
-import Density_Sampling.density_sampling as density_sampling
 
 logging.basicConfig(
     format="%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s",
@@ -49,15 +48,13 @@ def get_sfaira_h5ad(sfaira_id: str) -> AnnData:
     ds.subset(key="id", values=[sfaira_id])
     ds.download(verbose=1)
     ds.load(verbose=1)
-    ds.datasets[sfaira_id].streamline_metadata(
-        schema="sfaira"
-    )  # convert the metadata annotation to the sfaira standard
+    ds.datasets[sfaira_id].streamline_metadata(schema="sfaira")  # convert the metadata annotation to the sfaira standard
     adata = ds.datasets[sfaira_id].adata  # get the anndata object
     return adata
 
 
 def jupyter_h5ad_overview(adata: AnnData):
-    from IPython.display import display, HTML, display_pretty
+    from IPython.display import HTML, display, display_pretty
 
     pd.set_option("display.max_columns", 100)
 
@@ -113,15 +110,13 @@ def validate_gene_ids(adata: AnnData, taxonomy_id: int):
     for id in ids:
         if id in adata.var.index:
             return True
-    assert False, f"None of {ids} where found in adata.var"
+    raise AssertionError(f"None of {ids} where found in adata.var")
 
 
 # checks if the matrix at .X (or layer) is sparse, if not make it so
 def make_sparse(adata: AnnData, layer=None):
     if not scipy.sparse.issparse(_get_X_or_layer(adata, layer)):
-        _set_X_or_layer(
-            adata, layer, scipy.sparse.csr_matrix(_get_X_or_layer(adata, layer))
-        )
+        _set_X_or_layer(adata, layer, scipy.sparse.csr_matrix(_get_X_or_layer(adata, layer)))
         logging.info("make_sparse: conversion to sparse matrix done")
 
 
@@ -141,9 +136,7 @@ def make_norm_expression(adata: AnnData, layer=None):
     if isinteger(adata, layer):
         sc.pp.normalize_total(adata, target_sum=1e4, layer=layer, inplace=True)
         sc.pp.log1p(adata, layer=layer)
-        logging.info(
-            "make_norm_expression: integer values detected - applied normalize_total and log"
-        )
+        logging.info("make_norm_expression: integer values detected - applied normalize_total and log")
     else:
         if np.max(scipy.sparse.find(_get_X_or_layer(adata, layer))[2]) > 1000:
             sc.pp.log1p(adata, layer=layer)
@@ -152,15 +145,9 @@ def make_norm_expression(adata: AnnData, layer=None):
             logging.info("make_norm_expression: no transformations necessary")
 
 
-def adata_subset_for_testing(
-    adata, cells_filter_attribute, cells_filter_values, n_top_genes
-):
-    query = np.array(
-        [s in cells_filter_values for s in adata.obs[cells_filter_attribute]]
-    )
-    sc.pp.highly_variable_genes(
-        adata, n_top_genes=n_top_genes, batch_key=cells_filter_attribute, subset=True
-    )
+def adata_subset_for_testing(adata, cells_filter_attribute, cells_filter_values, n_top_genes):
+    query = np.array([s in cells_filter_values for s in adata.obs[cells_filter_attribute]])
+    sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes, batch_key=cells_filter_attribute, subset=True)
     adata_sub = adata[query].copy()
     adata_sub = adata_sub[:, adata.var_names].copy()
     return adata_sub
@@ -168,9 +155,7 @@ def adata_subset_for_testing(
 
 # basic umap calculation, doesn't take batch effect into account
 def calculate_umap(adata: AnnData, layer=None):
-    sc.pp.highly_variable_genes(
-        adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer=layer, inplace=True
-    )
+    sc.pp.highly_variable_genes(adata, min_mean=0.0125, max_mean=3, min_disp=0.5, layer=layer, inplace=True)
     pca = sc.pp.scale(_get_X_or_layer(adata, layer)[:, adata.var.highly_variable])
     adata.obsm["X_pca"] = sc.pp.pca(pca)
     sc.pp.neighbors(adata, n_pcs=20, copy=False)
@@ -182,25 +167,14 @@ def add_umap(adata: AnnData, layer=None):
     if adata.obsm is None:
         calculate_umap(adata, layer)
     else:
-        if not "X_umap" in adata.obsm:
+        if "X_umap" not in adata.obsm:
             calculate_umap(adata)
 
 
 def density_sample_umap(adata: AnnData, desired_samples=50000):
     if len(adata.obs) > desired_samples:
-        sampled_indices = density_sampling.density_sampling(
-            adata.obsm["X_umap"], metric="euclidean", desired_samples=desired_samples
-        )
-        _cellenium_uns_dictionary(adata)[
-            "umap_density_sampled_indices"
-        ] = sampled_indices
-
-
-# add cellenium stuff to harmonize metadata
-def add_cellenium_settings(adata: AnnData, main_attributes: List[str]):
-    cellenium_settings(adata, main_sample_attributes=main_attributes)
-    # TODO add NCIT, MeSH, tax_id, title, description, pubmed_id/link
-    return adata
+        sampled_indices = density_sampling.density_sampling(adata.obsm["X_umap"], metric="euclidean", desired_samples=desired_samples)
+        _cellenium_uns_dictionary(adata)["umap_density_sampled_indices"] = sampled_indices
 
 
 def _cellenium_uns_dictionary(adata: AnnData) -> dict:
@@ -211,9 +185,7 @@ def _cellenium_uns_dictionary(adata: AnnData) -> dict:
 
 # add differential expression table to the anndata object
 # TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
-def add_differential_expression_tables(
-    adata: AnnData, attributes: List[str], layer: str
-):
+def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
     diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
     _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = diff_exp
     return adata
@@ -228,32 +200,33 @@ def set_cellenium_metadata(
     mesh_disease_ids: List[str],
     X_pseudolayer_name: str,
     main_sample_attributes: List[str] | Dict[str, List[str]],
-    secondary_sample_attributes: List[str] = [],
-    import_projections: List[str] = ["umap"],
-    initial_reader_permissions: List[str] = None,
-    initial_admin_permissions: List[str] = None,
-    modalities: List[Dict] = None,
+    secondary_sample_attributes: Optional[List[str]] = None,
+    import_projections: Optional[List[str]] = None,
+    initial_reader_permissions: Optional[List[str]] = None,
+    initial_admin_permissions: Optional[List[str]] = None,
+    modalities: Optional[List[Dict]] = None,
 ):
+    if import_projections is None:
+        import_projections = ["umap"]
+    if secondary_sample_attributes is None:
+        secondary_sample_attributes = []
+
     def _check_cell_annotation(data, attribute: str):
         if attribute not in data.obs.columns:
             raise Exception(f"attribute {attribute} not in observations dataframe")
         count_unique_values = len(data.obs[a].unique())
         if count_unique_values > 100:
-            raise Exception(
-                f"attribute {attribute} has {count_unique_values} unique annotations, 100 is the maximum"
-            )
+            raise Exception(f"attribute {attribute} has {count_unique_values} unique annotations, 100 is the maximum")
 
     d = _cellenium_uns_dictionary(data)
 
-    assert isinstance(main_sample_attributes, list) or isinstance(
-        main_sample_attributes, dict
-    )
+    assert isinstance(main_sample_attributes, (list, dict))
 
     if not modalities:
         for a in main_sample_attributes:
             _check_cell_annotation(data, a)
     else:
-        for modality in modalities.keys():
+        for modality in modalities:
             for a in main_sample_attributes[modality]:
                 _check_cell_annotation(data.mod[modality], a)
 
@@ -278,9 +251,7 @@ def set_cellenium_metadata(
     for a in secondary_sample_attributes:
         _check_cell_annotation(data, a)
         if a in main_sample_attributes:
-            raise Exception(
-                f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed"
-            )
+            raise Exception(f"secondary_sample_attributes: {a} is also listed in main_sample_attributes, overlap not allowed")
     d["secondary_sample_attributes"] = secondary_sample_attributes
 
     if not modalities:
@@ -289,21 +260,17 @@ def set_cellenium_metadata(
         d["import_projections"] = import_projections
     else:
         collect = defaultdict(list)
-        for modality in modalities.keys():
+        for modality in modalities:
             for p in import_projections:
                 assert data.mod[modality].obsm[f"X_{p}"] is not None
                 collect[modality].append(p)
         d["import_projections"] = dict(collect)
 
-        for modality in modalities.keys():
+        for modality in modalities:
             if "cellenium" in data.mod[modality].uns:
-                data.mod[modality].uns["cellenium"]["main_sample_attributes"] = d[
-                    "main_sample_attributes"
-                ][modality]
+                data.mod[modality].uns["cellenium"]["main_sample_attributes"] = d["main_sample_attributes"][modality]
             else:
-                d.mod[modality].uns["cellenium"] = {
-                    "main_sample_attributes": d["main_sample_attributes"][modality]
-                }
+                d.mod[modality].uns["cellenium"] = {"main_sample_attributes": d["main_sample_attributes"][modality]}
 
     d["initial_reader_permissions"] = initial_reader_permissions
     d["initial_admin_permissions"] = initial_admin_permissions
@@ -378,9 +345,7 @@ def calculate_differentially_expressed_genes(
     result_dataframes = []
     for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="diff.exp. genes"):
         valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
-        attr_values = valid_attribute_group_check.index[
-            valid_attribute_group_check
-        ].tolist()
+        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
 
         sc.tl.rank_genes_groups(
             adata,
@@ -400,9 +365,7 @@ def calculate_differentially_expressed_genes(
             key_added="rank_genes_groups_filtered",
         )
         for attr_value in attr_values:
-            df = sc.get.rank_genes_groups_df(
-                adata, key="rank_genes_groups_filtered", group=attr_value
-            )
+            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups_filtered", group=attr_value)
             # remove filtered elements
             df = df[~df["names"].isnull()]
             df["ref_attr_value"] = attr_value
@@ -417,21 +380,15 @@ def calculate_differentially_expressed_genes(
         result_dataframe["attribute_name"].unique().tolist(),
     )
 
-    _cellenium_uns_dictionary(adata)[
-        "differentially_expressed_genes"
-    ] = result_dataframe.copy()
+    _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = result_dataframe.copy()
     return result_dataframe
 
 
-def calculate_differential_peaks(
-    adata: AnnData, diffexp_attributes: List[str], npeaks=100
-):
+def calculate_differential_peaks(adata: AnnData, diffexp_attributes: List[str], npeaks=100):
     result_dataframes = []
     for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="differential peaks"):
         valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
-        attr_values = valid_attribute_group_check.index[
-            valid_attribute_group_check
-        ].tolist()
+        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
 
         ac.tl.rank_peaks_groups(
             adata,
@@ -443,9 +400,7 @@ def calculate_differential_peaks(
         )
 
         for attr_value in attr_values:
-            df = sc.get.rank_genes_groups_df(
-                adata, key="rank_genes_groups", group=attr_value
-            )
+            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups", group=attr_value)
             # remove filtered elements
             df = df[~df["names"].isnull()]
             df["ref_attr_value"] = attr_value
@@ -459,9 +414,7 @@ def calculate_differential_peaks(
         result_dataframe["attribute_name"].unique().tolist(),
     )
 
-    _cellenium_uns_dictionary(adata)[
-        "differentially_expressed_genes"
-    ] = result_dataframe.copy()
+    _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = result_dataframe.copy()
     return result_dataframe
 
 
@@ -469,7 +422,7 @@ def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute: str):
     if adata.uns["cellenium"]["taxonomy_id"] != 9606:
         logging.info("skipping CellO classification, taxonomy_id is not human")
         return
-    resource_dir = basedir.joinpath(f"cello_resources")
+    resource_dir = basedir.joinpath("cello_resources")
     os.makedirs(resource_dir, exist_ok=True)
     # Mahmoud: CellO makes mistakes sometimes due to ribosomal protein genes, so would be good to filter them out before the CellO call
     remove_ribo = adata.var_names.str.startswith(("RPS", "RPL"))
@@ -480,9 +433,7 @@ def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute: str):
         rsrc_loc=resource_dir,
         term_ids=True,
     )
-    adata.obs["CellO_celltype"] = adata.obs.join(
-        adata_cello.obs["Most specific cell type"]
-    )["Most specific cell type"]
+    adata.obs["CellO_celltype"] = adata.obs.join(adata_cello.obs["Most specific cell type"])["Most specific cell type"]
 
     updated_sample_attributes = ["CellO_celltype"]
     updated_sample_attributes.extend(adata.uns["cellenium"]["main_sample_attributes"])

@@ -1,9 +1,10 @@
-from anndata import AnnData
+import io
+
 import mudata
+import scanpy as sc
+from anndata import AnnData
 from mudata import MuData
 from smart_open import open
-import scanpy as sc
-import io
 
 
 def h5ad_h5mu_read(filename) -> AnnData | MuData:
@@ -17,10 +18,7 @@ def h5ad_h5mu_read(filename) -> AnnData | MuData:
         open_param = io.BytesIO(s3_file_like_obj.read())
         s3_file_like_obj.close()
 
-    if filename.endswith("h5mu"):
-        data = mudata.read_h5mu(open_param)
-    else:
-        data = sc.read_h5ad(open_param)
+    data = mudata.read_h5mu(open_param) if filename.endswith("h5mu") else sc.read_h5ad(open_param)
 
     if not isinstance(open_param, str):
         open_param.close()
