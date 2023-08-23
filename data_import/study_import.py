@@ -24,6 +24,8 @@ from postgres_utils import (
     get_local_db_engine,
 )
 
+# true if this code is running in AWS Batch instead of locally (e.g. make target). In AWS Batch mode, the user has
+# already registered a study in the web UI and the import code here is triggered by the S3 file upload.
 IS_AWS_DEPLOYMENT = os.environ.get("AWS") is not None
 
 logging.basicConfig(
@@ -602,14 +604,44 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         )
 
 
-def create_update_study_from_file(data: AnnData, stored_filename: UPath):
+def get_or_create_study_id(stored_filename: UPath) -> int:
+    with engine.connect() as connection:
+        if IS_AWS_DEPLOYMENT:
+            r = connection.execute(
+                text(
+                    """
+                    SELECT study_id FROM study WHERE import_file = :filename
+                    """
+                ),
+                dict(filename=str(stored_filename))
+            )
+            study_row = r.fetchone()
+            if study_row is None:
+                raise Exception(f"Study with filename {stored_filename} not found")
+            study_id = study_row[0]
+            return study_id
+        else:
+            r = connection.execute(
+                text(
+                    """INSERT INTO study (filename, study_name)
+                VALUES (:filename, :filename)
+                RETURNING study_id"""
+                ),
+                dict(filename=str(stored_filename)),
+            )
+            study_id = r.fetchone()[0]
+            return study_id
+
+
+
+def update_study_from_file(study_id: int, data: AnnData):
     def _config_optional_list(key: str):
         if data.uns["cellenium"].get(key) is not None:
             return data.uns["cellenium"][key].tolist()
         return None
 
     study_data = {
-        "filename": str(stored_filename),
+        "study_id": study_id,
         "study_name": data.uns["cellenium"]["title"],
         "description": data.uns["cellenium"]["description"],
         "tissue_ncit_ids": data.uns["cellenium"]["ncit_tissue_ids"].tolist(),
@@ -628,56 +660,24 @@ def create_update_study_from_file(data: AnnData, stored_filename: UPath):
     }
 
     with engine.connect() as connection:
-        if IS_AWS_DEPLOYMENT:
-            r = connection.execute(
-                text(
-                    """
-                    SELECT study_id FROM study WHERE import_file = :filename
-                    """
-                ),
-                dict(filename=str(stored_filename))
-            )
-            study_id = r.fetchone()
-            if study_id is None:
-                raise Exception(f"Study with filename {stored_filename} not found")
-            study_id = study_id[0]
-            study_data["study_id"] = study_id
-
-            connection.execute(
-                text(""" 
-                        UPDATE study SET 
-                        filename = :filename,
-                        study_name = :study_name,
-                        description = :description,
-                        tissue_ncit_ids = :tissue_ncit_ids,
-                        disease_mesh_ids = :disease_mesh_ids,
-                        organism_tax_id = :organism_tax_id,
-                        projections = :projections,
-                        reader_permissions = :reader_permissions,
-                        admin_permissions = :admin_permissions,
-                        legacy_config = :legacy_config,
-                        import_finished = :import_finished,
-                        import_started = true
-                        WHERE study_id = :study_id
-                    """),
-                study_data
-            )
-            connection.connection.commit()
-        else:
-
-            r = connection.execute(
-                text(
-                    """INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
-                   projections, reader_permissions, admin_permissions, legacy_config)
-                VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
-                   :projections, :reader_permissions, :admin_permissions, :legacy_config
-                )
-                RETURNING study_id"""
-                ),
-                study_data,
-            )
-            study_id = r.fetchone()[0]
-    return study_id
+        connection.execute(
+            text(""" 
+                    UPDATE study SET 
+                    study_name = :study_name,
+                    description = :description,
+                    tissue_ncit_ids = :tissue_ncit_ids,
+                    disease_mesh_ids = :disease_mesh_ids,
+                    organism_tax_id = :organism_tax_id,
+                    projections = :projections,
+                    reader_permissions = :reader_permissions,
+                    admin_permissions = :admin_permissions,
+                    legacy_config = :legacy_config,
+                    import_finished = :import_finished,
+                    import_started = true
+                    WHERE study_id = :study_id
+                """),
+            study_data
+        )
 
 
 def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
@@ -806,8 +806,8 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             text("UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id"),
             {"study_id": study_id},
         )
-        logging.info("updating postgres statistics...")
         if analyze_database:
+            logging.info("updating postgres statistics...")
             connection.execute(text("call _analyze_schema()"))
     return study_id
 
@@ -830,27 +830,25 @@ def import_study(filename: str, analyze_database: bool) -> int:
         # filename inside scratch (scratch will be /h5ad_store in postgres docker)
         stored_filename = UPath(filename).relative_to("scratch").as_posix()
 
-    study_id = create_update_study_from_file(data, stored_filename)
-
+    study_id = get_or_create_study_id(stored_filename)
     try:
+        update_study_from_file(study_id, data)
         import_study_safe(data, study_id, filename, analyze_database)
     except Exception as e:
-        logging.error("import failed")
-        logging.error(e)
-        with engine.connect() as connection:
-            log = str()
-            if pathlib.Path("./study_import.log").exists():
-                with open("./study_import.log", "rb") as f:
-                    log = f.read()
-            connection.execute(
-                text(
-                    "UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"
-                ),
-                {"study_id": study_id, "log": log},
-            )
-        if not IS_AWS_DEPLOYMENT:
-            # failed import has been written to db, no need to trigger the failed batch lambda
-            raise e
+        logging.exception("import failed for file %s", filename)
+        if IS_AWS_DEPLOYMENT:
+            with engine.connect() as connection:
+                log = str()
+                if pathlib.Path("./study_import.log").exists():
+                    with open("./study_import.log", "r") as f:
+                        log = f.read()
+                connection.execute(
+                    text(
+                        "UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"
+                    ),
+                    {"study_id": study_id, "log": log},
+                )
+        exit(1)
 
 
 if __name__ == "__main__":

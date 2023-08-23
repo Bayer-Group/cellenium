@@ -17,7 +17,6 @@ dependencies:
     - pybiomart
     - lxml
     - cello-classify
-    - owlready2
     - pysam
     - mudatasets
     - leidenalg
