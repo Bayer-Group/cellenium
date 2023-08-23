@@ -44,7 +44,7 @@ def walk_down_tree(children):
 
 
 def get_all_ncit_codes_below(df, ont_code):
-    nodes = dict([(id, Node(id)) for id in df.ont_code.drop_duplicates().tolist()])
+    nodes = {id: Node(id) for id in df.ont_code.drop_duplicates().tolist()}
     hierarchy = df[["ont_code", "parent_ont_code"]].drop_duplicates()
     all_relations = hierarchy.to_dict(orient="records")
     for nd in all_relations:
@@ -65,16 +65,12 @@ class Node:
 
 
 def parse_mesh_ascii_diseases(fn):
-    records = list(filter(None, open(fn).read().split("*NEWRECORD")))
+    with open(fn) as f:
+        records = list(filter(None, f.read().split("*NEWRECORD")))
     collect = []
     for record in records:
         record = record.replace("PRINT ENTRY = ", "ENTRY = ")
-        rows = [
-            (_[0], _[2])
-            for _ in [
-                _.partition(" = ") for _ in list(filter(None, record.split("\n")))
-            ]
-        ]
+        rows = [(_[0], _[2]) for _ in [_.partition(" = ") for _ in list(filter(None, record.split("\n")))]]
         record_dict = defaultdict(list)
         for key, value in rows:
             record_dict[key].append(value)
@@ -98,7 +94,7 @@ def get_gene_mappings(dataset_name, attributes, tax_id):
             "NCBI gene (formerly Entrezgene) ID": "entrez_gene_ids",
         }
     )
-    df.display_name = df.display_name.str.split("\[Source", expand=True)[0].str.strip()
+    df.display_name = df.display_name.str.split(r"\[Source", expand=True)[0].str.strip()
     df.entrez_gene_ids = df.entrez_gene_ids.astype(int).astype(str)
     df = df.groupby(["ensembl_gene_id", "display_name"]).agg(set).reset_index()
     df.hgnc_symbols = df.hgnc_symbols.apply(list)
@@ -122,41 +118,21 @@ def parse_ncit(fn):
 
     nodes_below = get_all_ncit_codes_below(df, "C12219")
     df = df.loc[
-        (
-            df.ont_code.isin(["C12219", *nodes_below])
-            & df.parent_ont_code.isin(["Thing", "C12219", *nodes_below])
-        ),
+        (df.ont_code.isin(["C12219", *nodes_below]) & df.parent_ont_code.isin(["Thing", "C12219", *nodes_below])),
         :,
     ]
     return df
 
 
 def parse_ncbi_taxonomy(filesdir):
-    tax = pd.read_csv(
-        filesdir / "nodes.dmp", sep="\t\|\t", header=None, engine="python"
-    )
-    names = pd.read_csv(
-        filesdir / "names.dmp", sep="\t\|\t", header=None, engine="python"
-    )
+    tax = pd.read_csv(filesdir / "nodes.dmp", sep="\t\\|\t", header=None, engine="python")
+    names = pd.read_csv(filesdir / "names.dmp", sep="\t\\|\t", header=None, engine="python")
     names[3] = names[3].str.split("\t", expand=True)[0]
-    pref = (
-        names.loc[names[3] == "scientific name", [0, 1]]
-        .reset_index(drop=True)
-        .rename(columns={0: "ont_code", 1: "label"})
-    )
+    pref = names.loc[names[3] == "scientific name", [0, 1]].reset_index(drop=True).rename(columns={0: "ont_code", 1: "label"})
     pref.ont_code = pref.ont_code.astype(str)
 
-    synonyms = (
-        names.loc[names[3] != "scientific name", [0, 1]]
-        .drop_duplicates()
-        .reset_index(drop=True)
-    )
-    synonyms = (
-        synonyms.groupby(0)
-        .apply(lambda x: pd.Series({"synonym": x[1].tolist()}))
-        .reset_index()
-        .rename(columns={0: "ont_code"})
-    )
+    synonyms = names.loc[names[3] != "scientific name", [0, 1]].drop_duplicates().reset_index(drop=True)
+    synonyms = synonyms.groupby(0).apply(lambda x: pd.Series({"synonym": x[1].tolist()})).reset_index().rename(columns={0: "ont_code"})
     synonyms.ont_code = synonyms.ont_code.astype(str)
 
     tax = tax[[0, 1]].rename(columns={0: "ont_code", 1: "parent_ont_code"})
@@ -167,20 +143,11 @@ def parse_ncbi_taxonomy(filesdir):
 
 
 def get_antibody_mappings_from_biolegend():
-    tables = pd.read_html(
-        "https://www.biolegend.com/en-us/totalseq/barcode-lookup", encoding="utf-8"
-    )
+    tables = pd.read_html("https://www.biolegend.com/en-us/totalseq/barcode-lookup", encoding="utf-8")
     ab = pd.concat(
-        [
-            df[["Description", "Ensembl Gene Id"]]
-            for df in tables
-            if len(set(["Description", "Ensembl Gene Id"]).intersection(df.columns))
-            == 2
-        ],
+        [df[["Description", "Ensembl Gene Id"]] for df in tables if len({"Description", "Ensembl Gene Id"}.intersection(df.columns)) == 2],
         axis=0,
-    ).rename(
-        columns={"Description": "antibody_symbol", "Ensembl Gene Id": "ensembl_gene_id"}
-    )
+    ).rename(columns={"Description": "antibody_symbol", "Ensembl Gene Id": "ensembl_gene_id"})
     ab["display_symbol"] = ab["antibody_symbol"]
     ab["display_name"] = ab["antibody_symbol"]
     ab.ensembl_gene_id = ab.ensembl_gene_id.str.split(",")
@@ -197,7 +164,7 @@ def get_antibody_mappings_from_biolegend():
     return ab
 
 
-class Dataimport(object):
+class Dataimport:
     def __init__(self, db_config):
         self.db_config = db_config
         self.conn = None
@@ -209,11 +176,7 @@ class Dataimport(object):
         self.cofn = "./scratch/cl.owl"
 
     def __enter__(self):
-        self.engine = sqlalchemy.create_engine(
-            "postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}".format(
-                **self.db_config
-            )
-        )
+        self.engine = sqlalchemy.create_engine("postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}".format(**self.db_config))
         return self
 
     def __exit__(self, exception_type, exception_value, trace):
@@ -235,9 +198,9 @@ class Dataimport(object):
         url = "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdmp.zip"
         if not os.path.exists(self.ncbitaxonomyfn):
             download(url, self.ncbitaxonomyfn)
-            with ZipFile(self.ncbitaxonomyfn, "r") as zipObject:
+            with ZipFile(self.ncbitaxonomyfn, "r") as zip_object:
                 for fn in ["names.dmp", "nodes.dmp"]:
-                    zipObject.extract(fn, Path(self.ncbitaxonomyfn).parent)
+                    zip_object.extract(fn, Path(self.ncbitaxonomyfn).parent)
 
         # make entry into ontology table
         try:
@@ -255,17 +218,13 @@ class Dataimport(object):
         concept["ontid"] = 3
         concept.to_sql("concept", if_exists="append", index=False, con=self.engine)
         # get ids
-        cids = pd.read_sql(
-            "SELECT cid, ont_code from concept where ontid = 3", con=self.engine
-        )
+        cids = pd.read_sql("SELECT cid, ont_code from concept where ontid = 3", con=self.engine)
 
         # construct the synonym table
         logging.info("import the NCBI taxonomy concept_synonyms")
         synonyms = df[["ont_code", "synonym"]].explode("synonym").drop_duplicates()
         synonyms = synonyms.merge(cids, on="ont_code")
-        synonyms[["cid", "synonym"]].to_sql(
-            "concept_synonym", if_exists="append", con=self.engine, index=False
-        )
+        synonyms[["cid", "synonym"]].to_sql("concept_synonym", if_exists="append", con=self.engine, index=False)
 
         # construct the hierarchy table
         logging.info("import the NCIT concept_hierarchy")
@@ -282,35 +241,33 @@ class Dataimport(object):
         hierarchy = hierarchy.dropna(subset=["parent_cid"])
         hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
         hierarchy = hierarchy[["cid", "parent_cid"]].drop_duplicates()
-        hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
     def import_simplified_flat_taxonomy(self):
         logging.info("importing simplified taxonomy for human, mouse, rat")
-        SPECIES_ONTID = 3
+        species_ontid = 3
         # make entry into ontology table
         try:
-            self.add_ontology(name="taxonomy", ontid=SPECIES_ONTID)
+            self.add_ontology(name="taxonomy", ontid=species_ontid)
         except sqlalchemy.exc.IntegrityError:
             logging.warning("Taxonomy already imported into ontology table")
 
         concept = pd.DataFrame(
             [
-                {"ont_code": -1, "label": "All species", "ontid": SPECIES_ONTID},
-                {"ont_code": 9606, "label": "Homo sapiens", "ontid": SPECIES_ONTID},
+                {"ont_code": -1, "label": "All species", "ontid": species_ontid},
+                {"ont_code": 9606, "label": "Homo sapiens", "ontid": species_ontid},
                 {
                     "ont_code": 10116,
                     "label": "Rattus norvegicus",
-                    "ontid": SPECIES_ONTID,
+                    "ontid": species_ontid,
                 },
-                {"ont_code": 10090, "label": "Mus musculus", "ontid": SPECIES_ONTID},
+                {"ont_code": 10090, "label": "Mus musculus", "ontid": species_ontid},
             ]
         )
         concept.to_sql("concept", if_exists="append", index=False, con=self.engine)
         # get ids
         cids = pd.read_sql(
-            f"SELECT cid, ont_code from concept where ontid = {SPECIES_ONTID}",
+            f"SELECT cid, ont_code from concept where ontid = {species_ontid}",
             con=self.engine,
             index_col="ont_code",
         )
@@ -319,9 +276,7 @@ class Dataimport(object):
         concept_hierarchy = cids.copy()
         concept_hierarchy["parent_cid"] = parent_cid
         concept_hierarchy = concept_hierarchy.drop("-1", axis=0)
-        concept_hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        concept_hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
         synonym = pd.DataFrame(
             [
@@ -335,9 +290,7 @@ class Dataimport(object):
         logging.info("import the taxonomy concept_synonyms")
         synonym = synonym.merge(cids, left_on="ont_code", right_index=True)
         synonym.cid = synonym.cid.astype(int)
-        synonym[["cid", "synonym"]].to_sql(
-            "concept_synonym", if_exists="append", con=self.engine, index=False
-        )
+        synonym[["cid", "synonym"]].to_sql("concept_synonym", if_exists="append", con=self.engine, index=False)
 
     def import_ncit(self):
         logging.info("importing NCIT")
@@ -362,17 +315,13 @@ class Dataimport(object):
         concept["ontid"] = 2
         concept.to_sql("concept", if_exists="append", index=False, con=self.engine)
         # get ids
-        cids = pd.read_sql(
-            "SELECT cid, ont_code from concept where ontid = 2", con=self.engine
-        )
+        cids = pd.read_sql("SELECT cid, ont_code from concept where ontid = 2", con=self.engine)
 
         # construct the synonym table
         logging.info("import the NCIT concept_synonyms")
         synonyms = df[["ont_code", "synonym"]].explode("synonym").drop_duplicates()
         synonyms = synonyms.merge(cids, on="ont_code")
-        synonyms[["cid", "synonym"]].to_sql(
-            "concept_synonym", if_exists="append", con=self.engine, index=False
-        )
+        synonyms[["cid", "synonym"]].to_sql("concept_synonym", if_exists="append", con=self.engine, index=False)
 
         # construct the hierarchy table
         logging.info("import the NCIT concept_hierarchy")
@@ -389,9 +338,7 @@ class Dataimport(object):
         hierarchy = hierarchy.dropna(subset=["parent_cid"])
         hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
         hierarchy = hierarchy[["cid", "parent_cid"]].drop_duplicates()
-        hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
     def import_mesh(self):
         logging.info("importing MeSH")
@@ -422,9 +369,7 @@ class Dataimport(object):
         concept = pd.concat(
             [
                 concept,
-                pd.DataFrame(
-                    {"ontid": [1], "ont_code": ["HEALTHY"], "label": ["Healthy"]}
-                ),
+                pd.DataFrame({"ontid": [1], "ont_code": ["HEALTHY"], "label": ["Healthy"]}),
             ]
         )
         concept = pd.concat(
@@ -442,22 +387,14 @@ class Dataimport(object):
         concept.to_sql("concept", if_exists="append", index=False, con=self.engine)
 
         # get ids
-        cids = pd.read_sql(
-            "SELECT cid, ont_code from concept where ontid = 1", con=self.engine
-        )
+        cids = pd.read_sql("SELECT cid, ont_code from concept where ontid = 1", con=self.engine)
 
         # construct the synonym table
         logging.info("import the MeSH concept_synonyms")
-        synonyms = (
-            df[["UI", "ENTRY"]]
-            .rename(columns={"UI": "ont_code", "ENTRY": "synonym"})
-            .merge(cids, on="ont_code")
-        )
+        synonyms = df[["UI", "ENTRY"]].rename(columns={"UI": "ont_code", "ENTRY": "synonym"}).merge(cids, on="ont_code")
         synonyms = synonyms.explode("synonym").drop_duplicates()
         synonyms.synonym = synonyms.synonym.str.split("|", expand=True)[0]
-        synonyms[["cid", "synonym"]].to_sql(
-            "concept_synonym", if_exists="append", con=self.engine, index=False
-        )
+        synonyms[["cid", "synonym"]].to_sql("concept_synonym", if_exists="append", con=self.engine, index=False)
 
         # construct the hierarchy table
         logging.info("import the MeSH concept_hierarchy")
@@ -471,9 +408,7 @@ class Dataimport(object):
         hierarchy["MN_PARENT"] = hierarchy["MN"].str.split(".").str[:-1].str.join(".")
 
         hierarchy = hierarchy.merge(
-            hierarchy.rename(columns={"cid": "parent_cid"})[
-                ["parent_cid", "MN"]
-            ].drop_duplicates(),
+            hierarchy.rename(columns={"cid": "parent_cid"})[["parent_cid", "MN"]].drop_duplicates(),
             left_on="MN_PARENT",
             right_on="MN",
             how="left",
@@ -481,9 +416,7 @@ class Dataimport(object):
         hierarchy = hierarchy.dropna(subset=["parent_cid"])
         hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
         hierarchy = hierarchy[["cid", "parent_cid"]].drop_duplicates()
-        hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
         # now add a link to disease state
         disease_state_cid = cids.query('ont_code == "DISEASESTATE"').cid.values[0]
@@ -492,13 +425,11 @@ class Dataimport(object):
         all_cids_without_parent.remove(disease_state_cid)
         add_hierarchy = pd.DataFrame({"cid": all_cids_without_parent})
         add_hierarchy["parent_cid"] = disease_state_cid
-        add_hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        add_hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
     def import_co(self):
         logging.info("importing Cell Ontology")
-        CO_ONTID = 4
+        co_ontid = 4
         # download
         url = "http://purl.obolibrary.org/obo/cl.owl"
         if not os.path.exists(self.cofn):
@@ -506,18 +437,14 @@ class Dataimport(object):
 
         # make entry into ontology table
         try:
-            self.add_ontology(name="CO", ontid=CO_ONTID)
+            self.add_ontology(name="CO", ontid=co_ontid)
         except sqlalchemy.exc.IntegrityError:
             logging.warning("Cell ontology already imported into ontology table")
 
         # load the ontology
         print(url)
         onto = ow.get_ontology(url).load()
-        cls = [
-            ele
-            for ele in list(onto.classes())
-            if ele.iri.split("/")[-1].startswith("CL_")
-        ]
+        cls = [ele for ele in list(onto.classes()) if ele.iri.split("/")[-1].startswith("CL_")]
 
         # parse the tree
         concept = []
@@ -539,11 +466,9 @@ class Dataimport(object):
                                 }
                             )
                 if nd.hasExactSynonym:
-                    synonym.append(
-                        {"ont_code": ont_code, "synonym": nd.hasExactSynonym}
-                    )
+                    synonym.append({"ont_code": ont_code, "synonym": nd.hasExactSynonym})
         concept = pd.DataFrame(concept)
-        concept["ontid"] = CO_ONTID
+        concept["ontid"] = co_ontid
         concept = concept.drop_duplicates()
         hierarchy = pd.DataFrame(hierarchy).explode("parent_ont_code")
         synonym = pd.DataFrame(synonym)
@@ -553,7 +478,7 @@ class Dataimport(object):
 
         # get ids
         cids = pd.read_sql(
-            f"SELECT cid, ont_code from concept where ontid = {CO_ONTID}",
+            f"SELECT cid, ont_code from concept where ontid = {co_ontid}",
             con=self.engine,
         )
 
@@ -561,22 +486,18 @@ class Dataimport(object):
         logging.info("import the CO concept_synonyms")
         synonym = synonym.merge(cids, on="ont_code")
         synonym = synonym.explode("synonym").drop_duplicates()
-        synonym[["cid", "synonym"]].to_sql(
-            "concept_synonym", if_exists="append", con=self.engine, index=False
-        )
+        synonym[["cid", "synonym"]].to_sql("concept_synonym", if_exists="append", con=self.engine, index=False)
 
         # construct the hierarchy table
         logging.info("import the CO concept_hierarchy")
         hierarchy = hierarchy.merge(cids, on="ont_code")[["cid", "parent_ont_code"]]
-        hierarchy = hierarchy.merge(
-            cids, left_on="parent_ont_code", right_on="ont_code"
-        )[["cid_x", "cid_y"]].rename(columns={"cid_x": "cid", "cid_y": "parent_cid"})
+        hierarchy = hierarchy.merge(cids, left_on="parent_ont_code", right_on="ont_code")[["cid_x", "cid_y"]].rename(
+            columns={"cid_x": "cid", "cid_y": "parent_cid"}
+        )
         hierarchy = hierarchy.dropna(subset=["parent_cid"])
         hierarchy.parent_cid = hierarchy.parent_cid.astype(int)
         hierarchy = hierarchy[["cid", "parent_cid"]].drop_duplicates()
-        hierarchy.to_sql(
-            "concept_hierarchy", if_exists="append", index=False, con=self.engine
-        )
+        hierarchy.to_sql("concept_hierarchy", if_exists="append", index=False, con=self.engine)
 
     def import_genes(self):
         # import gene mappings
@@ -669,7 +590,7 @@ class Dataimport(object):
         self.import_simplified_flat_taxonomy()
         try:
             self.import_co()
-        except Exception as e:
+        except Exception:
             logging.warning("could not import CO")
 
         self.import_genes()

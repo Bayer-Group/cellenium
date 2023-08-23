@@ -1,4 +1,8 @@
-.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import
+src = data_import
+black = black --line-length 140 $(src)
+ruff = ruff ./$(pkg_src) --line-length 140 --select E,W,F,N,I,C,B,UP,PT,SIM,RUF --ignore E501,C901,B008,N815,N802,N803,SIM105
+
+.PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import format
 .SECONDARY:
 
 reset_database:
@@ -32,3 +36,13 @@ cite_studydata_import: scratch/pbmc3k_processed.h5mu.imported
 huge_studydata_880kcells_33kgenes_import: scratch/heart_failure_reichart2022.h5ad.imported
 
 huge_studydata_880kcells_50genes_import: scratch/heart_failure_reichart2022_gene_subset.h5ad.imported
+
+format:
+	$(ruff) --fix
+	$(black)
+
+check-format:
+	$(black) --check
+
+lint:
+	$(ruff) --format=github
