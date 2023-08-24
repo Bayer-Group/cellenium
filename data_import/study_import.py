@@ -527,7 +527,7 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
                     SELECT study_id FROM study WHERE import_file = :filename
                     """
                 ),
-                dict(filename=str(stored_filename))
+                {"filename": str(stored_filename)},
             )
             study_row = r.fetchone()
             if study_row is None:
@@ -541,11 +541,10 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
                 VALUES (:filename, :filename)
                 RETURNING study_id"""
                 ),
-                dict(filename=str(stored_filename)),
+                {"filename": str(stored_filename)},
             )
             study_id = r.fetchone()[0]
             return study_id
-
 
 
 def update_study_from_file(study_id: int, data: AnnData):
@@ -562,21 +561,19 @@ def update_study_from_file(study_id: int, data: AnnData):
         "disease_mesh_ids": data.uns["cellenium"]["mesh_disease_ids"].tolist(),
         "organism_tax_id": data.uns["cellenium"]["taxonomy_id"],
         "projections": _projection_list(data),
-        "reader_permissions": _config_optional_list(
-            "initial_reader_permissions"
-        ),
+        "reader_permissions": _config_optional_list("initial_reader_permissions"),
         "admin_permissions": _config_optional_list("initial_admin_permissions"),
         "legacy_config": Json(
             data.uns["cellenium"].get("legacy_config"),
             dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
         ),
-        "import_finished": False,
     }
 
     with engine.connect() as connection:
         connection.execute(
-            text(""" 
-                    UPDATE study SET 
+            text(
+                """
+                    UPDATE study SET
                     study_name = :study_name,
                     description = :description,
                     tissue_ncit_ids = :tissue_ncit_ids,
@@ -587,11 +584,14 @@ def update_study_from_file(study_id: int, data: AnnData):
                     reader_permissions = coalesce(reader_permissions, ARRAY[]::text[]) || coalesce(:reader_permissions, ARRAY[]::text[]),
                     admin_permissions = coalesce(admin_permissions, ARRAY[]::text[]) || coalesce(:admin_permissions, ARRAY[]::text[]),
                     legacy_config = :legacy_config,
-                    import_finished = :import_finished,
-                    import_started = true
+                    import_finished = false,
+                    import_started = true,
+                    /* support retry of study upload - reset earlier messages */
+                    import_log = null
                     WHERE study_id = :study_id
-                """),
-            study_data
+                """
+            ),
+            study_data,
         )
 
 
@@ -722,7 +722,6 @@ def import_study(filename: str, analyze_database: bool):
     """
 
     logging.info(f"importing study from file {filename}")
-    data = h5ad_open.h5ad_h5mu_read(filename)
     stored_filename = UPath(filename)
     if filename.startswith("scratch"):
         # filename inside scratch (scratch will be /h5ad_store in postgres docker)
@@ -730,20 +729,19 @@ def import_study(filename: str, analyze_database: bool):
 
     study_id = get_or_create_study_id(stored_filename)
     try:
+        data = h5ad_open.h5ad_h5mu_read(filename)
         update_study_from_file(study_id, data)
         import_study_safe(data, study_id, filename, analyze_database)
-    except Exception as e:
+    except Exception:
         logging.exception("import failed for file %s", filename)
         if IS_AWS_DEPLOYMENT:
             with engine.connect() as connection:
-                log = str()
+                log = ""
                 if pathlib.Path("./study_import.log").exists():
-                    with open("./study_import.log", "r") as f:
+                    with open("./study_import.log") as f:
                         log = f.read()
                 connection.execute(
-                    text(
-                        "UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"
-                    ),
+                    text("UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"),
                     {"study_id": study_id, "log": log},
                 )
         exit(1)
