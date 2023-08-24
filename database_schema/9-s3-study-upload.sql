@@ -83,7 +83,7 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION create_study_upload(IN filetype text, IN study_name text)
+CREATE OR REPLACE FUNCTION create_study_upload(IN filename text)
     RETURNS json
     LANGUAGE plpython3u
     VOLATILE
@@ -111,8 +111,8 @@ AS
         except Exception as e:
             return "anonymous"
 
-    if filetype not in [".h5ad", ".h5mu"]:
-        raise Exception("filetype must be one of .h5ad or .h5mu")
+    if not (filename.endswith(".h5ad") or filename.endswith(".h5mu")):
+        raise Exception("filename must have .h5ad or .h5mu suffix")
 
     if 'S3_BUCKET' not in os.environ:
         raise Exception("S3_BUCKET environment variable not set")
@@ -130,15 +130,15 @@ AS
     username = get_username()
     cleaned_username = re.sub('[^0-9a-zA-Z]+', '', username)
     s3_prefix = f"input/{cleaned_username}/"
-    study_name_cleaned = re.sub('[^0-9a-zA-Z]+', '', study_name)
-    if len(study_name_cleaned) == 0:
-        study_name_cleaned = str(uuid.uuid4())
-    s3_key = f"{s3_prefix}{study_name_cleaned}{filetype}"
+    filename_cleaned = re.sub('[^0-9a-zA-Z]+', '_', filename)
+    if len(filename_cleaned) == 0:
+        filename_cleaned = str(uuid.uuid4())
+    s3_key = f"{s3_prefix}{filename_cleaned}"
 
-    # check if key_exists
+    # check if key exists, and make it unique with a random string before the file suffix
     try:
         s3_client.head_object(Bucket=os.environ['S3_BUCKET'], Key=s3_key)
-        s3_key = f"{s3_prefix}{study_name_cleaned}_{uuid.uuid4()}.{filetype}"
+        s3_key = f"{s3_prefix}{filename_cleaned[:-5]}_{uuid.uuid4()}.{filename_cleaned[-4:]}"
     except ClientError as e:
         if e.response['Error']['Code'] != '404':
             raise e
@@ -157,7 +157,7 @@ AS
     plan = plpy.prepare(
         "INSERT INTO study (study_name, filename, visible, import_started, import_file, reader_permissions, admin_permissions) VALUES ($1, $2, $3, $4, $5, $6, $7)",
         ["text", "text", "bool", "bool", "text", "text[]", "text[]"])
-    plpy.execute(plan, [study_name, pathlib.Path(s3_key).name, False, False, f"s3://{os.environ['S3_BUCKET']}/{s3_key}", user_access, user_access])
+    plpy.execute(plan, ['(name will be obtained from file metadata)', pathlib.Path(s3_key).name, False, False, f"s3://{os.environ['S3_BUCKET']}/{s3_key}", user_access, user_access])
     # The response contains the presigned URL and required fields
     return json.dumps(response)
     $$;
