@@ -106,7 +106,7 @@ export default function StudyAdmin() {
       <Space h="xl" />
       <Stack px="md">
         <Group position="right">
-          {data?.userStudyUploadConfigured && (
+          {(data?.userStudyUploadConfigured || true) && (
             <Button onClick={() => setNewStudyModalOpen(true)}>
               <Group spacing="xs">
                 <IconPlus />

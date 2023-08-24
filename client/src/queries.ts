@@ -330,8 +330,8 @@ gql`
     }
   }
 
-  mutation createStudyUpload($studyName: String!, $filetype: String!) {
-    createStudyUpload(input: { studyName: $studyName, filetype: $filetype }) {
+  mutation createStudyUpload($filename: String!) {
+    createStudyUpload(input: { filename: $filename }) {
       json
     }
   }
