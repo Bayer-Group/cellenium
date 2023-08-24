@@ -71,6 +71,7 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
                 .map(([key, value]) => '-F ' + key + '=' + value)
                 .join(' ')} -F file=@<PATH_TO_YOUR_FILE> ${studyUploadData?.createStudyUpload.json['url']}`}
             </Prism>
+            <Text>You can close this dialog. Once uploaded, data will be processed automatically. Refresh the study list to observe the current status.</Text>
           </>
         )}
 

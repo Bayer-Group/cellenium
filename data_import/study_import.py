@@ -669,8 +669,9 @@ def update_study_from_file(study_id: int, data: AnnData):
                     disease_mesh_ids = :disease_mesh_ids,
                     organism_tax_id = :organism_tax_id,
                     projections = :projections,
-                    reader_permissions = :reader_permissions,
-                    admin_permissions = :admin_permissions,
+                    /* extend existing arrays to make sure the uploader does not lose permissions herself */
+                    reader_permissions = coalesce(reader_permissions, ARRAY[]::text[]) || coalesce(:reader_permissions, ARRAY[]::text[]),
+                    admin_permissions = coalesce(admin_permissions, ARRAY[]::text[]) || coalesce(:admin_permissions, ARRAY[]::text[]),
                     legacy_config = :legacy_config,
                     import_finished = :import_finished,
                     import_started = true

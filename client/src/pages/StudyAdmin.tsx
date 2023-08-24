@@ -37,6 +37,7 @@ export default function StudyAdmin() {
       name: 'ID',
       selector: (row: StudyAdminDetailsFragment) => row.studyId,
       sortable: true,
+      width: '60px',
     },
     {
       name: 'Title',
@@ -52,6 +53,7 @@ export default function StudyAdmin() {
       name: 'Your Role',
       selector: (row: StudyAdminDetailsFragment) => (row.adminPermissionGranted ? 'Admin' : row.readerPermissionGranted ? 'View' : 'No Access'),
       sortable: true,
+      width: '100px',
     },
     {
       name: 'Import Status',
@@ -62,18 +64,23 @@ export default function StudyAdmin() {
             : row.importFinished
             ? 'Imported'
             : 'Unknown Error'
-          : row.importFinished
-          ? 'Imported'
           : row.importFailed
           ? 'Failed'
+          : row.importFinished
+          ? 'Imported'
           : 'Not Started',
       sortable: true,
+      width: '130px',
     },
     {
       name: '',
       width: '50px',
       cell: (row: StudyAdminDetailsFragment) =>
-        !row.hasImportLog ? null : <IconArticle onClick={() => setSelectedLogStudy(row)} style={{ cursor: 'pointer' }} />,
+        !row.hasImportLog ? null : (
+          <span title={'View import logs'}>
+            <IconArticle onClick={() => setSelectedLogStudy(row)} style={{ cursor: 'pointer' }} />
+          </span>
+        ),
     },
     {
       name: '',
