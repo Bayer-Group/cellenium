@@ -121,7 +121,7 @@ export default function StudyAdmin() {
             <Loader variant="dots" color="blue" size="md" />
           </Group>
         )}
-        {!loading && data ? <DataTable data={data?.studyAdminDetailsList || []} columns={columns} /> : null}
+        {!loading && data ? <DataTable data={data?.studyAdminDetailsList || []} columns={columns} defaultSortFieldId={1} defaultSortAsc={false} /> : null}
         {error && (
           <Group position="center">
             <Text weight="bold">An Error occurred</Text>
