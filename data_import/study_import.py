@@ -562,7 +562,9 @@ def update_study_from_file(study_id: int, data: AnnData):
         "disease_mesh_ids": data.uns["cellenium"]["mesh_disease_ids"].tolist(),
         "organism_tax_id": data.uns["cellenium"]["taxonomy_id"],
         "projections": _projection_list(data),
-        "reader_permissions": _config_optional_list("initial_reader_permissions"),
+        "reader_permissions": _config_optional_list(
+            "initial_reader_permissions"
+        ),
         "admin_permissions": _config_optional_list("initial_admin_permissions"),
         "legacy_config": Json(
             data.uns["cellenium"].get("legacy_config"),
@@ -572,57 +574,6 @@ def update_study_from_file(study_id: int, data: AnnData):
     }
 
     with engine.connect() as connection:
-        if IS_AWS_DEPLOYMENT:
-            r = connection.execute(
-                text(
-                    """
-                    SELECT study_id FROM study WHERE import_file = :filename
-                    """
-                ),
-                {"filename": str(stored_filename)},
-            )
-            study_id = r.fetchone()
-            if study_id is None:
-                raise Exception(f"Study with filename {stored_filename} not found")
-            study_id = study_id[0]
-            study_data["study_id"] = study_id
-
-            connection.execute(
-                text(
-                    """
-                        UPDATE study SET
-                        filename = :filename,
-                        study_name = :study_name,
-                        description = :description,
-                        tissue_ncit_ids = :tissue_ncit_ids,
-                        disease_mesh_ids = :disease_mesh_ids,
-                        organism_tax_id = :organism_tax_id,
-                        projections = :projections,
-                        reader_permissions = :reader_permissions,
-                        admin_permissions = :admin_permissions,
-                        legacy_config = :legacy_config,
-                        import_finished = :import_finished,
-                        import_started = true
-                        WHERE study_id = :study_id
-                    """
-                ),
-                study_data,
-            )
-            connection.connection.commit()
-        else:
-            r = connection.execute(
-                text(
-                    """INSERT INTO study (filename, study_name, description, tissue_ncit_ids, disease_mesh_ids, organism_tax_id,
-                   projections, reader_permissions, admin_permissions, legacy_config)
-                VALUES (:filename, :study_name, :description, :tissue_ncit_ids, :disease_mesh_ids, :organism_tax_id,
-                   :projections, :reader_permissions, :admin_permissions, :legacy_config
-                )
-                RETURNING study_id"""
-                ),
-                study_data,
-            )
-            study_id = r.fetchone()[0]
-    return study_id
         connection.execute(
             text(""" 
                     UPDATE study SET 
@@ -759,7 +710,7 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
     return study_id
 
 
-def import_study(filename: str, analyze_database: bool) -> int:
+def import_study(filename: str, analyze_database: bool):
     """
     TODO enable S3 access as we had before:
 
