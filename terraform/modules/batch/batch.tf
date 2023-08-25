@@ -133,7 +133,7 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
 
   container_properties = jsonencode({
 
-    command    = ["Ref::analyze-database", "Ref::filename"]
+    command    = ["Ref::filename"]
     image      = "${aws_ecr_repository.study_import_batch_repository.repository_url}:latest"
     jobRoleArn = aws_iam_role.batch_execution_role.arn
 
