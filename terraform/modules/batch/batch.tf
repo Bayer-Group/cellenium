@@ -141,10 +141,6 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
       platformVersion = "LATEST"
     }
 
-    parameters = {
-      analyze-database = "--analyze-database"
-    }
-
     executionRoleArn = aws_iam_role.batch_execution_role.arn
 
     "ephemeralStorage" : {
