@@ -1,12 +1,13 @@
-import React from "react";
-import { ReactComponent as Heart } from "./svg/heart.svg";
+import Heart from './svg/heart.svg';
+
 interface IMouseIcon {
   size: number;
 }
+
 const HeartIcon = ({ size }: IMouseIcon) => {
   return (
     <div style={{ width: size }}>
-      <Heart />
+      <img src={Heart} alt="heart icon" />
     </div>
   );
 };

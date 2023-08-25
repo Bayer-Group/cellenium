@@ -13,8 +13,10 @@ CREATE TABLE study
     projections        text[],
     visible            boolean default False,
     import_started     boolean default False,
+    import_finished    boolean default False,
     import_failed      boolean default False,
     import_log         text,
+    import_file        text, --- s3 file path
     reader_permissions text[],
     admin_permissions  text[],
     legacy_config      jsonb
@@ -41,6 +43,7 @@ grant select on study_administrable_currentuser to postgraphile;
 
 ALTER TABLE study
     ENABLE ROW LEVEL SECURITY;
+
 CREATE POLICY study_policy ON study FOR SELECT TO postgraphile
     USING (
         study_id in (select study_id
@@ -51,7 +54,32 @@ CREATE POLICY study_update_policy ON study FOR UPDATE TO postgraphile
         study_id in (select study_id
                      from study_administrable_currentuser)
     );
-grant select, update on study to postgraphile;
+CREATE POLICY study_delete_policy ON study FOR DELETE TO postgraphile
+    USING (
+        study_id in (select study_id
+                     from study_administrable_currentuser)
+    );
+
+DROP POLICY IF EXISTS study_insert_policy ON study;
+CREATE POLICY study_insert_policy ON study FOR INSERT TO postgraphile
+    WITH CHECK (
+        true
+    );
+
+grant insert, select, update, delete on study to postgraphile;
+grant usage, select ON sequence study_study_id_seq TO postgraphile;
+
+CREATE OR REPLACE FUNCTION create_study_for_current_user(in study_name text)
+    RETURNS bool
+    LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO study (study_name, reader_permissions, admin_permissions)
+    VALUES (study_name, null, null);
+    RETURN true;
+END;
+$$;
+
 
 
 drop table if exists omics_base cascade;

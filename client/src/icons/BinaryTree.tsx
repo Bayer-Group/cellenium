@@ -1,15 +1,12 @@
-import React from "react";
-import { ReactComponent as Icon } from "./svg/BinaryTree.svg";
+import Icon from './svg/BinaryTree.svg';
 
 interface Icon {
   size?: string;
-  className?: string
+  className?: string;
 }
 
-const BinaryTreeIcon = ({ size, className }: Icon) => {
-  return (
-      <Icon className={className}/>
-  );
+const BinaryTreeIcon = ({ className }: Icon) => {
+  return <img src={Icon} className={className} alt="binary tree icon" />;
 };
 
 export default BinaryTreeIcon;

@@ -218,9 +218,24 @@ select s.study_id,
        s.admin_permissions,
        s.disease_mesh_ids,
        s.tissue_ncit_ids,
+       s.import_started,
+       s.import_failed,
+       s.import_finished,
+       (case when s.import_log is not null then True else False end) as has_import_log,
        case when sv.study_id is not null then True else False end "reader_permission_granted",
        case when sa.study_id is not null then True else False end "admin_permission_granted"
 from study s
          left join study_visible_currentuser sv on sv.study_id = s.study_id
          left join study_administrable_currentuser sa on sa.study_id = s.study_id;
 grant select on study_admin_details to postgraphile;
+
+drop view if exists study_import_log cascade;
+create view study_import_log
+as
+select s.import_file,
+       s.import_log,
+       s.study_id
+from study s
+         left join study_visible_currentuser sv on sv.study_id = s.study_id
+         left join study_administrable_currentuser sa on sa.study_id = s.study_id;
+grant select on study_import_log to postgraphile;

@@ -1,8 +1,11 @@
-from psycopg2 import extras
-from psycopg2.extensions import register_adapter, AsIs
-import numpy as np
-from sqlalchemy import create_engine
 import json
+import os
+
+import boto3
+import numpy as np
+from psycopg2 import extras
+from psycopg2.extensions import AsIs, register_adapter
+from sqlalchemy import create_engine
 
 
 def addapt_numpy_float64(numpy_float64):
@@ -38,7 +41,7 @@ register_adapter(np.ndarray, addapt_numpy_array)
 
 
 class NumpyEncoder(json.JSONEncoder):
-    """ Special json encoder for numpy types """
+    """Special json encoder for numpy types"""
 
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -51,26 +54,27 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.item()
         return json.JSONEncoder.default(self, obj)
 
-def list_to_pgarray(l):
-    return '{' + ','.join(l) + '}'
+
+def list_to_pgarray(iterable: list):
+    return "{" + ",".join(iterable) + "}"
 
 
-def import_df(df, schema_and_table: str):
+def import_df(df, schema_and_table: str, engine):
     """
     Append a dataframe into a postgres table - works with reordered/missing columns
     """
 
     def _quote_special_char_column(c):
-        if '.' in c:
+        if "." in c:
             return f'"{c}"'
         return c
 
     # Create a list of tuples from the dataframe values
     tuples = [tuple(x) for x in df.to_numpy()]
     # Comma-separated dataframe columns
-    cols = ','.join([_quote_special_char_column(str(c)) for c in df.columns])
+    cols = ",".join([_quote_special_char_column(str(c)) for c in df.columns])
     # SQL query to execute
-    query = "INSERT INTO %s(%s) VALUES %%s" % (schema_and_table, cols)
+    query = f"INSERT INTO {schema_and_table}({cols}) VALUES %s"
     with engine.connect() as connection:
         cursor = connection.connection.cursor()
         extras.execute_values(connection.connection.cursor(), query, tuples)
@@ -78,5 +82,24 @@ def import_df(df, schema_and_table: str):
         connection.connection.commit()
 
 
-url = f"postgresql://postgres:postgres@localhost:5001/postgres"
-engine = create_engine(url)
+def get_aws_db_engine():
+    session = boto3.session.Session()
+    client = session.client(
+        service_name="secretsmanager",
+        region_name=os.environ.get("AWS_REGION", "eu-central-1"),
+    )
+
+    secret_values = json.loads(client.get_secret_value(SecretId=os.environ.get("AWS_DB_SECRET"))["SecretString"])
+    db = secret_values["DB"]
+    db_host = secret_values["IP"]
+    db_port = secret_values["PORT"]
+    db_user = secret_values["USER"]
+    db_password = secret_values["PASSWORD"]
+
+    return create_engine(url=f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db}")
+
+
+def get_local_db_engine(url: str):
+    if url is None:
+        url = "postgresql://postgres:postgres@localhost:5001/postgres"
+    return create_engine(url=url)
