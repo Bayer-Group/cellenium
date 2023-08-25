@@ -75,7 +75,7 @@ def lambda_handler(event, context):
         jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
         jobName="".join(e for e in key if e.isalnum()),
         jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
-        parameters={"filename": key, "analyze-database": "--analyze-database"},
+        parameters={"filename": key},
         tags={
             'studyId': str(study_ids[0])
         },

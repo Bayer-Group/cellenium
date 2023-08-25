@@ -130,7 +130,7 @@ AS
     username = get_username()
     cleaned_username = re.sub('[^0-9a-zA-Z]+', '', username)
     s3_prefix = f"input/{cleaned_username}/"
-    filename_cleaned = re.sub('[^0-9a-zA-Z]+', '_', filename)
+    filename_cleaned = re.sub('[^0-9a-zA-Z\.]+', '_', filename)
     if len(filename_cleaned) == 0:
         filename_cleaned = str(uuid.uuid4())
     s3_key = f"{s3_prefix}{filename_cleaned}"
