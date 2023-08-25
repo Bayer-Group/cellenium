@@ -1,5 +1,5 @@
 src = data_import
-black = black --line-length 140 $(src)
+black = black --line-length 140 --exclude '.*\.ipynb' $(src)
 ruff = ruff ./$(pkg_src) --line-length 140 --select E,W,F,N,I,C,B,UP,PT,SIM,RUF --ignore E501,C901,B008,N815,N802,N803,SIM105
 
 .PHONY = reset_database normal_studydata_import test_studydata_import huge_studydata_import atac_studydata_import cite_studydata_import format
