@@ -711,16 +711,6 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
 
 
 def import_study(filename: str, analyze_database: bool):
-    """
-    TODO enable S3 access as we had before:
-
-    adata = h5ad_open.h5ad_read(filename)
-    stored_filename = filename
-    if stored_filename.startswith('scratch'):
-        # filename inside scratch (scratch will be /h5ad_store in postgres docker)
-        stored_filename = Path(filename).relative_to("scratch").as_posix()
-    """
-
     logging.info(f"importing study from file {filename}")
     stored_filename = UPath(filename)
     if filename.startswith("scratch"):
