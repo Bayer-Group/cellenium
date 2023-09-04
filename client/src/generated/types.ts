@@ -4582,6 +4582,7 @@ export type QueryViolinPlotArgs = {
   pAnnotationGroupId: InputMaybe<Scalars['Int']>;
   pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pOmicsId: InputMaybe<Scalars['Int']>;
+  pSecondaryAnnotationGroupId: InputMaybe<Scalars['Int']>;
   pStudyId: InputMaybe<Scalars['Int']>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
@@ -7378,6 +7379,7 @@ export type ExpressionViolinPlotQueryVariables = Exact<{
   omicsId: Scalars['Int'];
   annotationGroupId: Scalars['Int'];
   excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
+  annotationSecondaryGroupId: InputMaybe<Scalars['Int']>;
 }>;
 
 export type ExpressionViolinPlotQuery = { __typename?: 'Query'; violinPlot: string };
@@ -8025,13 +8027,21 @@ export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressio
 export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
 export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
 export const ExpressionViolinPlotDocument = gql`
-  query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  query ExpressionViolinPlot(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsId: Int!
+    $annotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+    $annotationSecondaryGroupId: Int
+  ) {
     violinPlot(
       pStudyId: $studyId
       pStudyLayerId: $studyLayerId
       pOmicsId: $omicsId
       pAnnotationGroupId: $annotationGroupId
       pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pSecondaryAnnotationGroupId: $annotationSecondaryGroupId
     )
   }
 `;
@@ -8053,6 +8063,7 @@ export const ExpressionViolinPlotDocument = gql`
  *      omicsId: // value for 'omicsId'
  *      annotationGroupId: // value for 'annotationGroupId'
  *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
+ *      annotationSecondaryGroupId: // value for 'annotationSecondaryGroupId'
  *   },
  * });
  */

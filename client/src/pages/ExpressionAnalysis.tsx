@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import ExpressionAnalysisTypeSelectBox from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
 import { Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme } from '@mantine/core';
-import { AnnotationFilterDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel, UserGeneStore } from '../components';
+import { AnnotationFilterDisplay, AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel, UserGeneStore } from '../components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   annotationGroupIdState,
+  annotationSecondaryGroupIdState,
   selectedAnnotationFilterState,
   selectedGenesState,
   studyIdState,
@@ -17,6 +18,7 @@ import { useExpressionValues } from '../hooks';
 import { useExpressionByAnnotationQuery, useExpressionViolinPlotQuery } from '../generated/types';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import ProjectionSelectBox from '../components/ProjectionSelectBox/ProjectionSelectBox';
+import { AnnotationSecondGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox.tsx';
 
 const analysisTypes = [
   { value: 'violinplot', label: 'Violin plot' },
@@ -34,6 +36,7 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
   const studyId = useRecoilValue(studyIdState);
   const studyLayerId = useRecoilValue(studyLayerIdState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
+  const annotationSecondaryGroupId = useRecoilValue(annotationSecondaryGroupIdState);
   const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
   const { data, loading } = useExpressionViolinPlotQuery({
     variables: {
@@ -41,6 +44,8 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
       studyLayerId,
       omicsId,
       annotationGroupId: annotationGroupId || -1,
+      // @ts-ignore
+      annotationSecondaryGroupId: annotationSecondaryGroupId,
       excludeAnnotationValueIds: annotationFilter,
     },
     skip: !annotationGroupId || !studyId,
@@ -161,6 +166,8 @@ const ExpressionAnalysis = () => {
   const selectedGenes = useRecoilValue(selectedGenesState);
 
   const study = useRecoilValue(studyState);
+  const annotationGroupId = useRecoilValue(annotationGroupIdState);
+  const annotationSecondaryGroupId = useRecoilValue(annotationSecondaryGroupIdState);
   if (!study) {
     return <></>;
   }
@@ -172,6 +179,15 @@ const ExpressionAnalysis = () => {
           {(analysisType === 'violinplot' || analysisType == 'dotplot') && (
             <>
               <AnnotationGroupSelectBox />
+              {analysisType === 'violinplot' && annotationGroupId && annotationSecondaryGroupId && (
+                <>
+                  <Text size={'xs'}>Violins are colored by annotation</Text>
+                  <AnnotationGroupDisplay disableSelection />
+                </>
+              )}
+
+              {analysisType === 'violinplot' && <AnnotationSecondGroupSelectBox />}
+
               <Divider my="sm" />
               <AnnotationFilterDisplay />
             </>

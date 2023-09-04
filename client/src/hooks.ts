@@ -5,6 +5,7 @@ import { ExpressionTable } from './model';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
   annotationGroupIdState,
+  annotationSecondaryGroupIdState,
   highlightAnnotationState,
   pageState,
   selectedAnnotationState,
@@ -94,6 +95,7 @@ export function useSetStudyFromUrl() {
   const study = useRecoilValue(studyState);
   const setPage = useSetRecoilState(pageState);
   const setAnnotationGroupId = useSetRecoilState(annotationGroupIdState);
+  const setSecondaryAnnotationGroupId = useSetRecoilState(annotationSecondaryGroupIdState);
   const setUserGenes = useSetRecoilState(userGenesState);
   const setSelectedGenes = useSetRecoilState(selectedGenesState);
   const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
@@ -103,6 +105,7 @@ export function useSetStudyFromUrl() {
       setValidParam('page', setPage);
       setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
       setValidParam('annotationValueId', setSelectedAnnotation);
+      setSecondaryAnnotationGroupId(undefined);
       setValidParam('omicsId', (omicsId: number) => {
         const o = study.studyOmicsMap.get(omicsId);
         setUserGenes(o ? [o] : []);

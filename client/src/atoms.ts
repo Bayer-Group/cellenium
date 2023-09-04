@@ -70,6 +70,11 @@ export const annotationGroupIdState = atom<number | undefined>({
   default: undefined,
 });
 
+export const annotationSecondaryGroupIdState = atom<number | undefined>({
+  key: 'annotationSecondaryGroupId',
+  default: undefined,
+});
+
 export const studyIdState = atom<number>({
   key: 'studyId',
   default: undefined,

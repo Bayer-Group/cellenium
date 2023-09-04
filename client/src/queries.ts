@@ -168,13 +168,21 @@ gql`
     }
   }
 
-  query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  query ExpressionViolinPlot(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsId: Int!
+    $annotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+    $annotationSecondaryGroupId: Int
+  ) {
     violinPlot(
       pStudyId: $studyId
       pStudyLayerId: $studyLayerId
       pOmicsId: $omicsId
       pAnnotationGroupId: $annotationGroupId
       pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pSecondaryAnnotationGroupId: $annotationSecondaryGroupId
     )
   }
 
