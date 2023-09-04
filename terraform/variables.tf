@@ -1,3 +1,8 @@
+variable "stage" {
+  type    = string
+  default = "prod"
+}
+
 variable "docker_host" {
   type        = string
   description = "The local docker host to use for building and pushing images, identify by using `docker context ls`"

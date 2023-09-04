@@ -27,6 +27,11 @@ variable "aws_region" {
   }
 }
 
+variable "stage" {
+  type    = string
+  default = "prod"
+}
+
 variable "bucket_name" {
   type    = string
   default = "cellenium-study-import"

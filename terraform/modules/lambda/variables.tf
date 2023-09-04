@@ -27,6 +27,10 @@ variable "aws_region" {
   }
 }
 
+variable "stage" {
+  type    = string
+  default = "prod"
+}
 
 variable "vpc_id" {
   type = string

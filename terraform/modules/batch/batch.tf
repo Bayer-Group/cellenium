@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "study_import_batch_repository" {
-  name                 = "${data.aws_caller_identity.current.account_id}-${var.ecr_repository_name}"
+  name                 = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.ecr_repository_name}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -51,7 +51,7 @@ resource "null_resource" "study_import_batch_docker_image" {
 
 
 resource "aws_security_group" "cellenium_study_import_batch_security_group" {
-  name        = "${data.aws_caller_identity.current.account_id}-${var.security_group_name}"
+  name        = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.security_group_name}"
   description = "Security group for cellenium study import with AWS Batch"
   vpc_id      = var.vpc_id
 }
@@ -83,7 +83,7 @@ resource "aws_security_group_rule" "cellenium_study_import_security_group_rule_e
   protocol                 = "TCP"
   source_security_group_id = aws_security_group.cellenium_study_import_batch_security_group.id
   security_group_id        = var.ec2_security_group_id
-  description              = "${data.aws_caller_identity.current.account_id}-cellenium-batch-access"
+  description              = "${data.aws_caller_identity.current.account_id}-${var.stage}-cellenium-batch-access"
 }
 
 #resource "aws_security_group_rule" "cellenium_study_import_batch_ingress_security_group_rule" {
@@ -97,7 +97,7 @@ resource "aws_security_group_rule" "cellenium_study_import_security_group_rule_e
 
 
 resource "aws_batch_compute_environment" "cellenium_study_import_compute_environment" {
-  compute_environment_name = "${data.aws_caller_identity.current.account_id}-${var.compute_environment_name}"
+  compute_environment_name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.compute_environment_name}"
 
   compute_resources {
     type               = "FARGATE"
@@ -110,7 +110,7 @@ resource "aws_batch_compute_environment" "cellenium_study_import_compute_environ
 }
 
 resource "aws_batch_job_queue" "cellenium_study_import_job_queue" {
-  name = "${data.aws_caller_identity.current.account_id}-${var.job_queue_name}"
+  name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.job_queue_name}"
 
   priority = 1
   state    = "ENABLED"
@@ -120,7 +120,7 @@ resource "aws_batch_job_queue" "cellenium_study_import_job_queue" {
 }
 
 resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
-  name = "${data.aws_caller_identity.current.account_id}-${var.job_definition_name}"
+  name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.job_definition_name}"
   type = "container"
 
   platform_capabilities = [
@@ -177,7 +177,7 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
 
 
 resource "aws_cloudwatch_event_rule" "failed_job_cloudwatch_event_rule" {
-  name        = "${data.aws_caller_identity.current.account_id}-${var.failed_batch_cloudwatch_rule_name}"
+  name        = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.failed_batch_cloudwatch_rule_name}"
   description = "calls a lambda function is a batch import job failed."
 
 

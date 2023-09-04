@@ -2,7 +2,15 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.16"
+      version = ">= 4.67"
+    }
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "3.0.2"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 3.0"
     }
   }
   required_version = ">= 1.5.0"
@@ -15,6 +23,7 @@ provider "aws" {
 
 module "cellenium_study_import_s3" {
   source = "./modules/s3"
+  stage  = var.stage
 }
 
 
@@ -35,6 +44,7 @@ module "cellenium_study_import_lambda" {
   s3_bucket_name                   = module.cellenium_study_import_s3.s3_bucket_name
   batch_job_definition_arn         = module.cellenium_study_import_batch.batch_job_definition_arn
   batch_queue_arn                  = module.cellenium_study_import_batch.batch_queue_arn
+  stage                            = var.stage
 }
 
 
@@ -50,6 +60,7 @@ module "cellenium_study_import_batch" {
   vpc_id                  = var.vpc_id
   subnet_ids              = var.subnet_ids
   docker_host             = var.docker_host
+  stage                   = var.stage
 }
 
 

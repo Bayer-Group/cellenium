@@ -1,5 +1,5 @@
 resource "aws_iam_role" "batch_execution_role" {
-  name = "${data.aws_caller_identity.current.account_id}-${var.batch_import_role_name}"
+  name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.batch_import_role_name}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -22,7 +22,7 @@ resource "aws_iam_role" "batch_execution_role" {
   })
 
   inline_policy {
-    name = "${data.aws_caller_identity.current.account_id}-${var.batch_import_policy_name}"
+    name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.batch_import_policy_name}"
 
     policy = jsonencode({
       Version = "2012-10-17"
@@ -91,7 +91,7 @@ resource "aws_iam_role_policy_attachment" "batch_role_policy_attachment_ecs_task
 
 
 resource "aws_iam_role_policy" "manage_ecs" {
-  name = "${data.aws_caller_identity.current.account_id}-${var.manage_ecs_policy_name}"
+  name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.manage_ecs_policy_name}"
   role = aws_iam_role.batch_execution_role.id
 
   policy = jsonencode({
@@ -99,7 +99,7 @@ resource "aws_iam_role_policy" "manage_ecs" {
     Statement = [
       {
         Action = [
-          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters"
+          "ecs:DeleteCluster", "ecs:DescribeClusters", "ecs:ListClusters", "ecs:CreateCluster"
         ]
         Effect   = "Allow"
         Resource = ["*"]

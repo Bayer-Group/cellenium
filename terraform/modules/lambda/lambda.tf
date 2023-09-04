@@ -6,49 +6,27 @@ resource "null_resource" "lambda_layer_zip" {
 
   triggers = {
     source_code_hash = filebase64sha256("${path.module}/lambda_layer/requirements.txt")
-    zip_file         = fileexists("${path.module}/lambda_layer.zip") ? "1": uuid()
+    zip_file         = fileexists("${path.module}/lambda_layer.zip") ? "1" : uuid()
   }
 }
 
-resource "null_resource" "lambda_submit_zip" {
-  provisioner "local-exec" {
-    command     = "make build_lambda_submit"
-    working_dir = path.module
-  }
-
-  triggers = {
-    source_code_hash = filebase64sha256("${path.module}/lambda_submit/lambda_function.py")
-    zip_file         = fileexists("${path.module}/lambda_submit.zip") ? "1": uuid()
-  }
+data "archive_file" "lambda_submit_zip" {
+  type        = "zip"
+  source_file = "${path.module}/lambda_submit/lambda_function.py"
+  output_path = "${path.module}/lambda_submit.zip"
 }
 
-
-resource "null_resource" "lambda_failed_zip" {
-  provisioner "local-exec" {
-    command     = "make build_lambda_failed"
-    working_dir = path.module
-  }
-
-  triggers = {
-    source_code_hash = filebase64sha256("${path.module}/lambda_failed/lambda_function.py")
-    zip_file         = fileexists("${path.module}/lambda_failed.zip") ? "1": uuid()
-  }
+data "archive_file" "lambda_failed_zip" {
+  type        = "zip"
+  source_file = "${path.module}/lambda_failed/lambda_function.py"
+  output_path = "${path.module}/lambda_failed.zip"
 }
 
 resource "aws_security_group" "cellenium_study_import_lambda_security_group" {
-  name        = "${data.aws_caller_identity.current.account_id}-${var.lambda_security_group}"
+  name        = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.lambda_security_group}"
   description = "Security group for cellenium study import with AWS Batch"
-  vpc_id      = data.aws_vpc.vpc.id
+  vpc_id      = var.vpc_id
 }
-
-#resource "aws_security_group_rule" "cellenium_study_import_lambda_ingress_security_group_rule" {
-#  type              = "ingress"
-#  from_port         = 0
-#  to_port           = 65535
-#  protocol          = "tcp"
-#  cidr_blocks       = ["0.0.0.0/0"]
-#  security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
-#}
 
 resource "aws_security_group_rule" "cellenium_study_import_lambda_egress_security_group_rule" {
   type                     = "egress"
@@ -76,13 +54,13 @@ resource "aws_security_group_rule" "cellenium_study_import_security_group_rule_e
   protocol                 = "TCP"
   source_security_group_id = aws_security_group.cellenium_study_import_lambda_security_group.id
   security_group_id        = var.ec2_security_group_id
-  description              = "${data.aws_caller_identity.current.account_id}-cellenium-lambda-access"
+  description              = "${data.aws_caller_identity.current.account_id}-${var.stage}-cellenium-lambda-access"
 }
 
 
 resource "aws_lambda_layer_version" "lambda_layer_psycopg2_sqlalchemy" {
   filename   = "${path.module}/lambda_layer.zip"
-  layer_name = "${data.aws_caller_identity.current.account_id}-${var.lambda_layer_name}"
+  layer_name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.lambda_layer_name}"
 
   compatible_runtimes      = ["python3.10"]
   compatible_architectures = ["x86_64"]
@@ -93,13 +71,13 @@ resource "aws_lambda_layer_version" "lambda_layer_psycopg2_sqlalchemy" {
 
 resource "aws_lambda_function" "submit_study_import_lambda" {
   filename      = "${path.module}/lambda_submit.zip"
-  function_name = "${data.aws_caller_identity.current.account_id}-${var.submit_study_import_lambda_function_name}"
+  function_name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.submit_study_import_lambda_function_name}"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
 
   runtime          = "python3.10"
-  depends_on       = [null_resource.lambda_submit_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
-  source_code_hash = filebase64sha256("${path.module}/lambda_submit/lambda_function.py")
+  depends_on       = [data.archive_file.lambda_submit_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
+  source_code_hash = data.archive_file.lambda_submit_zip.output_base64sha256
   layers           = [aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy.arn]
 
   timeout     = 60
@@ -122,13 +100,13 @@ resource "aws_lambda_function" "submit_study_import_lambda" {
 
 resource "aws_lambda_function" "failed_study_import_lambda" {
   filename      = "${path.module}/lambda_failed.zip"
-  function_name = "${data.aws_caller_identity.current.account_id}-${var.failed_study_import_lambda_function_name}"
+  function_name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.failed_study_import_lambda_function_name}"
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda_function.lambda_handler"
 
   runtime          = "python3.10"
-  depends_on       = [null_resource.lambda_failed_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
-  source_code_hash = filebase64sha256("${path.module}/lambda_failed/lambda_function.py")
+  depends_on       = [data.archive_file.lambda_failed_zip, aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy]
+  source_code_hash = data.archive_file.lambda_failed_zip.output_base64sha256
   layers           = [aws_lambda_layer_version.lambda_layer_psycopg2_sqlalchemy.arn]
 
   timeout     = 60
