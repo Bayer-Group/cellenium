@@ -1,5 +1,5 @@
 FROM --platform=linux/amd64 python:3.10 AS build
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean -y && apt-get update -y && apt upgrade -y && apt-get install -y --fix-missing build-essential cmake
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean -y && apt-get update -y && apt-get upgrade -y && apt-get install -y --fix-missing build-essential cmake
 
 COPY ./data_import/study_import_requirements.txt .
 RUN pip install --target=/opt/requirements -r ./study_import_requirements.txt

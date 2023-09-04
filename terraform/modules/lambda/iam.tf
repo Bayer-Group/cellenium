@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_role" {
-  name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}"
+  name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.import_role_name}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,7 +15,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   inline_policy {
-    name = "${data.aws_caller_identity.current.account_id}-${var.import_role_name}-inline-policy"
+    name = "${data.aws_caller_identity.current.account_id}-${var.stage}-${var.import_role_name}-inline-policy"
 
     policy = jsonencode({
       Version = "2012-10-17"
