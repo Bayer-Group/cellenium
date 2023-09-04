@@ -68,8 +68,8 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
         {studyUploadData !== undefined && (
           <>
             <Text>
-              Please upload your study file using the following curl command. (The local filename is found after the @ symbol in the proposed curl command,
-              feel free to modify the actual local name and path.)
+              Please upload your study file using the following curl command. (The local filename is found after the @ symbol in the proposed curl command, feel
+              free to modify the actual local name and path.)
             </Text>
             <Prism language="bash" copyLabel="Command code to clipboard" copiedLabel="Command copied to clipboard">
               {`curl -v ${Object.entries(studyUploadData?.createStudyUpload.json['fields'])
