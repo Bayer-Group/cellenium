@@ -73,3 +73,25 @@ module "cellenium_db_secret" {
   port     = var.db_credentials.port
   user     = var.db_credentials.username
 }
+
+
+module "api_gateway" {
+  source = "./modules/api_gateway"
+
+  stage                  = var.stage
+  vpc_id                 = var.vpc_id
+  route53_hosted_zone_id = var.route53_hosted_zone_id
+
+  api_authorizer_issuer           = var.api_authorizer_issuer
+  api_authorizer_audiences        = var.api_authorizer_audiences
+  api_domain_name                 = var.api_domain_name
+  api_domain_name_certificate_arn = var.api_domain_name_certificate_arn
+  ec2_security_group_id           = var.ec2_security_group_id
+  ec2_security_group_port         = var.ec2_security_group_port
+  ec2_target_group_port           = var.ec2_security_group_port
+  vpc_link_subnet_ids             = var.vpc_link_subnet_ids
+
+  ec2_instance_id = var.ec2_instance_id
+  nlb_port        = var.nlb_port
+  nlb_subnet_ids  = var.nlb_subnet_ids
+}

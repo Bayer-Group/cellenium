@@ -17,6 +17,10 @@ variable "ec2_security_group_port" {
   type = number
 }
 
+variable "ec2_instance_id" {
+  type = string
+}
+
 variable "vpc_id" {
   type = string
 }
@@ -34,4 +38,38 @@ variable "db_credentials" {
     )
     error_message = "db_credentials must contain the following keys: ip, port, database_name, password, username"
   }
+}
+
+variable "route53_hosted_zone_id" {
+  type = string
+}
+
+variable "nlb_subnet_ids" {
+  type    = list(string)
+  default = []
+}
+
+variable "nlb_port" {
+  type = number
+}
+
+variable "api_authorizer_audiences" {
+  type    = list(string)
+  default = []
+}
+
+variable "api_authorizer_issuer" {
+  type = string
+}
+
+variable "api_domain_name" {
+  type = string
+}
+
+variable "api_domain_name_certificate_arn" {
+  type = string
+}
+
+variable "vpc_link_subnet_ids" {
+  type = list(string)
 }
