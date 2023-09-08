@@ -4,6 +4,15 @@ import { Link } from 'react-router-dom';
 import { StudyInfoFragment } from '../../generated/types';
 import { ontology2Color } from '../../pages/helper';
 
+function metadataKeyValues(study: StudyInfoFragment) {
+  if (study.metadata) {
+    return Object.keys(study.metadata)
+      .map((key) => `${key}: ${study.metadata[key]}`)
+      .sort();
+  }
+  return [];
+}
+
 const StudyCard = ({ study }: { study: StudyInfoFragment }) => {
   const newStudyUrl = `study/${study.studyId}`;
 
@@ -59,6 +68,9 @@ const StudyCard = ({ study }: { study: StudyInfoFragment }) => {
                 }
                 return null;
               })}
+            {metadataKeyValues(study).map((label) => (
+              <Text style={{ marginLeft: '10px' }}>{label}</Text>
+            ))}
           </Group>
         </Spoiler>
       </Card.Section>

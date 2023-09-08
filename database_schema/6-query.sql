@@ -96,7 +96,8 @@ select s.study_id,
        s.cell_count,
        (select min(sl.study_layer_id)
         from study_layer sl
-        where sl.study_id = s.study_id) default_study_layer_id
+        where sl.study_id = s.study_id) default_study_layer_id,
+       s.metadata
 from study s
 where s.visible = True;
 grant select on study_overview to postgraphile;
@@ -222,8 +223,8 @@ select s.study_id,
        s.import_failed,
        s.import_finished,
        (case when s.import_log is not null then True else False end) as has_import_log,
-       case when sv.study_id is not null then True else False end "reader_permission_granted",
-       case when sa.study_id is not null then True else False end "admin_permission_granted"
+       case when sv.study_id is not null then True else False end       "reader_permission_granted",
+       case when sa.study_id is not null then True else False end       "admin_permission_granted"
 from study s
          left join study_visible_currentuser sv on sv.study_id = s.study_id
          left join study_administrable_currentuser sa on sa.study_id = s.study_id;

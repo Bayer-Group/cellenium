@@ -567,6 +567,10 @@ def update_study_from_file(study_id: int, data: AnnData):
             data.uns["cellenium"].get("legacy_config"),
             dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
         ),
+        "metadata": Json(
+            data.uns["cellenium"].get("metadata"),
+            dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
+        ),
     }
 
     with engine.connect() as connection:
@@ -584,6 +588,7 @@ def update_study_from_file(study_id: int, data: AnnData):
                     reader_permissions = coalesce(reader_permissions, ARRAY[]::text[]) || coalesce(:reader_permissions, ARRAY[]::text[]),
                     admin_permissions = coalesce(admin_permissions, ARRAY[]::text[]) || coalesce(:admin_permissions, ARRAY[]::text[]),
                     legacy_config = :legacy_config,
+                    metadata = :metadata,
                     import_finished = false,
                     import_started = true,
                     /* support retry of study upload - reset earlier messages */

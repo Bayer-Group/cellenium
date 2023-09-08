@@ -10,7 +10,7 @@ reset_database:
 	PYTHONPATH=$$(pwd)/data_import python data_import/masterdata.py
 	rm -f scratch/*.imported
 
-scratch/%: data_import/public_data/%.ipynb
+scratch/%: data_import/public_data/%.ipynb data_import/h5ad_preparation.py
 	@echo jupyter notebook $< is expected to produce h5ad file $@ and $@.html
 	PYTHONPATH=$$(pwd)/data_import jupyter nbconvert --execute --to html --stdout  $<  > $@.html
 

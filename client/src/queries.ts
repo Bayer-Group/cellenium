@@ -16,6 +16,7 @@ gql`
     description
     cellCount
     externalWebsite
+    metadata
     defaultStudyLayerId
     studyOntologyList {
       ontCodes

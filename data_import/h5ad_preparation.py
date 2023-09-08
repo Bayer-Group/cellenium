@@ -205,7 +205,12 @@ def set_cellenium_metadata(
     initial_reader_permissions: Optional[List[str]] = None,
     initial_admin_permissions: Optional[List[str]] = None,
     modalities: Optional[List[Dict]] = None,
+    pubmed_id: Optional[str] = None,
+    geo_accession: Optional[str] = None,
+    any_metadata: Optional[Dict[str, str]] = None,
 ):
+    if any_metadata is None:
+        any_metadata = {}
     if import_projections is None:
         import_projections = ["umap"]
     if secondary_sample_attributes is None:
@@ -275,6 +280,12 @@ def set_cellenium_metadata(
     d["initial_reader_permissions"] = initial_reader_permissions
     d["initial_admin_permissions"] = initial_admin_permissions
     d["modalities"] = modalities
+
+    if pubmed_id:
+        any_metadata["Pubmed ID"] = str(pubmed_id)
+    if geo_accession:
+        any_metadata["GEO Accession"] = str(geo_accession)
+    d["metadata"] = any_metadata
 
 
 # cellenium meta data

@@ -19,25 +19,28 @@ CREATE TABLE study
     import_file        text, --- s3 file path
     reader_permissions text[],
     admin_permissions  text[],
+    metadata           jsonb,
     legacy_config      jsonb
 );
 
 -- decide which studies can be analyzed by the current user:
 -- all studies which are open to everybody ("reader_permissions is null")
 -- and all studies which list of allowed groups has at least one group in common with the current user's groups
-create view study_visible_currentuser
+create or replace view study_visible_currentuser
 as
 select s.study_id
 from study s
 where s.reader_permissions is null
+   or s.reader_permissions = ARRAY[]::text[]
    or s.reader_permissions && current_user_groups();
 grant select on study_visible_currentuser to postgraphile;
 
-create view study_administrable_currentuser
+create or replace view study_administrable_currentuser
 as
 select s.study_id
 from study s
 where s.admin_permissions is null
+   or s.reader_permissions = ARRAY[]::text[]
    or s.admin_permissions && current_user_groups();
 grant select on study_administrable_currentuser to postgraphile;
 

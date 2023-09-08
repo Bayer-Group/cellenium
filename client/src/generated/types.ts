@@ -232,6 +232,849 @@ export enum AnnotationValuesOrderBy {
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
 }
 
+export type ApiDifferentialExpression = {
+  __typename?: 'ApiDifferentialExpression';
+  annotationDisplayValue: Maybe<Scalars['String']>;
+  annotationGroupColumn: Maybe<Scalars['String']>;
+  annotationGroupDisplay: Maybe<Scalars['String']>;
+  annotationValue: Maybe<Scalars['String']>;
+  celleniumInternalOmicsId: Maybe<Scalars['Int']>;
+  ensemblGeneId: Maybe<Scalars['String']>;
+  entrezGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  hgncSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  omicsDetails: Maybe<ApiOmic>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  studyTaxId: Maybe<Scalars['String']>;
+};
+
+/**
+ * A condition to be used against `ApiDifferentialExpression` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type ApiDifferentialExpressionCondition = {
+  /** Checks for equality with the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationGroupColumn` field. */
+  annotationGroupColumn: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationGroupDisplay` field. */
+  annotationGroupDisplay: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationValue` field. */
+  annotationValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `celleniumInternalOmicsId` field. */
+  celleniumInternalOmicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `entrezGeneIds` field. */
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `hgncSymbols` field. */
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `omicsDetails` field. */
+  omicsDetails: InputMaybe<ApiOmicInput>;
+  /** Checks for equality with the object’s `pvalue` field. */
+  pvalue: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `score` field. */
+  score: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyTaxId` field. */
+  studyTaxId: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `ApiDifferentialExpression` object types. All fields are combined with a logical ‘and.’ */
+export type ApiDifferentialExpressionFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiDifferentialExpressionFilter>>;
+  /** Filter by the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationGroupColumn` field. */
+  annotationGroupColumn: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationGroupDisplay` field. */
+  annotationGroupDisplay: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationValue` field. */
+  annotationValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `celleniumInternalOmicsId` field. */
+  celleniumInternalOmicsId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `entrezGeneIds` field. */
+  entrezGeneIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `hgncSymbols` field. */
+  hgncSymbols: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiDifferentialExpressionFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiDifferentialExpressionFilter>>;
+  /** Filter by the object’s `pvalue` field. */
+  pvalue: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `score` field. */
+  score: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyTaxId` field. */
+  studyTaxId: InputMaybe<StringFilter>;
+};
+
+/** Methods to use when ordering `ApiDifferentialExpression`. */
+export enum ApiDifferentialExpressionsOrderBy {
+  AnnotationDisplayValueAsc = 'ANNOTATION_DISPLAY_VALUE_ASC',
+  AnnotationDisplayValueDesc = 'ANNOTATION_DISPLAY_VALUE_DESC',
+  AnnotationGroupColumnAsc = 'ANNOTATION_GROUP_COLUMN_ASC',
+  AnnotationGroupColumnDesc = 'ANNOTATION_GROUP_COLUMN_DESC',
+  AnnotationGroupDisplayAsc = 'ANNOTATION_GROUP_DISPLAY_ASC',
+  AnnotationGroupDisplayDesc = 'ANNOTATION_GROUP_DISPLAY_DESC',
+  AnnotationValueAsc = 'ANNOTATION_VALUE_ASC',
+  AnnotationValueDesc = 'ANNOTATION_VALUE_DESC',
+  CelleniumInternalOmicsIdAsc = 'CELLENIUM_INTERNAL_OMICS_ID_ASC',
+  CelleniumInternalOmicsIdDesc = 'CELLENIUM_INTERNAL_OMICS_ID_DESC',
+  EnsemblGeneIdAsc = 'ENSEMBL_GENE_ID_ASC',
+  EnsemblGeneIdDesc = 'ENSEMBL_GENE_ID_DESC',
+  EntrezGeneIdsAsc = 'ENTREZ_GENE_IDS_ASC',
+  EntrezGeneIdsDesc = 'ENTREZ_GENE_IDS_DESC',
+  HgncSymbolsAsc = 'HGNC_SYMBOLS_ASC',
+  HgncSymbolsDesc = 'HGNC_SYMBOLS_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  OmicsDetailsAsc = 'OMICS_DETAILS_ASC',
+  OmicsDetailsDesc = 'OMICS_DETAILS_DESC',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyTaxIdAsc = 'STUDY_TAX_ID_ASC',
+  StudyTaxIdDesc = 'STUDY_TAX_ID_DESC',
+}
+
+export type ApiExpressionByAnnotation = {
+  __typename?: 'ApiExpressionByAnnotation';
+  annotationDisplayValue: Maybe<Scalars['String']>;
+  annotationValueId: Maybe<Scalars['Int']>;
+  boxplotParams: Maybe<BoxplotValue>;
+  ensemblGeneId: Maybe<Scalars['String']>;
+  entrezGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  exprSamplesFraction: Maybe<Scalars['Float']>;
+  hgncSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
+  layer: Maybe<Scalars['String']>;
+  mean: Maybe<Scalars['Float']>;
+  median: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  q3: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyLayerId: Maybe<Scalars['Int']>;
+  valueCount: Maybe<Scalars['Int']>;
+  values: Maybe<Array<Maybe<Scalars['Float']>>>;
+};
+
+/** A filter to be used against `ApiExpressionByAnnotation` object types. All fields are combined with a logical ‘and.’ */
+export type ApiExpressionByAnnotationFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiExpressionByAnnotationFilter>>;
+  /** Filter by the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `boxplotParams` field. */
+  boxplotParams: InputMaybe<BoxplotValueFilter>;
+  /** Filter by the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `entrezGeneIds` field. */
+  entrezGeneIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `exprSamplesFraction` field. */
+  exprSamplesFraction: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `hgncSymbols` field. */
+  hgncSymbols: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `layer` field. */
+  layer: InputMaybe<StringFilter>;
+  /** Filter by the object’s `mean` field. */
+  mean: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `median` field. */
+  median: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiExpressionByAnnotationFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiExpressionByAnnotationFilter>>;
+  /** Filter by the object’s `q3` field. */
+  q3: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyLayerId` field. */
+  studyLayerId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `valueCount` field. */
+  valueCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `values` field. */
+  values: InputMaybe<FloatListFilter>;
+};
+
+export type ApiOmic = {
+  __typename?: 'ApiOmic';
+  displayName: Maybe<Scalars['String']>;
+  displaySymbol: Maybe<Scalars['String']>;
+  ensemblGeneId: Maybe<Scalars['String']>;
+  entrezGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  hgncSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
+  linkedGenes: Maybe<Array<Maybe<Scalars['Int']>>>;
+  omicsId: Maybe<Scalars['Int']>;
+  omicsType: Maybe<OmicsType>;
+  region: Maybe<Scalars['String']>;
+  taxId: Maybe<Scalars['Int']>;
+};
+
+/** A condition to be used against `ApiOmic` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type ApiOmicCondition = {
+  /** Checks for equality with the object’s `displayName` field. */
+  displayName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `entrezGeneIds` field. */
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `hgncSymbols` field. */
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `omicsType` field. */
+  omicsType: InputMaybe<OmicsType>;
+  /** Checks for equality with the object’s `region` field. */
+  region: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `taxId` field. */
+  taxId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `ApiOmic` object types. All fields are combined with a logical ‘and.’ */
+export type ApiOmicFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiOmicFilter>>;
+  /** Filter by the object’s `displayName` field. */
+  displayName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `entrezGeneIds` field. */
+  entrezGeneIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `hgncSymbols` field. */
+  hgncSymbols: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<IntListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiOmicFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `omicsType` field. */
+  omicsType: InputMaybe<OmicsTypeFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiOmicFilter>>;
+  /** Filter by the object’s `region` field. */
+  region: InputMaybe<StringFilter>;
+  /** Filter by the object’s `taxId` field. */
+  taxId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `ApiOmic` */
+export type ApiOmicInput = {
+  displayName: InputMaybe<Scalars['String']>;
+  displaySymbol: InputMaybe<Scalars['String']>;
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  entrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  hgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  omicsId: InputMaybe<Scalars['Int']>;
+  omicsType: InputMaybe<OmicsType>;
+  region: InputMaybe<Scalars['String']>;
+  taxId: InputMaybe<Scalars['Int']>;
+};
+
+/** Methods to use when ordering `ApiOmic`. */
+export enum ApiOmicsOrderBy {
+  DisplayNameAsc = 'DISPLAY_NAME_ASC',
+  DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
+  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  EnsemblGeneIdAsc = 'ENSEMBL_GENE_ID_ASC',
+  EnsemblGeneIdDesc = 'ENSEMBL_GENE_ID_DESC',
+  EntrezGeneIdsAsc = 'ENTREZ_GENE_IDS_ASC',
+  EntrezGeneIdsDesc = 'ENTREZ_GENE_IDS_DESC',
+  HgncSymbolsAsc = 'HGNC_SYMBOLS_ASC',
+  HgncSymbolsDesc = 'HGNC_SYMBOLS_DESC',
+  LinkedGenesAsc = 'LINKED_GENES_ASC',
+  LinkedGenesDesc = 'LINKED_GENES_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  RegionAsc = 'REGION_ASC',
+  RegionDesc = 'REGION_DESC',
+  TaxIdAsc = 'TAX_ID_ASC',
+  TaxIdDesc = 'TAX_ID_DESC',
+}
+
+export type ApiStudiesBase = {
+  __typename?: 'ApiStudiesBase';
+  annotations: Maybe<Array<Maybe<ApiStudyAnnotationOverview>>>;
+  cellCount: Maybe<Scalars['Int']>;
+  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  cellOntologyLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  description: Maybe<Scalars['String']>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  diseaseMeshLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  layers: Maybe<Array<Maybe<Scalars['String']>>>;
+  organismLabel: Maybe<Scalars['String']>;
+  organismTaxId: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  studyType: Maybe<Scalars['String']>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  tissueNcitLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/**
+ * A condition to be used against `ApiStudiesBase` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type ApiStudiesBaseCondition = {
+  /** Checks for equality with the object’s `annotations` field. */
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `description` field. */
+  description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `layers` field. */
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyType` field. */
+  studyType: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** A filter to be used against `ApiStudiesBase` object types. All fields are combined with a logical ‘and.’ */
+export type ApiStudiesBaseFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiStudiesBaseFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `description` field. */
+  description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `layers` field. */
+  layers: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiStudiesBaseFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiStudiesBaseFilter>>;
+  /** Filter by the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<StringFilter>;
+  /** Filter by the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyType` field. */
+  studyType: InputMaybe<StringFilter>;
+  /** Filter by the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<StringListFilter>;
+};
+
+/** An input for mutations affecting `ApiStudiesBase` */
+export type ApiStudiesBaseInput = {
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description: InputMaybe<Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  organismLabel: InputMaybe<Scalars['String']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
+  studyType: InputMaybe<Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** Methods to use when ordering `ApiStudiesBase`. */
+export enum ApiStudiesBasesOrderBy {
+  AnnotationsAsc = 'ANNOTATIONS_ASC',
+  AnnotationsDesc = 'ANNOTATIONS_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
+  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
+  CellOntologyLabelsAsc = 'CELL_ONTOLOGY_LABELS_ASC',
+  CellOntologyLabelsDesc = 'CELL_ONTOLOGY_LABELS_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  DiseaseMeshLabelsAsc = 'DISEASE_MESH_LABELS_ASC',
+  DiseaseMeshLabelsDesc = 'DISEASE_MESH_LABELS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  LayersAsc = 'LAYERS_ASC',
+  LayersDesc = 'LAYERS_DESC',
+  Natural = 'NATURAL',
+  OrganismLabelAsc = 'ORGANISM_LABEL_ASC',
+  OrganismLabelDesc = 'ORGANISM_LABEL_DESC',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyTypeAsc = 'STUDY_TYPE_ASC',
+  StudyTypeDesc = 'STUDY_TYPE_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+}
+
+export type ApiStudiesBulkRna = {
+  __typename?: 'ApiStudiesBulkRna';
+  annotations: Maybe<Array<Maybe<ApiStudyAnnotationOverview>>>;
+  cellCount: Maybe<Scalars['Int']>;
+  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  cellOntologyLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  description: Maybe<Scalars['String']>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  diseaseMeshLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  layers: Maybe<Array<Maybe<Scalars['String']>>>;
+  organismLabel: Maybe<Scalars['String']>;
+  organismTaxId: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  studyType: Maybe<Scalars['String']>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  tissueNcitLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/**
+ * A condition to be used against `ApiStudiesBulkRna` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type ApiStudiesBulkRnaCondition = {
+  /** Checks for equality with the object’s `annotations` field. */
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `description` field. */
+  description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `layers` field. */
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyType` field. */
+  studyType: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** A filter to be used against `ApiStudiesBulkRna` object types. All fields are combined with a logical ‘and.’ */
+export type ApiStudiesBulkRnaFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiStudiesBulkRnaFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `description` field. */
+  description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `layers` field. */
+  layers: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiStudiesBulkRnaFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiStudiesBulkRnaFilter>>;
+  /** Filter by the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<StringFilter>;
+  /** Filter by the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyType` field. */
+  studyType: InputMaybe<StringFilter>;
+  /** Filter by the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<StringListFilter>;
+};
+
+/** An input for mutations affecting `ApiStudiesBulkRna` */
+export type ApiStudiesBulkRnaInput = {
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description: InputMaybe<Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  organismLabel: InputMaybe<Scalars['String']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
+  studyType: InputMaybe<Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** Methods to use when ordering `ApiStudiesBulkRna`. */
+export enum ApiStudiesBulkRnasOrderBy {
+  AnnotationsAsc = 'ANNOTATIONS_ASC',
+  AnnotationsDesc = 'ANNOTATIONS_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
+  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
+  CellOntologyLabelsAsc = 'CELL_ONTOLOGY_LABELS_ASC',
+  CellOntologyLabelsDesc = 'CELL_ONTOLOGY_LABELS_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  DiseaseMeshLabelsAsc = 'DISEASE_MESH_LABELS_ASC',
+  DiseaseMeshLabelsDesc = 'DISEASE_MESH_LABELS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  LayersAsc = 'LAYERS_ASC',
+  LayersDesc = 'LAYERS_DESC',
+  Natural = 'NATURAL',
+  OrganismLabelAsc = 'ORGANISM_LABEL_ASC',
+  OrganismLabelDesc = 'ORGANISM_LABEL_DESC',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyTypeAsc = 'STUDY_TYPE_ASC',
+  StudyTypeDesc = 'STUDY_TYPE_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+}
+
+export type ApiStudiesSingleCell = {
+  __typename?: 'ApiStudiesSingleCell';
+  annotations: Maybe<Array<Maybe<ApiStudyAnnotationOverview>>>;
+  cellCount: Maybe<Scalars['Int']>;
+  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  cellOntologyLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  description: Maybe<Scalars['String']>;
+  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  diseaseMeshLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+  externalWebsite: Maybe<Scalars['String']>;
+  layers: Maybe<Array<Maybe<Scalars['String']>>>;
+  organismLabel: Maybe<Scalars['String']>;
+  organismTaxId: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  studyType: Maybe<Scalars['String']>;
+  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  tissueNcitLabels: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+/**
+ * A condition to be used against `ApiStudiesSingleCell` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type ApiStudiesSingleCellCondition = {
+  /** Checks for equality with the object’s `annotations` field. */
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `description` field. */
+  description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `layers` field. */
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyType` field. */
+  studyType: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** A filter to be used against `ApiStudiesSingleCell` object types. All fields are combined with a logical ‘and.’ */
+export type ApiStudiesSingleCellFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiStudiesSingleCellFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `cellOntologyIds` field. */
+  cellOntologyIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `cellOntologyLabels` field. */
+  cellOntologyLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `description` field. */
+  description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `diseaseMeshIds` field. */
+  diseaseMeshIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `diseaseMeshLabels` field. */
+  diseaseMeshLabels: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `layers` field. */
+  layers: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiStudiesSingleCellFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiStudiesSingleCellFilter>>;
+  /** Filter by the object’s `organismLabel` field. */
+  organismLabel: InputMaybe<StringFilter>;
+  /** Filter by the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyType` field. */
+  studyType: InputMaybe<StringFilter>;
+  /** Filter by the object’s `tissueNcitIds` field. */
+  tissueNcitIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `tissueNcitLabels` field. */
+  tissueNcitLabels: InputMaybe<StringListFilter>;
+};
+
+/** An input for mutations affecting `ApiStudiesSingleCell` */
+export type ApiStudiesSingleCellInput = {
+  annotations: InputMaybe<Array<InputMaybe<ApiStudyAnnotationOverviewInput>>>;
+  cellCount: InputMaybe<Scalars['Int']>;
+  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  cellOntologyLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  description: InputMaybe<Scalars['String']>;
+  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  diseaseMeshLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  externalWebsite: InputMaybe<Scalars['String']>;
+  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  organismLabel: InputMaybe<Scalars['String']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  studyName: InputMaybe<Scalars['String']>;
+  studyType: InputMaybe<Scalars['String']>;
+  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tissueNcitLabels: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** Methods to use when ordering `ApiStudiesSingleCell`. */
+export enum ApiStudiesSingleCellsOrderBy {
+  AnnotationsAsc = 'ANNOTATIONS_ASC',
+  AnnotationsDesc = 'ANNOTATIONS_DESC',
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
+  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
+  CellOntologyLabelsAsc = 'CELL_ONTOLOGY_LABELS_ASC',
+  CellOntologyLabelsDesc = 'CELL_ONTOLOGY_LABELS_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
+  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
+  DiseaseMeshLabelsAsc = 'DISEASE_MESH_LABELS_ASC',
+  DiseaseMeshLabelsDesc = 'DISEASE_MESH_LABELS_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  LayersAsc = 'LAYERS_ASC',
+  LayersDesc = 'LAYERS_DESC',
+  Natural = 'NATURAL',
+  OrganismLabelAsc = 'ORGANISM_LABEL_ASC',
+  OrganismLabelDesc = 'ORGANISM_LABEL_DESC',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyTypeAsc = 'STUDY_TYPE_ASC',
+  StudyTypeDesc = 'STUDY_TYPE_DESC',
+  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
+  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
+  TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+}
+
+export type ApiStudyAnnotationOverview = {
+  __typename?: 'ApiStudyAnnotationOverview';
+  annotationDisplayValues: Maybe<Array<Maybe<Scalars['String']>>>;
+  annotationGroupColumn: Maybe<Scalars['String']>;
+  annotationGroupValue: Maybe<Scalars['String']>;
+  annotationValues: Maybe<Array<Maybe<Scalars['String']>>>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `ApiStudyAnnotationOverview` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type ApiStudyAnnotationOverviewCondition = {
+  /** Checks for equality with the object’s `annotationDisplayValues` field. */
+  annotationDisplayValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `annotationGroupColumn` field. */
+  annotationGroupColumn: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationGroupValue` field. */
+  annotationGroupValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationValues` field. */
+  annotationValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `ApiStudyAnnotationOverview` object types. All fields are combined with a logical ‘and.’ */
+export type ApiStudyAnnotationOverviewFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiStudyAnnotationOverviewFilter>>;
+  /** Filter by the object’s `annotationDisplayValues` field. */
+  annotationDisplayValues: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `annotationGroupColumn` field. */
+  annotationGroupColumn: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationGroupValue` field. */
+  annotationGroupValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationValues` field. */
+  annotationValues: InputMaybe<StringListFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiStudyAnnotationOverviewFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiStudyAnnotationOverviewFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `ApiStudyAnnotationOverview` */
+export type ApiStudyAnnotationOverviewInput = {
+  annotationDisplayValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  annotationGroupColumn: InputMaybe<Scalars['String']>;
+  annotationGroupValue: InputMaybe<Scalars['String']>;
+  annotationValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** Methods to use when ordering `ApiStudyAnnotationOverview`. */
+export enum ApiStudyAnnotationOverviewsOrderBy {
+  AnnotationDisplayValuesAsc = 'ANNOTATION_DISPLAY_VALUES_ASC',
+  AnnotationDisplayValuesDesc = 'ANNOTATION_DISPLAY_VALUES_DESC',
+  AnnotationGroupColumnAsc = 'ANNOTATION_GROUP_COLUMN_ASC',
+  AnnotationGroupColumnDesc = 'ANNOTATION_GROUP_COLUMN_DESC',
+  AnnotationGroupValueAsc = 'ANNOTATION_GROUP_VALUE_ASC',
+  AnnotationGroupValueDesc = 'ANNOTATION_GROUP_VALUE_DESC',
+  AnnotationValuesAsc = 'ANNOTATION_VALUES_ASC',
+  AnnotationValuesDesc = 'ANNOTATION_VALUES_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+}
+
 export type AutocompleteResult = {
   __typename?: 'AutocompleteResult';
   isSynonymOfPreferredTerm: Maybe<Scalars['String']>;
@@ -765,6 +1608,81 @@ export type CreateAnnotationValuePayload = {
   annotationGroup: Maybe<AnnotationGroup>;
   /** The `AnnotationValue` that was created by this mutation. */
   annotationValue: Maybe<AnnotationValue>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+/** All input for the create `ApiStudiesBase` mutation. */
+export type CreateApiStudiesBaseInput = {
+  /** The `ApiStudiesBase` to be created by this mutation. */
+  apiStudiesBase: ApiStudiesBaseInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our create `ApiStudiesBase` mutation. */
+export type CreateApiStudiesBasePayload = {
+  __typename?: 'CreateApiStudiesBasePayload';
+  /** The `ApiStudiesBase` that was created by this mutation. */
+  apiStudiesBase: Maybe<ApiStudiesBase>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+/** All input for the create `ApiStudiesBulkRna` mutation. */
+export type CreateApiStudiesBulkRnaInput = {
+  /** The `ApiStudiesBulkRna` to be created by this mutation. */
+  apiStudiesBulkRna: ApiStudiesBulkRnaInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our create `ApiStudiesBulkRna` mutation. */
+export type CreateApiStudiesBulkRnaPayload = {
+  __typename?: 'CreateApiStudiesBulkRnaPayload';
+  /** The `ApiStudiesBulkRna` that was created by this mutation. */
+  apiStudiesBulkRna: Maybe<ApiStudiesBulkRna>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+/** All input for the create `ApiStudiesSingleCell` mutation. */
+export type CreateApiStudiesSingleCellInput = {
+  /** The `ApiStudiesSingleCell` to be created by this mutation. */
+  apiStudiesSingleCell: ApiStudiesSingleCellInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our create `ApiStudiesSingleCell` mutation. */
+export type CreateApiStudiesSingleCellPayload = {
+  __typename?: 'CreateApiStudiesSingleCellPayload';
+  /** The `ApiStudiesSingleCell` that was created by this mutation. */
+  apiStudiesSingleCell: Maybe<ApiStudiesSingleCell>;
   /**
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
@@ -2421,6 +3339,12 @@ export type Mutation = {
   createAnnotationGroup: Maybe<CreateAnnotationGroupPayload>;
   /** Creates a single `AnnotationValue`. */
   createAnnotationValue: Maybe<CreateAnnotationValuePayload>;
+  /** Creates a single `ApiStudiesBase`. */
+  createApiStudiesBase: Maybe<CreateApiStudiesBasePayload>;
+  /** Creates a single `ApiStudiesBulkRna`. */
+  createApiStudiesBulkRna: Maybe<CreateApiStudiesBulkRnaPayload>;
+  /** Creates a single `ApiStudiesSingleCell`. */
+  createApiStudiesSingleCell: Maybe<CreateApiStudiesSingleCellPayload>;
   /** Creates a single `Concept`. */
   createConcept: Maybe<CreateConceptPayload>;
   /** Creates a single `ConceptHierarchy`. */
@@ -2584,6 +3508,21 @@ export type MutationCreateAnnotationGroupArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateAnnotationValueArgs = {
   input: CreateAnnotationValueInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateApiStudiesBaseArgs = {
+  input: CreateApiStudiesBaseInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateApiStudiesBulkRnaArgs = {
+  input: CreateApiStudiesBulkRnaInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateApiStudiesSingleCellArgs = {
+  input: CreateApiStudiesSingleCellInput;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -3854,6 +4793,20 @@ export type Query = Node & {
   annotationValueCoocurrenceList: Maybe<Array<Maybe<AnnotationValueCoocurrenceRecord>>>;
   /** Reads a set of `AnnotationValue`. */
   annotationValuesList: Maybe<Array<AnnotationValue>>;
+  /** Reads a set of `ApiDifferentialExpression`. */
+  apiDifferentialExpressionsList: Maybe<Array<ApiDifferentialExpression>>;
+  /** Reads and enables pagination through a set of `ApiExpressionByAnnotation`. */
+  apiExpressionByAnnotationList: Maybe<Array<Maybe<ApiExpressionByAnnotation>>>;
+  /** Reads a set of `ApiOmic`. */
+  apiOmicsList: Maybe<Array<ApiOmic>>;
+  /** Reads a set of `ApiStudiesBase`. */
+  apiStudiesBasesList: Maybe<Array<ApiStudiesBase>>;
+  /** Reads a set of `ApiStudiesBulkRna`. */
+  apiStudiesBulkRnasList: Maybe<Array<ApiStudiesBulkRna>>;
+  /** Reads a set of `ApiStudiesSingleCell`. */
+  apiStudiesSingleCellsList: Maybe<Array<ApiStudiesSingleCell>>;
+  /** Reads a set of `ApiStudyAnnotationOverview`. */
+  apiStudyAnnotationOverviewsList: Maybe<Array<ApiStudyAnnotationOverview>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
   autocompleteList: Maybe<Array<Maybe<AutocompleteResult>>>;
   concept: Maybe<Concept>;
@@ -3876,6 +4829,7 @@ export type Query = Node & {
   differentialExpressionVsList: Maybe<Array<DifferentialExpressionV>>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
+  ensureTextArray: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `ExpressionByAnnotation`. */
   expressionByAnnotationList: Maybe<Array<Maybe<ExpressionByAnnotation>>>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
@@ -3929,12 +4883,8 @@ export type Query = Node & {
    * which can only query top level fields if they are in a particular form.
    */
   query: Query;
-  /** Reads a set of `StudiesBulkRna`. */
-  studiesBulkRnasList: Maybe<Array<StudiesBulkRna>>;
   /** Reads a set of `Study`. */
   studiesList: Maybe<Array<Study>>;
-  /** Reads a set of `StudiesSingleCell`. */
-  studiesSingleCellsList: Maybe<Array<StudiesSingleCell>>;
   study: Maybe<Study>;
   /** Reads a set of `StudyAdminDetail`. */
   studyAdminDetailsList: Maybe<Array<StudyAdminDetail>>;
@@ -4061,6 +5011,74 @@ export type QueryAnnotationValuesListArgs = {
 };
 
 /** The root query type which gives access points into the data universe. */
+export type QueryApiDifferentialExpressionsListArgs = {
+  condition: InputMaybe<ApiDifferentialExpressionCondition>;
+  filter: InputMaybe<ApiDifferentialExpressionFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiDifferentialExpressionsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiExpressionByAnnotationListArgs = {
+  filter: InputMaybe<ApiExpressionByAnnotationFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pAnnotationGroupColumn: InputMaybe<Scalars['String']>;
+  pEnsemblGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  pEntrezGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  pHgncSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  pLayerName: InputMaybe<Scalars['String']>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pStudyIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiOmicsListArgs = {
+  condition: InputMaybe<ApiOmicCondition>;
+  filter: InputMaybe<ApiOmicFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiOmicsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiStudiesBasesListArgs = {
+  condition: InputMaybe<ApiStudiesBaseCondition>;
+  filter: InputMaybe<ApiStudiesBaseFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiStudiesBasesOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiStudiesBulkRnasListArgs = {
+  condition: InputMaybe<ApiStudiesBulkRnaCondition>;
+  filter: InputMaybe<ApiStudiesBulkRnaFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiStudiesBulkRnasOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiStudiesSingleCellsListArgs = {
+  condition: InputMaybe<ApiStudiesSingleCellCondition>;
+  filter: InputMaybe<ApiStudiesSingleCellFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiStudiesSingleCellsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiStudyAnnotationOverviewsListArgs = {
+  condition: InputMaybe<ApiStudyAnnotationOverviewCondition>;
+  filter: InputMaybe<ApiStudyAnnotationOverviewFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiStudyAnnotationOverviewsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
 export type QueryAutocompleteListArgs = {
   filter: InputMaybe<AutocompleteResultFilter>;
   first: InputMaybe<Scalars['Int']>;
@@ -4152,6 +5170,11 @@ export type QueryDifferentialExpressionsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryEnsureTextArrayArgs = {
+  a: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** The root query type which gives access points into the data universe. */
@@ -4349,30 +5372,12 @@ export type QueryOntologyByNodeIdArgs = {
 };
 
 /** The root query type which gives access points into the data universe. */
-export type QueryStudiesBulkRnasListArgs = {
-  condition: InputMaybe<StudiesBulkRnaCondition>;
-  filter: InputMaybe<StudiesBulkRnaFilter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudiesBulkRnasOrderBy>>;
-};
-
-/** The root query type which gives access points into the data universe. */
 export type QueryStudiesListArgs = {
   condition: InputMaybe<StudyCondition>;
   filter: InputMaybe<StudyFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudiesOrderBy>>;
-};
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudiesSingleCellsListArgs = {
-  condition: InputMaybe<StudiesSingleCellCondition>;
-  filter: InputMaybe<StudiesSingleCellFilter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudiesSingleCellsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
@@ -4705,116 +5710,6 @@ export type StringListFilter = {
   overlaps: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-export type StudiesBulkRna = {
-  __typename?: 'StudiesBulkRna';
-  cellCount: Maybe<Scalars['Int']>;
-  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  description: Maybe<Scalars['String']>;
-  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  externalWebsite: Maybe<Scalars['String']>;
-  importFailed: Maybe<Scalars['Boolean']>;
-  importFinished: Maybe<Scalars['Boolean']>;
-  layers: Maybe<Array<Maybe<Scalars['String']>>>;
-  organismTaxId: Maybe<Scalars['String']>;
-  studyId: Maybe<Scalars['Int']>;
-  studyName: Maybe<Scalars['String']>;
-  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-/**
- * A condition to be used against `StudiesBulkRna` object types. All fields are
- * tested for equality and combined with a logical ‘and.’
- */
-export type StudiesBulkRnaCondition = {
-  /** Checks for equality with the object’s `cellCount` field. */
-  cellCount: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `cellOntologyIds` field. */
-  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `description` field. */
-  description: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `importFailed` field. */
-  importFailed: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `importFinished` field. */
-  importFinished: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `layers` field. */
-  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `organismTaxId` field. */
-  organismTaxId: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyName` field. */
-  studyName: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-/** A filter to be used against `StudiesBulkRna` object types. All fields are combined with a logical ‘and.’ */
-export type StudiesBulkRnaFilter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudiesBulkRnaFilter>>;
-  /** Filter by the object’s `cellCount` field. */
-  cellCount: InputMaybe<IntFilter>;
-  /** Filter by the object’s `cellOntologyIds` field. */
-  cellOntologyIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `description` field. */
-  description: InputMaybe<StringFilter>;
-  /** Filter by the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<StringFilter>;
-  /** Filter by the object’s `importFailed` field. */
-  importFailed: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `importFinished` field. */
-  importFinished: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `layers` field. */
-  layers: InputMaybe<StringListFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudiesBulkRnaFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudiesBulkRnaFilter>>;
-  /** Filter by the object’s `organismTaxId` field. */
-  organismTaxId: InputMaybe<StringFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studyName` field. */
-  studyName: InputMaybe<StringFilter>;
-  /** Filter by the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<StringListFilter>;
-};
-
-/** Methods to use when ordering `StudiesBulkRna`. */
-export enum StudiesBulkRnasOrderBy {
-  CellCountAsc = 'CELL_COUNT_ASC',
-  CellCountDesc = 'CELL_COUNT_DESC',
-  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
-  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
-  DescriptionAsc = 'DESCRIPTION_ASC',
-  DescriptionDesc = 'DESCRIPTION_DESC',
-  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
-  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
-  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
-  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
-  ImportFailedAsc = 'IMPORT_FAILED_ASC',
-  ImportFailedDesc = 'IMPORT_FAILED_DESC',
-  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
-  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
-  LayersAsc = 'LAYERS_ASC',
-  LayersDesc = 'LAYERS_DESC',
-  Natural = 'NATURAL',
-  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
-  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
-  StudyNameAsc = 'STUDY_NAME_ASC',
-  StudyNameDesc = 'STUDY_NAME_DESC',
-  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
-  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
-}
-
 /** Methods to use when ordering `Study`. */
 export enum StudiesOrderBy {
   AdminPermissionsAsc = 'ADMIN_PERMISSIONS_ASC',
@@ -4843,6 +5738,8 @@ export enum StudiesOrderBy {
   ImportStartedDesc = 'IMPORT_STARTED_DESC',
   LegacyConfigAsc = 'LEGACY_CONFIG_ASC',
   LegacyConfigDesc = 'LEGACY_CONFIG_DESC',
+  MetadataAsc = 'METADATA_ASC',
+  MetadataDesc = 'METADATA_DESC',
   Natural = 'NATURAL',
   OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
   OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
@@ -4860,116 +5757,6 @@ export enum StudiesOrderBy {
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   VisibleAsc = 'VISIBLE_ASC',
   VisibleDesc = 'VISIBLE_DESC',
-}
-
-export type StudiesSingleCell = {
-  __typename?: 'StudiesSingleCell';
-  cellCount: Maybe<Scalars['Int']>;
-  cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  description: Maybe<Scalars['String']>;
-  diseaseMeshIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  externalWebsite: Maybe<Scalars['String']>;
-  importFailed: Maybe<Scalars['Boolean']>;
-  importFinished: Maybe<Scalars['Boolean']>;
-  layers: Maybe<Array<Maybe<Scalars['String']>>>;
-  organismTaxId: Maybe<Scalars['String']>;
-  studyId: Maybe<Scalars['Int']>;
-  studyName: Maybe<Scalars['String']>;
-  tissueNcitIds: Maybe<Array<Maybe<Scalars['String']>>>;
-};
-
-/**
- * A condition to be used against `StudiesSingleCell` object types. All fields are
- * tested for equality and combined with a logical ‘and.’
- */
-export type StudiesSingleCellCondition = {
-  /** Checks for equality with the object’s `cellCount` field. */
-  cellCount: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `cellOntologyIds` field. */
-  cellOntologyIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `description` field. */
-  description: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `importFailed` field. */
-  importFailed: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `importFinished` field. */
-  importFinished: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `layers` field. */
-  layers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `organismTaxId` field. */
-  organismTaxId: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyName` field. */
-  studyName: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-/** A filter to be used against `StudiesSingleCell` object types. All fields are combined with a logical ‘and.’ */
-export type StudiesSingleCellFilter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudiesSingleCellFilter>>;
-  /** Filter by the object’s `cellCount` field. */
-  cellCount: InputMaybe<IntFilter>;
-  /** Filter by the object’s `cellOntologyIds` field. */
-  cellOntologyIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `description` field. */
-  description: InputMaybe<StringFilter>;
-  /** Filter by the object’s `diseaseMeshIds` field. */
-  diseaseMeshIds: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `externalWebsite` field. */
-  externalWebsite: InputMaybe<StringFilter>;
-  /** Filter by the object’s `importFailed` field. */
-  importFailed: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `importFinished` field. */
-  importFinished: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `layers` field. */
-  layers: InputMaybe<StringListFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudiesSingleCellFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudiesSingleCellFilter>>;
-  /** Filter by the object’s `organismTaxId` field. */
-  organismTaxId: InputMaybe<StringFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studyName` field. */
-  studyName: InputMaybe<StringFilter>;
-  /** Filter by the object’s `tissueNcitIds` field. */
-  tissueNcitIds: InputMaybe<StringListFilter>;
-};
-
-/** Methods to use when ordering `StudiesSingleCell`. */
-export enum StudiesSingleCellsOrderBy {
-  CellCountAsc = 'CELL_COUNT_ASC',
-  CellCountDesc = 'CELL_COUNT_DESC',
-  CellOntologyIdsAsc = 'CELL_ONTOLOGY_IDS_ASC',
-  CellOntologyIdsDesc = 'CELL_ONTOLOGY_IDS_DESC',
-  DescriptionAsc = 'DESCRIPTION_ASC',
-  DescriptionDesc = 'DESCRIPTION_DESC',
-  DiseaseMeshIdsAsc = 'DISEASE_MESH_IDS_ASC',
-  DiseaseMeshIdsDesc = 'DISEASE_MESH_IDS_DESC',
-  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
-  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
-  ImportFailedAsc = 'IMPORT_FAILED_ASC',
-  ImportFailedDesc = 'IMPORT_FAILED_DESC',
-  ImportFinishedAsc = 'IMPORT_FINISHED_ASC',
-  ImportFinishedDesc = 'IMPORT_FINISHED_DESC',
-  LayersAsc = 'LAYERS_ASC',
-  LayersDesc = 'LAYERS_DESC',
-  Natural = 'NATURAL',
-  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
-  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
-  StudyNameAsc = 'STUDY_NAME_ASC',
-  StudyNameDesc = 'STUDY_NAME_DESC',
-  TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
-  TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
 }
 
 export type Study = Node & {
@@ -4991,6 +5778,7 @@ export type Study = Node & {
   importLog: Maybe<Scalars['String']>;
   importStarted: Maybe<Scalars['Boolean']>;
   legacyConfig: Maybe<Scalars['JSON']>;
+  metadata: Maybe<Scalars['JSON']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   organismTaxId: Maybe<Scalars['String']>;
@@ -5543,6 +6331,8 @@ export type StudyCondition = {
   importStarted: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `legacyConfig` field. */
   legacyConfig: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `metadata` field. */
+  metadata: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `projections` field. */
@@ -5589,6 +6379,8 @@ export type StudyFilter = {
   importStarted: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `legacyConfig` field. */
   legacyConfig: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `metadata` field. */
+  metadata: InputMaybe<JsonFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyFilter>;
   /** Checks for any expressions in this list. */
@@ -5671,6 +6463,7 @@ export type StudyInput = {
   importLog: InputMaybe<Scalars['String']>;
   importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
+  metadata: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -5899,6 +6692,7 @@ export type StudyOverview = {
   defaultStudyLayerId: Maybe<Scalars['Int']>;
   description: Maybe<Scalars['String']>;
   externalWebsite: Maybe<Scalars['String']>;
+  metadata: Maybe<Scalars['JSON']>;
   studyId: Maybe<Scalars['Int']>;
   studyName: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
@@ -5926,6 +6720,8 @@ export type StudyOverviewCondition = {
   description: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `externalWebsite` field. */
   externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `metadata` field. */
+  metadata: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
@@ -5944,6 +6740,8 @@ export type StudyOverviewFilter = {
   description: InputMaybe<StringFilter>;
   /** Filter by the object’s `externalWebsite` field. */
   externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `metadata` field. */
+  metadata: InputMaybe<JsonFilter>;
   /** Negates the expression. */
   not: InputMaybe<StudyOverviewFilter>;
   /** Checks for any expressions in this list. */
@@ -5960,6 +6758,7 @@ export type StudyOverviewInput = {
   defaultStudyLayerId: InputMaybe<Scalars['Int']>;
   description: InputMaybe<Scalars['String']>;
   externalWebsite: InputMaybe<Scalars['String']>;
+  metadata: InputMaybe<Scalars['JSON']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
 };
@@ -6037,6 +6836,8 @@ export enum StudyOverviewsOrderBy {
   DescriptionDesc = 'DESCRIPTION_DESC',
   ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
   ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  MetadataAsc = 'METADATA_ASC',
+  MetadataDesc = 'METADATA_DESC',
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
@@ -6059,6 +6860,7 @@ export type StudyPatch = {
   importLog: InputMaybe<Scalars['String']>;
   importStarted: InputMaybe<Scalars['Boolean']>;
   legacyConfig: InputMaybe<Scalars['JSON']>;
+  metadata: InputMaybe<Scalars['JSON']>;
   organismTaxId: InputMaybe<Scalars['String']>;
   projections: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -7144,6 +7946,7 @@ export type StudyInfoFragment = {
   description: string;
   cellCount: number;
   externalWebsite: string;
+  metadata: any;
   defaultStudyLayerId: number;
   studyOntologyList: Array<{
     __typename?: 'StudyOverviewOntology';
@@ -7188,6 +7991,7 @@ export type StudiesQuery = {
     description: string;
     cellCount: number;
     externalWebsite: string;
+    metadata: any;
     defaultStudyLayerId: number;
     studyOntologyList: Array<{
       __typename?: 'StudyOverviewOntology';
@@ -7579,6 +8383,7 @@ export const StudyInfoFragmentDoc = gql`
     description
     cellCount
     externalWebsite
+    metadata
     defaultStudyLayerId
     studyOntologyList {
       ontCodes

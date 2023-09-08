@@ -8,22 +8,24 @@ import { OntologyItem } from '../../model';
 import SearchBadge from '../SearchBadge/SearchBadge';
 import { ontology2Color } from '../../pages/helper';
 
-type OfferingItem = {
+export type OfferingItem = {
   value: string;
-  ontcode: string;
+  ontcode?: string;
   ontology: string;
+  preferredLabel?: string;
 };
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   value: string;
   ontology: string;
-  ontcode: string;
+  ontcode?: string;
+  preferredLabel?: string;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ value, ontology, ontcode, ...others }: ItemProps, ref) => (
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ value, ontology, ontcode, preferredLabel, ...others }: ItemProps, ref) => (
   <div ref={ref} {...others}>
     <Group position={'apart'} align={'center'} noWrap>
-      <Text>{value}</Text>
+      <Text>{preferredLabel || value}</Text>
       <Badge color={ontology2Color(ontology)}>{ontology}</Badge>
     </Group>
   </div>
@@ -31,10 +33,10 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ value, ontology, ont
 
 interface Props {
   ontologies?: Map<string, OntologyItem>;
-  onSearchElementsUpdate: (ontCodes: string[]) => void;
+  onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
 }
 
-function SearchBar({ ontologies, onSearchElementsUpdate }: Props) {
+function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
   const theme = useMantineTheme();
   const [value, setValue] = useState<string>('');
   const [offerings, setOfferings] = useState<OfferingItem[]>([]);
@@ -42,19 +44,30 @@ function SearchBar({ ontologies, onSearchElementsUpdate }: Props) {
   const [getAutocomplete, { data: autocompleteSuggestions, loading }] = useAutocompleteLazyQuery();
 
   useEffect(() => {
-    if (autocompleteSuggestions) {
-      let newOfferings: OfferingItem[] = autocompleteSuggestions.autocompleteList.map((e) => {
-        return {
-          ontcode: e.ontCode,
-          ontology: e.ontology,
-          value: e.label,
-        };
+    const newOfferings = [] as OfferingItem[];
+    if (value.length > 0) {
+      newOfferings.push({
+        ontology: 'FREETEXT',
+        value,
+        ontcode: value,
       });
+    }
+    if (autocompleteSuggestions) {
+      newOfferings.push(
+        ...autocompleteSuggestions.autocompleteList.map((e) => {
+          return {
+            ontcode: e.ontCode,
+            ontology: e.ontology,
+            value: e.label,
+            preferredLabel: e.isSynonymOfPreferredTerm,
+          };
+        }),
+      );
       setOfferings(newOfferings);
     }
-  }, [autocompleteSuggestions]);
+  }, [value, autocompleteSuggestions]);
 
-  useEffect(() => onSearchElementsUpdate(selectedFilters.map((f) => f.ontcode)), [selectedFilters]);
+  useEffect(() => onSearchFiltersUpdate(selectedFilters), [selectedFilters]);
 
   function handleSubmit(item: OfferingItem) {
     setValue('');
@@ -116,7 +129,7 @@ function SearchBar({ ontologies, onSearchElementsUpdate }: Props) {
 
       <Stack spacing={0} style={{ flexGrow: 1 }}>
         <Text size={'xs'} weight={800}>
-          Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO)
+          Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO) or title / description
         </Text>
 
         <Group
@@ -150,6 +163,7 @@ function SearchBar({ ontologies, onSearchElementsUpdate }: Props) {
                 },
               }}
               data={offerings}
+              filter={() => true}
               size="md"
               placeholder={'lung, cancer, heart'}
               rightSection={
