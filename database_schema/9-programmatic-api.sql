@@ -256,7 +256,7 @@ query ExpressionDataAggregatedApiExample {
  */
 
 DROP VIEW IF EXISTS api_study_h5_download;
-DROP FUNCTION create_study_h5ad_presigned_url;
+DROP FUNCTION IF EXISTS create_study_h5ad_presigned_url;
 CREATE OR REPLACE FUNCTION create_study_h5ad_presigned_url(IN file_url text)
     RETURNS text
     LANGUAGE plpython3u
