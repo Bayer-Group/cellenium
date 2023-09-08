@@ -11,7 +11,7 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y libpcre3 libpcre3-dev zlib1g zlib1g-dev openssl libssl-dev wget git gcc make libbrotli-dev
-RUN wget https://nginx.org/download/nginx-1.25.2.tar.gz && tar -zxf nginx-1.25.2.tar.gz && git clone https://github.com/google/ngx_brotli && cd nginx-1.25.2 && ./configure --with-compat --add-dynamic-module=../ngx_brotli && make modules
+RUN wget https://nginx.org/download/nginx-1.25.2.tar.gz && tar -zxf nginx-1.25.2.tar.gz && git clone https://github.com/google/ngx_brotli && cd ngx_brotli && git submodule update --init && cd ./../nginx-1.25.2 && ./configure --with-compat --add-dynamic-module=../ngx_brotli && make modules
 
 FROM --platform=$TARGETPLATFORM nginx:1.25-alpine3.18
 ARG TARGETPLATFORM

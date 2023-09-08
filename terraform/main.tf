@@ -37,7 +37,7 @@ module "cellenium_study_import_lambda" {
   db_secret_id                     = module.cellenium_db_secret.secret_id
   db_secret_arn                    = module.cellenium_db_secret.secret_arn
   ec2_security_group_id            = var.ec2_security_group_id
-  ec2_security_group_port          = var.ec2_security_group_port
+  ec2_security_group_port          = var.ec2_postgres_security_group_port
   failed_batch_cloudwatch_rule_arn = module.cellenium_study_import_batch.failed_job_cloudwatch_rule_arn
   s3_bucket_arn                    = module.cellenium_study_import_s3.s3_bucket_arn
   s3_bucket_id                     = module.cellenium_study_import_s3.s3_bucket_id
@@ -55,7 +55,7 @@ module "cellenium_study_import_batch" {
   db_secret_arn           = module.cellenium_db_secret.secret_arn
   db_secret_id            = module.cellenium_db_secret.secret_id
   ec2_security_group_id   = var.ec2_security_group_id
-  ec2_security_group_port = var.ec2_security_group_port
+  ec2_security_group_port = var.ec2_postgres_security_group_port
   failed_lambda_arn       = module.cellenium_study_import_lambda.failed_lambda_arn
   vpc_id                  = var.vpc_id
   subnet_ids              = var.subnet_ids
@@ -87,8 +87,8 @@ module "api_gateway" {
   api_domain_name                 = var.api_domain_name
   api_domain_name_certificate_arn = var.api_domain_name_certificate_arn
   ec2_security_group_id           = var.ec2_security_group_id
-  ec2_security_group_port         = var.ec2_security_group_port
-  ec2_target_group_port           = var.ec2_security_group_port
+  ec2_security_group_port         = var.ec2_postgraphile_security_group_port
+  ec2_target_group_port           = var.ec2_postgraphile_security_group_port
   vpc_link_subnet_ids             = var.vpc_link_subnet_ids
 
   ec2_instance_id = var.ec2_instance_id

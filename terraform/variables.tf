@@ -13,7 +13,11 @@ variable "ec2_security_group_id" {
   type = string
 }
 
-variable "ec2_security_group_port" {
+variable "ec2_postgres_security_group_port" {
+  type = number
+}
+
+variable "ec2_postgraphile_security_group_port" {
   type = number
 }
 

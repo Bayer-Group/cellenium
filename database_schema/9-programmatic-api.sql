@@ -254,3 +254,39 @@ query ExpressionDataAggregatedApiExample {
   }
 }
  */
+
+DROP VIEW IF EXISTS api_study_h5_download;
+DROP FUNCTION create_study_h5ad_presigned_url;
+CREATE OR REPLACE FUNCTION create_study_h5ad_presigned_url(IN file_url text)
+    RETURNS text
+    LANGUAGE plpython3u
+    VOLATILE
+AS $$
+    import boto3
+    from botocore.client import Config
+    import os
+
+    if 'S3_BUCKET' not in os.environ:
+        raise Exception("S3_BUCKET environment variable not set")
+    if 'AWS_REGION' not in os.environ:
+        raise Exception("AWS_REGION environment variable not set")
+
+    kwargs = dict()
+    if all([key in os.environ for key in ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"]]):
+        kwargs = dict(aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+                      aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+                      aws_session_token=os.environ['AWS_SESSION_TOKEN'])
+    if file_url is None or not "s3://" in file_url:
+     return file_url
+    bucket = os.environ["S3_BUCKET"]
+    s3_client = boto3.client("s3", config=Config(signature_version='s3v4'), region_name=os.environ['AWS_REGION'], **kwargs)
+    return s3_client.generate_presigned_url('get_object',
+                                    Params={'Bucket': bucket,
+                                            'Key': file_url.replace(f"s3://{bucket}/", "")},
+                                    ExpiresIn=60*60*24)
+    $$;
+
+
+CREATE VIEW api_study_h5_download with (security_invoker = true) AS
+SELECT create_study_h5ad_presigned_url(study.import_file) as presigned_url, study_id FROM study where study.visible = True;
+grant select on api_study_h5_download to postgraphile;
