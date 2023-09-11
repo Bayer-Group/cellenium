@@ -12,7 +12,7 @@ create view api_study_annotation_overview
 as
 select ssa.study_id,
        ag.h5ad_column                                              annotation_group_column,
-       ag.display_group                                            annotation_group_value,
+       ag.display_group                                            annotation_group_display,
        array_agg(av.h5ad_value order by av.annotation_value_id)    annotation_values,
        array_agg(av.display_value order by av.annotation_value_id) annotation_display_values
 from annotation_group ag
@@ -85,7 +85,7 @@ query StudyApiExample {
     layers
     annotations {
       annotationGroupColumn
-      annotationGroupValue
+      annotationGroupDisplay
       annotationValues
       annotationDisplayValues
     }
