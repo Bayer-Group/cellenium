@@ -27,11 +27,13 @@ CREATE TABLE study
 -- all studies which are open to everybody ("reader_permissions is null")
 -- and all studies which list of allowed groups has at least one group in common with the current user's groups
 create or replace view study_visible_currentuser
+    -- see https://www.postgresql.org/docs/current/rules-privileges.html
+    with (security_barrier)
 as
 select s.study_id
 from study s
 where s.reader_permissions is null
-   or s.reader_permissions = ARRAY[]::text[]
+   or s.reader_permissions = ARRAY []::text[]
    or s.reader_permissions && current_user_groups();
 grant select on study_visible_currentuser to postgraphile;
 
