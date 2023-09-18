@@ -88,6 +88,7 @@ def get_gene_mappings(dataset_name, attributes, tax_id):
     df = df.dropna().rename(
         columns={
             "Gene description": "display_name",
+            "NCBI gene (formerly Entrezgene) description": "display_name",
             "HGNC symbol": "hgnc_symbols",
             "Gene name": "hgnc_symbols",
             "Gene stable ID": "ensembl_gene_id",
@@ -96,9 +97,10 @@ def get_gene_mappings(dataset_name, attributes, tax_id):
     )
     df.display_name = df.display_name.str.split(r"\[Source", expand=True)[0].str.strip()
     df.entrez_gene_ids = df.entrez_gene_ids.astype(int).astype(str)
-    df = df.groupby(["ensembl_gene_id", "display_name"]).agg(set).reset_index()
+    df = df.groupby(["ensembl_gene_id"]).agg(set).reset_index()
     df.hgnc_symbols = df.hgnc_symbols.apply(list)
     df.entrez_gene_ids = df.entrez_gene_ids.apply(list)
+    df.display_name = df.display_name.apply(min)
     df["tax_id"] = tax_id
     df["display_symbol"] = df.hgnc_symbols.str.join(";")
     df["omics_type"] = "gene"
@@ -517,7 +519,12 @@ class Dataimport:
             ["ensembl_gene_id", "external_gene_name", "entrezgene_id", "description"],
             10116,
         )
-        genes = pd.concat([human, mus, rat]).reset_index(drop=True)
+        macaque = get_gene_mappings(
+            "mfascicularis_gene_ensembl",
+            ["ensembl_gene_id", "hgnc_symbol", "entrezgene_id", "entrezgene_description"],
+            9541,
+        )
+        genes = pd.concat([human, mus, rat, macaque]).reset_index(drop=True)
         genes[["omics_type", "tax_id", "display_symbol", "display_name"]].to_sql(
             "omics_base", if_exists="append", index=False, con=self.engine
         )
