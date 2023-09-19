@@ -8,8 +8,18 @@ services:
     environment:
       - PGPORT=5001
       - POSTGRES_PASSWORD=postgres
+      # the follwing variables can be defined to enable a feature that displays temporary credentials fpr h5ad study upload by users
+      - S3_BUCKET
+      - AWS_REGION
+      - USER_STUDY_UPLOAD_CONFIGURED
+      # AWS credentials - can be omitted if deployed in AWS context (e.g. role is assigned to EC2 / ECS container etc.)
+      # AWS access is required if study h5ad files shall be stored in AWS only, not necessary by default.
+      #- AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      #- AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      #- AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
     ports:
       - "5001:5001"
+    restart: always
     volumes:
       - postgresdata:/var/lib/postgresql/data
       - ./database_schema:/database_schema
@@ -18,9 +28,8 @@ services:
   postgraphile:
     build:
       context: ./postgraphile
+    restart: always
     environment:
-      # study-level permissions are not in effect until permissions are set in the study table,
-      # these are demo examples for testing:
       - AUTH_HEADER_NAME=x-amzn-oidc-accesstoken
       # - AUTH_HEADER_MOCK_VALUE=Group1;Group2
       - DATABASE_URL=postgres://postgraphile:postgraphile@postgres:5001/postgres
@@ -32,8 +41,8 @@ services:
     ports:
       - "5000:5000"
 
-
   client:
+    restart: always
     build:
       context: ./client
     ports:
