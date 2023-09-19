@@ -7,7 +7,14 @@ function createSpec(xAxis: 'studyName' | 'displaySymbol') {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     data: { name: 'table' },
-    mark: { type: 'point', filled: true },
+    transform: [
+      {
+        impute: 'exprSamplesFraction',
+        key: 'annotationDisplayValue',
+        value: 0,
+        groupby: [xAxis],
+      },
+    ],
     encoding: {
       y: {
         field: 'annotationDisplayValue',
@@ -29,18 +36,38 @@ function createSpec(xAxis: 'studyName' | 'displaySymbol') {
               title: '',
               axis: { offset: 10 },
             },
-      size: {
-        field: 'exprSamplesFraction',
-        type: 'quantitative',
-        scale: { domain: [0.0, 1.0] },
-        title: 'Expr. fraction',
-      },
-      color: {
-        field: 'median',
-        type: 'quantitative',
-        scale: { scheme: 'viridis', reverse: true },
-      },
     },
+    layer: [
+      {
+        mark: { type: 'point', filled: true },
+        encoding: {
+          size: {
+            field: 'exprSamplesFraction',
+            type: 'quantitative',
+            scale: { domain: [0.0, 1.0] },
+            title: ['Expr. fraction', 'x: not measured'],
+          },
+          color: {
+            field: 'median',
+            type: 'quantitative',
+            scale: { scheme: 'viridis', reverse: true },
+            title: 'Median',
+          },
+        },
+      },
+      {
+        mark: 'text',
+        encoding: {
+          text: {
+            condition: { test: "datum['exprSamplesFraction'] === 0", value: 'x' },
+            value: '',
+          },
+          color: {
+            value: 'lightgray',
+          },
+        },
+      },
+    ],
   } as VisualizationSpec;
 }
 
