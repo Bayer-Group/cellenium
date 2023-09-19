@@ -6,7 +6,7 @@ ruff = ruff ./$(pkg_src) --line-length 140 --select E,W,F,N,I,C,B,UP,PT,SIM,RUF 
 .SECONDARY:
 
 reset_database:
-	docker-compose exec postgres bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done'
+	docker compose exec postgres bash -c 'set -e; for f in /database_schema/*.sql; do echo "Processing $$f"; psql --username postgres --host=localhost --echo-errors --set ON_ERROR_STOP=on --file=$$f; done'
 	PYTHONPATH=$$(pwd)/data_import python data_import/masterdata.py
 	rm -f scratch/*.imported
 
