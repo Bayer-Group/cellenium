@@ -102,8 +102,9 @@ def validate_gene_ids(adata: AnnData, taxonomy_id: int):
     # cellenium recognizes HGNC Symbols and Ensembl Gene IDs in the annotation index.
     # Simple validation which checks some housekeeping genes.
     require_ids = {
-        9606: ["ATF1", "ENSG00000123268"],
-        10090: ["Atf1", "ENSMUSG00000023027"],
+        9541: ["ATF1", "ENSMFAG00000000109"],
+        9606: ["ATF1", "ENSG00000123268", "ADA", "ENSG00000196839"],
+        10090: ["Atf1", "ENSMUSG00000023027", "Ada", "ENSMUSG00000017697"],
         10116: ["Atf1", "ENSRNOG00000061088"],
     }
     ids = require_ids[taxonomy_id]
