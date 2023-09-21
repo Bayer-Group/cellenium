@@ -23,7 +23,9 @@ function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: St
         allOntCodes: [study.studyOntologyList.map((ont) => ont.ontCodes), study.studyOntologyList.map((ont) => ont.parentIds)]
           .flat(2)
           .filter((ontCode) => !!ontCode),
-        allSearchableStrings: [study.studyName, study.description, ...metadataValues(study)].filter((s) => s?.length > 0).map((s) => s.toLocaleLowerCase()),
+        allSearchableStrings: [study.studyName, study.description, ...metadataValues(study)]
+          .filter((s) => s?.length > 0)
+          .map((s) => `${s}`.toLocaleLowerCase()),
       })),
     [data],
   );
