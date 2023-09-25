@@ -538,10 +538,10 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             study_row = r.fetchone()
             if study_row is None:
                 raise Exception(f"Study with filename {stored_filename} not found")
-            study_id = study_row[0]
-            if study_row[1] is True and study_row[2] is False:
+            study_id = study_row["study_id"]
+            if study_row["import_started"] is True and study_row["import_finished"] is False:
                 raise Exception(f"Study with filename {stored_filename}, ID {study_id} is already being imported")
-            if study_row[2] is True:
+            if study_row["import_finished"] is True:
                 logging.info(f"replacing study {stored_filename}, ID {study_id}, its postgres data is deleted first")
                 connection.execute(text(f"call reset_study( {study_id} )"))
                 logging.info("study data removed")
