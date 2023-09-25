@@ -423,6 +423,10 @@ def import_study_layer_expression(
                 csc_gene_data = sparse.find(sparse_x.T[gene_i])
                 data_cell_indexes = csc_gene_data[1]
                 data_values = csc_gene_data[2]
+                # remove infinite and NaN values from this matrix row:
+                bad_value_mask = ~np.logical_or(np.isinf(data_values), np.isnan(data_values))
+                data_values = np.compress(bad_value_mask, data_values)
+                data_cell_indexes = np.compress(bad_value_mask, data_cell_indexes)
                 if data_values.size > 0:
                     studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
                     buffer.write(str(study_layer_id) + "|" + str(omics_id) + "|{")
