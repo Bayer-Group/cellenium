@@ -544,6 +544,7 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             if study_row["import_finished"] is True:
                 logging.info(f"replacing study {stored_filename}, ID {study_id}, its postgres data is deleted first")
                 connection.execute(text(f"call reset_study( {study_id} )"))
+                connection.connection.commit()
                 logging.info("study data removed")
             return study_id
         else:
