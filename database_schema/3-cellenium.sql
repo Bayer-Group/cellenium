@@ -274,6 +274,7 @@ CREATE TABLE study_annotation_group_ui
     differential_expression_calculated boolean not null
 );
 grant select on study_annotation_group_ui to postgraphile;
+create unique index study_annotation_group_ui_1 on study_annotation_group_ui (study_id, annotation_group_id);
 
 CREATE TABLE study_sample
 (
@@ -289,7 +290,6 @@ CREATE TABLE study_sample
     h5ad_obs_key    text not null
 );
 grant select on study_sample to postgraphile;
---create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
 
 CREATE TABLE study_sample_projection
@@ -298,7 +298,7 @@ CREATE TABLE study_sample_projection
     study_sample_id     int     not null,
     constraint fk_study_sample
         FOREIGN KEY (study_id, study_sample_id)
-            REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
+            REFERENCES study_sample (study_id, study_sample_id),
     projection_type     text    not null,
     modality            text,
     projection          real[]  not null,
@@ -306,6 +306,10 @@ CREATE TABLE study_sample_projection
     display_subsampling boolean not null
 );
 grant select on study_sample_projection to postgraphile;
+create index study_sample_projection_1 on study_sample_projection (study_id, projection_type, display_subsampling) include (study_sample_id, projection) where (display_subsampling);
+create index study_sample_projection_2 on study_sample_projection (study_id, projection_type);
+create unique index study_sample_projection_3 on study_sample_projection (study_id, study_sample_id, projection_type);
+
 
 CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed
 as
@@ -494,5 +498,48 @@ BEGIN
             comment on table expression_%1$s is ''@omit'';
             create unique index  expression_%1$s_omics_uq on expression_%1$s(omics_id);
             ', study_layer_id);
-END ;
+END;
+$$;
+
+create or replace procedure delete_study(p_study_id in int)
+    language plpgsql
+as
+$$
+declare
+    delete_study_layer_id int;
+begin
+
+    for delete_study_layer_id in (SELECT study_layer_id FROM study_layer WHERE study_id = p_study_id)
+        loop
+            EXECUTE 'drop table expression_' || delete_study_layer_id;
+        end loop;
+    delete from differential_expression where study_id = p_study_id;
+    delete from study_omics where study_id = p_study_id;
+    delete from study_layer where study_id = p_study_id;
+    delete from study_sample_annotation where study_id = p_study_id;
+    delete from study_annotation_group_ui where study_id = p_study_id;
+    delete from study_sample_projection where study_id = p_study_id;
+    delete from study_sample where study_id = p_study_id;
+    delete from study where study_id = p_study_id;
+end;
+$$;
+
+create or replace procedure reset_study(p_study_id in int)
+    language plpgsql
+as
+$$
+declare
+    keep_study_name        text;
+    keep_filename          text;
+    keep_import_file       text;
+    keep_admin_permissions text[];
+begin
+    select study_name, filename, import_file, admin_permissions
+    into keep_study_name, keep_filename, keep_import_file, keep_admin_permissions
+    from study
+    where study_id = p_study_id;
+    call delete_study(p_study_id);
+    insert into study (study_id, study_name, filename, import_file, admin_permissions)
+    values (p_study_id, keep_study_name, keep_filename, keep_import_file, keep_admin_permissions);
+end;
 $$;

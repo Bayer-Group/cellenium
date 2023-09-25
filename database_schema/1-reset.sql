@@ -19,7 +19,7 @@ $$;
 grant usage on schema public to postgraphile;
 
 
-create procedure _analyze_schema() as
+create or replace procedure _analyze_schema() as
 $$
 DECLARE
     tab RECORD;
@@ -29,6 +29,8 @@ BEGIN
                          JOIN pg_namespace n ON n.oid = t.relnamespace
                 WHERE t.relkind = 'r'
                   and n.nspname::varchar = 'public'
+                  -- the expression table partitions are analyzed after each study import
+                  and t.relname not like 'expression_%'
                 order by 1)
         LOOP
             RAISE NOTICE 'ANALYZE %.%', 'public', tab.table_name;

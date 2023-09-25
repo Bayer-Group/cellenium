@@ -461,6 +461,7 @@ def import_study_layer_expression(
                 buffer = io.StringIO()
                 buffered_gene_cnt = 0
         connection.connection.commit()
+        connection.execute(text(f"analyze expression_{study_layer_id}"))
         buffer.close()
         cursor.close()
 
@@ -524,7 +525,7 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             r = connection.execute(
                 text(
                     """
-                    SELECT study_id FROM study WHERE import_file = :filename
+                    SELECT study_id, import_started, import_finished FROM study WHERE import_file = :filename
                     """
                 ),
                 {"filename": str(stored_filename)},
@@ -533,6 +534,12 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             if study_row is None:
                 raise Exception(f"Study with filename {stored_filename} not found")
             study_id = study_row[0]
+            if study_row[1] is True and study_row[2] is False:
+                raise Exception(f"Study with filename {stored_filename}, ID {study_id} is already being imported")
+            if study_row[2] is True:
+                logging.info(f"replacing study {stored_filename}, ID {study_id}, its postgres data is deleted first")
+                connection.execute(text(f"call reset_study( {study_id} )"))
+                logging.info("study data removed")
             return study_id
         else:
             r = connection.execute(
