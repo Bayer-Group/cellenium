@@ -308,7 +308,7 @@ CREATE TABLE study_sample_projection
 grant select on study_sample_projection to postgraphile;
 create index study_sample_projection_1 on study_sample_projection (study_id, projection_type, display_subsampling) include (study_sample_id, projection) where (display_subsampling);
 create index study_sample_projection_2 on study_sample_projection (study_id, projection_type);
-create unique index study_sample_projection_3 on study_sample_projection (study_id, study_sample_id, projection_type);
+create unique index study_sample_projection_3 on study_sample_projection (study_id, study_sample_id, projection_type, modality);
 
 
 CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed
