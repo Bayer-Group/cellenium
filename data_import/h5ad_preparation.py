@@ -208,8 +208,8 @@ def _cellenium_uns_dictionary(adata: AnnData) -> dict:
 
 # add differential expression table to the anndata object
 # TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
-def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
-    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
+def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str, ngenes=100):
+    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer, ngenes)
     _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = diff_exp
     return adata
 
@@ -315,6 +315,7 @@ def set_cellenium_metadata(
 def calculate_differentially_expressed_genes(
     adata: AnnData,
     diffexp_attributes: List[str],
+    layer: Optional[str] = None,
     ngenes=100,
     diff_exp_min_group_expr=0.1,
     diff_exp_min_group_fc=0.5,
@@ -331,6 +332,7 @@ def calculate_differentially_expressed_genes(
             groups=attr_values,
             method="wilcoxon",
             use_raw=False,
+            layer=layer,
             n_genes=ngenes,
         )
         sc.tl.filter_rank_genes_groups(
@@ -339,6 +341,7 @@ def calculate_differentially_expressed_genes(
             min_fold_change=diff_exp_min_group_fc,
             max_out_group_fraction=diff_exp_max_notgroup_expr,
             use_raw=False,
+            layer=layer,
             key="rank_genes_groups",
             key_added="rank_genes_groups_filtered",
         )
