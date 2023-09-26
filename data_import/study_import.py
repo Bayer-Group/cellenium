@@ -486,6 +486,7 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
     df["study_id"] = study_id
     df.logfoldchanges = df.logfoldchanges.fillna(-1)  # muon puts logfoldchange to NaN
     df.replace(np.inf, 1000, inplace=True)
+    df.drop_duplicates(subset=["omics_id", "annotation_value_id"], inplace=True)
     df.rename(
         columns={
             "pvals": "pvalue",
