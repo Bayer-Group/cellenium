@@ -158,7 +158,7 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
       },
       {
         type  = "MEMORY"
-        value = "65536"
+        value = "122880"
       }
     ]
 
