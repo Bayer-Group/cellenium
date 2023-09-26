@@ -50,5 +50,19 @@ services:
     ports:
       - "5002:5002"
 
+  pgadmin:
+    restart: always
+    image: dpage/pgadmin4:7.7
+    mem_limit: 4g
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=cellenium@bayer.com
+      - PGADMIN_DEFAULT_PASSWORD=cellenium
+    ports:
+      - "5005:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
 volumes:
   postgresdata:
+  pgadmin:
+
