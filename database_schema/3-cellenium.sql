@@ -511,7 +511,7 @@ begin
 
     for delete_study_layer_id in (SELECT study_layer_id FROM study_layer WHERE study_id = p_study_id)
         loop
-            EXECUTE 'drop table expression_' || delete_study_layer_id;
+            EXECUTE 'drop table if exists expression_' || delete_study_layer_id;
         end loop;
     delete from differential_expression where study_id = p_study_id;
     delete from study_omics where study_id = p_study_id;
@@ -543,3 +543,4 @@ begin
     values (p_study_id, keep_study_name, keep_filename, keep_import_file, keep_admin_permissions);
 end;
 $$;
+
