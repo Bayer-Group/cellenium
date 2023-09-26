@@ -341,7 +341,6 @@ def calculate_differentially_expressed_genes(
             min_fold_change=diff_exp_min_group_fc,
             max_out_group_fraction=diff_exp_max_notgroup_expr,
             use_raw=False,
-            layer=layer,
             key="rank_genes_groups",
             key_added="rank_genes_groups_filtered",
         )
