@@ -69,11 +69,12 @@ def lambda_handler(event, context):
         s3.delete_object(Bucket=bucket, Key=key)
         return
 
-    logging.info(f"Submitting job for {key}")
+    job_name = "".join(e for e in key if e.isalnum())[:80]
+    logging.info(f"Submitting job '{job_name}' for {key}")
     batch_client = boto3.client("batch")
     response = batch_client.submit_job(
         jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
-        jobName="".join(e for e in key if e.isalnum()),
+        jobName=job_name,
         jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
         parameters={"filename": key},
         tags={
