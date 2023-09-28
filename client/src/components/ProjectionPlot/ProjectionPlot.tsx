@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, selectedProjectionState, studyState } from '../../atoms';
 import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from 'plotly.js';
+import { Params, Struct } from 'arquero/dist/types/table/transformable';
+import { annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, selectedProjectionState, studyState } from '../../atoms';
 import { ExpressionTable } from '../../model';
 
 interface PreparedPlot {
@@ -17,14 +18,17 @@ const plotlyConfig: Partial<Plotly.Config> = {
   displayModeBar: false,
 };
 
-type Props = {
+export function ProjectionPlot({
+  colorBy,
+  expressionTable,
+  showSampleIds,
+  disableSelection,
+}: {
   colorBy: 'annotation' | 'expression';
   expressionTable?: ExpressionTable;
   showSampleIds?: number[] | null;
   disableSelection?: boolean;
-};
-
-const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelection }: Props) => {
+}) {
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
   const study = useRecoilValue(studyState);
@@ -34,15 +38,13 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
   const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
 
   const annotationProjectionData = React.useMemo(() => {
-    // @ts-ignore
     if (!study || !study.samplesProjectionTables.get(projection)) {
       return undefined;
     }
 
-    // @ts-ignore
     let samplesAnnotationProjectionTable = study.samplesAnnotationTable
       .params({ annotationGroupId })
-      .filter((d: any, p: any) => d.annotationGroupId === p.annotationGroupId);
+      .filter((d: Struct, p: Params) => d.annotationGroupId === p.annotationGroupId);
     samplesAnnotationProjectionTable = samplesAnnotationProjectionTable
       .join_right(study.samplesProjectionTables.get(projection), 'studySampleId')
       .impute({ annotationValueId: () => -1 })
@@ -79,7 +81,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
     return annotationProjectionData.distinctAnnotationValueIds.map((annotationValueId) => {
       const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
         .params({ annotationValueId })
-        .filter((d: any, p: any) => d.annotationValueId === p.annotationValueId);
+        .filter((d: Struct, p: Params) => d.annotationValueId === p.annotationValueId);
       return {
         type: 'scattergl',
         x: tableForAnnotation.array('projectionX', Float32Array),
@@ -96,7 +98,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
         hoverinfo: 'text',
       } as Partial<Plotly.PlotData>;
     });
-  }, [study, annotationProjectionData, selectedAnnotation, expressionTable, colorBy, showSampleIds]);
+  }, [study, annotationProjectionData, expressionTable, colorBy, showSampleIds]);
 
   // the hovered cells highlighted
   const annotationHighlightTrace = React.useMemo(() => {
@@ -108,7 +110,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
     }
     const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
       .params({ highlightAnnotation })
-      .filter((d: any, p: any) => d.annotationValueId === p.highlightAnnotation);
+      .filter((d: Struct, p: Params) => d.annotationValueId === p.highlightAnnotation);
     return {
       type: 'scattergl',
       x: tableForAnnotation.array('projectionX', Float32Array),
@@ -123,7 +125,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
       showlegend: false,
       hoverinfo: 'text',
     } as Partial<Plotly.PlotData>;
-  }, [study, annotationProjectionData, highlightAnnotation]);
+  }, [study, annotationProjectionData, highlightAnnotation, colorBy]);
 
   // the selected cells highlighted
   const selectedAnnotationHighlightTrace = React.useMemo(() => {
@@ -135,7 +137,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
     }
     const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
       .params({ selectedAnnotation })
-      .filter((d: any, p: any) => d.annotationValueId === p.selectedAnnotation);
+      .filter((d: Struct, p: Params) => d.annotationValueId === p.selectedAnnotation);
     return {
       type: 'scattergl',
       x: tableForAnnotation.array('projectionX', Float32Array),
@@ -150,7 +152,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
       showlegend: false,
       hoverinfo: 'text',
     } as Partial<Plotly.PlotData>;
-  }, [study, annotationProjectionData, selectedAnnotation]);
+  }, [study, annotationProjectionData, selectedAnnotation, colorBy]);
 
   // the cells colored according to gene expression for the expression analysis page, include 0 values
   const expressionTrace = React.useMemo(() => {
@@ -237,9 +239,8 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
       return undefined;
     }
     const filteredTable = annotationProjectionData.samplesAnnotationProjectionTable
-      // @ts-ignore
       .params({ showSampleIds })
-      .filter((d: any, p: any) => aq.op.includes(p.showSampleIds, d.studySampleId, 0))
+      .filter((d: Struct, p: Params) => aq.op.includes(p.showSampleIds, d.studySampleId, 0))
       .reify();
     return {
       type: 'scattergl',
@@ -287,28 +288,46 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
         },
       },
     };
-  }, [annotationProjectionData, annotationTraces, annotationHighlightTrace, expressionTrace, selectedGeneExpressionTrace, selectedSamplesTrace]);
+  }, [
+    annotationProjectionData,
+    annotationTraces,
+    expressionTrace,
+    annotationHighlightTrace,
+    selectedAnnotationHighlightTrace,
+    selectedGeneExpressionTrace,
+    selectedSamplesTrace,
+  ]);
 
-  function onHover(event: Readonly<Plotly.PlotHoverEvent>) {
-    if (event.points.length > 0 && event.points[0].customdata) {
-      const annotationValueId = event.points[0].customdata as number;
-      setHighlightAnnotation(annotationValueId);
-    }
-  }
+  const onHover = useCallback(
+    (event: Readonly<Plotly.PlotHoverEvent>) => {
+      if (event.points.length > 0 && event.points[0].customdata) {
+        const annotationValueId = event.points[0].customdata as number;
+        setHighlightAnnotation(annotationValueId);
+      }
+    },
+    [setHighlightAnnotation],
+  );
 
-  function onClick(event: Readonly<Plotly.PlotMouseEvent>) {
-    if (!isSelectable) {
-      return null;
-    }
-    if (event.points.length > 0 && event.points[0].customdata) {
-      const annotationValueId = event.points[0].customdata as number;
-      setSelectedAnnotation(annotationValueId);
-    }
-  }
+  const onClick = useCallback(
+    (event: Readonly<Plotly.PlotMouseEvent>) => {
+      if (!isSelectable) {
+        return;
+      }
+      if (event.points.length > 0 && event.points[0].customdata) {
+        const annotationValueId = event.points[0].customdata as number;
+        setSelectedAnnotation(annotationValueId);
+      }
+    },
+    [isSelectable, setSelectedAnnotation],
+  );
 
-  function onDoubleClick() {
+  const onDoubleClick = useCallback(() => {
     setSelectedAnnotation(0);
-  }
+  }, [setSelectedAnnotation]);
+
+  const onUnHover = useCallback(() => {
+    setHighlightAnnotation(0);
+  }, [setHighlightAnnotation]);
 
   if (preparedPlot) {
     return (
@@ -319,13 +338,10 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
         onHover={onHover}
         onClick={onClick}
         onDoubleClick={onDoubleClick}
-        onUnhover={() => setHighlightAnnotation(0)}
+        onUnhover={onUnHover}
         style={{ width: '100%', height: '100%' }}
       />
     );
-  } else {
-    return <div>no plot</div>;
   }
-};
-
-export default ProjectionPlot;
+  return <div>no plot</div>;
+}

@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { Container, MantineProvider } from '@mantine/core';
-import './fonts/Exo-Bold.ttf';
+import './assets/fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { Notifications } from '@mantine/notifications';

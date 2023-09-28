@@ -6,7 +6,7 @@ import { ScenegraphEvent } from 'vega';
 import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery } from '../generated/types';
 import { allGenesState, cellOAnnotationGroupIdState } from '../atoms';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
-import StudySearchBar from '../components/SearchBar/StudySearchBar';
+import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { NavBar } from '../components/NavBar/NavBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
@@ -80,7 +80,7 @@ function CrossStudySearch() {
           heatmapDisplayData.map((heatmap) => (
             <Stack key={`${heatmap.omicsId}-expression-dot-plot`}>
               <Text>{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
-              <ExpressionDotPlot data={heatmap.heatmapData} annotationTitle="Cell Type" xAxis="studyName" onClick={onHeatmapClick} />
+              <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} />
             </Stack>
           ))}
       </Group>

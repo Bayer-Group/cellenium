@@ -1,8 +1,8 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { Group, Select, Text } from '@mantine/core';
 import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { annotationGroupIdState, annotationSecondaryGroupIdState, selectedAnnotationState, studyState } from '../../atoms';
 import { IconCalculator } from '@tabler/icons-react';
+import { annotationGroupIdState, annotationSecondaryGroupIdState, selectedAnnotationState, studyState } from '../../atoms';
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   value: string;
@@ -10,18 +10,20 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   differentialExpressionCalculated: boolean;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ label, differentialExpressionCalculated, ...others }: ItemProps, ref) => (
-  <div ref={ref} {...others}>
-    <Group position={'apart'} align={'center'} noWrap>
-      <Text>{label}</Text>
-      {differentialExpressionCalculated && (
-        <Group title="DEG calculated" align={'center'}>
-          <IconCalculator color={'gray'} size={20} />
-        </Group>
-      )}
-    </Group>
-  </div>
-));
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItem({ label, differentialExpressionCalculated, ...others }: ItemProps, ref) {
+  return (
+    <div ref={ref} {...others}>
+      <Group position="apart" align="center" noWrap>
+        <Text>{label}</Text>
+        {differentialExpressionCalculated && (
+          <Group title="DEG calculated" align="center">
+            <IconCalculator color="gray" size={20} />
+          </Group>
+        )}
+      </Group>
+    </div>
+  );
+});
 
 function AnnotationGroupSelector({
   label,
@@ -49,34 +51,37 @@ function AnnotationGroupSelector({
           differentialExpressionCalculated: false,
         });
       }
-      study.annotationGroupMap.forEach((value, key) => {
+      study.annotationGroupMap.forEach((v, key) => {
         if (key !== hideAnnotationGroup) {
           anns.push({
             value: key.toString(),
-            label: value.displayGroup,
-            differentialExpressionCalculated: value.differentialExpressionCalculated,
+            label: v.displayGroup,
+            differentialExpressionCalculated: v.differentialExpressionCalculated,
           });
         }
       });
     }
     setValue(annotationGroupId?.toString() || 'NONE');
     return anns;
-  }, [study, annotationGroupId]);
+  }, [study, annotationGroupId, includeDeselectEntry, hideAnnotationGroup]);
 
-  function update(value: string | null) {
-    if (value) {
-      const intVal = value === null || value === 'NONE' ? undefined : parseInt(value);
-      setValue(value);
-      setAnnotationGroupId(intVal);
-      onSelect && onSelect(intVal);
-    }
-  }
+  const update = useCallback(
+    (v: string | null) => {
+      if (v) {
+        const intVal = v === 'NONE' ? undefined : parseInt(v, 10);
+        setValue(v);
+        setAnnotationGroupId(intVal);
+        onSelect && onSelect(intVal);
+      }
+    },
+    [onSelect, setAnnotationGroupId],
+  );
 
   return (
     <Select
       style={{ maxWidth: 210, width: 210, minWidth: 210 }}
       value={value}
-      onChange={(value) => update(value)}
+      onChange={update}
       label={label || 'Select annotation group'}
       labelProps={{ size: 'xs' }}
       itemComponent={SelectItem}
@@ -85,12 +90,12 @@ function AnnotationGroupSelector({
         duration: 80,
         timingFunction: 'ease',
       }}
-      data={annotations as any}
+      data={annotations}
     />
   );
 }
 
-function AnnotationGroupSelectBox() {
+export function AnnotationGroupSelectBox() {
   const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
   const [annotationSecondaryGroupId, setAnnotationSecondaryGroupId] = useRecoilState(annotationSecondaryGroupIdState);
   return (
@@ -105,16 +110,15 @@ function AnnotationGroupSelectBox() {
     />
   );
 }
-function AnnotationSecondGroupSelectBox() {
+
+export function AnnotationSecondGroupSelectBox() {
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
   return (
     <AnnotationGroupSelector
-      label={'Group by second annotation'}
+      label="Group by second annotation"
       annotationGroupState={annotationSecondaryGroupIdState}
       hideAnnotationGroup={annotationGroupId}
       includeDeselectEntry
     />
   );
 }
-
-export { AnnotationGroupSelectBox, AnnotationSecondGroupSelectBox };

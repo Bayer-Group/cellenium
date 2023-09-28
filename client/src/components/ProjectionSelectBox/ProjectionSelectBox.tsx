@@ -1,8 +1,9 @@
 import { Select, Text } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useCallback } from 'react';
 import { selectedProjectionState, studyState } from '../../atoms';
 
-const ProjectionSelectBox = () => {
+export function ProjectionSelectBox() {
   const study = useRecoilValue(studyState);
   const [projection, setProjection] = useRecoilState(selectedProjectionState);
   const niceLabel = (value: string) => value.replace('umap', 'UMAP').replace('tsne', 't-SNE').replace('pca', 'PCA');
@@ -11,20 +12,25 @@ const ProjectionSelectBox = () => {
     label: niceLabel(p),
   }));
 
+  const onChange = useCallback(
+    (p: string | null) => {
+      setProjection(p || '');
+    },
+    [setProjection],
+  );
+
   if (options.length === 1) {
-    return <Text size={'xs'}>Projection: {options[0].label}</Text>;
+    return <Text size="xs">Projection: {options[0].label}</Text>;
   }
 
   return (
     <Select
       style={{ minWidth: 210, maxWidth: 210, width: 210 }}
       labelProps={{ size: 'xs' }}
-      label={'Select projection'}
+      label="Select projection"
       value={projection}
-      onChange={(p) => setProjection(p || '')}
+      onChange={onChange}
       data={options}
     />
   );
-};
-
-export default ProjectionSelectBox;
+}

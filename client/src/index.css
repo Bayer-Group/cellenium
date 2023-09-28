@@ -22,5 +22,5 @@ code {
   font-family: 'Exo-Bold';
   src:
     local('Exo-Bold'),
-    url('./fonts/Exo-Bold.ttf') format('truetype');
+    url('assets/fonts/Exo-Bold.ttf') format('truetype');
 }

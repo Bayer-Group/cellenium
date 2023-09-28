@@ -1,17 +1,12 @@
 import { ActionIcon, Autocomplete, AutocompleteItem } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { useRecoilValue } from 'recoil';
-import { studyState } from '../../atoms';
 import * as aq from 'arquero';
+import { studyState } from '../../atoms';
 import { Omics } from '../../model';
 
-interface Props {
-  selection: Omics | null;
-  onSelectionChange: (omics: Omics | null) => void;
-}
-
-function SingleGeneSelection({ selection, onSelectionChange }: Props) {
+export function SingleGeneSelection({ selection, onSelectionChange }: { selection: Omics | null; onSelectionChange: (omics: Omics | null) => void }) {
   const [offerings, setOfferings] = useState<Omics[]>([]);
   const [value, setValue] = useState(selection ? selection.displaySymbol : '');
   useEffect(() => {
@@ -23,36 +18,43 @@ function SingleGeneSelection({ selection, onSelectionChange }: Props) {
   }, [selection]);
   const study = useRecoilValue(studyState);
 
-  function handleChange(inputString: string) {
-    let newOfferings: Omics[] = [];
-    if (inputString.length > 0) {
-      // @ts-ignore
-      newOfferings = study?.studyOmicsTable
-        .filter(aq.escape((t: any) => aq.op.includes(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0)))
-        .objects();
-    }
-    setOfferings(newOfferings);
-    setValue(inputString);
-  }
+  const handleChange = useCallback(
+    (inputString: string) => {
+      let newOfferings: Omics[] = [];
+      if (inputString.length > 0) {
+        newOfferings = study?.studyOmicsTable
+          .filter(aq.escape((t: { displaySymbol: string }) => aq.op.includes(t.displaySymbol.toLowerCase(), inputString.toLowerCase(), 0)))
+          .objects() as Omics[];
+      }
+      setOfferings(newOfferings);
+      setValue(inputString);
+    },
+    [study?.studyOmicsTable],
+  );
 
-  function handleItemSubmit(item: Omics) {
-    setOfferings([]);
-    if (item) {
-      onSelectionChange(item);
-    }
-  }
+  const handleItemSubmit = useCallback(
+    (item: AutocompleteItem) => {
+      setOfferings([]);
+      if (item) {
+        onSelectionChange(item as Omics);
+      }
+    },
+    [onSelectionChange],
+  );
+
+  const onBlur = () => {
+    handleItemSubmit(offerings[0] as AutocompleteItem);
+  };
 
   return (
     <Autocomplete
       value={value}
       radius={0}
-      size={'xs'}
+      size="xs"
       onChange={handleChange}
-      onBlur={() => handleItemSubmit(offerings[0])}
+      onBlur={onBlur}
       data={offerings as AutocompleteItem[]}
-      onItemSubmit={(item: any) => {
-        handleItemSubmit(item);
-      }}
+      onItemSubmit={handleItemSubmit}
       rightSection={
         <ActionIcon
           onClick={() => {
@@ -67,5 +69,3 @@ function SingleGeneSelection({ selection, onSelectionChange }: Props) {
     />
   );
 }
-
-export { SingleGeneSelection };

@@ -2,14 +2,9 @@ import { ActionIcon, Badge } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { Omics } from '../../model';
 import { ontology2Color } from '../../utils/helper';
-import { OfferingItem } from '../SearchBar/interfaces.ts';
+import { OfferingItem } from '../SearchBar/interfaces';
 
-type Props = {
-  onRemove: Function;
-  item: OfferingItem | Omics;
-};
-
-function SearchBadge({ onRemove, item }: Props) {
+export function SearchBadge({ onRemove, item }: { onRemove: (item: OfferingItem | Omics) => void; item: OfferingItem | Omics }) {
   const removeButton = (
     <ActionIcon onClick={() => onRemove(item)} size="xs" radius="xl" variant="transparent">
       <IconX color="white" size={15} />
@@ -30,5 +25,3 @@ function SearchBadge({ onRemove, item }: Props) {
     </div>
   );
 }
-
-export default SearchBadge;

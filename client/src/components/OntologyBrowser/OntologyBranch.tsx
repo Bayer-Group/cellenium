@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import { OntologyItem } from '../../model';
-import OntologyNode from './OntologyNode';
+import { OntologyNode } from './OntologyNode';
 
-const OntologyBranch = ({ item, level, handleAddOntologyItem }: { item: OntologyItem; level: number; handleAddOntologyItem: Function }) => {
+export function OntologyBranch({
+  item,
+  level,
+  handleAddOntologyItem,
+}: {
+  item: OntologyItem;
+  level: number;
+  handleAddOntologyItem: (item: OntologyItem) => void;
+}) {
   const [selected, setSelected] = useState(false);
-  const hasChildren = item && item.children && item.children.length > 0 ? true : false;
+  const hasChildren = !!(item && item.children && item.children.length > 0);
 
   const renderChildren = () => {
     if (hasChildren) {
@@ -27,6 +35,4 @@ const OntologyBranch = ({ item, level, handleAddOntologyItem }: { item: Ontology
       {selected && renderChildren()}
     </>
   );
-};
-
-export default OntologyBranch;
+}

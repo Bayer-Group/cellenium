@@ -1,6 +1,6 @@
-import { OntologyItem } from '../../model';
 import { ActionIcon, createStyles, Group, Text, useMantineTheme } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import { OntologyItem } from '../../model';
 
 const useStyles = createStyles((theme) => ({
   main: {
@@ -13,29 +13,33 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type Props = {
+export function OntologyNode({
+  item,
+  selected,
+  hasChildren,
+  level,
+  onToggle,
+  handleAddOntologyItem,
+}: {
   item: OntologyItem;
-  selected: Boolean;
-  hasChildren: Boolean | undefined;
+  selected: boolean;
+  hasChildren: boolean | undefined;
   level: number;
   onToggle: () => void;
-  handleAddOntologyItem: Function;
-};
-const OntologyNode = ({ item, selected, hasChildren, level, onToggle, handleAddOntologyItem }: Props) => {
+  handleAddOntologyItem: (item: OntologyItem) => void;
+}) {
   const theme = useMantineTheme();
   const { classes } = useStyles();
   return (
     <Group pl={`${level * 10}px`} spacing={0}>
       {hasChildren && (
-        <ActionIcon size="xs" variant={'subtle'} onClick={onToggle}>
+        <ActionIcon size="xs" variant="subtle" onClick={onToggle}>
           {selected ? <IconChevronDown color={theme.colors.dark[9]} /> : <IconChevronRight color={theme.colors.dark[9]} />}
         </ActionIcon>
       )}
-      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size={'xs'} style={{ cursor: 'pointer' }}>
+      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs" style={{ cursor: 'pointer' }}>
         {item.label}
       </Text>
     </Group>
   );
-};
-
-export default OntologyNode;
+}

@@ -1,15 +1,11 @@
 import React from 'react';
 import { createStyles, Group, Navbar, Title, Tooltip, UnstyledButton } from '@mantine/core';
-import CellTypeMarkerIcon from '../../icons/study_analysis.svg';
-import ExpressionAnalysisIcon from '../../icons/expression_analysis.svg';
-import CoExpressionAnalysisIcon from '../../icons/coexpression_analysis.svg';
-import CompareAnnotationsIcon from '../../icons/annotation_comparison.svg';
-import UserAnnotationIcon from '../../icons/user_annotation.svg';
+import { useRecoilState } from 'recoil';
+import { NavLink } from 'react-router-dom';
 
 import CelleniumLogo from '../../images/logo.svg';
-import { useRecoilState } from 'recoil';
 import { pageState } from '../../atoms';
-import { NavLink } from 'react-router-dom';
+import { CellTypeMarkerIcon, CoExpressionAnalysisIcon, CompareAnnotationsIcon, ExpressionAnalysisIcon, UserAnnotationIcon } from '../../assets/icons/Icons';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -83,27 +79,28 @@ const useStyles = createStyles((theme) => ({
 
 const viewLinks = [
   {
-    icon: <img src={CellTypeMarkerIcon} alt="cell type marker icon" />,
+    icon: <CellTypeMarkerIcon />,
     label: 'Cell type marker analysis',
     link: 'CellMarkerAnalysis',
   },
   {
-    icon: <img src={ExpressionAnalysisIcon} alt="expression analysis icon" />,
+    icon: <ExpressionAnalysisIcon />,
     label: 'Expression analysis',
     link: 'ExpressionAnalysis',
   },
   {
-    icon: <img src={CoExpressionAnalysisIcon} alt="co-expression icon" />,
+    icon: <CoExpressionAnalysisIcon />,
     label: 'Co-Expression analysis',
     link: 'CoexpressionAnalysis',
   },
   {
-    icon: <img src={UserAnnotationIcon} alt="user annotations icon" />,
+    // eslint-disable-next-line react/jsx-no-undef
+    icon: <UserAnnotationIcon />,
     label: 'Interactive cell type annotation',
     link: 'CelltypeDiscovery',
   },
   {
-    icon: <img src={CompareAnnotationsIcon} alt="compare annotations icon" />,
+    icon: <CompareAnnotationsIcon />,
     label: 'Compare annotations',
     link: 'AnnotationComparison',
   },
@@ -113,7 +110,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-function LeftSidePanel({ children }: Props) {
+export function LeftSidePanel({ children }: Props) {
   const { classes, cx } = useStyles();
   const [page, setPage] = useRecoilState(pageState);
 
@@ -155,7 +152,7 @@ function LeftSidePanel({ children }: Props) {
               cellenium
             </Title>
           </NavLink>
-          <Group className={classes.navigation} spacing={'md'}>
+          <Group className={classes.navigation} spacing="md">
             {children}
           </Group>
         </div>
@@ -163,5 +160,3 @@ function LeftSidePanel({ children }: Props) {
     </Navbar>
   );
 }
-
-export { LeftSidePanel };

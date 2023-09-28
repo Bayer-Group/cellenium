@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState } from '../atoms';
-import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
+import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
 import { useExpressionValues } from '../hooks';
-import ProjectionSelectBox from '../components/ProjectionSelectBox/ProjectionSelectBox';
+import { ProjectionSelectBox } from '../components/ProjectionSelectBox/ProjectionSelectBox';
 import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
@@ -57,6 +57,7 @@ function DifferentialExpressionAnalysis() {
   const selectedAnnotation = useRecoilValue(selectedAnnotationState);
   const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
   const study = useRecoilValue(studyState);
+
   useEffect(() => {
     if (selectedGenes.length > 1) setSelectedGenes(selectedGenes.slice(0, 1));
   }, []);
@@ -78,7 +79,7 @@ function DifferentialExpressionAnalysis() {
           {annotationGroupId && <AnnotationGroupDisplay />}
         </Stack>
       </LeftSidePanel>
-      <main style={{ flexGrow: 'grow', width: '100%', height: '100%' }}>
+      <main style={{ width: '100%', height: '100%' }}>
         <ProjectionPlotWithOptionalExpression />
       </main>
       <RightSidePanel>

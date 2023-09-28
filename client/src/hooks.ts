@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import * as aq from 'arquero';
-import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { SetterOrUpdater, useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { InputMaybe, useExpressionByOmicsIdsQuery } from './generated/types';
 import { ExpressionTable } from './model';
@@ -60,21 +60,21 @@ export function useSetStudyFromUrl() {
   const navigate = useNavigate();
   // const page = queryParams.get('page');
 
-  const setValidParam = (queryParam: string, setter: (x: any) => void, defaultValue?: any) => {
+  const setValidParam = <T>(queryParam: string, setter: SetterOrUpdater<T> | ((v: T) => void), defaultValue?: T) => {
     const value = queryParams.get(queryParam);
     if (value) {
       if (queryParam.endsWith('Id')) {
         const numericValue = Number(value);
-        setter(numericValue);
+        setter(numericValue as T);
       } else {
-        setter(value);
+        setter(value as T);
       }
     } else if (defaultValue) {
       setter(defaultValue);
     }
   };
 
-  const studyIdUrlParamInt = studyIdUrlParam && parseInt(studyIdUrlParam);
+  const studyIdUrlParamInt = studyIdUrlParam && parseInt(studyIdUrlParam, 10);
   const [studyId, setStudyId] = useRecoilState(studyIdState);
   const resetStatesOnStudyChange = [
     useResetRecoilState(selectedGenesState),

@@ -1,17 +1,21 @@
 import { useMemo } from 'react';
-import { useAnnotationValueCoocurrenceQuery } from '../../generated/types';
-import { ResponsiveSankey } from '@nivo/sankey';
-import { Center, Loader } from '@mantine/core';
+import { DefaultLink, DefaultNode, ResponsiveSankey } from '@nivo/sankey';
+import { Center, Loader, MantineColor } from '@mantine/core';
+import { StudyAnnotationFrontendValue, useAnnotationValueCoocurrenceQuery } from '../../generated/types';
 
-interface Props {
+export function SankeyPlot({
+  annotationGroupId1,
+  annotationGroupId2,
+  studyId,
+  annotationValues1,
+  annotationValues2,
+}: {
   annotationGroupId1: number;
   annotationGroupId2: number;
-  annotationValues1: any;
-  annotationValues2: any;
+  annotationValues1: StudyAnnotationFrontendValue[];
+  annotationValues2: StudyAnnotationFrontendValue[];
   studyId: number;
-}
-
-const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotationValues1, annotationValues2 }: Props) => {
+}) {
   const { data, loading } = useAnnotationValueCoocurrenceQuery({
     variables: {
       studyId,
@@ -21,10 +25,14 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
   });
   const sankeyData = useMemo(() => {
     if (data) {
-      const nodes: any = [];
+      const nodes: {
+        id: number;
+        nodeColor: MantineColor;
+        label: string;
+      }[] = [];
       const vals1: number[] = [];
       const vals2: number[] = [];
-      annotationValues1.map((nd: any) => {
+      annotationValues1.forEach((nd) => {
         nodes.push({
           id: nd.annotationValueId,
           nodeColor: nd.color,
@@ -32,7 +40,7 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
         });
         vals1.push(nd.annotationValueId);
       });
-      annotationValues2.map((nd: any) => {
+      annotationValues2.forEach((nd) => {
         nodes.push({
           id: nd.annotationValueId,
           nodeColor: nd.color,
@@ -40,12 +48,16 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
         });
         vals2.push(nd.annotationValueId);
       });
-      const links: any = [];
+      const links: {
+        source: number;
+        target: number;
+        value: number;
+      }[] = [];
       data.annotationValueCoocurrenceList
         .filter((nd) => {
           return vals1.includes(nd.annotationValueId1) && vals2.includes(nd.annotationValueId2);
         })
-        .map((nd) => {
+        .forEach((nd) => {
           links.push({
             source: nd.annotationValueId1,
             target: nd.annotationValueId2,
@@ -61,17 +73,17 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
       nodes: [],
       links: [],
     };
-  }, [data, annotationGroupId1, annotationGroupId2, annotationValues1, annotationValues2]);
+  }, [data, annotationValues1, annotationValues2]);
 
   return (
     <Center style={{ width: '100%', height: '100%' }}>
-      {loading && <Loader variant={'dots'} color={'gray'} size={'xl'} />}
+      {loading && <Loader variant="dots" color="gray" size="xl" />}
 
       {sankeyData && sankeyData.nodes.length > 0 && (
         <div style={{ width: '90%', height: '100%' }}>
           <ResponsiveSankey
-            data={sankeyData}
-            label={'label'}
+            data={sankeyData as unknown as { nodes: DefaultNode[]; links: DefaultLink[] }}
+            label="label"
             margin={{ top: 40, right: 250, bottom: 40, left: 250 }}
             align="justify"
             colors={{ scheme: 'category10' }}
@@ -88,7 +100,7 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
             linkOpacity={0.5}
             linkHoverOthersOpacity={0.1}
             linkContract={3}
-            enableLinkGradient={true}
+            enableLinkGradient
             labelPosition="outside"
             labelOrientation="horizontal"
             labelPadding={16}
@@ -101,9 +113,4 @@ const SankeyPlot = ({ annotationGroupId1, annotationGroupId2, studyId, annotatio
       )}
     </Center>
   );
-};
-
-export { SankeyPlot };
-
-/*
- */
+}

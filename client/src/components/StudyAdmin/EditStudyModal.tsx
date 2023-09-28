@@ -1,9 +1,9 @@
-import { InputMaybe, StudyAdminDetailsFragment, useStudyUpdateMutation } from '../../generated/types.ts';
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { Button, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { Form } from 'react-router-dom';
+import { InputMaybe, StudyAdminDetailsFragment, useStudyUpdateMutation } from '../../generated/types';
 
 export function EditStudyModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
   const [studyUpdateMutation, { loading: studyUpdateLoading }] = useStudyUpdateMutation();
@@ -25,7 +25,7 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
   const submit = () => {
     if (study) {
       const splitToArray = (s: string) => {
-        const a = s.split(';').map((s) => s.trim());
+        const a = s.split(';').map((si) => si.trim());
         if (a.length === 1 && a[0] === '') {
           return null;
         }
@@ -69,7 +69,7 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
       visible: study?.visible || false,
       externalWebsite: study?.externalWebsite || '',
     });
-  }, [study]);
+  }, [form, study]);
 
   return (
     <Modal

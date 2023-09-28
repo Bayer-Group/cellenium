@@ -2,7 +2,7 @@ import { ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text } from '@ma
 import { IconExternalLink } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { StudyInfoFragment } from '../../generated/types';
-import { ontology2Color } from '../../utils/helper.ts';
+import { ontology2Color } from '../../utils/helper';
 
 function metadataKeyValues(study: StudyInfoFragment) {
   if (study.metadata) {
@@ -13,7 +13,7 @@ function metadataKeyValues(study: StudyInfoFragment) {
   return [];
 }
 
-function StudyCard({ study }: { study: StudyInfoFragment }) {
+export function StudyCard({ study }: { study: StudyInfoFragment }) {
   const newStudyUrl = `study/${study.studyId}`;
 
   return (
@@ -63,12 +63,11 @@ function StudyCard({ study }: { study: StudyInfoFragment }) {
             {study.studyOntologyList &&
               study.studyOntologyList.map((item) => {
                 if (item.labels !== null) {
-                  const badges = item.labels.map((label) => (
+                  return item.labels.map((label) => (
                     <Badge color={ontology2Color(item.ontology)} key={`${study.studyId}-${label}-badge`}>
                       {label}
                     </Badge>
                   ));
-                  return badges;
                 }
                 return null;
               })}
@@ -83,5 +82,3 @@ function StudyCard({ study }: { study: StudyInfoFragment }) {
     </Card>
   );
 }
-
-export { StudyCard };

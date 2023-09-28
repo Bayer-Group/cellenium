@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Grid, Space } from '@mantine/core';
 import { StudyInfoFragment } from '../generated/types';
-import StudySearchBar from '../components/SearchBar/StudySearchBar';
+import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { NavBar } from '../components/NavBar/NavBar';
 import { StudyCard } from '../components/StudyCard/StudyCard';
 

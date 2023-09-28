@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import * as aq from 'arquero';
+import { Struct } from 'arquero/dist/types/table/transformable';
 import { Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable } from './model';
 import { apolloClient } from './client';
 import {
@@ -108,19 +109,18 @@ export const studyState = selector<Study | undefined>({
           studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
           omicsTypes,
           annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
-          annotationValueMap: new Map(
+          annotationValueMap: new Map<number, StudyAnnotationFrontendValue>(
             response.data.study.annotationGroupsList
               .map((g) => g.annotationValuesList)
               .flat(2)
-              // @ts-ignore
-              .map((v: StudyAnnotationFrontendValue) => [v.annotationValueId, v]),
+              .map((v: Struct) => [v.annotationValueId, v as StudyAnnotationFrontendValue]),
           ),
         };
-        // console.log('studyState set', s)
+        // console.log('studyState set', s);
         return s;
       }
     }
-    throw Error('unknown study');
+    return undefined;
   },
   // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
   dangerouslyAllowMutability: true,

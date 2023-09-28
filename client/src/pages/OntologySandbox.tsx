@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack } from '@mantine/core';
 import { useOntologiesQuery, useStudiesQuery } from '../generated/types';
 import { OntologyItem } from '../model';
-import OntologySelect from '../components/OntologyBrowser/OntologySelect';
+import { OntologySelect } from '../components/OntologyBrowser/OntologySelect';
 import { generateOntologyTrees } from '../utils/helper';
 import { OntologyTree } from '../components/OntologyBrowser/OntologyTree';
 

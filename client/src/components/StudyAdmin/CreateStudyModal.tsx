@@ -1,10 +1,10 @@
 import { useForm } from '@mantine/form';
-import { useCreateStudyUploadMutation } from '../../generated/types.ts';
 import { useCallback } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { Form } from 'react-router-dom';
 import { Prism } from '@mantine/prism';
+import { useCreateStudyUploadMutation } from '../../generated/types';
 
 export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: () => void }) {
   const form = useForm({
@@ -29,7 +29,7 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
       variables: {
         filename: form.values.filename,
       },
-    }).catch((reason: any) => {
+    }).catch((reason: { message: string }) => {
       showNotification({
         title: 'Could not create study',
         message: reason.message,
@@ -61,7 +61,7 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
           <TextInput
             label="Filename"
             {...form.getInputProps('filename')}
-            placeholder={'my_study.h5ad'}
+            placeholder="my_study.h5ad"
             disabled={loading || studyUploadData !== undefined || error !== undefined}
           />
         </Form>
@@ -72,9 +72,9 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
               free to modify the actual local name and path.)
             </Text>
             <Prism language="bash" copyLabel="Command code to clipboard" copiedLabel="Command copied to clipboard">
-              {`curl -v ${Object.entries(studyUploadData?.createStudyUpload.json['fields'])
-                .map(([key, value]) => '-F ' + key + '=' + value)
-                .join(' ')} -F file=@${form.values.filename} ${studyUploadData?.createStudyUpload.json['url']}`}
+              {`curl -v ${Object.entries(studyUploadData?.createStudyUpload.json.fields)
+                .map(([key, value]) => `-F ${key}=${value}`)
+                .join(' ')} -F file=@${form.values.filename} ${studyUploadData?.createStudyUpload.json.url}`}
             </Prism>
             <Text>You can close this dialog. Once uploaded, data will be processed automatically. Refresh the study list to observe the current status.</Text>
           </>

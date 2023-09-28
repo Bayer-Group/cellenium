@@ -1,8 +1,8 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { View, VisualizationSpec } from 'react-vega';
-import { DotPlotElementFragment } from '../../generated/types';
 import { ScenegraphEvent } from 'vega';
 import { Center, Loader } from '@mantine/core';
+import { DotPlotElementFragment } from '../../generated/types';
 
 function createSpec(xAxis: 'studyName' | 'displaySymbol') {
   return {
@@ -74,17 +74,15 @@ function createSpec(xAxis: 'studyName' | 'displaySymbol') {
 
 export function ExpressionDotPlot({
   data,
-  annotationTitle,
   xAxis,
   onClick,
 }: {
   data: DotPlotElementFragment[];
-  annotationTitle: string;
   xAxis: 'studyName' | 'displaySymbol';
   onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void;
 }) {
   const VegaLite = lazy(() => import('react-vega/lib/VegaLite'));
-  const spec = useMemo(() => createSpec(xAxis), [annotationTitle, xAxis]);
+  const spec = useMemo(() => createSpec(xAxis), [xAxis]);
 
   const setUpSelectionListener = (view: View) => {
     view.addEventListener('click', (event, item) => {
@@ -99,7 +97,7 @@ export function ExpressionDotPlot({
     <Suspense
       fallback={
         <Center style={{ height: '100%', width: '100%' }}>
-          <Loader variant={'dots'} color={'gray'} />
+          <Loader variant="dots" color="gray" />
         </Center>
       }
     >

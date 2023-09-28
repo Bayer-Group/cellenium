@@ -1,24 +1,16 @@
 import { Select, SelectItem } from '@mantine/core';
 
-interface Props {
-  species: string;
-  handleChange: Function;
-  data: SelectItem[];
-}
-
-const SpeciesSelect = ({ handleChange, species, data }: Props) => {
+export function SpeciesSelect({ handleChange, species, data }: { species: string; handleChange: (item: string) => void; data: SelectItem[] }) {
   return (
     <Select
       style={{ borderColor: '#000' }}
-      onChange={(value: string) => handleChange(value)}
+      onChange={handleChange}
       value={species}
-      variant={'default'}
-      size={'md'}
+      variant="default"
+      size="md"
       data={data}
-      label={'Select species'}
+      label="Select species"
       labelProps={{ fw: 700, size: 'xs' }}
     />
   );
-};
-
-export { SpeciesSelect };
+}

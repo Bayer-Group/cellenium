@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Center, Group, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { showNotification } from '@mantine/notifications';
@@ -7,6 +7,7 @@ import { studyState } from '../atoms';
 import { SelectBoxItem } from '../model';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { SankeyPlot } from '../components/SankeyPlot/SankeyPlot';
+import { StudyAnnotationFrontendValue } from '../generated/types';
 
 function AnnotationComparison() {
   const study = useRecoilValue(studyState);
@@ -14,17 +15,20 @@ function AnnotationComparison() {
   const [value1, setValue1] = useState<string | undefined>();
   const [value2, setValue2] = useState<string | undefined>();
 
-  const handleChange1 = (value: string) => {
-    if (value !== value2) setValue1(value);
-    else {
-      showNotification({
-        title: 'Please choose two different annotation groups. ',
-        message: 'Nice try!',
-        color: 'red',
-        autoClose: 2500,
-      });
-    }
-  };
+  const handleChange1 = useCallback(
+    (value: string) => {
+      if (value !== value2) setValue1(value);
+      else {
+        showNotification({
+          title: 'Please choose two different annotation groups. ',
+          message: 'Nice try!',
+          color: 'red',
+          autoClose: 2500,
+        });
+      }
+    },
+    [value2],
+  );
 
   const annotations: SelectBoxItem[] = useMemo(() => {
     const anns: SelectBoxItem[] = [];
@@ -57,8 +61,8 @@ function AnnotationComparison() {
       >
         {study && annotations.length >= 2 && value1 && value2 && (
           <SankeyPlot
-            annotationValues1={study.annotationGroupMap.get(parseInt(value1, 10))?.annotationValuesList}
-            annotationValues2={study.annotationGroupMap.get(parseInt(value2, 10))?.annotationValuesList}
+            annotationValues1={study.annotationGroupMap.get(parseInt(value1, 10))?.annotationValuesList as StudyAnnotationFrontendValue[]}
+            annotationValues2={study.annotationGroupMap.get(parseInt(value2, 10))?.annotationValuesList as StudyAnnotationFrontendValue[]}
             annotationGroupId1={parseInt(value1, 10)}
             annotationGroupId2={parseInt(value2, 10)}
             studyId={study.studyId}

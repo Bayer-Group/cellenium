@@ -1,6 +1,6 @@
-import { StudyAdminDetailsFragment, useStudyLogsQuery } from '../../generated/types.ts';
 import { Group, Loader, Modal, Stack, Text } from '@mantine/core';
 import { Prism } from '@mantine/prism';
+import { StudyAdminDetailsFragment, useStudyLogsQuery } from '../../generated/types';
 
 export function StudyLogModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
   const { data, loading } = useStudyLogsQuery({

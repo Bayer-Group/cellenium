@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
-import ExpressionAnalysisTypeSelectBox from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
+import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
 import {
   annotationGroupIdState,
   annotationSecondaryGroupIdState,
@@ -13,11 +13,11 @@ import {
   studyState,
   userGeneStoreOpenState,
 } from '../atoms';
-import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
+import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
 import { useExpressionValues } from '../hooks';
 import { useExpressionByAnnotationQuery, useExpressionViolinPlotQuery } from '../generated/types';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
-import ProjectionSelectBox from '../components/ProjectionSelectBox/ProjectionSelectBox';
+import { ProjectionSelectBox } from '../components/ProjectionSelectBox/ProjectionSelectBox';
 import { AnnotationGroupSelectBox, AnnotationSecondGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
@@ -135,7 +135,7 @@ function DotPlots() {
       ...dotPlotElement,
       displaySymbol: study?.studyOmicsMap?.get(dotPlotElement.omicsId)?.displaySymbol || 'nn',
     }));
-  }, [data, selectedGenes]);
+  }, [data?.expressionByAnnotationList, study?.studyOmicsMap]);
 
   if (loading) {
     return (
@@ -147,11 +147,7 @@ function DotPlots() {
   return (
     heatmapDisplayData && (
       <Center style={{ height: '100%', width: '100%' }}>
-        <ExpressionDotPlot
-          data={heatmapDisplayData}
-          annotationTitle={study?.annotationGroupMap.get(annotationGroupId || -1)?.displayGroup || 'group'}
-          xAxis="displaySymbol"
-        />
+        <ExpressionDotPlot data={heatmapDisplayData} xAxis="displaySymbol" />
       </Center>
     )
   );
@@ -177,7 +173,7 @@ function ExpressionAnalysis() {
     <Group align="flex-start" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <Stack spacing="md">
-          <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType} selection={analysisType} options={analysisTypes} />
+          <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType as (v: unknown) => void} selection={analysisType} options={analysisTypes} />
           {(analysisType === 'violinplot' || analysisType === 'dotplot') && (
             <>
               <AnnotationGroupSelectBox />

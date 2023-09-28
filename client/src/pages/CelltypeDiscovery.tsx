@@ -18,7 +18,7 @@ import {
 import { useExpressionValues } from '../hooks';
 import { SingleGeneSelection } from '../components/AddGene/SingleGeneSelection';
 import { Omics } from '../model';
-import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
+import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
 import { InputMaybe, useSaveUserAnnotationMutation } from '../generated/types';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
@@ -123,7 +123,7 @@ function CoexpressionPlot({
         clickmode: 'none',
       } as Partial<Plotly.Layout>,
     } as PreparedPlot;
-  }, [table]);
+  }, [filterSampleIds, omicsX, omicsY, table]);
 
   return (
     <div style={{ width: '100%' }}>
@@ -235,7 +235,7 @@ function CelltypeDiscovery() {
           {annotationGroupId && <AnnotationGroupDisplay disableSelection />}
         </Stack>
       </LeftSidePanel>
-      <main>
+      <main style={{ flexGrow: 1, height: '100vh', position: 'relative' }}>
         <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
       </main>
       <RightSidePanel>

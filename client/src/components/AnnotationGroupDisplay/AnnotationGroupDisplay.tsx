@@ -1,16 +1,16 @@
-import { Annotation } from '../Annotation/Annotation';
 import { Stack } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { Annotation } from '../Annotation/Annotation';
 import { annotationGroupIdState, highlightAnnotationState, studyState } from '../../atoms';
 
-function AnnotationGroupDisplay({ disableSelection }: { disableSelection?: boolean }) {
+export function AnnotationGroupDisplay({ disableSelection }: { disableSelection?: boolean }) {
   const [, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
   const study = useRecoilValue(studyState);
 
   if (!study || !annotationGroupId) {
-    return <></>;
+    return null;
   }
   const annotations = study.annotationGroupMap.get(annotationGroupId)?.annotationValuesList;
   const isSelectable = disableSelection ? false : (study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated as boolean);
@@ -32,5 +32,3 @@ function AnnotationGroupDisplay({ disableSelection }: { disableSelection?: boole
     </Stack>
   );
 }
-
-export { AnnotationGroupDisplay };

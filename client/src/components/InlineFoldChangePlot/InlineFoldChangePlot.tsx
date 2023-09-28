@@ -2,14 +2,17 @@ import Plot from 'react-plotly.js/index';
 import { Loader } from '@mantine/core';
 import { useHalfAVolcanoQuery } from '../../generated/types';
 
-interface Props {
+export function InlineFoldChangePlot({
+  studyId,
+  annotationValueId,
+  pval,
+  log2fc,
+}: {
   studyId: number;
   annotationValueId: number;
   pval: number;
   log2fc: number;
-}
-
-function InlineFoldChangePlot({ studyId, annotationValueId, pval, log2fc }: Props) {
+}) {
   const { data, loading } = useHalfAVolcanoQuery({
     variables: {
       studyId,
@@ -83,5 +86,3 @@ function InlineFoldChangePlot({ studyId, annotationValueId, pval, log2fc }: Prop
     />
   );
 }
-
-export { InlineFoldChangePlot };

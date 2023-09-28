@@ -1,7 +1,7 @@
-import ProjPlotIcon from '../../images/logo.svg';
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
+import ProjPlotIcon from '../../images/logo.svg';
 
 const HEADER_HEIGHT = 60;
 
@@ -81,7 +81,7 @@ const mainLinks = [
   { link: '/markergene', label: 'Marker gene search' },
 ];
 
-function NavBar() {
+export function NavBar() {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes, cx } = useStyles();
   const mainItems = mainLinks.map((item) => (
@@ -92,8 +92,8 @@ function NavBar() {
 
   return (
     <Header height={HEADER_HEIGHT} zIndex={1000}>
-      <Container className={classes.inner} fluid={true}>
-        <NavLink to={'/'} style={{ textDecoration: 'none', color: 'black' }}>
+      <Container className={classes.inner} fluid>
+        <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
           <Group spacing={5}>
             <img src={ProjPlotIcon} alt="proj plot icon" />
             <Title>cellenium</Title>
@@ -118,5 +118,3 @@ function NavBar() {
     </Header>
   );
 }
-
-export { NavBar };

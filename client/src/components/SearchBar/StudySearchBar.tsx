@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Group, Loader } from '@mantine/core';
 import { StudyInfoFragment, useStudiesQuery } from '../../generated/types';
 import { OntologyItem } from '../../model';
-import { generateOntologyTrees } from '../../utils/helper.ts';
+import { generateOntologyTrees } from '../../utils/helper';
 import { OfferingItem, SearchBar } from './SearchBar';
 
 function metadataValues(study: StudyInfoFragment) {
@@ -12,7 +12,7 @@ function metadataValues(study: StudyInfoFragment) {
   return [];
 }
 
-function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: StudyInfoFragment[]) => void }) {
+export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: StudyInfoFragment[]) => void }) {
   const { data, loading } = useStudiesQuery();
   const allStudies = useMemo(
     () =>
@@ -51,7 +51,7 @@ function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: St
       }
     });
     return keepStudies;
-  }, [data?.studyOverviewsList, filters]);
+  }, [allStudies, filters]);
 
   useEffect(() => onStudyListUpdate(filteredStudies || []), [filteredStudies]);
 
@@ -64,5 +64,3 @@ function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: St
   }
   return <SearchBar ontologies={ontologyTrees} onSearchFiltersUpdate={setFilters} />;
 }
-
-export default StudySearchBar;

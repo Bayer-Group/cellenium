@@ -1,11 +1,11 @@
 import { ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
 import { closeModal, openModal } from '@mantine/modals';
 import { useAutocompleteLazyQuery } from '../../generated/types';
 import { OntologyBrowser } from '../OntologyBrowser/OntologyBrowser';
-import { OntologyItem } from '../../model';
-import SearchBadge from '../SearchBadge/SearchBadge';
+import { Omics, OntologyItem } from '../../model';
+import { SearchBadge } from '../SearchBadge/SearchBadge';
 import { ontology2Color } from '../../utils/helper';
 import { OfferingItem } from './interfaces';
 
@@ -16,21 +16,24 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   preferredLabel?: string;
 }
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ value, ontology, ontcode, preferredLabel, ...others }: ItemProps, ref) => (
-  <div ref={ref} {...others}>
-    <Group position="apart" align="center" noWrap>
-      <Text>{preferredLabel || value}</Text>
-      <Badge color={ontology2Color(ontology)}>{ontology}</Badge>
-    </Group>
-  </div>
-));
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItem({ value, ontology, ontcode, preferredLabel, ...others }: ItemProps, ref) {
+  return (
+    <div ref={ref} {...others}>
+      <Group position="apart" align="center" noWrap>
+        <Text>{preferredLabel || value}</Text>
+        <Badge color={ontology2Color(ontology)}>{ontology}</Badge>
+      </Group>
+    </div>
+  );
+});
 
-interface Props {
+export function SearchBar({
+  ontologies,
+  onSearchFiltersUpdate,
+}: {
   ontologies?: Map<string, OntologyItem>;
   onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
-}
-
-function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
+}) {
   const theme = useMantineTheme();
   const [value, setValue] = useState<string>('');
   const [offerings, setOfferings] = useState<OfferingItem[]>([]);
@@ -63,33 +66,44 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
 
   useEffect(() => onSearchFiltersUpdate(selectedFilters), [selectedFilters]);
 
-  function handleSubmit(item: OfferingItem) {
-    setValue('');
+  const handleSubmit = useCallback(
+    (item: OfferingItem) => {
+      setValue('');
 
-    const check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
-    if (check.length === 0) {
-      setSelectedFilters([...selectedFilters, item]);
-    }
-    setOfferings([]);
-  }
+      const check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
+      if (check.length === 0) {
+        setSelectedFilters([...selectedFilters, item]);
+      }
+      setOfferings([]);
+    },
+    [selectedFilters],
+  );
 
-  function handleChange(input: string) {
-    setOfferings([]);
-    setValue(input);
-    getAutocomplete({
-      variables: {
-        query: input,
-      },
-    });
-  }
+  const handleChange = useCallback(
+    (input: string) => {
+      setOfferings([]);
+      setValue(input);
+      (async () => {
+        await getAutocomplete({
+          variables: {
+            query: input,
+          },
+        });
+      })();
+    },
+    [getAutocomplete],
+  );
 
-  function handleFilterRemove(filter: OfferingItem) {
-    const newFilters = selectedFilters.filter((f) => !(f.ontcode === filter.ontcode && f.ontology === f.ontology));
-    setSelectedFilters(newFilters);
-    setOfferings([]);
-  }
+  const handleFilterRemove = useCallback(
+    (filter: OfferingItem | Omics) => {
+      const newFilters = selectedFilters.filter((f) => !(f.ontcode === (filter as OfferingItem).ontcode && f.ontology === filter.ontology));
+      setSelectedFilters(newFilters);
+      setOfferings([]);
+    },
+    [selectedFilters],
+  );
 
-  function showOntologyBrowser() {
+  const showOntologyBrowser = useCallback(() => {
     if (ontologies) {
       openModal({
         modalId: 'ontologyBrowser',
@@ -113,7 +127,7 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
         ),
       });
     }
-  }
+  }, [ontologies, selectedFilters]);
 
   return (
     <Group position="left" align="flex-end" spacing={4}>
@@ -178,6 +192,3 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
     </Group>
   );
 }
-
-export { SearchBar };
-export type { OfferingItem };
