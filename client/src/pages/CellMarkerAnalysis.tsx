@@ -40,7 +40,7 @@ function ProjectionPlotWithOptionalExpression() {
   }
 
   return (
-    <div>
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       {table && <ProjectionPlot colorBy={'annotation'} expressionTable={table} />}
       {table === undefined && <ProjectionPlot colorBy={'annotation'} />}
     </div>
@@ -73,7 +73,9 @@ function DifferentialExpressionAnalysis() {
           {annotationGroupId && <AnnotationGroupDisplay />}
         </Stack>
       </LeftSidePanel>
-      <main>{<ProjectionPlotWithOptionalExpression />}</main>
+      <main style={{ flexGrow: 'grow', width: '100%', height: '100%' }}>
+        <ProjectionPlotWithOptionalExpression />
+      </main>
       <RightSidePanel>
         <Stack>
           <Divider size={'xs'} label={'Gene store'} />

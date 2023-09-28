@@ -1,5 +1,5 @@
 import React from 'react';
-import { Anchor, createStyles, Group, Navbar, Title, Tooltip, UnstyledButton } from '@mantine/core';
+import { createStyles, Group, Navbar, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import CellTypeMarkerIcon from '../../icons/study_analysis.svg';
 import ExpressionAnalysisIcon from '../../icons/expression_analysis.svg';
 import CoExpressionAnalysisIcon from '../../icons/coexpression_analysis.svg';
@@ -9,12 +9,12 @@ import UserAnnotationIcon from '../../icons/user_annotation.svg';
 import CelleniumLogo from '../../images/logo.svg';
 import { useRecoilState } from 'recoil';
 import { pageState } from '../../atoms';
+import { NavLink } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: 'flex',
   },
-
   aside: {
     flex: '0 0 60px',
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
@@ -143,16 +143,18 @@ function LeftSidePanel({ children }: Props) {
       <Navbar.Section grow className={classes.wrapper}>
         <div className={classes.aside}>
           <div className={classes.logo}>
-            <Anchor href={'/'}>
+            <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
               <img src={CelleniumLogo} alt="cellenium logo" />
-            </Anchor>
+            </NavLink>
           </div>
           {mainLinks}
         </div>
         <div className={classes.main}>
-          <Title order={4} className={classes.title}>
-            cellenium
-          </Title>
+          <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
+            <Title order={4} className={classes.title}>
+              cellenium
+            </Title>
+          </NavLink>
           <Group className={classes.navigation} spacing={'md'}>
             {children}
           </Group>

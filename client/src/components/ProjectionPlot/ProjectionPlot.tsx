@@ -272,8 +272,8 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
     return {
       plotlyData,
       plotlyLayout: {
-        width: 850,
-        height: window.innerHeight - 50,
+        // width: 850,
+        // height: window.innerHeight - 50,
         margin: { l: 0, r: 0, t: 0, b: 0 },
         xaxis: {
           visible: false,
@@ -320,6 +320,7 @@ const ProjectionPlot = ({ colorBy, expressionTable, showSampleIds, disableSelect
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onUnhover={() => setHighlightAnnotation(0)}
+        style={{ width: '100%', height: '100%' }}
       />
     );
   } else {

@@ -37,7 +37,7 @@ export default function StudyAdmin() {
       name: 'ID',
       selector: (row: StudyAdminDetailsFragment) => row.studyId,
       sortable: true,
-      width: '60px',
+      width: '10%',
     },
     {
       name: 'Title',
@@ -47,13 +47,13 @@ export default function StudyAdmin() {
     {
       name: 'Filename',
       selector: (row: StudyAdminDetailsFragment) => row.filename,
-      sortable: true,
+      width: '20%',
     },
     {
       name: 'Your Role',
       selector: (row: StudyAdminDetailsFragment) => (row.adminPermissionGranted ? 'Admin' : row.readerPermissionGranted ? 'View' : 'No Access'),
       sortable: true,
-      width: '100px',
+      width: '10%',
     },
     {
       name: 'Import Status',
@@ -121,7 +121,9 @@ export default function StudyAdmin() {
             <Loader variant="dots" color="blue" size="md" />
           </Group>
         )}
-        {!loading && data ? <DataTable data={data?.studyAdminDetailsList || []} columns={columns} defaultSortFieldId={1} defaultSortAsc={false} /> : null}
+        {!loading && data ? (
+          <DataTable data={data?.studyAdminDetailsList || []} columns={columns} defaultSortFieldId={1} defaultSortAsc={false} style={{ width: '100%' }} />
+        ) : null}
         {error && (
           <Group position="center">
             <Text weight="bold">An Error occurred</Text>

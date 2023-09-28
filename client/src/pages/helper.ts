@@ -2,7 +2,6 @@ import { TreeOntologyOverviewFragment } from '../generated/types';
 import { OntologyItem } from '../model';
 
 export function ontology2Color(ontology: string) {
-  console.log({ ontology });
   let color;
   switch (ontology) {
     case 'taxonomy':

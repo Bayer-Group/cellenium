@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
+import Markdown from 'vite-plugin-react-markdown';
 
 export default defineConfig(() => ({
   server: {
@@ -15,5 +16,11 @@ export default defineConfig(() => ({
     outDir: 'build',
     sourcemap: true,
   },
-  plugins: [react(), svgr({ svgrOptions: { icon: true } })],
+  plugins: [
+    Markdown(),
+    react({
+      include: [/\.tsx$/, /\.md$/], // <-- add .md
+    }),
+    svgr({ svgrOptions: { icon: true } }),
+  ],
 }));

@@ -63,13 +63,19 @@ const StudyCard = ({ study }: { study: StudyInfoFragment }) => {
             {study.studyOntologyList &&
               study.studyOntologyList.map((item) => {
                 if (item.labels !== null) {
-                  let badges = item.labels.map((label) => <Badge color={ontology2Color(item.ontology)}>{label}</Badge>);
+                  let badges = item.labels.map((label) => (
+                    <Badge color={ontology2Color(item.ontology)} key={`${study.studyId}-${label}-badge`}>
+                      {label}
+                    </Badge>
+                  ));
                   return badges;
                 }
                 return null;
               })}
             {metadataKeyValues(study).map((label) => (
-              <Text style={{ marginLeft: '10px' }}>{label}</Text>
+              <Text style={{ marginLeft: '10px' }} key={`${study.studyId}-${label}-label`}>
+                {label}
+              </Text>
             ))}
           </Group>
         </Spoiler>

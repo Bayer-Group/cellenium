@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
-import { VegaLite, View, VisualizationSpec } from 'react-vega';
+import { lazy, Suspense, useMemo } from 'react';
+import { View, VisualizationSpec } from 'react-vega';
 import { DotPlotElementFragment } from '../../generated/types';
 import { ScenegraphEvent } from 'vega';
+import { Center, Loader } from '@mantine/core';
 
 function createSpec(xAxis: 'studyName' | 'displaySymbol') {
   return {
@@ -82,6 +83,7 @@ export function ExpressionDotPlot({
   xAxis: 'studyName' | 'displaySymbol';
   onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void;
 }) {
+  const VegaLite = lazy(() => import('react-vega/lib/VegaLite'));
   const spec = useMemo(() => createSpec(xAxis), [annotationTitle, xAxis]);
 
   const setUpSelectionListener = (view: View) => {
@@ -94,16 +96,24 @@ export function ExpressionDotPlot({
   };
 
   return (
-    <VegaLite
-      spec={spec}
-      onNewView={(view) => setUpSelectionListener(view)}
-      config={{
-        view: { stroke: 'transparent' },
-      }}
-      actions={false}
-      data={{
-        table: data,
-      }}
-    />
+    <Suspense
+      fallback={
+        <Center style={{ height: '100%', width: '100%' }}>
+          <Loader variant={'dots'} color={'gray'} />
+        </Center>
+      }
+    >
+      <VegaLite
+        spec={spec}
+        onNewView={(view) => setUpSelectionListener(view)}
+        config={{
+          view: { stroke: 'transparent' },
+        }}
+        actions={false}
+        data={{
+          table: data,
+        }}
+      />
+    </Suspense>
   );
 }

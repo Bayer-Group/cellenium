@@ -1,5 +1,5 @@
 import { ActionIcon, Autocomplete, AutocompleteItem, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { Omics } from '../../model';
 import SearchBadge from '../SearchBadge/SearchBadge';
@@ -54,7 +54,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: Props) {
       Array.from(allGenes.values())
         .filter((gene) => gene.taxId === parseInt(species))
         .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))
-        .filter((gene) => humanOnly === false || gene.taxId === 9606)
+        .filter((gene) => !humanOnly || gene.taxId === 9606)
         .sort(sortAlphaNum),
       'displaySymbol',
     )
@@ -79,6 +79,10 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: Props) {
     setOfferings([]);
     onGeneSelection(newFilters.map((f) => f.omicsId));
   }
+
+  useEffect(() => {
+    setSelectedFilters([]);
+  }, [species]);
 
   return (
     <Group position={'left'} align={'flex-end'} spacing={4} noWrap>

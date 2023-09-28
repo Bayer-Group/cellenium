@@ -11,6 +11,7 @@ import { RecoilRoot } from 'recoil';
 import ErrorPage from './pages/ErrorPage';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
+import { Docs } from './pages/Docs.tsx';
 
 export const apolloCache = new InMemoryCache();
 
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: 'ontology-sandbox',
     element: <OntologySandbox />,
+  },
+  {
+    path: 'docs',
+    element: <Docs />,
   },
 ]);
 

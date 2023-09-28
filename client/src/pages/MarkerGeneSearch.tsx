@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { MarkerCard, NavBar } from '../components';
+import { GeneSearchBar, MarkerCard, NavBar } from '../components';
 import { Center, Container, Grid, Loader, Space, Text, useMantineTheme } from '@mantine/core';
-import { GeneSearchBar } from '../components';
 import { DifferentialMarkerFragment, useStudiesWithMarkerGenesQuery } from '../generated/types';
 
 const MarkerGeneSearch = () => {
@@ -13,6 +12,7 @@ const MarkerGeneSearch = () => {
     },
     skip: omicsIds.length === 0,
   });
+
   return (
     <Container fluid={true}>
       <NavBar />
@@ -21,7 +21,13 @@ const MarkerGeneSearch = () => {
         <GeneSearchBar humanOnly={false} onGeneSelection={(ids) => setOmicsIds(ids)} />
       </Container>
       <Container size={'xl'}>
-        {loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={25} />}
+        <Center style={{ width: '100%' }} mb="sm">
+          <Text color={'dimmed'}>
+            Please enter your genes of interest. Cellenium will search for studies and cell annotation clusters that show the entered gene as differentially
+            expressed.
+          </Text>
+          {loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={25} />}
+        </Center>
         <Grid>
           {data?.differentialExpressionsList &&
             data.differentialExpressionsList.map((sr: DifferentialMarkerFragment) => (
@@ -31,14 +37,6 @@ const MarkerGeneSearch = () => {
             ))}
         </Grid>
         <Space h={'xl'} />
-        <Center style={{ height: '100%', width: '100%' }}>
-          {!data?.differentialExpressionsList && (
-            <Text color={'dimmed'}>
-              Please enter your genes of interest. Cellenium will search for studies and cell annotation clusters that show the entered gene as differentially
-              expressed.
-            </Text>
-          )}
-        </Center>
       </Container>
     </Container>
   );
