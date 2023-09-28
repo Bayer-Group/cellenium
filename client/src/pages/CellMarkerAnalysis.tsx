@@ -1,11 +1,16 @@
 import { useEffect } from 'react';
-import { AnnotationGroupDisplay, AnnotationGroupSelectBox, DEGTable, LeftSidePanel, RightSidePanel, UserGeneStore } from '../components';
 import { Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState } from '../atoms';
 import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
 import { useExpressionValues } from '../hooks';
 import ProjectionSelectBox from '../components/ProjectionSelectBox/ProjectionSelectBox';
+import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
+import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
+import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
+import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
+import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
+import { DEGTable } from '../components/DEGTable/DEGTable';
 
 // const ANNOTATIONS = [
 //     {label: "bone cell", color: "#1f77b4"},
@@ -34,15 +39,15 @@ function ProjectionPlotWithOptionalExpression() {
   if (loading) {
     return (
       <div>
-        <Loader variant={'dots'} color={theme.colors.gray[5]} size={'xl'} />
+        <Loader variant="dots" color={theme.colors.gray[5]} size="xl" />
       </div>
     );
   }
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {table && <ProjectionPlot colorBy={'annotation'} expressionTable={table} />}
-      {table === undefined && <ProjectionPlot colorBy={'annotation'} />}
+      {table && <ProjectionPlot colorBy="annotation" expressionTable={table} />}
+      {table === undefined && <ProjectionPlot colorBy="annotation" />}
     </div>
   );
 }
@@ -57,16 +62,16 @@ function DifferentialExpressionAnalysis() {
   }, []);
 
   if (!study) {
-    return <></>;
+    return null;
   }
   return (
-    <Group style={{ height: '100vh' }} align={'flex-start'} position={'apart'} spacing={'xs'} noWrap>
+    <Group style={{ height: '100vh' }} align="flex-start" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <Stack>
           <ProjectionSelectBox />
           {annotationGroupId && <AnnotationGroupSelectBox />}
           {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated ? null : (
-            <Text color={'red'} size={'xs'}>
+            <Text color="red" size="xs">
               No DEGs calculated for selected group.
             </Text>
           )}
@@ -78,13 +83,13 @@ function DifferentialExpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
-          <Divider size={'xs'} label={'Gene store'} />
+          <Divider size="xs" label="Gene store" />
           <UserGeneStore multiple={false} />
-          <Space h={'xs'} />
+          <Space h="xs" />
           <Stack>
-            <Divider size={'xs'} label={'Differential expression table'} />
+            <Divider size="xs" label="Differential expression table" />
             {annotationGroupId && study.annotationGroupMap.get(annotationGroupId)?.differentialExpressionCalculated ? null : (
-              <Text color={'red'} size={'xs'}>
+              <Text color="red" size="xs">
                 No DEGs calculated for selected group.
               </Text>
             )}

@@ -1,15 +1,16 @@
 import { useMemo, useState } from 'react';
-import { GeneSearchBar, NavBar } from '../components';
 import { Center, Container, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
-import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery } from '../generated/types';
 import { useRecoilValue } from 'recoil';
-import { allGenesState, cellOAnnotationGroupIdState } from '../atoms';
 import { useNavigate } from 'react-router-dom';
-import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { ScenegraphEvent } from 'vega';
+import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery } from '../generated/types';
+import { allGenesState, cellOAnnotationGroupIdState } from '../atoms';
+import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import StudySearchBar from '../components/SearchBar/StudySearchBar';
+import { NavBar } from '../components/NavBar/NavBar';
+import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
-const CrossStudySearch = () => {
+function CrossStudySearch() {
   const theme = useMantineTheme();
   const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
   const [omicsIds, setOmicsIds] = useState<number[]>([]);
@@ -56,35 +57,35 @@ const CrossStudySearch = () => {
   };
 
   return (
-    <Container fluid={true}>
+    <Container fluid>
       <NavBar />
       <Space h="xl" />
-      <Container size={'xl'} style={{ paddingBottom: '2rem' }}>
-        <GeneSearchBar humanOnly={true} onGeneSelection={(ids) => setOmicsIds(ids)} />
+      <Container size="xl" style={{ paddingBottom: '2rem' }}>
+        <GeneSearchBar humanOnly onGeneSelection={(ids) => setOmicsIds(ids)} />
         <Space h="xl" />
         <StudySearchBar onStudyListUpdate={setStudyList} />
       </Container>
       {omicsIds.length === 0 && (
         <Center>
-          <Text style={{ width: '50em' }} color={'dimmed'}>
-            Please enter your genes of interest. Cellenium will show the gene's expression in human studies with standardized cell annotation (CellO). As the
-            study data is processed and normalized independently, this is a qualitative direction for which studies to explore independently. Click in the chart
-            to open a study.
+          <Text style={{ width: '50em' }} color="dimmed">
+            Please enter your genes of interest. Cellenium will show the gene&apos;s expression in human studies with standardized cell annotation (CellO). As
+            the study data is processed and normalized independently, this is a qualitative direction for which studies to explore independently. Click in the
+            chart to open a study.
           </Text>
         </Center>
       )}
-      <Group position={'center'} align={'start'}>
-        {loading && <Loader variant={'dots'} color={theme.colors.gray[5]} size={25} />}
+      <Group position="center" align="start">
+        {loading && <Loader variant="dots" color={theme.colors.gray[5]} size={25} />}
         {heatmapDisplayData &&
           heatmapDisplayData.map((heatmap) => (
-            <Stack>
+            <Stack key={`${heatmap.omicsId}-expression-dot-plot`}>
               <Text>{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
-              <ExpressionDotPlot data={heatmap.heatmapData} annotationTitle={'Cell Type'} xAxis={'studyName'} onClick={onHeatmapClick} />
+              <ExpressionDotPlot data={heatmap.heatmapData} annotationTitle="Cell Type" xAxis="studyName" onClick={onHeatmapClick} />
             </Stack>
           ))}
       </Group>
     </Container>
   );
-};
+}
 
 export default CrossStudySearch;

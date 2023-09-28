@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Group, Loader, Overlay, Stack, Text, TextInput } from '@mantine/core';
-import { AnnotationGroupDisplay, AnnotationGroupSelectBox, LeftSidePanel, RightSidePanel } from '../components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import * as aq from 'arquero';
+import Plot from 'react-plotly.js';
+import * as Plotly from 'plotly.js';
+import { showNotification } from '@mantine/notifications';
+import { Params, Struct } from 'arquero/dist/types/table/transformable';
 import {
   annotationGroupIdState,
   celltypeDiscoveryCoexpressionSamplesState,
@@ -12,14 +16,14 @@ import {
   userGenesState,
 } from '../atoms';
 import { useExpressionValues } from '../hooks';
-import * as aq from 'arquero';
-import Plot from 'react-plotly.js';
 import { SingleGeneSelection } from '../components/AddGene/SingleGeneSelection';
 import { Omics } from '../model';
 import ProjectionPlot from '../components/ProjectionPlot/ProjectionPlot';
-import * as Plotly from 'plotly.js';
 import { InputMaybe, useSaveUserAnnotationMutation } from '../generated/types';
-import { showNotification } from '@mantine/notifications';
+import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
+import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
+import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
+import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 
 interface PreparedPlot {
   message?: string;
@@ -59,19 +63,20 @@ function CoexpressionPlot({
 
     const subTableA = table
       .params({ plotFilter: omicsX.omicsId })
-      .filter((d: any, p: any) => d.omicsId === p.plotFilter)
+      .filter((d: Struct, p: Params) => d.omicsId === p.plotFilter)
       .select({ studySampleId: 'studySampleId', value: 'valueA' });
     const subTableB = table
       .params({ plotFilter: omicsY.omicsId })
-      .filter((d: any, p: any) => d.omicsId === p.plotFilter)
+      .filter((d: Struct, p: Params) => d.omicsId === p.plotFilter)
       .select({ studySampleId: 'studySampleId', value: 'valueB' });
     let sameSampleExprValues = subTableA
       .join_full(subTableB, ['studySampleId', 'studySampleId'])
       .derive({ index: () => aq.op.row_number() - 1 })
       .impute({ valueA: () => 0, valueB: () => 0 });
     if (filterSampleIds) {
-      // @ts-ignore
-      sameSampleExprValues = sameSampleExprValues.params({ filterSampleIds }).filter((d: any, p: any) => aq.op.includes(p.filterSampleIds, d.studySampleId, 0));
+      sameSampleExprValues = sameSampleExprValues
+        .params({ filterSampleIds })
+        .filter((d: Struct, p: Params) => aq.op.includes(p.filterSampleIds, d.studySampleId, 0));
     }
 
     // to show a dummy sample with 0 expression in both genes (not retrievable from the sparse DB data)
@@ -92,7 +97,7 @@ function CoexpressionPlot({
       customdata: sameSampleExprValues.array('studySampleId', Int32Array),
       mode: 'markers',
       marker: {
-        //size: markerSize,
+        // size: markerSize,
         color: '#415370',
         opacity: 0.6,
       },
@@ -101,14 +106,19 @@ function CoexpressionPlot({
     } as Partial<Plotly.PlotData>;
 
     return {
-      //allSameSampleExprValues,
+      // allSameSampleExprValues,
       plotlyData: [plot],
-      //combinations,
+      // combinations,
       plotlyLayout: {
-        //autosize: true,
+        // autosize: true,
         width: 250,
         height: 250,
-        margin: { l: 40, r: 0, t: 0, b: 40 },
+        margin: {
+          l: 40,
+          r: 0,
+          t: 0,
+          b: 40,
+        },
         dragmode: 'lasso',
         clickmode: 'none',
       } as Partial<Plotly.Layout>,
@@ -130,7 +140,7 @@ function CoexpressionPlot({
       {preparedPlot && !preparedPlot.message && (
         <Plot data={preparedPlot.plotlyData} layout={preparedPlot.plotlyLayout} config={plotlyConfig} onSelected={onSelection} onDeselect={onDoubleClick} />
       )}
-      {!preparedPlot && <div style={{ height: 250, width: 250 }}>{loading && <Loader variant={'dots'} />}</div>}
+      {!preparedPlot && <div style={{ height: 250, width: 250 }}>{loading && <Loader variant="dots" />}</div>}
     </div>
   );
 }
@@ -140,7 +150,7 @@ function CelltypeDiscovery() {
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
   const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
   const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
-  const [_, setSelected] = useRecoilState(selectedAnnotationState);
+  const [, setSelected] = useRecoilState(selectedAnnotationState);
 
   useEffect(() => {
     setSelected(0);
@@ -215,23 +225,24 @@ function CelltypeDiscovery() {
   };
 
   if (!study) {
-    return <></>;
+    return null;
   }
   return (
-    <Group position={'apart'}>
+    <Group position="apart">
       <LeftSidePanel>
         <Stack>
           {annotationGroupId && <AnnotationGroupSelectBox />}
-          {annotationGroupId && <AnnotationGroupDisplay disableSelection={true} />}
+          {annotationGroupId && <AnnotationGroupDisplay disableSelection />}
         </Stack>
       </LeftSidePanel>
       <main>
-        <ProjectionPlot colorBy={'annotation'} showSampleIds={selectedSampleIds} disableSelection={true} />
+        <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
       </main>
       <RightSidePanel>
-        <Stack align={'flex-start'} justify={'flex-start'} spacing={'md'}>
-          {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((_, i) => (
-            <Box sx={{ height: 350, position: 'relative' }} key={i}>
+        <Stack align="flex-start" justify="flex-start" spacing="md">
+          {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((__, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Box sx={{ height: 350, position: 'relative' }} key={`${i}-coexpression-samples`}>
               {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
               {i < celltypeDiscoveryCoexpressionSamples.length - 1 && <Overlay opacity={0.6} color="#000" zIndex={5} />}
               <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
@@ -244,7 +255,7 @@ function CelltypeDiscovery() {
             Remove last plot
           </Button>
           <Group>
-            <TextInput value={annotationName} placeholder={'My Custom Cell Annotation'} onChange={(event) => setAnnotationName(event.currentTarget.value)} />
+            <TextInput value={annotationName} placeholder="My Custom Cell Annotation" onChange={(event) => setAnnotationName(event.currentTarget.value)} />
             <Button
               disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
               onClick={saveUserAnnotation}

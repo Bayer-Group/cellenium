@@ -44,7 +44,7 @@ app.use(
             dynamicJson: true,
             showErrorStack: "json",
             extendedErrors: ["hint", "detail", "errcode"],
-            simpleCollections: "only",
+            simpleCollections: "both",
             enableQueryBatching: true,
             appendPlugins: [require("@graphile-contrib/pg-simplify-inflector"),
                 require("postgraphile-plugin-connection-filter")],

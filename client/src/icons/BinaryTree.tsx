@@ -1,12 +1,7 @@
 import Icon from './svg/BinaryTree.svg';
 
-interface Icon {
-  size?: string;
-  className?: string;
-}
-
-const BinaryTreeIcon = ({ className }: Icon) => {
+function BinaryTreeIcon({ className }: { className?: string }) {
   return <img src={Icon} className={className} alt="binary tree icon" />;
-};
+}
 
 export default BinaryTreeIcon;

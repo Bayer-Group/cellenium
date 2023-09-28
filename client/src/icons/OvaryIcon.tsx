@@ -1,15 +1,11 @@
 import Icon from './svg/ovary.svg';
 
-interface Icon {
-  size: number;
-}
-
-const OvaryIcon = ({ size }: Icon) => {
+function OvaryIcon({ size }: { size: number }) {
   return (
     <div style={{ width: size }}>
       <img src={Icon} alt="ovary icon" />
     </div>
   );
-};
+}
 
 export default OvaryIcon;

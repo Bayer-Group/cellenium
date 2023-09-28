@@ -1,20 +1,20 @@
 import { useMemo, useState } from 'react';
 import { Center, Group, Text } from '@mantine/core';
-import { LeftSidePanel } from '../components';
-import { SankeyPlot } from '../components/';
-import { SankeyAnnotationGroupSelector } from '../components/SankeyAnnotationGroupSelector/SankeyAnnotationGroupSelector';
 import { useRecoilValue } from 'recoil';
+import { showNotification } from '@mantine/notifications';
+import { SankeyAnnotationGroupSelector } from '../components/SankeyAnnotationGroupSelector/SankeyAnnotationGroupSelector';
 import { studyState } from '../atoms';
 import { SelectBoxItem } from '../model';
-import { showNotification } from '@mantine/notifications';
+import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
+import { SankeyPlot } from '../components/SankeyPlot/SankeyPlot';
 
-const AnnotationComparison = () => {
+function AnnotationComparison() {
   const study = useRecoilValue(studyState);
 
   const [value1, setValue1] = useState<string | undefined>();
   const [value2, setValue2] = useState<string | undefined>();
 
-  function handleChange1(value: string) {
+  const handleChange1 = (value: string) => {
     if (value !== value2) setValue1(value);
     else {
       showNotification({
@@ -24,7 +24,7 @@ const AnnotationComparison = () => {
         autoClose: 2500,
       });
     }
-  }
+  };
 
   const annotations: SelectBoxItem[] = useMemo(() => {
     const anns: SelectBoxItem[] = [];
@@ -43,7 +43,7 @@ const AnnotationComparison = () => {
     return anns;
   }, [study]);
   return (
-    <Group position={'apart'} noWrap>
+    <Group position="apart" noWrap>
       <LeftSidePanel>
         <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={handleChange1} value1={value1} handleChange2={setValue2} value2={value2} />
       </LeftSidePanel>
@@ -57,10 +57,10 @@ const AnnotationComparison = () => {
       >
         {study && annotations.length >= 2 && value1 && value2 && (
           <SankeyPlot
-            annotationValues1={study.annotationGroupMap.get(parseInt(value1))?.annotationValuesList}
-            annotationValues2={study.annotationGroupMap.get(parseInt(value2))?.annotationValuesList}
-            annotationGroupId1={parseInt(value1)}
-            annotationGroupId2={parseInt(value2)}
+            annotationValues1={study.annotationGroupMap.get(parseInt(value1, 10))?.annotationValuesList}
+            annotationValues2={study.annotationGroupMap.get(parseInt(value2, 10))?.annotationValuesList}
+            annotationGroupId1={parseInt(value1, 10)}
+            annotationGroupId2={parseInt(value2, 10)}
             studyId={study.studyId}
           />
         )}
@@ -72,6 +72,6 @@ const AnnotationComparison = () => {
       </main>
     </Group>
   );
-};
+}
 
 export default AnnotationComparison;

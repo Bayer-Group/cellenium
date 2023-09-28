@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react';
-import { NavBar } from '../components';
 import { Button, Container, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { IconArticle, IconDotsVertical, IconPlus, IconX } from '@tabler/icons-react';
-import { StudyAdminDetailsFragment, useStudyAdminListQuery } from '../generated/types';
 import DataTable from 'react-data-table-component';
-import { CreateStudyModal } from '../components/StudyAdmin/CreateStudyModal.tsx';
-import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal.tsx';
-import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal.tsx';
-import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal.tsx';
+import { StudyAdminDetailsFragment, useStudyAdminListQuery } from '../generated/types';
+import { CreateStudyModal } from '../components/StudyAdmin/CreateStudyModal';
+import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal';
+import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal';
+import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal';
+import { NavBar } from '../components/NavBar/NavBar';
 
 export default function StudyAdmin() {
   const [newStudyModalOpen, setNewStudyModalOpen] = useState(false);
@@ -17,19 +17,19 @@ export default function StudyAdmin() {
   const [selectedDeleteStudy, setSelectedDeleteStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
   const [selectedLogStudy, setSelectedLogStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
 
-  const resetNewStudyModal = useCallback(() => {
+  const resetNewStudyModal = useCallback(async () => {
     setNewStudyModalOpen(false);
-    void refetch();
+    await refetch();
   }, [setNewStudyModalOpen, refetch]);
 
-  const resetDeleteModal = useCallback(() => {
+  const resetDeleteModal = useCallback(async () => {
     setSelectedDeleteStudy(undefined);
-    void refetch();
+    await refetch();
   }, [setSelectedDeleteStudy, refetch]);
 
-  const resetEditModal = useCallback(() => {
+  const resetEditModal = useCallback(async () => {
     setSelectedEditStudy(undefined);
-    void refetch();
+    await refetch();
   }, [setSelectedEditStudy, refetch]);
 
   const columns = [
@@ -77,7 +77,7 @@ export default function StudyAdmin() {
       width: '50px',
       cell: (row: StudyAdminDetailsFragment) =>
         !row.hasImportLog ? null : (
-          <span title={'View import logs'}>
+          <span title="View import logs">
             <IconArticle onClick={() => setSelectedLogStudy(row)} style={{ cursor: 'pointer' }} />
           </span>
         ),
@@ -97,7 +97,7 @@ export default function StudyAdmin() {
   ];
 
   return (
-    <Container fluid={true}>
+    <Container fluid>
       <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />
       {newStudyModalOpen && <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />}
       <DeleteStudyModal study={selectedDeleteStudy} reset={resetDeleteModal} opened={selectedDeleteStudy !== undefined} />

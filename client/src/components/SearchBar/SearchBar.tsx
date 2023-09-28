@@ -1,19 +1,13 @@
 import { ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
 import React, { forwardRef, useEffect, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
-import { useAutocompleteLazyQuery } from '../../generated/types';
 import { closeModal, openModal } from '@mantine/modals';
+import { useAutocompleteLazyQuery } from '../../generated/types';
 import { OntologyBrowser } from '../OntologyBrowser/OntologyBrowser';
 import { OntologyItem } from '../../model';
 import SearchBadge from '../SearchBadge/SearchBadge';
-import { ontology2Color } from '../../pages/helper';
-
-export type OfferingItem = {
-  value: string;
-  ontcode?: string;
-  ontology: string;
-  preferredLabel?: string;
-};
+import { ontology2Color } from '../../utils/helper';
+import { OfferingItem } from './interfaces';
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   value: string;
@@ -24,7 +18,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(({ value, ontology, ontcode, preferredLabel, ...others }: ItemProps, ref) => (
   <div ref={ref} {...others}>
-    <Group position={'apart'} align={'center'} noWrap>
+    <Group position="apart" align="center" noWrap>
       <Text>{preferredLabel || value}</Text>
       <Badge color={ontology2Color(ontology)}>{ontology}</Badge>
     </Group>
@@ -72,7 +66,7 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
   function handleSubmit(item: OfferingItem) {
     setValue('');
 
-    let check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
+    const check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
     if (check.length === 0) {
       setSelectedFilters([...selectedFilters, item]);
     }
@@ -90,7 +84,7 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
   }
 
   function handleFilterRemove(filter: OfferingItem) {
-    let newFilters = selectedFilters.filter((f) => !(f.ontcode === filter.ontcode && f.ontology === f.ontology));
+    const newFilters = selectedFilters.filter((f) => !(f.ontcode === filter.ontcode && f.ontology === f.ontology));
     setSelectedFilters(newFilters);
     setOfferings([]);
   }
@@ -122,20 +116,20 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
   }
 
   return (
-    <Group position={'left'} align={'flex-end'} spacing={4}>
-      <ActionIcon onClick={showOntologyBrowser} size={'xl'} variant={'default'}>
-        <IconBinaryTree color={'lightgray'} />
+    <Group position="left" align="flex-end" spacing={4}>
+      <ActionIcon onClick={showOntologyBrowser} size="xl" variant="default">
+        <IconBinaryTree color="lightgray" />
       </ActionIcon>
 
       <Stack spacing={0} style={{ flexGrow: 1 }}>
-        <Text size={'xs'} weight={800}>
+        <Text size="xs" weight={800}>
           Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO) or title / description
         </Text>
 
         <Group
           spacing={4}
-          position={'left'}
-          align={'center'}
+          position="left"
+          align="center"
           style={{
             border: '1px lightgray solid',
             borderRadius: 5,
@@ -165,7 +159,7 @@ function SearchBar({ ontologies, onSearchFiltersUpdate }: Props) {
               data={offerings}
               filter={() => true}
               size="md"
-              placeholder={'lung, cancer, heart'}
+              placeholder="lung, cancer, heart"
               rightSection={
                 <ActionIcon
                   onClick={() => {

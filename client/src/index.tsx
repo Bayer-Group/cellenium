@@ -1,28 +1,18 @@
 import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { Container, MantineProvider } from '@mantine/core';
 import './fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { GlobalLoading } from './pages/GlobalLoading';
 import { RecoilRoot } from 'recoil';
-import ErrorPage from './pages/ErrorPage';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
-import { Docs } from './pages/Docs.tsx';
-
-export const apolloCache = new InMemoryCache();
-
-const link = new HttpLink({
-  uri: '/postgraphile/',
-});
-
-const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: apolloCache,
-  link,
-});
+import { ApolloProvider } from '@apollo/client';
+import ErrorPage from './pages/ErrorPage';
+import { GlobalLoading } from './pages/GlobalLoading';
+import reportWebVitals from './reportWebVitals';
+import { Docs } from './pages/Docs';
+import { apolloClient } from './client';
 
 const StudyList = lazy(() => import('./pages/StudyList'));
 const MarkerGeneSearch = lazy(() => import('./pages/MarkerGeneSearch'));
@@ -81,7 +71,7 @@ root.render(
         <React.Suspense fallback={<GlobalLoading />}>
           <Notifications />
           <ModalsProvider>
-            <Container style={{ padding: 0 }} fluid={true}>
+            <Container style={{ padding: 0 }} fluid>
               <RouterProvider router={router} />
             </Container>
           </ModalsProvider>

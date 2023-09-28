@@ -2,9 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Group, Loader } from '@mantine/core';
 import { StudyInfoFragment, useStudiesQuery } from '../../generated/types';
 import { OntologyItem } from '../../model';
-import { generateOntologyTrees } from '../../pages/helper';
+import { generateOntologyTrees } from '../../utils/helper.ts';
 import { OfferingItem, SearchBar } from './SearchBar';
-import { allGenesState } from '../../atoms.ts';
 
 function metadataValues(study: StudyInfoFragment) {
   if (study.metadata) {
@@ -59,15 +58,11 @@ function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: St
   if (loading) {
     return (
       <Group position="center" mt="5rem">
-        <Loader variant={'dots'} />
+        <Loader variant="dots" />
       </Group>
     );
   }
-  return (
-    <>
-      <SearchBar ontologies={ontologyTrees} onSearchFiltersUpdate={setFilters} />
-    </>
-  );
+  return <SearchBar ontologies={ontologyTrees} onSearchFiltersUpdate={setFilters} />;
 }
 
 export default StudySearchBar;

@@ -25,6 +25,7 @@ export default function StudyPage() {
       return <AnnotationComparison />;
     case 'UserAnnotation':
       return <UserAnnotation />;
+    default:
+      return <div>page {page} not defined</div>;
   }
-  return <div>page {page} not defined</div>;
 }

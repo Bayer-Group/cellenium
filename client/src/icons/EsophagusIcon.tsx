@@ -1,15 +1,11 @@
 import Icon from './svg/esophagus.svg';
 
-interface Icon {
-  size: number;
-}
-
-const EsophagusIcon = ({ size }: Icon) => {
+function EsophagusIcon({ size }: { size: number }) {
   return (
     <div style={{ width: size }}>
       <img src={Icon} alt="esophagus icon" />
     </div>
   );
-};
+}
 
 export default EsophagusIcon;
