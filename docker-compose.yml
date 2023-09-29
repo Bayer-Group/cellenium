@@ -4,7 +4,7 @@ services:
   postgres:
     build:
       context: ./postgres
-    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB'
+    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB' -c 'max_connections=100' -c 'random_page_cost=1'
     environment:
       - PGPORT=5001
       - POSTGRES_PASSWORD=postgres
@@ -50,19 +50,7 @@ services:
     ports:
       - "5002:5002"
 
-  pgadmin:
-    restart: always
-    image: dpage/pgadmin4:7.7
-    mem_limit: 4g
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=cellenium@bayer.com
-      - PGADMIN_DEFAULT_PASSWORD=cellenium
-    ports:
-      - "5005:80"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-
 volumes:
   postgresdata:
-  pgadmin:
+
 

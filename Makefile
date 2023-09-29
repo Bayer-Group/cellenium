@@ -15,7 +15,7 @@ scratch/%: data_import/public_data/%.ipynb data_import/h5ad_preparation.py
 	PYTHONPATH=$$(pwd)/data_import jupyter nbconvert --execute --to html --stdout  $<  > $@.html
 
 scratch/%.imported: scratch/%
-	PYTHONPATH=$$(pwd)/data_import python data_import/study_import.py $< --analyze-database
+	PYTHONPATH=$$(pwd)/data_import NUM_PROCESSES=1 python data_import/study_import.py $< --analyze-database
 	echo "done" > $@
 
 
