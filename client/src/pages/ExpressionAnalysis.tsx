@@ -212,7 +212,7 @@ function ExpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
-          <Divider size="xs" label="User store" />
+          <Divider size="xs" label="User gene store" />
           <UserGeneStore multiple />
         </Stack>
       </RightSidePanel>

@@ -80,6 +80,8 @@ export function useSetStudyFromUrl() {
     useResetRecoilState(selectedGenesState),
     useResetRecoilState(selectedAnnotationState),
     useResetRecoilState(highlightAnnotationState),
+    useResetRecoilState(userGenesState),
+    useResetRecoilState(selectedGenesState),
   ];
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export function useSetStudyFromUrl() {
   const setSelectedProjection = useSetRecoilState(selectedProjectionState);
   useEffect(() => {
     if (study && study.studyId === studyIdUrlParamInt) {
-      setValidParam('page', setPage);
+      setValidParam('page', setPage, 'CellMarkerAnalysis');
       setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
       setValidParam('annotationValueId', setSelectedAnnotation);
       setSecondaryAnnotationGroupId(undefined);

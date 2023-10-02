@@ -109,7 +109,7 @@ function CoexpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
-          <Divider size="xs" label="Gene store" />
+          <Divider size="xs" label="User gene store" />
           <UserGeneStore multiple findCoexpressors />
           <Space />
           <Divider size="xs" label="Correlated genes" />

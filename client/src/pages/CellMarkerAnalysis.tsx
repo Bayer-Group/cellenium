@@ -84,7 +84,7 @@ function DifferentialExpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
-          <Divider size="xs" label="Gene store" />
+          <Divider size="xs" label="User gene store" />
           <UserGeneStore multiple={false} />
           <Space h="xs" />
           <Stack>
