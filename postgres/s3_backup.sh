@@ -1,4 +1,4 @@
 #!/bin/bash
 # first argument is the s3 object to write
 set -e -o pipefail
-pg_dump -h localhost -p 5001 -U postgres -Fc  | lz4 | aws s3 cp  --expected-size 800000000000  - $1
+pg_dump -h localhost -p 5001 -U postgres -Fc  | lz4 --fast | aws s3 cp  --expected-size 800000000000  - $1
