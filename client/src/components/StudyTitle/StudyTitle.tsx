@@ -1,9 +1,9 @@
-import {Modal, Text} from '@mantine/core';
-import {StudyInfoFragment, useSingleStudyInfoQuery} from '../../generated/types';
-import {useRecoilValue} from 'recoil';
-import {studyState} from '../../atoms.ts';
-import {useState} from 'react';
-import {StudyCard} from '../StudyCard/StudyCard.tsx';
+import { Modal, Text } from '@mantine/core';
+import { StudyInfoFragment, useSingleStudyInfoQuery } from '../../generated/types';
+import { useRecoilValue } from 'recoil';
+import { studyState } from '../../atoms.ts';
+import { useState } from 'react';
+import { StudyCard } from '../StudyCard/StudyCard.tsx';
 
 function StudyInfoModal({ opened, onClose, study }: { opened: boolean; onClose: () => void; study: StudyInfoFragment }) {
   return (
