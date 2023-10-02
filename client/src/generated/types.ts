@@ -8179,6 +8179,31 @@ export type StudiesQuery = {
   treeOntologiesList: Array<{ __typename?: 'TreeOntology'; label: string; ontCode: string; ontology: string; parentOntCodePath: Array<string> }>;
 };
 
+export type SingleStudyInfoQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+}>;
+
+export type SingleStudyInfoQuery = {
+  __typename?: 'Query';
+  studyOverviewsList: Array<{
+    __typename?: 'StudyOverview';
+    studyId: number;
+    studyName: string;
+    description: string;
+    cellCount: number;
+    externalWebsite: string;
+    metadata: any;
+    defaultStudyLayerId: number;
+    studyOntologyList: Array<{
+      __typename?: 'StudyOverviewOntology';
+      ontCodes: Array<string>;
+      labels: Array<string>;
+      ontology: string;
+      parentIds: Array<string>;
+    }>;
+  }>;
+};
+
 export type AnnotationGrpFragment = {
   __typename?: 'StudyAnnotationFrontendGroup';
   annotationGroupId: number;
@@ -8821,6 +8846,42 @@ export function useStudiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<St
 export type StudiesQueryHookResult = ReturnType<typeof useStudiesQuery>;
 export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
 export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
+export const SingleStudyInfoDocument = gql`
+  query singleStudyInfo($studyId: Int!) {
+    studyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
+      ...StudyInfo
+    }
+  }
+  ${StudyInfoFragmentDoc}
+`;
+
+/**
+ * __useSingleStudyInfoQuery__
+ *
+ * To run a query within a React component, call `useSingleStudyInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSingleStudyInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSingleStudyInfoQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useSingleStudyInfoQuery(baseOptions: Apollo.QueryHookOptions<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
+}
+export function useSingleStudyInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
+}
+export type SingleStudyInfoQueryHookResult = ReturnType<typeof useSingleStudyInfoQuery>;
+export type SingleStudyInfoLazyQueryHookResult = ReturnType<typeof useSingleStudyInfoLazyQuery>;
+export type SingleStudyInfoQueryResult = Apollo.QueryResult<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>;
 export const StudiesWithMarkerGenesDocument = gql`
   query studiesWithMarkerGenes($omicsIds: [Int!]!) {
     differentialExpressionsList(filter: { omicsId: { in: $omicsIds } }, orderBy: LOG2_FOLDCHANGE_DESC) {

@@ -24,6 +24,7 @@ import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/Ann
 import { AnnotationFilterDisplay } from '../components/AnnotationFilterDisplay/AnnotationFilterDisplay';
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
 
 const analysisTypes = [
   { value: 'violinplot', label: 'Violin plot' },
@@ -212,6 +213,7 @@ function ExpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
+          <StudyTitle />
           <Divider size="xs" label="User gene store" />
           <UserGeneStore multiple />
         </Stack>

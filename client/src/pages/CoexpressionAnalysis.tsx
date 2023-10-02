@@ -16,6 +16,7 @@ import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { CorrelationTable } from '../components/CorrelationTable/CorrelationTable';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
 
 // interface PreparedPlot {
 //     message?: string;
@@ -109,6 +110,7 @@ function CoexpressionAnalysis() {
       </main>
       <RightSidePanel>
         <Stack>
+          <StudyTitle />
           <Divider size="xs" label="User gene store" />
           <UserGeneStore multiple findCoexpressors />
           <Space />

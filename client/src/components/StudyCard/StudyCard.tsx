@@ -13,7 +13,7 @@ function metadataKeyValues(study: StudyInfoFragment) {
   return [];
 }
 
-export function StudyCard({ study }: { study: StudyInfoFragment }) {
+export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detailed?: boolean }) {
   const newStudyUrl = `study/${study.studyId}`;
 
   return (
@@ -21,8 +21,8 @@ export function StudyCard({ study }: { study: StudyInfoFragment }) {
       <Card.Section withBorder inheritPadding py="xs">
         <Grid columns={12}>
           <Grid.Col span={8}>
-            <Anchor component={Link} to={newStudyUrl} color="dark">
-              <Text align="left" lineClamp={1} sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }} weight={800}>
+            <Anchor component={Link} to={detailed ? '' : newStudyUrl} color="dark">
+              <Text align="left" lineClamp={detailed ? undefined : 1} sx={detailed ? {} : { textOverflow: 'ellipsis', overflow: 'hidden' }} weight={800}>
                 {study.studyName}
               </Text>
             </Anchor>
@@ -47,12 +47,12 @@ export function StudyCard({ study }: { study: StudyInfoFragment }) {
           </Grid.Col>
         </Grid>
       </Card.Section>
-      <Text mt="sm" mb="sm" color="dimmed" size="sm" lineClamp={3} align="left">
+      <Text mt="sm" mb="sm" color="dimmed" size="sm" lineClamp={detailed ? undefined : 3} align="left">
         {study.description}
       </Text>
       <Card.Section withBorder inheritPadding py="xs">
         <Spoiler
-          maxHeight={25}
+          maxHeight={detailed ? 500 : 25}
           showLabel="Show more"
           hideLabel="hide"
           style={{

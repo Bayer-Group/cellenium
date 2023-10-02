@@ -56,6 +56,12 @@ gql`
     }
   }
 
+  query singleStudyInfo($studyId: Int!) {
+    studyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
+      ...StudyInfo
+    }
+  }
+
   fragment AnnotationGrp on StudyAnnotationFrontendGroup {
     annotationGroupId
     isPrimary

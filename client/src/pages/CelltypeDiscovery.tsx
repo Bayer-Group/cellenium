@@ -24,6 +24,7 @@ import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
 import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
 
 interface PreparedPlot {
   message?: string;
@@ -240,6 +241,7 @@ function CelltypeDiscovery() {
       </main>
       <RightSidePanel>
         <Stack align="flex-start" justify="flex-start" spacing="md">
+          <StudyTitle />
           {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((__, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <Box sx={{ height: 350, position: 'relative' }} key={`${i}-coexpression-samples`}>
