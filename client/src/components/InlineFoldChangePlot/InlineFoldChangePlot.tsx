@@ -1,4 +1,4 @@
-import Plot from 'react-plotly.js/index';
+import Plot from 'react-plotly.js';
 import { Loader } from '@mantine/core';
 import { useHalfAVolcanoQuery } from '../../generated/types';
 

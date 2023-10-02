@@ -4,7 +4,7 @@ import { IconSearch, IconX } from '@tabler/icons-react';
 import _ from 'lodash';
 import { useRecoilValue } from 'recoil';
 import { Omics } from '../../model';
-import SearchBadge from '../SearchBadge/SearchBadge';
+import { SearchBadge } from '../SearchBadge/SearchBadge';
 import { allGenesState } from '../../atoms';
 import { SpeciesSelect } from '../SpeciesSelect/SpeciesSelect';
 import { OfferingItem } from './interfaces';

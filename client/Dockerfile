@@ -1,4 +1,4 @@
-FROM node:16 as asset-builder
+FROM node:18 as asset-builder
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn
