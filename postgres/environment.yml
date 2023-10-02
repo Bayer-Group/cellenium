@@ -20,8 +20,3 @@ dependencies:
   - git
   - make
   - gcc
-  # - awscli
-  - lz4
-  - pip:
-      - awscli
-
