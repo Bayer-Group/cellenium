@@ -1009,7 +1009,7 @@ export type ApiStudyAnnotationOverview = {
   __typename?: 'ApiStudyAnnotationOverview';
   annotationDisplayValues: Maybe<Array<Maybe<Scalars['String']>>>;
   annotationGroupColumn: Maybe<Scalars['String']>;
-  annotationGroupValue: Maybe<Scalars['String']>;
+  annotationGroupDisplay: Maybe<Scalars['String']>;
   annotationValues: Maybe<Array<Maybe<Scalars['String']>>>;
   studyId: Maybe<Scalars['Int']>;
 };
@@ -1023,8 +1023,8 @@ export type ApiStudyAnnotationOverviewCondition = {
   annotationDisplayValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `annotationGroupColumn` field. */
   annotationGroupColumn: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `annotationGroupValue` field. */
-  annotationGroupValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `annotationGroupDisplay` field. */
+  annotationGroupDisplay: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `annotationValues` field. */
   annotationValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -1039,8 +1039,8 @@ export type ApiStudyAnnotationOverviewFilter = {
   annotationDisplayValues: InputMaybe<StringListFilter>;
   /** Filter by the object’s `annotationGroupColumn` field. */
   annotationGroupColumn: InputMaybe<StringFilter>;
-  /** Filter by the object’s `annotationGroupValue` field. */
-  annotationGroupValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationGroupDisplay` field. */
+  annotationGroupDisplay: InputMaybe<StringFilter>;
   /** Filter by the object’s `annotationValues` field. */
   annotationValues: InputMaybe<StringListFilter>;
   /** Negates the expression. */
@@ -1055,7 +1055,7 @@ export type ApiStudyAnnotationOverviewFilter = {
 export type ApiStudyAnnotationOverviewInput = {
   annotationDisplayValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   annotationGroupColumn: InputMaybe<Scalars['String']>;
-  annotationGroupValue: InputMaybe<Scalars['String']>;
+  annotationGroupDisplay: InputMaybe<Scalars['String']>;
   annotationValues: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   studyId: InputMaybe<Scalars['Int']>;
 };
@@ -1066,11 +1066,57 @@ export enum ApiStudyAnnotationOverviewsOrderBy {
   AnnotationDisplayValuesDesc = 'ANNOTATION_DISPLAY_VALUES_DESC',
   AnnotationGroupColumnAsc = 'ANNOTATION_GROUP_COLUMN_ASC',
   AnnotationGroupColumnDesc = 'ANNOTATION_GROUP_COLUMN_DESC',
-  AnnotationGroupValueAsc = 'ANNOTATION_GROUP_VALUE_ASC',
-  AnnotationGroupValueDesc = 'ANNOTATION_GROUP_VALUE_DESC',
+  AnnotationGroupDisplayAsc = 'ANNOTATION_GROUP_DISPLAY_ASC',
+  AnnotationGroupDisplayDesc = 'ANNOTATION_GROUP_DISPLAY_DESC',
   AnnotationValuesAsc = 'ANNOTATION_VALUES_ASC',
   AnnotationValuesDesc = 'ANNOTATION_VALUES_DESC',
   Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+}
+
+export type ApiStudyH5Download = {
+  __typename?: 'ApiStudyH5Download';
+  presignedUrl: Maybe<Scalars['String']>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `ApiStudyH5Download` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type ApiStudyH5DownloadCondition = {
+  /** Checks for equality with the object’s `presignedUrl` field. */
+  presignedUrl: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `ApiStudyH5Download` object types. All fields are combined with a logical ‘and.’ */
+export type ApiStudyH5DownloadFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ApiStudyH5DownloadFilter>>;
+  /** Negates the expression. */
+  not: InputMaybe<ApiStudyH5DownloadFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ApiStudyH5DownloadFilter>>;
+  /** Filter by the object’s `presignedUrl` field. */
+  presignedUrl: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `ApiStudyH5Download` */
+export type ApiStudyH5DownloadInput = {
+  presignedUrl: InputMaybe<Scalars['String']>;
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** Methods to use when ordering `ApiStudyH5Download`. */
+export enum ApiStudyH5DownloadsOrderBy {
+  Natural = 'NATURAL',
+  PresignedUrlAsc = 'PRESIGNED_URL_ASC',
+  PresignedUrlDesc = 'PRESIGNED_URL_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
 }
@@ -1692,6 +1738,31 @@ export type CreateApiStudiesSingleCellPayload = {
   query: Maybe<Query>;
 };
 
+/** All input for the create `ApiStudyH5Download` mutation. */
+export type CreateApiStudyH5DownloadInput = {
+  /** The `ApiStudyH5Download` to be created by this mutation. */
+  apiStudyH5Download: ApiStudyH5DownloadInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our create `ApiStudyH5Download` mutation. */
+export type CreateApiStudyH5DownloadPayload = {
+  __typename?: 'CreateApiStudyH5DownloadPayload';
+  /** The `ApiStudyH5Download` that was created by this mutation. */
+  apiStudyH5Download: Maybe<ApiStudyH5Download>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
 /** All input for the create `ConceptHierarchy` mutation. */
 export type CreateConceptHierarchyInput = {
   /**
@@ -2150,6 +2221,29 @@ export type CreateStudyForCurrentUserPayload = {
   query: Maybe<Query>;
 };
 
+/** All input for the `createStudyH5AdPresignedUrl` mutation. */
+export type CreateStudyH5AdPresignedUrlInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  fileUrl: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `createStudyH5AdPresignedUrl` mutation. */
+export type CreateStudyH5AdPresignedUrlPayload = {
+  __typename?: 'CreateStudyH5AdPresignedUrlPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  string: Maybe<Scalars['String']>;
+};
+
 /** All input for the create `Study` mutation. */
 export type CreateStudyInput = {
   /**
@@ -2414,6 +2508,29 @@ export type CreateUserAnnotationGroupPayload = {
   study: Maybe<Study>;
   /** The `UserAnnotationGroup` that was created by this mutation. */
   userAnnotationGroup: Maybe<UserAnnotationGroup>;
+};
+
+/** All input for the `deleteAllStudyData` mutation. */
+export type DeleteAllStudyDataInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+};
+
+/** The output of our `deleteAllStudyData` mutation. */
+export type DeleteAllStudyDataPayload = {
+  __typename?: 'DeleteAllStudyDataPayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
 };
 
 /** All input for the `deleteAnnotationGroupByNodeId` mutation. */
@@ -3345,6 +3462,8 @@ export type Mutation = {
   createApiStudiesBulkRna: Maybe<CreateApiStudiesBulkRnaPayload>;
   /** Creates a single `ApiStudiesSingleCell`. */
   createApiStudiesSingleCell: Maybe<CreateApiStudiesSingleCellPayload>;
+  /** Creates a single `ApiStudyH5Download`. */
+  createApiStudyH5Download: Maybe<CreateApiStudyH5DownloadPayload>;
   /** Creates a single `Concept`. */
   createConcept: Maybe<CreateConceptPayload>;
   /** Creates a single `ConceptHierarchy`. */
@@ -3379,6 +3498,7 @@ export type Mutation = {
   /** Creates a single `StudyAnnotationGroupUi`. */
   createStudyAnnotationGroupUi: Maybe<CreateStudyAnnotationGroupUiPayload>;
   createStudyForCurrentUser: Maybe<CreateStudyForCurrentUserPayload>;
+  createStudyH5AdPresignedUrl: Maybe<CreateStudyH5AdPresignedUrlPayload>;
   /** Creates a single `StudyLayer`. */
   createStudyLayer: Maybe<CreateStudyLayerPayload>;
   /** Creates a single `StudyOmic`. */
@@ -3396,6 +3516,7 @@ export type Mutation = {
   createStudyVisibleCurrentuser: Maybe<CreateStudyVisibleCurrentuserPayload>;
   /** Creates a single `UserAnnotationGroup`. */
   createUserAnnotationGroup: Maybe<CreateUserAnnotationGroupPayload>;
+  deleteAllStudyData: Maybe<DeleteAllStudyDataPayload>;
   /** Deletes a single `AnnotationGroup` using a unique key. */
   deleteAnnotationGroup: Maybe<DeleteAnnotationGroupPayload>;
   /** Deletes a single `AnnotationGroup` using its globally unique id. */
@@ -3444,6 +3565,7 @@ export type Mutation = {
   deleteStudySample: Maybe<DeleteStudySamplePayload>;
   /** Deletes a single `StudySample` using its globally unique id. */
   deleteStudySampleByNodeId: Maybe<DeleteStudySamplePayload>;
+  studyDefinitionUpdate: Maybe<StudyDefinitionUpdatePayload>;
   /** Updates a single `AnnotationGroup` using a unique key and a patch. */
   updateAnnotationGroup: Maybe<UpdateAnnotationGroupPayload>;
   /** Updates a single `AnnotationGroup` using its globally unique id and a patch. */
@@ -3523,6 +3645,11 @@ export type MutationCreateApiStudiesBulkRnaArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateApiStudiesSingleCellArgs = {
   input: CreateApiStudiesSingleCellInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateApiStudyH5DownloadArgs = {
+  input: CreateApiStudyH5DownloadInput;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -3616,6 +3743,11 @@ export type MutationCreateStudyForCurrentUserArgs = {
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateStudyH5AdPresignedUrlArgs = {
+  input: CreateStudyH5AdPresignedUrlInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyLayerArgs = {
   input: CreateStudyLayerInput;
 };
@@ -3658,6 +3790,11 @@ export type MutationCreateStudyVisibleCurrentuserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserAnnotationGroupArgs = {
   input: CreateUserAnnotationGroupInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteAllStudyDataArgs = {
+  input: DeleteAllStudyDataInput;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -3778,6 +3915,11 @@ export type MutationDeleteStudySampleArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudySampleByNodeIdArgs = {
   input: DeleteStudySampleByNodeIdInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationStudyDefinitionUpdateArgs = {
+  input: StudyDefinitionUpdateInput;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -4807,6 +4949,8 @@ export type Query = Node & {
   apiStudiesSingleCellsList: Maybe<Array<ApiStudiesSingleCell>>;
   /** Reads a set of `ApiStudyAnnotationOverview`. */
   apiStudyAnnotationOverviewsList: Maybe<Array<ApiStudyAnnotationOverview>>;
+  /** Reads a set of `ApiStudyH5Download`. */
+  apiStudyH5DownloadsList: Maybe<Array<ApiStudyH5Download>>;
   /** Reads and enables pagination through a set of `AutocompleteResult`. */
   autocompleteList: Maybe<Array<Maybe<AutocompleteResult>>>;
   concept: Maybe<Concept>;
@@ -5076,6 +5220,15 @@ export type QueryApiStudyAnnotationOverviewsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudyAnnotationOverviewsOrderBy>>;
+};
+
+/** The root query type which gives access points into the data universe. */
+export type QueryApiStudyH5DownloadsListArgs = {
+  condition: InputMaybe<ApiStudyH5DownloadCondition>;
+  filter: InputMaybe<ApiStudyH5DownloadFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ApiStudyH5DownloadsOrderBy>>;
 };
 
 /** The root query type which gives access points into the data universe. */
@@ -6347,6 +6500,28 @@ export type StudyCondition = {
   tissueNcitIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `visible` field. */
   visible: InputMaybe<Scalars['Boolean']>;
+};
+
+/** All input for the `studyDefinitionUpdate` mutation. */
+export type StudyDefinitionUpdateInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `studyDefinitionUpdate` mutation. */
+export type StudyDefinitionUpdatePayload = {
+  __typename?: 'StudyDefinitionUpdatePayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
 };
 
 /** A filter to be used against `Study` object types. All fields are combined with a logical ‘and.’ */
@@ -8365,16 +8540,20 @@ export type StudyDeleteMutationVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyDeleteMutation = {
-  __typename?: 'Mutation';
-  deleteStudy: { __typename?: 'DeleteStudyPayload'; study: { __typename?: 'Study'; studyId: number } };
-};
+export type StudyDeleteMutation = { __typename?: 'Mutation'; deleteAllStudyData: { __typename?: 'DeleteAllStudyDataPayload'; boolean: boolean } };
 
 export type CreateStudyUploadMutationVariables = Exact<{
   filename: Scalars['String'];
 }>;
 
 export type CreateStudyUploadMutation = { __typename?: 'Mutation'; createStudyUpload: { __typename?: 'CreateStudyUploadPayload'; json: any } };
+
+export type StudyDefinitionUpdateMutationVariables = Exact<{ [key: string]: never }>;
+
+export type StudyDefinitionUpdateMutation = {
+  __typename?: 'Mutation';
+  studyDefinitionUpdate: { __typename?: 'StudyDefinitionUpdatePayload'; boolean: boolean };
+};
 
 export const StudyInfoFragmentDoc = gql`
   fragment StudyInfo on StudyOverview {
@@ -9349,10 +9528,8 @@ export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutatio
 export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
 export const StudyDeleteDocument = gql`
   mutation studyDelete($studyId: Int!) {
-    deleteStudy(input: { studyId: $studyId }) {
-      study {
-        studyId
-      }
+    deleteAllStudyData(input: { pStudyId: $studyId }) {
+      boolean
     }
   }
 `;
@@ -9413,3 +9590,36 @@ export function useCreateStudyUploadMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateStudyUploadMutationHookResult = ReturnType<typeof useCreateStudyUploadMutation>;
 export type CreateStudyUploadMutationResult = Apollo.MutationResult<CreateStudyUploadMutation>;
 export type CreateStudyUploadMutationOptions = Apollo.BaseMutationOptions<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>;
+export const StudyDefinitionUpdateDocument = gql`
+  mutation studyDefinitionUpdate {
+    studyDefinitionUpdate(input: {}) {
+      boolean
+    }
+  }
+`;
+
+/**
+ * __useStudyDefinitionUpdateMutation__
+ *
+ * To run a mutation, you first call `useStudyDefinitionUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudyDefinitionUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studyDefinitionUpdateMutation, { data, loading, error }] = useStudyDefinitionUpdateMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStudyDefinitionUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>(StudyDefinitionUpdateDocument, options);
+}
+export type StudyDefinitionUpdateMutationHookResult = ReturnType<typeof useStudyDefinitionUpdateMutation>;
+export type StudyDefinitionUpdateMutationResult = Apollo.MutationResult<StudyDefinitionUpdateMutation>;
+export type StudyDefinitionUpdateMutationOptions = Apollo.BaseMutationOptions<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>;

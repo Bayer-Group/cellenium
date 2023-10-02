@@ -102,8 +102,7 @@ from study s
 where s.visible = True;
 grant select on study_overview to postgraphile;
 
-CREATE VIEW study_overview_ontology
-    with (security_invoker = true)
+create materialized view study_overview_ontology
 AS
 SELECT s.study_id,
        'NCIT'            ontology,
@@ -148,7 +147,8 @@ from (select ssa.study_id, array_agg(distinct c.ont_code) ont_codes
 group by study_cell_ontology_ids.study_id,
          study_cell_ontology_ids.ont_codes,
          ont.labels;
-comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+create index study_overview_ontology_1 on study_overview_ontology(study_id);
 grant select on study_overview_ontology to postgraphile;
 
 
@@ -240,3 +240,16 @@ from study s
          left join study_visible_currentuser sv on sv.study_id = s.study_id
          left join study_administrable_currentuser sa on sa.study_id = s.study_id;
 grant select on study_import_log to postgraphile;
+
+create or replace function study_definition_update()
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+begin
+    refresh materialized view study_overview_ontology;
+    return true;
+end;
+$$;

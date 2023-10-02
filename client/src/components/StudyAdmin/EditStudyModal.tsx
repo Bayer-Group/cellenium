@@ -3,10 +3,11 @@ import { showNotification } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { Button, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { Form } from 'react-router-dom';
-import { InputMaybe, StudyAdminDetailsFragment, useStudyUpdateMutation } from '../../generated/types';
+import { InputMaybe, StudyAdminDetailsFragment, useStudyDefinitionUpdateMutation, useStudyUpdateMutation } from '../../generated/types';
 
 export function EditStudyModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
   const [studyUpdateMutation, { loading: studyUpdateLoading }] = useStudyUpdateMutation();
+  const [studyDefinitionUpdateMutation, { loading: studyUpdateLoading2 }] = useStudyDefinitionUpdateMutation();
 
   const form = useForm({
     initialValues: {
@@ -46,7 +47,9 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
         },
       })
         .then(() => {
-          reset();
+          studyDefinitionUpdateMutation().then(() => {
+            reset();
+          });
         })
         .catch((reason) => {
           showNotification({
@@ -69,7 +72,7 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
       visible: study?.visible || false,
       externalWebsite: study?.externalWebsite || '',
     });
-  }, [form, study]);
+  }, [study]);
 
   return (
     <Modal
@@ -96,7 +99,7 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
           />
           <TextInput label="External Website" {...form.getInputProps('externalWebsite')} />
           <Group position="right" mt="md">
-            <Button disabled={!study?.adminPermissionGranted} onClick={submit} loading={studyUpdateLoading}>
+            <Button disabled={!study?.adminPermissionGranted} onClick={submit} loading={studyUpdateLoading || studyUpdateLoading2}>
               Save Changes
             </Button>
           </Group>

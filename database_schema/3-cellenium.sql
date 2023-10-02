@@ -501,8 +501,13 @@ BEGIN
 END;
 $$;
 
-create or replace procedure delete_study(p_study_id in int)
+-- drop procedure if exists delete_study, reset_study;
+
+create or replace function delete_all_study_data(p_study_id in int)
+    returns boolean
     language plpgsql
+    security definer
+    volatile
 as
 $$
 declare
@@ -521,6 +526,7 @@ begin
     delete from study_sample_projection where study_id = p_study_id;
     delete from study_sample where study_id = p_study_id;
     delete from study where study_id = p_study_id;
+    return true;
 end;
 $$;
 
@@ -538,9 +544,8 @@ begin
     into keep_study_name, keep_filename, keep_import_file, keep_admin_permissions
     from study
     where study_id = p_study_id;
-    call delete_study(p_study_id);
+    perform delete_all_study_data(p_study_id);
     insert into study (study_id, study_name, filename, import_file, admin_permissions)
     values (p_study_id, keep_study_name, keep_filename, keep_import_file, keep_admin_permissions);
 end;
 $$;
-

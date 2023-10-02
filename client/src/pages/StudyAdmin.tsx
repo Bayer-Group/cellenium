@@ -37,7 +37,7 @@ export default function StudyAdmin() {
       name: 'ID',
       selector: (row: StudyAdminDetailsFragment) => row.studyId,
       sortable: true,
-      width: '10%',
+      width: '15%',
     },
     {
       name: 'Title',
@@ -95,6 +95,8 @@ export default function StudyAdmin() {
         !row.adminPermissionGranted ? null : <IconX onClick={() => setSelectedDeleteStudy(row)} style={{ cursor: 'pointer' }} />,
     },
   ];
+
+  console.log('RENDER');
 
   return (
     <Container fluid>

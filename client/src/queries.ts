@@ -332,16 +332,20 @@ gql`
   }
 
   mutation studyDelete($studyId: Int!) {
-    deleteStudy(input: { studyId: $studyId }) {
-      study {
-        studyId
-      }
+    deleteAllStudyData(input: { pStudyId: $studyId }) {
+      boolean
     }
   }
 
   mutation createStudyUpload($filename: String!) {
     createStudyUpload(input: { filename: $filename }) {
       json
+    }
+  }
+
+  mutation studyDefinitionUpdate {
+    studyDefinitionUpdate(input: {}) {
+      boolean
     }
   }
 `;
