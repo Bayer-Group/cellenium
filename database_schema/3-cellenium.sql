@@ -501,8 +501,6 @@ BEGIN
 END;
 $$;
 
--- drop procedure if exists delete_study, reset_study;
-
 create or replace function delete_all_study_data(p_study_id in int)
     returns boolean
     language plpgsql
