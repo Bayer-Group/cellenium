@@ -42,6 +42,10 @@ const router = createBrowserRouter([
     element: <StudyPage />,
   },
   {
+    path: '/analysis/:studyId',
+    element: <StudyPage />,
+  },
+  {
     path: 'study-admin',
     element: <StudyAdmin />,
   },
