@@ -22,7 +22,7 @@ export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (stud
         allOntCodes: [study.studyOntologyList.map((ont) => ont.ontCodes), study.studyOntologyList.map((ont) => ont.parentIds)]
           .flat(2)
           .filter((ontCode) => !!ontCode),
-        allSearchableStrings: [study.studyName, study.description, ...metadataValues(study)]
+        allSearchableStrings: [study.studyName, study.description, `${study.studyId}`, ...metadataValues(study)]
           .filter((s) => s?.length > 0)
           .map((s) => `${s}`.toLocaleLowerCase()),
       })),
