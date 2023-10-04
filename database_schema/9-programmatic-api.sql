@@ -285,7 +285,8 @@ AS $$
                                             'Key': file_url.replace(f"s3://{bucket}/", "")},
                                     ExpiresIn=60*60*24)
     $$;
-
+revoke all on function create_study_h5ad_presigned_url from postgraphile;
+revoke all on function create_study_h5ad_presigned_url from public;
 
 CREATE VIEW api_study_h5_download with (security_invoker = true) AS
 SELECT create_study_h5ad_presigned_url(study.import_file) as presigned_url, study_id FROM study where study.visible = True;
