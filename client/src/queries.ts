@@ -68,6 +68,9 @@ gql`
     ordering
     displayGroup
     differentialExpressionCalculated
+    createdByUser
+    currentUserIsOwner
+    privateToUser
     annotationValuesList {
       annotationValueId
       displayValue
@@ -270,6 +273,18 @@ gql`
     ) {
       clientMutationId
       integer
+    }
+  }
+
+  mutation EditUserAnnotation($studyId: Int!, $annotationGroupId: Int!, $privateToUser: Boolean!) {
+    userAnnotationEdit(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId, pPrivateToUser: $privateToUser }) {
+      boolean
+    }
+  }
+
+  mutation DeleteUserAnnotation($studyId: Int!, $annotationGroupId: Int!) {
+    userAnnotationDelete(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId }) {
+      boolean
     }
   }
 

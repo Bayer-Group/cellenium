@@ -11,7 +11,7 @@ import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/Ann
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { DEGTable } from '../components/DEGTable/DEGTable';
-import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 
 // const ANNOTATIONS = [
 //     {label: "bone cell", color: "#1f77b4"},

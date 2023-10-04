@@ -3,7 +3,7 @@ import { StudyInfoFragment, useSingleStudyInfoQuery } from '../../generated/type
 import { useRecoilValue } from 'recoil';
 import { studyState } from '../../atoms.ts';
 import { useState } from 'react';
-import { StudyCard } from '../StudyCard/StudyCard.tsx';
+import { StudyCard } from '../StudyCard/StudyCard';
 
 function StudyInfoModal({ opened, onClose, study }: { opened: boolean; onClose: () => void; study: StudyInfoFragment }) {
   return (

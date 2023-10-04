@@ -42,7 +42,7 @@ as
 select s.study_id
 from study s
 where s.admin_permissions is null
-   or s.reader_permissions = ARRAY[]::text[]
+   or s.reader_permissions = ARRAY []::text[]
    or s.admin_permissions && current_user_groups();
 grant select on study_administrable_currentuser to postgraphile;
 
@@ -68,7 +68,7 @@ CREATE POLICY study_delete_policy ON study FOR DELETE TO postgraphile
 DROP POLICY IF EXISTS study_insert_policy ON study;
 CREATE POLICY study_insert_policy ON study FOR INSERT TO postgraphile
     WITH CHECK (
-        true
+    true
     );
 
 grant insert, select, update, delete on study to postgraphile;
@@ -77,7 +77,8 @@ grant usage, select ON sequence study_study_id_seq TO postgraphile;
 CREATE OR REPLACE FUNCTION create_study_for_current_user(in study_name text)
     RETURNS bool
     LANGUAGE plpgsql
-AS $$
+AS
+$$
 BEGIN
     INSERT INTO study (study_name, reader_permissions, admin_permissions)
     VALUES (study_name, null, null);
@@ -523,6 +524,15 @@ begin
     delete from study_annotation_group_ui where study_id = p_study_id;
     delete from study_sample_projection where study_id = p_study_id;
     delete from study_sample where study_id = p_study_id;
+    delete
+    from annotation_value
+    where annotation_group_id in
+          (select saved_as_annotation_group_id from user_annotation_group where study_id = p_study_id);
+    delete from user_annotation_group where study_id = p_study_id;
+    delete
+    from annotation_group
+    where annotation_group_id in
+          (select saved_as_annotation_group_id from user_annotation_group where study_id = p_study_id);
     delete from study where study_id = p_study_id;
     return true;
 end;

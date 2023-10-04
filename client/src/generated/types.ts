@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Datetime: any;
   JSON: any;
 };
 
@@ -2510,6 +2511,32 @@ export type CreateUserAnnotationGroupPayload = {
   userAnnotationGroup: Maybe<UserAnnotationGroup>;
 };
 
+/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
+export type DatetimeFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value. */
+  equalTo: InputMaybe<Scalars['Datetime']>;
+  /** Greater than the specified value. */
+  greaterThan: InputMaybe<Scalars['Datetime']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo: InputMaybe<Scalars['Datetime']>;
+  /** Included in the specified list. */
+  in: InputMaybe<Array<Scalars['Datetime']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan: InputMaybe<Scalars['Datetime']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom: InputMaybe<Scalars['Datetime']>;
+  /** Not equal to the specified value. */
+  notEqualTo: InputMaybe<Scalars['Datetime']>;
+  /** Not included in the specified list. */
+  notIn: InputMaybe<Array<Scalars['Datetime']>>;
+};
+
 /** All input for the `deleteAllStudyData` mutation. */
 export type DeleteAllStudyDataInput = {
   /**
@@ -3615,6 +3642,8 @@ export type Mutation = {
   /** Updates a single `StudySample` using its globally unique id and a patch. */
   updateStudySampleByNodeId: Maybe<UpdateStudySamplePayload>;
   userAnnotationDefine: Maybe<UserAnnotationDefinePayload>;
+  userAnnotationDelete: Maybe<UserAnnotationDeletePayload>;
+  userAnnotationEdit: Maybe<UserAnnotationEditPayload>;
 };
 
 /** The root mutation type which contains root level fields which mutate data. */
@@ -4045,6 +4074,16 @@ export type MutationUpdateStudySampleByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUserAnnotationDefineArgs = {
   input: UserAnnotationDefineInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUserAnnotationDeleteArgs = {
+  input: UserAnnotationDeleteInput;
+};
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUserAnnotationEditArgs = {
+  input: UserAnnotationEditInput;
 };
 
 /** An object with a globally unique `ID`. */
@@ -6237,10 +6276,13 @@ export type StudyAnnotationFrontendGroup = {
   annotationGroupId: Maybe<Scalars['Int']>;
   /** Reads and enables pagination through a set of `StudyAnnotationFrontendValue`. */
   annotationValuesList: Array<StudyAnnotationFrontendValue>;
+  createdByUser: Maybe<Scalars['String']>;
+  currentUserIsOwner: Maybe<Scalars['Boolean']>;
   differentialExpressionCalculated: Maybe<Scalars['Boolean']>;
   displayGroup: Maybe<Scalars['String']>;
   isPrimary: Maybe<Scalars['Boolean']>;
   ordering: Maybe<Scalars['Int']>;
+  privateToUser: Maybe<Scalars['Boolean']>;
   /** Reads a single `Study` that is related to this `StudyAnnotationFrontendGroup`. */
   study: Maybe<Study>;
   studyId: Maybe<Scalars['Int']>;
@@ -6261,6 +6303,10 @@ export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
 export type StudyAnnotationFrontendGroupCondition = {
   /** Checks for equality with the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdByUser` field. */
+  createdByUser: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `currentUserIsOwner` field. */
+  currentUserIsOwner: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
   differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `displayGroup` field. */
@@ -6269,6 +6315,8 @@ export type StudyAnnotationFrontendGroupCondition = {
   isPrimary: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `ordering` field. */
   ordering: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `privateToUser` field. */
+  privateToUser: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
 };
@@ -6279,6 +6327,10 @@ export type StudyAnnotationFrontendGroupFilter = {
   and: InputMaybe<Array<StudyAnnotationFrontendGroupFilter>>;
   /** Filter by the object’s `annotationGroupId` field. */
   annotationGroupId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `createdByUser` field. */
+  createdByUser: InputMaybe<StringFilter>;
+  /** Filter by the object’s `currentUserIsOwner` field. */
+  currentUserIsOwner: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `differentialExpressionCalculated` field. */
   differentialExpressionCalculated: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `displayGroup` field. */
@@ -6291,6 +6343,8 @@ export type StudyAnnotationFrontendGroupFilter = {
   or: InputMaybe<Array<StudyAnnotationFrontendGroupFilter>>;
   /** Filter by the object’s `ordering` field. */
   ordering: InputMaybe<IntFilter>;
+  /** Filter by the object’s `privateToUser` field. */
+  privateToUser: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
 };
@@ -6299,6 +6353,10 @@ export type StudyAnnotationFrontendGroupFilter = {
 export enum StudyAnnotationFrontendGroupsOrderBy {
   AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
   AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
+  CreatedByUserAsc = 'CREATED_BY_USER_ASC',
+  CreatedByUserDesc = 'CREATED_BY_USER_DESC',
+  CurrentUserIsOwnerAsc = 'CURRENT_USER_IS_OWNER_ASC',
+  CurrentUserIsOwnerDesc = 'CURRENT_USER_IS_OWNER_DESC',
   DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
   DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
   DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
@@ -6308,6 +6366,8 @@ export enum StudyAnnotationFrontendGroupsOrderBy {
   Natural = 'NATURAL',
   OrderingAsc = 'ORDERING_ASC',
   OrderingDesc = 'ORDERING_DESC',
+  PrivateToUserAsc = 'PRIVATE_TO_USER_ASC',
+  PrivateToUserDesc = 'PRIVATE_TO_USER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
 }
@@ -8006,9 +8066,61 @@ export type UserAnnotationDefinePayload = {
   query: Maybe<Query>;
 };
 
+/** All input for the `userAnnotationDelete` mutation. */
+export type UserAnnotationDeleteInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+};
+
+/** The output of our `userAnnotationDelete` mutation. */
+export type UserAnnotationDeletePayload = {
+  __typename?: 'UserAnnotationDeletePayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+/** All input for the `userAnnotationEdit` mutation. */
+export type UserAnnotationEditInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pPrivateToUser: InputMaybe<Scalars['Boolean']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+};
+
+/** The output of our `userAnnotationEdit` mutation. */
+export type UserAnnotationEditPayload = {
+  __typename?: 'UserAnnotationEditPayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
 export type UserAnnotationGroup = {
   __typename?: 'UserAnnotationGroup';
   calculateDifferentialExpression: Scalars['Boolean'];
+  createdByUser: Maybe<Scalars['String']>;
+  creationTimestamp: Scalars['Datetime'];
+  privateToUser: Scalars['Boolean'];
   /** Reads a single `AnnotationGroup` that is related to this `UserAnnotationGroup`. */
   savedAsAnnotationGroup: Maybe<AnnotationGroup>;
   savedAsAnnotationGroupId: Scalars['Int'];
@@ -8024,6 +8136,12 @@ export type UserAnnotationGroup = {
 export type UserAnnotationGroupCondition = {
   /** Checks for equality with the object’s `calculateDifferentialExpression` field. */
   calculateDifferentialExpression: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `createdByUser` field. */
+  createdByUser: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `creationTimestamp` field. */
+  creationTimestamp: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `privateToUser` field. */
+  privateToUser: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `savedAsAnnotationGroupId` field. */
   savedAsAnnotationGroupId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -8036,10 +8154,16 @@ export type UserAnnotationGroupFilter = {
   and: InputMaybe<Array<UserAnnotationGroupFilter>>;
   /** Filter by the object’s `calculateDifferentialExpression` field. */
   calculateDifferentialExpression: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `createdByUser` field. */
+  createdByUser: InputMaybe<StringFilter>;
+  /** Filter by the object’s `creationTimestamp` field. */
+  creationTimestamp: InputMaybe<DatetimeFilter>;
   /** Negates the expression. */
   not: InputMaybe<UserAnnotationGroupFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<UserAnnotationGroupFilter>>;
+  /** Filter by the object’s `privateToUser` field. */
+  privateToUser: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `savedAsAnnotationGroupId` field. */
   savedAsAnnotationGroupId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyId` field. */
@@ -8049,6 +8173,9 @@ export type UserAnnotationGroupFilter = {
 /** An input for mutations affecting `UserAnnotationGroup` */
 export type UserAnnotationGroupInput = {
   calculateDifferentialExpression: Scalars['Boolean'];
+  createdByUser: InputMaybe<Scalars['String']>;
+  creationTimestamp: Scalars['Datetime'];
+  privateToUser: Scalars['Boolean'];
   savedAsAnnotationGroupId: Scalars['Int'];
   studyId: Scalars['Int'];
 };
@@ -8057,7 +8184,13 @@ export type UserAnnotationGroupInput = {
 export enum UserAnnotationGroupsOrderBy {
   CalculateDifferentialExpressionAsc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_ASC',
   CalculateDifferentialExpressionDesc = 'CALCULATE_DIFFERENTIAL_EXPRESSION_DESC',
+  CreatedByUserAsc = 'CREATED_BY_USER_ASC',
+  CreatedByUserDesc = 'CREATED_BY_USER_DESC',
+  CreationTimestampAsc = 'CREATION_TIMESTAMP_ASC',
+  CreationTimestampDesc = 'CREATION_TIMESTAMP_DESC',
   Natural = 'NATURAL',
+  PrivateToUserAsc = 'PRIVATE_TO_USER_ASC',
+  PrivateToUserDesc = 'PRIVATE_TO_USER_DESC',
   SavedAsAnnotationGroupIdAsc = 'SAVED_AS_ANNOTATION_GROUP_ID_ASC',
   SavedAsAnnotationGroupIdDesc = 'SAVED_AS_ANNOTATION_GROUP_ID_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
@@ -8211,6 +8344,9 @@ export type AnnotationGrpFragment = {
   ordering: number;
   displayGroup: string;
   differentialExpressionCalculated: boolean;
+  createdByUser: string;
+  currentUserIsOwner: boolean;
+  privateToUser: boolean;
   annotationValuesList: Array<{
     __typename?: 'StudyAnnotationFrontendValue';
     annotationValueId: number;
@@ -8240,6 +8376,9 @@ export type StudyBasicsFragment = {
     ordering: number;
     displayGroup: string;
     differentialExpressionCalculated: boolean;
+    createdByUser: string;
+    currentUserIsOwner: boolean;
+    privateToUser: boolean;
     annotationValuesList: Array<{
       __typename?: 'StudyAnnotationFrontendValue';
       annotationValueId: number;
@@ -8347,6 +8486,9 @@ export type StudyBasicsQuery = {
       ordering: number;
       displayGroup: string;
       differentialExpressionCalculated: boolean;
+      createdByUser: string;
+      currentUserIsOwner: boolean;
+      privateToUser: boolean;
       annotationValuesList: Array<{
         __typename?: 'StudyAnnotationFrontendValue';
         annotationValueId: number;
@@ -8493,6 +8635,21 @@ export type SaveUserAnnotationMutation = {
   userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload'; clientMutationId: string; integer: number };
 };
 
+export type EditUserAnnotationMutationVariables = Exact<{
+  studyId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  privateToUser: Scalars['Boolean'];
+}>;
+
+export type EditUserAnnotationMutation = { __typename?: 'Mutation'; userAnnotationEdit: { __typename?: 'UserAnnotationEditPayload'; boolean: boolean } };
+
+export type DeleteUserAnnotationMutationVariables = Exact<{
+  studyId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+}>;
+
+export type DeleteUserAnnotationMutation = { __typename?: 'Mutation'; userAnnotationDelete: { __typename?: 'UserAnnotationDeletePayload'; boolean: boolean } };
+
 export type StudyAdminDetailsFragment = {
   __typename?: 'StudyAdminDetail';
   studyId: number;
@@ -8612,6 +8769,9 @@ export const AnnotationGrpFragmentDoc = gql`
     ordering
     displayGroup
     differentialExpressionCalculated
+    createdByUser
+    currentUserIsOwner
+    privateToUser
     annotationValuesList {
       annotationValueId
       displayValue
@@ -9451,6 +9611,73 @@ export function useSaveUserAnnotationMutation(baseOptions?: Apollo.MutationHookO
 export type SaveUserAnnotationMutationHookResult = ReturnType<typeof useSaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationResult = Apollo.MutationResult<SaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>;
+export const EditUserAnnotationDocument = gql`
+  mutation EditUserAnnotation($studyId: Int!, $annotationGroupId: Int!, $privateToUser: Boolean!) {
+    userAnnotationEdit(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId, pPrivateToUser: $privateToUser }) {
+      boolean
+    }
+  }
+`;
+
+/**
+ * __useEditUserAnnotationMutation__
+ *
+ * To run a mutation, you first call `useEditUserAnnotationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditUserAnnotationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editUserAnnotationMutation, { data, loading, error }] = useEditUserAnnotationMutation({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *      privateToUser: // value for 'privateToUser'
+ *   },
+ * });
+ */
+export function useEditUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>(EditUserAnnotationDocument, options);
+}
+export type EditUserAnnotationMutationHookResult = ReturnType<typeof useEditUserAnnotationMutation>;
+export type EditUserAnnotationMutationResult = Apollo.MutationResult<EditUserAnnotationMutation>;
+export type EditUserAnnotationMutationOptions = Apollo.BaseMutationOptions<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>;
+export const DeleteUserAnnotationDocument = gql`
+  mutation DeleteUserAnnotation($studyId: Int!, $annotationGroupId: Int!) {
+    userAnnotationDelete(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId }) {
+      boolean
+    }
+  }
+`;
+
+/**
+ * __useDeleteUserAnnotationMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserAnnotationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserAnnotationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserAnnotationMutation, { data, loading, error }] = useDeleteUserAnnotationMutation({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *   },
+ * });
+ */
+export function useDeleteUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>(DeleteUserAnnotationDocument, options);
+}
+export type DeleteUserAnnotationMutationHookResult = ReturnType<typeof useDeleteUserAnnotationMutation>;
+export type DeleteUserAnnotationMutationResult = Apollo.MutationResult<DeleteUserAnnotationMutation>;
+export type DeleteUserAnnotationMutationOptions = Apollo.BaseMutationOptions<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>;
 export const StudyAdminListDocument = gql`
   query studyAdminList {
     studyAdminDetailsList {

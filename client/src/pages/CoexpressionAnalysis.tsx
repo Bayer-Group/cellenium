@@ -16,7 +16,7 @@ import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { CorrelationTable } from '../components/CorrelationTable/CorrelationTable';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
-import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 
 // interface PreparedPlot {
 //     message?: string;

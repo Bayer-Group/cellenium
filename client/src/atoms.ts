@@ -72,8 +72,8 @@ export const studyState = selector<Study | undefined>({
   key: 'studyState',
   get: async ({ get }) => {
     const studyId = get(studyIdState);
-    // const studyReloadHelper = get(studyReloadHelperState);
-    if (studyId) {
+    const studyReloadHelper = get(studyReloadHelperState);
+    if (studyId && studyReloadHelper) {
       const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
         query: StudyBasicsDocument,
         variables: {

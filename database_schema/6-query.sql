@@ -148,7 +148,7 @@ group by study_cell_ontology_ids.study_id,
          study_cell_ontology_ids.ont_codes,
          ont.labels;
 comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
-create index study_overview_ontology_1 on study_overview_ontology(study_id);
+create index study_overview_ontology_1 on study_overview_ontology (study_id);
 grant select on study_overview_ontology to postgraphile;
 
 
@@ -176,15 +176,24 @@ from ont_code_lists,
 grant select on tree_ontology to postgraphile;
 
 create view study_annotation_frontend_group
+    with (security_invoker = true)
 as
 select gui.study_id,
        gui.annotation_group_id,
        gui.is_primary,
        gui.ordering,
        gui.differential_expression_calculated,
-       g.display_group
+       g.display_group,
+       ug.created_by_user,
+       ug.created_by_user = current_user_email() current_user_is_owner,
+       ug.private_to_user
 from study_annotation_group_ui gui
-         join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
+         join annotation_group g on gui.annotation_group_id = g.annotation_group_id
+         left join user_annotation_group ug on ug.saved_as_annotation_group_id = g.annotation_group_id
+where (ug.saved_as_annotation_group_id is null
+    or ug.private_to_user = False
+    or ug.created_by_user = current_user_email()
+          );
 comment on view study_annotation_frontend_group is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
 grant select on study_annotation_frontend_group to postgraphile;

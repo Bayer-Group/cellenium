@@ -24,7 +24,7 @@ import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/Ann
 import { AnnotationFilterDisplay } from '../components/AnnotationFilterDisplay/AnnotationFilterDisplay';
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
-import { StudyTitle } from '../components/StudyTitle/StudyTitle.tsx';
+import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 
 const analysisTypes = [
   { value: 'violinplot', label: 'Violin plot' },
