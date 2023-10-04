@@ -1,7 +1,7 @@
 import React, { ComponentType, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { createStyles, Group, Header, ScrollArea, Stack, Text, Title } from '@mantine/core';
-import ProjPlotIcon from '../images/logo.svg';
+import ProjPlotIcon from '../assets/images/logo.svg';
 
 const MDComponents: Record<
   string,

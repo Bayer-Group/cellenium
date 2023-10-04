@@ -3,7 +3,7 @@ import { createStyles, Group, Navbar, Title, Tooltip, UnstyledButton } from '@ma
 import { useRecoilState } from 'recoil';
 import { NavLink } from 'react-router-dom';
 
-import CelleniumLogo from '../../images/logo.svg';
+import CelleniumLogo from '../../assets/images/logo.svg';
 import { pageState } from '../../atoms';
 import { CellTypeMarkerIcon, CoExpressionAnalysisIcon, CompareAnnotationsIcon, ExpressionAnalysisIcon, UserAnnotationIcon } from '../../assets/icons/Icons';
 

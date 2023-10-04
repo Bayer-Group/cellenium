@@ -1,7 +1,7 @@
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
-import ProjPlotIcon from '../../images/logo.svg';
+import ProjPlotIcon from '../../assets/images/logo.svg';
 
 const HEADER_HEIGHT = 60;
 
