@@ -50,6 +50,10 @@ const router = createBrowserRouter([
     element: <StudyAdmin />,
   },
   {
+    path: 'manageStudyImport',
+    element: <StudyAdmin />,
+  },
+  {
     path: 'ontology-sandbox',
     element: <OntologySandbox />,
   },
