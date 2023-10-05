@@ -149,7 +149,7 @@ def _read_h5ad(filename):
 
 
 def read_h5ad(study_id: int):
-    filename = sql_query(f"select filename from study where study_id = {study_id}")[0]['filename']
+    filename = sql_query(f"select coalesce(filename, import_file) filename from study where study_id = {study_id}")[0]['filename']
     if not filename.startswith('s3:'):
         try:
             import plpy

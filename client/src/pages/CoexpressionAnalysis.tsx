@@ -103,6 +103,10 @@ function CoexpressionAnalysis() {
       <LeftSidePanel>
         <Stack pt={5}>
           <AnnotationFilterDisplay />
+          <Divider />
+          <Text size={'xs'} color={'gray'}>
+            Pearson correlation is displayed in each pair-wise scatter plot.
+          </Text>
         </Stack>
       </LeftSidePanel>
       <main style={{ height: '100vh' }}>

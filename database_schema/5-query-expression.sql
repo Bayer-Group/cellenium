@@ -69,7 +69,7 @@ def compute_correlation(m, genes, goi):
 
 
 data = sql_query(f"""
-    SELECT s.filename,so.h5ad_var_index FROM study s
+    SELECT coalesce(s.filename, s.import_file) filename, so.h5ad_var_index FROM study s
     JOIN study_omics so
       ON s.study_id=so.study_id
     WHERE omics_id={omics_id} AND s.study_id={study_id}

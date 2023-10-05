@@ -56,7 +56,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
     <Group align="center" position="left" spacing={2} style={{ width: '100%' }}>
       <Grid columns={12} style={{ width: '100%' }} gutter="md">
         <Grid.Col span={1}>
-          <ActionIcon variant="subtle" size="xs">
+          <ActionIcon variant="subtle" size="xs" title="remove from user gene list">
             <IconX onClick={handleRemove} size="xs" />
           </ActionIcon>
         </Grid.Col>
@@ -68,6 +68,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
             onClick={handleColorClick}
             variant="subtle"
             size="xs"
+            title="show/hide gene in plot"
             mr={5}
           >
             <IconEye color={selectedGenes.filter((g) => g.omicsId === gene.omicsId).length !== 0 ? 'white' : 'gray'} />
@@ -81,6 +82,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
               })}
               variant="subtle"
               size="xs"
+              title="find other genes with correlating expression"
               onClick={searchCoexpressors}
             >
               <IconCalculator color={correlationOmicsId === gene.omicsId ? 'white' : 'gray'} />
