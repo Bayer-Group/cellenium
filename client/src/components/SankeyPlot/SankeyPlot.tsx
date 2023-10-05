@@ -77,7 +77,7 @@ export function SankeyPlot({
 
   return (
     <Center style={{ width: '100%', height: '100%' }}>
-      {loading && <Loader variant="dots" color="gray" size="xl" />}
+      {loading && <Loader variant="dots" color="blue" size="xl" />}
 
       {sankeyData && sankeyData.nodes.length > 0 && (
         <div style={{ width: '90%', height: '100%' }}>

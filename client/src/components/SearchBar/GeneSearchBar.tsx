@@ -119,7 +119,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: Props) {
           }}
           noWrap
         >
-          {!allGenes ? <Loader variant="dots" size={25} color={theme.colors.gray[5]} /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
+          {!allGenes ? <Loader variant="dots" size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
           <Group spacing={2}>
             {selectedFilters.map((filter) => {
               return <SearchBadge key={`${filter.omicsId}`} onRemove={handleFilterRemove} item={filter} />;

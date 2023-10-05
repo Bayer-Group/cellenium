@@ -13,7 +13,7 @@ function AnnotationComparison() {
   const study = useRecoilValue(studyState);
 
   const [value1, setValue1] = useState<string | undefined>();
-  const [value2, setValue2] = useState<string | undefined>();
+  const [value2, setValue2] = useState<string | undefined>(0);
 
   const handleChange1 = useCallback(
     (value: string) => {

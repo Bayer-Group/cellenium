@@ -16,7 +16,7 @@ export function StudyLogModal({ opened, reset, study }: { opened: boolean; reset
         </Text>
         {loading && (
           <Group position="center">
-            <Loader />
+            <Loader color="blue" />
           </Group>
         )}
         {data && (

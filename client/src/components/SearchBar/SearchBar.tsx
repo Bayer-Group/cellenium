@@ -2,7 +2,7 @@ import { ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantine
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
 import { closeModal, openModal } from '@mantine/modals';
-import { StudyInfoFragment, StudyOverview, useAutocompleteLazyQuery } from '../../generated/types';
+import { StudyOverview, useAutocompleteLazyQuery } from '../../generated/types';
 import { OntologyBrowser } from '../OntologyBrowser/OntologyBrowser';
 import { Omics, OntologyItem } from '../../model';
 import { SearchBadge } from '../SearchBadge/SearchBadge';
@@ -66,7 +66,7 @@ export function SearchBar({
     }
   }, [value, autocompleteSuggestions]);
 
-  useEffect(() => onSearchFiltersUpdate(selectedFilters), [selectedFilters]);
+  useEffect(() => onSearchFiltersUpdate(selectedFilters), [onSearchFiltersUpdate, selectedFilters]);
 
   const handleSubmit = useCallback(
     (item: OfferingItem) => {
@@ -130,7 +130,7 @@ export function SearchBar({
         ),
       });
     }
-  }, [ontologies, selectedFilters]);
+  }, [ontologies, selectedFilters, studies]);
 
   return (
     <Group position="left" align="flex-end" spacing={4}>
@@ -153,7 +153,7 @@ export function SearchBar({
             paddingLeft: 4,
           }}
         >
-          {loading ? <Loader size={25} color={theme.colors.gray[5]} /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
+          {loading ? <Loader size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
           <Group spacing={2}>
             {selectedFilters.map((filter) => {
               return <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove} item={filter} />;

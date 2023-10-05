@@ -28,7 +28,7 @@ function MarkerGeneSearch() {
             Please enter your genes of interest. Cellenium will search for studies and cell annotation clusters that show the entered gene as differentially
             expressed.
           </Text>
-          {loading && <Loader variant="dots" color={theme.colors.gray[5]} size={25} />}
+          {loading && <Loader variant="dots" color="blue" size={25} />}
         </Center>
         <Grid>
           {data?.differentialExpressionsList &&

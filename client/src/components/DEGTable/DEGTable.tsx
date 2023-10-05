@@ -261,7 +261,7 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
           noDataComponent={<Text>No data.</Text>}
         />
       )}
-      {loading && <Loader variant="dots" color="gray" />}
+      {loading && <Loader variant="dots" color="blue" />}
     </Stack>
   );
 }

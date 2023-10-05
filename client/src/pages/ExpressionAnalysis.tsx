@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Center, Divider, Group, Loader, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { Center, Divider, Group, Loader, ScrollArea, Stack, Text, Title, useMantineTheme } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
 import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
@@ -57,20 +57,30 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
   });
 
   if (data?.violinPlot) {
-    return <img style={{ width: '100%', objectFit: 'fill', overflow: 'hidden' }} alt="violin plot" src={data.violinPlot} />;
+    return (
+      <Stack align="center" h="30rem">
+        <img style={{ height: '100%', display: 'block' }} alt="violin plot" src={data.violinPlot} />
+      </Stack>
+    );
   }
-  return <div>{loading && <Loader variant="dots" color={theme.colors.gray[5]} size="xl" />}</div>;
+  return (
+    <Stack w="100%" align="center">
+      {loading && <Loader variant="dots" color="blue" size="xl" />}
+    </Stack>
+  );
 }
 
 function ViolinPlots() {
   const selectedGenes = useRecoilValue(selectedGenesState);
 
   return (
-    <Stack align="center" style={{ width: '100%' }}>
+    <Stack align="center" pos="relative" pt="1rem" style={{ width: '100%', overflowX: 'hidden' }}>
       {[...selectedGenes].reverse().map((g) => (
-        <Stack key={g.omicsId} align="center">
+        <Stack key={g.omicsId} align="center" w="100%">
           <Title order={3}>{g.displaySymbol}</Title>
-          <ViolinPlot omicsId={g.omicsId} />
+          <ScrollArea h="30rem" w="100%" style={{ overflowX: 'scroll', overflowY: 'hidden', position: 'relative' }}>
+            <ViolinPlot omicsId={g.omicsId} />
+          </ScrollArea>
         </Stack>
       ))}
     </Stack>
@@ -94,21 +104,21 @@ function ProjectionPlots() {
   if (loading) {
     return (
       <Center style={{ height: '100%', width: '100%' }}>
-        <Loader variant="dots" color={theme.colors.gray[5]} size={25} />
+        <Loader variant="dots" color="blue" size={25} />
       </Center>
     );
   }
 
   return (
-    <Group position="center">
+    <Stack w="100%" pt="1rem" spacing="md">
       {tablePerGene &&
         [...selectedGenes].reverse().map((g, i) => (
-          <Stack key={g.omicsId} align="center">
+          <Stack key={g.omicsId} align="center" mih="50vh">
             <Title order={3}>{g.displaySymbol}</Title>
             <ProjectionPlot colorBy="expression" expressionTable={tablePerGene[i]} />
           </Stack>
         ))}
-    </Group>
+    </Stack>
   );
 }
 
@@ -141,15 +151,15 @@ function DotPlots() {
   if (loading) {
     return (
       <Center style={{ height: '100%', width: '100%' }}>
-        <Loader variant="dots" color={theme.colors.gray[5]} size={25} />
+        <Loader variant="dots" color="blue" size={25} />
       </Center>
     );
   }
   return (
     heatmapDisplayData && (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Stack style={{ height: '100%', width: '100%' }} align="center" justify="center">
         <ExpressionDotPlot data={heatmapDisplayData} xAxis="displaySymbol" />
-      </Center>
+      </Stack>
     )
   );
 }

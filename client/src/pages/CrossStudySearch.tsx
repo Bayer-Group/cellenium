@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Center, Container, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Center, Container, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ScenegraphEvent } from 'vega';
@@ -11,7 +11,6 @@ import { NavBar } from '../components/NavBar/NavBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
 function CrossStudySearch() {
-  const theme = useMantineTheme();
   const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
   const [omicsIds, setOmicsIds] = useState<number[]>([]);
   const cellOAnnotationGroupId = useRecoilValue(cellOAnnotationGroupIdState);
@@ -64,26 +63,24 @@ function CrossStudySearch() {
         <GeneSearchBar humanOnly onGeneSelection={(ids) => setOmicsIds(ids)} />
         <Space h="xl" />
         <StudySearchBar onStudyListUpdate={setStudyList} />
-      </Container>
-      {omicsIds.length === 0 && (
-        <Center>
-          <Text style={{ width: '50em' }} color="dimmed">
+        <Center w="100%">
+          <Text color="dimmed" align="center" mt="1rem">
             Please enter your genes of interest. Cellenium will show the gene&apos;s expression in human studies with standardized cell annotation (CellO). As
             the study data is processed and normalized independently, this is a qualitative direction for which studies to explore independently. Click in the
             chart to open a study.
           </Text>
         </Center>
-      )}
-      <Group position="center" align="start">
-        {loading && <Loader variant="dots" color={theme.colors.gray[5]} size={25} />}
-        {heatmapDisplayData &&
-          heatmapDisplayData.map((heatmap) => (
-            <Stack key={`${heatmap.omicsId}-expression-dot-plot`}>
-              <Text>{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
-              <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} />
-            </Stack>
-          ))}
-      </Group>
+        <Group position="center" align="start" w="100%">
+          {loading && <Loader mt="1rem" variant="dots" color="blue" size={25} />}
+          {heatmapDisplayData &&
+            heatmapDisplayData.map((heatmap) => (
+              <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" h="120rem" align="center" mt="1rem">
+                <Text weight="bold">{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
+                <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} />
+              </Stack>
+            ))}
+        </Group>
+      </Container>
     </Container>
   );
 }

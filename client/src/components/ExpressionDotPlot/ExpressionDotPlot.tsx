@@ -4,10 +4,12 @@ import { ScenegraphEvent } from 'vega';
 import { Center, Loader } from '@mantine/core';
 import { DotPlotElementFragment } from '../../generated/types';
 
-function createSpec(xAxis: 'studyName' | 'displaySymbol') {
+function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: boolean) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     data: { name: 'table' },
+    width: 'container',
+    height: responsiveHeight ? 'container' : undefined,
     transform: [
       {
         impute: 'exprSamplesFraction',
@@ -76,13 +78,15 @@ export function ExpressionDotPlot({
   data,
   xAxis,
   onClick,
+  responsiveHeight = false,
 }: {
   data: DotPlotElementFragment[];
   xAxis: 'studyName' | 'displaySymbol';
   onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void;
+  responsiveHeight?: boolean;
 }) {
   const VegaLite = lazy(() => import('react-vega/lib/VegaLite'));
-  const spec = useMemo(() => createSpec(xAxis), [xAxis]);
+  const spec = useMemo(() => createSpec(xAxis, responsiveHeight), [responsiveHeight, xAxis]);
 
   const setUpSelectionListener = (view: View) => {
     view.addEventListener('click', (event, item) => {
@@ -97,7 +101,7 @@ export function ExpressionDotPlot({
     <Suspense
       fallback={
         <Center style={{ height: '100%', width: '100%' }}>
-          <Loader variant="dots" color="gray" />
+          <Loader variant="dots" color="blue" />
         </Center>
       }
     >
@@ -111,6 +115,7 @@ export function ExpressionDotPlot({
         data={{
           table: data,
         }}
+        style={{ height: '100%', width: '100%', maxHeight: '75%' }}
       />
     </Suspense>
   );

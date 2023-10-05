@@ -140,7 +140,14 @@ function CoexpressionPlot({
         </Group>
       </Group>
       {preparedPlot && !preparedPlot.message && (
-        <Plot data={preparedPlot.plotlyData} layout={preparedPlot.plotlyLayout} config={plotlyConfig} onSelected={onSelection} onDeselect={onDoubleClick} />
+        <Plot
+          data={preparedPlot.plotlyData}
+          layout={preparedPlot.plotlyLayout}
+          config={plotlyConfig}
+          onSelected={onSelection}
+          onDeselect={onDoubleClick}
+          style={{ marginTop: '1rem' }}
+        />
       )}
       {!preparedPlot && <div style={{ height: 250, width: 250 }}>{loading && <Loader variant="dots" />}</div>}
     </div>
@@ -242,9 +249,9 @@ function CelltypeDiscovery() {
         <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
       </main>
       <RightSidePanel>
-        <Stack align="flex-start" justify="flex-start" spacing="md">
+        <Stack align="flex-start" justify="flex-start" spacing="md" w="90%">
           <StudyTitle />
-          <Text size={'xs'} color="gray">
+          <Text size="xs" color="gray">
             After entering two marker genes, their coexpression plot shows. Select an area (e.g. high expression of one gene, low expression of the other) to
             visualize the matching samples in the projection plot. Filter with additional marker genes as needed. The selected cells can saved into a custom
             annotation.
@@ -257,11 +264,11 @@ function CelltypeDiscovery() {
               <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
             </Box>
           ))}
-          <Button onClick={newPlotBasedOnSelectedSamples} disabled={selectedSampleIds === null || selectedSampleIds.length === 0} size={'xs'} variant={'light'}>
+          <Button onClick={newPlotBasedOnSelectedSamples} disabled={selectedSampleIds === null || selectedSampleIds.length === 0} size="xs" variant="light">
             Subset, based on selection
           </Button>
           {celltypeDiscoveryCoexpressionSamples.length >= 2 && (
-            <Button onClick={removeLastPlot} size={'xs'} variant={'light'}>
+            <Button onClick={removeLastPlot} size="xs" variant="light">
               Remove last plot
             </Button>
           )}
@@ -269,12 +276,12 @@ function CelltypeDiscovery() {
             <TextInput
               value={annotationName}
               placeholder="My Custom Cell Annotation"
-              size={'xs'}
+              size="xs"
               onChange={(event) => setAnnotationName(event.currentTarget.value)}
             />
             <Button
-              size={'xs'}
-              variant={'light'}
+              size="xs"
+              variant="light"
               disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
               onClick={saveUserAnnotation}
               loading={saveUserAnnotationLoading}

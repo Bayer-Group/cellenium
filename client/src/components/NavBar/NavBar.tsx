@@ -39,7 +39,7 @@ const useStyles = createStyles((theme) => ({
     textDecoration: 'none',
     fontSize: 13,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
-    padding: `2px ${theme.spacing.sm}px`,
+    padding: `5px 2px`,
     fontWeight: 700,
     borderLeft: '2px solid transparent',
     transition: 'border-color 100ms ease, color 100ms ease',

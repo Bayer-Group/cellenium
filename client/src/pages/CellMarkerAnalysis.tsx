@@ -40,7 +40,7 @@ function ProjectionPlotWithOptionalExpression() {
   if (loading) {
     return (
       <div>
-        <Loader variant="dots" color={theme.colors.gray[5]} size="xl" />
+        <Loader variant="dots" color="blue" size="xl" />
       </div>
     );
   }

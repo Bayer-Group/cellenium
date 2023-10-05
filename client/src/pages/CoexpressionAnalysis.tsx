@@ -50,7 +50,7 @@ function CoexpressionAnalysisPlot() {
   if (loading) {
     return (
       <Center style={{ height: '100%', width: '100%' }}>
-        <Loader variant="dots" color={theme.colors.gray[5]} size="xl" />
+        <Loader variant="dots" color="blue" size="xl" />
       </Center>
     );
   }
@@ -72,7 +72,7 @@ function CoexpressionAnalysisPlot() {
       <img
         style={{
           width: '100%',
-          height: selectedGenes.length > 3 ? '100%' : '',
+          height: '75%',
           objectFit: 'fill',
           overflow: 'hidden',
         }}
@@ -93,7 +93,7 @@ function CoexpressionAnalysis() {
   if (!study) {
     return (
       <Center style={{ height: '100%', width: '100%' }}>
-        <Loader variant="dots" color="gray" />{' '}
+        <Loader variant="dots" color="blue" />{' '}
       </Center>
     );
   }
@@ -104,12 +104,12 @@ function CoexpressionAnalysis() {
         <Stack pt={5}>
           <AnnotationFilterDisplay />
           <Divider />
-          <Text size={'xs'} color={'gray'}>
+          <Text size="xs" color="gray">
             Pearson correlation is displayed in each pair-wise scatter plot.
           </Text>
         </Stack>
       </LeftSidePanel>
-      <main style={{ height: '100vh' }}>
+      <main style={{ height: '100%', width: '100%' }}>
         <CoexpressionAnalysisPlot />
       </main>
       <RightSidePanel>

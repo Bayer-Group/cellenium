@@ -1,6 +1,6 @@
 import { Modal, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StudyCard } from '../StudyCard/StudyCard';
 import { StudyInfoFragment, useSingleStudyInfoQuery } from '../../generated/types';
 import { studyState } from '../../atoms';
@@ -32,6 +32,10 @@ export function StudyTitle() {
     skip: !study,
   });
 
+  const modalClick = useCallback(() => {
+    setModalOpen(!modalOpen);
+  }, [modalOpen]);
+
   return (
     <>
       <Text
@@ -39,12 +43,12 @@ export function StudyTitle() {
         truncate="end"
         size="s"
         title="click for complete study information"
-        onClick={() => setModalOpen(true)}
-        style={{ maxWidth: '80%', cursor: 'pointer' }}
+        onClick={modalClick}
+        style={{ maxWidth: '90%', cursor: 'pointer' }}
       >
         {study && study.studyName}
       </Text>
-      {singleStudyInfoList && <StudyInfoModal opened={modalOpen} onClose={() => setModalOpen(false)} study={singleStudyInfoList?.studyOverviewsList[0]} />}
+      {singleStudyInfoList && <StudyInfoModal opened={modalOpen} onClose={modalClick} study={singleStudyInfoList?.studyOverviewsList[0]} />}
     </>
   );
 }

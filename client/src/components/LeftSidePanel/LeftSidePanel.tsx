@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Group, Navbar, Title, Tooltip, UnstyledButton } from '@mantine/core';
+import { createStyles, Group, Navbar, Stack, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { useRecoilState } from 'recoil';
 import { NavLink } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-
+    userSelect: 'none',
     '&:hover': {
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
     },
@@ -140,14 +140,14 @@ export function LeftSidePanel({ children }: Props) {
       <Navbar.Section grow className={classes.wrapper}>
         <div className={classes.aside}>
           <div className={classes.logo}>
-            <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
+            <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
               <img src={CelleniumLogo} alt="cellenium logo" />
             </NavLink>
           </div>
-          {mainLinks}
+          <Stack mt="md">{mainLinks}</Stack>
         </div>
         <div className={classes.main}>
-          <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
+          <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
             <Title order={4} className={classes.title}>
               cellenium
             </Title>

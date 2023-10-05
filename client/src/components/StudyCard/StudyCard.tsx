@@ -25,7 +25,7 @@ function metadataKeyValues(study: StudyInfoFragment) {
         if (isValidUrl(study.metadata[key])) {
           return (
             <Badge key={k} color="gray">
-              <Anchor color="gray" component={Link} to={study.metadata[key] as string}>
+              <Anchor color="gray" component={Link} to={study.metadata[key] as string} target="_blank" rel="nofollow">
                 {key}: {study.metadata[key]}
               </Anchor>
             </Badge>
@@ -35,7 +35,7 @@ function metadataKeyValues(study: StudyInfoFragment) {
         if (isValidEmail(study.metadata[key])) {
           return (
             <Badge key={k} color="gray">
-              <Anchor color="gray" href={`mailto:${study.metadata[key]}`} target="_blank">
+              <Anchor color="gray" href={`mailto:${study.metadata[key]}`} target="_blank" rel="nofollow">
                 {key}: {study.metadata[key]}
               </Anchor>
             </Badge>

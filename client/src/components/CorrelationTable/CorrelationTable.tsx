@@ -121,7 +121,7 @@ export function CorrelationTable({ omicsId, studyId }: { omicsId: number; studyI
         <Text color="gray" size="xs">
           A genome-wide correlation analysis takes some seconds. Please stay patient!
         </Text>
-        <Loader variant="dots" color="gray" />
+        <Loader variant="dots" color="blue" />
       </Stack>
     );
   }
