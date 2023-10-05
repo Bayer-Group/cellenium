@@ -2,7 +2,7 @@ import { ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantine
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
 import { closeModal, openModal } from '@mantine/modals';
-import { useAutocompleteLazyQuery } from '../../generated/types';
+import { StudyInfoFragment, StudyOverview, useAutocompleteLazyQuery } from '../../generated/types';
 import { OntologyBrowser } from '../OntologyBrowser/OntologyBrowser';
 import { Omics, OntologyItem } from '../../model';
 import { SearchBadge } from '../SearchBadge/SearchBadge';
@@ -30,9 +30,11 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItem({ v
 export function SearchBar({
   ontologies,
   onSearchFiltersUpdate,
+  studies,
 }: {
   ontologies?: Map<string, OntologyItem>;
   onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
+  studies?: StudyOverview[];
 }) {
   const theme = useMantineTheme();
   const [value, setValue] = useState<string>('');
@@ -111,6 +113,7 @@ export function SearchBar({
         children: (
           <OntologyBrowser
             ontologyTrees={ontologies}
+            studies={studies}
             handleAddOntologyItem={(item: OntologyItem) => {
               setSelectedFilters([
                 ...selectedFilters,

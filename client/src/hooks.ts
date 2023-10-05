@@ -105,7 +105,15 @@ export function useSetStudyFromUrl() {
   useEffect(() => {
     if (study && study.studyId === studyIdUrlParamInt) {
       setValidParam('page', setPage, 'CellMarkerAnalysis');
-      setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
+
+      const annotationGroupsWithDEGs = study.annotationGroupsList.filter(
+        (ag) => study.annotationGroupMap.get(ag.annotationGroupId)?.differentialExpressionCalculated,
+      );
+      setValidParam(
+        'annotationGroupId',
+        setAnnotationGroupId,
+        annotationGroupsWithDEGs.length > 0 ? annotationGroupsWithDEGs[0].annotationGroupId : study.annotationGroupsList[0].annotationGroupId,
+      );
       setValidParam('annotationValueId', setSelectedAnnotation);
       setSecondaryAnnotationGroupId(undefined);
       setValidParam('omicsId', (omicsId: number) => {
@@ -116,6 +124,10 @@ export function useSetStudyFromUrl() {
       setValidParam('projection', setSelectedProjection, study.projections[0]);
       // clear query parameters, as we don't plan to update them and it's not nice to leave stale data in the URL
       navigate(`/study/${studyId}`, { replace: true });
+
+      // study is undefined if it could not be loaded, otherwise it is null. If it is undefined, we therefore want to redirect to the home page.
+    } else if (study === undefined && studyIdUrlParamInt) {
+      navigate(`/`, { replace: true });
     }
   }, [study]);
 }

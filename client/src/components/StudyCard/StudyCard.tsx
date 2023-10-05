@@ -4,10 +4,50 @@ import { Link } from 'react-router-dom';
 import { StudyInfoFragment } from '../../generated/types';
 import { ontology2Color } from '../../utils/helper';
 
+function isValidEmail(email: string) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+function isValidUrl(urlString: string) {
+  try {
+    return Boolean(new URL(urlString));
+  } catch (e) {
+    return false;
+  }
+}
+
 function metadataKeyValues(study: StudyInfoFragment) {
   if (study.metadata) {
     return Object.keys(study.metadata)
-      .map((key) => `${key}: ${study.metadata[key]}`)
+      .map((key) => {
+        const k = `${study.studyId}-${key}-label`;
+        if (isValidUrl(study.metadata[key])) {
+          return (
+            <Badge key={k} color="gray">
+              <Anchor color="gray" component={Link} to={study.metadata[key] as string}>
+                {key}: {study.metadata[key]}
+              </Anchor>
+            </Badge>
+          );
+        }
+
+        if (isValidEmail(study.metadata[key])) {
+          return (
+            <Badge key={k} color="gray">
+              <Anchor color="gray" href={`mailto:${study.metadata[key]}`} target="_blank">
+                {key}: {study.metadata[key]}
+              </Anchor>
+            </Badge>
+          );
+        }
+
+        return (
+          <Badge key={k} color="gray">
+            {key}: {study.metadata[key]}
+          </Badge>
+        );
+      })
       .sort();
   }
   return [];
@@ -17,7 +57,7 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
   const newStudyUrl = `study/${study.studyId}`;
 
   return (
-    <Card shadow="sm" p="lg" radius="md" withBorder>
+    <Card shadow={detailed ? undefined : 'sm'} p="lg" radius="md" withBorder={!detailed}>
       <Card.Section withBorder inheritPadding py="xs">
         <Grid columns={12}>
           <Grid.Col span={8}>
@@ -71,11 +111,7 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
                 }
                 return null;
               })}
-            {metadataKeyValues(study).map((label) => (
-              <Text style={{ marginLeft: '10px' }} key={`${study.studyId}-${label}-label`}>
-                {label}
-              </Text>
-            ))}
+            {metadataKeyValues(study)}
           </Group>
         </Spoiler>
       </Card.Section>

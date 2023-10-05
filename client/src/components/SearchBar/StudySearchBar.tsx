@@ -3,7 +3,8 @@ import { Group, Loader } from '@mantine/core';
 import { StudyInfoFragment, useStudiesQuery } from '../../generated/types';
 import { OntologyItem } from '../../model';
 import { generateOntologyTrees } from '../../utils/helper';
-import { OfferingItem, SearchBar } from './SearchBar';
+import { SearchBar } from './SearchBar';
+import type { OfferingItem } from './interfaces';
 
 function metadataValues(study: StudyInfoFragment) {
   if (study.metadata) {
@@ -62,5 +63,5 @@ export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (stud
       </Group>
     );
   }
-  return <SearchBar ontologies={ontologyTrees} onSearchFiltersUpdate={setFilters} />;
+  return <SearchBar ontologies={ontologyTrees} studies={allStudies} onSearchFiltersUpdate={setFilters} />;
 }

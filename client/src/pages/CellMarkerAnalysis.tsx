@@ -61,7 +61,7 @@ function DifferentialExpressionAnalysis() {
 
   useEffect(() => {
     if (selectedGenes.length > 1) setSelectedGenes(selectedGenes.slice(0, 1));
-  }, []);
+  }, [selectedGenes, setSelectedGenes]);
 
   if (!study) {
     return null;

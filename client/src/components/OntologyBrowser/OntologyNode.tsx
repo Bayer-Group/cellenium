@@ -1,6 +1,8 @@
 import { ActionIcon, createStyles, Group, Text, useMantineTheme } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import { useMemo } from 'react';
 import { OntologyItem } from '../../model';
+import { StudyOverview } from '../../generated/types';
 
 const useStyles = createStyles((theme) => ({
   main: {
@@ -20,6 +22,7 @@ export function OntologyNode({
   level,
   onToggle,
   handleAddOntologyItem,
+  studies,
 }: {
   item: OntologyItem;
   selected: boolean;
@@ -27,9 +30,15 @@ export function OntologyNode({
   level: number;
   onToggle: () => void;
   handleAddOntologyItem: (item: OntologyItem) => void;
+  studies?: StudyOverview & { allOntCodes: string[] }[];
 }) {
   const theme = useMantineTheme();
   const { classes } = useStyles();
+
+  const numberOfStudies = useMemo(() => {
+    return studies?.filter((study) => study.allOntCodes.includes(item.id)).length;
+  }, [item.id, studies]);
+
   return (
     <Group pl={`${level * 10}px`} spacing={0}>
       {hasChildren && (
@@ -38,7 +47,7 @@ export function OntologyNode({
         </ActionIcon>
       )}
       <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs" style={{ cursor: 'pointer' }}>
-        {item.label}
+        {item.label} ({numberOfStudies})
       </Text>
     </Group>
   );

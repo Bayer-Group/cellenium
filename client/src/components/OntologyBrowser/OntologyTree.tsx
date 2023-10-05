@@ -1,8 +1,17 @@
 import { Group, Stack, Text } from '@mantine/core';
 import { OntologyItem } from '../../model';
 import { OntologyBranch } from './OntologyBranch';
+import { StudyOverview } from '../../generated/types';
 
-export function OntologyTree({ ontology, handleAddOntologyItem }: { ontology: OntologyItem; handleAddOntologyItem: (item: OntologyItem) => void }) {
+export function OntologyTree({
+  ontology,
+  handleAddOntologyItem,
+  studies,
+}: {
+  ontology: OntologyItem;
+  handleAddOntologyItem: (item: OntologyItem) => void;
+  studies?: StudyOverview & { allOntCodes: string[] }[];
+}) {
   return (
     <Group position="center" align="center" grow>
       <Stack spacing={0} justify="center" align="flex-start">
@@ -10,7 +19,7 @@ export function OntologyTree({ ontology, handleAddOntologyItem }: { ontology: On
           Choose from:
         </Text>
         {[ontology].map((item: OntologyItem) => (
-          <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={item.id} item={item} level={0} />
+          <OntologyBranch studies={studies} handleAddOntologyItem={handleAddOntologyItem} key={item.id} item={item} level={0} />
         ))}
       </Stack>
     </Group>

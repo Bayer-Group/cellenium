@@ -119,8 +119,9 @@ export const studyState = selector<Study | undefined>({
         // console.log('studyState set', s);
         return s;
       }
+      return undefined;
     }
-    return undefined;
+    return null;
   },
   // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
   dangerouslyAllowMutability: true,

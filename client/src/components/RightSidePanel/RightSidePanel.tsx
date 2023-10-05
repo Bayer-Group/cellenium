@@ -19,7 +19,7 @@ export function RightSidePanel({ children }: { children?: ReactNode }) {
   const { classes } = useStyles();
 
   return (
-    <Navbar height="100vh" width={{ sm: 300 }} style={{ overflowY: 'scroll', minWidth: 300 }}>
+    <Navbar height="100vh" width={{ sm: 300 }} style={{ overflowY: 'scroll', overflowX: 'hidden', minWidth: 300 }}>
       <Navbar.Section grow className={classes.wrapper}>
         <Stack className={classes.main} spacing="md" p={10}>
           {children}
