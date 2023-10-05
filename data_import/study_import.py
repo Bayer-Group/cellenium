@@ -787,8 +787,10 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
 
     with engine.connect() as connection:
         connection.execute(
-            text("""UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id;
-                    SELECT study_definition_update();"""),
+            text(
+                """UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id;
+                   SELECT study_definition_update();"""
+            ),
             {"study_id": study_id},
         )
         connection.connection.commit()

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { StudyCard } from '../StudyCard/StudyCard';
 import { StudyInfoFragment, useSingleStudyInfoQuery } from '../../generated/types';
 import { studyState } from '../../atoms';
-import { StudyCard } from '../StudyCard/StudyCard';
 
 function StudyInfoModal({ opened, onClose, study }: { opened: boolean; onClose: () => void; study: StudyInfoFragment }) {
   return (
