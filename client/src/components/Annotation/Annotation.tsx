@@ -71,8 +71,7 @@ export function Annotation({
       <Grid.Col span={6} style={{ textAlign: 'right' }}>
         {sampleCount ? (
           <Text size="xs" weight={showBold} lineClamp={1}>
-            ({sampleCount}
-            {sampleCountPercentage ? `, ${sampleCountPercentage}%` : null})
+            ({sampleCountPercentage ? `${sampleCountPercentage}%` : null})
           </Text>
         ) : null}
       </Grid.Col>

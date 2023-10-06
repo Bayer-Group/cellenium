@@ -37,10 +37,18 @@ export function AnnotationFilterDisplay() {
 
   const invertSelection = useCallback(() => {
     if (study) {
+      const groups: number[] = [];
       const anns: number[] = [];
       study.annotationGroupMap.forEach((g) => {
         g.annotationValuesList.forEach((ann) => {
-          if (!selectedAnnotationFilter.includes(ann.annotationValueId)) {
+          if (selectedAnnotationFilter.includes(ann.annotationValueId)) {
+            groups.push(g.annotationGroupId);
+          }
+        });
+      });
+      study.annotationGroupMap.forEach((g) => {
+        g.annotationValuesList.forEach((ann) => {
+          if (!selectedAnnotationFilter.includes(ann.annotationValueId) && groups.includes(g.annotationGroupId)) {
             anns.push(ann.annotationValueId);
           }
         });
