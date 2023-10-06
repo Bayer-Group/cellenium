@@ -167,7 +167,7 @@ export const correlationOmicsIdState = atom<number>({
 
 export const userGeneStoreOpenState = atom<boolean>({
   key: 'usergenestoreopen',
-  default: false,
+  default: true,
 });
 export const userGeneStoreCounterColor = atom<string>({
   key: 'usergenestorecountercolor',
