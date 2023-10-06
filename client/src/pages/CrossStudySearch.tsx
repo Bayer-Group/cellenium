@@ -7,7 +7,7 @@ import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQue
 import { allGenesState, cellOAnnotationGroupIdState } from '../atoms';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
-import { NavBar } from '../components/NavBar/NavBar';
+import { NavBarProvider } from '../components/NavBar/NavBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
 function CrossStudySearch() {
@@ -56,9 +56,8 @@ function CrossStudySearch() {
   };
 
   return (
-    <Container fluid>
-      <NavBar />
-      <Space h="xl" />
+    <NavBarProvider scrollable>
+      <Space h="md" />
       <Container size="xl" style={{ paddingBottom: '2rem' }}>
         <GeneSearchBar humanOnly onGeneSelection={(ids) => setOmicsIds(ids)} />
         <Space h="xl" />
@@ -74,14 +73,14 @@ function CrossStudySearch() {
           {loading && <Loader mt="1rem" variant="dots" color="blue" size={25} />}
           {heatmapDisplayData &&
             heatmapDisplayData.map((heatmap) => (
-              <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" h="120rem" align="center" mt="1rem">
+              <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
                 <Text weight="bold">{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
                 <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} />
               </Stack>
             ))}
         </Group>
       </Container>
-    </Container>
+    </NavBarProvider>
   );
 }
 

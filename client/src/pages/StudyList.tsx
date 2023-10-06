@@ -1,30 +1,27 @@
 import { useState } from 'react';
-import { Container, Grid, Space } from '@mantine/core';
+import { Container, Space, Stack } from '@mantine/core';
 import { StudyInfoFragment } from '../generated/types';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
-import { NavBar } from '../components/NavBar/NavBar';
 import { StudyCard } from '../components/StudyCard/StudyCard';
+import { NavBarProvider } from '../components/NavBar/NavBar';
 
 function StudyList() {
   const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
 
   return (
-    <Container fluid>
-      <NavBar />
-      <Space h="xl" />
-      <Container size="xl" style={{ paddingBottom: '2rem' }}>
+    <NavBarProvider scrollable>
+      <Space h="xs" />
+      <Container w="100%" size="xl" p={0}>
         <StudySearchBar onStudyListUpdate={setStudyList} />
       </Container>
-      <Container size="xl">
-        <Grid>
+      <Container w="100%" size="xl">
+        <Stack w="100%" pb="md">
           {studyList.map((study) => (
-            <Grid.Col span={12} key={study.studyId}>
-              <StudyCard study={study} />
-            </Grid.Col>
+            <StudyCard study={study} key={study.studyId} />
           ))}
-        </Grid>
+        </Stack>
       </Container>
-    </Container>
+    </NavBarProvider>
   );
 }
 

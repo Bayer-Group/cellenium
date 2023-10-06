@@ -1,6 +1,7 @@
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
+import { ReactNode } from 'react';
 import ProjPlotIcon from '../../assets/images/logo.svg';
 
 const HEADER_HEIGHT = 60;
@@ -116,5 +117,23 @@ export function NavBar() {
         </Transition>
       </Container>
     </Header>
+  );
+}
+
+export function NavBarProvider({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
+  if (scrollable) {
+    return (
+      <Stack w="100%" h="100%" style={{ overflowY: 'scroll' }}>
+        <NavBar />
+        {children}
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack w="100%" h="100%">
+      <NavBar />
+      {children}
+    </Stack>
   );
 }

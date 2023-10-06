@@ -87,6 +87,8 @@ gql`
     study {
       studyName
       studyId
+      cellCount
+      description
     }
     annotationValue {
       annotationGroup {
