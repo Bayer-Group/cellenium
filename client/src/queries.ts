@@ -79,36 +79,6 @@ gql`
     }
   }
 
-  fragment StudyBasics on Study {
-    studyId
-    studyName
-    studyLayersList {
-      layer
-      studyLayerId
-    }
-    cellCount
-    studyOmicsTransposedList {
-      displayName
-      displaySymbol
-      omicsId
-      omicsType
-    }
-    annotationGroupsList {
-      ...AnnotationGrp
-    }
-    studySampleAnnotationSubsamplingList {
-      annotationValueId
-      studySampleIds
-    }
-    projections
-    studySampleProjectionSubsamplingTransposedList {
-      projectionType
-      studySampleId
-      projection
-      modality
-    }
-  }
-
   fragment DifferentialMarker on DifferentialExpression {
     annotationValueId
     log2Foldchange
@@ -165,9 +135,47 @@ gql`
     }
   }
 
+  fragment StudyBasics on Study {
+    studyId
+    studyName
+    studyLayersList {
+      layer
+      studyLayerId
+    }
+    cellCount
+
+    annotationGroupsList {
+      ...AnnotationGrp
+    }
+    studySampleAnnotationSubsamplingList {
+      annotationValueId
+      studySampleIds
+    }
+    projections
+  }
   query StudyBasics($studyId: Int!) {
     study(studyId: $studyId) {
       ...StudyBasics
+    }
+  }
+  query StudyBasics2($studyId: Int!) {
+    study(studyId: $studyId) {
+      studyOmicsTransposedList {
+        displayName
+        displaySymbol
+        omicsId
+        omicsType
+      }
+    }
+  }
+  query StudyBasics3($studyId: Int!) {
+    study(studyId: $studyId) {
+      studySampleProjectionSubsamplingTransposedList {
+        projectionType
+        studySampleId
+        projection
+        modality
+      }
     }
   }
 

@@ -12,6 +12,12 @@ import {
   CellOAnnotationGroupIdQueryVariables,
   OmicsGeneFragment,
   StudyAnnotationFrontendValue,
+  StudyBasics2Document,
+  StudyBasics2Query,
+  StudyBasics2QueryVariables,
+  StudyBasics3Document,
+  StudyBasics3Query,
+  StudyBasics3QueryVariables,
   StudyBasicsDocument,
   StudyBasicsFragment,
   StudyBasicsQuery,
@@ -74,6 +80,7 @@ export const studyState = selector<Study | undefined>({
     const studyId = get(studyIdState);
     const studyReloadHelper = get(studyReloadHelperState);
     if (studyId && studyReloadHelper) {
+      // study is loaded in three parallel requests, as a performance improvement
       const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
         query: StudyBasicsDocument,
         variables: {
@@ -81,25 +88,40 @@ export const studyState = selector<Study | undefined>({
         },
         fetchPolicy: 'network-only',
       });
-      // could do multiple queries in parallel ... but maybe not needed
+      const response2Promise = apolloClient.query<StudyBasics2Query, StudyBasics2QueryVariables>({
+        query: StudyBasics2Document,
+        variables: {
+          studyId,
+        },
+        fetchPolicy: 'network-only',
+      });
+      const response3Promise = apolloClient.query<StudyBasics3Query, StudyBasics3QueryVariables>({
+        query: StudyBasics3Document,
+        variables: {
+          studyId,
+        },
+        fetchPolicy: 'network-only',
+      });
       const response = await responsePromise;
+      const response2 = await response2Promise;
+      const response3 = await response3Promise;
 
-      if (response?.data?.study) {
-        if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
+      if (response.data?.study) {
+        if (response3.data?.study?.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
           throw Error('no projection data');
         }
-        if (response.data.study.studySampleAnnotationSubsamplingList.length === 0) {
+        if (response.data?.study?.studySampleAnnotationSubsamplingList.length === 0) {
           throw Error('no study annotations');
         }
-        if (response.data.study.studyOmicsTransposedList.length === 0) {
+        if (response2.data?.study?.studyOmicsTransposedList.length === 0) {
           throw Error('no genes');
         }
-        const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
+        const studyOmicsTable = buildOmicsTable(response2.data.study.studyOmicsTransposedList[0]);
         const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
         const s: Study = {
           ...response.data.study,
           samplesProjectionTables: new Map(
-            response.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
+            response3.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
               tl.modality ? `${tl.modality}:${tl.projectionType}` : tl.projectionType,
               buildSampleProjectionTable(tl),
             ]),
