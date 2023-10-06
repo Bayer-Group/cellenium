@@ -182,7 +182,7 @@ function ExpressionAnalysis() {
   const setOpened = useSetRecoilState(userGeneStoreOpenState);
   useEffect(() => {
     setOpened(() => true);
-  }, []);
+  }, [setOpened]);
 
   // const [selectedAnnotationGroup, setSelectedAnnotationGroup] = useState<number>();
   const selectedGenes = useRecoilValue(selectedGenesState);
@@ -218,7 +218,7 @@ function ExpressionAnalysis() {
           {analysisType === 'projection' && <ProjectionSelectBox />}
         </Stack>
       </LeftSidePanel>
-      <main style={{ height: '100vh', overflowY: 'scroll', flexGrow: 1 }} className="plotContainer">
+      <main style={{ height: '100vh', width: '100%', overflowY: 'scroll', flexGrow: 1 }} className="plotContainer">
         {analysisType === 'violinplot' && <ViolinPlots />}
         {analysisType === 'projection' && <ProjectionPlots />}
         {analysisType === 'dotplot' && <DotPlots />}
