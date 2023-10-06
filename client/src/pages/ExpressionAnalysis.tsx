@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Center, Divider, Group, Loader, ScrollArea, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { Center, createStyles, Divider, Group, Loader, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
 import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
@@ -37,8 +37,15 @@ const analysisTypes = [
          */
 ];
 
+const useStyles = createStyles(() => ({
+  scroll: {
+    '::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
+}));
+
 function ViolinPlot({ omicsId }: { omicsId: number }) {
-  const theme = useMantineTheme();
   const studyId = useRecoilValue(studyIdState);
   const studyLayerId = useRecoilValue(studyLayerIdState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
@@ -58,13 +65,13 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
 
   if (data?.violinPlot) {
     return (
-      <Stack align="center" h="30rem">
+      <Stack align="center" h="28rem" pos="relative">
         <img style={{ height: '100%', display: 'block' }} alt="violin plot" src={data.violinPlot} />
       </Stack>
     );
   }
   return (
-    <Stack w="100%" align="center">
+    <Stack w="100%" h="100%" align="center">
       {loading && <Loader variant="dots" color="blue" size="xl" />}
     </Stack>
   );
@@ -72,13 +79,21 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
 
 function ViolinPlots() {
   const selectedGenes = useRecoilValue(selectedGenesState);
+  const { classes } = useStyles();
 
   return (
-    <Stack align="center" pos="relative" pt="1rem" style={{ width: '100%', overflowX: 'hidden' }}>
+    <Stack align="center" pos="relative" style={{ width: '100%', overflowX: 'hidden' }} bg="white">
       {[...selectedGenes].reverse().map((g) => (
         <Stack key={g.omicsId} align="center" w="100%">
           <Title order={3}>{g.displaySymbol}</Title>
-          <ScrollArea h="30rem" w="100%" style={{ overflowX: 'scroll', overflowY: 'hidden', position: 'relative' }}>
+          <ScrollArea
+            h="30rem"
+            type="never"
+            w="100%"
+            m={0}
+            style={{ overflowX: 'scroll', overflowY: 'hidden', position: 'relative' }}
+            className={classes.scroll}
+          >
             <ViolinPlot omicsId={g.omicsId} />
           </ScrollArea>
         </Stack>
@@ -88,7 +103,6 @@ function ViolinPlots() {
 }
 
 function ProjectionPlots() {
-  const theme = useMantineTheme();
   const selectedGenes = useRecoilValue(selectedGenesState);
   const { table, loading } = useExpressionValues(
     selectedGenes.map((g) => g.omicsId),
@@ -123,7 +137,6 @@ function ProjectionPlots() {
 }
 
 function DotPlots() {
-  const theme = useMantineTheme();
   const study = useRecoilValue(studyState);
   const studyLayerId = useRecoilValue(studyLayerIdState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);

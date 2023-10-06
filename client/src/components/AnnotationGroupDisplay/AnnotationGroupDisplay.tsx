@@ -26,6 +26,7 @@ export function AnnotationGroupDisplay({ disableSelection }: { disableSelection?
               color={annot.color}
               annotationId={annot.annotationValueId}
               isSelectable={isSelectable}
+              sampleCountPercentage={((annot.sampleCount / study.cellCount) * 100).toFixed(2)}
             />
           );
         })}

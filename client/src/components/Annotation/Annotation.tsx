@@ -18,12 +18,14 @@ export function Annotation({
   label,
   color,
   sampleCount,
+  sampleCountPercentage,
   annotationId,
   isSelectable = false,
 }: {
   label: string;
   color: string;
   sampleCount: number;
+  sampleCountPercentage: string;
   annotationId: number;
   isSelectable: boolean;
 }) {
@@ -46,7 +48,7 @@ export function Annotation({
 
   return (
     <Grid
-      columns={12}
+      columns={14}
       pl={10}
       gutter={0}
       sx={{ cursor: 'pointer' }}
@@ -66,17 +68,16 @@ export function Annotation({
           </Text>
         </Group>
       </Grid.Col>
-      <Grid.Col span={4} style={{ textAlign: 'right' }}>
+      <Grid.Col span={6} style={{ textAlign: 'right' }}>
         {sampleCount ? (
           <Text size="xs" weight={showBold} lineClamp={1}>
-            ({sampleCount})
+            ({sampleCount}
+            {sampleCountPercentage ? `, ${sampleCountPercentage}%` : null})
           </Text>
         ) : null}
       </Grid.Col>
       <Grid.Col span={1} pl={5}>
-        <div>
-          <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} style={{ border: annotationIsSelected ? '2px solid black' : '' }} />
-        </div>
+        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} style={{ border: annotationIsSelected ? '2px solid black' : '' }} />
       </Grid.Col>
     </Grid>
   );

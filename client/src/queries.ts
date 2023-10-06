@@ -86,6 +86,7 @@ gql`
       layer
       studyLayerId
     }
+    cellCount
     studyOmicsTransposedList {
       displayName
       displaySymbol
