@@ -11541,8 +11541,6 @@ export type SingleStudyInfoQuery = { __typename?: 'Query', studyOverviewsList: A
 
 export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
-
 export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number, cellCount: number, description: string }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
 export type StudiesWithMarkerGenesQueryVariables = Exact<{
@@ -11566,12 +11564,28 @@ export type StudyOmicsQueryVariables = Exact<{
 
 export type StudyOmicsQuery = { __typename?: 'Query', studyOmicsList: Array<{ __typename?: 'StudyOmic', omics: { __typename?: 'OmicsBase', omicsId: number, displayName: string, displaySymbol: string } }> };
 
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }> };
+
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }>, annotationGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleAnnotationSubsamplingList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }> } };
+
+export type StudyBasics2QueryVariables = Exact<{
+  studyId: Scalars['Int'];
+}>;
+
+
+export type StudyBasics2Query = { __typename?: 'Query', study: { __typename?: 'Study', studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }> } };
+
+export type StudyBasics3QueryVariables = Exact<{
+  studyId: Scalars['Int'];
+}>;
+
+
+export type StudyBasics3Query = { __typename?: 'Query', study: { __typename?: 'Study', studySampleProjectionSubsamplingTransposedList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> } };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -11752,55 +11766,6 @@ export const TreeOntologyOverviewFragmentDoc = gql`
   parentOntCodePath
 }
     `;
-export const AnnotationGrpFragmentDoc = gql`
-    fragment AnnotationGrp on StudyAnnotationFrontendGroup {
-  annotationGroupId
-  isPrimary
-  ordering
-  displayGroup
-  differentialExpressionCalculated
-  createdByUser
-  currentUserIsOwner
-  privateToUser
-  annotationValuesList {
-    annotationValueId
-    displayValue
-    color
-    sampleCount
-  }
-}
-    `;
-export const StudyBasicsFragmentDoc = gql`
-    fragment StudyBasics on Study {
-  studyId
-  studyName
-  studyLayersList {
-    layer
-    studyLayerId
-  }
-  cellCount
-  studyOmicsTransposedList {
-    displayName
-    displaySymbol
-    omicsId
-    omicsType
-  }
-  annotationGroupsList {
-    ...AnnotationGrp
-  }
-  studySampleAnnotationSubsamplingList {
-    annotationValueId
-    studySampleIds
-  }
-  projections
-  studySampleProjectionSubsamplingTransposedList {
-    projectionType
-    studySampleId
-    projection
-    modality
-  }
-}
-    ${AnnotationGrpFragmentDoc}`;
 export const DifferentialMarkerFragmentDoc = gql`
     fragment DifferentialMarker on DifferentialExpression {
   annotationValueId
@@ -11837,6 +11802,43 @@ export const OmicsGeneFragmentDoc = gql`
   taxId
 }
     `;
+export const AnnotationGrpFragmentDoc = gql`
+    fragment AnnotationGrp on StudyAnnotationFrontendGroup {
+  annotationGroupId
+  isPrimary
+  ordering
+  displayGroup
+  differentialExpressionCalculated
+  createdByUser
+  currentUserIsOwner
+  privateToUser
+  annotationValuesList {
+    annotationValueId
+    displayValue
+    color
+    sampleCount
+  }
+}
+    `;
+export const StudyBasicsFragmentDoc = gql`
+    fragment StudyBasics on Study {
+  studyId
+  studyName
+  studyLayersList {
+    layer
+    studyLayerId
+  }
+  cellCount
+  annotationGroupsList {
+    ...AnnotationGrp
+  }
+  studySampleAnnotationSubsamplingList {
+    annotationValueId
+    studySampleIds
+  }
+  projections
+}
+    ${AnnotationGrpFragmentDoc}`;
 export const OntologyOverviewFragmentDoc = gql`
     fragment ontologyOverview on Ontology {
   name
@@ -12182,6 +12184,86 @@ export function useStudyBasicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type StudyBasicsQueryHookResult = ReturnType<typeof useStudyBasicsQuery>;
 export type StudyBasicsLazyQueryHookResult = ReturnType<typeof useStudyBasicsLazyQuery>;
 export type StudyBasicsQueryResult = Apollo.QueryResult<StudyBasicsQuery, StudyBasicsQueryVariables>;
+export const StudyBasics2Document = gql`
+    query StudyBasics2($studyId: Int!) {
+  study(studyId: $studyId) {
+    studyOmicsTransposedList {
+      displayName
+      displaySymbol
+      omicsId
+      omicsType
+    }
+  }
+}
+    `;
+
+/**
+ * __useStudyBasics2Query__
+ *
+ * To run a query within a React component, call `useStudyBasics2Query` and pass it any options that fit your needs.
+ * When your component renders, `useStudyBasics2Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudyBasics2Query({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useStudyBasics2Query(baseOptions: Apollo.QueryHookOptions<StudyBasics2Query, StudyBasics2QueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
+      }
+export function useStudyBasics2LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasics2Query, StudyBasics2QueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
+        }
+export type StudyBasics2QueryHookResult = ReturnType<typeof useStudyBasics2Query>;
+export type StudyBasics2LazyQueryHookResult = ReturnType<typeof useStudyBasics2LazyQuery>;
+export type StudyBasics2QueryResult = Apollo.QueryResult<StudyBasics2Query, StudyBasics2QueryVariables>;
+export const StudyBasics3Document = gql`
+    query StudyBasics3($studyId: Int!) {
+  study(studyId: $studyId) {
+    studySampleProjectionSubsamplingTransposedList {
+      projectionType
+      studySampleId
+      projection
+      modality
+    }
+  }
+}
+    `;
+
+/**
+ * __useStudyBasics3Query__
+ *
+ * To run a query within a React component, call `useStudyBasics3Query` and pass it any options that fit your needs.
+ * When your component renders, `useStudyBasics3Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudyBasics3Query({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useStudyBasics3Query(baseOptions: Apollo.QueryHookOptions<StudyBasics3Query, StudyBasics3QueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
+      }
+export function useStudyBasics3LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasics3Query, StudyBasics3QueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
+        }
+export type StudyBasics3QueryHookResult = ReturnType<typeof useStudyBasics3Query>;
+export type StudyBasics3LazyQueryHookResult = ReturnType<typeof useStudyBasics3LazyQuery>;
+export type StudyBasics3QueryResult = Apollo.QueryResult<StudyBasics3Query, StudyBasics3QueryVariables>;
 export const ExpressionByOmicsIdsDocument = gql`
     query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: String) {
   expressionByOmicsIdsList(
