@@ -97,7 +97,10 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: Props) {
   );
 
   useEffect(() => {
+    setValue('');
+    setOfferings([]);
     setSelectedFilters([]);
+    onGeneSelection([]);
   }, [species]);
 
   return (
@@ -154,6 +157,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: Props) {
                     setValue('');
                     setOfferings([]);
                     setSelectedFilters([]);
+                    onGeneSelection([]);
                   }}
                 >
                   <IconX />

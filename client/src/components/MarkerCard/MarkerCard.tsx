@@ -17,21 +17,23 @@ export function MarkerCard({ data }: { data: DifferentialMarkerFragment }) {
   const { classes } = useStyles();
   const newStudyUrl = `/study/${data.study.studyId}?page=CellMarkerAnalysis&annotationGroupId=${data.annotationValue.annotationGroup.annotationGroupId}&annotationValueId=${data.annotationValueId}&omicsId=${data.omics.omicsId}`;
   return (
-    <Card pr={0} shadow="sm" p="lg" radius="md" withBorder component={Link} to={newStudyUrl}>
+    <Card m={10} style={{ width: '25em' }} shadow="sm" p="lg" radius="md" withBorder component={Link} to={newStudyUrl}>
       <Card.Section className={classes.main} withBorder inheritPadding py="xs">
         <Group position="left" spacing="xs" noWrap pr={20}>
           <Stack spacing={4} justify="flex-end" align="flex-start" style={{ minWidth: 90 }}>
             <Text span fw={100} lineClamp={1} size="xs">
-              Cell annotation
+              Annotation group
             </Text>
             <Text fw={100} size="xs">
-              Study
+              Annotation
             </Text>
           </Stack>
           <Stack spacing={4} justify="flex-start">
-            <Text fw={700} lineClamp={1} size="xs">{`${data.annotationValue.displayValue} (${data.annotationValue.annotationGroup.displayGroup})`}</Text>
             <Text fw={700} lineClamp={1} size="xs">
-              {data.study.studyName}
+              {data.annotationValue.annotationGroup.displayGroup}
+            </Text>
+            <Text fw={700} lineClamp={1} size="xs">
+              {data.annotationValue.displayValue}
             </Text>
           </Stack>
         </Group>
