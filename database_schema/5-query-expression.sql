@@ -267,7 +267,9 @@ with expr as (select e.study_layer_id, sample_id, e.omics_id, value
                  and sample_id not in (select exclude_sample_id
                                        from study_sample_annotation exclude_ssa
                                                 cross join unnest(exclude_ssa.study_sample_ids) exclude_sample_id
-                                       where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids))
+                                                join study_layer sl on exclude_ssa.study_id = sl.study_id
+                                       where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids)
+                                         and sl.study_layer_id = any (p_study_layer_ids))
                order by 1, 2)
 select expr.study_layer_id,
        expr.omics_id,
