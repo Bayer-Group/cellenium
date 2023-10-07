@@ -136,18 +136,18 @@ export function LeftSidePanel({ children }: Props) {
   ));
 
   return (
-    <Navbar style={{ height: '100vh', minWidth: 300 }} width={{ sm: 300 }}>
+    <Navbar zIndex={150} h="100%" miw={300} w={300}>
       <Navbar.Section grow className={classes.wrapper}>
         <div className={classes.aside}>
           <div className={classes.logo}>
-            <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
+            <NavLink to="/" color="black" style={{ textDecoration: 'none', userSelect: 'none' }}>
               <img src={CelleniumLogo} alt="cellenium logo" />
             </NavLink>
           </div>
           <Stack mt="md">{mainLinks}</Stack>
         </div>
         <div className={classes.main}>
-          <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
+          <NavLink to="/" color="black" style={{ textDecoration: 'none', userSelect: 'none' }}>
             <Title order={4} className={classes.title}>
               cellenium
             </Title>
