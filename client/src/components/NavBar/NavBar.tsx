@@ -83,7 +83,7 @@ export function NavBar() {
   ));
 
   return (
-    <Header w="100%" height={HEADER_HEIGHT} zIndex={1000}>
+    <Header w="100%" height={HEADER_HEIGHT} zIndex={150}>
       <Group className={classes.inner} p="md" style={{ alignContent: 'center' }}>
         <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
           <Group spacing={5}>
