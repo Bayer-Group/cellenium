@@ -58,7 +58,7 @@ export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (stud
 
   if (loading) {
     return (
-      <Group position="center">
+      <Group position="center" align="center" w="100%">
         <Loader variant="dots" color="blue" />
       </Group>
     );

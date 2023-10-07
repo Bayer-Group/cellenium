@@ -12,7 +12,7 @@ export function UserGeneStore({ multiple = false, findCoexpressors = false }: { 
   const [userGeneStore, setUserGeneStore] = useRecoilState(userGenesState);
   const [, setSelectedGenes] = useRecoilState(selectedGenesState);
   return (
-    <Stack>
+    <Stack w="100%">
       <AddGene multipleSelected={multiple} />
       <Group
         onClick={() => {

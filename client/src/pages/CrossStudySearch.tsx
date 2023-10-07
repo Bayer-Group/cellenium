@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Center, Container, Group, Loader, Space, Stack, Text } from '@mantine/core';
+import { Center, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ScenegraphEvent } from 'vega';
@@ -57,8 +57,7 @@ function CrossStudySearch() {
 
   return (
     <NavBarProvider scrollable>
-      <Space h="md" />
-      <Container size="xl" style={{ paddingBottom: '2rem' }}>
+      <Stack p="md" spacing={0}>
         <GeneSearchBar humanOnly onGeneSelection={(ids) => setOmicsIds(ids)} />
         <Space h="xl" />
         <StudySearchBar onStudyListUpdate={setStudyList} />
@@ -79,7 +78,7 @@ function CrossStudySearch() {
               </Stack>
             ))}
         </Group>
-      </Container>
+      </Stack>
     </NavBarProvider>
   );
 }

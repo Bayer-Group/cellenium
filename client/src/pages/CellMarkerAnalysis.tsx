@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Divider, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState } from '../atoms';
 import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
@@ -30,7 +30,6 @@ import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 // }
 
 function ProjectionPlotWithOptionalExpression() {
-  const theme = useMantineTheme();
   const selectedGenes = useRecoilValue(selectedGenesState);
   const { table, loading } = useExpressionValues(
     selectedGenes.map((g) => g.omicsId),

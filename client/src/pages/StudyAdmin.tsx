@@ -96,8 +96,6 @@ export default function StudyAdmin() {
     },
   ];
 
-  console.log('RENDER');
-
   return (
     <Container fluid>
       <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />

@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { MantineProvider, Stack } from '@mantine/core';
+import { MantineProvider, Stack, Text } from '@mantine/core';
 import './assets/fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -79,7 +79,7 @@ root.render(
         <React.Suspense fallback={<GlobalLoading />}>
           <Notifications />
           <ModalsProvider>
-            <Stack w="100vw" h="100vh" style={{ overflow: 'hidden' }}>
+            <Stack w="100vw" pos="relative" spacing={0} h="100vh" style={{ overflow: 'hidden' }}>
               <RouterProvider router={router} />
             </Stack>
           </ModalsProvider>

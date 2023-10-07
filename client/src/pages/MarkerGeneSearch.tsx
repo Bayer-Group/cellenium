@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Anchor, Badge, Card, Center, Container, Grid, Group, Loader, SimpleGrid, Space, Stack, Text } from '@mantine/core';
+import { Anchor, Badge, Card, Center, Grid, Group, Loader, SimpleGrid, Stack, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { DifferentialMarkerFragment, useStudiesWithMarkerGenesQuery } from '../generated/types';
 import { NavBarProvider } from '../components/NavBar/NavBar';
@@ -15,7 +15,7 @@ interface StudySummary {
 }
 
 function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
-  const newStudyUrl = `study/${study.studyId}`;
+  const newStudyUrl = `/study/${study.studyId}`;
 
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -44,7 +44,16 @@ function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
         {study.description}
       </Text>
       <Card.Section withBorder inheritPadding py="xs">
-        <SimpleGrid cols={3} style={{ maxHeight: '20rem', overflowY: 'scroll' }} className="no-scrollbar">
+        <SimpleGrid
+          breakpoints={[
+            { maxWidth: 'md', cols: 1 },
+            { maxWidth: 'xl', cols: 2 },
+            { minWidth: 'xl', cols: 3 },
+          ]}
+          style={{ maxHeight: '20rem', overflowY: 'scroll', justifyItems: 'center' }}
+          className="no-scrollbar"
+          spacing="xs"
+        >
           {study.differentialExpressionsList.map((sr: DifferentialMarkerFragment) => (
             <MarkerCard data={sr} key={`${sr.study.studyId}_${sr.annotationValueId}`} />
           ))}
@@ -91,8 +100,7 @@ function MarkerGeneSearch() {
 
   return (
     <NavBarProvider scrollable>
-      <Space h="xl" />
-      <Container w="100%" size="xl" style={{ paddingBottom: '2rem' }}>
+      <Stack p="md" spacing={0}>
         <GeneSearchBar humanOnly={false} onGeneSelection={(ids: number[]) => setOmicsIds(ids)} />
         <Center style={{ width: '100%' }} m="sm">
           {loading && <Loader variant="dots" color="blue" size={25} />}
@@ -107,14 +115,16 @@ function MarkerGeneSearch() {
         {studySummaries && studySummaries.length > 0 && (
           <>
             <Center style={{ width: '100%' }}>
-              <Text color="dimmed">
+              <Text color="dimmed" align="center">
                 {omicsIds.length === 1
                   ? 'The gene is differentially expressed in the studies below.'
                   : 'At least one of the genes is differentially expressed in the studies below.'}
               </Text>
             </Center>
             <Center style={{ width: '100%' }} mb="sm">
-              <Text color="dimmed">The half volcano plot highlights the gene among other differentially expressed genes in the same study and annotation.</Text>
+              <Text align="center" color="dimmed">
+                The half volcano plot highlights the gene among other differentially expressed genes in the same study and annotation.
+              </Text>
             </Center>
             <Stack>
               {studySummaries.map((s) => (
@@ -123,7 +133,7 @@ function MarkerGeneSearch() {
             </Stack>
           </>
         )}
-      </Container>
+      </Stack>
     </NavBarProvider>
   );
 }

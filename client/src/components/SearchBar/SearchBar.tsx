@@ -133,7 +133,7 @@ export function SearchBar({
   }, [ontologies, selectedFilters, studies]);
 
   return (
-    <Group position="left" align="flex-end" spacing={4}>
+    <Group position="left" align="flex-end" w="100%" spacing={4}>
       <ActionIcon onClick={showOntologyBrowser} size="xl" variant="default">
         <IconBinaryTree color="lightgray" />
       </ActionIcon>

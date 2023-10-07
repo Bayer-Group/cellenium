@@ -138,7 +138,6 @@ export const studyState = selector<Study | undefined>({
               .map((v: Struct) => [v.annotationValueId, v as StudyAnnotationFrontendValue]),
           ),
         };
-        // console.log('studyState set', s);
         return s;
       }
       return undefined;

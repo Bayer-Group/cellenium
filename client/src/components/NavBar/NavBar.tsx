@@ -19,22 +19,13 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
-
-  links: {
-    paddingTop: '2.5rem',
+  mainLinks: {
+    marginRight: -theme.spacing.sm,
     height: HEADER_HEIGHT,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
     [theme.fn.smallerThan('md')]: {
       display: 'none',
     },
   },
-
-  mainLinks: {
-    marginRight: -theme.spacing.sm,
-  },
-
   mainLink: {
     textTransform: 'uppercase',
     textDecoration: 'none',
@@ -92,19 +83,17 @@ export function NavBar() {
   ));
 
   return (
-    <Header height={HEADER_HEIGHT} zIndex={1000}>
-      <Container className={classes.inner} fluid>
+    <Header w="100%" height={HEADER_HEIGHT} zIndex={1000}>
+      <Group className={classes.inner} p="md" style={{ alignContent: 'center' }}>
         <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
           <Group spacing={5}>
             <img src={ProjPlotIcon} alt="proj plot icon" />
             <Title>cellenium</Title>
           </Group>
         </NavLink>
-        <div className={classes.links}>
-          <Group spacing="sm" position="right" className={classes.mainLinks}>
-            {mainItems}
-          </Group>
-        </div>
+        <Group spacing="sm" position="right" className={classes.mainLinks}>
+          {mainItems}
+        </Group>
         <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
         <Transition transition="scale-y" duration={200} mounted={opened}>
           {(styles) => (
@@ -115,7 +104,7 @@ export function NavBar() {
             </Paper>
           )}
         </Transition>
-      </Container>
+      </Group>
     </Header>
   );
 }
@@ -123,15 +112,17 @@ export function NavBar() {
 export function NavBarProvider({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
   if (scrollable) {
     return (
-      <Stack w="100%" h="100%" style={{ overflowY: 'scroll' }}>
+      <Stack w="100%" h="100%" style={{ overflowY: 'scroll' }} pos="relative" spacing={0}>
         <NavBar />
-        {children}
+        <Container w="100%" size="xl" p={0} pb="md">
+          {children}
+        </Container>
       </Stack>
     );
   }
 
   return (
-    <Stack w="100%" h="100%">
+    <Stack w="100%" h="100%" style={{ overflowY: 'hidden', overflowX: 'hidden' }} spacing={0}>
       <NavBar />
       {children}
     </Stack>

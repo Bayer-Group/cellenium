@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Center, Divider, Group, Loader, Space, Stack, Text, useMantineTheme } from '@mantine/core';
+import { Center, Divider, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   correlationOmicsIdState,
@@ -27,7 +27,6 @@ import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 // }
 
 function CoexpressionAnalysisPlot() {
-  const theme = useMantineTheme();
   const selectedGenes = useRecoilValue(selectedGenesState);
   const studyId = useRecoilValue(studyIdState);
   const studyLayerId = useRecoilValue(studyLayerIdState);

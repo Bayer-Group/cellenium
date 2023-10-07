@@ -53,7 +53,9 @@
     "format": "prettier . --write",
     "check-format": "prettier . --check",
     "lint": "eslint --cache --no-error-on-unmatched-pattern src/**/*.ts{,x}",
-    "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern  src/**/*.ts{,x}"
+    "lint:fix": "eslint --cache --fix --no-error-on-unmatched-pattern  src/**/*.ts{,x}",
+    "quality": "yarn run check-format && yarn run lint",
+    "quality:fix": "yarn run format && yarn run lint:fix"
   },
   "browserslist": {
     "production": [

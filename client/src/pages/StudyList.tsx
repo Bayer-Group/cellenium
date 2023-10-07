@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Space, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import { StudyInfoFragment } from '../generated/types';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { StudyCard } from '../components/StudyCard/StudyCard';
@@ -10,17 +10,14 @@ function StudyList() {
 
   return (
     <NavBarProvider scrollable>
-      <Space h="xs" />
-      <Container w="100%" size="xl" p={0}>
+      <Stack p="md" spacing={0}>
         <StudySearchBar onStudyListUpdate={setStudyList} />
-      </Container>
-      <Container w="100%" size="xl">
-        <Stack w="100%" pb="md">
+        <Stack w="100%" pb="md" mt="1rem">
           {studyList.map((study) => (
             <StudyCard study={study} key={study.studyId} />
           ))}
         </Stack>
-      </Container>
+      </Stack>
     </NavBarProvider>
   );
 }
