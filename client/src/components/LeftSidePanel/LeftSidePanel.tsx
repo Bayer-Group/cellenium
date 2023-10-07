@@ -140,14 +140,14 @@ export function LeftSidePanel({ children }: Props) {
       <Navbar.Section grow className={classes.wrapper}>
         <div className={classes.aside}>
           <div className={classes.logo}>
-            <NavLink to="/" color="black" style={{ textDecoration: 'none', userSelect: 'none' }}>
+            <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
               <img src={CelleniumLogo} alt="cellenium logo" />
             </NavLink>
           </div>
           <Stack mt="md">{mainLinks}</Stack>
         </div>
         <div className={classes.main}>
-          <NavLink to="/" color="black" style={{ textDecoration: 'none', userSelect: 'none' }}>
+          <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
             <Title order={4} className={classes.title}>
               cellenium
             </Title>
