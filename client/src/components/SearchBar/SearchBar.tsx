@@ -1,4 +1,4 @@
-import { ActionIcon, Autocomplete, Badge, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Autocomplete, Badge, createStyles, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
 import { closeModal, openModal } from '@mantine/modals';
@@ -27,6 +27,16 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItem({ v
   );
 });
 
+const useStyles = createStyles(() => ({
+  grow: {
+    flexGrow: 1,
+  },
+  filterGroup: {
+    border: '1px lightgray solid',
+    borderRadius: 5,
+  },
+}));
+
 export function SearchBar({
   ontologies,
   onSearchFiltersUpdate,
@@ -36,6 +46,7 @@ export function SearchBar({
   onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
   studies?: StudyOverview[];
 }) {
+  const { classes } = useStyles();
   const theme = useMantineTheme();
   const [value, setValue] = useState<string>('');
   const [offerings, setOfferings] = useState<OfferingItem[]>([]);
@@ -132,64 +143,47 @@ export function SearchBar({
     }
   }, [ontologies, selectedFilters, studies]);
 
+  const clearInput = useCallback(() => {
+    setValue('');
+    setOfferings([]);
+    setSelectedFilters([]);
+  }, []);
+
   return (
-    <Group position="left" align="flex-end" w="100%" spacing={4}>
+    <Group position="left" align="flex-end" w="100%" spacing={4} noWrap>
       <ActionIcon onClick={showOntologyBrowser} size="xl" variant="default">
         <IconBinaryTree color="lightgray" />
       </ActionIcon>
 
-      <Stack spacing={0} style={{ flexGrow: 1 }}>
+      <Stack spacing={0} w="100%">
         <Text size="xs" weight={800}>
           Filter studies by disease (MESH), tissue (NCIT), species, cell type (CO) or title / description
         </Text>
 
-        <Group
-          spacing={4}
-          position="left"
-          align="center"
-          style={{
-            border: '1px lightgray solid',
-            borderRadius: 5,
-            paddingLeft: 4,
-          }}
-        >
+        <Group spacing={4} position="left" align="center" className={classes.filterGroup} pl={4} noWrap>
           {loading ? <Loader size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
           <Group spacing={2}>
             {selectedFilters.map((filter) => {
               return <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove} item={filter} />;
             })}
           </Group>
-          <div style={{ flexGrow: 1 }}>
-            <Autocomplete
-              onChange={handleChange}
-              onItemSubmit={handleSubmit}
-              value={value}
-              itemComponent={SelectItem}
-              variant="unstyled"
-              styles={{
-                label: {
-                  fontWeight: 500,
-                  fontSize: '0.8rem',
-                  display: 'inline-block',
-                },
-              }}
-              data={offerings}
-              filter={() => true}
-              size="md"
-              placeholder="lung, cancer, heart"
-              rightSection={
-                <ActionIcon
-                  onClick={() => {
-                    setValue('');
-                    setOfferings([]);
-                    setSelectedFilters([]);
-                  }}
-                >
-                  <IconX />
-                </ActionIcon>
-              }
-            />
-          </div>
+          <Autocomplete
+            onChange={handleChange}
+            onItemSubmit={handleSubmit}
+            value={value}
+            itemComponent={SelectItem}
+            variant="unstyled"
+            data={offerings}
+            filter={() => true}
+            size="md"
+            w="100%"
+            placeholder="lung, cancer, heart, ..."
+            rightSection={
+              <ActionIcon onClick={clearInput}>
+                <IconX />
+              </ActionIcon>
+            }
+          />
         </Group>
       </Stack>
     </Group>

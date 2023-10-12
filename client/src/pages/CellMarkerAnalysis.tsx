@@ -12,22 +12,6 @@ import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { DEGTable } from '../components/DEGTable/DEGTable';
 
-// const ANNOTATIONS = [
-//     {label: "bone cell", color: "#1f77b4"},
-//     {label: "chondrocyte", color: "#ff7f0e"},
-//     {label: "endothelial cell", color: "#2ca02c"},
-//     {label: "endothelial cell of artery", color: "#d62728"},
-//     {label: "fibroblast", color: "#9467bd"},
-//     {label: "mesenchymal stem cell", color: "#8c564b"},
-//     {label: "pericyte cell", color: "#e377c2"}
-// ]
-
-// interface PreparedPlot {
-//     message?: string;
-//     plotlyData: Partial<Plotly.PlotData>[];
-//     plotlyLayout: Partial<Plotly.Layout>;
-// }
-
 function ProjectionPlotWithOptionalExpression() {
   const selectedGenes = useRecoilValue(selectedGenesState);
   const { table, loading } = useExpressionValues(

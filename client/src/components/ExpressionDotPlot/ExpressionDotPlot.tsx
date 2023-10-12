@@ -1,8 +1,16 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { View, VisualizationSpec } from 'react-vega';
 import { ScenegraphEvent } from 'vega';
-import { Center, Loader } from '@mantine/core';
+import { Center, createStyles, Loader } from '@mantine/core';
 import { DotPlotElementFragment } from '../../generated/types';
+
+const useStyles = createStyles(() => ({
+  plot: {
+    height: '100%',
+    width: '100%',
+    maxHeight: '75%',
+  },
+}));
 
 function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: boolean) {
   return {
@@ -85,6 +93,7 @@ export function ExpressionDotPlot({
   onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void;
   responsiveHeight?: boolean;
 }) {
+  const { classes } = useStyles();
   const VegaLite = lazy(() => import('react-vega/lib/VegaLite'));
   const spec = useMemo(() => createSpec(xAxis, responsiveHeight), [responsiveHeight, xAxis]);
 
@@ -100,7 +109,7 @@ export function ExpressionDotPlot({
   return (
     <Suspense
       fallback={
-        <Center style={{ height: '100%', width: '100%' }}>
+        <Center h="100%" w="100%">
           <Loader variant="dots" color="blue" />
         </Center>
       }
@@ -115,7 +124,7 @@ export function ExpressionDotPlot({
         data={{
           table: data,
         }}
-        style={{ height: '100%', width: '100%', maxHeight: '75%' }}
+        className={classes.plot}
       />
     </Suspense>
   );

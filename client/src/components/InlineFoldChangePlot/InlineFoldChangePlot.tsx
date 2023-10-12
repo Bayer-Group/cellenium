@@ -19,7 +19,7 @@ export function InlineFoldChangePlot({
       annotationValueId,
     },
   });
-  if (loading) return <Loader variant="dots" />;
+  if (loading) return <Loader variant="dots" color="blue" />;
   return (
     <Plot
       config={{

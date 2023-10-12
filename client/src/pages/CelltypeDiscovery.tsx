@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Box, Button, Group, Loader, Overlay, Stack, Text, TextInput } from '@mantine/core';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, Button, Center, Group, Loader, Overlay, Stack, Text, TextInput } from '@mantine/core';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import * as aq from 'arquero';
 import Plot from 'react-plotly.js';
@@ -48,14 +48,25 @@ function CoexpressionPlot({
   onDoubleClick: () => void;
 }) {
   const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
-  const omicsX = omicsAll[stateOffset * 2];
-  const omicsY = omicsAll[stateOffset * 2 + 1];
-  const setOmicsX = (omics: Omics | null) => setOmicsAll((prev) => prev.map((o, i) => (i === stateOffset * 2 ? omics : o)));
-  const setOmicsY = (omics: Omics | null) => setOmicsAll((prev) => prev.map((o, i) => (i === stateOffset * 2 + 1 ? omics : o)));
-  const { table, loading } = useExpressionValues(omicsX && omicsY ? [omicsX.omicsId, omicsY.omicsId] : [], false);
-
   const celltypeDiscoveryCoexpressionSamples = useRecoilValue(celltypeDiscoveryCoexpressionSamplesState);
-  const filterSampleIds = celltypeDiscoveryCoexpressionSamples[stateOffset];
+
+  const { omicsX, omicsY, filterSampleIds } = useMemo(() => {
+    return {
+      omicsX: omicsAll[stateOffset * 2],
+      omicsY: omicsAll[stateOffset * 2 + 1],
+      filterSampleIds: celltypeDiscoveryCoexpressionSamples[stateOffset],
+    };
+  }, [celltypeDiscoveryCoexpressionSamples, omicsAll, stateOffset]);
+
+  const setOmicsX = useCallback(
+    (omics: Omics | null) => setOmicsAll((prev) => prev.map((o, i) => (i === stateOffset * 2 ? omics : o))),
+    [setOmicsAll, stateOffset],
+  );
+  const setOmicsY = useCallback(
+    (omics: Omics | null) => setOmicsAll((prev) => prev.map((o, i) => (i === stateOffset * 2 + 1 ? omics : o))),
+    [setOmicsAll, stateOffset],
+  );
+  const { table, loading } = useExpressionValues(omicsX && omicsY ? [omicsX.omicsId, omicsY.omicsId] : [], false);
 
   const preparedPlot = useMemo(() => {
     if (!table || !omicsX || !omicsY) {
@@ -127,7 +138,7 @@ function CoexpressionPlot({
   }, [filterSampleIds, omicsX, omicsY, table]);
 
   return (
-    <div style={{ width: '100%' }}>
+    <Stack w="100%">
       <Group>
         <Group>
           <Text>X</Text>
@@ -139,17 +150,14 @@ function CoexpressionPlot({
         </Group>
       </Group>
       {preparedPlot && !preparedPlot.message && (
-        <Plot
-          data={preparedPlot.plotlyData}
-          layout={preparedPlot.plotlyLayout}
-          config={plotlyConfig}
-          onSelected={onSelection}
-          onDeselect={onDoubleClick}
-          style={{ marginTop: '1rem' }}
-        />
+        <Plot data={preparedPlot.plotlyData} layout={preparedPlot.plotlyLayout} config={plotlyConfig} onSelected={onSelection} onDeselect={onDoubleClick} />
       )}
-      {!preparedPlot && <div style={{ height: 250, width: 250 }}>{loading && <Loader variant="dots" />}</div>}
-    </div>
+      {!preparedPlot && (
+        <Center h="250px" w="250px">
+          {loading && <Loader variant="dots" color="blue" />}
+        </Center>
+      )}
+    </Stack>
   );
 }
 
@@ -159,13 +167,18 @@ function CelltypeDiscovery() {
   const [omicsAll, setOmicsAll] = useRecoilState(celltypeDiscoveryGenesState);
   const [celltypeDiscoveryCoexpressionSamples, setCelltypeDiscoveryCoexpressionSamples] = useRecoilState(celltypeDiscoveryCoexpressionSamplesState);
   const [, setSelected] = useRecoilState(selectedAnnotationState);
+  const [annotationName, setAnnotationName] = useState('');
+  const [saveUserAnnotationMutation, { loading: saveUserAnnotationLoading }] = useSaveUserAnnotationMutation();
+  const setStudyReloadHelper = useSetRecoilState(studyReloadHelperState);
+
+  // convenient default for gene input
+  const userGenes = useRecoilValue(userGenesState);
+  const [selectedSampleIds, setSelectedSampleIds] = useState<number[] | null>(null);
 
   useEffect(() => {
     setSelected(0);
   }, []);
 
-  // convenient default for gene input
-  const userGenes = useRecoilValue(userGenesState);
   useEffect(() => {
     if (!omicsAll[0] && !omicsAll[1]) {
       if (userGenes.length > 1) {
@@ -176,29 +189,26 @@ function CelltypeDiscovery() {
     }
   }, [omicsAll, userGenes]);
 
-  const [selectedSampleIds, setSelectedSampleIds] = useState<number[] | null>(null);
-
-  const onCoexpressionSelection = (event: Readonly<Plotly.PlotSelectionEvent>) => {
+  const onCoexpressionSelection = useCallback((event: Readonly<Plotly.PlotSelectionEvent>) => {
     const theelectedSampleIds = event.points.map((p) => p.customdata) as number[];
     setSelectedSampleIds(theelectedSampleIds);
-  };
-  const onCoexpressionDoubleClick = () => {
+  }, []);
+  const onCoexpressionDoubleClick = useCallback(() => {
     setSelectedSampleIds([]);
-  };
+  }, []);
 
-  const newPlotBasedOnSelectedSamples = () => {
+  const newPlotBasedOnSelectedSamples = useCallback(() => {
     setOmicsAll((prev) => [...prev, prev[prev.length - 2], prev[prev.length - 1]]);
     setCelltypeDiscoveryCoexpressionSamples((prev) => [...prev, selectedSampleIds]);
     setSelectedSampleIds(null);
-  };
-  const removeLastPlot = () => {
+  }, [selectedSampleIds, setCelltypeDiscoveryCoexpressionSamples, setOmicsAll]);
+
+  const removeLastPlot = useCallback(() => {
     setOmicsAll((prev) => prev.slice(0, prev.length - 2));
     setCelltypeDiscoveryCoexpressionSamples((prev) => prev.slice(0, prev.length - 1));
-  };
-  const [annotationName, setAnnotationName] = useState('');
-  const [saveUserAnnotationMutation, { loading: saveUserAnnotationLoading }] = useSaveUserAnnotationMutation();
-  const setStudyReloadHelper = useSetRecoilState(studyReloadHelperState);
-  const saveUserAnnotation = () => {
+  }, [setCelltypeDiscoveryCoexpressionSamples, setOmicsAll]);
+
+  const saveUserAnnotation = useCallback(() => {
     if (study && selectedSampleIds && selectedSampleIds.length > 0) {
       const omicsX = omicsAll[(celltypeDiscoveryCoexpressionSamples.length - 1) * 2];
       const omicsY = omicsAll[(celltypeDiscoveryCoexpressionSamples.length - 1) * 2 + 1];
@@ -230,7 +240,7 @@ function CelltypeDiscovery() {
           });
         });
     }
-  };
+  }, [annotationName, celltypeDiscoveryCoexpressionSamples.length, omicsAll, saveUserAnnotationMutation, selectedSampleIds, setStudyReloadHelper, study]);
 
   if (!study) {
     return null;
@@ -238,15 +248,13 @@ function CelltypeDiscovery() {
   return (
     <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
-        <Stack>
-          {annotationGroupId && <AnnotationGroupSelectBox />}
-          {annotationGroupId && <AnnotationGroupDisplay disableSelection />}
-          <UserAnnotationAdminPanel />
-        </Stack>
+        {annotationGroupId && <AnnotationGroupSelectBox />}
+        {annotationGroupId && <AnnotationGroupDisplay disableSelection />}
+        <UserAnnotationAdminPanel />
       </LeftSidePanel>
-      <main style={{ flexGrow: 1, height: '100%', position: 'relative' }}>
+      <Group grow h="100%" pos="relative">
         <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
-      </main>
+      </Group>
       <RightSidePanel>
         <Text size="xs" color="gray" align="justify">
           After entering two marker genes, their coexpression plot shows. Select an area (e.g. high expression of one gene, low expression of the other) to

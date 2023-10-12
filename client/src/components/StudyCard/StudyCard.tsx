@@ -1,6 +1,7 @@
-import { ActionIcon, Anchor, Badge, Card, Grid, Group, Spoiler, Text } from '@mantine/core';
+import { ActionIcon, Anchor, Badge, Card, createStyles, Grid, Group, Spoiler, Text } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
 import { StudyInfoFragment } from '../../generated/types';
 import { ontology2Color } from '../../utils/helper';
 
@@ -17,7 +18,7 @@ function isValidUrl(urlString: string) {
   }
 }
 
-function metadataKeyValues(study: StudyInfoFragment) {
+function MetadataKeyValues(study: StudyInfoFragment) {
   if (study.metadata) {
     return Object.keys(study.metadata)
       .map((key) => {
@@ -53,8 +54,39 @@ function metadataKeyValues(study: StudyInfoFragment) {
   return [];
 }
 
+const useStyles = createStyles(() => ({
+  fontSize: {
+    fontSize: 12,
+  },
+  detailed: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  },
+}));
+
 export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detailed?: boolean }) {
+  const { classes } = useStyles();
   const newStudyUrl = `study/${study.studyId}`;
+
+  const ontologyBadges = useMemo(() => {
+    return (
+      study.studyOntologyList &&
+      study.studyOntologyList.map((item) => {
+        if (item.labels !== null) {
+          return item.labels.map((label) => (
+            <Badge color={ontology2Color(item.ontology)} key={`${study.studyId}-${label}-badge`}>
+              {label}
+            </Badge>
+          ));
+        }
+        return null;
+      })
+    );
+  }, [study.studyId, study.studyOntologyList]);
+
+  const openExternal = useCallback(() => {
+    window.open(study.externalWebsite, '_blank');
+  }, [study.externalWebsite]);
 
   return (
     <Card shadow={detailed ? undefined : 'sm'} p="lg" radius="md" withBorder={!detailed}>
@@ -62,7 +94,7 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
         <Grid columns={12}>
           <Grid.Col span={8}>
             <Anchor component={Link} to={detailed ? '' : newStudyUrl} color="dark">
-              <Text align="left" lineClamp={detailed ? undefined : 1} sx={detailed ? {} : { textOverflow: 'ellipsis', overflow: 'hidden' }} weight={800}>
+              <Text align="left" lineClamp={detailed ? undefined : 1} sx={detailed ? {} : {}} className={detailed ? classes.detailed : undefined} weight={800}>
                 {study.studyName}
               </Text>
             </Anchor>
@@ -74,12 +106,7 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
               </Badge>
               {/* eslint-disable-next-line react/jsx-no-undef */}
               {study.externalWebsite && (
-                <ActionIcon
-                  variant="subtle"
-                  onClick={() => {
-                    window.open(study.externalWebsite, '_blank');
-                  }}
-                >
+                <ActionIcon variant="subtle" onClick={openExternal}>
                   <IconExternalLink />
                 </ActionIcon>
               )}
@@ -91,27 +118,10 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
         {study.description}
       </Text>
       <Card.Section withBorder inheritPadding py="xs">
-        <Spoiler
-          maxHeight={detailed ? 500 : 25}
-          showLabel="Show more"
-          hideLabel="hide"
-          style={{
-            fontSize: 12,
-          }}
-        >
+        <Spoiler maxHeight={detailed ? 500 : 25} showLabel="Show more" hideLabel="hide" className={classes.fontSize}>
           <Group position="left" spacing={3}>
-            {study.studyOntologyList &&
-              study.studyOntologyList.map((item) => {
-                if (item.labels !== null) {
-                  return item.labels.map((label) => (
-                    <Badge color={ontology2Color(item.ontology)} key={`${study.studyId}-${label}-badge`}>
-                      {label}
-                    </Badge>
-                  ));
-                }
-                return null;
-              })}
-            {metadataKeyValues(study)}
+            {ontologyBadges}
+            <MetadataKeyValues {...study} />
           </Group>
         </Spoiler>
       </Card.Section>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Center, Divider, Group, Loader, Stack, Text, Title } from '@mantine/core';
+import { Center, createStyles, Divider, Group, Loader, Stack, Text, Title } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
 import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
@@ -36,7 +36,15 @@ const analysisTypes = [
          */
 ];
 
+const useStyles = createStyles(() => ({
+  violinPlotImg: { height: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' },
+  violinPlotWrapper: { overflowX: 'auto', overflowY: 'hidden' },
+  expressionAnalysisMain: { overflowX: 'hidden', overflowY: 'auto' },
+}));
+
 function ViolinPlot({ omicsId }: { omicsId: number }) {
+  const { classes } = useStyles();
+
   const studyId = useRecoilValue(studyIdState);
   const studyLayerId = useRecoilValue(studyLayerIdState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
@@ -57,7 +65,7 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
   if (data?.violinPlot) {
     return (
       <Stack align="flex-start" h="28rem" pos="relative" px="md">
-        <img style={{ height: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' }} alt="violin plot" src={data.violinPlot} />
+        <img alt="violin plot" src={data.violinPlot} className={classes.violinPlotImg} />
       </Stack>
     );
   }
@@ -69,6 +77,7 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
 }
 
 function ViolinPlots() {
+  const { classes } = useStyles();
   const selectedGenes = useRecoilValue(selectedGenesState);
 
   return (
@@ -76,7 +85,7 @@ function ViolinPlots() {
       {[...selectedGenes].reverse().map((g) => (
         <Stack key={g.omicsId} align="center" w="100%">
           <Title order={3}>{g.displaySymbol}</Title>
-          <Stack h="30rem" w="100%" style={{ overflowX: 'auto', overflowY: 'hidden' }}>
+          <Stack h="30rem" w="100%" className={classes.violinPlotWrapper}>
             <ViolinPlot omicsId={g.omicsId} />
           </Stack>
         </Stack>
@@ -100,7 +109,7 @@ function ProjectionPlots() {
 
   if (loading) {
     return (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Center h="100%" w="100%">
         <Loader variant="dots" color="blue" />
       </Center>
     );
@@ -144,14 +153,14 @@ function DotPlots() {
 
   if (loading) {
     return (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Center h="100%" w="100%">
         <Loader variant="dots" color="blue" />
       </Center>
     );
   }
   return (
     heatmapDisplayData && (
-      <Stack style={{ height: '100%', width: '100%' }} align="center" justify="center" p="md">
+      <Stack h="100%" w="100%" align="center" justify="center" p="md">
         <ExpressionDotPlot data={heatmapDisplayData} xAxis="displaySymbol" responsiveHeight />
       </Stack>
     )
@@ -159,8 +168,10 @@ function DotPlots() {
 }
 
 function ExpressionAnalysis() {
+  const { classes, cx } = useStyles();
   const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
   const setOpened = useSetRecoilState(userGeneStoreOpenState);
+
   useEffect(() => {
     setOpened(() => true);
   }, [setOpened]);
@@ -188,7 +199,6 @@ function ExpressionAnalysis() {
                 <AnnotationGroupDisplay disableSelection />
               </>
             )}
-
             {analysisType === 'violinplot' && <AnnotationSecondGroupSelectBox />}
 
             <Divider my="sm" />
@@ -196,12 +206,12 @@ function ExpressionAnalysis() {
           </>
         )}
       </LeftSidePanel>
-      <Stack h="100%" w="100%" pos="relative" py="md" spacing="md" style={{ overflowX: 'hidden', overflowY: 'auto' }} className="no-scrollbar">
+      <Stack h="100%" w="100%" pos="relative" py="md" spacing="md" className={cx(classes.expressionAnalysisMain, 'no-scrollbar')}>
         {analysisType === 'violinplot' && <ViolinPlots />}
         {analysisType === 'projection' && <ProjectionPlots />}
         {analysisType === 'dotplot' && <DotPlots />}
         {selectedGenes.length === 0 && (
-          <Center style={{ height: '100%', width: '100%' }}>
+          <Center h="100%" w="100%">
             <Text c="dimmed">
               Please select gene(s) from the&nbsp;
               <Text span weight={800}>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Anchor, Badge, Card, Center, Grid, Group, Loader, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Anchor, Badge, Card, Center, createStyles, Grid, Group, Loader, SimpleGrid, Stack, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { DifferentialMarkerFragment, useStudiesWithMarkerGenesQuery } from '../generated/types';
 import { NavBarProvider } from '../components/NavBar/NavBar';
@@ -14,7 +14,13 @@ interface StudySummary {
   differentialExpressionsList: DifferentialMarkerFragment[];
 }
 
+const useStyles = createStyles(() => ({
+  studyName: { textOverflow: 'ellipsis', overflow: 'hidden' },
+  diffExpGrid: { maxHeight: '20rem', overflowY: 'scroll', justifyItems: 'center' },
+}));
+
 function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
+  const { classes, cx } = useStyles();
   const newStudyUrl = `/study/${study.studyId}`;
 
   return (
@@ -23,7 +29,7 @@ function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
         <Grid columns={12}>
           <Grid.Col span={8}>
             <Anchor component={Link} to={newStudyUrl} color="dark">
-              <Text align="left" lineClamp={1} sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }} weight={800}>
+              <Text align="left" lineClamp={1} className={classes.studyName} weight={800}>
                 {study.studyName}
               </Text>
             </Anchor>
@@ -50,8 +56,7 @@ function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
             { maxWidth: 'xl', cols: 2 },
             { minWidth: 'xl', cols: 3 },
           ]}
-          style={{ maxHeight: '20rem', overflowY: 'scroll', justifyItems: 'center' }}
-          className="no-scrollbar"
+          className={cx(classes.diffExpGrid, 'no-scrollbar')}
           spacing="xs"
         >
           {study.differentialExpressionsList.map((sr: DifferentialMarkerFragment) => (
@@ -102,8 +107,8 @@ function MarkerGeneSearch() {
     <NavBarProvider scrollable>
       <Stack p="md" spacing={0}>
         <GeneSearchBar humanOnly={false} onGeneSelection={(ids: number[]) => setOmicsIds(ids)} />
-        <Center style={{ width: '100%' }} m="sm">
-          {loading && <Loader variant="dots" color="blue" size={25} />}
+        <Center w="100%" m="sm">
+          {loading && <Loader variant="dots" color="blue" />}
           {omicsIds.length === 0 && (
             <Text color="dimmed">
               Please enter your genes of interest. Cellenium will search for studies and cell annotation clusters that show the entered gene as differentially
@@ -114,14 +119,14 @@ function MarkerGeneSearch() {
 
         {studySummaries && studySummaries.length > 0 && (
           <>
-            <Center style={{ width: '100%' }}>
+            <Center w="100%">
               <Text color="dimmed" align="center">
                 {omicsIds.length === 1
                   ? 'The gene is differentially expressed in the studies below.'
                   : 'At least one of the genes is differentially expressed in the studies below.'}
               </Text>
             </Center>
-            <Center style={{ width: '100%' }} mb="sm">
+            <Center w="100%" mb="sm">
               <Text align="center" color="dimmed">
                 The half volcano plot highlights the gene among other differentially expressed genes in the same study and annotation.
               </Text>

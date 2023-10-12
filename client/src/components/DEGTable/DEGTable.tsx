@@ -5,7 +5,7 @@ import memoize from 'memoize-one';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import _ from 'lodash';
 import { showNotification } from '@mantine/notifications';
-import { ReactNode, useCallback } from 'react';
+import { useCallback } from 'react';
 import { selectedGenesState, studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
 import { Omics } from '../../model';
 import { DifferentialExpressionV, useDegQuery } from '../../generated/types';
@@ -108,6 +108,20 @@ const columns = memoize((clickHandler, handleColorClick) => [
   },
 ]);
 
+function LinkedGene({ gene, showExpression, addToStore }: { gene: Omics; showExpression: (gene: Omics) => void; addToStore: (gene: Omics) => void }) {
+  return (
+    <Group spacing="xs">
+      <Text size="xs">{gene.displaySymbol}</Text>
+      <ActionIcon title="add to gene store" color="blue.3" onClick={() => showExpression(gene as Omics)} size="xs" variant="default">
+        <IconEye size={12} color="black" />
+      </ActionIcon>
+      <ActionIcon title="add to gene store" color="blue.3" onClick={() => addToStore(gene as Omics)} size="xs" variant="default">
+        <IconPlus size={12} color="black" />
+      </ActionIcon>
+    </Group>
+  );
+}
+
 function ExpandedComponent({ data }: { data: DifferentialExpressionV }) {
   const study = useRecoilValue(studyState);
   const [userGenes, setUserGenes] = useRecoilState(userGenesState);
@@ -115,51 +129,47 @@ function ExpandedComponent({ data }: { data: DifferentialExpressionV }) {
   const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState);
   const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
 
-  function showExpression(gene: Omics) {
-    if (selectedGenes.filter((g) => g.omicsId === gene.omicsId).length > 0) {
-      // remove
-      const removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId);
-      setSelectedGenesStore(removed);
-    } else {
-      setSelectedGenesStore([gene]);
-    }
-  }
+  const showExpression = useCallback(
+    (gene: Omics) => {
+      if (selectedGenes.filter((g) => g.omicsId === gene.omicsId).length > 0) {
+        // remove
+        const removed = selectedGenes.filter((g) => g.omicsId !== gene.omicsId);
+        setSelectedGenesStore(removed);
+      } else {
+        setSelectedGenesStore([gene]);
+      }
+    },
+    [selectedGenes, setSelectedGenesStore],
+  );
 
-  function addToStore(gene: Omics) {
-    const check = userGenes.filter((g) => g.omicsId === gene.omicsId);
-    if (check.length === 0) {
-      setIndicatorColor('pink');
-      setUserGenes(_.union(userGenes, [gene]));
-      setStoreOpen(false);
-      setTimeout(() => {
-        setIndicatorColor('blue');
-      }, 200);
-    } else {
-      showNotification({
-        title: 'Your selection is already in the store',
-        message: '',
-        color: 'red',
-        autoClose: 1000,
-      });
-    }
-  }
+  const addToStore = useCallback(
+    (gene: Omics) => {
+      const check = userGenes.filter((g) => g.omicsId === gene.omicsId);
+      if (check.length === 0) {
+        setIndicatorColor('pink');
+        setUserGenes(_.union(userGenes, [gene]));
+        setStoreOpen(false);
+        setTimeout(() => {
+          setIndicatorColor('blue');
+        }, 200);
+      } else {
+        showNotification({
+          title: 'Your selection is already in the store',
+          message: '',
+          color: 'red',
+          autoClose: 1000,
+        });
+      }
+    },
+    [setIndicatorColor, setUserGenes, userGenes, setStoreOpen],
+  );
 
-  const linkedGenes: ReactNode[] = data.linkedGenes.map((id: number) => {
-    const gene = study?.studyOmicsMap.get(id);
-    if (gene !== undefined)
-      return (
-        <Group key={id} spacing="xs">
-          <Text size="xs">{gene.displaySymbol}</Text>
-          <ActionIcon title="add to gene store" color="blue.3" onClick={() => showExpression(gene as Omics)} size="xs" variant="default">
-            <IconEye size={12} color="black" />
-          </ActionIcon>
-          <ActionIcon title="add to gene store" color="blue.3" onClick={() => addToStore(gene as Omics)} size="xs" variant="default">
-            <IconPlus size={12} color="black" />
-          </ActionIcon>
-        </Group>
-      );
-    return null;
-  });
+  const linkedGenes: Omics[] = data.linkedGenes
+    .map((id: number) => {
+      return study?.studyOmicsMap.get(id) as Omics;
+    })
+    .filter((g) => g !== undefined);
+
   return (
     <pre>
       <Center>
@@ -169,7 +179,11 @@ function ExpandedComponent({ data }: { data: DifferentialExpressionV }) {
               Corresponding gene(s)
             </Text>
           )}
-          {linkedGenes && linkedGenes.length > 0 && linkedGenes}
+          {linkedGenes &&
+            linkedGenes.length > 0 &&
+            linkedGenes.map((gene) => {
+              return <LinkedGene gene={gene} key={gene.omicsId} showExpression={showExpression} addToStore={addToStore} />;
+            })}
         </Stack>
       </Center>
     </pre>

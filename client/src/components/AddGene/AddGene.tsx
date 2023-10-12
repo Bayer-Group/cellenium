@@ -1,4 +1,4 @@
-import { ActionIcon, Autocomplete, AutocompleteItem, Group, Stack, Text, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Autocomplete, AutocompleteItem, createStyles, Group, Stack, Text, useMantineTheme } from '@mantine/core';
 import React, { FormEvent, useCallback, useState } from 'react';
 import { IconArrowRight, IconX } from '@tabler/icons-react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -7,7 +7,18 @@ import * as aq from 'arquero';
 import { selectedGenesState, studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
 import { Omics } from '../../model';
 
+const useStyles = createStyles(() => ({
+  form: {
+    width: '100%',
+  },
+  icon: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+  },
+}));
+
 export function AddGene({ multipleSelected = false }: { multipleSelected?: boolean }) {
+  const { classes } = useStyles();
   const [offerings, setOfferings] = useState<Omics[]>([]);
   const [value, setValue] = useState('');
   const theme = useMantineTheme();
@@ -15,9 +26,7 @@ export function AddGene({ multipleSelected = false }: { multipleSelected?: boole
   const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
   const setIndicatorColor = useSetRecoilState(userGeneStoreCounterColor);
   const setOpened = useSetRecoilState(userGeneStoreOpenState);
-
   const study = useRecoilValue(studyState);
-  // const form = useForm();
 
   const handleChange = useCallback(
     (inputString: string) => {
@@ -96,7 +105,7 @@ export function AddGene({ multipleSelected = false }: { multipleSelected?: boole
     <Stack spacing={0}>
       <Text size="xs">Enter identifiers(s)</Text>
       <Group spacing={0} noWrap>
-        <form style={{ width: '100%' }} onSubmit={(event) => handleSubmit(event)}>
+        <form className={classes.form} onSubmit={(event) => handleSubmit(event)}>
           <Autocomplete
             value={value}
             radius={0}
@@ -116,13 +125,12 @@ export function AddGene({ multipleSelected = false }: { multipleSelected?: boole
             }
           />
         </form>
-
         <ActionIcon
           onClick={(event) => {
             handleSubmit(event);
           }}
           size={36}
-          style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }}
+          className={classes.icon}
           color={theme.primaryColor}
           variant="filled"
         >

@@ -40,15 +40,13 @@ export function CreateStudyModal({ opened, reset }: { opened: boolean; reset: ()
     });
   }, [form, createStudyUploadMutation, reset]);
 
+  const modalClose = useCallback(() => {
+    reset();
+    form.reset();
+  }, [form, reset]);
+
   return (
-    <Modal
-      opened={opened}
-      onClose={() => {
-        reset();
-        form.reset();
-      }}
-      size="xl"
-    >
+    <Modal opened={opened} onClose={modalClose} size="xl">
       <Stack>
         <Text weight="bold" size="xl">
           Create Study

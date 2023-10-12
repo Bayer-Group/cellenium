@@ -4,6 +4,7 @@ import Plot from 'react-plotly.js';
 import * as aq from 'arquero';
 import * as Plotly from 'plotly.js';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
+import { Center, createStyles, Text } from '@mantine/core';
 import { annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, selectedProjectionState, studyState } from '../../atoms';
 import { ExpressionTable } from '../../model';
 
@@ -18,6 +19,13 @@ const plotlyConfig: Partial<Plotly.Config> = {
   displayModeBar: false,
 };
 
+const useStyles = createStyles(() => ({
+  full: {
+    width: '100%',
+    height: '100%',
+  },
+}));
+
 export function ProjectionPlot({
   colorBy,
   expressionTable,
@@ -29,6 +37,7 @@ export function ProjectionPlot({
   showSampleIds?: number[] | null;
   disableSelection?: boolean;
 }) {
+  const { classes } = useStyles();
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
   const study = useRecoilValue(studyState);
@@ -328,7 +337,6 @@ export function ProjectionPlot({
   const onUnHover = useCallback(() => {
     setHighlightAnnotation(0);
   }, [setHighlightAnnotation]);
-
   if (preparedPlot) {
     return (
       <Plot
@@ -339,9 +347,15 @@ export function ProjectionPlot({
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onUnhover={onUnHover}
-        style={{ width: '100%', height: '100%' }}
+        className={classes.full}
       />
     );
   }
-  return <div>no plot</div>;
+  return (
+    <Center w="100%" h="100%">
+      <Text weight="bold" color="gray">
+        No plot available
+      </Text>
+    </Center>
+  );
 }

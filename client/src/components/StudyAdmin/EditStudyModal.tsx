@@ -1,6 +1,6 @@
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { Form } from 'react-router-dom';
 import { InputMaybe, StudyAdminDetailsFragment, useStudyDefinitionUpdateMutation, useStudyUpdateMutation } from '../../generated/types';
@@ -23,7 +23,7 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
     validate: {},
   });
 
-  const submit = () => {
+  const submit = useCallback(() => {
     if (study) {
       const splitToArray = (s: string) => {
         const a = s.split(';').map((si) => si.trim());
@@ -59,7 +59,20 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
           });
         });
     }
-  };
+  }, [
+    form.values.adminPermissions,
+    form.values.description,
+    form.values.diseaseMeshIds,
+    form.values.externalWebsite,
+    form.values.readerPermissions,
+    form.values.studyName,
+    form.values.tissueNcitIds,
+    form.values.visible,
+    reset,
+    study,
+    studyDefinitionUpdateMutation,
+    studyUpdateMutation,
+  ]);
 
   useEffect(() => {
     form.setValues({
@@ -72,16 +85,10 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
       visible: study?.visible || false,
       externalWebsite: study?.externalWebsite || '',
     });
-  }, [study]);
+  }, [form, study]);
 
   return (
-    <Modal
-      opened={opened}
-      onClose={() => {
-        reset();
-      }}
-      size="80vw"
-    >
+    <Modal opened={opened} onClose={reset} size="80vw">
       <Stack>
         <Text weight="bold" size="xl">
           Edit Study

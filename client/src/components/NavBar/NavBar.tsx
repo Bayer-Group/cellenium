@@ -1,7 +1,7 @@
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import ProjPlotIcon from '../../assets/images/logo.svg';
 
 const HEADER_HEIGHT = 60;
@@ -12,8 +12,9 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    alignContent: 'center',
   },
-
+  celleniumLink: { textDecoration: 'none', color: 'black' },
   burger: {
     [theme.fn.largerThan('md')]: {
       display: 'none',
@@ -60,12 +61,14 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
+  navBarProviderScrollable: {
+    overflowY: 'scroll',
+  },
+  navBarProviderNonScrollable: {
+    overflowY: 'hidden',
+    overflowX: 'hidden',
+  },
 }));
-
-// interface LinkProps {
-//     label: string;
-//     link: string;
-// }
 
 const mainLinks = [
   { link: '/', label: 'Single study analysis' },
@@ -76,16 +79,18 @@ const mainLinks = [
 export function NavBar() {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes, cx } = useStyles();
-  const mainItems = mainLinks.map((item) => (
-    <NavLink to={item.link} key={item.label} className={({ isActive }) => (isActive ? cx([classes.mainLink, classes.mainLinkActive]) : classes.mainLink)}>
-      {item.label}
-    </NavLink>
-  ));
+  const mainItems = useMemo(() => {
+    return mainLinks.map((item) => (
+      <NavLink to={item.link} key={item.label} className={({ isActive }) => (isActive ? cx([classes.mainLink, classes.mainLinkActive]) : classes.mainLink)}>
+        {item.label}
+      </NavLink>
+    ));
+  }, [classes, cx]);
 
   return (
     <Header w="100%" height={HEADER_HEIGHT} zIndex={150}>
-      <Group className={classes.inner} p="md" style={{ alignContent: 'center' }}>
-        <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
+      <Group className={classes.inner} p="md">
+        <NavLink to="/" className={classes.celleniumLink}>
           <Group spacing={5}>
             <img src={ProjPlotIcon} alt="proj plot icon" />
             <Title>cellenium</Title>
@@ -110,9 +115,10 @@ export function NavBar() {
 }
 
 export function NavBarProvider({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
+  const { classes } = useStyles();
   if (scrollable) {
     return (
-      <Stack w="100%" h="100%" style={{ overflowY: 'scroll' }} pos="relative" spacing={0}>
+      <Stack w="100%" h="100%" className={classes.navBarProviderScrollable} pos="relative" spacing={0}>
         <NavBar />
         <Container w="100%" size="xl" p={0} pb="md">
           {children}
@@ -122,7 +128,7 @@ export function NavBarProvider({ children, scrollable = false }: { children: Rea
   }
 
   return (
-    <Stack w="100%" h="100%" style={{ overflowY: 'hidden', overflowX: 'hidden' }} spacing={0}>
+    <Stack w="100%" h="100%" spacing={0} className={classes.navBarProviderNonScrollable}>
       <NavBar />
       {children}
     </Stack>

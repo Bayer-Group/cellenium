@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Center, Group, Text } from '@mantine/core';
+import { Center, createStyles, Group, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { showNotification } from '@mantine/notifications';
 import { SankeyAnnotationGroupSelector } from '../components/SankeyAnnotationGroupSelector/SankeyAnnotationGroupSelector';
@@ -9,7 +9,17 @@ import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { SankeyPlot } from '../components/SankeyPlot/SankeyPlot';
 import { StudyAnnotationFrontendValue } from '../generated/types';
 
+const useStyles = createStyles(() => ({
+  mainScrollable: {
+    height: '100%',
+    overflowY: 'scroll',
+    flexGrow: 1,
+    paddingTop: 60,
+  },
+}));
+
 function AnnotationComparison() {
+  const { classes } = useStyles();
   const study = useRecoilValue(studyState);
 
   const [value1, setValue1] = useState<string | undefined>();
@@ -46,19 +56,13 @@ function AnnotationComparison() {
     }
     return anns;
   }, [study]);
+
   return (
     <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={handleChange1} value1={value1} handleChange2={setValue2} value2={value2} />
       </LeftSidePanel>
-      <main
-        style={{
-          height: '100%',
-          overflowY: 'scroll',
-          flexGrow: 1,
-          paddingTop: 60,
-        }}
-      >
+      <main className={classes.mainScrollable}>
         {study && annotations.length >= 2 && value1 && value2 && (
           <SankeyPlot
             annotationValues1={study.annotationGroupMap.get(parseInt(value1, 10))?.annotationValuesList as StudyAnnotationFrontendValue[]}
@@ -69,7 +73,7 @@ function AnnotationComparison() {
           />
         )}
         {annotations.length < 2 && (
-          <Center style={{ height: '100%', width: '100%' }}>
+          <Center w="100%" h="100%">
             <Text>My friend. Please think twice: Does a comparison of annotation groups make sense when there is only 1???</Text>
           </Center>
         )}

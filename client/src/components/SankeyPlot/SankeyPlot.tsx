@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { DefaultLink, DefaultNode, ResponsiveSankey } from '@nivo/sankey';
-import { Center, Loader, MantineColor } from '@mantine/core';
+import { Center, Loader, MantineColor, Stack } from '@mantine/core';
 import { StudyAnnotationFrontendValue, useAnnotationValueCoocurrenceQuery } from '../../generated/types';
 
 export function SankeyPlot({
@@ -76,11 +76,10 @@ export function SankeyPlot({
   }, [data, annotationValues1, annotationValues2]);
 
   return (
-    <Center style={{ width: '100%', height: '100%' }}>
+    <Center w="100%" h="100%">
       {loading && <Loader variant="dots" color="blue" size="xl" />}
-
       {sankeyData && sankeyData.nodes.length > 0 && (
-        <div style={{ width: '90%', height: '100%' }}>
+        <Stack w="90%" h="90%">
           <ResponsiveSankey
             data={sankeyData as unknown as { nodes: DefaultNode[]; links: DefaultLink[] }}
             label="label"
@@ -109,7 +108,7 @@ export function SankeyPlot({
               modifiers: [['darker', 1]],
             }}
           />
-        </div>
+        </Stack>
       )}
     </Center>
   );

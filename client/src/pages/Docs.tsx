@@ -1,7 +1,6 @@
 import React, { ComponentType, useEffect, useMemo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { createStyles, Group, Header, ScrollArea, Stack, Text, Title } from '@mantine/core';
-import ProjPlotIcon from '../assets/images/logo.svg';
+import { createStyles, Group, ScrollArea, Stack, Text } from '@mantine/core';
+import { NavBarProvider } from '../components/NavBar/NavBar';
 
 const MDComponents: Record<
   string,
@@ -65,15 +64,7 @@ export function Docs() {
   }, [selectedPage]);
 
   return (
-    <Stack h="100%" w="100vw" spacing={0} pos="relative">
-      <Header height={HEADER_HEIGHT} zIndex={1000} className={classes.inner} w="100%">
-        <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
-          <Group spacing={5}>
-            <img src={ProjPlotIcon} alt="proj plot icon" />
-            <Title>cellenium</Title>
-          </Group>
-        </NavLink>
-      </Header>
+    <NavBarProvider>
       <Group align="start" h="100%">
         <Stack p="1rem" className={classes.sidebar}>
           <ScrollArea h="100%" maw="20rem">
@@ -92,6 +83,6 @@ export function Docs() {
           <ScrollArea h="100%">{DocsComponent && <DocsComponent />}</ScrollArea>
         </Stack>
       </Group>
-    </Stack>
+    </NavBarProvider>
   );
 }

@@ -11,6 +11,9 @@ const useStyles = createStyles((theme) => ({
       backgroundColor: theme.colors.gray[1],
     },
   },
+  annotationGroupWrapper: {
+    minWidth: 90,
+  },
 }));
 
 export function MarkerCard({ data }: { data: DifferentialMarkerFragment }) {
@@ -20,7 +23,7 @@ export function MarkerCard({ data }: { data: DifferentialMarkerFragment }) {
     <Card w="100%" shadow="sm" p="lg" radius="md" withBorder component={Link} to={newStudyUrl}>
       <Card.Section className={classes.main} withBorder inheritPadding py="xs">
         <Group position="left" spacing="xs" noWrap pr={20}>
-          <Stack spacing={4} justify="flex-end" align="flex-start" style={{ minWidth: 90 }}>
+          <Stack spacing={4} justify="flex-end" align="flex-start" className={classes.annotationGroupWrapper}>
             <Text span fw={100} lineClamp={1} size="xs">
               Annotation group
             </Text>

@@ -13,6 +13,9 @@ const useStyles = createStyles((theme) => ({
       borderRadius: '2px',
     },
   },
+  cursor: {
+    cursor: 'pointer',
+  },
 }));
 
 export function OntologyNode({
@@ -46,7 +49,7 @@ export function OntologyNode({
           {selected ? <IconChevronDown color={theme.colors.dark[9]} /> : <IconChevronRight color={theme.colors.dark[9]} />}
         </ActionIcon>
       )}
-      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs" style={{ cursor: 'pointer' }}>
+      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs" classNames={classes.cursor}>
         {item.label} ({numberOfStudies})
       </Text>
     </Group>

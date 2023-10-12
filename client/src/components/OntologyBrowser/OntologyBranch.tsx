@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { OntologyItem } from '../../model';
 import { OntologyNode } from './OntologyNode';
 import { StudyOverview } from '../../generated/types';
@@ -17,9 +17,10 @@ export function OntologyBranch({
   const [selected, setSelected] = useState(false);
   const hasChildren = !!(item && item.children && item.children.length > 0);
 
-  const toggle = () => {
+  const toggle = useCallback(() => {
     setSelected((prev) => !prev);
-  };
+  }, [setSelected]);
+
   return (
     <>
       <OntologyNode

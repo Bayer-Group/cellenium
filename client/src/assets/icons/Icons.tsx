@@ -19,6 +19,7 @@ import ExpressionAnalysis from './svg/expression_analysis.svg';
 import CoExpressionAnalysis from './svg/coexpression_analysis.svg';
 import CompareAnnotations from './svg/annotation_comparison.svg';
 import MSTeams from './svg/Microsoft_Teams.svg';
+import Switch from './svg/switch.svg';
 
 interface IIcon {
   className?: string;
@@ -111,4 +112,8 @@ export function CompareAnnotationsIcon({ className, size }: IIcon) {
 
 export function MSTeamsIcon({ className, size }: IIcon) {
   return <Icon icon={MSTeams} alt="microsoft teams" className={className} size={size} />;
+}
+
+export function SwitchIcon({ className, size }: IIcon) {
+  return <Icon icon={Switch} alt="switch" className={className} size={size} />;
 }

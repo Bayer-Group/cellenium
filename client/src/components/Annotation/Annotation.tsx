@@ -12,6 +12,12 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colors.blue[1],
     borderRadius: theme.radius.xs,
   },
+  cursor: {
+    cursor: 'pointer',
+  },
+  border: {
+    border: '2px solid black',
+  },
 }));
 
 export function Annotation({
@@ -48,18 +54,20 @@ export function Annotation({
 
   return (
     <Grid
-      columns={14}
+      columns={15}
       pl="sm"
       gutter={0}
-      sx={{ cursor: 'pointer' }}
       justify="space-between"
       align="center"
       onMouseOver={() => setHighlight(annotationId)}
       onClick={onClick}
-      className={cx({
-        [classes.hovered]: annotationId === highlight,
-        [classes.clicked]: annotationIsSelected,
-      })}
+      className={cx(
+        {
+          [classes.hovered]: annotationId === highlight,
+          [classes.clicked]: annotationIsSelected,
+        },
+        classes.cursor,
+      )}
     >
       <Grid.Col span={7}>
         <Group pr={2} spacing={2}>
@@ -68,15 +76,15 @@ export function Annotation({
           </Text>
         </Group>
       </Grid.Col>
-      <Grid.Col span={6} style={{ textAlign: 'right' }}>
+      <Grid.Col span={6}>
         {sampleCount ? (
-          <Text size="xs" weight={showBold} lineClamp={1}>
+          <Text size="xs" weight={showBold} lineClamp={1} align="right">
             ({sampleCountPercentage ? `${sampleCountPercentage}%` : null})
           </Text>
         ) : null}
       </Grid.Col>
-      <Grid.Col span={1} pl={5}>
-        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} style={{ border: annotationIsSelected ? '2px solid black' : '' }} />
+      <Grid.Col span={2} pl={5}>
+        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} className={annotationIsSelected ? classes.border : undefined} />
       </Grid.Col>
     </Grid>
   );

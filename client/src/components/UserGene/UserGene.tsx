@@ -52,9 +52,17 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
     }
   }, [gene, multiple, selectedGenes, setSelectedGenesStore]);
 
+  const onInfoClick = useCallback(() => {
+    setShowInfo((o) => !o);
+  }, []);
+
+  const onInfoLeave = useCallback(() => {
+    setShowInfo(false);
+  }, []);
+
   return (
-    <Group align="center" position="left" spacing={2} style={{ width: '100%' }}>
-      <Grid columns={12} style={{ width: '100%' }} gutter="md">
+    <Group align="center" position="left" spacing={2} w="100%">
+      <Grid columns={12} w="100%" gutter="md">
         <Grid.Col span={1}>
           <ActionIcon variant="subtle" size="xs" title="remove from user gene list">
             <IconX onClick={handleRemove} size="xs" />
@@ -91,7 +99,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
         )}
         <Grid.Col span={1}>
           <Tooltip label={`${gene.displayName}`} opened={showInfo}>
-            <ActionIcon variant="subtle" size="xs" onClick={() => setShowInfo((o) => !o)} onMouseLeave={() => setShowInfo(false)}>
+            <ActionIcon variant="subtle" size="xs" onClick={onInfoClick} onMouseLeave={onInfoLeave}>
               <IconInfoCircle />
             </ActionIcon>
           </Tooltip>

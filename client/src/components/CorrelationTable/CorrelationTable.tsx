@@ -75,7 +75,7 @@ const columns = memoize((clickHandler) => [
         omicsId: row.omicsId,
         displayName: row.displayName,
         displaySymbol: row.displaySymbol,
-        omicsType: row.omicsType,
+        // omicsType: row.omicsType,
         value: row.displaySymbol,
       };
       return (

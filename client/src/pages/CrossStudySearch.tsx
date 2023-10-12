@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Center, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
@@ -43,17 +43,20 @@ function CrossStudySearch() {
     }));
   }, [studyList, data, omicsIds]);
 
-  const onHeatmapClick = (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => {
-    const dpe = dotPlotElement as DotPlotElementFragment & { studyId: number };
-    const newStudyUrl = `/study/${dpe.studyId}?page=CellMarkerAnalysis&annotationGroupId=${cellOAnnotationGroupId}&annotationValueId=${dotPlotElement.annotationValueId}&omicsId=${dotPlotElement.omicsId}`;
-    if (event.shiftKey || event.altKey) {
-      const parsedUrl = new URL(window.location.href);
-      const url = `${parsedUrl.origin}${newStudyUrl}`;
-      window.open(url, '_blank');
-    } else {
-      navigate(newStudyUrl);
-    }
-  };
+  const onHeatmapClick = useCallback(
+    (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => {
+      const dpe = dotPlotElement as DotPlotElementFragment & { studyId: number };
+      const newStudyUrl = `/study/${dpe.studyId}?page=CellMarkerAnalysis&annotationGroupId=${cellOAnnotationGroupId}&annotationValueId=${dotPlotElement.annotationValueId}&omicsId=${dotPlotElement.omicsId}`;
+      if (event.shiftKey || event.altKey) {
+        const parsedUrl = new URL(window.location.href);
+        const url = `${parsedUrl.origin}${newStudyUrl}`;
+        window.open(url, '_blank');
+      } else {
+        navigate(newStudyUrl);
+      }
+    },
+    [cellOAnnotationGroupId, navigate],
+  );
 
   return (
     <NavBarProvider scrollable>

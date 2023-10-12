@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Center, Divider, Group, Loader, Space, Stack, Text } from '@mantine/core';
+import { Center, createStyles, Divider, Group, Loader, Stack, Text } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   correlationOmicsIdState,
@@ -16,17 +16,18 @@ import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { CorrelationTable } from '../components/CorrelationTable/CorrelationTable';
 import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
-import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 
-// interface PreparedPlot {
-//     message?: string;
-//     allSameSampleExprValues: ColumnTable[];
-//     combinations: { dimX: number; dimY: number }[];
-//     plotlyData: Partial<Plotly.PlotData>[];
-//     plotlyLayout: Partial<Plotly.Layout>;
-// }
+const useStyles = createStyles(() => ({
+  coexpressionPlotImg: {
+    width: '100%',
+    height: '75%',
+    objectFit: 'fill',
+    overflow: 'hidden',
+  },
+}));
 
 function CoexpressionAnalysisPlot() {
+  const { classes } = useStyles();
   const selectedGenes = useRecoilValue(selectedGenesState);
   const studyId = useRecoilValue(studyIdState);
   const studyLayerId = useRecoilValue(studyLayerIdState);
@@ -48,14 +49,14 @@ function CoexpressionAnalysisPlot() {
 
   if (loading) {
     return (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Center w="100%" h="100%">
         <Loader variant="dots" color="blue" size="xl" />
       </Center>
     );
   }
   if (!data?.correlationTrianglePlot) {
     return (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Center w="100%" h="100%">
         <Text color="dimmed" size="md">
           Please select at least 2 genes from the{' '}
           <Text span weight={800}>
@@ -67,31 +68,23 @@ function CoexpressionAnalysisPlot() {
     );
   }
   return (
-    <Center style={{ height: '100%', width: '100%' }}>
-      <img
-        style={{
-          width: '100%',
-          height: '75%',
-          objectFit: 'fill',
-          overflow: 'hidden',
-        }}
-        alt="correlation triangle plot"
-        src={data.correlationTrianglePlot}
-      />
+    <Center w="100%" h="100%">
+      <img alt="correlation triangle plot" src={data.correlationTrianglePlot} className={classes.coexpressionPlotImg} />
     </Center>
   );
 }
 
-function CoexpressionAnalysis() {
+export default function CoexpressionAnalysis() {
   const study = useRecoilValue(studyState);
   const setOpened = useSetRecoilState(userGeneStoreOpenState);
   const correlationOmicsId = useRecoilValue(correlationOmicsIdState);
   useEffect(() => {
     setOpened(true);
   }, []);
+
   if (!study) {
     return (
-      <Center style={{ height: '100%', width: '100%' }}>
+      <Center w="100%" h="100%">
         <Loader variant="dots" color="blue" />{' '}
       </Center>
     );
@@ -108,9 +101,9 @@ function CoexpressionAnalysis() {
           </Text>
         </Stack>
       </LeftSidePanel>
-      <main style={{ height: '100%', width: '100%' }}>
+      <Stack h="100%" w="100%">
         <CoexpressionAnalysisPlot />
-      </main>
+      </Stack>
       <RightSidePanel>
         <UserGeneStore multiple findCoexpressors />
         <Divider size="xs" label="Correlated genes" />
@@ -124,5 +117,3 @@ function CoexpressionAnalysis() {
     </Group>
   );
 }
-
-export default CoexpressionAnalysis;
