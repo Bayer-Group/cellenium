@@ -6,15 +6,13 @@ import { StudyOverview } from '../../generated/types';
 
 const useStyles = createStyles((theme) => ({
   main: {
+    cursor: 'pointer',
     paddingLeft: '2px',
     paddingRight: '2px',
     '&:hover': {
       backgroundColor: theme.colors.gray[1],
       borderRadius: '2px',
     },
-  },
-  cursor: {
-    cursor: 'pointer',
   },
 }));
 
@@ -49,7 +47,7 @@ export function OntologyNode({
           {selected ? <IconChevronDown color={theme.colors.dark[9]} /> : <IconChevronRight color={theme.colors.dark[9]} />}
         </ActionIcon>
       )}
-      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs" classNames={classes.cursor}>
+      <Text onClick={() => handleAddOntologyItem(item)} className={classes.main} size="xs">
         {item.label} ({numberOfStudies})
       </Text>
     </Group>
