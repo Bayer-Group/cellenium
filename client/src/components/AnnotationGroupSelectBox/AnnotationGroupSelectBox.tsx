@@ -79,7 +79,7 @@ function AnnotationGroupSelector({
 
   return (
     <Select
-      style={{ maxWidth: 210, width: 210, minWidth: 210 }}
+      w="100%"
       value={value}
       onChange={update}
       label={label || 'Select annotation group'}

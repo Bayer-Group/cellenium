@@ -1,4 +1,4 @@
-import { Modal, Text } from '@mantine/core';
+import { Modal, Stack, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { useCallback, useState } from 'react';
 import { StudyCard } from '../StudyCard/StudyCard';
@@ -37,18 +37,11 @@ export function StudyTitle() {
   }, [modalOpen]);
 
   return (
-    <>
-      <Text
-        weight="bold"
-        truncate="end"
-        size="s"
-        title="click for complete study information"
-        onClick={modalClick}
-        style={{ maxWidth: '90%', cursor: 'pointer' }}
-      >
+    <Stack>
+      <Text weight="bold" truncate="end" size="md" title="click for complete study information" onClick={modalClick} style={{ cursor: 'pointer' }}>
         {study && study.studyName}
       </Text>
       {singleStudyInfoList && <StudyInfoModal opened={modalOpen} onClose={modalClick} study={singleStudyInfoList?.studyOverviewsList[0]} />}
-    </>
+    </Stack>
   );
 }

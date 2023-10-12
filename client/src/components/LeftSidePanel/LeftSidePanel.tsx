@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createStyles, Group, Navbar, Stack, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { useRecoilState } from 'recoil';
 import { NavLink } from 'react-router-dom';
@@ -10,27 +10,26 @@ import { CellTypeMarkerIcon, CoExpressionAnalysisIcon, CompareAnnotationsIcon, E
 const useStyles = createStyles((theme) => ({
   wrapper: {
     display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
   },
+
   aside: {
-    flex: '0 0 60px',
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
     borderRight: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]}`,
   },
 
   main: {
-    flex: 1,
+    height: '100%',
+    flexGrow: 1,
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
   },
 
-  navigation: {
-    padding: 10,
-  },
   mainLink: {
-    width: 44,
-    height: 44,
+    width: '100%',
+    aspectRatio: '1 / 1',
+    padding: theme.spacing.xs,
     borderRadius: theme.radius.md,
     display: 'flex',
     alignItems: 'center',
@@ -53,27 +52,30 @@ const useStyles = createStyles((theme) => ({
   },
 
   title: {
-    boxSizing: 'border-box',
     fontFamily: `Exo-bold, ${theme.fontFamily}`,
     fontSize: '1.8rem',
-    marginBottom: theme.spacing.md,
+  },
+
+  titleWrapper: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]}`,
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-    paddingTop: 10,
-    paddingLeft: 15,
+  },
+
+  logo: {
     height: 60,
     borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]}`,
   },
 
-  logo: {
-    boxSizing: 'border-box',
+  logoLink: {
+    textDecoration: 'none',
+    color: 'black',
+    userSelect: 'none',
     width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    height: 60,
-    paddingTop: theme.spacing.md,
-    marginBottom: theme.spacing.md + 4,
+  },
 
-    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]}`,
+  childrenStack: {
+    height: '100%',
+    overflowY: 'auto',
   },
 }));
 
@@ -106,56 +108,58 @@ const viewLinks = [
   },
 ];
 
-type Props = {
-  children?: React.ReactNode;
-};
-
-export function LeftSidePanel({ children }: Props) {
+export function LeftSidePanel({ children }: { children?: React.ReactNode }) {
   const { classes, cx } = useStyles();
   const [page, setPage] = useRecoilState(pageState);
 
-  const mainLinks = viewLinks.map((link) => (
-    <Tooltip
-      label={link.label}
-      position="right"
-      withArrow
-      transitionProps={{
-        duration: 0,
-      }}
-      key={link.label}
-    >
-      <UnstyledButton
-        onClick={() => setPage(link.link)}
-        className={cx(classes.mainLink, {
-          [classes.mainLinkActive]: link.link === page,
-        })}
-      >
-        {link.icon}
-      </UnstyledButton>
-    </Tooltip>
-  ));
+  const mainLinks = useMemo(
+    () =>
+      viewLinks.map((link) => (
+        <Tooltip
+          label={link.label}
+          position="right"
+          withArrow
+          transitionProps={{
+            duration: 0,
+          }}
+          key={link.label}
+        >
+          <UnstyledButton
+            onClick={() => setPage(link.link)}
+            className={cx(classes.mainLink, {
+              [classes.mainLinkActive]: link.link === page,
+            })}
+          >
+            {link.icon}
+          </UnstyledButton>
+        </Tooltip>
+      )),
+    [classes, cx, page, setPage],
+  );
 
   return (
-    <Navbar zIndex={150} h="100%" miw={300} w={300}>
+    <Navbar zIndex={150} h="100%" miw={300} w={300} top={0} left={0} bottom={0}>
       <Navbar.Section grow className={classes.wrapper}>
-        <div className={classes.aside}>
-          <div className={classes.logo}>
-            <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
+        <Stack spacing={0} w={60} align="center" className={classes.aside}>
+          <NavLink to="/" className={classes.logoLink}>
+            <Group className={classes.logo} align="center" spacing={0} p={0} position="center" w={60}>
               <img src={CelleniumLogo} alt="cellenium logo" />
-            </NavLink>
-          </div>
-          <Stack mt="md">{mainLinks}</Stack>
-        </div>
-        <div className={classes.main}>
-          <NavLink to="/" style={{ textDecoration: 'none', color: 'black', userSelect: 'none' }}>
-            <Title order={4} className={classes.title}>
-              cellenium
-            </Title>
+            </Group>
           </NavLink>
-          <Group className={classes.navigation} spacing="md">
+          <Stack pt="sm" pb="sm" className={cx(classes.childrenStack, ['no-scrollbar'])}>
+            {mainLinks}
+          </Stack>
+        </Stack>
+        <Stack spacing={0} className={classes.main}>
+          <NavLink to="/" className={classes.logoLink}>
+            <Group align="center" h={60} w="100%" bg="white" className={classes.titleWrapper} pl="sm">
+              <Title className={classes.title}>cellenium</Title>
+            </Group>
+          </NavLink>
+          <Stack p="sm" spacing="md" className={cx(classes.childrenStack, ['no-scrollbar'])}>
             {children}
-          </Group>
-        </div>
+          </Stack>
+        </Stack>
       </Navbar.Section>
     </Navbar>
   );

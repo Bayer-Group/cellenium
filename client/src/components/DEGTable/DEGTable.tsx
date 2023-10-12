@@ -182,7 +182,7 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
   const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
   // const annotationGroup = useRecoilValue(annotationGroupIdState);
   const study = useRecoilValue(studyState);
-  const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState);
+  // const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState);
 
   const { data, loading } = useDegQuery({
     variables: {
@@ -210,7 +210,7 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
       if (check.length === 0) {
         setIndicatorColor('pink');
         setUserGenes(_.union(userGenes, [gene]));
-        setStoreOpen(false);
+        // setStoreOpen(false);
         setTimeout(() => {
           setIndicatorColor('blue');
         }, 200);
@@ -223,7 +223,7 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
         });
       }
     },
-    [setIndicatorColor, setStoreOpen, setUserGenes, userGenes],
+    [setIndicatorColor, setUserGenes, userGenes],
   );
 
   return (

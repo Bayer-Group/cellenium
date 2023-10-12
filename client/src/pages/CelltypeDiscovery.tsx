@@ -24,7 +24,6 @@ import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
 import { AnnotationGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
 import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/AnnotationGroupDisplay';
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
-import { StudyTitle } from '../components/StudyTitle/StudyTitle';
 import { UserAnnotationAdminPanel } from '../components/UserAnnotationAdminPanel/UserAnnotationAdminPanel';
 
 interface PreparedPlot {
@@ -237,7 +236,7 @@ function CelltypeDiscovery() {
     return null;
   }
   return (
-    <Group position="apart">
+    <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <Stack>
           {annotationGroupId && <AnnotationGroupSelectBox />}
@@ -245,51 +244,48 @@ function CelltypeDiscovery() {
           <UserAnnotationAdminPanel />
         </Stack>
       </LeftSidePanel>
-      <main style={{ flexGrow: 1, height: '100vh', position: 'relative' }}>
+      <main style={{ flexGrow: 1, height: '100%', position: 'relative' }}>
         <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
       </main>
       <RightSidePanel>
-        <Stack align="flex-start" justify="flex-start" spacing="md" w="90%">
-          <StudyTitle />
-          <Text size="xs" color="gray">
-            After entering two marker genes, their coexpression plot shows. Select an area (e.g. high expression of one gene, low expression of the other) to
-            visualize the matching samples in the projection plot. Filter with additional marker genes as needed. The selected cells can saved into a custom
-            annotation.
-          </Text>
-          {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((__, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Box sx={{ height: 350, position: 'relative' }} key={`${i}-coexpression-samples`}>
-              {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
-              {i < celltypeDiscoveryCoexpressionSamples.length - 1 && <Overlay opacity={0.6} color="#000" zIndex={5} />}
-              <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
-            </Box>
-          ))}
-          <Button onClick={newPlotBasedOnSelectedSamples} disabled={selectedSampleIds === null || selectedSampleIds.length === 0} size="xs" variant="light">
-            Subset, based on selection
+        <Text size="xs" color="gray" align="justify">
+          After entering two marker genes, their coexpression plot shows. Select an area (e.g. high expression of one gene, low expression of the other) to
+          visualize the matching samples in the projection plot. Filter with additional marker genes as needed. The selected cells can saved into a custom
+          annotation.
+        </Text>
+        {[...Array(celltypeDiscoveryCoexpressionSamples.length)].map((__, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Box sx={{ height: 350, position: 'relative' }} key={`${i}-coexpression-samples`}>
+            {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
+            {i < celltypeDiscoveryCoexpressionSamples.length - 1 && <Overlay opacity={0.6} color="#000" zIndex={5} />}
+            <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
+          </Box>
+        ))}
+        <Button onClick={newPlotBasedOnSelectedSamples} disabled={selectedSampleIds === null || selectedSampleIds.length === 0} size="xs" variant="light">
+          Subset, based on selection
+        </Button>
+        {celltypeDiscoveryCoexpressionSamples.length >= 2 && (
+          <Button onClick={removeLastPlot} size="xs" variant="light">
+            Remove last plot
           </Button>
-          {celltypeDiscoveryCoexpressionSamples.length >= 2 && (
-            <Button onClick={removeLastPlot} size="xs" variant="light">
-              Remove last plot
-            </Button>
-          )}
-          <Group>
-            <TextInput
-              value={annotationName}
-              placeholder="My Custom Cell Annotation"
-              size="xs"
-              onChange={(event) => setAnnotationName(event.currentTarget.value)}
-            />
-            <Button
-              size="xs"
-              variant="light"
-              disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
-              onClick={saveUserAnnotation}
-              loading={saveUserAnnotationLoading}
-            >
-              Save
-            </Button>
-          </Group>
-        </Stack>
+        )}
+        <Group>
+          <TextInput
+            value={annotationName}
+            placeholder="My Custom Cell Annotation"
+            size="xs"
+            onChange={(event) => setAnnotationName(event.currentTarget.value)}
+          />
+          <Button
+            size="xs"
+            variant="light"
+            disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
+            onClick={saveUserAnnotation}
+            loading={saveUserAnnotationLoading}
+          >
+            Save
+          </Button>
+        </Group>
       </RightSidePanel>
     </Group>
   );

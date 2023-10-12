@@ -98,7 +98,7 @@ function CoexpressionAnalysis() {
   }
 
   return (
-    <Group style={{ height: '100vh' }} align="flex-start" position="apart" spacing="xs" noWrap>
+    <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <Stack pt={5}>
           <AnnotationFilterDisplay />
@@ -112,19 +112,14 @@ function CoexpressionAnalysis() {
         <CoexpressionAnalysisPlot />
       </main>
       <RightSidePanel>
-        <Stack>
-          <StudyTitle />
-          <Divider size="xs" label="User gene store" />
-          <UserGeneStore multiple findCoexpressors />
-          <Space />
-          <Divider size="xs" label="Correlated genes" />
-          {correlationOmicsId === undefined && (
-            <Text size="xs" color="gray">
-              No correlation exploration triggered yet.
-            </Text>
-          )}
-          {correlationOmicsId !== undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId} />}
-        </Stack>
+        <UserGeneStore multiple findCoexpressors />
+        <Divider size="xs" label="Correlated genes" />
+        {correlationOmicsId === undefined && (
+          <Text size="xs" color="gray">
+            No correlation exploration triggered yet.
+          </Text>
+        )}
+        {correlationOmicsId !== undefined && <CorrelationTable omicsId={correlationOmicsId} studyId={study.studyId} />}
       </RightSidePanel>
     </Group>
   );

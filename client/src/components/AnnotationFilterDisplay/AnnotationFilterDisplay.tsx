@@ -82,7 +82,7 @@ export function AnnotationFilterDisplay() {
       </Group>
       <Group>
         <MultiSelect
-          style={{ width: 210, maxWidth: 210, minWidth: 210 }}
+          w="100%"
           value={selectedAnnotationFilter.map((s) => s.toString())}
           onChange={onChange}
           searchable

@@ -10,14 +10,5 @@ export function ExpressionAnalysisTypeSelectBox({
   selection: string;
   options: SelectBoxItem[];
 }) {
-  return (
-    <Select
-      style={{ minWidth: 210, maxWidth: 210, width: 210 }}
-      labelProps={{ size: 'xs' }}
-      label="Select plot type"
-      value={selection}
-      onChange={handleSelection}
-      data={options}
-    />
-  );
+  return <Select w="100%" labelProps={{ size: 'xs' }} label="Select plot type" value={selection} onChange={handleSelection} data={options} />;
 }

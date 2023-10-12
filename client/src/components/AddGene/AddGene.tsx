@@ -95,8 +95,8 @@ export function AddGene({ multipleSelected = false }: { multipleSelected?: boole
   return (
     <Stack spacing={0}>
       <Text size="xs">Enter identifiers(s)</Text>
-      <Group align="center" spacing={0}>
-        <form onSubmit={(event) => handleSubmit(event)}>
+      <Group spacing={0} noWrap>
+        <form style={{ width: '100%' }} onSubmit={(event) => handleSubmit(event)}>
           <Autocomplete
             value={value}
             radius={0}

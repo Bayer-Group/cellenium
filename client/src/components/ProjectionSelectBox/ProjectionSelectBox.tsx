@@ -23,14 +23,5 @@ export function ProjectionSelectBox() {
     return <Text size="xs">Projection: {options[0].label}</Text>;
   }
 
-  return (
-    <Select
-      style={{ minWidth: 210, maxWidth: 210, width: 210 }}
-      labelProps={{ size: 'xs' }}
-      label="Select projection"
-      value={projection}
-      onChange={onChange}
-      data={options}
-    />
-  );
+  return <Select w="100%" labelProps={{ size: 'xs' }} label="Select projection" value={projection} onChange={onChange} data={options} />;
 }

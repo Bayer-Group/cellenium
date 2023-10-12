@@ -1,10 +1,10 @@
-import { Center, Loader } from '@mantine/core';
+import { Loader, Stack } from '@mantine/core';
 
 function GlobalLoading() {
   return (
-    <Center style={{ width: '100vw', height: '100vh' }}>
+    <Stack style={{ width: '100%', height: '100%' }} align="center" justify="center">
       <Loader size="xl" color="blue" variant="dots" />
-    </Center>
+    </Stack>
   );
 }
 

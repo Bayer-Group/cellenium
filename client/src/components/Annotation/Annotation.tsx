@@ -49,7 +49,7 @@ export function Annotation({
   return (
     <Grid
       columns={14}
-      pl={10}
+      pl="sm"
       gutter={0}
       sx={{ cursor: 'pointer' }}
       justify="space-between"

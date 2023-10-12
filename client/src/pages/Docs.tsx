@@ -65,7 +65,7 @@ export function Docs() {
   }, [selectedPage]);
 
   return (
-    <Stack h="100vh" w="100vw" spacing={0} pos="relative">
+    <Stack h="100%" w="100vw" spacing={0} pos="relative">
       <Header height={HEADER_HEIGHT} zIndex={1000} className={classes.inner} w="100%">
         <NavLink to="/" style={{ textDecoration: 'none', color: 'black' }}>
           <Group spacing={5}>

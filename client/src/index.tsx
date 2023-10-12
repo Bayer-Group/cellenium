@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { MantineProvider, Stack, Text } from '@mantine/core';
+import { MantineProvider, Stack } from '@mantine/core';
 import './assets/fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
@@ -66,27 +66,27 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <ApolloProvider client={apolloClient}>
-    <MantineProvider
-      theme={{
-        fontFamily: 'Rubik, sans-serif',
-        headings: {
-          fontFamily: 'Exo-bold, sans-serif',
-        },
-      }}
-    >
-      <RecoilRoot>
-        <React.Suspense fallback={<GlobalLoading />}>
-          <Notifications />
-          <ModalsProvider>
-            <Stack w="100vw" pos="relative" spacing={0} h="100vh" style={{ overflow: 'hidden' }}>
+  <MantineProvider
+    theme={{
+      fontFamily: 'Rubik, sans-serif',
+      headings: {
+        fontFamily: 'Exo-bold, sans-serif',
+      },
+    }}
+  >
+    <Stack w="100vw" pos="relative" spacing={0} h="100vh" style={{ overflow: 'hidden' }}>
+      <ApolloProvider client={apolloClient}>
+        <RecoilRoot>
+          <React.Suspense fallback={<GlobalLoading />}>
+            <Notifications />
+            <ModalsProvider>
               <RouterProvider router={router} />
-            </Stack>
-          </ModalsProvider>
-        </React.Suspense>
-      </RecoilRoot>
-    </MantineProvider>
-  </ApolloProvider>,
+            </ModalsProvider>
+          </React.Suspense>
+        </RecoilRoot>
+      </ApolloProvider>
+    </Stack>
+  </MantineProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

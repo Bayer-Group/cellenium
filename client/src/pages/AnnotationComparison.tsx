@@ -13,7 +13,7 @@ function AnnotationComparison() {
   const study = useRecoilValue(studyState);
 
   const [value1, setValue1] = useState<string | undefined>();
-  const [value2, setValue2] = useState<string | undefined>(0);
+  const [value2, setValue2] = useState<string | undefined>('0');
 
   const handleChange1 = useCallback(
     (value: string) => {
@@ -47,13 +47,13 @@ function AnnotationComparison() {
     return anns;
   }, [study]);
   return (
-    <Group position="apart" noWrap>
+    <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={handleChange1} value1={value1} handleChange2={setValue2} value2={value2} />
       </LeftSidePanel>
       <main
         style={{
-          height: '100vh',
+          height: '100%',
           overflowY: 'scroll',
           flexGrow: 1,
           paddingTop: 60,

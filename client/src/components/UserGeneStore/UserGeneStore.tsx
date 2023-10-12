@@ -1,4 +1,4 @@
-import { ActionIcon, Collapse, Group, Indicator, Stack, Text, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Collapse, Divider, Group, Indicator, Stack, Text, useMantineTheme } from '@mantine/core';
 import { IconChevronDown, IconChevronRight, IconTrashX } from '@tabler/icons-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { AddGene } from '../AddGene/AddGene';
@@ -12,7 +12,8 @@ export function UserGeneStore({ multiple = false, findCoexpressors = false }: { 
   const [userGeneStore, setUserGeneStore] = useRecoilState(userGenesState);
   const [, setSelectedGenes] = useRecoilState(selectedGenesState);
   return (
-    <Stack w="100%">
+    <Stack spacing="sm">
+      <Divider size="xs" label="User gene store" />
       <AddGene multipleSelected={multiple} />
       <Group
         onClick={() => {
@@ -31,12 +32,11 @@ export function UserGeneStore({ multiple = false, findCoexpressors = false }: { 
       </Group>
       <Collapse in={storeOpened} transitionDuration={0} transitionTimingFunction="linear">
         {userGeneStore.length === 0 ? (
-          <Text size="xs" color="dimmed">
+          <Text size="xs" color="dimmed" pl="md">
             No genes added yet.
           </Text>
         ) : (
-          <Stack>
-            {' '}
+          <Stack pl="md">
             <Group position="left" spacing="xs">
               <Text size="xs" color="dimmed">
                 Remove everything from store
