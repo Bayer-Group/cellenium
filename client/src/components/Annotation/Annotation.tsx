@@ -18,6 +18,9 @@ const useStyles = createStyles((theme) => ({
   border: {
     border: '2px solid black',
   },
+  label: {
+    whiteSpace: 'nowrap',
+  },
 }));
 
 export function Annotation({
@@ -71,7 +74,7 @@ export function Annotation({
     >
       <Grid.Col span={7}>
         <Group pr={2} spacing={2}>
-          <Text title={label} size="xs" weight={showBold} lineClamp={1}>
+          <Text title={label} size="xs" weight={showBold} lineClamp={1} className={classes.label}>
             {label}
           </Text>
         </Group>
