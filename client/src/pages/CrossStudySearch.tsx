@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Center, Group, Loader, Space, Stack, Text } from '@mantine/core';
+import { Center, createStyles, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ScenegraphEvent } from 'vega';
@@ -10,7 +10,19 @@ import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { NavBarProvider } from '../components/NavBar/NavBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
+const useStyles = createStyles(() => ({
+  plotContainer: {
+    width: '100%',
+    overflowX: 'auto',
+    transform: 'rotateX(180deg)', // this is a hack to display the scrollbar on the top
+  },
+  plot: {
+    transform: 'rotateX(180deg)', // this is a hack to display the scrollbar on the top
+  },
+}));
+
 function CrossStudySearch() {
+  const { classes } = useStyles();
   const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
   const [omicsIds, setOmicsIds] = useState<number[]>([]);
   const cellOAnnotationGroupId = useRecoilValue(cellOAnnotationGroupIdState);
@@ -77,7 +89,12 @@ function CrossStudySearch() {
             heatmapDisplayData.map((heatmap) => (
               <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
                 <Text weight="bold">{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
-                <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} />
+
+                <Stack w="100%" align="center" className={classes.plotContainer}>
+                  <Stack w="100%" align="center" className={classes.plot}>
+                    <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} responsiveWidth={false} />
+                  </Stack>
+                </Stack>
               </Stack>
             ))}
         </Group>

@@ -12,11 +12,11 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: boolean) {
+function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: boolean, responsiveWidth: boolean) {
   return {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
     data: { name: 'table' },
-    width: 'container',
+    width: responsiveWidth ? 'container' : undefined,
     height: responsiveHeight ? 'container' : undefined,
     transform: [
       {
@@ -87,15 +87,17 @@ export function ExpressionDotPlot({
   xAxis,
   onClick,
   responsiveHeight = false,
+  responsiveWidth = true,
 }: {
   data: DotPlotElementFragment[];
   xAxis: 'studyName' | 'displaySymbol';
   onClick?: (dotPlotElement: DotPlotElementFragment, event: ScenegraphEvent) => void;
   responsiveHeight?: boolean;
+  responsiveWidth?: boolean;
 }) {
   const { classes } = useStyles();
   const VegaLite = lazy(() => import('react-vega/lib/VegaLite'));
-  const spec = useMemo(() => createSpec(xAxis, responsiveHeight), [responsiveHeight, xAxis]);
+  const spec = useMemo(() => createSpec(xAxis, responsiveHeight, responsiveWidth), [responsiveHeight, responsiveWidth, xAxis]);
 
   const setUpSelectionListener = (view: View) => {
     view.addEventListener('click', (event, item) => {
