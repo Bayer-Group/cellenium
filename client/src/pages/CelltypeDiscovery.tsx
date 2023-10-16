@@ -175,9 +175,11 @@ function CelltypeDiscovery() {
   const userGenes = useRecoilValue(userGenesState);
   const [selectedSampleIds, setSelectedSampleIds] = useState<number[] | null>(null);
 
-  useEffect(() => {
+  const setInitialSelected = useCallback(() => {
     setSelected(0);
-  }, []);
+  }, [setSelected]);
+
+  useEffect(setInitialSelected, [setInitialSelected]);
 
   useEffect(() => {
     if (!omicsAll[0] && !omicsAll[1]) {

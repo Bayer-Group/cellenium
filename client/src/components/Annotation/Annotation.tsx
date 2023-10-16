@@ -1,4 +1,4 @@
-import { ColorSwatch, createStyles, Grid, Group, Text } from '@mantine/core';
+import { ColorSwatch, createStyles, Group, Text } from '@mantine/core';
 import { useRecoilState } from 'recoil';
 import { useCallback } from 'react';
 import { highlightAnnotationState, selectedAnnotationState, selectedGenesState } from '../../atoms';
@@ -16,7 +16,13 @@ const useStyles = createStyles((theme) => ({
     cursor: 'pointer',
   },
   border: {
-    border: '2px solid black',
+    outline: '2px solid black',
+  },
+  spacing_on_hover: {
+    letterSpacing: 0,
+  },
+  nowrap: {
+    whiteSpace: 'nowrap',
   },
 }));
 
@@ -53,12 +59,8 @@ export function Annotation({
   }, [annotationId, highlight, isSelectable, selected, setSelected, setSelectedGenes]);
 
   return (
-    <Grid
-      columns={15}
-      pl="sm"
-      gutter={0}
-      justify="space-between"
-      align="center"
+    <Group
+      w="100%"
       onMouseOver={() => setHighlight(annotationId)}
       onClick={onClick}
       className={cx(
@@ -68,24 +70,30 @@ export function Annotation({
         },
         classes.cursor,
       )}
+      position="apart"
+      noWrap
+      spacing="xs"
+      px="0.25rem"
     >
-      <Grid.Col span={7}>
-        <Group pr={2} spacing={2}>
-          <Text title={label} size="xs" weight={showBold} lineClamp={1}>
-            {label}
-          </Text>
-        </Group>
-      </Grid.Col>
-      <Grid.Col span={6}>
-        {sampleCount ? (
-          <Text size="xs" weight={showBold} lineClamp={1} align="right">
-            ({sampleCountPercentage ? `${sampleCountPercentage}%` : null})
+      <Text title={label} size="xs" weight={showBold} w="7.5rem" truncate classNames={cx(classes.nowrap, showBold ? classes.spacing_on_hover : undefined)}>
+        {label}
+      </Text>
+
+      <Group position="right" noWrap spacing="xs">
+        {sampleCount || sampleCountPercentage ? (
+          <Text
+            size="xs"
+            title={sampleCountPercentage ? `${sampleCountPercentage}%` : sampleCount.toString(10)}
+            weight={showBold}
+            lineClamp={1}
+            align="right"
+            classNames={cx(classes.nowrap, showBold ? classes.spacing_on_hover : undefined)}
+          >
+            ({sampleCountPercentage ? `${sampleCountPercentage}%` : sampleCount.toString(10)})
           </Text>
         ) : null}
-      </Grid.Col>
-      <Grid.Col span={2} pl={5}>
-        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} className={annotationIsSelected ? classes.border : undefined} />
-      </Grid.Col>
-    </Grid>
+        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 14} className={annotationIsSelected ? classes.border : undefined} />
+      </Group>
+    </Group>
   );
 }

@@ -3,7 +3,7 @@ import { IconTrash } from '@tabler/icons-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useCallback, useEffect, useMemo } from 'react';
 import { selectedAnnotationFilterState, studyState } from '../../atoms';
-import { SwitchIcon } from '../../assets/icons/Icons.tsx';
+import { SwitchIcon } from '../../assets/icons/Icons';
 
 export function AnnotationFilterDisplay() {
   const study = useRecoilValue(studyState);
