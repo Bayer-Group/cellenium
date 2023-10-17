@@ -55,25 +55,26 @@ export function SearchBar({
 
   useEffect(() => {
     const newOfferings = [] as OfferingItem[];
-    if (value.length > 0) {
+    if (value.trim().length > 0) {
       newOfferings.push({
         ontology: 'FREETEXT',
         value,
         ontcode: value,
       });
-    }
-    if (autocompleteSuggestions) {
-      newOfferings.push(
-        ...autocompleteSuggestions.autocompleteList.map((e) => {
-          return {
-            ontcode: e.ontCode,
-            ontology: e.ontology,
-            value: e.label,
-            preferredLabel: e.isSynonymOfPreferredTerm,
-          };
-        }),
-      );
-      setOfferings(newOfferings);
+
+      if (autocompleteSuggestions) {
+        newOfferings.push(
+          ...autocompleteSuggestions.autocompleteList.map((e) => {
+            return {
+              ontcode: e.ontCode,
+              ontology: e.ontology,
+              value: e.label,
+              preferredLabel: e.isSynonymOfPreferredTerm,
+            };
+          }),
+        );
+        setOfferings(newOfferings);
+      }
     }
   }, [value, autocompleteSuggestions]);
 
@@ -81,13 +82,13 @@ export function SearchBar({
 
   const handleSubmit = useCallback(
     (item: OfferingItem) => {
+      setOfferings([]);
       setValue('');
 
       const check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
       if (check.length === 0) {
         setSelectedFilters([...selectedFilters, item]);
       }
-      setOfferings([]);
     },
     [selectedFilters],
   );
@@ -162,7 +163,7 @@ export function SearchBar({
 
         <Group spacing={4} position="left" align="center" className={classes.filterGroup} pl={4} noWrap>
           {loading ? <Loader size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
-          <Group spacing={2}>
+          <Group spacing={2} align="center" noWrap>
             {selectedFilters.map((filter) => {
               return <SearchBadge key={`${filter.ontology}_${filter.ontcode}`} onRemove={handleFilterRemove} item={filter} />;
             })}
