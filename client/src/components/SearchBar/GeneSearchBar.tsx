@@ -48,15 +48,21 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
 
   const handleSubmit = useCallback(
     (item: AutocompleteItem) => {
-      setValue('');
-      const newFilters = [...selectedFilters, item as Omics];
-      setSelectedFilters(newFilters);
-      onGeneSelection(newFilters.map((f) => f.omicsId));
-      if (inputRef && inputRef.current !== null) {
-        inputRef.current.focus();
+      const omicsItem = offerings.find((o) => o.value === item.value);
+      if (omicsItem) {
+        setValue('');
+        if (selectedFilters.find((f) => f.omicsId === omicsItem.omicsId) === undefined) {
+          const newFilters = [...selectedFilters, omicsItem];
+          setSelectedFilters(newFilters);
+          onGeneSelection(newFilters.map((f) => f.omicsId));
+        }
+
+        if (inputRef && inputRef.current !== null) {
+          inputRef.current.focus();
+        }
       }
     },
-    [onGeneSelection, selectedFilters],
+    [offerings, onGeneSelection, selectedFilters],
   );
 
   const handleChange = useCallback(
@@ -125,6 +131,8 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
     onGeneSelection([]);
   }, [species]);
 
+  console.log(offerings);
+
   return (
     <Group position="left" align="flex-end" spacing={4} noWrap>
       <SpeciesSelect data={speciesList} species={species} handleChange={setSpecies} />
@@ -135,7 +143,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
 
         <Group spacing={4} position="left" align="center" className={classes.searchBarWrapper} noWrap>
           {!allGenes ? <Loader variant="dots" size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
-          <Group spacing={2}>
+          <Group spacing={2} align="center" noWrap>
             {selectedFilters.map((filter) => {
               return <SearchBadge key={`${filter.omicsId}`} onRemove={handleFilterRemove} item={filter} />;
             })}
@@ -150,7 +158,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
             onItemSubmit={handleSubmit}
             value={value}
             variant="unstyled"
-            data={offerings as AutocompleteItem[]}
+            data={offerings.map((o) => ({ value: o.value, key: o.value })) as AutocompleteItem[]}
             size="md"
             placeholder="EGFR, KLK3, CDK2, ..."
             rightSection={
