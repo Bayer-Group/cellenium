@@ -91,6 +91,7 @@ def get_palette(study_id:int, annotation_group_id: int):
         join study_sample_annotation ssa on av.annotation_value_id = ssa.annotation_value_id
         where av.annotation_group_id={annotation_group_id} and ssa.study_id={study_id}""")
     palette = {e['display_value']: e['color'] for e in annotation_values}
+    palette['-'] = '#888888'  # cells not assigned to any annotation group
     return palette
 
 def get_omics_symbol(omics_id: int):
