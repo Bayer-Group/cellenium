@@ -254,7 +254,7 @@ function CelltypeDiscovery() {
         {annotationGroupId && <AnnotationGroupDisplay disableSelection />}
         <UserAnnotationAdminPanel />
       </LeftSidePanel>
-      <Group grow h="100%" pos="relative">
+      <Group grow h="100%" w="100%" pos="relative">
         <ProjectionPlot colorBy="annotation" showSampleIds={selectedSampleIds} disableSelection />
       </Group>
       <RightSidePanel>
