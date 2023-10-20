@@ -63,7 +63,7 @@ export function AnnotationFilterDisplay() {
   }, [setSelectedAnnotationFilter]);
 
   return (
-    <Stack spacing={0}>
+    <Stack spacing={0} w="100%">
       <Group align="center" position="apart" noWrap>
         <Text size="xs">Filter out cells with annotation(s)</Text>
         <Group align="center" noWrap>

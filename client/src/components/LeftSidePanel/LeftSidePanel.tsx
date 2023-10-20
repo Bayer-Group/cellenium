@@ -75,6 +75,7 @@ const useStyles = createStyles((theme) => ({
 
   childrenStack: {
     height: '100%',
+    maxWidth: '13.5rem',
     overflowY: 'auto',
   },
 }));
