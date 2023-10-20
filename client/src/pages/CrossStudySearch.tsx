@@ -84,14 +84,14 @@ function CrossStudySearch() {
           </Text>
         </Center>
         <Group position="center" align="start" w="100%">
-          {loading && <Loader mt="1rem" variant="dots" color="blue" size={25} />}
+          {loading && <Loader mt="1rem" variant="dots" color="blue" />}
           {heatmapDisplayData &&
             heatmapDisplayData.map((heatmap) => (
               <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
                 <Text weight="bold">{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
 
                 <Stack w="100%" align="center" className={classes.plotContainer}>
-                  <Stack w="100%" align="center" className={classes.plot}>
+                  <Stack w="100%" className={classes.plot}>
                     <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} responsiveWidth={false} />
                   </Stack>
                 </Stack>

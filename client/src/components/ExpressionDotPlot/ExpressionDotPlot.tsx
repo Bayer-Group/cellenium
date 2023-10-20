@@ -9,6 +9,11 @@ const useStyles = createStyles(() => ({
     height: '100%',
     width: '100%',
     maxHeight: '75%',
+    margin: 'auto',
+    '& canvas': {
+      margin: 'auto',
+      display: 'block!important',
+    },
   },
 }));
 
@@ -39,13 +44,13 @@ function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: bool
               field: 'studyName',
               type: 'nominal',
               title: '',
-              axis: { offset: 10 },
+              axis: { offset: 10, orient: 'top' },
             }
           : {
               field: 'displaySymbol',
               type: 'nominal',
               title: '',
-              axis: { offset: 10 },
+              axis: { offset: 10, orient: 'top' },
             },
     },
     layer: [

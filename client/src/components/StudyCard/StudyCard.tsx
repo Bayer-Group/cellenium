@@ -11,11 +11,8 @@ function isValidEmail(email: string) {
 }
 
 function isValidUrl(urlString: string) {
-  try {
-    return Boolean(new URL(urlString));
-  } catch (e) {
-    return false;
-  }
+  const urlRegex = /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+  return urlRegex.test(urlString);
 }
 
 function MetadataKeyValues(study: StudyInfoFragment) {
