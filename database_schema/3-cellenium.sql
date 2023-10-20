@@ -135,9 +135,9 @@ grant select on omics_region_gene to postgraphile;
 DROP INDEX IF EXISTS omics_region_gene_1;
 CREATE UNIQUE INDEX omics_region_gene_1 on omics_region_gene (region_id, gene_id);
 
--- TODO I had to add this to fix a postgraphile schema generation problem
-COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" IS E'@fieldName omics_region_newNameHere';
-
+COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" IS E'@fieldName omics_region_gene_region';
+alter table omics_region_gene
+    alter constraint omics_region_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 
 
 -- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
@@ -163,6 +163,8 @@ CREATE TABLE omics_protein_antibody_tag_gene
     protein_antibody_tag_id int not null references omics_protein_antibody_tag,
     gene_id                 int not null references omics_gene
 );
+alter table omics_protein_antibody_tag_gene
+    alter constraint omics_protein_antibody_tag_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 grant select on omics_protein_antibody_tag_gene to postgraphile;
 create unique index omics_protein_antibody_tag_gene_1 on omics_protein_antibody_tag_gene (protein_antibody_tag_id, gene_id);
 
@@ -180,6 +182,8 @@ CREATE TABLE omics_transcription_factor_gene
     transcription_factor_id int not null references omics_transcription_factor,
     gene_id                 int not null references omics_gene
 );
+alter table omics_transcription_factor_gene
+    alter constraint omics_transcription_factor_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 grant select on omics_transcription_factor_gene to postgraphile;
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
 
