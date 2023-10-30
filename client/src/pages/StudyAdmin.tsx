@@ -125,7 +125,7 @@ export default function StudyAdmin() {
               ? 'Failed'
               : row.importFinished
               ? 'Imported'
-              : 'Unknown Error'
+              : 'Importing...'
             : row.importFailed
             ? 'Failed'
             : row.importFinished
