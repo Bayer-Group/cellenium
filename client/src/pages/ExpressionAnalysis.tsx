@@ -37,7 +37,7 @@ const analysisTypes = [
 ];
 
 const useStyles = createStyles(() => ({
-  violinPlotImg: { height: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto' },
+  violinPlotImg: { display: 'block', marginLeft: 'auto', marginRight: 'auto' },
   violinPlotWrapper: { overflowX: 'auto', overflowY: 'hidden' },
   expressionAnalysisMain: { overflowX: 'hidden', overflowY: 'auto' },
 }));
@@ -64,7 +64,7 @@ function ViolinPlot({ omicsId }: { omicsId: number }) {
 
   if (data?.violinPlot) {
     return (
-      <Stack align="flex-start" h="28rem" pos="relative" px="md">
+      <Stack align="flex-start" pos="relative" px="md">
         <img alt="violin plot" src={data.violinPlot} className={classes.violinPlotImg} />
       </Stack>
     );
@@ -85,7 +85,7 @@ function ViolinPlots() {
       {[...selectedGenes].reverse().map((g) => (
         <Stack key={g.omicsId} align="center" w="100%">
           <Title order={3}>{g.displaySymbol}</Title>
-          <Stack h="30rem" w="100%" className={classes.violinPlotWrapper}>
+          <Stack w="100%" className={classes.violinPlotWrapper}>
             <ViolinPlot omicsId={g.omicsId} />
           </Stack>
         </Stack>
@@ -188,8 +188,8 @@ function ExpressionAnalysis() {
   return (
     <Group h="100%" w="100%" position="apart" spacing={0} noWrap>
       <LeftSidePanel>
-        {analysisType === 'projection' && <ProjectionSelectBox />}
         <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType as (v: unknown) => void} selection={analysisType} options={analysisTypes} />
+        {analysisType === 'projection' && <ProjectionSelectBox />}
         {(analysisType === 'violinplot' || analysisType === 'dotplot') && (
           <>
             <AnnotationGroupSelectBox />
