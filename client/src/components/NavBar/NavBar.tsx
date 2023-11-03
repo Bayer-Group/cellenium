@@ -1,7 +1,8 @@
-import ProjPlotIcon from '../../images/logo.svg';
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
+import { ReactNode, useMemo } from 'react';
+import ProjPlotIcon from '../../assets/images/logo.svg';
 
 const HEADER_HEIGHT = 60;
 
@@ -11,35 +12,27 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    alignContent: 'center',
   },
-
+  celleniumLink: { textDecoration: 'none', color: 'black' },
   burger: {
     [theme.fn.largerThan('md')]: {
       display: 'none',
     },
   },
-
-  links: {
-    paddingTop: '2.5rem',
+  mainLinks: {
+    marginRight: -theme.spacing.sm,
     height: HEADER_HEIGHT,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
     [theme.fn.smallerThan('md')]: {
       display: 'none',
     },
   },
-
-  mainLinks: {
-    marginRight: -theme.spacing.sm,
-  },
-
   mainLink: {
     textTransform: 'uppercase',
     textDecoration: 'none',
     fontSize: 13,
     color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[6],
-    padding: `2px ${theme.spacing.sm}px`,
+    padding: `5px 2px`,
     fontWeight: 700,
     borderLeft: '2px solid transparent',
     transition: 'border-color 100ms ease, color 100ms ease',
@@ -68,12 +61,14 @@ const useStyles = createStyles((theme) => ({
       display: 'none',
     },
   },
+  navBarProviderScrollable: {
+    overflowY: 'scroll',
+  },
+  navBarProviderNonScrollable: {
+    overflowY: 'hidden',
+    overflowX: 'hidden',
+  },
 }));
-
-// interface LinkProps {
-//     label: string;
-//     link: string;
-// }
 
 const mainLinks = [
   { link: '/', label: 'Single study analysis' },
@@ -81,29 +76,29 @@ const mainLinks = [
   { link: '/markergene', label: 'Marker gene search' },
 ];
 
-function NavBar() {
+export function NavBar() {
   const [opened, { toggle }] = useDisclosure(false);
   const { classes, cx } = useStyles();
-  const mainItems = mainLinks.map((item) => (
-    <NavLink to={item.link} key={item.label} className={({ isActive }) => (isActive ? cx([classes.mainLink, classes.mainLinkActive]) : classes.mainLink)}>
-      {item.label}
-    </NavLink>
-  ));
+  const mainItems = useMemo(() => {
+    return mainLinks.map((item) => (
+      <NavLink to={item.link} key={item.label} className={({ isActive }) => (isActive ? cx([classes.mainLink, classes.mainLinkActive]) : classes.mainLink)}>
+        {item.label}
+      </NavLink>
+    ));
+  }, [classes, cx]);
 
   return (
-    <Header height={HEADER_HEIGHT} zIndex={1000}>
-      <Container className={classes.inner} fluid={true}>
-        <NavLink to={'/'} style={{ textDecoration: 'none', color: 'black' }}>
+    <Header w="100%" height={HEADER_HEIGHT} zIndex={150}>
+      <Group className={classes.inner} p="md">
+        <NavLink to="/" className={classes.celleniumLink}>
           <Group spacing={5}>
             <img src={ProjPlotIcon} alt="proj plot icon" />
             <Title>cellenium</Title>
           </Group>
         </NavLink>
-        <div className={classes.links}>
-          <Group spacing="sm" position="right" className={classes.mainLinks}>
-            {mainItems}
-          </Group>
-        </div>
+        <Group spacing="sm" position="right" className={classes.mainLinks}>
+          {mainItems}
+        </Group>
         <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
         <Transition transition="scale-y" duration={200} mounted={opened}>
           {(styles) => (
@@ -114,9 +109,28 @@ function NavBar() {
             </Paper>
           )}
         </Transition>
-      </Container>
+      </Group>
     </Header>
   );
 }
 
-export { NavBar };
+export function NavBarProvider({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
+  const { classes } = useStyles();
+  if (scrollable) {
+    return (
+      <Stack w="100%" h="100%" className={classes.navBarProviderScrollable} pos="relative" spacing={0}>
+        <NavBar />
+        <Container w="100%" size="xl" p={0} pb="md">
+          {children}
+        </Container>
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack w="100%" h="100%" spacing={0} className={classes.navBarProviderNonScrollable}>
+      <NavBar />
+      {children}
+    </Stack>
+  );
+}

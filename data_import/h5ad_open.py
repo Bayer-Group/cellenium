@@ -19,7 +19,7 @@ def h5ad_h5mu_read(filename) -> AnnData | MuData:
         # and use that.
         s3_file_like_obj = open(filename, "rb")
         fp = tempfile.NamedTemporaryFile(delete=False)
-        shutil.copyfileobj(s3_file_like_obj, fp)
+        shutil.copyfileobj(s3_file_like_obj, fp, 16 * 1024**2)
         s3_file_like_obj.close()
         fp.close()
         open_param = fp.name

@@ -1,27 +1,18 @@
 import React, { lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
-import { Container, MantineProvider } from '@mantine/core';
-import './fonts/Exo-Bold.ttf';
+import { MantineProvider, Stack } from '@mantine/core';
+import './assets/fonts/Exo-Bold.ttf';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { GlobalLoading } from './pages/GlobalLoading';
 import { RecoilRoot } from 'recoil';
-import ErrorPage from './pages/ErrorPage';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
-
-export const apolloCache = new InMemoryCache();
-
-const link = new HttpLink({
-  uri: '/postgraphile/',
-});
-
-const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: apolloCache,
-  link,
-});
+import { ApolloProvider } from '@apollo/client';
+import ErrorPage from './pages/ErrorPage';
+import { GlobalLoading } from './pages/GlobalLoading';
+import reportWebVitals from './reportWebVitals';
+import { Docs } from './pages/Docs';
+import { apolloClient } from './client';
 
 const StudyList = lazy(() => import('./pages/StudyList'));
 const MarkerGeneSearch = lazy(() => import('./pages/MarkerGeneSearch'));
@@ -51,39 +42,51 @@ const router = createBrowserRouter([
     element: <StudyPage />,
   },
   {
+    path: '/analysis/:studyId',
+    element: <StudyPage />,
+  },
+  {
     path: 'study-admin',
+    element: <StudyAdmin />,
+  },
+  {
+    path: 'manageStudyImport',
     element: <StudyAdmin />,
   },
   {
     path: 'ontology-sandbox',
     element: <OntologySandbox />,
   },
+  {
+    path: 'docs',
+    element: <Docs />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <ApolloProvider client={apolloClient}>
-    <MantineProvider
-      theme={{
-        fontFamily: 'Rubik, sans-serif',
-        headings: {
-          fontFamily: 'Exo-bold, sans-serif',
-        },
-      }}
-    >
-      <RecoilRoot>
-        <React.Suspense fallback={<GlobalLoading />}>
-          <Notifications />
-          <ModalsProvider>
-            <Container style={{ padding: 0 }} fluid={true}>
+  <MantineProvider
+    theme={{
+      fontFamily: 'Rubik, sans-serif',
+      headings: {
+        fontFamily: 'Exo-bold, sans-serif',
+      },
+    }}
+  >
+    <Stack w="100vw" pos="relative" spacing={0} h="100vh" style={{ overflow: 'hidden' }}>
+      <ApolloProvider client={apolloClient}>
+        <RecoilRoot>
+          <React.Suspense fallback={<GlobalLoading />}>
+            <Notifications />
+            <ModalsProvider>
               <RouterProvider router={router} />
-            </Container>
-          </ModalsProvider>
-        </React.Suspense>
-      </RecoilRoot>
-    </MantineProvider>
-  </ApolloProvider>,
+            </ModalsProvider>
+          </React.Suspense>
+        </RecoilRoot>
+      </ApolloProvider>
+    </Stack>
+  </MantineProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,16 +1,22 @@
 CREATE TABLE user_annotation_group
 (
-    study_id                          int     not null,
+    study_id                          int         not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
     -- the user annotation group is persisted here in annotation_group:
-    saved_as_annotation_group_id      int     not null references annotation_group,
+    saved_as_annotation_group_id      int         not null references annotation_group,
 
     -- user preference regarding this annotation
-    calculate_differential_expression boolean not null
+    calculate_differential_expression boolean     not null,
+    created_by_user                   text,
+    creation_timestamp                timestamptz not null,
+    private_to_user                   boolean     not null
 );
+create unique index user_annotation_group_1 on user_annotation_group (study_id, saved_as_annotation_group_id);
+create index user_annotation_group_2 on user_annotation_group (saved_as_annotation_group_id) include (study_id);
+grant select on user_annotation_group to postgraphile;
 
 drop function if exists user_annotation_define;
 create function user_annotation_define(p_study_id int,
@@ -62,8 +68,9 @@ begin
     values (p_study_id || '_' || p_annotation_group_name, p_annotation_group_name)
     returning annotation_group_id into created_annotation_group_id;
 
-    insert into user_annotation_group (study_id, saved_as_annotation_group_id, calculate_differential_expression)
-    values (p_study_id, created_annotation_group_id, false);
+    insert into user_annotation_group (study_id, saved_as_annotation_group_id, calculate_differential_expression,
+                                       created_by_user, creation_timestamp, private_to_user)
+    values (p_study_id, created_annotation_group_id, false, current_user_email(), now(), true);
 
     insert into annotation_value (annotation_group_id, h5ad_value, display_value)
     values (created_annotation_group_id, p_annotation_group_name, p_annotation_group_name)
@@ -142,7 +149,7 @@ def _read_h5ad(filename):
 
 
 def read_h5ad(study_id: int):
-    filename = sql_query(f"select filename from study where study_id = {study_id}")[0]['filename']
+    filename = sql_query(f"select coalesce(filename, import_file) filename from study where study_id = {study_id}")[0]['filename']
     if not filename.startswith('s3:'):
         try:
             import plpy
@@ -154,7 +161,7 @@ def read_h5ad(study_id: int):
     return _read_h5ad(filename)
 
 
-#def add_custom_annotation(adata: AnnData, study_id:int, annotation_group_id:int):
+# def add_custom_annotation(adata: AnnData, study_id:int, annotation_group_id:int):
 
 def get_annotation_df(study_id: int, annotation_group_id: int):
     annotation_data = sql_query(f"""
@@ -234,3 +241,77 @@ save_differential_expression(study_id, annotation_group_id, diffexp_db_df)
 $$;
 
 --call user_annotation_diffexp_job(3, 32);
+
+
+drop function if exists user_annotation_edit;
+create function user_annotation_edit(p_study_id int,
+                                     p_annotation_group_id int,
+                                     p_private_to_user boolean
+)
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+declare
+    annotation_allowed int;
+begin
+    select count(1)
+    into annotation_allowed
+    from user_annotation_group
+    where study_id = p_study_id
+      and saved_as_annotation_group_id = p_annotation_group_id
+      and created_by_user = current_user_email();
+    if annotation_allowed = 0 then
+        raise 'no permission to edit user annotation';
+    end if;
+    update user_annotation_group
+    set private_to_user = p_private_to_user
+    where study_id = p_study_id
+      and saved_as_annotation_group_id = p_annotation_group_id;
+    return true;
+end;
+$$;
+
+drop function if exists user_annotation_delete;
+create function user_annotation_delete(p_study_id int,
+                                       p_annotation_group_id int
+)
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+declare
+    annotation_allowed int;
+begin
+    select count(1)
+    into annotation_allowed
+    from user_annotation_group
+    where study_id = p_study_id
+      and saved_as_annotation_group_id = p_annotation_group_id
+      and created_by_user = current_user_email();
+    if annotation_allowed = 0 then
+        raise 'no permission to delete user annotation';
+    end if;
+
+    delete
+    from differential_expression
+    where study_id = p_study_id
+      and annotation_value_id in
+          (select annotation_value_id from annotation_value where annotation_group_id = p_annotation_group_id);
+    delete
+    from postgres.public.study_sample_annotation
+    where study_id = p_study_id
+      and annotation_value_id in
+          (select annotation_value_id from annotation_value where annotation_group_id = p_annotation_group_id);
+    delete from annotation_value where annotation_group_id = p_annotation_group_id;
+    delete from study_annotation_group_ui where annotation_group_id = p_annotation_group_id;
+    delete from user_annotation_group where saved_as_annotation_group_id = p_annotation_group_id;
+    delete from annotation_group where annotation_group_id = p_annotation_group_id;
+    return true;
+end;
+$$;
+

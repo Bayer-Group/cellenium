@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import * as aq from 'arquero';
+import { SetterOrUpdater, useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { InputMaybe, useExpressionByOmicsIdsQuery } from './generated/types';
 import { ExpressionTable } from './model';
-import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
   annotationGroupIdState,
+  annotationSecondaryGroupIdState,
   highlightAnnotationState,
   pageState,
   selectedAnnotationState,
@@ -15,7 +17,6 @@ import {
   studyState,
   userGenesState,
 } from './atoms';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export function useExpressionValues(omicsIds: number[], subsampling: boolean) {
   const studyLayerId = useRecoilValue(studyLayerIdState);
@@ -59,26 +60,28 @@ export function useSetStudyFromUrl() {
   const navigate = useNavigate();
   // const page = queryParams.get('page');
 
-  const setValidParam = (queryParam: string, setter: (x: any) => void, defaultValue?: any) => {
+  const setValidParam = <T>(queryParam: string, setter: SetterOrUpdater<T> | ((v: T) => void), defaultValue?: T) => {
     const value = queryParams.get(queryParam);
     if (value) {
       if (queryParam.endsWith('Id')) {
         const numericValue = Number(value);
-        setter(numericValue);
+        setter(numericValue as T);
       } else {
-        setter(value);
+        setter(value as T);
       }
     } else if (defaultValue) {
       setter(defaultValue);
     }
   };
 
-  const studyIdUrlParamInt = studyIdUrlParam && parseInt(studyIdUrlParam);
+  const studyIdUrlParamInt = studyIdUrlParam && parseInt(studyIdUrlParam, 10);
   const [studyId, setStudyId] = useRecoilState(studyIdState);
   const resetStatesOnStudyChange = [
     useResetRecoilState(selectedGenesState),
     useResetRecoilState(selectedAnnotationState),
     useResetRecoilState(highlightAnnotationState),
+    useResetRecoilState(userGenesState),
+    useResetRecoilState(selectedGenesState),
   ];
 
   useEffect(() => {
@@ -94,15 +97,25 @@ export function useSetStudyFromUrl() {
   const study = useRecoilValue(studyState);
   const setPage = useSetRecoilState(pageState);
   const setAnnotationGroupId = useSetRecoilState(annotationGroupIdState);
+  const setSecondaryAnnotationGroupId = useSetRecoilState(annotationSecondaryGroupIdState);
   const setUserGenes = useSetRecoilState(userGenesState);
   const setSelectedGenes = useSetRecoilState(selectedGenesState);
   const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
   const setSelectedProjection = useSetRecoilState(selectedProjectionState);
   useEffect(() => {
     if (study && study.studyId === studyIdUrlParamInt) {
-      setValidParam('page', setPage);
-      setValidParam('annotationGroupId', setAnnotationGroupId, study.annotationGroupsList[0].annotationGroupId);
+      setValidParam('page', setPage, 'CellMarkerAnalysis');
+
+      const annotationGroupsWithDEGs = study.annotationGroupsList.filter(
+        (ag) => study.annotationGroupMap.get(ag.annotationGroupId)?.differentialExpressionCalculated,
+      );
+      setValidParam(
+        'annotationGroupId',
+        setAnnotationGroupId,
+        annotationGroupsWithDEGs.length > 0 ? annotationGroupsWithDEGs[0].annotationGroupId : study.annotationGroupsList[0].annotationGroupId,
+      );
       setValidParam('annotationValueId', setSelectedAnnotation);
+      setSecondaryAnnotationGroupId(undefined);
       setValidParam('omicsId', (omicsId: number) => {
         const o = study.studyOmicsMap.get(omicsId);
         setUserGenes(o ? [o] : []);
@@ -111,6 +124,10 @@ export function useSetStudyFromUrl() {
       setValidParam('projection', setSelectedProjection, study.projections[0]);
       // clear query parameters, as we don't plan to update them and it's not nice to leave stale data in the URL
       navigate(`/study/${studyId}`, { replace: true });
+
+      // study is undefined if it could not be loaded, otherwise it is null. If it is undefined, we therefore want to redirect to the home page.
+    } else if (study === undefined && studyIdUrlParamInt) {
+      navigate(`/`, { replace: true });
     }
   }, [study]);
 }

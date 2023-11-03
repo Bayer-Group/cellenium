@@ -102,9 +102,32 @@ def validate_gene_ids(adata: AnnData, taxonomy_id: int):
     # cellenium recognizes HGNC Symbols and Ensembl Gene IDs in the annotation index.
     # Simple validation which checks some housekeeping genes.
     require_ids = {
-        9606: ["ATF1", "ENSG00000123268"],
-        10090: ["Atf1", "ENSMUSG00000023027"],
-        10116: ["Atf1", "ENSRNOG00000061088"],
+        9541: ["ATF1", "ENSMFAG00000000109", "AK1", "ENSMFAG00000032155", "REL", "ENSMFAG00000038696"],
+        9606: [
+            "ATF1",
+            "ENSG00000123268",
+            "ADA",
+            "ENSG00000196839",
+            "AK1",
+            "ENSG00000106992",
+            "REL",
+            "ENSG00000162924",
+            "SLA",
+            "ENSG00000155926",
+        ],
+        10090: [
+            "Atf1",
+            "ENSMUSG00000023027",
+            "Ada",
+            "ENSMUSG00000017697",
+            "Ak1",
+            "ENSMUSG00000026817",
+            "Rel",
+            "ENSMUSG00000020275",
+            "Sla",
+            "ENSMUSG00000022372",
+        ],
+        10116: ["Atf1", "ENSRNOG00000061088", "Rel", "ENSRNOG00000054437", "Sla", "ENSRNOG00000056714"],
     }
     ids = require_ids[taxonomy_id]
     for id in ids:
@@ -185,8 +208,8 @@ def _cellenium_uns_dictionary(adata: AnnData) -> dict:
 
 # add differential expression table to the anndata object
 # TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
-def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str):
-    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer)
+def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str, ngenes=100):
+    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer, ngenes)
     _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = diff_exp
     return adata
 
@@ -205,7 +228,12 @@ def set_cellenium_metadata(
     initial_reader_permissions: Optional[List[str]] = None,
     initial_admin_permissions: Optional[List[str]] = None,
     modalities: Optional[List[Dict]] = None,
+    pubmed_id: Optional[str] = None,
+    geo_accession: Optional[str] = None,
+    any_metadata: Optional[Dict[str, str | List[str]]] = None,
 ):
+    if any_metadata is None:
+        any_metadata = {}
     if import_projections is None:
         import_projections = ["umap"]
     if secondary_sample_attributes is None:
@@ -276,67 +304,18 @@ def set_cellenium_metadata(
     d["initial_admin_permissions"] = initial_admin_permissions
     d["modalities"] = modalities
 
-
-# cellenium meta data
-def cellenium_settings(
-    adata: AnnData,
-    title: str,
-    description: str,
-    taxonomy_id: str,
-    ncit_tissue_id: List[str],
-    mesh_disease_id: List[str],
-    pubmed_id: str,
-    data_source: str,
-):
-    d = _cellenium_uns_dictionary(adata)
-
-    # assert isinstance(main_sample_attributes, list)
-    # for a in main_sample_attributes:
-    #    if a not in adata.obs.columns:
-    #        raise Exception(f"main_sample_attributes: {a} not in observations dataframe")
-
-    # d['main_sample_attributes'] = main_sample_attributes
-    d["title"] = title
-    d["description"] = description
-    d["taxonomy_id"] = taxonomy_id
-    d["ncit_tissue_id"] = ncit_tissue_id
-    d["mesh_disease_id"] = mesh_disease_id
-    d["pubmed_id"] = pubmed_id
-    d["data_source"] = data_source
-
-
-# add cellenium meta data to AnnData.uns,
-def add_cellenium_settings(
-    adata: AnnData,
-    title: str,
-    description: str,
-    taxonomy_id: str,
-    ncit_tissue_id: List[str],
-    mesh_disease_id: List[str],
-    pubmed_id: str,
-    data_source: str,
-):
-    ncit_tissue_id = [x.strip() for x in ncit_tissue_id.split(",")]
-    mesh_disease_id = [x.strip() for x in mesh_disease_id.split(",")]
-    cellenium_settings(
-        adata,
-        title,
-        description,
-        taxonomy_id,
-        ncit_tissue_id,
-        mesh_disease_id,
-        pubmed_id,
-        data_source,
-    )
-    # TODO: add fuzzy matching to detect main cell type attributes
-    # TODO: add fuzzy matching of cell types to cell ontology
-    return adata
+    if pubmed_id:
+        any_metadata["Pubmed ID"] = str(pubmed_id)
+    if geo_accession:
+        any_metadata["GEO Accession"] = str(geo_accession)
+    d["metadata"] = any_metadata
 
 
 # calculate differentially expressed genes using rank_genes_groups from scanpy
 def calculate_differentially_expressed_genes(
     adata: AnnData,
     diffexp_attributes: List[str],
+    layer: Optional[str] = None,
     ngenes=100,
     diff_exp_min_group_expr=0.1,
     diff_exp_min_group_fc=0.5,
@@ -353,6 +332,7 @@ def calculate_differentially_expressed_genes(
             groups=attr_values,
             method="wilcoxon",
             use_raw=False,
+            layer=layer,
             n_genes=ngenes,
         )
         sc.tl.filter_rank_genes_groups(

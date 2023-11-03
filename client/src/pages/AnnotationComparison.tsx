@@ -1,30 +1,44 @@
-import { useMemo, useState } from 'react';
-import { Center, Group, Text } from '@mantine/core';
-import { LeftSidePanel } from '../components';
-import { SankeyPlot } from '../components/';
-import { SankeyAnnotationGroupSelector } from '../components/SankeyAnnotationGroupSelector/SankeyAnnotationGroupSelector';
+import { useCallback, useMemo, useState } from 'react';
+import { Center, createStyles, Group, Text } from '@mantine/core';
 import { useRecoilValue } from 'recoil';
+import { showNotification } from '@mantine/notifications';
+import { SankeyAnnotationGroupSelector } from '../components/SankeyAnnotationGroupSelector/SankeyAnnotationGroupSelector';
 import { studyState } from '../atoms';
 import { SelectBoxItem } from '../model';
-import { showNotification } from '@mantine/notifications';
+import { LeftSidePanel } from '../components/LeftSidePanel/LeftSidePanel';
+import { SankeyPlot } from '../components/SankeyPlot/SankeyPlot';
+import { StudyAnnotationFrontendValue } from '../generated/types';
 
-const AnnotationComparison = () => {
+const useStyles = createStyles(() => ({
+  mainScrollable: {
+    height: '100%',
+    overflowY: 'scroll',
+    flexGrow: 1,
+    paddingTop: 60,
+  },
+}));
+
+function AnnotationComparison() {
+  const { classes } = useStyles();
   const study = useRecoilValue(studyState);
 
   const [value1, setValue1] = useState<string | undefined>();
-  const [value2, setValue2] = useState<string | undefined>();
+  const [value2, setValue2] = useState<string | undefined>('0');
 
-  function handleChange1(value: string) {
-    if (value !== value2) setValue1(value);
-    else {
-      showNotification({
-        title: 'Please choose two different annotation groups. ',
-        message: 'Nice try!',
-        color: 'red',
-        autoClose: 2500,
-      });
-    }
-  }
+  const handleChange1 = useCallback(
+    (value: string) => {
+      if (value !== value2) setValue1(value);
+      else {
+        showNotification({
+          title: 'Please choose two different annotation groups. ',
+          message: 'Nice try!',
+          color: 'red',
+          autoClose: 2500,
+        });
+      }
+    },
+    [value2],
+  );
 
   const annotations: SelectBoxItem[] = useMemo(() => {
     const anns: SelectBoxItem[] = [];
@@ -42,36 +56,30 @@ const AnnotationComparison = () => {
     }
     return anns;
   }, [study]);
+
   return (
-    <Group position={'apart'} noWrap>
+    <Group h="100%" w="100%" position="apart" spacing="xs" noWrap>
       <LeftSidePanel>
         <SankeyAnnotationGroupSelector annotationGroups={annotations} handleChange1={handleChange1} value1={value1} handleChange2={setValue2} value2={value2} />
       </LeftSidePanel>
-      <main
-        style={{
-          height: '100vh',
-          overflowY: 'scroll',
-          flexGrow: 1,
-          paddingTop: 60,
-        }}
-      >
+      <main className={classes.mainScrollable}>
         {study && annotations.length >= 2 && value1 && value2 && (
           <SankeyPlot
-            annotationValues1={study.annotationGroupMap.get(parseInt(value1))?.annotationValuesList}
-            annotationValues2={study.annotationGroupMap.get(parseInt(value2))?.annotationValuesList}
-            annotationGroupId1={parseInt(value1)}
-            annotationGroupId2={parseInt(value2)}
+            annotationValues1={study.annotationGroupMap.get(parseInt(value1, 10))?.annotationValuesList as StudyAnnotationFrontendValue[]}
+            annotationValues2={study.annotationGroupMap.get(parseInt(value2, 10))?.annotationValuesList as StudyAnnotationFrontendValue[]}
+            annotationGroupId1={parseInt(value1, 10)}
+            annotationGroupId2={parseInt(value2, 10)}
             studyId={study.studyId}
           />
         )}
         {annotations.length < 2 && (
-          <Center style={{ height: '100%', width: '100%' }}>
+          <Center w="100%" h="100%">
             <Text>My friend. Please think twice: Does a comparison of annotation groups make sense when there is only 1???</Text>
           </Center>
         )}
       </main>
     </Group>
   );
-};
+}
 
 export default AnnotationComparison;

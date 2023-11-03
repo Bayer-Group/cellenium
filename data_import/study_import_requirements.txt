@@ -1,7 +1,7 @@
 pandas~=1.5.2
-numpy~=1.23.5
+numpy~=1.24.4
 numba~=0.57.1
-scanpy~=1.9.1
+scanpy==1.9.3
 sqlalchemy~=1.4.46
 psycopg2-binary~=2.9.6
 muon~=0.1.5

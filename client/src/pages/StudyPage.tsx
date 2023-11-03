@@ -5,7 +5,6 @@ import CellMarkerAnalysis from './CellMarkerAnalysis';
 import ExpressionAnalysis from './ExpressionAnalysis';
 import CoexpressionAnalysis from './CoexpressionAnalysis';
 import AnnotationComparison from './AnnotationComparison';
-import UserAnnotation from './UserAnnotation';
 import CelltypeDiscovery from './CelltypeDiscovery';
 
 export default function StudyPage() {
@@ -23,8 +22,7 @@ export default function StudyPage() {
       return <CelltypeDiscovery />;
     case 'AnnotationComparison':
       return <AnnotationComparison />;
-    case 'UserAnnotation':
-      return <UserAnnotation />;
+    default:
+      return <div>page {page} not defined</div>;
   }
-  return <div>page {page} not defined</div>;
 }

@@ -1,5 +1,6 @@
-import { ColorSwatch, createStyles, Grid, Group, Text } from '@mantine/core';
+import { ColorSwatch, createStyles, Group, Text } from '@mantine/core';
 import { useRecoilState } from 'recoil';
+import { useCallback } from 'react';
 import { highlightAnnotationState, selectedAnnotationState, selectedGenesState } from '../../atoms';
 
 const useStyles = createStyles((theme) => ({
@@ -11,67 +12,88 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colors.blue[1],
     borderRadius: theme.radius.xs,
   },
+  cursor: {
+    cursor: 'pointer',
+  },
+  border: {
+    outline: '2px solid black',
+  },
+  spacing_on_hover: {
+    letterSpacing: 0,
+  },
+  nowrap: {
+    whiteSpace: 'nowrap',
+  },
 }));
 
-type Props = {
+export function Annotation({
+  label,
+  color,
+  sampleCount,
+  sampleCountPercentage,
+  annotationId,
+  isSelectable = false,
+}: {
   label: string;
   color: string;
   sampleCount: number;
+  sampleCountPercentage: string;
   annotationId: number;
   isSelectable: boolean;
-};
-
-function Annotation({ label, color, sampleCount, annotationId, isSelectable = false }: Props) {
+}) {
   const { classes, cx } = useStyles();
   const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
   const [selected, setSelected] = useRecoilState(selectedAnnotationState);
   const [, setSelectedGenes] = useRecoilState(selectedGenesState);
   const annotationIsSelected = selected === annotationId && isSelectable;
   const showBold = annotationIsSelected ? 800 : 'md';
+
+  const onClick = useCallback(() => {
+    if (!isSelectable) return;
+    if (highlight === selected) {
+      setSelected(0);
+    } else {
+      setSelectedGenes([]);
+      setSelected(annotationId);
+    }
+  }, [annotationId, highlight, isSelectable, selected, setSelected, setSelectedGenes]);
+
   return (
-    <Grid
-      columns={12}
-      pl={10}
-      gutter={0}
-      sx={{ cursor: 'pointer' }}
-      justify={'space-between'}
-      align={'center'}
+    <Group
+      w="100%"
       onMouseOver={() => setHighlight(annotationId)}
-      onClick={() => {
-        if (!isSelectable) return null;
-        if (highlight === selected) {
-          setSelected(0);
-        } else {
-          setSelectedGenes([]);
-          setSelected(annotationId);
-        }
-      }}
-      className={cx({
-        [classes.hovered]: annotationId === highlight,
-        [classes.clicked]: annotationIsSelected,
-      })}
+      onClick={onClick}
+      className={cx(
+        {
+          [classes.hovered]: annotationId === highlight,
+          [classes.clicked]: annotationIsSelected,
+        },
+        classes.cursor,
+      )}
+      position="apart"
+      noWrap
+      spacing="xs"
+      px="0.25rem"
     >
-      <Grid.Col span={7}>
-        <Group pr={2} spacing={2}>
-          <Text title={label} size={'xs'} weight={showBold} lineClamp={1}>
-            {label}
-          </Text>
-        </Group>
-      </Grid.Col>
-      <Grid.Col span={4} style={{ textAlign: 'right' }}>
-        {sampleCount ? (
-          <Text size={'xs'} weight={showBold} lineClamp={1}>
-            ({sampleCount})
+      <Text title={label} size="xs" weight={showBold} w="7.5rem" truncate classNames={cx(classes.nowrap, showBold ? classes.spacing_on_hover : undefined)}>
+        {label}
+      </Text>
+
+      <Group position="right" noWrap spacing="xs">
+        {sampleCount || sampleCountPercentage ? (
+          <Text
+            size="xs"
+            title={sampleCountPercentage ? `${sampleCountPercentage}%` : sampleCount.toString(10)}
+            weight={showBold}
+            lineClamp={1}
+            align="right"
+            classNames={cx(classes.nowrap, showBold ? classes.spacing_on_hover : undefined)}
+          >
+            ({sampleCountPercentage ? `${sampleCountPercentage}%` : sampleCount.toString(10)})
           </Text>
         ) : null}
-      </Grid.Col>
-      <Grid.Col span={1} pl={5}>
-        <div>
-          <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 15} style={{ border: annotationIsSelected ? '2px solid black' : '' }} />
-        </div>
-      </Grid.Col>
-    </Grid>
+        <ColorSwatch key={color} color={color} size={annotationIsSelected ? 12 : 14} className={annotationIsSelected ? classes.border : undefined} />
+      </Group>
+    </Group>
   );
 }
-
-export { Annotation };

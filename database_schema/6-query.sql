@@ -96,13 +96,13 @@ select s.study_id,
        s.cell_count,
        (select min(sl.study_layer_id)
         from study_layer sl
-        where sl.study_id = s.study_id) default_study_layer_id
+        where sl.study_id = s.study_id) default_study_layer_id,
+       s.metadata
 from study s
 where s.visible = True;
 grant select on study_overview to postgraphile;
 
-CREATE VIEW study_overview_ontology
-    with (security_invoker = true)
+create materialized view study_overview_ontology
 AS
 SELECT s.study_id,
        'NCIT'            ontology,
@@ -147,7 +147,8 @@ from (select ssa.study_id, array_agg(distinct c.ont_code) ont_codes
 group by study_cell_ontology_ids.study_id,
          study_cell_ontology_ids.ont_codes,
          ont.labels;
-comment on view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+create index study_overview_ontology_1 on study_overview_ontology (study_id);
 grant select on study_overview_ontology to postgraphile;
 
 
@@ -175,15 +176,24 @@ from ont_code_lists,
 grant select on tree_ontology to postgraphile;
 
 create view study_annotation_frontend_group
+    with (security_invoker = true)
 as
 select gui.study_id,
        gui.annotation_group_id,
        gui.is_primary,
        gui.ordering,
        gui.differential_expression_calculated,
-       g.display_group
+       g.display_group,
+       ug.created_by_user,
+       ug.created_by_user = current_user_email() current_user_is_owner,
+       ug.private_to_user
 from study_annotation_group_ui gui
-         join annotation_group g on gui.annotation_group_id = g.annotation_group_id;
+         join annotation_group g on gui.annotation_group_id = g.annotation_group_id
+         left join user_annotation_group ug on ug.saved_as_annotation_group_id = g.annotation_group_id
+where (ug.saved_as_annotation_group_id is null
+    or ug.private_to_user = False
+    or ug.created_by_user = current_user_email()
+          );
 comment on view study_annotation_frontend_group is
     E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
 grant select on study_annotation_frontend_group to postgraphile;
@@ -222,8 +232,8 @@ select s.study_id,
        s.import_failed,
        s.import_finished,
        (case when s.import_log is not null then True else False end) as has_import_log,
-       case when sv.study_id is not null then True else False end "reader_permission_granted",
-       case when sa.study_id is not null then True else False end "admin_permission_granted"
+       case when sv.study_id is not null then True else False end       "reader_permission_granted",
+       case when sa.study_id is not null then True else False end       "admin_permission_granted"
 from study s
          left join study_visible_currentuser sv on sv.study_id = s.study_id
          left join study_administrable_currentuser sa on sa.study_id = s.study_id;
@@ -239,3 +249,16 @@ from study s
          left join study_visible_currentuser sv on sv.study_id = s.study_id
          left join study_administrable_currentuser sa on sa.study_id = s.study_id;
 grant select on study_import_log to postgraphile;
+
+create or replace function study_definition_update()
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+begin
+    refresh materialized view study_overview_ontology;
+    return true;
+end;
+$$;

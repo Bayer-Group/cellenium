@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { OntologyTree } from '../components';
+import { Stack } from '@mantine/core';
 import { useOntologiesQuery, useStudiesQuery } from '../generated/types';
 import { OntologyItem } from '../model';
-import { Stack } from '@mantine/core';
-import OntologySelect from '../components/OntologyBrowser/OntologySelect';
-import { generateOntologyTrees } from './helper';
+import { OntologySelect } from '../components/OntologyBrowser/OntologySelect';
+import { generateOntologyTrees } from '../utils/helper';
+import { OntologyTree } from '../components/OntologyBrowser/OntologyTree';
 
-const OntologySandbox = () => {
+function OntologySandbox() {
   const { data: ontologyData } = useOntologiesQuery();
   const { data } = useStudiesQuery();
   const [ontologyTrees, setOntologyTrees] = useState<Map<string, OntologyItem>>();
@@ -21,10 +21,10 @@ const OntologySandbox = () => {
     <Stack>
       {ontologyData && <OntologySelect handleChange={setSelectedOntology} ontologies={ontologyData.ontologiesList} />}
       {ontologyTrees && ontologyTrees.get(selectedOntology) !== undefined && selectedOntology && (
-        <OntologyTree ontology={ontologyTrees.get(selectedOntology) as any} handleAddOntologyItem={() => {}} />
+        <OntologyTree ontology={ontologyTrees.get(selectedOntology) as OntologyItem} handleAddOntologyItem={() => {}} />
       )}
     </Stack>
   );
-};
+}
 
 export default OntologySandbox;

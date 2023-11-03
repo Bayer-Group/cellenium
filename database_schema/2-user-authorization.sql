@@ -16,7 +16,7 @@
 CREATE OR REPLACE FUNCTION current_user_groups()
     RETURNS text[]
     LANGUAGE plpython3u
-    IMMUTABLE
+    STABLE
 AS
 $$
 
@@ -59,7 +59,7 @@ will return less rows depending on the permission definition in each study recor
 CREATE OR REPLACE FUNCTION current_user_email()
     RETURNS text
     LANGUAGE plpython3u
-    IMMUTABLE
+    STABLE
 AS
 $$
 

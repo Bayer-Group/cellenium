@@ -1,7 +1,8 @@
-import { StudyAdminDetailsFragment, useStudyDeleteMutation } from '../../generated/types.ts';
+// eslint-disable-next-line import/extensions
 import { useCallback, useState } from 'react';
 import { showNotification } from '@mantine/notifications';
 import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
+import { StudyAdminDetailsFragment, useStudyDeleteMutation } from '../../generated/types';
 
 export function DeleteStudyModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
   const [confirmationInput, setConfirmationInput] = useState('');

@@ -27,6 +27,11 @@ variable "aws_region" {
   }
 }
 
+variable "stage" {
+  type    = string
+  default = "prod"
+}
+
 
 variable "docker_host" {
   type        = string

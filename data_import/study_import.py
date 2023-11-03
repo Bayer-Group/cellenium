@@ -2,16 +2,20 @@ import argparse
 import io
 import json
 import logging
+import multiprocessing
 import os
 import pathlib
-from typing import Dict, List
+import queue
+import sys
+from multiprocessing import Process, Queue
+from typing import Dict, List, Union
 
 import h5ad_open
 import numpy as np
 import pandas as pd
 import scipy.sparse as sparse
-import tqdm
 from anndata import AnnData
+from anndata._core.views import ArrayView
 from muon import MuData
 from postgres_utils import (
     NumpyEncoder,
@@ -385,8 +389,92 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
         import_df(annotation_df, "study_sample_annotation", engine)
 
 
+def expression_import_task(
+    gene_i_tasks: Queue,
+    study_layer_id: int,
+    x: Union[np.ndarray, sparse.spmatrix, ArrayView],
+    map_h5ad_var_index_to_omics_index: np.ndarray,
+    map_h5ad_obs_index_to_studysample_index: np.ndarray,
+    status_queue: Queue,
+):
+    localengine = None
+    try:
+        localengine = get_aws_db_engine() if IS_AWS_DEPLOYMENT else get_local_db_engine(os.environ.get("ENGINE_URL"))
+        with localengine.connect() as connection:
+            cursor = connection.connection.cursor()
+            buffer = io.StringIO()
+            buffered_gene_cnt = 0
+            gene_batch_size = min(max(int(10000000 / x.shape[0]), 1), 500)
+            logging.info(f"gene_batch_size: {gene_batch_size} , {x.shape[0]}")
+            done = False
+            while not done:
+                try:
+                    gene_i = gene_i_tasks.get_nowait()
+                    if buffered_gene_cnt % 50 == 0 or gene_i % 50 == 0:
+                        logging.info(f"importing gene_i: {gene_i} ...")
+                    omics_id = map_h5ad_var_index_to_omics_index[gene_i]
+                    if omics_id > 0:
+                        csc_gene_data = sparse.find(sparse.csc_matrix(x[:, gene_i]).T)
+                        data_cell_indexes = csc_gene_data[1]
+                        data_values = csc_gene_data[2]
+                        # remove infinite and NaN values from this matrix row:
+                        bad_value_mask = ~np.logical_or(np.isinf(data_values), np.isnan(data_values))
+                        data_values = np.compress(bad_value_mask, data_values)
+                        data_cell_indexes = np.compress(bad_value_mask, data_cell_indexes)
+                        if data_values.size > 0:
+                            studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
+                            buffer.write(str(study_layer_id) + "|" + str(omics_id) + "|{")
+                            # the [None, :] reshaping is just a workaround to get np.savetxt into writing separators at all
+                            np.savetxt(
+                                buffer,
+                                studysample_ids[None, :],
+                                fmt="%i",
+                                delimiter=",",
+                                newline=" ",
+                            )
+                            buffer.write("}|{")
+                            np.savetxt(
+                                buffer,
+                                data_values[None, :],
+                                fmt="%.8e",
+                                delimiter=",",
+                                newline=" ",
+                            )
+                            buffer.write("}\n")
+                            buffered_gene_cnt += 1
+                except queue.Empty:
+                    done = True
+                    logging.info("done")
+
+                if buffered_gene_cnt == gene_batch_size or (done and buffered_gene_cnt > 0):
+                    buffer.seek(0)
+                    cursor.copy_from(
+                        buffer,
+                        f"expression_{study_layer_id}",
+                        columns=[
+                            "study_layer_id",
+                            "omics_id",
+                            "study_sample_ids",
+                            "values",
+                        ],
+                        sep="|",
+                    )
+                    buffer.close()
+                    buffer = io.StringIO()
+                    buffered_gene_cnt = 0
+                    connection.connection.commit()
+            buffer.close()
+            cursor.close()
+        status_queue.put(True)
+    except Exception:
+        logging.exception("exception in expression_import_task")
+        status_queue.put(False)
+    finally:
+        if localengine:
+            localengine.dispose()
+
+
 def import_study_layer_expression(
-    study_id: int,
     layer_name: str | None,
     data_genes_df,
     data_samples_df,
@@ -400,69 +488,57 @@ def import_study_layer_expression(
         x = data.X
     else:
         x = data.layers[layer_name]
-    logging.info(f"importing expression matrix {layer_name} {omics_type}")
+    logging.info(f"importing expression matrix {layer_name} {omics_type} ({x.shape[1]} elements)")
 
-    with engine.connect() as connection:
-        sparse_x = sparse.csc_matrix(x)
+    map_h5ad_var_index_to_omics_index = np.zeros(shape=[x.shape[1]], dtype=np.uint32)
+    for _, row in data_genes_df.iterrows():
+        map_h5ad_var_index_to_omics_index[row["h5ad_var_index"]] = row["omics_id"]
 
-        map_h5ad_var_index_to_omics_index = np.zeros(shape=[sparse_x.shape[1]], dtype=np.uint32)
-        for _, row in data_genes_df.iterrows():
-            map_h5ad_var_index_to_omics_index[row["h5ad_var_index"]] = row["omics_id"]
+    samples_of_modality_df = data.obs.join(data_samples_df.set_index("h5ad_obs_key")[["study_sample_id"]]).reset_index()
+    map_h5ad_obs_index_to_studysample_index = np.zeros(shape=[x.shape[0]], dtype=np.uint32)
+    for i, row in samples_of_modality_df.iterrows():
+        map_h5ad_obs_index_to_studysample_index[i] = row["study_sample_id"]
 
-        samples_of_modality_df = data.obs.join(data_samples_df.set_index("h5ad_obs_key")[["study_sample_id"]]).reset_index()
-        map_h5ad_obs_index_to_studysample_index = np.zeros(shape=[sparse_x.shape[0]], dtype=np.uint32)
-        for i, row in samples_of_modality_df.iterrows():
-            map_h5ad_obs_index_to_studysample_index[i] = row["study_sample_id"]
-
-        buffer = io.StringIO()
-        buffered_gene_cnt = 0
-        cursor = connection.connection.cursor()
-        for gene_i in tqdm.tqdm(range(0, sparse_x.shape[1]), desc=f'import expression matrix "{layer_name}"'):
-            omics_id = map_h5ad_var_index_to_omics_index[gene_i]
-            if omics_id > 0:
-                csc_gene_data = sparse.find(sparse_x.T[gene_i])
-                data_cell_indexes = csc_gene_data[1]
-                data_values = csc_gene_data[2]
-                if data_values.size > 0:
-                    studysample_ids = map_h5ad_obs_index_to_studysample_index[data_cell_indexes]
-                    buffer.write(str(study_layer_id) + "|" + str(omics_id) + "|{")
-                    # the [None, :] reshaping is just a workaround to get np.savetxt into writing separators at all
-                    np.savetxt(
-                        buffer,
-                        studysample_ids[None, :],
-                        fmt="%i",
-                        delimiter=",",
-                        newline=" ",
-                    )
-                    buffer.write("}|{")
-                    np.savetxt(
-                        buffer,
-                        data_values[None, :],
-                        fmt="%.8e",
-                        delimiter=",",
-                        newline=" ",
-                    )
-                    buffer.write("}\n")
-                    buffered_gene_cnt += 1
-            if buffered_gene_cnt == 500 or (gene_i == sparse_x.shape[1] - 1 and buffered_gene_cnt > 0):
-                buffer.seek(0)
-                cursor.copy_from(
-                    buffer,
-                    "expression",
-                    columns=[
-                        "study_layer_id",
-                        "omics_id",
-                        "study_sample_ids",
-                        "values",
-                    ],
-                    sep="|",
-                )
-                buffer.close()
-                buffer = io.StringIO()
-                buffered_gene_cnt = 0
-        connection.connection.commit()
-        buffer.close()
-        cursor.close()
+    g_gene_i_tasks = Queue()  # queue cannot hold more than 32k elements
+    for i in range(0, min(x.shape[1], 30000)):
+        g_gene_i_tasks.put(i)
+    num_workers = int(os.getenv("NUM_PROCESSES", int(os.cpu_count() / 2)))
+    # Fork mode leverages the copy on write memory model for the new process, which lets us inherit the huge matrix.
+    # This is the default on Linux, and can cause issues on OSX.
+    if sys.platform == "linux" and multiprocessing.get_start_method() != "fork":
+        # be explicit about our dependence on the default setting
+        raise Exception(
+            "on Linux (the actual production environment), we require fork to handle big studies without multiprocessing memory overhead."
+        )
+    processes = []
+    status_queue = Queue()
+    for _w in range(num_workers):
+        p = Process(
+            target=expression_import_task,
+            args=(
+                g_gene_i_tasks,
+                study_layer_id,
+                x,
+                map_h5ad_var_index_to_omics_index,
+                map_h5ad_obs_index_to_studysample_index,
+                status_queue,
+            ),
+        )
+        processes.append(p)
+        p.start()
+    for i in range(30000, x.shape[1]):
+        g_gene_i_tasks.put(i)
+    failures = False
+    for _w in range(num_workers):
+        if not status_queue.get():
+            failures = True
+    for p in processes:
+        p.join()
+    if failures:
+        raise Exception("exception in expression_import_task (see above)")
+    logging.info("expression matrix imported")
+    with engine.connect() as g_connection:
+        g_connection.execute(text(f"analyze expression_{study_layer_id}"))
 
 
 def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
@@ -479,7 +555,9 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         right_on=["h5ad_column", "h5ad_value"],
     )
     df["study_id"] = study_id
-    df.logfoldchanges = df.logfoldchanges.fillna(-1)  # TODO: this is as muon puts logfoldchange to NaN
+    df.logfoldchanges = df.logfoldchanges.fillna(-1)  # muon puts logfoldchange to NaN
+    df.replace(np.inf, 1000, inplace=True)
+    df.drop_duplicates(subset=["omics_id", "annotation_value_id"], inplace=True)
     df.rename(
         columns={
             "pvals": "pvalue",
@@ -509,7 +587,7 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         connection.execute(
             text(
                 """UPDATE study_annotation_group_ui SET differential_expression_calculated=True
-                                    WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids)"""
+                   WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids)"""
             ),
             {
                 "study_id": study_id,
@@ -524,7 +602,7 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             r = connection.execute(
                 text(
                     """
-                    SELECT study_id FROM study WHERE import_file = :filename
+                    SELECT study_id, import_started, import_finished FROM study WHERE import_file = :filename
                     """
                 ),
                 {"filename": str(stored_filename)},
@@ -532,7 +610,14 @@ def get_or_create_study_id(stored_filename: UPath) -> int:
             study_row = r.fetchone()
             if study_row is None:
                 raise Exception(f"Study with filename {stored_filename} not found")
-            study_id = study_row[0]
+            study_id = study_row["study_id"]
+            if study_row["import_started"] is True and study_row["import_finished"] is False:
+                raise Exception(f"Study with filename {stored_filename}, ID {study_id} is already being imported")
+            if study_row["import_finished"] is True:
+                logging.info(f"replacing study {stored_filename}, ID {study_id}, its postgres data is deleted first")
+                connection.execute(text(f"call reset_study( {study_id} )"))
+                connection.connection.commit()
+                logging.info("study data removed")
             return study_id
         else:
             r = connection.execute(
@@ -567,6 +652,10 @@ def update_study_from_file(study_id: int, data: AnnData):
             data.uns["cellenium"].get("legacy_config"),
             dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
         ),
+        "metadata": Json(
+            data.uns["cellenium"].get("metadata"),
+            dumps=lambda data: json.dumps(data, cls=NumpyEncoder),
+        ),
     }
 
     with engine.connect() as connection:
@@ -584,6 +673,7 @@ def update_study_from_file(study_id: int, data: AnnData):
                     reader_permissions = coalesce(reader_permissions, ARRAY[]::text[]) || coalesce(:reader_permissions, ARRAY[]::text[]),
                     admin_permissions = coalesce(admin_permissions, ARRAY[]::text[]) || coalesce(:admin_permissions, ARRAY[]::text[]),
                     legacy_config = :legacy_config,
+                    metadata = :metadata,
                     import_finished = false,
                     import_started = true,
                     /* support retry of study upload - reset earlier messages */
@@ -652,7 +742,6 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
         meta_data = data.uns["cellenium"]
         if omics_type == "gene":
             import_study_layer_expression(
-                study_id,
                 None,
                 data_genes_df,
                 cur_data_samples_df,
@@ -666,7 +755,6 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             for layer_name in cur_data.layers:
                 further_study_layer_id = _generate_study_layer(study_id, layer_name, "gene")
                 import_study_layer_expression(
-                    study_id,
                     layer_name,
                     data_genes_df,
                     cur_data_samples_df,
@@ -678,7 +766,6 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
 
         if omics_type == "region":
             import_study_layer_expression(
-                study_id,
                 None,
                 data_region_df,
                 cur_data_samples_df,
@@ -689,7 +776,6 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
             )
         if omics_type == "protein_antibody_tag":
             import_study_layer_expression(
-                study_id,
                 None,
                 data_protein_df,
                 cur_data_samples_df,
@@ -701,9 +787,13 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
 
     with engine.connect() as connection:
         connection.execute(
-            text("UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id"),
+            text(
+                """UPDATE study SET visible=True, import_failed=False, import_finished=True WHERE study_id=:study_id;
+                   SELECT study_definition_update();"""
+            ),
             {"study_id": study_id},
         )
+        connection.connection.commit()
         if analyze_database:
             logging.info("updating postgres statistics...")
             connection.execute(text("call _analyze_schema()"))

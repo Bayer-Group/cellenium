@@ -1,14 +1,15 @@
-.plotContainer {
+
+.no-scrollbar {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 }
-.plotContainer::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Arial', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -22,5 +23,5 @@ code {
   font-family: 'Exo-Bold';
   src:
     local('Exo-Bold'),
-    url('./fonts/Exo-Bold.ttf') format('truetype');
+    url('assets/fonts/Exo-Bold.ttf') format('truetype');
 }

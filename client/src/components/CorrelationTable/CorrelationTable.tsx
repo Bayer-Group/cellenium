@@ -2,11 +2,11 @@ import { ActionIcon, Loader, Stack, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import memoize from 'memoize-one';
 import { useRecoilState } from 'recoil';
+import _ from 'lodash';
+import DataTable from 'react-data-table-component';
 import { selectedGenesState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
 import { Omics } from '../../model';
-import _ from 'lodash';
-import { useCorrelatedgenesQuery } from '../../generated/types';
-import DataTable from 'react-data-table-component';
+import { GetCorrelatedGenesRecord, useCorrelatedgenesQuery } from '../../generated/types';
 
 const customStyles = {
   table: {
@@ -58,29 +58,29 @@ const customStyles = {
 const columns = memoize((clickHandler) => [
   {
     name: 'gene',
-    selector: (row: any) => row.displaySymbol,
+    selector: (row: GetCorrelatedGenesRecord) => row.displaySymbol,
     sortable: true,
     width: '80px',
   },
   {
     name: 'r',
-    selector: (row: any) => row.r.toFixed(2),
+    selector: (row: GetCorrelatedGenesRecord) => row.r.toFixed(2),
     sortable: true,
     width: '70px',
   },
   {
     name: '',
-    cell: (row: any) => {
-      let gene = {
+    cell: (row: GetCorrelatedGenesRecord) => {
+      const gene = {
         omicsId: row.omicsId,
         displayName: row.displayName,
         displaySymbol: row.displaySymbol,
-        omicsType: row.omicsType,
+        // omicsType: row.omicsType,
         value: row.displaySymbol,
       };
       return (
-        <ActionIcon color={'blue.3'} onClick={() => clickHandler(gene)} size="xs" variant={'default'}>
-          <IconPlus size={12} color={'black'} />
+        <ActionIcon color="blue.3" onClick={() => clickHandler(gene)} size="xs" variant="default">
+          <IconPlus size={12} color="black" />
         </ActionIcon>
       );
     },
@@ -88,12 +88,7 @@ const columns = memoize((clickHandler) => [
   },
 ]);
 
-type Props = {
-  omicsId: number;
-  studyId: number;
-};
-
-const CorrelationTable = ({ omicsId, studyId }: Props) => {
+export function CorrelationTable({ omicsId, studyId }: { omicsId: number; studyId: number }) {
   const [userGenes, setUserGenes] = useRecoilState(userGenesState);
   const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
   const [, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
@@ -101,13 +96,13 @@ const CorrelationTable = ({ omicsId, studyId }: Props) => {
   const [, setStoreOpen] = useRecoilState(userGeneStoreOpenState);
   const { data, loading } = useCorrelatedgenesQuery({
     variables: {
-      omicsId: omicsId,
-      studyId: studyId,
+      omicsId,
+      studyId,
     },
   });
 
   function handleClick(gene: Omics) {
-    let check = userGenes.filter((g) => g.omicsId === gene.omicsId);
+    const check = userGenes.filter((g) => g.omicsId === gene.omicsId);
     if (check.length === 0) {
       setSelectedGenes([...selectedGenes, gene]);
 
@@ -122,17 +117,17 @@ const CorrelationTable = ({ omicsId, studyId }: Props) => {
 
   if (loading) {
     return (
-      <Stack align={'center'}>
-        <Text color={'gray'} size={'xs'}>
-          A genome-wide correlation analysis takes some seconds. Please stay patient! We are working on a speed-up in the meantime!
+      <Stack align="center">
+        <Text color="gray" size="xs">
+          A genome-wide correlation analysis takes some seconds. Please stay patient!
         </Text>
-        <Loader variant={'dots'} color={'gray'} />
+        <Loader variant="dots" color="blue" />
       </Stack>
     );
   }
 
   return (
-    <Stack justify={'flex-start'} align={'flex-start'}>
+    <Stack justify="flex-start" align="flex-start">
       {data && data.getCorrelatedGenesList.length > 0 && (
         <DataTable
           dense
@@ -147,12 +142,10 @@ const CorrelationTable = ({ omicsId, studyId }: Props) => {
         />
       )}
       {data && data.getCorrelatedGenesList.length === 0 && (
-        <Text color={'dimmed'} size={'xs'}>
+        <Text color="dimmed" size="xs">
           No correlated genes with Pearson r&gt;=0.2 found.
         </Text>
       )}
     </Stack>
   );
-};
-
-export { CorrelationTable };
+}

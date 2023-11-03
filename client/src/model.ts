@@ -1,5 +1,5 @@
-import { AnnotationGrpFragment, OmicsType, StudyBasicsFragment } from './generated/types';
 import { internal } from 'arquero';
+import { AnnotationGrpFragment, OmicsType, StudyBasicsFragment } from './generated/types';
 
 export type OntologyItem = {
   id: string;

@@ -16,6 +16,7 @@ gql`
     description
     cellCount
     externalWebsite
+    metadata
     defaultStudyLayerId
     studyOntologyList {
       ontCodes
@@ -55,46 +56,26 @@ gql`
     }
   }
 
+  query singleStudyInfo($studyId: Int!) {
+    studyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
+      ...StudyInfo
+    }
+  }
+
   fragment AnnotationGrp on StudyAnnotationFrontendGroup {
     annotationGroupId
     isPrimary
     ordering
     displayGroup
     differentialExpressionCalculated
+    createdByUser
+    currentUserIsOwner
+    privateToUser
     annotationValuesList {
       annotationValueId
       displayValue
       color
       sampleCount
-    }
-  }
-
-  fragment StudyBasics on Study {
-    studyId
-    studyName
-    studyLayersList {
-      layer
-      studyLayerId
-    }
-    studyOmicsTransposedList {
-      displayName
-      displaySymbol
-      omicsId
-      omicsType
-    }
-    annotationGroupsList {
-      ...AnnotationGrp
-    }
-    studySampleAnnotationSubsamplingList {
-      annotationValueId
-      studySampleIds
-    }
-    projections
-    studySampleProjectionSubsamplingTransposedList {
-      projectionType
-      studySampleId
-      projection
-      modality
     }
   }
 
@@ -106,6 +87,8 @@ gql`
     study {
       studyName
       studyId
+      cellCount
+      description
     }
     annotationValue {
       annotationGroup {
@@ -154,9 +137,47 @@ gql`
     }
   }
 
+  fragment StudyBasics on Study {
+    studyId
+    studyName
+    studyLayersList {
+      layer
+      studyLayerId
+    }
+    cellCount
+
+    annotationGroupsList {
+      ...AnnotationGrp
+    }
+    studySampleAnnotationSubsamplingList {
+      annotationValueId
+      studySampleIds
+    }
+    projections
+  }
   query StudyBasics($studyId: Int!) {
     study(studyId: $studyId) {
       ...StudyBasics
+    }
+  }
+  query StudyBasics2($studyId: Int!) {
+    study(studyId: $studyId) {
+      studyOmicsTransposedList {
+        displayName
+        displaySymbol
+        omicsId
+        omicsType
+      }
+    }
+  }
+  query StudyBasics3($studyId: Int!) {
+    study(studyId: $studyId) {
+      studySampleProjectionSubsamplingTransposedList {
+        projectionType
+        studySampleId
+        projection
+        modality
+      }
     }
   }
 
@@ -168,13 +189,21 @@ gql`
     }
   }
 
-  query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  query ExpressionViolinPlot(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsId: Int!
+    $annotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+    $annotationSecondaryGroupId: Int
+  ) {
     violinPlot(
       pStudyId: $studyId
       pStudyLayerId: $studyLayerId
       pOmicsId: $omicsId
       pAnnotationGroupId: $annotationGroupId
       pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pSecondaryAnnotationGroupId: $annotationSecondaryGroupId
     )
   }
 
@@ -258,6 +287,18 @@ gql`
     }
   }
 
+  mutation EditUserAnnotation($studyId: Int!, $annotationGroupId: Int!, $privateToUser: Boolean!) {
+    userAnnotationEdit(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId, pPrivateToUser: $privateToUser }) {
+      boolean
+    }
+  }
+
+  mutation DeleteUserAnnotation($studyId: Int!, $annotationGroupId: Int!) {
+    userAnnotationDelete(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId }) {
+      boolean
+    }
+  }
+
   fragment StudyAdminDetails on StudyAdminDetail {
     studyId
     studyName
@@ -323,16 +364,20 @@ gql`
   }
 
   mutation studyDelete($studyId: Int!) {
-    deleteStudy(input: { studyId: $studyId }) {
-      study {
-        studyId
-      }
+    deleteAllStudyData(input: { pStudyId: $studyId }) {
+      boolean
     }
   }
 
   mutation createStudyUpload($filename: String!) {
     createStudyUpload(input: { filename: $filename }) {
       json
+    }
+  }
+
+  mutation studyDefinitionUpdate {
+    studyDefinitionUpdate(input: {}) {
+      boolean
     }
   }
 `;

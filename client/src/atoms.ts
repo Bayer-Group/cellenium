@@ -1,6 +1,8 @@
 import { atom, selector } from 'recoil';
+import * as aq from 'arquero';
+import { Struct } from 'arquero/dist/types/table/transformable';
 import { Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable } from './model';
-import { apolloClient } from './index';
+import { apolloClient } from './client';
 import {
   AllGenesDocument,
   AllGenesQuery,
@@ -9,12 +11,175 @@ import {
   CellOAnnotationGroupIdQuery,
   CellOAnnotationGroupIdQueryVariables,
   OmicsGeneFragment,
+  StudyAnnotationFrontendValue,
+  StudyBasics2Document,
+  StudyBasics2Query,
+  StudyBasics2QueryVariables,
+  StudyBasics3Document,
+  StudyBasics3Query,
+  StudyBasics3QueryVariables,
   StudyBasicsDocument,
   StudyBasicsFragment,
   StudyBasicsQuery,
   StudyBasicsQueryVariables,
 } from './generated/types';
-import * as aq from 'arquero';
+
+export const studyIdState = atom<number>({
+  key: 'studyId',
+  default: undefined,
+});
+
+function buildSampleAnnotationTable(s: StudyBasicsFragment) {
+  const samplesTable = aq
+    .from(s.studySampleAnnotationSubsamplingList)
+    .select(aq.not(['__typename']))
+    .unroll('studySampleIds')
+    .select({
+      studySampleIds: 'studySampleId',
+      annotationValueId: 'annotationValueId',
+    });
+  // samplesTable.print();
+  const annotationGroupsValuesTable = aq
+    .from(s.annotationGroupsList)
+    .unroll('annotationValuesList')
+    .derive({
+      // @ts-ignore
+      annotationValueId: (d) => d.annotationValuesList.annotationValueId,
+    })
+    .select('annotationGroupId', 'annotationValueId');
+
+  // annotationGroupsValuesTable.print();
+  const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
+  return SamplesAnnotationTable.definedTable(annotatedSamplesTable);
+}
+
+function buildOmicsTable(d: { displaySymbol: string[]; displayName: string[]; omicsType: string[]; omicsId: number[] }) {
+  const retTable = aq.table({
+    value: d.displaySymbol,
+    displaySymbol: d.displaySymbol,
+    displayName: d.displayName,
+    omicsType: d.omicsType,
+    omicsId: d.omicsId,
+  });
+  return StudyOmicsTable.definedTable(retTable);
+}
+
+function buildSampleProjectionTable(d: { studySampleId: number[]; projection: number[] }) {
+  return SamplesProjectionTable.definedTable(
+    aq.table({
+      studySampleId: d.studySampleId,
+      projectionX: Array.from(Array(d.projection ? d.projection.length / 2 : 0).keys()).map((i) => d.projection[i * 2]),
+      projectionY: Array.from(Array(d.projection ? d.projection.length / 2 : 0).keys()).map((i) => d.projection[i * 2 + 1]),
+    }),
+  );
+}
+
+export const studyState = selector<Study | undefined>({
+  key: 'studyState',
+  get: async ({ get }) => {
+    const studyId = get(studyIdState);
+    const studyReloadHelper = get(studyReloadHelperState);
+    if (studyId && studyReloadHelper) {
+      // study is loaded in three parallel requests, as a performance improvement
+      const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
+        query: StudyBasicsDocument,
+        variables: {
+          studyId,
+        },
+        fetchPolicy: 'network-only',
+      });
+      const response2Promise = apolloClient.query<StudyBasics2Query, StudyBasics2QueryVariables>({
+        query: StudyBasics2Document,
+        variables: {
+          studyId,
+        },
+        fetchPolicy: 'network-only',
+      });
+      const response3Promise = apolloClient.query<StudyBasics3Query, StudyBasics3QueryVariables>({
+        query: StudyBasics3Document,
+        variables: {
+          studyId,
+        },
+        fetchPolicy: 'network-only',
+      });
+      const response = await responsePromise;
+      const response2 = await response2Promise;
+      const response3 = await response3Promise;
+
+      if (response.data?.study) {
+        if (response3.data?.study?.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
+          throw Error('no projection data');
+        }
+        if (response.data?.study?.studySampleAnnotationSubsamplingList.length === 0) {
+          throw Error('no study annotations');
+        }
+        if (response2.data?.study?.studyOmicsTransposedList.length === 0) {
+          throw Error('no genes');
+        }
+        const studyOmicsTable = buildOmicsTable(response2.data.study.studyOmicsTransposedList[0]);
+        const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
+        const s: Study = {
+          ...response.data.study,
+          samplesProjectionTables: new Map(
+            response3.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
+              tl.modality ? `${tl.modality}:${tl.projectionType}` : tl.projectionType,
+              buildSampleProjectionTable(tl),
+            ]),
+          ),
+          samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
+          studyOmicsTable,
+          studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
+          omicsTypes,
+          annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
+          annotationValueMap: new Map<number, StudyAnnotationFrontendValue>(
+            response.data.study.annotationGroupsList
+              .map((g) => g.annotationValuesList)
+              .flat(2)
+              .map((v: Struct) => [v.annotationValueId, v as StudyAnnotationFrontendValue]),
+          ),
+        };
+        return s;
+      }
+      return undefined;
+    }
+    return null;
+  },
+  // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
+  dangerouslyAllowMutability: true,
+});
+
+export const pageState = atom<string>({
+  key: 'page',
+  default: 'CellMarkerAnalysis',
+});
+
+export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
+  key: 'allGenesState',
+  get: async () => {
+    const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
+      query: AllGenesDocument,
+      fetchPolicy: 'no-cache',
+    });
+    if (allGenes?.data) {
+      return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
+    }
+    throw Error('Error fetching genes');
+  },
+});
+
+export const cellOAnnotationGroupIdState = selector<number | undefined>({
+  key: 'cellOAnnotationGroupIdState',
+  get: async () => {
+    const annotationGroupIdData = await apolloClient.query<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>({
+      query: CellOAnnotationGroupIdDocument,
+      fetchPolicy: 'no-cache',
+    });
+    if (annotationGroupIdData?.data) {
+      return annotationGroupIdData.data.annotationGroupsList[0].annotationGroupId;
+    }
+    return 0;
+  },
+});
 
 export const correlationOmicsIdState = atom<number>({
   key: 'coexpressionOmicsId',
@@ -23,7 +188,7 @@ export const correlationOmicsIdState = atom<number>({
 
 export const userGeneStoreOpenState = atom<boolean>({
   key: 'usergenestoreopen',
-  default: false,
+  default: true,
 });
 export const userGeneStoreCounterColor = atom<string>({
   key: 'usergenestorecountercolor',
@@ -70,8 +235,8 @@ export const annotationGroupIdState = atom<number | undefined>({
   default: undefined,
 });
 
-export const studyIdState = atom<number>({
-  key: 'studyId',
+export const annotationSecondaryGroupIdState = atom<number | undefined>({
+  key: 'annotationSecondaryGroupId',
   default: undefined,
 });
 
@@ -100,138 +265,4 @@ export const studyLayerIdState = selector<number>({
 export const selectedProjectionState = atom<string>({
   key: 'selectedProjection',
   default: '',
-});
-
-function buildSampleProjectionTable(d: { studySampleId: number[]; projection: number[] }) {
-  return SamplesProjectionTable.definedTable(
-    aq.table({
-      studySampleId: d.studySampleId,
-      projectionX: Array.from(Array(d.projection?.length / 2).keys()).map((i) => d.projection[i * 2]),
-      projectionY: Array.from(Array(d.projection?.length / 2).keys()).map((i) => d.projection[i * 2 + 1]),
-    }),
-  );
-}
-
-function buildSampleAnnotationTable(s: StudyBasicsFragment) {
-  const samplesTable = aq
-    .from(s.studySampleAnnotationSubsamplingList)
-    .select(aq.not(['__typename']))
-    .unroll('studySampleIds')
-    .select({
-      studySampleIds: 'studySampleId',
-      annotationValueId: 'annotationValueId',
-    });
-  // samplesTable.print();
-  let annotationGroupsValuesTable = aq
-    .from(s.annotationGroupsList)
-    .unroll('annotationValuesList')
-    .derive({
-      // @ts-ignore
-      annotationValueId: (d) => d.annotationValuesList.annotationValueId,
-    })
-    .select('annotationGroupId', 'annotationValueId');
-
-  // annotationGroupsValuesTable.print();
-  const annotatedSamplesTable = samplesTable.join(annotationGroupsValuesTable, 'annotationValueId').reify();
-  return SamplesAnnotationTable.definedTable(annotatedSamplesTable);
-}
-
-function buildOmicsTable(d: { displaySymbol: string[]; displayName: string[]; omicsType: string[]; omicsId: number[] }) {
-  const retTable = aq.table({
-    value: d.displaySymbol,
-    displaySymbol: d.displaySymbol,
-    displayName: d.displayName,
-    omicsType: d.omicsType,
-    omicsId: d.omicsId,
-  });
-  return StudyOmicsTable.definedTable(retTable);
-}
-
-export const studyState = selector<Study | undefined>({
-  key: 'studyState',
-  get: async ({ get }) => {
-    const studyId = get(studyIdState);
-    // const studyReloadHelper = get(studyReloadHelperState);
-    if (studyId) {
-      const responsePromise = apolloClient.query<StudyBasicsQuery, StudyBasicsQueryVariables>({
-        query: StudyBasicsDocument,
-        variables: {
-          studyId,
-        },
-        fetchPolicy: 'network-only',
-      });
-      // console.log('REFETCH', studyReloadHelper)
-      // could do multiple queries in parallel ... but maybe not needed
-      const response = await responsePromise;
-
-      if (response?.data?.study) {
-        if (response.data.study.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
-          throw Error('no projection data');
-        }
-        if (response.data.study.studySampleAnnotationSubsamplingList.length === 0) {
-          throw Error('no study annotations');
-        }
-        if (response.data.study.studyOmicsTransposedList.length === 0) {
-          throw Error('no genes');
-        }
-        const studyOmicsTable = buildOmicsTable(response.data.study.studyOmicsTransposedList[0]);
-        const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
-        const s: Study = {
-          ...response.data.study,
-          samplesProjectionTables: new Map(
-            response.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
-              tl.modality ? `${tl.modality}:${tl.projectionType}` : tl.projectionType,
-              buildSampleProjectionTable(tl),
-            ]),
-          ),
-          samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
-          studyOmicsTable,
-          studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
-          omicsTypes,
-          annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
-          annotationValueMap: new Map(
-            response.data.study.annotationGroupsList
-              .map((g) => g.annotationValuesList)
-              .flat(2)
-              .map((v: any) => [v.annotationValueId, v]),
-          ),
-        };
-        // console.log('studyState set', s)
-        return s;
-      }
-    }
-  },
-  // by default, recoil protects returned objects with immutability - but arquero's query builder pattern needs to write to the table state
-  dangerouslyAllowMutability: true,
-});
-
-export const pageState = atom<string>({
-  key: 'page',
-  default: 'CellMarkerAnalysis',
-});
-
-export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
-  key: 'allGenesState',
-  get: async ({}) => {
-    const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
-      query: AllGenesDocument,
-      fetchPolicy: 'no-cache',
-    });
-    if (allGenes?.data) {
-      return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
-    }
-  },
-});
-
-export const cellOAnnotationGroupIdState = selector<number | undefined>({
-  key: 'cellOAnnotationGroupIdState',
-  get: async ({}) => {
-    const annotationGroupIdData = await apolloClient.query<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>({
-      query: CellOAnnotationGroupIdDocument,
-      fetchPolicy: 'no-cache',
-    });
-    if (annotationGroupIdData?.data) {
-      return annotationGroupIdData.data.annotationGroupsList[0].annotationGroupId;
-    }
-  },
 });

@@ -19,25 +19,30 @@ CREATE TABLE study
     import_file        text, --- s3 file path
     reader_permissions text[],
     admin_permissions  text[],
+    metadata           jsonb,
     legacy_config      jsonb
 );
 
 -- decide which studies can be analyzed by the current user:
 -- all studies which are open to everybody ("reader_permissions is null")
 -- and all studies which list of allowed groups has at least one group in common with the current user's groups
-create view study_visible_currentuser
+create or replace view study_visible_currentuser
+    -- see https://www.postgresql.org/docs/current/rules-privileges.html
+    with (security_barrier)
 as
 select s.study_id
 from study s
 where s.reader_permissions is null
+   or s.reader_permissions = ARRAY []::text[]
    or s.reader_permissions && current_user_groups();
 grant select on study_visible_currentuser to postgraphile;
 
-create view study_administrable_currentuser
+create or replace view study_administrable_currentuser
 as
 select s.study_id
 from study s
 where s.admin_permissions is null
+   or s.reader_permissions = ARRAY []::text[]
    or s.admin_permissions && current_user_groups();
 grant select on study_administrable_currentuser to postgraphile;
 
@@ -63,7 +68,7 @@ CREATE POLICY study_delete_policy ON study FOR DELETE TO postgraphile
 DROP POLICY IF EXISTS study_insert_policy ON study;
 CREATE POLICY study_insert_policy ON study FOR INSERT TO postgraphile
     WITH CHECK (
-        true
+    true
     );
 
 grant insert, select, update, delete on study to postgraphile;
@@ -72,7 +77,8 @@ grant usage, select ON sequence study_study_id_seq TO postgraphile;
 CREATE OR REPLACE FUNCTION create_study_for_current_user(in study_name text)
     RETURNS bool
     LANGUAGE plpgsql
-AS $$
+AS
+$$
 BEGIN
     INSERT INTO study (study_name, reader_permissions, admin_permissions)
     VALUES (study_name, null, null);
@@ -129,9 +135,9 @@ grant select on omics_region_gene to postgraphile;
 DROP INDEX IF EXISTS omics_region_gene_1;
 CREATE UNIQUE INDEX omics_region_gene_1 on omics_region_gene (region_id, gene_id);
 
--- TODO I had to add this to fix a postgraphile schema generation problem
-COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" IS E'@fieldName omics_region_newNameHere';
-
+COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" IS E'@fieldName omics_region_gene_region';
+alter table omics_region_gene
+    alter constraint omics_region_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 
 
 -- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
@@ -157,6 +163,8 @@ CREATE TABLE omics_protein_antibody_tag_gene
     protein_antibody_tag_id int not null references omics_protein_antibody_tag,
     gene_id                 int not null references omics_gene
 );
+alter table omics_protein_antibody_tag_gene
+    alter constraint omics_protein_antibody_tag_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 grant select on omics_protein_antibody_tag_gene to postgraphile;
 create unique index omics_protein_antibody_tag_gene_1 on omics_protein_antibody_tag_gene (protein_antibody_tag_id, gene_id);
 
@@ -174,6 +182,8 @@ CREATE TABLE omics_transcription_factor_gene
     transcription_factor_id int not null references omics_transcription_factor,
     gene_id                 int not null references omics_gene
 );
+alter table omics_transcription_factor_gene
+    alter constraint omics_transcription_factor_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 grant select on omics_transcription_factor_gene to postgraphile;
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
 
@@ -269,6 +279,7 @@ CREATE TABLE study_annotation_group_ui
     differential_expression_calculated boolean not null
 );
 grant select on study_annotation_group_ui to postgraphile;
+create unique index study_annotation_group_ui_1 on study_annotation_group_ui (study_id, annotation_group_id);
 
 CREATE TABLE study_sample
 (
@@ -284,7 +295,6 @@ CREATE TABLE study_sample
     h5ad_obs_key    text not null
 );
 grant select on study_sample to postgraphile;
---create unique index study_sample_i1 on study_sample (study_id, study_sample_id);
 
 
 CREATE TABLE study_sample_projection
@@ -293,7 +303,7 @@ CREATE TABLE study_sample_projection
     study_sample_id     int     not null,
     constraint fk_study_sample
         FOREIGN KEY (study_id, study_sample_id)
-            REFERENCES study_sample (study_id, study_sample_id) ON DELETE CASCADE,
+            REFERENCES study_sample (study_id, study_sample_id),
     projection_type     text    not null,
     modality            text,
     projection          real[]  not null,
@@ -301,6 +311,10 @@ CREATE TABLE study_sample_projection
     display_subsampling boolean not null
 );
 grant select on study_sample_projection to postgraphile;
+create index study_sample_projection_1 on study_sample_projection (study_id, projection_type, display_subsampling) include (study_sample_id, projection) where (display_subsampling);
+create index study_sample_projection_2 on study_sample_projection (study_id, projection_type);
+create unique index study_sample_projection_3 on study_sample_projection (study_id, study_sample_id, projection_type, modality);
+
 
 CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed
 as
@@ -489,5 +503,61 @@ BEGIN
             comment on table expression_%1$s is ''@omit'';
             create unique index  expression_%1$s_omics_uq on expression_%1$s(omics_id);
             ', study_layer_id);
-END ;
+END;
+$$;
+
+create or replace function delete_all_study_data(p_study_id in int)
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+declare
+    delete_study_layer_id int;
+begin
+
+    for delete_study_layer_id in (SELECT study_layer_id FROM study_layer WHERE study_id = p_study_id)
+        loop
+            EXECUTE 'drop table if exists expression_' || delete_study_layer_id;
+        end loop;
+    delete from differential_expression where study_id = p_study_id;
+    delete from study_omics where study_id = p_study_id;
+    delete from study_layer where study_id = p_study_id;
+    delete from study_sample_annotation where study_id = p_study_id;
+    delete from study_annotation_group_ui where study_id = p_study_id;
+    delete from study_sample_projection where study_id = p_study_id;
+    delete from study_sample where study_id = p_study_id;
+    delete
+    from annotation_value
+    where annotation_group_id in
+          (select saved_as_annotation_group_id from user_annotation_group where study_id = p_study_id);
+    delete from user_annotation_group where study_id = p_study_id;
+    delete
+    from annotation_group
+    where annotation_group_id in
+          (select saved_as_annotation_group_id from user_annotation_group where study_id = p_study_id);
+    delete from study where study_id = p_study_id;
+    return true;
+end;
+$$;
+
+create or replace procedure reset_study(p_study_id in int)
+    language plpgsql
+as
+$$
+declare
+    keep_study_name        text;
+    keep_filename          text;
+    keep_import_file       text;
+    keep_admin_permissions text[];
+begin
+    select study_name, filename, import_file, admin_permissions
+    into keep_study_name, keep_filename, keep_import_file, keep_admin_permissions
+    from study
+    where study_id = p_study_id;
+    perform delete_all_study_data(p_study_id);
+    insert into study (study_id, study_name, filename, import_file, admin_permissions)
+    values (p_study_id, keep_study_name, keep_filename, keep_import_file, keep_admin_permissions);
+end;
 $$;

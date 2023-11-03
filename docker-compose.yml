@@ -4,7 +4,7 @@ services:
   postgres:
     build:
       context: ./postgres
-    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB'
+    command: postgres -c 'port=5001' -c 'temp_buffers=200MB' -c 'work_mem=200MB' -c 'max_connections=100' -c 'random_page_cost=1'
     environment:
       - PGPORT=5001
       - POSTGRES_PASSWORD=postgres
@@ -52,3 +52,5 @@ services:
 
 volumes:
   postgresdata:
+
+

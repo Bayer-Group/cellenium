@@ -1,15 +1,64 @@
-import { useCallback, useState } from 'react';
-import { NavBar } from '../components';
-import { Button, Container, Group, Loader, Space, Stack, Text } from '@mantine/core';
+import { useCallback, useMemo, useState } from 'react';
+import { Button, createStyles, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { IconArticle, IconDotsVertical, IconPlus, IconX } from '@tabler/icons-react';
-import { StudyAdminDetailsFragment, useStudyAdminListQuery } from '../generated/types';
 import DataTable from 'react-data-table-component';
-import { CreateStudyModal } from '../components/StudyAdmin/CreateStudyModal.tsx';
-import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal.tsx';
-import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal.tsx';
-import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal.tsx';
+import { StudyAdminDetailsFragment, useStudyAdminListQuery } from '../generated/types';
+import { CreateStudyModal } from '../components/StudyAdmin/CreateStudyModal';
+import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal';
+import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal';
+import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal';
+import { NavBarProvider } from '../components/NavBar/NavBar';
+
+const useStyles = createStyles(() => ({
+  fullW: {
+    width: '100%',
+  },
+  cursor: {
+    cursor: 'pointer',
+  },
+}));
+
+function StudyImportLogCell({ row, setSelectedLogStudy }: { row: StudyAdminDetailsFragment; setSelectedLogStudy: (row: StudyAdminDetailsFragment) => void }) {
+  const { classes } = useStyles();
+  const selectStudyLog = useCallback(() => {
+    setSelectedLogStudy(row);
+  }, [row, setSelectedLogStudy]);
+
+  return !row.hasImportLog ? null : <IconArticle onClick={selectStudyLog} className={classes.cursor} />;
+}
+
+function StudyImportAdminCell({
+  row,
+  setSelectedEditStudy,
+}: {
+  row: StudyAdminDetailsFragment;
+  setSelectedEditStudy: (row: StudyAdminDetailsFragment) => void;
+}) {
+  const { classes } = useStyles();
+  const selectStudyEdit = useCallback(() => {
+    setSelectedEditStudy(row);
+  }, [row, setSelectedEditStudy]);
+
+  return !row.adminPermissionGranted ? null : <IconDotsVertical onClick={selectStudyEdit} className={classes.cursor} />;
+}
+
+function StudyImportDeleteCell({
+  row,
+  setSelectedDeleteStudy,
+}: {
+  row: StudyAdminDetailsFragment;
+  setSelectedDeleteStudy: (row: StudyAdminDetailsFragment) => void;
+}) {
+  const { classes } = useStyles();
+  const selectStudyDelete = useCallback(() => {
+    setSelectedDeleteStudy(row);
+  }, [row, setSelectedDeleteStudy]);
+
+  return !row.adminPermissionGranted ? null : <IconX onClick={selectStudyDelete} className={classes.cursor} />;
+}
 
 export default function StudyAdmin() {
+  const { classes } = useStyles();
   const [newStudyModalOpen, setNewStudyModalOpen] = useState(false);
 
   const { data, loading, refetch, error } = useStudyAdminListQuery();
@@ -17,97 +66,111 @@ export default function StudyAdmin() {
   const [selectedDeleteStudy, setSelectedDeleteStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
   const [selectedLogStudy, setSelectedLogStudy] = useState<StudyAdminDetailsFragment | undefined>(undefined);
 
-  const resetNewStudyModal = useCallback(() => {
+  const resetNewStudyModal = useCallback(async () => {
     setNewStudyModalOpen(false);
-    void refetch();
+    await refetch();
   }, [setNewStudyModalOpen, refetch]);
 
-  const resetDeleteModal = useCallback(() => {
+  const resetDeleteModal = useCallback(async () => {
     setSelectedDeleteStudy(undefined);
-    void refetch();
+    await refetch();
   }, [setSelectedDeleteStudy, refetch]);
 
-  const resetEditModal = useCallback(() => {
+  const resetEditModal = useCallback(async () => {
     setSelectedEditStudy(undefined);
-    void refetch();
+    await refetch();
   }, [setSelectedEditStudy, refetch]);
 
-  const columns = [
-    {
-      name: 'ID',
-      selector: (row: StudyAdminDetailsFragment) => row.studyId,
-      sortable: true,
-      width: '60px',
-    },
-    {
-      name: 'Title',
-      selector: (row: StudyAdminDetailsFragment) => row.studyName,
-      sortable: true,
-    },
-    {
-      name: 'Filename',
-      selector: (row: StudyAdminDetailsFragment) => row.filename,
-      sortable: true,
-    },
-    {
-      name: 'Your Role',
-      selector: (row: StudyAdminDetailsFragment) => (row.adminPermissionGranted ? 'Admin' : row.readerPermissionGranted ? 'View' : 'No Access'),
-      sortable: true,
-      width: '100px',
-    },
-    {
-      name: 'Import Status',
-      selector: (row: StudyAdminDetailsFragment) =>
-        row.importStarted
-          ? row.importFailed
+  const StudyImportLogCellFn = useCallback((row: StudyAdminDetailsFragment) => {
+    return <StudyImportLogCell row={row} setSelectedLogStudy={setSelectedLogStudy} />;
+  }, []);
+
+  const StudyImportAdminCellFn = useCallback((row: StudyAdminDetailsFragment) => {
+    return <StudyImportAdminCell row={row} setSelectedEditStudy={setSelectedEditStudy} />;
+  }, []);
+
+  const StudyImportDeleteCellFn = useCallback((row: StudyAdminDetailsFragment) => {
+    return <StudyImportDeleteCell row={row} setSelectedDeleteStudy={setSelectedDeleteStudy} />;
+  }, []);
+
+  const columns = useMemo(() => {
+    return [
+      {
+        name: 'ID',
+        selector: (row: StudyAdminDetailsFragment) => row.studyId,
+        sortable: true,
+        width: '15%',
+      },
+      {
+        name: 'Title',
+        selector: (row: StudyAdminDetailsFragment) => row.studyName,
+        sortable: true,
+      },
+      {
+        name: 'Filename',
+        selector: (row: StudyAdminDetailsFragment) => row.filename,
+        width: '20%',
+      },
+      {
+        name: 'Your Role',
+        selector: (row: StudyAdminDetailsFragment) => (row.adminPermissionGranted ? 'Admin' : row.readerPermissionGranted ? 'View' : 'No Access'),
+        sortable: true,
+        width: '10%',
+      },
+      {
+        name: 'Import Status',
+        selector: (row: StudyAdminDetailsFragment) =>
+          row.importStarted
+            ? row.importFailed
+              ? 'Failed'
+              : row.importFinished
+              ? 'Imported'
+              : 'Importing...'
+            : row.importFailed
             ? 'Failed'
             : row.importFinished
             ? 'Imported'
-            : 'Unknown Error'
-          : row.importFailed
-          ? 'Failed'
-          : row.importFinished
-          ? 'Imported'
-          : 'Not Started',
-      sortable: true,
-      width: '130px',
-    },
-    {
-      name: '',
-      width: '50px',
-      cell: (row: StudyAdminDetailsFragment) =>
-        !row.hasImportLog ? null : (
-          <span title={'View import logs'}>
-            <IconArticle onClick={() => setSelectedLogStudy(row)} style={{ cursor: 'pointer' }} />
-          </span>
-        ),
-    },
-    {
-      name: '',
-      width: '50px',
-      cell: (row: StudyAdminDetailsFragment) =>
-        !row.adminPermissionGranted ? null : <IconDotsVertical onClick={() => setSelectedEditStudy(row)} style={{ cursor: 'pointer' }} />,
-    },
-    {
-      name: '',
-      width: '50px',
-      cell: (row: StudyAdminDetailsFragment) =>
-        !row.adminPermissionGranted ? null : <IconX onClick={() => setSelectedDeleteStudy(row)} style={{ cursor: 'pointer' }} />,
-    },
-  ];
+            : 'Not Started',
+        sortable: true,
+        width: '130px',
+      },
+      {
+        name: '',
+        width: '50px',
+        cell: StudyImportLogCellFn,
+      },
+      {
+        name: '',
+        width: '50px',
+        cell: StudyImportAdminCellFn,
+      },
+      {
+        name: '',
+        width: '50px',
+        cell: StudyImportDeleteCellFn,
+      },
+    ];
+  }, [StudyImportAdminCellFn, StudyImportDeleteCellFn, StudyImportLogCellFn]);
+
+  const openNewStudyModal = useCallback(() => {
+    setNewStudyModalOpen(!newStudyModalOpen);
+  }, [newStudyModalOpen]);
+
+  const resetStudyLogModal = useCallback(() => {
+    setSelectedLogStudy(undefined);
+  }, []);
 
   return (
-    <Container fluid={true}>
+    <NavBarProvider>
       <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />
-      {newStudyModalOpen && <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />}
+      <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />
       <DeleteStudyModal study={selectedDeleteStudy} reset={resetDeleteModal} opened={selectedDeleteStudy !== undefined} />
-      <StudyLogModal opened={selectedLogStudy !== undefined} study={selectedLogStudy} reset={() => setSelectedLogStudy(undefined)} />
-      <NavBar />
+      <StudyLogModal opened={selectedLogStudy !== undefined} study={selectedLogStudy} reset={resetStudyLogModal} />
       <Space h="xl" />
       <Stack px="md">
         <Group position="right">
           {(data?.userStudyUploadConfigured || true) && (
-            <Button onClick={() => setNewStudyModalOpen(true)}>
+            <Button onClick={openNewStudyModal}>
               <Group spacing="xs">
                 <IconPlus />
                 <span>New Study</span>
@@ -121,13 +184,15 @@ export default function StudyAdmin() {
             <Loader variant="dots" color="blue" size="md" />
           </Group>
         )}
-        {!loading && data ? <DataTable data={data?.studyAdminDetailsList || []} columns={columns} defaultSortFieldId={1} defaultSortAsc={false} /> : null}
+        {!loading && data ? (
+          <DataTable data={data?.studyAdminDetailsList || []} columns={columns} defaultSortFieldId={1} defaultSortAsc={false} className={classes.fullW} />
+        ) : null}
         {error && (
           <Group position="center">
             <Text weight="bold">An Error occurred</Text>
           </Group>
         )}
       </Stack>
-    </Container>
+    </NavBarProvider>
   );
 }

@@ -1,32 +1,42 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { OntologyItem } from '../../model';
-import OntologyNode from './OntologyNode';
+import { OntologyNode } from './OntologyNode';
+import { StudyOverview } from '../../generated/types';
 
-const OntologyBranch = ({ item, level, handleAddOntologyItem }: { item: OntologyItem; level: number; handleAddOntologyItem: Function }) => {
+export function OntologyBranch({
+  item,
+  level,
+  handleAddOntologyItem,
+  studies,
+}: {
+  item: OntologyItem;
+  level: number;
+  handleAddOntologyItem: (item: OntologyItem) => void;
+  studies?: StudyOverview & { allOntCodes: string[] }[];
+}) {
   const [selected, setSelected] = useState(false);
-  const hasChildren = item && item.children && item.children.length > 0 ? true : false;
+  const hasChildren = !!(item && item.children && item.children.length > 0);
 
-  const renderChildren = () => {
-    if (hasChildren) {
-      return (
-        item &&
-        item.children &&
-        item.children.map((child) => {
-          return <OntologyBranch handleAddOntologyItem={handleAddOntologyItem} key={child.unique_id} item={child} level={level + 1} />;
-        })
-      );
-    }
-    return null;
-  };
-  const toggle = () => {
+  const toggle = useCallback(() => {
     setSelected((prev) => !prev);
-  };
+  }, [setSelected]);
+
   return (
     <>
-      <OntologyNode item={item} selected={selected} hasChildren={hasChildren} level={level} onToggle={toggle} handleAddOntologyItem={handleAddOntologyItem} />
-      {selected && renderChildren()}
+      <OntologyNode
+        studies={studies}
+        item={item}
+        selected={selected}
+        hasChildren={hasChildren}
+        level={level}
+        onToggle={toggle}
+        handleAddOntologyItem={handleAddOntologyItem}
+      />
+      {selected && hasChildren && item && item.children
+        ? item.children.map((child) => {
+            return <OntologyBranch studies={studies} handleAddOntologyItem={handleAddOntologyItem} key={child.unique_id} item={child} level={level + 1} />;
+          })
+        : null}
     </>
   );
-};
-
-export default OntologyBranch;
+}

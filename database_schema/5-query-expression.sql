@@ -69,7 +69,7 @@ def compute_correlation(m, genes, goi):
 
 
 data = sql_query(f"""
-    SELECT s.filename,so.h5ad_var_index FROM study s
+    SELECT coalesce(s.filename, s.import_file) filename, so.h5ad_var_index FROM study s
     JOIN study_omics so
       ON s.study_id=so.study_id
     WHERE omics_id={omics_id} AND s.study_id={study_id}
@@ -220,7 +220,7 @@ CREATE AGGREGATE boxplot(real) (
     );
 
 
--- box plot / dot plot calculated in the database:
+-- box plot / dot plot calculated in the database, e.g. dot plot expression comparison, cross study plot:
 
 drop type if exists expression_by_annotation cascade;
 create type expression_by_annotation as
@@ -267,7 +267,9 @@ with expr as (select e.study_layer_id, sample_id, e.omics_id, value
                  and sample_id not in (select exclude_sample_id
                                        from study_sample_annotation exclude_ssa
                                                 cross join unnest(exclude_ssa.study_sample_ids) exclude_sample_id
-                                       where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids))
+                                                join study_layer sl on exclude_ssa.study_id = sl.study_id
+                                       where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids)
+                                         and sl.study_layer_id = any (p_study_layer_ids))
                order by 1, 2)
 select expr.study_layer_id,
        expr.omics_id,
@@ -291,3 +293,106 @@ $$;
 select study_layer_id, omics_id, annotation_value_id, annotation_display_value, q3, expr_samples_fraction from expression_by_annotation(ARRAY[3],
     ARRAY[10382, 11906], 3, ARRAY[]::int[]);
 */
+
+
+-- aggregation along two annotation group dimensions, e.g. cell type specificity plot:
+
+drop type if exists expression_by_two_annotations cascade;
+create type expression_by_two_annotations as
+(
+    omics_id                        int,
+    annotation_value_id             int,
+    annotation_display_value        text,
+    second_annotation_value_id      int,
+    second_annotation_display_value text,
+    values                          real[],
+    boxplot_params                  boxplot_values,
+    median                          real,
+    q3                              real,
+    mean                            real,
+    value_count                     int,
+    expr_samples_fraction           real
+);
+
+drop function if exists expression_by_two_annotations;
+create function expression_by_two_annotations(p_study_id int, p_study_layer_id int, p_omics_ids int[],
+                                              p_annotation_group_id int,
+                                              p_second_annotation_group_id int,
+                                              p_exclude_annotation_value_ids int[])
+    returns setof expression_by_two_annotations
+    language sql
+    stable
+as
+$$
+with expr as (select sample_id, e.omics_id, value
+              from expression e
+                       cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
+              where omics_id = any (p_omics_ids)
+                and study_layer_id = p_study_layer_id
+                -- all CTEs must be ordered for their join columns
+              order by 1, 2),
+     exclude_samples as (select exclude_sample_id
+                         from study_sample_annotation exclude_ssa
+                                  cross join unnest(exclude_ssa.study_sample_ids) exclude_sample_id
+                         where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids)
+                           and exclude_ssa.study_id = p_study_id),
+     annot1 as (select sample_id,
+                       ssa.annotation_value_id
+                from study_sample_annotation ssa
+                         cross join unnest(ssa.study_sample_ids) sample_id
+                where ssa.study_id = p_study_id
+                  and ssa.annotation_value_id in (select annotation_value_id
+                                                  from annotation_value
+                                                  where annotation_group_id = p_annotation_group_id)
+                  and sample_id not in (select exclude_sample_id from exclude_samples)
+                order by 1),
+     annot2 as (select sample_id,
+                       ssa.annotation_value_id
+                from study_sample_annotation ssa
+                         cross join unnest(ssa.study_sample_ids) sample_id
+                where ssa.study_id = p_study_id
+                  and ssa.annotation_value_id in (select annotation_value_id
+                                                  from annotation_value
+                                                  where annotation_group_id = p_second_annotation_group_id)
+                  and sample_id not in (select exclude_sample_id from exclude_samples)
+                order by 1),
+     annot_full as (select coalesce(annot1.sample_id, annot2.sample_id)                                sample_id,
+                           annot1.annotation_value_id,
+                           annot2.annotation_value_id                                                  second_annotation_value_id,
+                           count(1)
+                           over (partition by annot1.annotation_value_id, annot2.annotation_value_id ) sample_count
+                    from annot1
+                             full outer join annot2 on annot1.sample_id = annot2.sample_id
+                    order by 1)
+select expr.omics_id,
+       annot_full.annotation_value_id,
+       coalesce((select av.display_value
+                 from annotation_value av
+                 where av.annotation_value_id = annot_full.annotation_value_id), '-') annotation_display_value,
+       annot_full.second_annotation_value_id,
+       coalesce((select av.display_value
+                 from annotation_value av
+                 where av.annotation_value_id = annot_full.second_annotation_value_id),
+                '-')                                                                  second_annotation_display_value,
+       array_agg(value)                                                               values,
+       boxplot(value)                                                                 boxplot_params,
+       percentile_cont(0.5) within group (order by value)  as                         median,
+       percentile_cont(0.75) within group (order by value) as                         q3,
+       avg(value)                                          as                         "mean",
+       count(1)                                                                       value_count,
+       count(1) :: real / annot_full.sample_count                                     expr_samples_fraction
+from expr
+         join annot_full on expr.sample_id = annot_full.sample_id
+group by expr.omics_id, annot_full.annotation_value_id, annot_full.second_annotation_value_id, annot_full.sample_count
+$$;
+
+
+-- select omics_id,
+--        annotation_value_id,
+--        annotation_display_value,
+--        second_annotation_value_id,
+--        second_annotation_display_value,
+--        mean,
+--        expr_samples_fraction
+-- from expression_by_two_annotations(3, 3,
+--                                    ARRAY [784, 5125], 8, 20, ARRAY []::int[]);
