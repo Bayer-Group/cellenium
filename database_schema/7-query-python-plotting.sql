@@ -126,10 +126,10 @@ def generate_plot(study_id:int, study_layer_id:int, omics_id:int, annotation_gro
         # The primary group by selection is open in the attribute panel and shows a color legend for each attribute value.
         # We want these colors to appear in the violin 'hue' groups.
         groupByAttribute, secondaryGroupByAttribute = 'secondary_display_value', 'display_value'
-        df = df.sort_values(by=['display_value', 'secondary_display_value'])
+        df = df.sort_values(by=['display_value', 'secondary_display_value'], key=lambda col: col.str.lower())
     else:
         groupByAttribute, secondaryGroupByAttribute = 'display_value', None
-        df = df.sort_values(by=['display_value'])
+        df = df.sort_values(by=['display_value'], key=lambda col: col.str.lower())
 
     unique_x_values = len(df[groupByAttribute].unique())
     if secondaryGroupByAttribute:
