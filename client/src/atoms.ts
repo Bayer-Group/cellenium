@@ -130,7 +130,15 @@ export const studyState = selector<Study | undefined>({
           studyOmicsTable,
           studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
           omicsTypes,
-          annotationGroupMap: new Map(response.data.study.annotationGroupsList.map((g) => [g.annotationGroupId, g])),
+          annotationGroupMap: new Map(
+            response.data.study.annotationGroupsList.map((g) => [
+              g.annotationGroupId,
+              {
+                ...g,
+                annotationValuesList: [...g.annotationValuesList].sort((a, b) => a.displayValue.localeCompare(b.displayValue)),
+              },
+            ]),
+          ),
           annotationValueMap: new Map<number, StudyAnnotationFrontendValue>(
             response.data.study.annotationGroupsList
               .map((g) => g.annotationValuesList)
