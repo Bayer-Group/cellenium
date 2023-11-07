@@ -79,6 +79,7 @@ CREATE TABLE omics_base
     display_name   text
 );
 grant select on omics_base to postgraphile;
+CREATE INDEX omics_base_type_idx ON omics_base (omics_type);
 
 CREATE TABLE omics_gene
 (

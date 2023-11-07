@@ -51,6 +51,9 @@ gql`
     studyOverviewsList {
       ...StudyInfo
     }
+  }
+
+  query studiesTreeOntologies {
     treeOntologiesList {
       ...TreeOntologyOverview
     }
