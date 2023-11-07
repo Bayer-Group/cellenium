@@ -129,7 +129,8 @@ GROUP BY
 	ssa.study_id,
 	ssa.annotation_value_id;
 
-COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
+-- COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
+COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS NULL;
 GRANT SELECT ON study_sample_annotation_subsampling TO postgraphile;
 CREATE INDEX study_sample_annotation_subsampling_idx ON study_sample_annotation_subsampling (study_id);
 
@@ -170,7 +171,8 @@ GROUP BY
 	projection_type,
 	modality;
 
-COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
+-- COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
+COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS NULL;
 GRANT SELECT ON study_sample_projection_subsampling_transposed TO postgraphile;
 CREATE INDEX study_sample_projection_subsampling_transposed_idx ON study_sample_projection_subsampling_transposed (study_id);
 
@@ -206,7 +208,8 @@ FROM
 GROUP BY
 	study_id;
 
-COMMENT ON MATERIALIZED VIEW study_omics_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
+-- COMMENT ON MATERIALIZED VIEW study_omics_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
+COMMENT ON MATERIALIZED VIEW study_omics_transposed IS NULL;
 GRANT SELECT ON study_omics_transposed TO postgraphile;
 CREATE INDEX study_omics_transposed_idx ON study_omics_transposed (study_id);
 
@@ -343,8 +346,8 @@ where (ug.saved_as_annotation_group_id is null
     or ug.private_to_user = False
     or ug.created_by_user = current_user_email()
           );
-comment on materialized view study_annotation_frontend_group is
-    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
+-- comment on materialized view study_annotation_frontend_group is E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
+comment on materialized view study_annotation_frontend_group is NULL;
 grant select on study_annotation_frontend_group to postgraphile;
 CREATE INDEX study_annotation_frontend_group_idx ON study_annotation_frontend_group (study_id);
 
