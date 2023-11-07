@@ -137,31 +137,32 @@ gql`
     }
   }
 
-  fragment StudyBasics on Study {
-    studyId
-    studyName
-    studyLayersList {
-      layer
-      studyLayerId
-    }
-    cellCount
+  #  fragment StudyBasics on Study {
+  #    studyId
+  #    studyName
+  #    studyLayersList {
+  #      layer
+  #      studyLayerId
+  #    }
+  #    cellCount
+  #
+  #    annotationGroupsList {
+  #      ...AnnotationGrp
+  #    }
+  #    studySampleAnnotationSubsamplingList {
+  #      annotationValueId
+  #      studySampleIds
+  #    }
+  #    projections
+  #  }
 
-    annotationGroupsList {
-      ...AnnotationGrp
-    }
-    studySampleAnnotationSubsamplingList {
-      annotationValueId
-      studySampleIds
-    }
-    projections
-  }
   query StudyBasics($studyId: Int!) {
     study(studyId: $studyId) {
-      ...StudyBasics
-    }
-  }
-  query StudyBasics2($studyId: Int!) {
-    study(studyId: $studyId) {
+      studyId
+      studyName
+      cellCount
+      projections
+      __typename
       studyOmicsTransposedList {
         displayName
         displaySymbol
@@ -169,15 +170,53 @@ gql`
         omicsType
       }
     }
+    studyLayersList(condition: { studyId: $studyId }) {
+      layer
+      studyLayerId
+      __typename
+    }
+  }
+
+  query StudyBasics2($studyId: Int!) {
+    studyAnnotationFrontendGroupsList(condition: { studyId: $studyId }) {
+      annotationGroupId
+      isPrimary
+      ordering
+      displayGroup
+      differentialExpressionCalculated
+      createdByUser
+      currentUserIsOwner
+      privateToUser
+      annotationValuesList {
+        annotationValueId
+        displayValue
+        color
+        sampleCount
+        __typename
+      }
+      __typename
+    }
+    studySampleProjectionSubsamplingTransposedsList(condition: { studyId: $studyId }) {
+      projectionType
+      studySampleId
+      projection
+      modality
+      __typename
+    }
   }
   query StudyBasics3($studyId: Int!) {
-    study(studyId: $studyId) {
-      studySampleProjectionSubsamplingTransposedList {
-        projectionType
-        studySampleId
-        projection
-        modality
-      }
+    studySampleAnnotationSubsamplingsList(condition: { studyId: $studyId }) {
+      annotationValueId
+      studySampleIds
+      __typename
+    }
+
+    studyOmicsTransposedsList(condition: { studyId: $studyId }) {
+      displayName
+      displaySymbol
+      omicsId
+      omicsType
+      __typename
     }
   }
 

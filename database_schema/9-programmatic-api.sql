@@ -104,7 +104,6 @@ query StudyApiExample {
 
 
 --diff_genes = cellenium.differentially_expressed_genes(study_id = study_id, annotation = attribute, annotation_value = annotation_value)
-
 drop view if exists api_omics cascade;
 create view api_omics
 as
