@@ -24,4 +24,5 @@ code {
   src:
     local('Exo-Bold'),
     url('assets/fonts/Exo-Bold.ttf') format('truetype');
+  font-display: swap;
 }
