@@ -95,7 +95,6 @@ $$
 begin
     refresh materialized view study_overview_ontology;
     refresh materialized view study_omics_transposed;
-    refresh materialized view study_annotation_frontend_group;
     refresh materialized view study_sample_annotation_subsampling;
     refresh materialized view study_sample_projection_subsampling_transposed;
     return true;
