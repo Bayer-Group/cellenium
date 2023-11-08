@@ -311,6 +311,7 @@ create type expression_by_two_annotations as
     q3                              real,
     mean                            real,
     value_count                     int,
+    non_zero_value_count            int,
     expr_samples_fraction           real
 );
 
@@ -318,18 +319,29 @@ drop function if exists expression_by_two_annotations;
 create function expression_by_two_annotations(p_study_id int, p_study_layer_id int, p_omics_ids int[],
                                               p_annotation_group_id int,
                                               p_second_annotation_group_id int,
-                                              p_exclude_annotation_value_ids int[])
+                                              p_exclude_annotation_value_ids int[],
+                                              p_dropouts_as_zero bool)
     returns setof expression_by_two_annotations
     language sql
     stable
 as
 $$
-with expr as (select sample_id, e.omics_id, value
-              from expression e
-                       cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
-              where omics_id = any (p_omics_ids)
-                and study_layer_id = p_study_layer_id
-                -- all CTEs must be ordered for their join columns
+with expr as (select coalesce(data.sample_id, dropouts.study_sample_id) sample_id,
+                     coalesce(data.omics_id, dropouts.oid)              omics_id,
+                     coalesce(data.value, 0)                            value
+              from (select sample_id, e.omics_id, value
+                    from expression e
+                             cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
+                    where omics_id = any (p_omics_ids)
+                      and study_layer_id = p_study_layer_id) data
+                       full outer join (select oid, ss.study_sample_id
+                                        from unnest(p_omics_ids) as oid
+                                                 cross join study_sample ss
+                                        where ss.study_id = p_study_id
+                                          -- dismiss the whole outer join and just take existing expression values into account
+                                          and p_dropouts_as_zero) dropouts
+                                       on dropouts.study_sample_id = sample_id and dropouts.oid = data.omics_id
+                   -- all CTEs must be ordered for their join columns
               order by 1, 2),
      exclude_samples as (select exclude_sample_id
                          from study_sample_annotation exclude_ssa
@@ -380,6 +392,9 @@ select expr.omics_id,
        percentile_cont(0.75) within group (order by value) as                         q3,
        avg(value)                                          as                         "mean",
        count(1)                                                                       value_count,
+       -- will equal value_count if dropouts_as_zero is false
+       count(1) filter ( where value != 0 )                                           non_zero_value_count,
+       -- fraction of samples that have expression values available. Always 1 if dropouts_as_zero is true
        count(1) :: real / annot_full.sample_count                                     expr_samples_fraction
 from expr
          join annot_full on expr.sample_id = annot_full.sample_id

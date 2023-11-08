@@ -249,6 +249,59 @@ gql`
     )
   }
 
+  query ExpressionGroupTable(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsId: Int!
+    $annotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+    $annotationSecondaryGroupId: Int!
+  ) {
+    expressionByTwoAnnotationsList(
+      pStudyId: $studyId
+      pStudyLayerId: $studyLayerId
+      pOmicsIds: [$omicsId]
+      pAnnotationGroupId: $annotationGroupId
+      pSecondAnnotationGroupId: $annotationSecondaryGroupId
+      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pDropoutsAsZero: true
+    ) {
+      annotationValueId
+      annotationDisplayValue
+      secondAnnotationValueId
+      secondAnnotationDisplayValue
+      valueCount
+      median
+      nonZeroValueCount
+    }
+  }
+
+  query ExpressionTTest(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsId: Int!
+    $annotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+    $secondAnnotationGroupId: Int
+    $sample1AnnotationValueId: Int!
+    $sample1SecondAnnotationValueId: Int
+    $sample2AnnotationValueId: Int!
+    $sample2SecondAnnotationValueId: Int
+  ) {
+    expressionTtest(
+      pStudyId: $studyId
+      pStudyLayerId: $studyLayerId
+      pOmicsId: $omicsId
+      pAnnotationGroupId: $annotationGroupId
+      pSecondaryAnnotationGroupId: $secondAnnotationGroupId
+      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pSample1AnnotationValueId: $sample1AnnotationValueId
+      pSample1SecondAnnotationValueId: $sample1SecondAnnotationValueId
+      pSample2AnnotationValueId: $sample2AnnotationValueId
+      pSample2SecondAnnotationValueId: $sample2SecondAnnotationValueId
+    )
+  }
+
   query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
     correlationTrianglePlot(pStudyId: $studyId, pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
   }
