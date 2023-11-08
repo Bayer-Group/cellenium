@@ -597,6 +597,38 @@ $$ LANGUAGE plpgsql STABLE;
 select * from concept_hierarchy_minimum_trees_parents_lists('NCIT', array ['C12391','C33645','C34125','C34192','C33105','C34168','C13063','C12403','C22600','C13056','C34167','C12377','C12423','C13300','C12313','C33797','C12372','C12382','C12434','C25726','C12445','C12400','C13049','C12666','C156591','C34170','C12801','C12464','C12416','C12393','C12433','C12679','C12388','C12366','C98275','C32425','C12470','C12745','C12387','C12710','C12405','C12419','C12410','C12439','C12390','C12376','C13363','C12401','C12468','C12756','C12414','C34169','C12727','C12669','C12432','C12381','C12392','C12736','C34172','C12379','C12782','C12431','C12311','C33177','C12263','C12469','C12935','C12412','C12802','C12386','C33209','C13272','C12811','C12272','C12472','C22673','C52975','C12389','C12971','C12404','C12428','C12426','C12415','C12623','C173496']);
  */
 
+
+drop function if exists ont_codes_info;
+create function ont_codes_info(p_ontology text, p_ont_codes text[])
+    returns table
+            (
+                labels     text[],
+                parent_ids text[]
+            )
+    LANGUAGE sql
+    STABLE
+as
+$$
+select min(labels), min(parent_ids)
+from (
+         -- in case there are no parents, still find the label
+         select array_agg(distinct c.label) labels,
+                null::text[]                parent_ids
+         from ontology o
+                  join concept c on o.ontid = c.ontid
+         where o.name = p_ontology
+           and c.ont_code = any (p_ont_codes)
+         union all
+         select array_agg(distinct c.label) labels,
+                array_agg(parents.ont_code) parent_ids
+         from ontology o
+                  join concept c on o.ontid = c.ontid
+                  cross join concept_all_parents(c) parents
+         where o.name = p_ontology
+           and c.ont_code = any (p_ont_codes)) x
+$$;
+
+
 drop type if exists autocomplete_result;
 create type autocomplete_result as
 (

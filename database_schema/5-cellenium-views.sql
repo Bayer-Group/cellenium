@@ -1,38 +1,3 @@
--- decide which studies can be analyzed by the
---  current user:
---    all studies which are open to everybody
---  ("reader_permissions is null")
---    and all studies which list of allowed groups
---  has at least one group in common with the
---  current user's groups
-CREATE OR REPLACE VIEW study_visible_currentuser
--- see
--- https://www.postgresql.org/docs/current/rules-pr
--- ivileges.html
-WITH ( security_barrier
-) AS
-SELECT
-	s.study_id
-FROM
-	study s
-WHERE
-	s.reader_permissions IS NULL
-	OR s.reader_permissions = ARRAY[]::text[]
-	OR s.reader_permissions && current_user_groups ();
-
-GRANT SELECT ON study_visible_currentuser TO postgraphile;
-
-CREATE OR REPLACE VIEW study_administrable_currentuser AS
-SELECT
-	s.study_id
-FROM
-	study s
-WHERE
-	s.admin_permissions IS NULL
-	OR s.reader_permissions = ARRAY[]::text[]
-	OR s.admin_permissions && current_user_groups ();
-
-GRANT SELECT ON study_administrable_currentuser TO postgraphile;
 
 
 DROP VIEW IF EXISTS omics_all CASCADE;

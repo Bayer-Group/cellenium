@@ -53,38 +53,6 @@ $$ LANGUAGE plpython3u
     PARALLEL SAFE;
 
 
-
-drop function if exists ont_codes_info;
-create function ont_codes_info(p_ontology text, p_ont_codes text[])
-    returns table
-            (
-                labels     text[],
-                parent_ids text[]
-            )
-    LANGUAGE sql
-    STABLE
-as
-$$
-select min(labels), min(parent_ids)
-from (
-         -- in case there are no parents, still find the label
-         select array_agg(distinct c.label) labels,
-                null::text[]                parent_ids
-         from ontology o
-                  join concept c on o.ontid = c.ontid
-         where o.name = p_ontology
-           and c.ont_code = any (p_ont_codes)
-         union all
-         select array_agg(distinct c.label) labels,
-                array_agg(parents.ont_code) parent_ids
-         from ontology o
-                  join concept c on o.ontid = c.ontid
-                  cross join concept_all_parents(c) parents
-         where o.name = p_ontology
-           and c.ont_code = any (p_ont_codes)) x
-$$;
-
-
 create or replace function study_definition_update()
     returns boolean
     language plpgsql
