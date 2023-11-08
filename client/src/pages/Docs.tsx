@@ -1,7 +1,6 @@
 import React, { ComponentType, useEffect, useMemo, useState } from 'react';
 import { Center, createStyles, Group, Loader, ScrollArea, Stack, Text } from '@mantine/core';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { NavBarProvider } from '../components/NavBar/NavBar';
 import '../assets/docs_styles.css';
 
 const MDComponents: Record<
@@ -83,7 +82,7 @@ export function Docs() {
   }, [attributes, params.pageId]);
 
   return (
-    <NavBarProvider>
+    <>
       {loading && (
         <Center h="100%" w="100%">
           <Loader color="blue" />
@@ -117,6 +116,6 @@ export function Docs() {
           </Stack>
         </Group>
       )}
-    </NavBarProvider>
+    </>
   );
 }

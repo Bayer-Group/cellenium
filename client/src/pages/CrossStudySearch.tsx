@@ -7,7 +7,6 @@ import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQue
 import { cellOAnnotationGroupIdState, GeneSearchSelection } from '../atoms';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
-import { NavBarProvider } from '../components/NavBar/NavBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 
 const useStyles = createStyles(() => ({
@@ -73,35 +72,33 @@ function CrossStudySearch() {
   const onGeneSelection = useCallback((ids: number[]) => setOmicsIds(ids), []);
 
   return (
-    <NavBarProvider scrollable>
-      <Stack p="md" spacing={0}>
-        <GeneSearchBar humanOnly onGeneSelection={onGeneSelection} />
-        <Space h="xl" />
-        <StudySearchBar onStudyListUpdate={setStudyList} />
-        <Center w="100%">
-          <Text color="dimmed" align="center" mt="1rem">
-            Please enter your genes of interest. Cellenium will show the gene&apos;s expression in human studies with standardized cell annotation (CellO). As
-            the study data is processed and normalized independently, this is a qualitative direction for which studies to explore independently. Click in the
-            chart to open a study.
-          </Text>
-        </Center>
-        <Group position="center" align="start" w="100%">
-          {loading && <Loader mt="1rem" variant="dots" color="blue" />}
-          {heatmapDisplayData &&
-            heatmapDisplayData.map((heatmap) => (
-              <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
-                <Text weight="bold">{selectedFilters.find((i) => i.omicsId.includes(heatmap.omicsId))?.displaySymbol}</Text>
+    <Stack p="md" spacing={0}>
+      <GeneSearchBar humanOnly onGeneSelection={onGeneSelection} />
+      <Space h="xl" />
+      <StudySearchBar onStudyListUpdate={setStudyList} />
+      <Center w="100%">
+        <Text color="dimmed" align="center" mt="1rem">
+          Please enter your genes of interest. Cellenium will show the gene&apos;s expression in human studies with standardized cell annotation (CellO). As the
+          study data is processed and normalized independently, this is a qualitative direction for which studies to explore independently. Click in the chart
+          to open a study.
+        </Text>
+      </Center>
+      <Group position="center" align="start" w="100%">
+        {loading && <Loader mt="1rem" variant="dots" color="blue" />}
+        {heatmapDisplayData &&
+          heatmapDisplayData.map((heatmap) => (
+            <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
+              <Text weight="bold">{selectedFilters.find((i) => i.omicsId.includes(heatmap.omicsId))?.displaySymbol}</Text>
 
-                <Stack w="100%" align="center" className={classes.plotContainer}>
-                  <Stack w="100%" className={classes.plot}>
-                    <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} responsiveWidth={false} />
-                  </Stack>
+              <Stack w="100%" align="center" className={classes.plotContainer}>
+                <Stack w="100%" className={classes.plot}>
+                  <ExpressionDotPlot data={heatmap.heatmapData} xAxis="studyName" onClick={onHeatmapClick} responsiveHeight={false} responsiveWidth={false} />
                 </Stack>
               </Stack>
-            ))}
-        </Group>
-      </Stack>
-    </NavBarProvider>
+            </Stack>
+          ))}
+      </Group>
+    </Stack>
   );
 }
 

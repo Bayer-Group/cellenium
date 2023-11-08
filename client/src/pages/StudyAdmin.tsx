@@ -7,7 +7,6 @@ import { CreateStudyModal } from '../components/StudyAdmin/CreateStudyModal';
 import { DeleteStudyModal } from '../components/StudyAdmin/DeleteStudyModal';
 import { StudyLogModal } from '../components/StudyAdmin/StudyLogModal';
 import { EditStudyModal } from '../components/StudyAdmin/EditStudyModal';
-import { NavBarProvider } from '../components/NavBar/NavBar';
 
 const useStyles = createStyles(() => ({
   fullW: {
@@ -161,7 +160,7 @@ export default function StudyAdmin() {
   }, []);
 
   return (
-    <NavBarProvider>
+    <>
       <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />
       <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />
       <DeleteStudyModal study={selectedDeleteStudy} reset={resetDeleteModal} opened={selectedDeleteStudy !== undefined} />
@@ -193,6 +192,6 @@ export default function StudyAdmin() {
           </Group>
         )}
       </Stack>
-    </NavBarProvider>
+    </>
   );
 }
