@@ -11,6 +11,7 @@ import {
   CellOAnnotationGroupIdQuery,
   CellOAnnotationGroupIdQueryVariables,
   OmicsGeneFragment,
+  StudyAnnotationFrontendGroup,
   StudyAnnotationFrontendValue,
   StudyBasics2Document,
   StudyBasics2Query,
@@ -19,9 +20,9 @@ import {
   StudyBasics3Query,
   StudyBasics3QueryVariables,
   StudyBasicsDocument,
-  StudyBasicsFragment,
   StudyBasicsQuery,
   StudyBasicsQueryVariables,
+  StudySampleAnnotationSubsampling,
 } from './generated/types';
 
 export const studyIdState = atom<number>({
@@ -29,9 +30,12 @@ export const studyIdState = atom<number>({
   default: undefined,
 });
 
-function buildSampleAnnotationTable(s: StudyBasicsFragment) {
+function buildSampleAnnotationTable(
+  studySampleAnnotationSubsamplingList: StudySampleAnnotationSubsampling[],
+  annotationGroupsList: StudyAnnotationFrontendGroup,
+) {
   const samplesTable = aq
-    .from(s.studySampleAnnotationSubsamplingList)
+    .from(studySampleAnnotationSubsamplingList)
     .select(aq.not(['__typename']))
     .unroll('studySampleIds')
     .select({
@@ -40,7 +44,7 @@ function buildSampleAnnotationTable(s: StudyBasicsFragment) {
     });
   // samplesTable.print();
   const annotationGroupsValuesTable = aq
-    .from(s.annotationGroupsList)
+    .from(annotationGroupsList)
     .unroll('annotationValuesList')
     .derive({
       // @ts-ignore
@@ -107,31 +111,40 @@ export const studyState = selector<Study | undefined>({
       const response3 = await response3Promise;
 
       if (response.data?.study) {
-        if (response3.data?.study?.studySampleProjectionSubsamplingTransposedList[0].projection.length === 0) {
+        if (response2.data.studySampleProjectionSubsamplingTransposedsList[0].projection.length === 0) {
           throw Error('no projection data');
         }
-        if (response.data?.study?.studySampleAnnotationSubsamplingList.length === 0) {
+        if (response3.data?.studySampleAnnotationSubsamplingsList.length === 0) {
           throw Error('no study annotations');
         }
-        if (response2.data?.study?.studyOmicsTransposedList.length === 0) {
+        if (response.data?.study?.studyOmicsTransposedList.length === 0) {
           throw Error('no genes');
         }
-        const studyOmicsTable = buildOmicsTable(response2.data.study.studyOmicsTransposedList[0]);
+        console.log(response3.data.studyOmicsTransposedsList[0]);
+        const studyOmicsTable = buildOmicsTable(response3.data.studyOmicsTransposedsList[0]);
         const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
         const s: Study = {
           ...response.data.study,
           samplesProjectionTables: new Map(
-            response3.data.study.studySampleProjectionSubsamplingTransposedList.map((tl) => [
+            response2.data.studySampleProjectionSubsamplingTransposedsList.map((tl) => [
               tl.modality ? `${tl.modality}:${tl.projectionType}` : tl.projectionType,
               buildSampleProjectionTable(tl),
             ]),
           ),
-          samplesAnnotationTable: buildSampleAnnotationTable(response.data.study),
+          studyLayersList: response.data.studyLayersList,
+          annotationGroupsList: response2.data.studyAnnotationFrontendGroupsList,
+          studySampleAnnotationSubsamplingList: response3.data.studySampleAnnotationSubsamplingsList,
+          samplesAnnotationTable: buildSampleAnnotationTable(
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            response3.data.studySampleAnnotationSubsamplingsList,
+            response2.data.studyAnnotationFrontendGroupsList,
+          ),
           studyOmicsTable,
           studyOmicsMap: new Map(studyOmicsTable.objects().map((o) => [(o as Omics).omicsId, o as Omics])),
           omicsTypes,
           annotationGroupMap: new Map(
-            response.data.study.annotationGroupsList.map((g) => [
+            response2.data.studyAnnotationFrontendGroupsList.map((g) => [
               g.annotationGroupId,
               {
                 ...g,
@@ -140,7 +153,7 @@ export const studyState = selector<Study | undefined>({
             ]),
           ),
           annotationValueMap: new Map<number, StudyAnnotationFrontendValue>(
-            response.data.study.annotationGroupsList
+            response2.data.studyAnnotationFrontendGroupsList
               .map((g) => g.annotationValuesList)
               .flat(2)
               .map((v: Struct) => [v.annotationValueId, v as StudyAnnotationFrontendValue]),

@@ -23,28 +23,7 @@ CREATE TABLE study
     legacy_config      jsonb
 );
 
--- decide which studies can be analyzed by the current user:
--- all studies which are open to everybody ("reader_permissions is null")
--- and all studies which list of allowed groups has at least one group in common with the current user's groups
-create or replace view study_visible_currentuser
-    -- see https://www.postgresql.org/docs/current/rules-privileges.html
-    with (security_barrier)
-as
-select s.study_id
-from study s
-where s.reader_permissions is null
-   or s.reader_permissions = ARRAY []::text[]
-   or s.reader_permissions && current_user_groups();
-grant select on study_visible_currentuser to postgraphile;
 
-create or replace view study_administrable_currentuser
-as
-select s.study_id
-from study s
-where s.admin_permissions is null
-   or s.reader_permissions = ARRAY []::text[]
-   or s.admin_permissions && current_user_groups();
-grant select on study_administrable_currentuser to postgraphile;
 
 ALTER TABLE study
     ENABLE ROW LEVEL SECURITY;
@@ -100,6 +79,7 @@ CREATE TABLE omics_base
     display_name   text
 );
 grant select on omics_base to postgraphile;
+CREATE INDEX omics_base_type_idx ON omics_base (omics_type);
 
 CREATE TABLE omics_gene
 (
@@ -189,31 +169,6 @@ create unique index omics_transcription_factor_gene_1 on omics_transcription_fac
 
 -- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
 -- insert into omics_gene (gene_id, ensembl_gene_id, hgnc_symbols) values (1000000, 'ENSG00000102575', ARRAY ['ACP5']);
-
-DROP VIEW IF EXISTS omics_all;
-create view omics_all as
-select b.omics_id,
-       b.omics_type,
-       b.tax_id,
-       b.display_symbol,
-       b.display_name,
-       og.ensembl_gene_id,
-       og.entrez_gene_ids,
-       og.hgnc_symbols,
-       ogr.region,
-       array_remove(array_agg(otfg.gene_id) ||
-                    array_agg(opatg.gene_id) ||
-                    array_agg(ogrg.gene_id), null) as linked_genes
-from omics_base b
-         left join omics_gene og on b.omics_id = og.gene_id
-         left join omics_region ogr on b.omics_id = ogr.region_id
-         left join omics_region_gene ogrg on b.omics_id = ogrg.region_id
-
-         left join omics_protein_antibody_tag_gene opatg on b.omics_id = opatg.protein_antibody_tag_id
-         left join omics_transcription_factor_gene otfg on b.omics_id = otfg.transcription_factor_id
-group by og.ensembl_gene_id, og.entrez_gene_ids, og.hgnc_symbols, b.omics_id, b.omics_type, b.tax_id, b.display_symbol,
-         b.display_name, ogr.region;
-grant select on omics_all to postgraphile;
 
 
 /*
@@ -316,19 +271,6 @@ create index study_sample_projection_2 on study_sample_projection (study_id, pro
 create unique index study_sample_projection_3 on study_sample_projection (study_id, study_sample_id, projection_type, modality);
 
 
-CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed
-as
-select study_id,
-       projection_type,
-       modality,
-       array_agg(study_sample_id order by study_sample_id) study_sample_id,
-       array_agg(projection order by study_sample_id)      projection
-from study_sample_projection
-where display_subsampling = True
-group by study_id, projection_type, modality;
-comment on view study_sample_projection_subsampling_transposed is
-    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
-grant select on study_sample_projection_subsampling_transposed to postgraphile;
 
 CREATE TABLE study_sample_annotation
 (
@@ -350,20 +292,6 @@ CREATE TABLE study_sample_annotation
 grant select on study_sample_annotation to postgraphile;
 create unique index study_sample_annotation_1 on study_sample_annotation (study_id, annotation_value_id);
 
--- contains all samples which appear in at least one projection
-CREATE or replace VIEW study_sample_annotation_subsampling
-as
-select ssa.study_id,
-       ssa.annotation_value_id,
-       array_agg(distinct ssp.study_sample_id) study_sample_ids
-from study_sample_annotation ssa
-         cross join unnest(ssa.study_sample_ids) sample_id
-         join study_sample_projection ssp on ssp.study_id = ssa.study_id and ssp.study_sample_id = sample_id
-where ssp.display_subsampling = True
-group by ssa.study_id, ssa.annotation_value_id;
-comment on view study_sample_annotation_subsampling is
-    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
-grant select on study_sample_annotation_subsampling to postgraphile;
 
 CREATE TABLE study_omics
 (
@@ -385,19 +313,6 @@ CREATE TABLE study_omics
 grant select on study_omics to postgraphile;
 create unique index study_omics_i1 on study_omics (study_id, omics_id);
 
-CREATE VIEW study_omics_transposed
-as
-select study_id,
-       array_agg(ob.omics_id order by ob.omics_id)       omics_id,
-       array_agg(ob.omics_type order by ob.omics_id)     omics_type,
-       array_agg(ob.display_symbol order by ob.omics_id) display_symbol,
-       array_agg(ob.display_name order by ob.omics_id)   display_name
-from study_omics
-         join omics_base ob on study_omics.omics_id = ob.omics_id
-group by study_id;
-comment on view study_omics_transposed is
-    E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
-grant select on study_omics_transposed to postgraphile;
 
 
 CREATE TABLE differential_expression
@@ -437,14 +352,6 @@ CREATE POLICY differential_expression_policy ON differential_expression FOR SELE
     );
 grant select on differential_expression to postgraphile;
 
-CREATE OR REPLACE VIEW differential_expression_v
-    with (security_invoker = true)
-AS
-SELECT de.*, ob.omics_type, ob.display_symbol, ob.display_name, oa.linked_genes
-FROM differential_expression de
-         JOIN omics_base ob on de.omics_id = ob.omics_id
-         JOIN omics_all oa on de.omics_id = oa.omics_id;
-grant select on differential_expression_v to postgraphile;
 
 CREATE TABLE study_layer
 (
