@@ -72,14 +72,17 @@ CREATE TYPE omics_type AS ENUM ('gene', 'protein_antibody_tag', 'transcription_f
 
 CREATE TABLE omics_base
 (
-    omics_id       serial primary key,
-    omics_type     omics_type not null,
-    tax_id         int        not null,
-    display_symbol text       not null,
-    display_name   text
+    omics_id                serial primary key,
+    omics_type              omics_type not null,
+    tax_id                  int        not null,
+    display_symbol          text       not null,
+    display_name            text,
+    display_name_tsvector   tsvector generated always as ( to_tsvector('english', display_name) ) stored,
+    display_symbol_tsvector tsvector generated always as ( to_tsvector('english', display_symbol) ) stored
 );
 grant select on omics_base to postgraphile;
 CREATE INDEX omics_base_type_idx ON omics_base (omics_type);
+
 
 CREATE TABLE omics_gene
 (
@@ -467,4 +470,64 @@ begin
     insert into study (study_id, study_name, filename, import_file, admin_permissions)
     values (p_study_id, keep_study_name, keep_filename, keep_import_file, keep_admin_permissions);
 end;
+$$;
+
+
+drop type if exists omics_autocomplete_result cascade;
+create type omics_autocomplete_result as
+(
+    omics_id        integer[],
+    omics_type      omics_type[],
+    display_symbol  text,
+    label_highlight text
+);
+
+create aggregate product(integer)
+   (stype=float4,sfunc=float4mul,initcond=1);
+
+drop function if exists omics_autocomplete(search_query text, tax_id_filter integer, omics_type_filter omics_type);
+create function omics_autocomplete(search_query text, tax_id_filter integer, omics_type_filter omics_type)
+    returns setof omics_autocomplete_result
+    language sql
+    stable
+as
+$$
+with all_concepts_terms as (select ob.display_symbol, array_agg(DISTINCT ob.omics_id) omics_id, array_agg(DISTINCT ob.omics_type) omics_type, array_agg(DISTINCT ob.display_symbol_tsvector) display_symbol_tsvector
+                            from omics_base ob
+                            where ob.tax_id=tax_id_filter and ob.omics_type=omics_type_filter
+                            group by ob.display_symbol
+                            ),
+     as_tsquery as (
+         -- users may double-quote words to find them exactly, otherwise we assume a prefix search
+         -- it is also possible to double-quote a phrase of multiple words
+         select --to_tsquery('english','cdk | cdk:*') q
+                to_tsquery('english', string_agg(
+                        case
+                            when right(split, 1) = '"' then replace(replace(split, '"', ''), ' ', ' <-> ')
+                            else split || ' | ' || split || ':*' end,
+                        ' & ')) q
+         -- see https://stackoverflow.com/questions/4780728/regex-split-string-preserving-quotes
+         from regexp_split_to_table(lower(regexp_replace(search_query, '[^\w|\-|\"]', ' ', 'g')),
+                                    E'(?<=^[^"]*(?:"[^"]*\"[^"]*)*) (?=(?:[^"]*"[^"]*")*[^"]*$)') split),
+     search_results as (select as_tsquery.q,
+                               c.omics_id,
+                               c.omics_type,
+                               ts_rank(c.display_symbol_tsvector[1], as_tsquery.q, 2) *
+                               case
+                                   when lower(c.display_symbol) =
+                                        lower(regexp_replace(search_query, '[^\w|\-|\"]', ' ', 'g'))
+                                       then 2 /*still need to boost the exact match...*/
+                                   else 1
+                                   end                                     "rank",
+                               c.display_symbol,
+                               ts_headline(c.display_symbol, as_tsquery.q) label_highlight
+                        from all_concepts_terms c,
+                             as_tsquery
+                        where c.display_symbol_tsvector[1] @@ as_tsquery.q)
+select sro.omics_id,
+       sro.omics_type,
+       sro.display_symbol,
+       sro.label_highlight
+from search_results sro
+order by sro.rank desc
 $$;

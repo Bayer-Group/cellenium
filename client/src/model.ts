@@ -1,5 +1,5 @@
 import { internal } from 'arquero';
-import { AnnotationGrpFragment, OmicsType, StudyBasicsFragment } from './generated/types';
+import { AnnotationGrpFragment, OmicsType, StudyBasicsFragment, StudySampleAnnotationSubsampling } from './generated/types';
 
 export type OntologyItem = {
   id: string;
@@ -29,6 +29,8 @@ export type Study = StudyBasicsFragment & {
   annotationGroupMap: Map<number, AnnotationGrpFragment>;
   annotationValueMap: Map<number, AnnotationGrpFragment['annotationValuesList'][0]>;
   omicsTypes: OmicsType[];
+  annotationGroupsList: AnnotationGrpFragment[];
+  studySampleAnnotationSubsamplingList: StudySampleAnnotationSubsampling[];
 };
 
 export type SelectBoxItem = {

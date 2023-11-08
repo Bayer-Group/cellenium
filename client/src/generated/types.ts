@@ -4312,6 +4312,78 @@ export type ExpressionByOmicsEdge = {
   node: Maybe<ExpressionByOmic>;
 };
 
+export type ExpressionByTwoAnnotation = {
+  __typename?: 'ExpressionByTwoAnnotation';
+  annotationDisplayValue: Maybe<Scalars['String']>;
+  annotationValueId: Maybe<Scalars['Int']>;
+  boxplotParams: Maybe<BoxplotValue>;
+  exprSamplesFraction: Maybe<Scalars['Float']>;
+  mean: Maybe<Scalars['Float']>;
+  median: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  q3: Maybe<Scalars['Float']>;
+  secondAnnotationDisplayValue: Maybe<Scalars['String']>;
+  secondAnnotationValueId: Maybe<Scalars['Int']>;
+  valueCount: Maybe<Scalars['Int']>;
+  values: Maybe<Array<Maybe<Scalars['Float']>>>;
+};
+
+/** A filter to be used against `ExpressionByTwoAnnotation` object types. All fields are combined with a logical ‘and.’ */
+export type ExpressionByTwoAnnotationFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ExpressionByTwoAnnotationFilter>>;
+  /** Filter by the object’s `annotationDisplayValue` field. */
+  annotationDisplayValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `boxplotParams` field. */
+  boxplotParams: InputMaybe<BoxplotValueFilter>;
+  /** Filter by the object’s `exprSamplesFraction` field. */
+  exprSamplesFraction: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `mean` field. */
+  mean: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `median` field. */
+  median: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ExpressionByTwoAnnotationFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ExpressionByTwoAnnotationFilter>>;
+  /** Filter by the object’s `q3` field. */
+  q3: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `secondAnnotationDisplayValue` field. */
+  secondAnnotationDisplayValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `secondAnnotationValueId` field. */
+  secondAnnotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `valueCount` field. */
+  valueCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `values` field. */
+  values: InputMaybe<FloatListFilter>;
+};
+
+/** A connection to a list of `ExpressionByTwoAnnotation` values. */
+export type ExpressionByTwoAnnotationsConnection = {
+  __typename?: 'ExpressionByTwoAnnotationsConnection';
+  /** A list of edges which contains the `ExpressionByTwoAnnotation` and cursor to aid in pagination. */
+  edges: Array<ExpressionByTwoAnnotationsEdge>;
+  /** A list of `ExpressionByTwoAnnotation` objects. */
+  nodes: Array<Maybe<ExpressionByTwoAnnotation>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ExpressionByTwoAnnotation` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ExpressionByTwoAnnotation` edge in the connection. */
+export type ExpressionByTwoAnnotationsEdge = {
+  __typename?: 'ExpressionByTwoAnnotationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `ExpressionByTwoAnnotation` at the end of the edge. */
+  node: Maybe<ExpressionByTwoAnnotation>;
+};
+
 /** A filter to be used against Float fields. All fields are combined with a logical ‘and.’ */
 export type FloatFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -5356,6 +5428,54 @@ export enum OmicsAllsOrderBy {
   TaxIdDesc = 'TAX_ID_DESC'
 }
 
+export type OmicsAutocompleteResult = {
+  __typename?: 'OmicsAutocompleteResult';
+  displaySymbol: Maybe<Scalars['String']>;
+  labelHighlight: Maybe<Scalars['String']>;
+  omicsId: Maybe<Array<Maybe<Scalars['Int']>>>;
+  omicsType: Maybe<Array<Maybe<OmicsType>>>;
+};
+
+/** A filter to be used against `OmicsAutocompleteResult` object types. All fields are combined with a logical ‘and.’ */
+export type OmicsAutocompleteResultFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<OmicsAutocompleteResultFilter>>;
+  /** Filter by the object’s `displaySymbol` field. */
+  displaySymbol: InputMaybe<StringFilter>;
+  /** Filter by the object’s `labelHighlight` field. */
+  labelHighlight: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<OmicsAutocompleteResultFilter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntListFilter>;
+  /** Filter by the object’s `omicsType` field. */
+  omicsType: InputMaybe<OmicsTypeListFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<OmicsAutocompleteResultFilter>>;
+};
+
+/** A connection to a list of `OmicsAutocompleteResult` values. */
+export type OmicsAutocompleteResultsConnection = {
+  __typename?: 'OmicsAutocompleteResultsConnection';
+  /** A list of edges which contains the `OmicsAutocompleteResult` and cursor to aid in pagination. */
+  edges: Array<OmicsAutocompleteResultsEdge>;
+  /** A list of `OmicsAutocompleteResult` objects. */
+  nodes: Array<Maybe<OmicsAutocompleteResult>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `OmicsAutocompleteResult` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `OmicsAutocompleteResult` edge in the connection. */
+export type OmicsAutocompleteResultsEdge = {
+  __typename?: 'OmicsAutocompleteResultsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `OmicsAutocompleteResult` at the end of the edge. */
+  node: Maybe<OmicsAutocompleteResult>;
+};
+
 export type OmicsBase = Node & {
   __typename?: 'OmicsBase';
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
@@ -5363,7 +5483,9 @@ export type OmicsBase = Node & {
   /** Reads and enables pagination through a set of `DifferentialExpression`. */
   differentialExpressionsByOmicsIdList: Array<DifferentialExpression>;
   displayName: Maybe<Scalars['String']>;
+  displayNameTsvector: Maybe<Scalars['String']>;
   displaySymbol: Scalars['String'];
+  displaySymbolTsvector: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   /** Reads a single `OmicsGene` that is related to this `OmicsBase`. */
@@ -5500,8 +5622,12 @@ export type OmicsBaseStudyOmicsByOmicsIdListArgs = {
 export type OmicsBaseCondition = {
   /** Checks for equality with the object’s `displayName` field. */
   displayName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displayNameTsvector` field. */
+  displayNameTsvector: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `displaySymbol` field. */
   displaySymbol: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `displaySymbolTsvector` field. */
+  displaySymbolTsvector: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `omicsId` field. */
   omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsType` field. */
@@ -5533,7 +5659,9 @@ export type OmicsBaseFilter = {
 /** An input for mutations affecting `OmicsBase` */
 export type OmicsBaseInput = {
   displayName: InputMaybe<Scalars['String']>;
+  displayNameTsvector: InputMaybe<Scalars['String']>;
   displaySymbol: Scalars['String'];
+  displaySymbolTsvector: InputMaybe<Scalars['String']>;
   omicsId: InputMaybe<Scalars['Int']>;
   omicsType: OmicsType;
   taxId: Scalars['Int'];
@@ -5542,7 +5670,9 @@ export type OmicsBaseInput = {
 /** Represents an update to a `OmicsBase`. Fields that are set will be updated. */
 export type OmicsBasePatch = {
   displayName: InputMaybe<Scalars['String']>;
+  displayNameTsvector: InputMaybe<Scalars['String']>;
   displaySymbol: InputMaybe<Scalars['String']>;
+  displaySymbolTsvector: InputMaybe<Scalars['String']>;
   omicsId: InputMaybe<Scalars['Int']>;
   omicsType: InputMaybe<OmicsType>;
   taxId: InputMaybe<Scalars['Int']>;
@@ -5574,8 +5704,12 @@ export type OmicsBasesEdge = {
 export enum OmicsBasesOrderBy {
   DisplayNameAsc = 'DISPLAY_NAME_ASC',
   DisplayNameDesc = 'DISPLAY_NAME_DESC',
+  DisplayNameTsvectorAsc = 'DISPLAY_NAME_TSVECTOR_ASC',
+  DisplayNameTsvectorDesc = 'DISPLAY_NAME_TSVECTOR_DESC',
   DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
   DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
+  DisplaySymbolTsvectorAsc = 'DISPLAY_SYMBOL_TSVECTOR_ASC',
+  DisplaySymbolTsvectorDesc = 'DISPLAY_SYMBOL_TSVECTOR_DESC',
   Natural = 'NATURAL',
   OmicsIdAsc = 'OMICS_ID_ASC',
   OmicsIdDesc = 'OMICS_ID_DESC',
@@ -6661,6 +6795,10 @@ export type Query = Node & {
   expressionByOmicsIds: Maybe<ExpressionByOmicsConnection>;
   /** Reads and enables pagination through a set of `ExpressionByOmic`. */
   expressionByOmicsIdsList: Maybe<Array<Maybe<ExpressionByOmic>>>;
+  /** Reads and enables pagination through a set of `ExpressionByTwoAnnotation`. */
+  expressionByTwoAnnotations: Maybe<ExpressionByTwoAnnotationsConnection>;
+  /** Reads and enables pagination through a set of `ExpressionByTwoAnnotation`. */
+  expressionByTwoAnnotationsList: Maybe<Array<Maybe<ExpressionByTwoAnnotation>>>;
   getCorrelatedGenes: Maybe<GetCorrelatedGenesConnection>;
   getCorrelatedGenesList: Maybe<Array<Maybe<GetCorrelatedGenesRecord>>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -6671,6 +6809,10 @@ export type Query = Node & {
   omicsAlls: Maybe<OmicsAllsConnection>;
   /** Reads a set of `OmicsAll`. */
   omicsAllsList: Maybe<Array<OmicsAll>>;
+  /** Reads and enables pagination through a set of `OmicsAutocompleteResult`. */
+  omicsAutocomplete: Maybe<OmicsAutocompleteResultsConnection>;
+  /** Reads and enables pagination through a set of `OmicsAutocompleteResult`. */
+  omicsAutocompleteList: Maybe<Array<Maybe<OmicsAutocompleteResult>>>;
   omicsBase: Maybe<OmicsBase>;
   /** Reads a single `OmicsBase` using its globally unique `ID`. */
   omicsBaseByNodeId: Maybe<OmicsBase>;
@@ -7442,6 +7584,39 @@ export type QueryExpressionByOmicsIdsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryExpressionByTwoAnnotationsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  filter: InputMaybe<ExpressionByTwoAnnotationFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pDropoutsAsZero: InputMaybe<Scalars['Boolean']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pSecondAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryExpressionByTwoAnnotationsListArgs = {
+  filter: InputMaybe<ExpressionByTwoAnnotationFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pDropoutsAsZero: InputMaybe<Scalars['Boolean']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pSecondAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGetCorrelatedGenesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -7490,6 +7665,31 @@ export type QueryOmicsAllsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsAllsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsAutocompleteArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  filter: InputMaybe<OmicsAutocompleteResultFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  omicsTypeFilter: InputMaybe<OmicsType>;
+  searchQuery: InputMaybe<Scalars['String']>;
+  taxIdFilter: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsAutocompleteListArgs = {
+  filter: InputMaybe<OmicsAutocompleteResultFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  omicsTypeFilter: InputMaybe<OmicsType>;
+  searchQuery: InputMaybe<Scalars['String']>;
+  taxIdFilter: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -12023,6 +12223,8 @@ export type StudyOmicsQueryVariables = Exact<{
 
 export type StudyOmicsQuery = { __typename?: 'Query', studyOmicsList: Array<{ __typename?: 'StudyOmic', omics: { __typename?: 'OmicsBase', omicsId: number, displayName: string, displaySymbol: string } }> };
 
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
+
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
@@ -12081,6 +12283,15 @@ export type AutocompleteQueryVariables = Exact<{
 
 
 export type AutocompleteQuery = { __typename?: 'Query', autocompleteList: Array<{ __typename?: 'AutocompleteResult', isSynonymOfPreferredTerm: string, label: string, labelHighlight: string, ontCode: string, ontology: string }> };
+
+export type OmicsAutocompleteQueryVariables = Exact<{
+  searchQuery: Scalars['String'];
+  omicsType: OmicsType;
+  taxId: Scalars['Int'];
+}>;
+
+
+export type OmicsAutocompleteQuery = { __typename?: 'Query', omicsAutocompleteList: Array<{ __typename?: 'OmicsAutocompleteResult', displaySymbol: string, labelHighlight: string, omicsId: Array<number>, omicsType: Array<OmicsType> }> };
 
 export type OntologyOverviewFragment = { __typename?: 'Ontology', name: string, ontid: number, nodeId: string };
 
@@ -12275,6 +12486,18 @@ export const OmicsGeneFragmentDoc = gql`
   displaySymbol
   omicsId
   taxId
+}
+    `;
+export const StudyBasicsFragmentDoc = gql`
+    fragment StudyBasics on Study {
+  studyId
+  studyName
+  studyLayersList {
+    layer
+    studyLayerId
+  }
+  cellCount
+  projections
 }
     `;
 export const OntologyOverviewFragmentDoc = gql`
@@ -12936,6 +13159,50 @@ export function useAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type AutocompleteQueryHookResult = ReturnType<typeof useAutocompleteQuery>;
 export type AutocompleteLazyQueryHookResult = ReturnType<typeof useAutocompleteLazyQuery>;
 export type AutocompleteQueryResult = Apollo.QueryResult<AutocompleteQuery, AutocompleteQueryVariables>;
+export const OmicsAutocompleteDocument = gql`
+    query OmicsAutocomplete($searchQuery: String!, $omicsType: OmicsType!, $taxId: Int!) {
+  omicsAutocompleteList(
+    searchQuery: $searchQuery
+    omicsTypeFilter: $omicsType
+    taxIdFilter: $taxId
+  ) {
+    displaySymbol
+    labelHighlight
+    omicsId
+    omicsType
+  }
+}
+    `;
+
+/**
+ * __useOmicsAutocompleteQuery__
+ *
+ * To run a query within a React component, call `useOmicsAutocompleteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOmicsAutocompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOmicsAutocompleteQuery({
+ *   variables: {
+ *      searchQuery: // value for 'searchQuery'
+ *      omicsType: // value for 'omicsType'
+ *      taxId: // value for 'taxId'
+ *   },
+ * });
+ */
+export function useOmicsAutocompleteQuery(baseOptions: Apollo.QueryHookOptions<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
+      }
+export function useOmicsAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
+        }
+export type OmicsAutocompleteQueryHookResult = ReturnType<typeof useOmicsAutocompleteQuery>;
+export type OmicsAutocompleteLazyQueryHookResult = ReturnType<typeof useOmicsAutocompleteLazyQuery>;
+export type OmicsAutocompleteQueryResult = Apollo.QueryResult<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>;
 export const OntologiesDocument = gql`
     query ontologies {
   ontologiesList {

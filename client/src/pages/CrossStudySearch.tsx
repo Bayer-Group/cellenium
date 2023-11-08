@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Center, createStyles, Group, Loader, Space, Stack, Text } from '@mantine/core';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ScenegraphEvent } from 'vega';
 import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery } from '../generated/types';
-import { allGenesState, cellOAnnotationGroupIdState } from '../atoms';
+import { cellOAnnotationGroupIdState, GeneSearchSelection } from '../atoms';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { NavBarProvider } from '../components/NavBar/NavBar';
@@ -26,8 +26,8 @@ function CrossStudySearch() {
   const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
   const [omicsIds, setOmicsIds] = useState<number[]>([]);
   const cellOAnnotationGroupId = useRecoilValue(cellOAnnotationGroupIdState);
-  const allGenes = useRecoilValue(allGenesState);
   const navigate = useNavigate();
+  const [selectedFilters] = useRecoilState(GeneSearchSelection);
 
   const { data, loading } = useExpressionByAnnotationQuery({
     variables: {
@@ -70,10 +70,12 @@ function CrossStudySearch() {
     [cellOAnnotationGroupId, navigate],
   );
 
+  const onGeneSelection = useCallback((ids: number[]) => setOmicsIds(ids), []);
+
   return (
     <NavBarProvider scrollable>
       <Stack p="md" spacing={0}>
-        <GeneSearchBar humanOnly onGeneSelection={(ids) => setOmicsIds(ids)} />
+        <GeneSearchBar humanOnly onGeneSelection={onGeneSelection} />
         <Space h="xl" />
         <StudySearchBar onStudyListUpdate={setStudyList} />
         <Center w="100%">
@@ -88,7 +90,7 @@ function CrossStudySearch() {
           {heatmapDisplayData &&
             heatmapDisplayData.map((heatmap) => (
               <Stack key={`${heatmap.omicsId}-expression-dot-plot`} w="100%" align="center" mt="1rem">
-                <Text weight="bold">{allGenes?.get(heatmap.omicsId)?.displaySymbol}</Text>
+                <Text weight="bold">{selectedFilters.find((i) => i.omicsId.includes(heatmap.omicsId))?.displaySymbol}</Text>
 
                 <Stack w="100%" align="center" className={classes.plotContainer}>
                   <Stack w="100%" className={classes.plot}>
