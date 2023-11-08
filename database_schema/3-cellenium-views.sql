@@ -328,8 +328,7 @@ grant select on tree_ontology to postgraphile;
 -- grant select on study_annotation_frontend_group to postgraphile;
 
 DROP VIEW IF EXISTS study_annotation_frontend_group;
-DROP MATERIALIZED VIEW IF EXISTS study_annotation_frontend_group;
-create materialized view study_annotation_frontend_group AS
+create view study_annotation_frontend_group AS
 select gui.study_id,
        gui.annotation_group_id,
        gui.is_primary,
@@ -347,9 +346,8 @@ where (ug.saved_as_annotation_group_id is null
     or ug.created_by_user = current_user_email()
           );
 -- comment on materialized view study_annotation_frontend_group is E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName annotationGroups';
-comment on materialized view study_annotation_frontend_group is NULL;
+comment on view study_annotation_frontend_group is NULL;
 grant select on study_annotation_frontend_group to postgraphile;
-CREATE INDEX study_annotation_frontend_group_idx ON study_annotation_frontend_group (study_id);
 
 DROP VIEW IF EXISTS study_annotation_frontend_value;
 create view study_annotation_frontend_value

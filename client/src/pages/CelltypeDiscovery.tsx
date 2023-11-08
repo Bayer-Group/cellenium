@@ -268,26 +268,36 @@ function CelltypeDiscovery() {
           <Box sx={{ height: 350, position: 'relative' }} key={`${i}-coexpression-samples`}>
             {/*  Disable edit if there is a plot following (which depends on the selection in the current plot)  */}
             {i < celltypeDiscoveryCoexpressionSamples.length - 1 && <Overlay opacity={0.6} color="#000" zIndex={5} />}
-            <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
+            <Stack p="sm">
+              <CoexpressionPlot stateOffset={i} onSelection={onCoexpressionSelection} onDoubleClick={onCoexpressionDoubleClick} />
+            </Stack>
           </Box>
         ))}
-        <Button onClick={newPlotBasedOnSelectedSamples} disabled={selectedSampleIds === null || selectedSampleIds.length === 0} size="xs" variant="light">
+        <Button
+          onClick={newPlotBasedOnSelectedSamples}
+          disabled={selectedSampleIds === null || selectedSampleIds.length === 0}
+          size="xs"
+          mih="2rem"
+          variant="light"
+        >
           Subset, based on selection
         </Button>
         {celltypeDiscoveryCoexpressionSamples.length >= 2 && (
-          <Button onClick={removeLastPlot} size="xs" variant="light">
+          <Button onClick={removeLastPlot} size="xs" variant="light" mih="2rem">
             Remove last plot
           </Button>
         )}
-        <Group>
+        <Group w="100%" position="apart" noWrap>
           <TextInput
             value={annotationName}
             placeholder="My Custom Cell Annotation"
             size="xs"
+            w="100%"
             onChange={(event) => setAnnotationName(event.currentTarget.value)}
           />
           <Button
             size="xs"
+            mih="2rem"
             variant="light"
             disabled={selectedSampleIds === null || selectedSampleIds.length === 0 || annotationName.length === 0}
             onClick={saveUserAnnotation}

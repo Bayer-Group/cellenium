@@ -1,8 +1,9 @@
 import { Burger, Container, createStyles, Group, Header, Paper, Stack, Title, Transition } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
-import { ReactNode, useMemo } from 'react';
+import React, { memo, ReactNode, useMemo } from 'react';
 import ProjPlotIcon from '../../assets/images/logo.svg';
+import { GlobalLoading } from '../../pages/GlobalLoading.tsx';
 
 const HEADER_HEIGHT = 60;
 
@@ -114,15 +115,17 @@ export function NavBar() {
   );
 }
 
-export function NavBarProvider({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
+function NavBarProviderUnMemo({ children, scrollable = false }: { children: ReactNode; scrollable?: boolean }) {
   const { classes } = useStyles();
   if (scrollable) {
     return (
       <Stack w="100%" h="100%" className={classes.navBarProviderScrollable} pos="relative" spacing={0}>
         <NavBar />
-        <Container w="100%" size="xl" p={0} pb="md">
-          {children}
-        </Container>
+        <React.Suspense fallback={<GlobalLoading />}>
+          <Container w="100%" size="xl" p={0} pb="md">
+            {children}
+          </Container>
+        </React.Suspense>
       </Stack>
     );
   }
@@ -130,7 +133,9 @@ export function NavBarProvider({ children, scrollable = false }: { children: Rea
   return (
     <Stack w="100%" h="100%" spacing={0} className={classes.navBarProviderNonScrollable}>
       <NavBar />
-      {children}
+      <React.Suspense fallback={<GlobalLoading />}>{children}</React.Suspense>
     </Stack>
   );
 }
+
+export const NavBarProvider = memo(NavBarProviderUnMemo);

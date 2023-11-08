@@ -1,13 +1,15 @@
 import { ActionIcon, Autocomplete, Badge, createStyles, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { IconBinaryTree, IconSearch, IconX } from '@tabler/icons-react';
 import { closeModal, openModal } from '@mantine/modals';
+import { useRecoilState } from 'recoil';
 import { StudyOverview, useAutocompleteLazyQuery } from '../../generated/types';
 import { OntologyBrowser } from '../OntologyBrowser/OntologyBrowser';
 import { Omics, OntologyItem } from '../../model';
 import { SearchBadge } from '../SearchBadge/SearchBadge';
 import { ontology2Color } from '../../utils/helper';
 import { OfferingItem } from './interfaces';
+import { StudySearchSelection } from '../../atoms';
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   value: string;
@@ -41,19 +43,22 @@ export function SearchBar({
   ontologies,
   onSearchFiltersUpdate,
   studies,
+  ontologyLoading,
+  initialFocus = false,
 }: {
+  ontologyLoading?: boolean;
   ontologies?: Map<string, OntologyItem>;
   onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
   studies?: StudyOverview[];
+  initialFocus?: boolean;
 }) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const [value, setValue] = useState<string>('');
-  const [offerings, setOfferings] = useState<OfferingItem[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState<OfferingItem[]>([]);
+  const [selectedFilters, setSelectedFilters] = useRecoilState(StudySearchSelection);
   const [getAutocomplete, { data: autocompleteSuggestions, loading }] = useAutocompleteLazyQuery();
 
-  useEffect(() => {
+  const offerings = useMemo(() => {
     const newOfferings = [] as OfferingItem[];
     if (value.trim().length > 0) {
       newOfferings.push({
@@ -73,16 +78,15 @@ export function SearchBar({
             };
           }),
         );
-        setOfferings(newOfferings);
       }
     }
-  }, [value, autocompleteSuggestions]);
+    return newOfferings;
+  }, [autocompleteSuggestions, value]);
 
   useEffect(() => onSearchFiltersUpdate(selectedFilters), [onSearchFiltersUpdate, selectedFilters]);
 
   const handleSubmit = useCallback(
     (item: OfferingItem) => {
-      setOfferings([]);
       setValue('');
 
       const check = selectedFilters.filter((e) => e.ontology === item.ontology && e.ontcode === item.ontcode);
@@ -90,12 +94,11 @@ export function SearchBar({
         setSelectedFilters([...selectedFilters, item]);
       }
     },
-    [selectedFilters],
+    [selectedFilters, setSelectedFilters],
   );
 
   const handleChange = useCallback(
     (input: string) => {
-      setOfferings([]);
       setValue(input);
       (async () => {
         await getAutocomplete({
@@ -112,9 +115,8 @@ export function SearchBar({
     (filter: OfferingItem | Omics) => {
       const newFilters = selectedFilters.filter((f) => !(f.ontcode === (filter as OfferingItem).ontcode && f.ontology === filter.ontology));
       setSelectedFilters(newFilters);
-      setOfferings([]);
     },
-    [selectedFilters],
+    [selectedFilters, setSelectedFilters],
   );
 
   const showOntologyBrowser = useCallback(() => {
@@ -142,18 +144,32 @@ export function SearchBar({
         ),
       });
     }
-  }, [ontologies, selectedFilters, studies]);
+  }, [ontologies, selectedFilters, setSelectedFilters, studies]);
 
   const clearInput = useCallback(() => {
     setValue('');
-    setOfferings([]);
     setSelectedFilters([]);
-  }, []);
+  }, [setSelectedFilters]);
+
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleSubmit({
+          ontology: 'FREETEXT',
+          value,
+          ontcode: value,
+        });
+      } else if (event.key === 'Backspace' && value.length === 0 && selectedFilters.length > 0) {
+        handleFilterRemove(selectedFilters[selectedFilters.length - 1]);
+      }
+    },
+    [handleFilterRemove, handleSubmit, selectedFilters, value],
+  );
 
   return (
     <Group position="left" align="flex-end" w="100%" spacing={4} noWrap>
-      <ActionIcon onClick={showOntologyBrowser} size="xl" variant="default">
-        <IconBinaryTree color="lightgray" />
+      <ActionIcon onClick={showOntologyBrowser} size="xl" variant="default" disabled={ontologyLoading}>
+        {ontologyLoading ? <Loader size="sm" /> : <IconBinaryTree color="lightgray" />}
       </ActionIcon>
 
       <Stack spacing={0} w="100%">
@@ -170,6 +186,7 @@ export function SearchBar({
           </Group>
           <Autocomplete
             onChange={handleChange}
+            onKeyDown={onKeyDown}
             onItemSubmit={handleSubmit}
             value={value}
             itemComponent={SelectItem}
@@ -179,6 +196,7 @@ export function SearchBar({
             size="md"
             w="100%"
             placeholder="lung, cancer, heart, ..."
+            autoFocus={initialFocus}
             rightSection={
               <ActionIcon onClick={clearInput}>
                 <IconX />

@@ -140,24 +140,17 @@ gql`
     }
   }
 
-  #  fragment StudyBasics on Study {
-  #    studyId
-  #    studyName
-  #    studyLayersList {
-  #      layer
-  #      studyLayerId
-  #    }
-  #    cellCount
-  #
-  #    annotationGroupsList {
-  #      ...AnnotationGrp
-  #    }
-  #    studySampleAnnotationSubsamplingList {
-  #      annotationValueId
-  #      studySampleIds
-  #    }
-  #    projections
-  #  }
+  fragment StudyBasics on Study {
+    studyId
+    studyName
+    studyLayersList {
+      layer
+      studyLayerId
+    }
+    cellCount
+
+    projections
+  }
 
   query StudyBasics($studyId: Int!) {
     study(studyId: $studyId) {
@@ -315,6 +308,16 @@ gql`
       ontology
     }
   }
+
+  query OmicsAutocomplete($searchQuery: String!, $omicsType: OmicsType!, $taxId: Int!) {
+    omicsAutocompleteList(searchQuery: $searchQuery, omicsTypeFilter: $omicsType, taxIdFilter: $taxId) {
+      displaySymbol
+      labelHighlight
+      omicsId
+      omicsType
+    }
+  }
+
   fragment ontologyOverview on Ontology {
     name
     ontid

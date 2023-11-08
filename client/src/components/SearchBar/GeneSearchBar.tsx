@@ -1,21 +1,13 @@
 import { ActionIcon, Autocomplete, AutocompleteItem, createStyles, Group, Loader, Stack, Text, useMantineTheme } from '@mantine/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconSearch, IconX } from '@tabler/icons-react';
-import _ from 'lodash';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Omics } from '../../model';
 import { SearchBadge } from '../SearchBadge/SearchBadge';
-import { allGenesState } from '../../atoms';
 import { SpeciesSelect } from '../SpeciesSelect/SpeciesSelect';
 import { OfferingItem } from './interfaces';
-
-const sortAlphaNum = (a: Omics, b: Omics) => a.displaySymbol.localeCompare(b.displaySymbol, 'en', { numeric: true });
-
-const SPECIES = [
-  { value: '9606', label: 'Homo sapiens' },
-  { value: '10090', label: 'Mus musculus' },
-  { value: '10116', label: 'Rattus norvegicus' },
-];
+import { OmicsType, useOmicsAutocompleteLazyQuery } from '../../generated/types';
+import { GeneSearchSelection, GeneSearchSpeciesSelection, SPECIES } from '../../atoms';
 
 const useStyles = createStyles((theme) => ({
   grow: {
@@ -36,25 +28,45 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const [value, setValue] = useState<string>('');
-  const [offerings, setOfferings] = useState<Omics[]>([]);
-  const [selectedFilters, setSelectedFilters] = useState<Omics[]>([]);
-  const allGenesRecoilState = useRecoilValue(allGenesState);
-  const allGenes = useMemo(() => {
-    return allGenesRecoilState || new Map();
-  }, [allGenesRecoilState]);
-  const [species, setSpecies] = useState<string>(SPECIES[0].value);
+  const [species, setSpecies] = useRecoilState(GeneSearchSpeciesSelection);
+  const [selectedFilters, setSelectedFilters] = useRecoilState(GeneSearchSelection);
   const inputRef = useRef<HTMLInputElement>(null);
   const speciesList = useMemo(() => (humanOnly ? SPECIES.filter((s) => s.value === '9606') : SPECIES), [humanOnly]);
+  const [getAutocomplete, { data: autocompleteSuggestions, loading }] = useOmicsAutocompleteLazyQuery();
+
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (value.trim().length > 0) {
+        await getAutocomplete({
+          variables: {
+            taxId: parseInt(species.value, 10),
+            omicsType: OmicsType.Gene,
+            searchQuery: value,
+          },
+        });
+      }
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [value, species, getAutocomplete]);
+
+  const offerings = useMemo(() => {
+    if (!autocompleteSuggestions || !autocompleteSuggestions.omicsAutocompleteList || value.trim().length === 0) {
+      return [];
+    }
+    return autocompleteSuggestions.omicsAutocompleteList.map((o) => {
+      return { ...o, value: o.displaySymbol, ontology: 'GENE', displayName: o.displaySymbol };
+    });
+  }, [autocompleteSuggestions, value]);
 
   const handleSubmit = useCallback(
     (item: AutocompleteItem) => {
       const omicsItem = offerings.find((o) => o.value === item.value);
       if (omicsItem) {
         setValue('');
-        if (selectedFilters.find((f) => f.omicsId === omicsItem.omicsId) === undefined) {
+        if (selectedFilters.find((f) => f.value === omicsItem.value) === undefined) {
           const newFilters = [...selectedFilters, omicsItem];
           setSelectedFilters(newFilters);
-          onGeneSelection(newFilters.map((f) => f.omicsId));
+          onGeneSelection(newFilters.map((f) => f.omicsId).flat());
         }
 
         if (inputRef && inputRef.current !== null) {
@@ -62,43 +74,36 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
         }
       }
     },
-    [offerings, onGeneSelection, selectedFilters],
+    [offerings, onGeneSelection, selectedFilters, setSelectedFilters],
   );
 
-  const handleChange = useCallback(
-    (input: string) => {
-      if (input === '') {
-        setOfferings([]);
-        setValue('');
-        if (inputRef && inputRef.current !== null) {
-          inputRef.current.focus();
-        }
-        return;
+  const handleChange = useCallback((input: string) => {
+    if (input === '') {
+      if (inputRef && inputRef.current !== null) {
+        inputRef.current.focus();
       }
-      const newOfferings = _.uniqBy(
-        Array.from(allGenes.values())
-          .filter((gene) => gene.taxId === parseInt(species, 10))
-          .filter((gene) => gene.displaySymbol.toLowerCase().startsWith(input.toLowerCase()))
-          .filter((gene) => !humanOnly || gene.taxId === 9606)
-          .sort(sortAlphaNum),
-        'displaySymbol',
-      )
-        .slice(0, 20)
-        .map((gene) => {
-          return { ...gene, ontology: 'GENE', value: gene.displaySymbol };
-        });
-      if (newOfferings !== undefined) setOfferings(newOfferings);
-      setValue(input);
+    }
+    setValue(input);
+  }, []);
+
+  const updateSpecies = useCallback(
+    (item: string) => {
+      const localSpecies = SPECIES.find((s) => s.value === item);
+      if (localSpecies) {
+        setSpecies(localSpecies);
+        setSelectedFilters([]);
+        setValue('');
+      }
     },
-    [allGenes, humanOnly, species],
+    [setSelectedFilters, setSpecies],
   );
 
   const handleFilterRemove = useCallback(
-    (filter: Omics | OfferingItem) => {
-      if ('ontcode' in filter) {
+    (item: Omics | OfferingItem) => {
+      if ('ontcode' in item) {
         return;
       }
-      const newFilters = selectedFilters.filter((f) => !(f.omicsId === (filter as Omics).omicsId));
+      const newFilters = selectedFilters.filter((f) => !(f.value === (item as Omics).value));
       if (newFilters.length > 0) {
         setSelectedFilters(newFilters);
       } else {
@@ -107,55 +112,48 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
       if (inputRef && inputRef.current !== null) {
         inputRef.current.focus();
       }
-      setOfferings([]);
-      onGeneSelection(newFilters.map((f) => f.omicsId));
+      onGeneSelection(newFilters.map((f) => f.omicsId).flat());
     },
-    [onGeneSelection, selectedFilters],
+    [onGeneSelection, selectedFilters, setSelectedFilters],
   );
 
   const clearInput = useCallback(() => {
     setValue('');
-    setOfferings([]);
     setSelectedFilters([]);
     onGeneSelection([]);
-  }, [onGeneSelection]);
+  }, [onGeneSelection, setSelectedFilters]);
 
-  const autoCompleteFocusChange = useCallback(() => {
-    handleChange(value);
-  }, [handleChange, value]);
-
-  useEffect(() => {
-    setValue('');
-    setOfferings([]);
-    setSelectedFilters([]);
-    onGeneSelection([]);
-  }, [species]);
-
-  console.log(offerings);
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Backspace' && value.length === 0 && selectedFilters.length > 0) {
+        handleFilterRemove(selectedFilters[selectedFilters.length - 1]);
+      }
+    },
+    [handleFilterRemove, selectedFilters, value],
+  );
 
   return (
     <Group position="left" align="flex-end" spacing={4} noWrap>
-      <SpeciesSelect data={speciesList} species={species} handleChange={setSpecies} />
+      <SpeciesSelect data={speciesList} species={species.value} handleChange={updateSpecies} />
       <Stack spacing={0} className={classes.grow}>
         <Text size="xs" weight={800}>
           Enter identifier(s)
         </Text>
 
         <Group spacing={4} position="left" align="center" className={classes.searchBarWrapper} noWrap>
-          {!allGenes ? <Loader variant="dots" size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
+          {loading ? <Loader size={25} color="blue" /> : <IconSearch size={25} color={theme.colors.gray[3]} />}
           <Group spacing={2} align="center" noWrap>
             {selectedFilters.map((filter) => {
-              return <SearchBadge key={`${filter.omicsId}`} onRemove={handleFilterRemove} item={filter} />;
+              return <SearchBadge key={`${filter.omicsId}`} onRemove={handleFilterRemove} item={filter as unknown as Omics} />;
             })}
           </Group>
           <Autocomplete
             ref={inputRef}
             autoFocus
             className={classes.autocomplete}
-            disabled={allGenes.size === 0}
-            onFocus={autoCompleteFocusChange}
-            onChange={handleChange}
             onItemSubmit={handleSubmit}
+            onChange={handleChange}
+            onKeyDown={onKeyDown}
             value={value}
             variant="unstyled"
             data={offerings.map((o) => ({ value: o.value, key: o.value })) as AutocompleteItem[]}

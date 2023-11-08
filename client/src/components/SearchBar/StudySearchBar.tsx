@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Group, Loader } from '@mantine/core';
+import { Group, Loader, Stack } from '@mantine/core';
 import { StudyInfoFragment, useStudiesQuery, useStudiesTreeOntologiesQuery } from '../../generated/types';
 import { OntologyItem } from '../../model';
 import { generateOntologyTrees } from '../../utils/helper';
@@ -13,7 +13,13 @@ function metadataValues(study: StudyInfoFragment) {
   return [];
 }
 
-export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: StudyInfoFragment[]) => void }) {
+export function StudySearchBar({
+  onStudyListUpdate,
+  initialFocus = false,
+}: {
+  onStudyListUpdate: (studies: StudyInfoFragment[]) => void;
+  initialFocus?: boolean;
+}) {
   const { data, loading } = useStudiesQuery();
   const { data: ontologyData, loading: ontologyLoading } = useStudiesTreeOntologiesQuery();
   const allStudies = useMemo(
@@ -55,14 +61,22 @@ export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (stud
     return keepStudies;
   }, [allStudies, filters]);
 
-  useEffect(() => onStudyListUpdate(filteredStudies || []), [filteredStudies]);
+  useEffect(() => onStudyListUpdate(filteredStudies || []), [filteredStudies, onStudyListUpdate]);
 
-  if (loading || ontologyLoading) {
-    return (
-      <Group position="center" align="center" w="100%">
-        <Loader variant="dots" color="blue" />
-      </Group>
-    );
-  }
-  return <SearchBar ontologies={ontologyTrees} studies={allStudies} onSearchFiltersUpdate={setFilters} />;
+  return (
+    <Stack>
+      <SearchBar
+        ontologyLoading={ontologyLoading}
+        ontologies={ontologyTrees}
+        studies={allStudies || []}
+        onSearchFiltersUpdate={setFilters}
+        initialFocus={initialFocus}
+      />
+      {loading && (
+        <Group position="center" align="center" w="100%">
+          <Loader variant="dots" color="blue" />
+        </Group>
+      )}
+    </Stack>
+  );
 }

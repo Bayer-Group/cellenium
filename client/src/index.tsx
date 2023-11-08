@@ -13,28 +13,40 @@ import { GlobalLoading } from './pages/GlobalLoading';
 import reportWebVitals from './reportWebVitals';
 import { Docs } from './pages/Docs';
 import { apolloClient } from './client';
+import { NavBarProvider } from './components/NavBar/NavBar';
 
 const StudyList = lazy(() => import('./pages/StudyList'));
 const MarkerGeneSearch = lazy(() => import('./pages/MarkerGeneSearch'));
 const CrossStudySearch = lazy(() => import('./pages/CrossStudySearch'));
 const StudyPage = lazy(() => import('./pages/StudyPage'));
 const StudyAdmin = lazy(() => import('./pages/StudyAdmin'));
-const OntologySandbox = lazy(() => import('./pages/OntologySandbox'));
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <StudyList />,
+    element: (
+      <NavBarProvider scrollable>
+        <StudyList />
+      </NavBarProvider>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: '/markergene',
-    element: <MarkerGeneSearch />,
+    element: (
+      <NavBarProvider scrollable>
+        <MarkerGeneSearch />
+      </NavBarProvider>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: '/crossstudy',
-    element: <CrossStudySearch />,
+    element: (
+      <NavBarProvider scrollable>
+        <CrossStudySearch />
+      </NavBarProvider>
+    ),
     errorElement: <ErrorPage />,
   },
   {
@@ -47,19 +59,27 @@ const router = createBrowserRouter([
   },
   {
     path: 'study-admin',
-    element: <StudyAdmin />,
+    element: (
+      <NavBarProvider>
+        <StudyAdmin />
+      </NavBarProvider>
+    ),
   },
   {
     path: 'manageStudyImport',
-    element: <StudyAdmin />,
-  },
-  {
-    path: 'ontology-sandbox',
-    element: <OntologySandbox />,
+    element: (
+      <NavBarProvider>
+        <StudyAdmin />
+      </NavBarProvider>
+    ),
   },
   {
     path: 'docs',
-    element: <Docs />,
+    element: (
+      <NavBarProvider>
+        <Docs />
+      </NavBarProvider>
+    ),
   },
 ]);
 

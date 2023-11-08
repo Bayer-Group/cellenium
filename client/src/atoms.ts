@@ -4,13 +4,10 @@ import { Struct } from 'arquero/dist/types/table/transformable';
 import { Omics, SamplesAnnotationTable, SamplesProjectionTable, Study, StudyOmicsTable } from './model';
 import { apolloClient } from './client';
 import {
-  AllGenesDocument,
-  AllGenesQuery,
-  AllGenesQueryVariables,
   CellOAnnotationGroupIdDocument,
   CellOAnnotationGroupIdQuery,
   CellOAnnotationGroupIdQueryVariables,
-  OmicsGeneFragment,
+  OmicsAutocompleteResult,
   StudyAnnotationFrontendGroup,
   StudyAnnotationFrontendValue,
   StudyBasics2Document,
@@ -24,6 +21,13 @@ import {
   StudyBasicsQueryVariables,
   StudySampleAnnotationSubsampling,
 } from './generated/types';
+import { OfferingItem } from './components/SearchBar/interfaces';
+
+export const SPECIES = [
+  { value: '9606', label: 'Homo sapiens' },
+  { value: '10090', label: 'Mus musculus' },
+  { value: '10116', label: 'Rattus norvegicus' },
+];
 
 export const studyIdState = atom<number>({
   key: 'studyId',
@@ -47,6 +51,7 @@ function buildSampleAnnotationTable(
     .from(annotationGroupsList)
     .unroll('annotationValuesList')
     .derive({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       annotationValueId: (d) => d.annotationValuesList.annotationValueId,
     })
@@ -120,7 +125,6 @@ export const studyState = selector<Study | undefined>({
         if (response.data?.study?.studyOmicsTransposedList.length === 0) {
           throw Error('no genes');
         }
-        console.log(response3.data.studyOmicsTransposedsList[0]);
         const studyOmicsTable = buildOmicsTable(response3.data.studyOmicsTransposedsList[0]);
         const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
         const s: Study = {
@@ -133,6 +137,8 @@ export const studyState = selector<Study | undefined>({
           ),
           studyLayersList: response.data.studyLayersList,
           annotationGroupsList: response2.data.studyAnnotationFrontendGroupsList,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           studySampleAnnotationSubsamplingList: response3.data.studySampleAnnotationSubsamplingsList,
           samplesAnnotationTable: buildSampleAnnotationTable(
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -174,20 +180,6 @@ export const pageState = atom<string>({
   default: 'CellMarkerAnalysis',
 });
 
-export const allGenesState = selector<Map<number, OmicsGeneFragment> | undefined>({
-  key: 'allGenesState',
-  get: async () => {
-    const allGenes = await apolloClient.query<AllGenesQuery, AllGenesQueryVariables>({
-      query: AllGenesDocument,
-      fetchPolicy: 'no-cache',
-    });
-    if (allGenes?.data) {
-      return new Map(allGenes.data.omicsBasesList.map((o: OmicsGeneFragment) => [o.omicsId, o]));
-    }
-    throw Error('Error fetching genes');
-  },
-});
-
 export const cellOAnnotationGroupIdState = selector<number | undefined>({
   key: 'cellOAnnotationGroupIdState',
   get: async () => {
@@ -200,6 +192,21 @@ export const cellOAnnotationGroupIdState = selector<number | undefined>({
     }
     return 0;
   },
+});
+
+export const StudySearchSelection = atom<OfferingItem[]>({
+  key: 'StudySearchSelection',
+  default: [],
+});
+
+export const GeneSearchSelection = atom<(OmicsAutocompleteResult & { value: string; ontology: string; displayName: string })[]>({
+  key: 'GeneSearchSelection',
+  default: [],
+});
+
+export const GeneSearchSpeciesSelection = atom<{ value: string; label: string }>({
+  key: 'GeneSearchSpeciesSelection',
+  default: SPECIES.find((s) => s.value === '9606'),
 });
 
 export const correlationOmicsIdState = atom<number>({
