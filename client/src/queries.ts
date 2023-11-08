@@ -159,12 +159,6 @@ gql`
       cellCount
       projections
       __typename
-      studyOmicsTransposedList {
-        displayName
-        displaySymbol
-        omicsId
-        omicsType
-      }
     }
     studyLayersList(condition: { studyId: $studyId }) {
       layer

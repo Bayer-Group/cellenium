@@ -122,9 +122,6 @@ export const studyState = selector<Study | undefined>({
         if (response3.data?.studySampleAnnotationSubsamplingsList.length === 0) {
           throw Error('no study annotations');
         }
-        if (response.data?.study?.studyOmicsTransposedList.length === 0) {
-          throw Error('no genes');
-        }
         const studyOmicsTable = buildOmicsTable(response3.data.studyOmicsTransposedsList[0]);
         const omicsTypes = studyOmicsTable.rollup({ omicsTypes: aq.op.array_agg_distinct('omicsType') }).array('omicsTypes')[0];
         const s: Study = {

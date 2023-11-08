@@ -2773,7 +2773,7 @@ export type CreateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -3721,7 +3721,7 @@ export type DeleteOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -4320,6 +4320,7 @@ export type ExpressionByTwoAnnotation = {
   exprSamplesFraction: Maybe<Scalars['Float']>;
   mean: Maybe<Scalars['Float']>;
   median: Maybe<Scalars['Float']>;
+  nonZeroValueCount: Maybe<Scalars['Int']>;
   omicsId: Maybe<Scalars['Int']>;
   q3: Maybe<Scalars['Float']>;
   secondAnnotationDisplayValue: Maybe<Scalars['String']>;
@@ -4344,6 +4345,8 @@ export type ExpressionByTwoAnnotationFilter = {
   mean: InputMaybe<FloatFilter>;
   /** Filter by the object’s `median` field. */
   median: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `nonZeroValueCount` field. */
+  nonZeroValueCount: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not: InputMaybe<ExpressionByTwoAnnotationFilter>;
   /** Filter by the object’s `omicsId` field. */
@@ -5505,7 +5508,7 @@ export type OmicsBase = Node & {
   omicsProteinAntibodyTagsByProteinAntibodyTagId: OmicsProteinAntibodyTagsConnection;
   /**
    * Reads and enables pagination through a set of `OmicsRegion`.
-   * @deprecated Please use omics_region_newNameHere instead
+   * @deprecated Please use omics_region_gene_region instead
    */
   omicsRegionsByRegionId: OmicsRegionsConnection;
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsBase`. */
@@ -5517,7 +5520,7 @@ export type OmicsBase = Node & {
   omicsTranscriptionFactorsByOmicsId: OmicsTranscriptionFactorsConnection;
   omicsType: OmicsType;
   /** Reads a single `OmicsRegion` that is related to this `OmicsBase`. */
-  omics_region_newNameHere: Maybe<OmicsRegion>;
+  omics_region_gene_region: Maybe<OmicsRegion>;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsId: StudyOmicsConnection;
   /** Reads and enables pagination through a set of `StudyOmic`. */
@@ -6091,7 +6094,7 @@ export type OmicsRegion = Node & {
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
   omicsRegionGenesByRegionIdList: Array<OmicsRegionGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   region: Scalars['String'];
   regionId: Scalars['Int'];
   startPosition: Scalars['Int'];
@@ -6799,6 +6802,7 @@ export type Query = Node & {
   expressionByTwoAnnotations: Maybe<ExpressionByTwoAnnotationsConnection>;
   /** Reads and enables pagination through a set of `ExpressionByTwoAnnotation`. */
   expressionByTwoAnnotationsList: Maybe<Array<Maybe<ExpressionByTwoAnnotation>>>;
+  expressionTtest: Maybe<Scalars['String']>;
   getCorrelatedGenes: Maybe<GetCorrelatedGenesConnection>;
   getCorrelatedGenesList: Maybe<Array<Maybe<GetCorrelatedGenesRecord>>>;
   /** Fetches an object given its globally unique `ID`. */
@@ -6887,10 +6891,6 @@ export type Query = Node & {
   studyAdministrableCurrentusers: Maybe<StudyAdministrableCurrentusersConnection>;
   /** Reads a set of `StudyAdministrableCurrentuser`. */
   studyAdministrableCurrentusersList: Maybe<Array<StudyAdministrableCurrentuser>>;
-  /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup2`. */
-  studyAnnotationFrontendGroup2s: Maybe<StudyAnnotationFrontendGroup2sConnection>;
-  /** Reads a set of `StudyAnnotationFrontendGroup2`. */
-  studyAnnotationFrontendGroup2sList: Maybe<Array<StudyAnnotationFrontendGroup2>>;
   /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup`. */
   studyAnnotationFrontendGroups: Maybe<StudyAnnotationFrontendGroupsConnection>;
   /** Reads a set of `StudyAnnotationFrontendGroup`. */
@@ -6920,10 +6920,6 @@ export type Query = Node & {
   studyOmics: Maybe<StudyOmicsConnection>;
   /** Reads a set of `StudyOmic`. */
   studyOmicsList: Maybe<Array<StudyOmic>>;
-  /** Reads and enables pagination through a set of `StudyOmicsTransposed2`. */
-  studyOmicsTransposed2s: Maybe<StudyOmicsTransposed2sConnection>;
-  /** Reads a set of `StudyOmicsTransposed2`. */
-  studyOmicsTransposed2sList: Maybe<Array<StudyOmicsTransposed2>>;
   /** Reads and enables pagination through a set of `StudyOmicsTransposed`. */
   studyOmicsTransposeds: Maybe<StudyOmicsTransposedsConnection>;
   /** Reads a set of `StudyOmicsTransposed`. */
@@ -6937,10 +6933,6 @@ export type Query = Node & {
   /** Reads a set of `StudyOverview`. */
   studyOverviewsList: Maybe<Array<StudyOverview>>;
   studySample: Maybe<StudySample>;
-  /** Reads and enables pagination through a set of `StudySampleAnnotationSubsampling2`. */
-  studySampleAnnotationSubsampling2s: Maybe<StudySampleAnnotationSubsampling2sConnection>;
-  /** Reads a set of `StudySampleAnnotationSubsampling2`. */
-  studySampleAnnotationSubsampling2sList: Maybe<Array<StudySampleAnnotationSubsampling2>>;
   /** Reads and enables pagination through a set of `StudySampleAnnotationSubsampling`. */
   studySampleAnnotationSubsamplings: Maybe<StudySampleAnnotationSubsamplingsConnection>;
   /** Reads a set of `StudySampleAnnotationSubsampling`. */
@@ -6951,10 +6943,6 @@ export type Query = Node & {
   studySampleAnnotationsList: Maybe<Array<StudySampleAnnotation>>;
   /** Reads a single `StudySample` using its globally unique `ID`. */
   studySampleByNodeId: Maybe<StudySample>;
-  /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed2`. */
-  studySampleProjectionSubsamplingTransposed2s: Maybe<StudySampleProjectionSubsamplingTransposed2sConnection>;
-  /** Reads a set of `StudySampleProjectionSubsamplingTransposed2`. */
-  studySampleProjectionSubsamplingTransposed2sList: Maybe<Array<StudySampleProjectionSubsamplingTransposed2>>;
   /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed`. */
   studySampleProjectionSubsamplingTransposeds: Maybe<StudySampleProjectionSubsamplingTransposedsConnection>;
   /** Reads a set of `StudySampleProjectionSubsamplingTransposed`. */
@@ -7617,6 +7605,21 @@ export type QueryExpressionByTwoAnnotationsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryExpressionTtestArgs = {
+  pAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  pOmicsId: InputMaybe<Scalars['Int']>;
+  pSample1AnnotationValueId: InputMaybe<Scalars['Int']>;
+  pSample1SecondAnnotationValueId: InputMaybe<Scalars['Int']>;
+  pSample2AnnotationValueId: InputMaybe<Scalars['Int']>;
+  pSample2SecondAnnotationValueId: InputMaybe<Scalars['Int']>;
+  pSecondaryAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  pStudyId: InputMaybe<Scalars['Int']>;
+  pStudyLayerId: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGetCorrelatedGenesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8071,29 +8074,6 @@ export type QueryStudyAdministrableCurrentusersListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryStudyAnnotationFrontendGroup2sArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudyAnnotationFrontendGroup2Condition>;
-  filter: InputMaybe<StudyAnnotationFrontendGroup2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudyAnnotationFrontendGroup2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudyAnnotationFrontendGroup2sListArgs = {
-  condition: InputMaybe<StudyAnnotationFrontendGroup2Condition>;
-  filter: InputMaybe<StudyAnnotationFrontendGroup2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudyAnnotationFrontendGroup2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendGroupsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8250,29 +8230,6 @@ export type QueryStudyOmicsListArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryStudyOmicsTransposed2sArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudyOmicsTransposed2Condition>;
-  filter: InputMaybe<StudyOmicsTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudyOmicsTransposed2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudyOmicsTransposed2sListArgs = {
-  condition: InputMaybe<StudyOmicsTransposed2Condition>;
-  filter: InputMaybe<StudyOmicsTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudyOmicsTransposed2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryStudyOmicsTransposedsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8349,29 +8306,6 @@ export type QueryStudySampleArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
-export type QueryStudySampleAnnotationSubsampling2sArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudySampleAnnotationSubsampling2Condition>;
-  filter: InputMaybe<StudySampleAnnotationSubsampling2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationSubsampling2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudySampleAnnotationSubsampling2sListArgs = {
-  condition: InputMaybe<StudySampleAnnotationSubsampling2Condition>;
-  filter: InputMaybe<StudySampleAnnotationSubsampling2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudySampleAnnotationSubsampling2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationSubsamplingsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8420,29 +8354,6 @@ export type QueryStudySampleAnnotationsListArgs = {
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleByNodeIdArgs = {
   nodeId: Scalars['ID'];
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudySampleProjectionSubsamplingTransposed2sArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudySampleProjectionSubsamplingTransposed2Condition>;
-  filter: InputMaybe<StudySampleProjectionSubsamplingTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2sOrderBy>>;
-};
-
-
-/** The root query type which gives access points into the data universe. */
-export type QueryStudySampleProjectionSubsamplingTransposed2sListArgs = {
-  condition: InputMaybe<StudySampleProjectionSubsamplingTransposed2Condition>;
-  filter: InputMaybe<StudySampleProjectionSubsamplingTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2sOrderBy>>;
 };
 
 
@@ -8786,10 +8697,6 @@ export enum StudiesOrderBy {
 export type Study = Node & {
   __typename?: 'Study';
   adminPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
-  /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup2`. */
-  annotationGroups: StudyAnnotationFrontendGroup2sConnection;
-  /** Reads and enables pagination through a set of `StudyAnnotationFrontendGroup2`. */
-  annotationGroupsList: Array<StudyAnnotationFrontendGroup2>;
   cellCount: Maybe<Scalars['Int']>;
   cellOntologyIds: Maybe<Array<Maybe<Scalars['String']>>>;
   description: Maybe<Scalars['String']>;
@@ -8826,22 +8733,10 @@ export type Study = Node & {
   studyOmics: StudyOmicsConnection;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsList: Array<StudyOmic>;
-  /** Reads and enables pagination through a set of `StudyOmicsTransposed2`. */
-  studyOmicsTransposed: StudyOmicsTransposed2sConnection;
-  /** Reads and enables pagination through a set of `StudyOmicsTransposed2`. */
-  studyOmicsTransposedList: Array<StudyOmicsTransposed2>;
-  /** Reads and enables pagination through a set of `StudySampleAnnotationSubsampling2`. */
-  studySampleAnnotationSubsampling: StudySampleAnnotationSubsampling2sConnection;
-  /** Reads and enables pagination through a set of `StudySampleAnnotationSubsampling2`. */
-  studySampleAnnotationSubsamplingList: Array<StudySampleAnnotationSubsampling2>;
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotations: StudySampleAnnotationsConnection;
   /** Reads and enables pagination through a set of `StudySampleAnnotation`. */
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
-  /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed2`. */
-  studySampleProjectionSubsamplingTransposed: StudySampleProjectionSubsamplingTransposed2sConnection;
-  /** Reads and enables pagination through a set of `StudySampleProjectionSubsamplingTransposed2`. */
-  studySampleProjectionSubsamplingTransposedList: Array<StudySampleProjectionSubsamplingTransposed2>;
   /** Reads and enables pagination through a set of `StudySample`. */
   studySamples: StudySamplesConnection;
   /** Reads and enables pagination through a set of `StudySample`. */
@@ -8852,27 +8747,6 @@ export type Study = Node & {
   /** Reads and enables pagination through a set of `UserAnnotationGroup`. */
   userAnnotationGroupsList: Array<UserAnnotationGroup>;
   visible: Maybe<Scalars['Boolean']>;
-};
-
-
-export type StudyAnnotationGroupsArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudyAnnotationFrontendGroup2Condition>;
-  filter: InputMaybe<StudyAnnotationFrontendGroup2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudyAnnotationFrontendGroup2sOrderBy>>;
-};
-
-
-export type StudyAnnotationGroupsListArgs = {
-  condition: InputMaybe<StudyAnnotationFrontendGroup2Condition>;
-  filter: InputMaybe<StudyAnnotationFrontendGroup2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudyAnnotationFrontendGroup2sOrderBy>>;
 };
 
 
@@ -8960,48 +8834,6 @@ export type StudyStudyOmicsListArgs = {
 };
 
 
-export type StudyStudyOmicsTransposedArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudyOmicsTransposed2Condition>;
-  filter: InputMaybe<StudyOmicsTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudyOmicsTransposed2sOrderBy>>;
-};
-
-
-export type StudyStudyOmicsTransposedListArgs = {
-  condition: InputMaybe<StudyOmicsTransposed2Condition>;
-  filter: InputMaybe<StudyOmicsTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudyOmicsTransposed2sOrderBy>>;
-};
-
-
-export type StudyStudySampleAnnotationSubsamplingArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudySampleAnnotationSubsampling2Condition>;
-  filter: InputMaybe<StudySampleAnnotationSubsampling2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleAnnotationSubsampling2sOrderBy>>;
-};
-
-
-export type StudyStudySampleAnnotationSubsamplingListArgs = {
-  condition: InputMaybe<StudySampleAnnotationSubsampling2Condition>;
-  filter: InputMaybe<StudySampleAnnotationSubsampling2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudySampleAnnotationSubsampling2sOrderBy>>;
-};
-
-
 export type StudyStudySampleAnnotationsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -9020,27 +8852,6 @@ export type StudyStudySampleAnnotationsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
-};
-
-
-export type StudyStudySampleProjectionSubsamplingTransposedArgs = {
-  after: InputMaybe<Scalars['Cursor']>;
-  before: InputMaybe<Scalars['Cursor']>;
-  condition: InputMaybe<StudySampleProjectionSubsamplingTransposed2Condition>;
-  filter: InputMaybe<StudySampleProjectionSubsamplingTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  last: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2sOrderBy>>;
-};
-
-
-export type StudyStudySampleProjectionSubsamplingTransposedListArgs = {
-  condition: InputMaybe<StudySampleProjectionSubsamplingTransposed2Condition>;
-  filter: InputMaybe<StudySampleProjectionSubsamplingTransposed2Filter>;
-  first: InputMaybe<Scalars['Int']>;
-  offset: InputMaybe<Scalars['Int']>;
-  orderBy: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2sOrderBy>>;
 };
 
 
@@ -9349,119 +9160,6 @@ export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
-
-export type StudyAnnotationFrontendGroup2 = {
-  __typename?: 'StudyAnnotationFrontendGroup2';
-  annotationGroupId: Maybe<Scalars['Int']>;
-  createdByUser: Maybe<Scalars['String']>;
-  currentUserIsOwner: Maybe<Scalars['Boolean']>;
-  differentialExpressionCalculated: Maybe<Scalars['Boolean']>;
-  displayGroup: Maybe<Scalars['String']>;
-  isPrimary: Maybe<Scalars['Boolean']>;
-  ordering: Maybe<Scalars['Int']>;
-  privateToUser: Maybe<Scalars['Boolean']>;
-  /** Reads a single `Study` that is related to this `StudyAnnotationFrontendGroup2`. */
-  study: Maybe<Study>;
-  studyId: Maybe<Scalars['Int']>;
-};
-
-/**
- * A condition to be used against `StudyAnnotationFrontendGroup2` object types. All
- * fields are tested for equality and combined with a logical ‘and.’
- */
-export type StudyAnnotationFrontendGroup2Condition = {
-  /** Checks for equality with the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `createdByUser` field. */
-  createdByUser: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `currentUserIsOwner` field. */
-  currentUserIsOwner: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `displayGroup` field. */
-  displayGroup: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `isPrimary` field. */
-  isPrimary: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `ordering` field. */
-  ordering: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `privateToUser` field. */
-  privateToUser: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `StudyAnnotationFrontendGroup2` object types. All fields are combined with a logical ‘and.’ */
-export type StudyAnnotationFrontendGroup2Filter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudyAnnotationFrontendGroup2Filter>>;
-  /** Filter by the object’s `annotationGroupId` field. */
-  annotationGroupId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `createdByUser` field. */
-  createdByUser: InputMaybe<StringFilter>;
-  /** Filter by the object’s `currentUserIsOwner` field. */
-  currentUserIsOwner: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `differentialExpressionCalculated` field. */
-  differentialExpressionCalculated: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `displayGroup` field. */
-  displayGroup: InputMaybe<StringFilter>;
-  /** Filter by the object’s `isPrimary` field. */
-  isPrimary: InputMaybe<BooleanFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudyAnnotationFrontendGroup2Filter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudyAnnotationFrontendGroup2Filter>>;
-  /** Filter by the object’s `ordering` field. */
-  ordering: InputMaybe<IntFilter>;
-  /** Filter by the object’s `privateToUser` field. */
-  privateToUser: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-};
-
-/** A connection to a list of `StudyAnnotationFrontendGroup2` values. */
-export type StudyAnnotationFrontendGroup2sConnection = {
-  __typename?: 'StudyAnnotationFrontendGroup2sConnection';
-  /** A list of edges which contains the `StudyAnnotationFrontendGroup2` and cursor to aid in pagination. */
-  edges: Array<StudyAnnotationFrontendGroup2sEdge>;
-  /** A list of `StudyAnnotationFrontendGroup2` objects. */
-  nodes: Array<Maybe<StudyAnnotationFrontendGroup2>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `StudyAnnotationFrontendGroup2` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `StudyAnnotationFrontendGroup2` edge in the connection. */
-export type StudyAnnotationFrontendGroup2sEdge = {
-  __typename?: 'StudyAnnotationFrontendGroup2sEdge';
-  /** A cursor for use in pagination. */
-  cursor: Maybe<Scalars['Cursor']>;
-  /** The `StudyAnnotationFrontendGroup2` at the end of the edge. */
-  node: Maybe<StudyAnnotationFrontendGroup2>;
-};
-
-/** Methods to use when ordering `StudyAnnotationFrontendGroup2`. */
-export enum StudyAnnotationFrontendGroup2sOrderBy {
-  AnnotationGroupIdAsc = 'ANNOTATION_GROUP_ID_ASC',
-  AnnotationGroupIdDesc = 'ANNOTATION_GROUP_ID_DESC',
-  CreatedByUserAsc = 'CREATED_BY_USER_ASC',
-  CreatedByUserDesc = 'CREATED_BY_USER_DESC',
-  CurrentUserIsOwnerAsc = 'CURRENT_USER_IS_OWNER_ASC',
-  CurrentUserIsOwnerDesc = 'CURRENT_USER_IS_OWNER_DESC',
-  DifferentialExpressionCalculatedAsc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
-  DifferentialExpressionCalculatedDesc = 'DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
-  DisplayGroupAsc = 'DISPLAY_GROUP_ASC',
-  DisplayGroupDesc = 'DISPLAY_GROUP_DESC',
-  IsPrimaryAsc = 'IS_PRIMARY_ASC',
-  IsPrimaryDesc = 'IS_PRIMARY_DESC',
-  Natural = 'NATURAL',
-  OrderingAsc = 'ORDERING_ASC',
-  OrderingDesc = 'ORDERING_DESC',
-  PrivateToUserAsc = 'PRIVATE_TO_USER_ASC',
-  PrivateToUserDesc = 'PRIVATE_TO_USER_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC'
-}
 
 /**
  * A condition to be used against `StudyAnnotationFrontendGroup` object types. All
@@ -10166,91 +9864,6 @@ export type StudyOmicsTransposed = {
   studyId: Maybe<Scalars['Int']>;
 };
 
-export type StudyOmicsTransposed2 = {
-  __typename?: 'StudyOmicsTransposed2';
-  displayName: Maybe<Array<Maybe<Scalars['String']>>>;
-  displaySymbol: Maybe<Array<Maybe<Scalars['String']>>>;
-  omicsId: Maybe<Array<Maybe<Scalars['Int']>>>;
-  omicsType: Maybe<Array<Maybe<OmicsType>>>;
-  /** Reads a single `Study` that is related to this `StudyOmicsTransposed2`. */
-  study: Maybe<Study>;
-  studyId: Maybe<Scalars['Int']>;
-};
-
-/**
- * A condition to be used against `StudyOmicsTransposed2` object types. All fields
- * are tested for equality and combined with a logical ‘and.’
- */
-export type StudyOmicsTransposed2Condition = {
-  /** Checks for equality with the object’s `displayName` field. */
-  displayName: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Checks for equality with the object’s `omicsId` field. */
-  omicsId: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  /** Checks for equality with the object’s `omicsType` field. */
-  omicsType: InputMaybe<Array<InputMaybe<OmicsType>>>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `StudyOmicsTransposed2` object types. All fields are combined with a logical ‘and.’ */
-export type StudyOmicsTransposed2Filter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudyOmicsTransposed2Filter>>;
-  /** Filter by the object’s `displayName` field. */
-  displayName: InputMaybe<StringListFilter>;
-  /** Filter by the object’s `displaySymbol` field. */
-  displaySymbol: InputMaybe<StringListFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudyOmicsTransposed2Filter>;
-  /** Filter by the object’s `omicsId` field. */
-  omicsId: InputMaybe<IntListFilter>;
-  /** Filter by the object’s `omicsType` field. */
-  omicsType: InputMaybe<OmicsTypeListFilter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudyOmicsTransposed2Filter>>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-};
-
-/** A connection to a list of `StudyOmicsTransposed2` values. */
-export type StudyOmicsTransposed2sConnection = {
-  __typename?: 'StudyOmicsTransposed2sConnection';
-  /** A list of edges which contains the `StudyOmicsTransposed2` and cursor to aid in pagination. */
-  edges: Array<StudyOmicsTransposed2sEdge>;
-  /** A list of `StudyOmicsTransposed2` objects. */
-  nodes: Array<Maybe<StudyOmicsTransposed2>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `StudyOmicsTransposed2` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `StudyOmicsTransposed2` edge in the connection. */
-export type StudyOmicsTransposed2sEdge = {
-  __typename?: 'StudyOmicsTransposed2sEdge';
-  /** A cursor for use in pagination. */
-  cursor: Maybe<Scalars['Cursor']>;
-  /** The `StudyOmicsTransposed2` at the end of the edge. */
-  node: Maybe<StudyOmicsTransposed2>;
-};
-
-/** Methods to use when ordering `StudyOmicsTransposed2`. */
-export enum StudyOmicsTransposed2sOrderBy {
-  DisplayNameAsc = 'DISPLAY_NAME_ASC',
-  DisplayNameDesc = 'DISPLAY_NAME_DESC',
-  DisplaySymbolAsc = 'DISPLAY_SYMBOL_ASC',
-  DisplaySymbolDesc = 'DISPLAY_SYMBOL_DESC',
-  Natural = 'NATURAL',
-  OmicsIdAsc = 'OMICS_ID_ASC',
-  OmicsIdDesc = 'OMICS_ID_DESC',
-  OmicsTypeAsc = 'OMICS_TYPE_ASC',
-  OmicsTypeDesc = 'OMICS_TYPE_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC'
-}
-
 /**
  * A condition to be used against `StudyOmicsTransposed` object types. All fields
  * are tested for equality and combined with a logical ‘and.’
@@ -10665,77 +10278,6 @@ export type StudySampleAnnotationSubsampling = {
   studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
-export type StudySampleAnnotationSubsampling2 = {
-  __typename?: 'StudySampleAnnotationSubsampling2';
-  annotationValueId: Maybe<Scalars['Int']>;
-  /** Reads a single `Study` that is related to this `StudySampleAnnotationSubsampling2`. */
-  study: Maybe<Study>;
-  studyId: Maybe<Scalars['Int']>;
-  studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
-
-/**
- * A condition to be used against `StudySampleAnnotationSubsampling2` object types.
- * All fields are tested for equality and combined with a logical ‘and.’
- */
-export type StudySampleAnnotationSubsampling2Condition = {
-  /** Checks for equality with the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studySampleIds` field. */
-  studySampleIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-/** A filter to be used against `StudySampleAnnotationSubsampling2` object types. All fields are combined with a logical ‘and.’ */
-export type StudySampleAnnotationSubsampling2Filter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudySampleAnnotationSubsampling2Filter>>;
-  /** Filter by the object’s `annotationValueId` field. */
-  annotationValueId: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudySampleAnnotationSubsampling2Filter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudySampleAnnotationSubsampling2Filter>>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studySampleIds` field. */
-  studySampleIds: InputMaybe<IntListFilter>;
-};
-
-/** A connection to a list of `StudySampleAnnotationSubsampling2` values. */
-export type StudySampleAnnotationSubsampling2sConnection = {
-  __typename?: 'StudySampleAnnotationSubsampling2sConnection';
-  /** A list of edges which contains the `StudySampleAnnotationSubsampling2` and cursor to aid in pagination. */
-  edges: Array<StudySampleAnnotationSubsampling2sEdge>;
-  /** A list of `StudySampleAnnotationSubsampling2` objects. */
-  nodes: Array<Maybe<StudySampleAnnotationSubsampling2>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `StudySampleAnnotationSubsampling2` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `StudySampleAnnotationSubsampling2` edge in the connection. */
-export type StudySampleAnnotationSubsampling2sEdge = {
-  __typename?: 'StudySampleAnnotationSubsampling2sEdge';
-  /** A cursor for use in pagination. */
-  cursor: Maybe<Scalars['Cursor']>;
-  /** The `StudySampleAnnotationSubsampling2` at the end of the edge. */
-  node: Maybe<StudySampleAnnotationSubsampling2>;
-};
-
-/** Methods to use when ordering `StudySampleAnnotationSubsampling2`. */
-export enum StudySampleAnnotationSubsampling2sOrderBy {
-  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
-  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
-  Natural = 'NATURAL',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
-  StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
-  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC'
-}
-
 /**
  * A condition to be used against `StudySampleAnnotationSubsampling` object types.
  * All fields are tested for equality and combined with a logical ‘and.’
@@ -10953,91 +10495,6 @@ export type StudySampleProjectionSubsamplingTransposed = {
   studyId: Maybe<Scalars['Int']>;
   studySampleId: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
-
-export type StudySampleProjectionSubsamplingTransposed2 = {
-  __typename?: 'StudySampleProjectionSubsamplingTransposed2';
-  modality: Maybe<Scalars['String']>;
-  projection: Maybe<Array<Maybe<Scalars['Float']>>>;
-  projectionType: Maybe<Scalars['String']>;
-  /** Reads a single `Study` that is related to this `StudySampleProjectionSubsamplingTransposed2`. */
-  study: Maybe<Study>;
-  studyId: Maybe<Scalars['Int']>;
-  studySampleId: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
-
-/**
- * A condition to be used against `StudySampleProjectionSubsamplingTransposed2`
- * object types. All fields are tested for equality and combined with a logical ‘and.’
- */
-export type StudySampleProjectionSubsamplingTransposed2Condition = {
-  /** Checks for equality with the object’s `modality` field. */
-  modality: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `projection` field. */
-  projection: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
-  /** Checks for equality with the object’s `projectionType` field. */
-  projectionType: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `studyId` field. */
-  studyId: InputMaybe<Scalars['Int']>;
-  /** Checks for equality with the object’s `studySampleId` field. */
-  studySampleId: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-};
-
-/** A filter to be used against `StudySampleProjectionSubsamplingTransposed2` object types. All fields are combined with a logical ‘and.’ */
-export type StudySampleProjectionSubsamplingTransposed2Filter = {
-  /** Checks for all expressions in this list. */
-  and: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2Filter>>;
-  /** Filter by the object’s `modality` field. */
-  modality: InputMaybe<StringFilter>;
-  /** Negates the expression. */
-  not: InputMaybe<StudySampleProjectionSubsamplingTransposed2Filter>;
-  /** Checks for any expressions in this list. */
-  or: InputMaybe<Array<StudySampleProjectionSubsamplingTransposed2Filter>>;
-  /** Filter by the object’s `projection` field. */
-  projection: InputMaybe<FloatListFilter>;
-  /** Filter by the object’s `projectionType` field. */
-  projectionType: InputMaybe<StringFilter>;
-  /** Filter by the object’s `studyId` field. */
-  studyId: InputMaybe<IntFilter>;
-  /** Filter by the object’s `studySampleId` field. */
-  studySampleId: InputMaybe<IntListFilter>;
-};
-
-/** A connection to a list of `StudySampleProjectionSubsamplingTransposed2` values. */
-export type StudySampleProjectionSubsamplingTransposed2sConnection = {
-  __typename?: 'StudySampleProjectionSubsamplingTransposed2sConnection';
-  /** A list of edges which contains the `StudySampleProjectionSubsamplingTransposed2` and cursor to aid in pagination. */
-  edges: Array<StudySampleProjectionSubsamplingTransposed2sEdge>;
-  /** A list of `StudySampleProjectionSubsamplingTransposed2` objects. */
-  nodes: Array<Maybe<StudySampleProjectionSubsamplingTransposed2>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `StudySampleProjectionSubsamplingTransposed2` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `StudySampleProjectionSubsamplingTransposed2` edge in the connection. */
-export type StudySampleProjectionSubsamplingTransposed2sEdge = {
-  __typename?: 'StudySampleProjectionSubsamplingTransposed2sEdge';
-  /** A cursor for use in pagination. */
-  cursor: Maybe<Scalars['Cursor']>;
-  /** The `StudySampleProjectionSubsamplingTransposed2` at the end of the edge. */
-  node: Maybe<StudySampleProjectionSubsamplingTransposed2>;
-};
-
-/** Methods to use when ordering `StudySampleProjectionSubsamplingTransposed2`. */
-export enum StudySampleProjectionSubsamplingTransposed2sOrderBy {
-  ModalityAsc = 'MODALITY_ASC',
-  ModalityDesc = 'MODALITY_DESC',
-  Natural = 'NATURAL',
-  ProjectionAsc = 'PROJECTION_ASC',
-  ProjectionDesc = 'PROJECTION_DESC',
-  ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
-  ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
-  StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
-  StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
-  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
-}
 
 /**
  * A condition to be used against `StudySampleProjectionSubsamplingTransposed`
@@ -11667,7 +11124,7 @@ export type UpdateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -12054,8 +11511,8 @@ export type UserAnnotationGroupFilter = {
 export type UserAnnotationGroupInput = {
   calculateDifferentialExpression: Scalars['Boolean'];
   createdByUser: InputMaybe<Scalars['String']>;
-  creationTimestamp: InputMaybe<Scalars['Datetime']>;
-  privateToUser: InputMaybe<Scalars['Boolean']>;
+  creationTimestamp: Scalars['Datetime'];
+  privateToUser: Scalars['Boolean'];
   savedAsAnnotationGroupId: Scalars['Int'];
   studyId: Scalars['Int'];
 };
@@ -12230,7 +11687,7 @@ export type StudyBasicsQueryVariables = Exact<{
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyOmicsTransposedList: Array<{ __typename?: 'StudyOmicsTransposed2', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }> }, studyLayersList: Array<{ __typename: 'StudyLayer', layer: string, studyLayerId: number }> };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string> }, studyLayersList: Array<{ __typename: 'StudyLayer', layer: string, studyLayerId: number }> };
 
 export type StudyBasics2QueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12266,6 +11723,34 @@ export type ExpressionViolinPlotQueryVariables = Exact<{
 
 
 export type ExpressionViolinPlotQuery = { __typename?: 'Query', violinPlot: string };
+
+export type ExpressionGroupTableQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
+  annotationSecondaryGroupId: Scalars['Int'];
+}>;
+
+
+export type ExpressionGroupTableQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', annotationValueId: number, annotationDisplayValue: string, secondAnnotationValueId: number, secondAnnotationDisplayValue: string, valueCount: number, median: number, nonZeroValueCount: number }> };
+
+export type ExpressionTTestQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsId: Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
+  secondAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  sample1AnnotationValueId: Scalars['Int'];
+  sample1SecondAnnotationValueId: InputMaybe<Scalars['Int']>;
+  sample2AnnotationValueId: Scalars['Int'];
+  sample2SecondAnnotationValueId: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ExpressionTTestQuery = { __typename?: 'Query', expressionTtest: string };
 
 export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12848,12 +12333,6 @@ export const StudyBasicsDocument = gql`
     cellCount
     projections
     __typename
-    studyOmicsTransposedList {
-      displayName
-      displaySymbol
-      omicsId
-      omicsType
-    }
   }
   studyLayersList(condition: {studyId: $studyId}) {
     layer
@@ -13079,6 +12558,113 @@ export function useExpressionViolinPlotLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressionViolinPlotQuery>;
 export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
 export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
+export const ExpressionGroupTableDocument = gql`
+    query ExpressionGroupTable($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!, $annotationSecondaryGroupId: Int!) {
+  expressionByTwoAnnotationsList(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: [$omicsId]
+    pAnnotationGroupId: $annotationGroupId
+    pSecondAnnotationGroupId: $annotationSecondaryGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pDropoutsAsZero: true
+  ) {
+    annotationValueId
+    annotationDisplayValue
+    secondAnnotationValueId
+    secondAnnotationDisplayValue
+    valueCount
+    median
+    nonZeroValueCount
+  }
+}
+    `;
+
+/**
+ * __useExpressionGroupTableQuery__
+ *
+ * To run a query within a React component, call `useExpressionGroupTableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionGroupTableQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpressionGroupTableQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      studyLayerId: // value for 'studyLayerId'
+ *      omicsId: // value for 'omicsId'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
+ *      annotationSecondaryGroupId: // value for 'annotationSecondaryGroupId'
+ *   },
+ * });
+ */
+export function useExpressionGroupTableQuery(baseOptions: Apollo.QueryHookOptions<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
+      }
+export function useExpressionGroupTableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
+        }
+export type ExpressionGroupTableQueryHookResult = ReturnType<typeof useExpressionGroupTableQuery>;
+export type ExpressionGroupTableLazyQueryHookResult = ReturnType<typeof useExpressionGroupTableLazyQuery>;
+export type ExpressionGroupTableQueryResult = Apollo.QueryResult<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>;
+export const ExpressionTTestDocument = gql`
+    query ExpressionTTest($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!, $secondAnnotationGroupId: Int, $sample1AnnotationValueId: Int!, $sample1SecondAnnotationValueId: Int, $sample2AnnotationValueId: Int!, $sample2SecondAnnotationValueId: Int) {
+  expressionTtest(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsId: $omicsId
+    pAnnotationGroupId: $annotationGroupId
+    pSecondaryAnnotationGroupId: $secondAnnotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pSample1AnnotationValueId: $sample1AnnotationValueId
+    pSample1SecondAnnotationValueId: $sample1SecondAnnotationValueId
+    pSample2AnnotationValueId: $sample2AnnotationValueId
+    pSample2SecondAnnotationValueId: $sample2SecondAnnotationValueId
+  )
+}
+    `;
+
+/**
+ * __useExpressionTTestQuery__
+ *
+ * To run a query within a React component, call `useExpressionTTestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExpressionTTestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExpressionTTestQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      studyLayerId: // value for 'studyLayerId'
+ *      omicsId: // value for 'omicsId'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
+ *      secondAnnotationGroupId: // value for 'secondAnnotationGroupId'
+ *      sample1AnnotationValueId: // value for 'sample1AnnotationValueId'
+ *      sample1SecondAnnotationValueId: // value for 'sample1SecondAnnotationValueId'
+ *      sample2AnnotationValueId: // value for 'sample2AnnotationValueId'
+ *      sample2SecondAnnotationValueId: // value for 'sample2SecondAnnotationValueId'
+ *   },
+ * });
+ */
+export function useExpressionTTestQuery(baseOptions: Apollo.QueryHookOptions<ExpressionTTestQuery, ExpressionTTestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
+      }
+export function useExpressionTTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionTTestQuery, ExpressionTTestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
+        }
+export type ExpressionTTestQueryHookResult = ReturnType<typeof useExpressionTTestQuery>;
+export type ExpressionTTestLazyQueryHookResult = ReturnType<typeof useExpressionTTestLazyQuery>;
+export type ExpressionTTestQueryResult = Apollo.QueryResult<ExpressionTTestQuery, ExpressionTTestQueryVariables>;
 export const ExpressionCorrelationTrianglePlotDocument = gql`
     query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
   correlationTrianglePlot(
