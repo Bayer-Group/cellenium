@@ -65,7 +65,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
       <Grid columns={12} w="100%" gutter="md">
         <Grid.Col span={1}>
           <ActionIcon variant="subtle" size="xs" title="remove from user gene list">
-            <IconX onClick={handleRemove} size="xs" />
+            <IconX onClick={handleRemove} />
           </ActionIcon>
         </Grid.Col>
         <Grid.Col span={1}>
