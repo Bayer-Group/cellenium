@@ -44,11 +44,13 @@ export function SearchBar({
   onSearchFiltersUpdate,
   studies,
   ontologyLoading,
+  initialFocus = false,
 }: {
   ontologyLoading?: boolean;
   ontologies?: Map<string, OntologyItem>;
   onSearchFiltersUpdate: (filters: OfferingItem[]) => void;
   studies?: StudyOverview[];
+  initialFocus?: boolean;
 }) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
@@ -193,6 +195,7 @@ export function SearchBar({
             size="md"
             w="100%"
             placeholder="lung, cancer, heart, ..."
+            autoFocus={initialFocus}
             rightSection={
               <ActionIcon onClick={clearInput}>
                 <IconX />

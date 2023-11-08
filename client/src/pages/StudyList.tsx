@@ -11,7 +11,7 @@ function StudyList() {
   return (
     <NavBarProvider scrollable>
       <Stack p="md" spacing={0}>
-        <StudySearchBar onStudyListUpdate={setStudyList} />
+        <StudySearchBar onStudyListUpdate={setStudyList} initialFocus />
         <Stack w="100%" pb="md" mt="1rem">
           {studyList.map((study) => (
             <StudyCard study={study} key={study.studyId} />

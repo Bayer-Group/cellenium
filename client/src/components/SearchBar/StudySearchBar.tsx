@@ -13,7 +13,13 @@ function metadataValues(study: StudyInfoFragment) {
   return [];
 }
 
-export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (studies: StudyInfoFragment[]) => void }) {
+export function StudySearchBar({
+  onStudyListUpdate,
+  initialFocus = false,
+}: {
+  onStudyListUpdate: (studies: StudyInfoFragment[]) => void;
+  initialFocus?: boolean;
+}) {
   const { data, loading } = useStudiesQuery();
   const { data: ontologyData, loading: ontologyLoading } = useStudiesTreeOntologiesQuery();
   const allStudies = useMemo(
@@ -59,7 +65,13 @@ export function StudySearchBar({ onStudyListUpdate }: { onStudyListUpdate: (stud
 
   return (
     <Stack>
-      <SearchBar ontologyLoading={ontologyLoading} ontologies={ontologyTrees} studies={allStudies || []} onSearchFiltersUpdate={setFilters} />
+      <SearchBar
+        ontologyLoading={ontologyLoading}
+        ontologies={ontologyTrees}
+        studies={allStudies || []}
+        onSearchFiltersUpdate={setFilters}
+        initialFocus={initialFocus}
+      />
       {loading && (
         <Group position="center" align="center" w="100%">
           <Loader variant="dots" color="blue" />
