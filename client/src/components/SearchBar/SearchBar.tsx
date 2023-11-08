@@ -66,18 +66,19 @@ export function SearchBar({
         value,
         ontcode: value,
       });
-    }
-    if (autocompleteSuggestions) {
-      newOfferings.push(
-        ...autocompleteSuggestions.autocompleteList.map((e) => {
-          return {
-            ontcode: e.ontCode,
-            ontology: e.ontology,
-            value: e.label,
-            preferredLabel: e.isSynonymOfPreferredTerm,
-          };
-        }),
-      );
+
+      if (autocompleteSuggestions) {
+        newOfferings.push(
+          ...autocompleteSuggestions.autocompleteList.map((e) => {
+            return {
+              ontcode: e.ontCode,
+              ontology: e.ontology,
+              value: e.label,
+              preferredLabel: e.isSynonymOfPreferredTerm,
+            };
+          }),
+        );
+      }
     }
     return newOfferings;
   }, [autocompleteSuggestions, value]);
