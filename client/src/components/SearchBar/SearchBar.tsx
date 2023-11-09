@@ -153,7 +153,7 @@ export function SearchBar({
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter' && value.trim().length > 0) {
         handleSubmit({
           ontology: 'FREETEXT',
           value,
