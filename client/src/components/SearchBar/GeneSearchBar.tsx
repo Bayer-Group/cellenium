@@ -24,7 +24,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onGeneSelection: (omicsIds: number[]) => void }) {
+function GeneSearchBar({ humanOnly }: { humanOnly: boolean }) {
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const [value, setValue] = useState<string>('');
@@ -66,7 +66,6 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
         if (selectedFilters.find((f) => f.value === omicsItem.value) === undefined) {
           const newFilters = [...selectedFilters, omicsItem];
           setSelectedFilters(newFilters);
-          onGeneSelection(newFilters.map((f) => f.omicsId).flat());
         }
 
         if (inputRef && inputRef.current !== null) {
@@ -74,7 +73,7 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
         }
       }
     },
-    [offerings, onGeneSelection, selectedFilters, setSelectedFilters],
+    [offerings, selectedFilters, setSelectedFilters],
   );
 
   const handleChange = useCallback((input: string) => {
@@ -112,16 +111,14 @@ function GeneSearchBar({ humanOnly, onGeneSelection }: { humanOnly: boolean; onG
       if (inputRef && inputRef.current !== null) {
         inputRef.current.focus();
       }
-      onGeneSelection(newFilters.map((f) => f.omicsId).flat());
     },
-    [onGeneSelection, selectedFilters, setSelectedFilters],
+    [selectedFilters, setSelectedFilters],
   );
 
   const clearInput = useCallback(() => {
     setValue('');
     setSelectedFilters([]);
-    onGeneSelection([]);
-  }, [onGeneSelection, setSelectedFilters]);
+  }, [setSelectedFilters]);
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {

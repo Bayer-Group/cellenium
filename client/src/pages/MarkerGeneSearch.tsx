@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Anchor, Badge, Card, Center, createStyles, Grid, Group, Loader, SimpleGrid, Stack, Text } from '@mantine/core';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { DifferentialMarkerFragment, useStudiesWithMarkerGenesQuery } from '../generated/types';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
 import { MarkerCard } from '../components/MarkerCard/MarkerCard';
+import { GeneSearchSelection } from '../atoms';
 
 interface StudySummary {
   studyId: number;
@@ -68,7 +70,12 @@ function StudyMarkerGeneCard({ study }: { study: StudySummary }) {
 }
 
 function MarkerGeneSearch() {
-  const [omicsIds, setOmicsIds] = useState<number[]>([]);
+  const [selectedFilters] = useRecoilState(GeneSearchSelection);
+
+  const omicsIds = useMemo(() => {
+    return selectedFilters.map((f) => f.omicsId).flat();
+  }, [selectedFilters]);
+
   const { data, loading } = useStudiesWithMarkerGenesQuery({
     variables: {
       omicsIds,
@@ -104,7 +111,7 @@ function MarkerGeneSearch() {
 
   return (
     <Stack p="md" spacing={0}>
-      <GeneSearchBar humanOnly={false} onGeneSelection={(ids: number[]) => setOmicsIds(ids)} />
+      <GeneSearchBar humanOnly={false} />
       <Center w="100%" m="sm">
         {loading && <Loader variant="dots" color="blue" />}
         {omicsIds.length === 0 && (

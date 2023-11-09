@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Group, Loader, Stack } from '@mantine/core';
+import { useRecoilState } from 'recoil';
 import { StudyInfoFragment, useStudiesQuery, useStudiesTreeOntologiesQuery } from '../../generated/types';
 import { OntologyItem } from '../../model';
 import { generateOntologyTrees } from '../../utils/helper';
 import { SearchBar } from './SearchBar';
 import type { OfferingItem } from './interfaces';
+import { StudySearchList } from '../../atoms';
 
 function metadataValues(study: StudyInfoFragment) {
   if (study.metadata) {
@@ -13,13 +15,8 @@ function metadataValues(study: StudyInfoFragment) {
   return [];
 }
 
-export function StudySearchBar({
-  onStudyListUpdate,
-  initialFocus = false,
-}: {
-  onStudyListUpdate: (studies: StudyInfoFragment[]) => void;
-  initialFocus?: boolean;
-}) {
+export function StudySearchBar({ initialFocus = false }: { initialFocus?: boolean }) {
+  const [, setGlobalStudies] = useRecoilState(StudySearchList);
   const { data, loading } = useStudiesQuery();
   const { data: ontologyData, loading: ontologyLoading } = useStudiesTreeOntologiesQuery();
   const allStudies = useMemo(
@@ -61,7 +58,7 @@ export function StudySearchBar({
     return keepStudies;
   }, [allStudies, filters]);
 
-  useEffect(() => onStudyListUpdate(filteredStudies || []), [filteredStudies, onStudyListUpdate]);
+  useEffect(() => setGlobalStudies(filteredStudies || []), [filteredStudies, setGlobalStudies]);
 
   return (
     <Stack>

@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Center, createStyles, Group, Loader, Space, Stack, Text } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { ScenegraphEvent } from 'vega';
-import { DotPlotElementFragment, StudyInfoFragment, useExpressionByAnnotationQuery } from '../generated/types';
-import { cellOAnnotationGroupIdState, GeneSearchSelection } from '../atoms';
+import { DotPlotElementFragment, useExpressionByAnnotationQuery } from '../generated/types';
+import { cellOAnnotationGroupIdState, GeneSearchSelection, StudySearchList } from '../atoms';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { GeneSearchBar } from '../components/SearchBar/GeneSearchBar';
@@ -22,11 +22,13 @@ const useStyles = createStyles(() => ({
 
 function CrossStudySearch() {
   const { classes } = useStyles();
-  const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
-  const [omicsIds, setOmicsIds] = useState<number[]>([]);
+  const [studyList] = useRecoilState(StudySearchList);
   const cellOAnnotationGroupId = useRecoilValue(cellOAnnotationGroupIdState);
   const navigate = useNavigate();
   const [selectedFilters] = useRecoilState(GeneSearchSelection);
+  const omicsIds = useMemo(() => {
+    return selectedFilters.map((f) => f.omicsId).flat();
+  }, [selectedFilters]);
 
   const { data, loading } = useExpressionByAnnotationQuery({
     variables: {
@@ -69,13 +71,11 @@ function CrossStudySearch() {
     [cellOAnnotationGroupId, navigate],
   );
 
-  const onGeneSelection = useCallback((ids: number[]) => setOmicsIds(ids), []);
-
   return (
     <Stack p="md" spacing={0}>
-      <GeneSearchBar humanOnly onGeneSelection={onGeneSelection} />
+      <GeneSearchBar humanOnly />
       <Space h="xl" />
-      <StudySearchBar onStudyListUpdate={setStudyList} />
+      <StudySearchBar />
       <Center w="100%">
         <Text color="dimmed" align="center" mt="1rem">
           Please enter your genes of interest. Cellenium will show the gene&apos;s expression in human studies with standardized cell annotation (CellO). As the

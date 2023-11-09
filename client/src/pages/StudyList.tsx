@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { Stack } from '@mantine/core';
-import { StudyInfoFragment } from '../generated/types';
+import { useRecoilState } from 'recoil';
 import { StudySearchBar } from '../components/SearchBar/StudySearchBar';
 import { StudyCard } from '../components/StudyCard/StudyCard';
+import { StudySearchList } from '../atoms';
 
 function StudyList() {
-  const [studyList, setStudyList] = useState<StudyInfoFragment[]>([]);
+  const [studyList] = useRecoilState(StudySearchList);
 
   return (
     <Stack p="md" spacing={0}>
-      <StudySearchBar onStudyListUpdate={setStudyList} initialFocus />
+      <StudySearchBar initialFocus />
       <Stack w="100%" pb="md" mt="1rem">
         {studyList.map((study) => (
           <StudyCard study={study} key={study.studyId} />

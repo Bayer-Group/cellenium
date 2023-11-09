@@ -19,6 +19,7 @@ import {
   StudyBasicsDocument,
   StudyBasicsQuery,
   StudyBasicsQueryVariables,
+  StudyInfoFragment,
   StudySampleAnnotationSubsampling,
 } from './generated/types';
 import { OfferingItem } from './components/SearchBar/interfaces';
@@ -189,6 +190,11 @@ export const cellOAnnotationGroupIdState = selector<number | undefined>({
     }
     return 0;
   },
+});
+
+export const StudySearchList = atom<StudyInfoFragment[]>({
+  key: 'StudySearchList',
+  default: [],
 });
 
 export const StudySearchSelection = atom<OfferingItem[]>({
