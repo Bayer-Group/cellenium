@@ -61,10 +61,10 @@ create or replace function study_definition_update()
 as
 $$
 begin
-    refresh materialized view study_overview_ontology;
-    refresh materialized view study_omics_transposed;
-    refresh materialized view study_sample_annotation_subsampling;
-    refresh materialized view study_sample_projection_subsampling_transposed;
+    refresh materialized view concurrently study_overview_ontology;
+    refresh materialized view concurrently study_omics_transposed;
+    refresh materialized view concurrently study_sample_annotation_subsampling;
+    refresh materialized view concurrently study_sample_projection_subsampling_transposed;
     return true;
 end;
 $$;

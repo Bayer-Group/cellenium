@@ -80,6 +80,7 @@ GRANT SELECT ON differential_expression_v TO postgraphile;
 DROP MATERIALIZED VIEW IF EXISTS study_sample_annotation_subsampling;
 CREATE MATERIALIZED VIEW study_sample_annotation_subsampling AS
 SELECT
+    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
 	ssa.study_id,
 	ssa.annotation_value_id,
 	array_agg(DISTINCT ssp.study_sample_id) study_sample_ids
@@ -98,6 +99,8 @@ GROUP BY
 COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS NULL;
 GRANT SELECT ON study_sample_annotation_subsampling TO postgraphile;
 CREATE INDEX study_sample_annotation_subsampling_idx ON study_sample_annotation_subsampling (study_id);
+create unique index study_sample_annotation_subsampling_unique_idx
+    on study_sample_annotation_subsampling (row_number);
 
 -- CREATE OR REPLACE VIEW study_sample_projection_subsampling_transposed AS
 -- SELECT
@@ -122,6 +125,7 @@ CREATE INDEX study_sample_annotation_subsampling_idx ON study_sample_annotation_
 DROP MATERIALIZED VIEW IF EXISTS study_sample_projection_subsampling_transposed;
 CREATE MATERIALIZED VIEW study_sample_projection_subsampling_transposed AS
 SELECT
+    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
 	study_id,
 	projection_type,
 	modality,
@@ -140,6 +144,8 @@ GROUP BY
 COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS NULL;
 GRANT SELECT ON study_sample_projection_subsampling_transposed TO postgraphile;
 CREATE INDEX study_sample_projection_subsampling_transposed_idx ON study_sample_projection_subsampling_transposed (study_id);
+create unique index study_sample_projection_subsampling_transposed_unique_idx
+    on study_sample_projection_subsampling_transposed (row_number); -- needed to refresh materialized view concurrently
 
 -- CREATE VIEW study_omics_transposed AS
 -- SELECT
@@ -158,10 +164,10 @@ CREATE INDEX study_sample_projection_subsampling_transposed_idx ON study_sample_
 -- GRANT SELECT ON study_omics_transposed TO postgraphile;
 
 
-DROP VIEW IF EXISTS study_omics_transposed;
 DROP MATERIALIZED VIEW IF EXISTS study_omics_transposed;
 CREATE MATERIALIZED VIEW study_omics_transposed AS
 SELECT
+    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
 	study_id,
 	array_agg(ob.omics_id ORDER BY ob.omics_id) omics_id,
 	array_agg(ob.omics_type ORDER BY ob.omics_id) omics_type,
@@ -177,6 +183,8 @@ GROUP BY
 COMMENT ON MATERIALIZED VIEW study_omics_transposed IS NULL;
 GRANT SELECT ON study_omics_transposed TO postgraphile;
 CREATE INDEX study_omics_transposed_idx ON study_omics_transposed (study_id);
+create unique index study_omics_transposed_unique_idx
+    on study_omics_transposed (row_number); -- needed to refresh materialized view concurrently
 
 
 drop view if exists study_overview cascade;
@@ -244,6 +252,8 @@ group by study_cell_ontology_ids.study_id,
          ont.labels;
 comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
 create index study_overview_ontology_1 on study_overview_ontology (study_id);
+create unique index study_overview_ontology_unique_idx
+    on study_overview_ontology (study_id, ontology, ont_codes); -- needed to refresh materialized view concurrently
 grant select on study_overview_ontology to postgraphile;
 
 
