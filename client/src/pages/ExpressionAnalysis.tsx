@@ -237,7 +237,7 @@ function ViolinPlotAndTable({ displaySymbol, omicsId }: { displaySymbol: string;
           onClick={() => setShowTable((p) => !p)}
           title={'Cell count table'}
         >
-          <IconTable />
+          <IconTable color={showTable ? 'white' : 'gray'} />
         </ActionIcon>
       </Group>
       <Stack w="100%" className={classes.violinPlotWrapper}>
