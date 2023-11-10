@@ -73,14 +73,6 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['cypress/**/*'],
-      extends: ['plugin:cypress/recommended', 'plugin:chai-friendly/recommended'],
-      rules: {
-        'cypress/unsafe-to-chain-command': 'warn',
-      },
-      plugins: ['cypress', 'chai-friendly'],
-    },
-    {
       files: ['{src|tests}/**/*.{test|spec}.ts'],
       extends: ['plugin:jest/recommended'],
       plugins: ['jest'],

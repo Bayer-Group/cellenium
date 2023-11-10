@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActionIcon, Button, Center, ColorSwatch, Container, createStyles, Divider, Group, Loader, Stack, Table, Text, Title } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
+import { IconTable, IconX } from '@tabler/icons-react';
 import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
 import {
   annotationGroupIdState,
@@ -24,12 +25,13 @@ import { AnnotationGroupDisplay } from '../components/AnnotationGroupDisplay/Ann
 import { AnnotationFilterDisplay } from '../components/AnnotationFilterDisplay/AnnotationFilterDisplay';
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
-import { IconTable, IconX } from '@tabler/icons-react';
+import { GeneSpecificityPlot } from '../components/GeneSpecificityPlot/GeneSpecificityPlot';
 
 const analysisTypes = [
   { value: 'violinplot', label: 'Violin Plot' },
   { value: 'projection', label: 'Projection Plot' },
   { value: 'dotplot', label: 'Dot Plot' },
+  { value: 'specificity', label: 'Gene Specificity Plot' },
   /*
         {value: 'boxplot', label: 'Boxplot'},
             {value: 'dot', label: 'Dotplot'},
@@ -114,7 +116,7 @@ function ExpressionTable({ omicsId }: { omicsId: number }) {
     [data],
   );
 
-  const annotations = study.annotationGroupMap.get(annotationGroupId || -1)?.annotationValuesList;
+  const annotations = study?.annotationGroupMap.get(annotationGroupId || -1)?.annotationValuesList;
   const [selectedTTestIndexes, setSelectedTTestIndexes] = useState<number[]>([]);
   const [tTestResult, setTTestResult] = useState<string | undefined>();
   const [runTTest, { loading: ttestLoading }] = useExpressionTTestLazyQuery();
@@ -162,17 +164,17 @@ function ExpressionTable({ omicsId }: { omicsId: number }) {
                 <th>Annotation Group</th>
                 {annotationSecondaryGroupId && <th>Second Group</th>}
                 <th>Median</th>
-                <th title={'amount of cells in this annotation group'}># in group</th>
-                <th title={'amount of cells with gene expression measured (i.e. no dropout)'}># expressed</th>
-                <th title={'test probability of both groups having the same expression level'}>Run t test</th>
+                <th title="amount of cells in this annotation group"># in group</th>
+                <th title="amount of cells with gene expression measured (i.e. no dropout)"># expressed</th>
+                <th title="test probability of both groups having the same expression level">Run t test</th>
               </tr>
             </thead>
             <tbody>
               {sortedData.map((r, index) => (
                 <tr key={`${r.annotationValueId}_${r.secondAnnotationValueId}`}>
                   <td>
-                    <Group spacing={'xs'}>
-                      <ColorSwatch color={annotations.find((a) => a.annotationValueId === r.annotationValueId)?.color} size={12} />
+                    <Group spacing="xs">
+                      <ColorSwatch color={annotations?.find((a) => a.annotationValueId === r.annotationValueId)?.color || ''} size={12} />
                       <Text> {r.annotationDisplayValue}</Text>
                     </Group>
                   </td>
@@ -182,13 +184,7 @@ function ExpressionTable({ omicsId }: { omicsId: number }) {
                   <td>{r.nonZeroValueCount}</td>
                   <td>
                     {tTestResult === undefined && !ttestLoading && (
-                      <Button
-                        size="xs"
-                        h={'1.5em'}
-                        disabled={selectedTTestIndexes.indexOf(index) !== -1}
-                        variant={'default'}
-                        onClick={() => onTTestClick(index)}
-                      >
+                      <Button size="xs" h="1.5em" disabled={selectedTTestIndexes.indexOf(index) !== -1} variant="default" onClick={() => onTTestClick(index)}>
                         Group {selectedTTestIndexes.length > 0 && selectedTTestIndexes.indexOf(index) === -1 ? 2 : 1}
                       </Button>
                     )}
@@ -196,10 +192,10 @@ function ExpressionTable({ omicsId }: { omicsId: number }) {
                       <>
                         {ttestLoading && <Loader variant="dots" color="blue" />}
                         {tTestResult && (
-                          <Group spacing={'xs'}>
-                            <Text title={'probability of both groups having the same expression level'}>p={tTestResult}</Text>
+                          <Group spacing="xs">
+                            <Text title="probability of both groups having the same expression level">p={tTestResult}</Text>
                             <ActionIcon
-                              size={'xs'}
+                              size="xs"
                               onClick={() => {
                                 setSelectedTTestIndexes([]);
                                 setTTestResult(undefined);
@@ -235,7 +231,7 @@ function ViolinPlotAndTable({ displaySymbol, omicsId }: { displaySymbol: string;
             [classes.active]: showTable,
           })}
           onClick={() => setShowTable((p) => !p)}
-          title={'Cell count table'}
+          title="Cell count table"
         >
           <IconTable color={showTable ? 'white' : 'gray'} />
         </ActionIcon>
@@ -335,6 +331,40 @@ function DotPlots() {
   );
 }
 
+function GeneSpecificity() {
+  const study = useRecoilValue(studyState);
+  const studyLayerId = useRecoilValue(studyLayerIdState);
+  const annotationGroupId = useRecoilValue(annotationGroupIdState);
+  const annotationSecondaryGroupId = useRecoilValue(annotationSecondaryGroupIdState);
+  const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
+  const selectedGenes = useRecoilValue(selectedGenesState);
+
+  return (
+    selectedGenes.length > 0 && (
+      <Group w="100%" noWrap position="apart">
+        <GeneSpecificityPlot
+          studyName={study?.studyName || ''}
+          study_id={study?.studyId ?? 0}
+          studyLayerId={studyLayerId}
+          omicsIds={selectedGenes.map((e) => e.omicsId)}
+          annotationGroupId={annotationGroupId ?? 0}
+          secondAnnotationGroupId={annotationSecondaryGroupId ?? 0}
+          excludeAnnotationValueIds={annotationFilter}
+        />
+        <GeneSpecificityPlot
+          studyName={study?.studyName || ''}
+          study_id={study?.studyId ?? 0}
+          studyLayerId={studyLayerId}
+          omicsIds={selectedGenes.map((e) => e.omicsId)}
+          annotationGroupId={annotationGroupId ?? 0}
+          secondAnnotationGroupId={annotationSecondaryGroupId ?? 0}
+          excludeAnnotationValueIds={annotationFilter}
+        />
+      </Group>
+    )
+  );
+}
+
 function ExpressionAnalysis() {
   const { classes, cx } = useStyles();
   const [analysisType, setAnalysisType] = useState<string>(analysisTypes[0].value);
@@ -358,7 +388,7 @@ function ExpressionAnalysis() {
       <LeftSidePanel>
         <ExpressionAnalysisTypeSelectBox handleSelection={setAnalysisType as (v: unknown) => void} selection={analysisType} options={analysisTypes} />
         {analysisType === 'projection' && <ProjectionSelectBox />}
-        {(analysisType === 'violinplot' || analysisType === 'dotplot') && (
+        {(analysisType === 'violinplot' || analysisType === 'dotplot' || analysisType === 'specificity') && (
           <>
             <AnnotationGroupSelectBox />
             {analysisType === 'violinplot' && annotationGroupId && annotationSecondaryGroupId && (
@@ -367,7 +397,7 @@ function ExpressionAnalysis() {
                 <AnnotationGroupDisplay disableSelection />
               </>
             )}
-            {analysisType === 'violinplot' && <AnnotationSecondGroupSelectBox />}
+            {(analysisType === 'violinplot' || analysisType === 'specificity') && <AnnotationSecondGroupSelectBox />}
 
             <Divider my="sm" />
             <AnnotationFilterDisplay />
@@ -378,6 +408,7 @@ function ExpressionAnalysis() {
         {analysisType === 'violinplot' && <ViolinPlots />}
         {analysisType === 'projection' && <ProjectionPlots />}
         {analysisType === 'dotplot' && <DotPlots />}
+        {analysisType === 'specificity' && <GeneSpecificity />}
         {selectedGenes.length === 0 && (
           <Center h="100%" w="100%">
             <Text c="dimmed">
