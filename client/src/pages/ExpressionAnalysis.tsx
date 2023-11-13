@@ -156,6 +156,11 @@ function ExpressionTable({ omicsId }: { omicsId: number }) {
     return (
       <Container>
         <div style={{ width: annotationSecondaryGroupId ? '70em' : '45em' }}>
+          {tTestResult && (
+            <Text italic color="dimmed">
+              t test: no correction for multiple testing or technical covariables is implemented.
+            </Text>
+          )}
           <Table>
             <thead>
               <tr>
