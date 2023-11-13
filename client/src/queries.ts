@@ -158,12 +158,10 @@ gql`
       studyName
       cellCount
       projections
-      __typename
     }
     studyLayersList(condition: { studyId: $studyId }) {
       layer
       studyLayerId
-      __typename
     }
   }
 
@@ -182,23 +180,19 @@ gql`
         displayValue
         color
         sampleCount
-        __typename
       }
-      __typename
     }
     studySampleProjectionSubsamplingTransposedsList(condition: { studyId: $studyId }) {
       projectionType
       studySampleId
       projection
       modality
-      __typename
     }
   }
   query StudyBasics3($studyId: Int!) {
     studySampleAnnotationSubsamplingsList(condition: { studyId: $studyId }) {
       annotationValueId
       studySampleIds
-      __typename
     }
 
     studyOmicsTransposedsList(condition: { studyId: $studyId }) {
@@ -206,7 +200,6 @@ gql`
       displaySymbol
       omicsId
       omicsType
-      __typename
     }
   }
 
@@ -422,6 +415,34 @@ gql`
     studyImportLogsList(condition: { studyId: $studyId }) {
       importFile
       importLog
+    }
+  }
+
+  query GeneSpecificity(
+    $studyId: Int!
+    $studyLayerId: Int!
+    $omicsIds: [Int!]!
+    $annotationGroupId: Int!
+    $secondAnnotationGroupId: Int!
+    $excludeAnnotationValueIds: [Int!]!
+  ) {
+    expressionByTwoAnnotationsList(
+      pStudyId: $studyId
+      pStudyLayerId: $studyLayerId
+      pOmicsIds: $omicsIds
+      pAnnotationGroupId: $annotationGroupId
+      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+      pSecondAnnotationGroupId: $secondAnnotationGroupId
+      pDropoutsAsZero: false
+    ) {
+      omicsId
+      annotationValueId
+      annotationDisplayValue
+      secondAnnotationDisplayValue
+      secondAnnotationValueId
+      valueCount
+      exprSamplesFraction
+      mean
     }
   }
 

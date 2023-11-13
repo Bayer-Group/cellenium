@@ -55,7 +55,7 @@ function createSpec(xAxis: 'studyName' | 'displaySymbol', responsiveHeight: bool
     },
     layer: [
       {
-        mark: { type: 'point', filled: true },
+        mark: { type: 'point', filled: true, tooltip: true },
         encoding: {
           size: {
             field: 'exprSamplesFraction',

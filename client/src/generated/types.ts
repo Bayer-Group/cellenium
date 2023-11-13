@@ -14,6 +14,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  BigInt: any;
   Cursor: any;
   Datetime: any;
   JSON: any;
@@ -1489,6 +1490,32 @@ export type AutocompleteResultsEdge = {
   node: Maybe<AutocompleteResult>;
 };
 
+/** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
+export type BigIntFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value. */
+  equalTo: InputMaybe<Scalars['BigInt']>;
+  /** Greater than the specified value. */
+  greaterThan: InputMaybe<Scalars['BigInt']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Included in the specified list. */
+  in: InputMaybe<Array<Scalars['BigInt']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan: InputMaybe<Scalars['BigInt']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom: InputMaybe<Scalars['BigInt']>;
+  /** Not equal to the specified value. */
+  notEqualTo: InputMaybe<Scalars['BigInt']>;
+  /** Not included in the specified list. */
+  notIn: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
 export type BooleanFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -2773,7 +2800,7 @@ export type CreateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -3721,7 +3748,7 @@ export type DeleteOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -5508,7 +5535,7 @@ export type OmicsBase = Node & {
   omicsProteinAntibodyTagsByProteinAntibodyTagId: OmicsProteinAntibodyTagsConnection;
   /**
    * Reads and enables pagination through a set of `OmicsRegion`.
-   * @deprecated Please use omics_region_gene_region instead
+   * @deprecated Please use omics_region_newNameHere instead
    */
   omicsRegionsByRegionId: OmicsRegionsConnection;
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsBase`. */
@@ -5520,7 +5547,7 @@ export type OmicsBase = Node & {
   omicsTranscriptionFactorsByOmicsId: OmicsTranscriptionFactorsConnection;
   omicsType: OmicsType;
   /** Reads a single `OmicsRegion` that is related to this `OmicsBase`. */
-  omics_region_gene_region: Maybe<OmicsRegion>;
+  omics_region_newNameHere: Maybe<OmicsRegion>;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsId: StudyOmicsConnection;
   /** Reads and enables pagination through a set of `StudyOmic`. */
@@ -6094,7 +6121,7 @@ export type OmicsRegion = Node & {
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
   omicsRegionGenesByRegionIdList: Array<OmicsRegionGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   region: Scalars['String'];
   regionId: Scalars['Int'];
   startPosition: Scalars['Int'];
@@ -9861,6 +9888,7 @@ export type StudyOmicsTransposed = {
   displaySymbol: Maybe<Array<Maybe<Scalars['String']>>>;
   omicsId: Maybe<Array<Maybe<Scalars['Int']>>>;
   omicsType: Maybe<Array<Maybe<OmicsType>>>;
+  rowNumber: Maybe<Scalars['BigInt']>;
   studyId: Maybe<Scalars['Int']>;
 };
 
@@ -9877,6 +9905,8 @@ export type StudyOmicsTransposedCondition = {
   omicsId: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<Array<InputMaybe<OmicsType>>>;
+  /** Checks for equality with the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<Scalars['BigInt']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
 };
@@ -9897,6 +9927,8 @@ export type StudyOmicsTransposedFilter = {
   omicsType: InputMaybe<OmicsTypeListFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<StudyOmicsTransposedFilter>>;
+  /** Filter by the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<BigIntFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
 };
@@ -9934,6 +9966,8 @@ export enum StudyOmicsTransposedsOrderBy {
   OmicsIdDesc = 'OMICS_ID_DESC',
   OmicsTypeAsc = 'OMICS_TYPE_ASC',
   OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  RowNumberAsc = 'ROW_NUMBER_ASC',
+  RowNumberDesc = 'ROW_NUMBER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC'
 }
@@ -10274,6 +10308,7 @@ export type StudySampleAnnotationInput = {
 export type StudySampleAnnotationSubsampling = {
   __typename?: 'StudySampleAnnotationSubsampling';
   annotationValueId: Maybe<Scalars['Int']>;
+  rowNumber: Maybe<Scalars['BigInt']>;
   studyId: Maybe<Scalars['Int']>;
   studySampleIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
@@ -10285,6 +10320,8 @@ export type StudySampleAnnotationSubsampling = {
 export type StudySampleAnnotationSubsamplingCondition = {
   /** Checks for equality with the object’s `annotationValueId` field. */
   annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<Scalars['BigInt']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleIds` field. */
@@ -10301,6 +10338,8 @@ export type StudySampleAnnotationSubsamplingFilter = {
   not: InputMaybe<StudySampleAnnotationSubsamplingFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<StudySampleAnnotationSubsamplingFilter>>;
+  /** Filter by the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<BigIntFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studySampleIds` field. */
@@ -10334,6 +10373,8 @@ export enum StudySampleAnnotationSubsamplingsOrderBy {
   AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
   AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
   Natural = 'NATURAL',
+  RowNumberAsc = 'ROW_NUMBER_ASC',
+  RowNumberDesc = 'ROW_NUMBER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
@@ -10492,6 +10533,7 @@ export type StudySampleProjectionSubsamplingTransposed = {
   modality: Maybe<Scalars['String']>;
   projection: Maybe<Array<Maybe<Scalars['Float']>>>;
   projectionType: Maybe<Scalars['String']>;
+  rowNumber: Maybe<Scalars['BigInt']>;
   studyId: Maybe<Scalars['Int']>;
   studySampleId: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
@@ -10507,6 +10549,8 @@ export type StudySampleProjectionSubsamplingTransposedCondition = {
   projection: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
   /** Checks for equality with the object’s `projectionType` field. */
   projectionType: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<Scalars['BigInt']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studySampleId` field. */
@@ -10527,6 +10571,8 @@ export type StudySampleProjectionSubsamplingTransposedFilter = {
   projection: InputMaybe<FloatListFilter>;
   /** Filter by the object’s `projectionType` field. */
   projectionType: InputMaybe<StringFilter>;
+  /** Filter by the object’s `rowNumber` field. */
+  rowNumber: InputMaybe<BigIntFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studySampleId` field. */
@@ -10564,6 +10610,8 @@ export enum StudySampleProjectionSubsamplingTransposedsOrderBy {
   ProjectionDesc = 'PROJECTION_DESC',
   ProjectionTypeAsc = 'PROJECTION_TYPE_ASC',
   ProjectionTypeDesc = 'PROJECTION_TYPE_DESC',
+  RowNumberAsc = 'ROW_NUMBER_ASC',
+  RowNumberDesc = 'ROW_NUMBER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
@@ -11124,7 +11172,7 @@ export type UpdateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -11511,8 +11559,8 @@ export type UserAnnotationGroupFilter = {
 export type UserAnnotationGroupInput = {
   calculateDifferentialExpression: Scalars['Boolean'];
   createdByUser: InputMaybe<Scalars['String']>;
-  creationTimestamp: Scalars['Datetime'];
-  privateToUser: Scalars['Boolean'];
+  creationTimestamp: InputMaybe<Scalars['Datetime']>;
+  privateToUser: InputMaybe<Scalars['Boolean']>;
   savedAsAnnotationGroupId: Scalars['Int'];
   studyId: Scalars['Int'];
 };
@@ -11859,6 +11907,18 @@ export type StudyLogsQueryVariables = Exact<{
 
 
 export type StudyLogsQuery = { __typename?: 'Query', studyImportLogsList: Array<{ __typename?: 'StudyImportLog', importFile: string, importLog: string }> };
+
+export type GeneSpecificityQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+  studyLayerId: Scalars['Int'];
+  omicsIds: Array<Scalars['Int']> | Scalars['Int'];
+  annotationGroupId: Scalars['Int'];
+  secondAnnotationGroupId: Scalars['Int'];
+  excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -13162,6 +13222,61 @@ export function useStudyLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type StudyLogsQueryHookResult = ReturnType<typeof useStudyLogsQuery>;
 export type StudyLogsLazyQueryHookResult = ReturnType<typeof useStudyLogsLazyQuery>;
 export type StudyLogsQueryResult = Apollo.QueryResult<StudyLogsQuery, StudyLogsQueryVariables>;
+export const GeneSpecificityDocument = gql`
+    query GeneSpecificity($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $secondAnnotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  expressionByTwoAnnotationsList(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: $omicsIds
+    pAnnotationGroupId: $annotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pSecondAnnotationGroupId: $secondAnnotationGroupId
+    pDropoutsAsZero: false
+  ) {
+    omicsId
+    annotationValueId
+    annotationDisplayValue
+    secondAnnotationDisplayValue
+    secondAnnotationValueId
+    valueCount
+    exprSamplesFraction
+    mean
+  }
+}
+    `;
+
+/**
+ * __useGeneSpecificityQuery__
+ *
+ * To run a query within a React component, call `useGeneSpecificityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGeneSpecificityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGeneSpecificityQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *      studyLayerId: // value for 'studyLayerId'
+ *      omicsIds: // value for 'omicsIds'
+ *      annotationGroupId: // value for 'annotationGroupId'
+ *      secondAnnotationGroupId: // value for 'secondAnnotationGroupId'
+ *      excludeAnnotationValueIds: // value for 'excludeAnnotationValueIds'
+ *   },
+ * });
+ */
+export function useGeneSpecificityQuery(baseOptions: Apollo.QueryHookOptions<GeneSpecificityQuery, GeneSpecificityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
+      }
+export function useGeneSpecificityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeneSpecificityQuery, GeneSpecificityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
+        }
+export type GeneSpecificityQueryHookResult = ReturnType<typeof useGeneSpecificityQuery>;
+export type GeneSpecificityLazyQueryHookResult = ReturnType<typeof useGeneSpecificityLazyQuery>;
+export type GeneSpecificityQueryResult = Apollo.QueryResult<GeneSpecificityQuery, GeneSpecificityQueryVariables>;
 export const StudyUpdateDocument = gql`
     mutation studyUpdate($studyId: Int!, $studyName: String!, $description: String, $readerPermissions: [String!], $adminPermissions: [String!], $tissueNcitIds: [String!], $diseaseMeshIds: [String!], $visible: Boolean!, $externalWebsite: String) {
   updateStudy(
