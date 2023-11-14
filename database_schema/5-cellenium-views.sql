@@ -1,51 +1,46 @@
-
-
 DROP VIEW IF EXISTS omics_all CASCADE;
 CREATE VIEW omics_all AS
-SELECT
-	b.omics_id,
-	b.omics_type,
-	b.tax_id,
-	b.display_symbol,
-	b.display_name,
-	og.ensembl_gene_id,
-	og.entrez_gene_ids,
-	og.hgnc_symbols,
-	ogr.region,
-	array_remove(array_agg(otfg.gene_id) || array_agg(opatg.gene_id) ||
-	array_agg(ogrg.gene_id), NULL) AS linked_genes
-FROM
-	omics_base b
-	LEFT JOIN omics_gene og ON b.omics_id = og.gene_id
-	LEFT JOIN omics_region ogr ON b.omics_id = ogr.region_id
-	LEFT JOIN omics_region_gene ogrg ON b.omics_id = ogrg.region_id
-	LEFT JOIN omics_protein_antibody_tag_gene opatg ON b.omics_id = opatg.protein_antibody_tag_id
-	LEFT JOIN omics_transcription_factor_gene otfg ON b.omics_id = otfg.transcription_factor_id
-GROUP BY
-	og.ensembl_gene_id,
-	og.entrez_gene_ids,
-	og.hgnc_symbols,
-	b.omics_id,
-	b.omics_type,
-	b.tax_id,
-	b.display_symbol,
-	b.display_name,
-	ogr.region;
+SELECT b.omics_id,
+       b.omics_type,
+       b.tax_id,
+       b.display_symbol,
+       b.display_name,
+       og.ensembl_gene_id,
+       og.entrez_gene_ids,
+       og.hgnc_symbols,
+       ogr.region,
+       array_remove(array_agg(otfg.gene_id) || array_agg(opatg.gene_id) ||
+                    array_agg(ogrg.gene_id), NULL) AS linked_genes
+FROM omics_base b
+         LEFT JOIN omics_gene og ON b.omics_id = og.gene_id
+         LEFT JOIN omics_region ogr ON b.omics_id = ogr.region_id
+         LEFT JOIN omics_region_gene ogrg ON b.omics_id = ogrg.region_id
+         LEFT JOIN omics_protein_antibody_tag_gene opatg ON b.omics_id = opatg.protein_antibody_tag_id
+         LEFT JOIN omics_transcription_factor_gene otfg ON b.omics_id = otfg.transcription_factor_id
+GROUP BY og.ensembl_gene_id,
+         og.entrez_gene_ids,
+         og.hgnc_symbols,
+         b.omics_id,
+         b.omics_type,
+         b.tax_id,
+         b.display_symbol,
+         b.display_name,
+         ogr.region;
 
 GRANT SELECT ON omics_all TO postgraphile;
 
-CREATE OR REPLACE VIEW differential_expression_v WITH ( security_invoker = TRUE
-) AS
-SELECT
-	de.*,
-	ob.omics_type,
-	ob.display_symbol,
-	ob.display_name,
-	oa.linked_genes
-FROM
-	differential_expression de
-	JOIN omics_base ob ON de.omics_id = ob.omics_id
-	JOIN omics_all oa ON de.omics_id = oa.omics_id;
+CREATE OR REPLACE VIEW differential_expression_v
+            WITH ( security_invoker = TRUE
+            )
+AS
+SELECT de.*,
+       ob.omics_type,
+       ob.display_symbol,
+       ob.display_name,
+       oa.linked_genes
+FROM differential_expression de
+         JOIN omics_base ob ON de.omics_id = ob.omics_id
+         JOIN omics_all oa ON de.omics_id = oa.omics_id;
 
 GRANT SELECT ON differential_expression_v TO postgraphile;
 --
@@ -79,21 +74,17 @@ GRANT SELECT ON differential_expression_v TO postgraphile;
 -- DROP VIEW IF EXISTS study_sample_annotation_subsampling;
 DROP MATERIALIZED VIEW IF EXISTS study_sample_annotation_subsampling;
 CREATE MATERIALIZED VIEW study_sample_annotation_subsampling AS
-SELECT
-    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
-	ssa.study_id,
-	ssa.annotation_value_id,
-	array_agg(DISTINCT ssp.study_sample_id) study_sample_ids
-FROM
-	study_sample_annotation ssa
-	CROSS JOIN unnest(ssa.study_sample_ids) sample_id
-	JOIN study_sample_projection ssp ON ssp.study_id = ssa.study_id
-		AND ssp.study_sample_id = sample_id
-WHERE
-	ssp.display_subsampling = TRUE
-GROUP BY
-	ssa.study_id,
-	ssa.annotation_value_id;
+SELECT row_number() OVER ()                    row_number, -- needed to refresh materialized view concurrently
+       ssa.study_id,
+       ssa.annotation_value_id,
+       array_agg(DISTINCT ssp.study_sample_id) study_sample_ids
+FROM study_sample_annotation ssa
+         CROSS JOIN unnest(ssa.study_sample_ids) sample_id
+         JOIN study_sample_projection ssp ON ssp.study_id = ssa.study_id
+    AND ssp.study_sample_id = sample_id
+WHERE ssp.display_subsampling = TRUE
+GROUP BY ssa.study_id,
+         ssa.annotation_value_id;
 
 -- COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleAnnotationSubsampling';
 COMMENT ON MATERIALIZED VIEW study_sample_annotation_subsampling IS NULL;
@@ -124,28 +115,25 @@ create unique index study_sample_annotation_subsampling_unique_idx
 -- DROP VIEW IF EXISTS study_sample_projection_subsampling_transposed;
 DROP MATERIALIZED VIEW IF EXISTS study_sample_projection_subsampling_transposed;
 CREATE MATERIALIZED VIEW study_sample_projection_subsampling_transposed AS
-SELECT
-    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
-	study_id,
-	projection_type,
-	modality,
-	array_agg(study_sample_id ORDER BY study_sample_id) study_sample_id,
-	array_agg(projection ORDER BY study_sample_id) projection
-FROM
-	study_sample_projection
-WHERE
-	display_subsampling = TRUE
-GROUP BY
-	study_id,
-	projection_type,
-	modality;
+SELECT row_number() OVER ()                                row_number, -- needed to refresh materialized view concurrently
+       study_id,
+       projection_type,
+       modality,
+       array_agg(study_sample_id ORDER BY study_sample_id) study_sample_id,
+       array_agg(projection ORDER BY study_sample_id)      projection
+FROM study_sample_projection
+WHERE display_subsampling = TRUE
+GROUP BY study_id,
+         projection_type,
+         modality;
 
 -- COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studySampleProjectionSubsamplingTransposed';
 COMMENT ON MATERIALIZED VIEW study_sample_projection_subsampling_transposed IS NULL;
 GRANT SELECT ON study_sample_projection_subsampling_transposed TO postgraphile;
 CREATE INDEX study_sample_projection_subsampling_transposed_idx ON study_sample_projection_subsampling_transposed (study_id);
 create unique index study_sample_projection_subsampling_transposed_unique_idx
-    on study_sample_projection_subsampling_transposed (row_number); -- needed to refresh materialized view concurrently
+    on study_sample_projection_subsampling_transposed (row_number);
+-- needed to refresh materialized view concurrently
 
 -- CREATE VIEW study_omics_transposed AS
 -- SELECT
@@ -166,18 +154,15 @@ create unique index study_sample_projection_subsampling_transposed_unique_idx
 
 DROP MATERIALIZED VIEW IF EXISTS study_omics_transposed;
 CREATE MATERIALIZED VIEW study_omics_transposed AS
-SELECT
-    row_number() OVER () row_number, -- needed to refresh materialized view concurrently
-	study_id,
-	array_agg(ob.omics_id ORDER BY ob.omics_id) omics_id,
-	array_agg(ob.omics_type ORDER BY ob.omics_id) omics_type,
-	array_agg(ob.display_symbol ORDER BY ob.omics_id) display_symbol,
-	array_agg(ob.display_name ORDER BY ob.omics_id) display_name
-FROM
-	study_omics
-	JOIN omics_base ob ON study_omics.omics_id = ob.omics_id
-GROUP BY
-	study_id;
+SELECT row_number() OVER ()                              row_number, -- needed to refresh materialized view concurrently
+       study_id,
+       array_agg(ob.omics_id ORDER BY ob.omics_id)       omics_id,
+       array_agg(ob.omics_type ORDER BY ob.omics_id)     omics_type,
+       array_agg(ob.display_symbol ORDER BY ob.omics_id) display_symbol,
+       array_agg(ob.display_name ORDER BY ob.omics_id)   display_name
+FROM study_omics
+         JOIN omics_base ob ON study_omics.omics_id = ob.omics_id
+GROUP BY study_id;
 
 -- COMMENT ON MATERIALIZED VIEW study_omics_transposed IS E'@foreignKey (study_id) references study (study_id)|@fieldName study|@foreignFieldName studyOmicsTransposed';
 COMMENT ON MATERIALIZED VIEW study_omics_transposed IS NULL;
@@ -196,6 +181,7 @@ select s.study_id,
        s.description,
        s.external_website,
        s.cell_count,
+       s.organism_tax_id,
        (select min(sl.study_layer_id)
         from study_layer sl
         where sl.study_id = s.study_id) default_study_layer_id,
@@ -203,6 +189,27 @@ select s.study_id,
 from study s
 where s.visible = True;
 grant select on study_overview to postgraphile;
+
+drop view if exists reference_study_overview cascade;
+create view reference_study_overview
+            with (security_invoker = true) -- use current user's permission when querying study table
+as
+select s.study_id,
+       s.study_name,
+       s.description,
+       s.reader_permissions,
+       s.external_website,
+       s.cell_count,
+       s.organism_tax_id,
+       (select min(sl.study_layer_id)
+        from study_layer sl
+        where sl.study_id = s.study_id) default_study_layer_id,
+       s.metadata
+from study s
+         RIGHT JOIN reference_study rs ON s.study_id = rs.study_id
+where s.visible = True;
+grant select on reference_study_overview to postgraphile;
+
 
 DROP MATERIALIZED VIEW IF EXISTS study_overview_ontology;
 create materialized view study_overview_ontology
@@ -250,7 +257,7 @@ from (select ssa.study_id, array_agg(distinct c.ont_code) ont_codes
 group by study_cell_ontology_ids.study_id,
          study_cell_ontology_ids.ont_codes,
          ont.labels;
-comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology';
+comment on materialized view study_overview_ontology is E'@foreignKey (study_id) references study_overview (study_id)|@fieldName study|@foreignFieldName studyOntology\n@foreignKey (study_id) references reference_study_overview (study_id)|@fieldName studyOntology|@foreignFieldName studyOntology';
 create index study_overview_ontology_1 on study_overview_ontology (study_id);
 create unique index study_overview_ontology_unique_idx
     on study_overview_ontology (study_id, ontology, ont_codes); -- needed to refresh materialized view concurrently

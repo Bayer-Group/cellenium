@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ActionIcon, Button, Center, ColorSwatch, Container, createStyles, Divider, Group, Loader, Stack, Table, Text, Title } from '@mantine/core';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ActionIcon, Button, Center, ColorSwatch, Container, createStyles, Divider, Group, Loader, SimpleGrid, Stack, Table, Text, Title } from '@mantine/core';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
-import { IconTable, IconX } from '@tabler/icons-react';
+import { IconTable, IconX, IconInfoCircle } from '@tabler/icons-react';
 import { ExpressionAnalysisTypeSelectBox } from '../components/ExpressionAnalysisTypeSelectBox/ExpressionAnalysisTypeSelectBox';
 import {
   annotationGroupIdState,
@@ -16,7 +16,14 @@ import {
 } from '../atoms';
 import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
 import { useExpressionValues } from '../hooks';
-import { useExpressionByAnnotationQuery, useExpressionGroupTableQuery, useExpressionTTestLazyQuery, useExpressionViolinPlotQuery } from '../generated/types';
+import {
+  StudyInfoFragment,
+  useExpressionByAnnotationQuery,
+  useExpressionGroupTableQuery,
+  useExpressionTTestLazyQuery,
+  useExpressionViolinPlotQuery,
+  useGeneSpecificityStudyQuery,
+} from '../generated/types';
 import { ExpressionDotPlot } from '../components/ExpressionDotPlot/ExpressionDotPlot';
 import { ProjectionSelectBox } from '../components/ProjectionSelectBox/ProjectionSelectBox';
 import { AnnotationGroupSelectBox, AnnotationSecondGroupSelectBox } from '../components/AnnotationGroupSelectBox/AnnotationGroupSelectBox';
@@ -26,6 +33,9 @@ import { AnnotationFilterDisplay } from '../components/AnnotationFilterDisplay/A
 import { RightSidePanel } from '../components/RightSidePanel/RightSidePanel';
 import { UserGeneStore } from '../components/UserGeneStore/UserGeneStore';
 import { GeneSpecificityPlot } from '../components/GeneSpecificityPlot/GeneSpecificityPlot';
+import { CrossStudySelector } from '../components/CrossStudySelector/CrossStudySelector';
+import { GlobalLoading } from './GlobalLoading';
+import { StudyInfoModal } from '../components/StudyTitle/StudyTitle';
 
 const analysisTypes = [
   { value: 'violinplot', label: 'Violin Plot' },
@@ -33,10 +43,10 @@ const analysisTypes = [
   { value: 'dotplot', label: 'Dot Plot' },
   { value: 'specificity', label: 'Gene Specificity Plot' },
   /*
-        {value: 'boxplot', label: 'Boxplot'},
-            {value: 'dot', label: 'Dotplot'},
-
-         */
+            {value: 'boxplot', label: 'Boxplot'},
+                {value: 'dot', label: 'Dotplot'},
+  
+             */
 ];
 
 const useStyles = createStyles((theme) => ({
@@ -343,10 +353,46 @@ function GeneSpecificity() {
   const annotationSecondaryGroupId = useRecoilValue(annotationSecondaryGroupIdState);
   const annotationFilter = useRecoilValue(selectedAnnotationFilterState);
   const selectedGenes = useRecoilValue(selectedGenesState);
+  const [secondSelectedStudy, setSelectedStudy] = useState<number | undefined>(undefined);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [minMaxOne, setMinMaxOne] = useState<[number, number, number, number] | undefined>(undefined);
+  const [minMaxTwo, setMinMaxTwo] = useState<[number, number, number, number] | undefined>(undefined);
+
+  const minMaxXY = useMemo(() => {
+    if (minMaxOne && minMaxTwo) {
+      return {
+        minX: Math.min(minMaxOne[0], minMaxTwo[0]),
+        maxX: Math.max(minMaxOne[1], minMaxTwo[1]),
+        minY: Math.min(minMaxOne[2], minMaxTwo[2]),
+        maxY: Math.max(minMaxOne[3], minMaxTwo[3]),
+      };
+    }
+    return undefined;
+  }, [minMaxOne, minMaxTwo]);
+
+  const modalClick = useCallback(() => {
+    setModalOpen(!modalOpen);
+  }, [modalOpen]);
+
+  const { data: secondStudyData, loading } = useGeneSpecificityStudyQuery({
+    variables: {
+      studyId: secondSelectedStudy ?? 0,
+    },
+    skip: !secondSelectedStudy,
+  });
+
+  const setMinMaxCallback = useCallback((minX: number, maxX: number, minY: number, maxY: number) => setMinMaxOne([minX, maxX, minY, maxY]), [setMinMaxOne]);
+  const setMinMaxTwoCallback = useCallback((minX: number, maxX: number, minY: number, maxY: number) => setMinMaxTwo([minX, maxX, minY, maxY]), [setMinMaxOne]);
 
   return (
-    selectedGenes.length > 0 && (
-      <Group w="100%" noWrap position="apart">
+    selectedGenes.length > 0 &&
+    annotationSecondaryGroupId &&
+    study && (
+      <SimpleGrid cols={1} h="100%" w="100%" breakpoints={[{ minWidth: '150rem', cols: 2 }]}>
+        {secondStudyData?.referenceStudyOverviewsList[0] && (
+          <StudyInfoModal opened={modalOpen} onClose={modalClick} study={secondStudyData?.referenceStudyOverviewsList[0] as StudyInfoFragment} />
+        )}
         <GeneSpecificityPlot
           studyName={study?.studyName || ''}
           study_id={study?.studyId ?? 0}
@@ -355,17 +401,38 @@ function GeneSpecificity() {
           annotationGroupId={annotationGroupId ?? 0}
           secondAnnotationGroupId={annotationSecondaryGroupId ?? 0}
           excludeAnnotationValueIds={annotationFilter}
+          showAnnotationLegend={false}
+          reportMinMaxXY={setMinMaxCallback}
+          minMaxXY={minMaxXY}
         />
-        <GeneSpecificityPlot
-          studyName={study?.studyName || ''}
-          study_id={study?.studyId ?? 0}
-          studyLayerId={studyLayerId}
-          omicsIds={selectedGenes.map((e) => e.omicsId)}
-          annotationGroupId={annotationGroupId ?? 0}
-          secondAnnotationGroupId={annotationSecondaryGroupId ?? 0}
-          excludeAnnotationValueIds={annotationFilter}
-        />
-      </Group>
+        {secondSelectedStudy === undefined ? (
+          <CrossStudySelector selectStudy={setSelectedStudy} taxId={study.organismTaxId} />
+        ) : loading || !secondStudyData ? (
+          <GlobalLoading />
+        ) : (
+          <Stack pos="relative" w="100%" h="100%">
+            <Group spacing="xs" pos="absolute" top={20} right={20} style={{ zIndex: 190 }}>
+              <ActionIcon size="lg" onClick={modalClick}>
+                <IconInfoCircle height="100%" width="auto" />
+              </ActionIcon>
+              <ActionIcon size="lg" onClick={() => setSelectedStudy(undefined)}>
+                <IconX height="100%" width="auto" />
+              </ActionIcon>
+            </Group>
+            <GeneSpecificityPlot
+              study_id={secondSelectedStudy}
+              omicsIds={selectedGenes.map((e) => e.omicsId)}
+              studyName={secondStudyData?.referenceStudyOverviewsList[0].studyName || ''}
+              studyLayerId={secondStudyData?.referenceStudyOverviewsList[0].defaultStudyLayerId || 0}
+              annotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].celltypeAnnotationGroupId}
+              secondAnnotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].tissueAnnotationGroupId}
+              excludeAnnotationValueIds={[]}
+              reportMinMaxXY={setMinMaxTwoCallback}
+              minMaxXY={minMaxXY}
+            />
+          </Stack>
+        )}
+      </SimpleGrid>
     )
   );
 }
@@ -395,15 +462,28 @@ function ExpressionAnalysis() {
         {analysisType === 'projection' && <ProjectionSelectBox />}
         {(analysisType === 'violinplot' || analysisType === 'dotplot' || analysisType === 'specificity') && (
           <>
-            <AnnotationGroupSelectBox />
-            {analysisType === 'violinplot' && annotationGroupId && annotationSecondaryGroupId && (
-              <>
-                <Text size="xs">Violins are colored by annotation</Text>
-                <AnnotationGroupDisplay disableSelection />
-              </>
-            )}
-            {(analysisType === 'violinplot' || analysisType === 'specificity') && <AnnotationSecondGroupSelectBox />}
-
+            <Stack spacing={0}>
+              {analysisType === 'specificity' && (
+                <Text size="xs" weight="bold">
+                  Please select a tissue annotation group in this dropdown
+                </Text>
+              )}
+              <AnnotationGroupSelectBox />
+              {((analysisType === 'violinplot' && annotationGroupId && annotationSecondaryGroupId) || analysisType === 'specificity') && (
+                <Stack spacing="sm" pt="sm">
+                  <Text size="xs">{analysisType === 'violinplot' ? 'Violins' : 'Bubbles'} are colored by annotation</Text>
+                  <AnnotationGroupDisplay disableSelection />
+                </Stack>
+              )}
+            </Stack>
+            <Stack spacing={0}>
+              {analysisType === 'specificity' && (
+                <Text size="xs" weight="bold">
+                  Please select a celltype annotation group in this dropdown
+                </Text>
+              )}
+              {(analysisType === 'violinplot' || analysisType === 'specificity') && <AnnotationSecondGroupSelectBox />}
+            </Stack>
             <Divider my="sm" />
             <AnnotationFilterDisplay />
           </>
@@ -414,7 +494,22 @@ function ExpressionAnalysis() {
         {analysisType === 'projection' && <ProjectionPlots />}
         {analysisType === 'dotplot' && <DotPlots />}
         {analysisType === 'specificity' && <GeneSpecificity />}
-        {selectedGenes.length === 0 && (
+        {analysisType === 'specificity' && (selectedGenes.length === 0 || annotationSecondaryGroupId === undefined) && (
+          <Center h="100%" w="100%">
+            <Text c="dimmed">
+              Please select a gene from the&nbsp;
+              <Text span weight={800}>
+                gene store
+              </Text>
+              &nbsp;and both&nbsp;
+              <Text span weight={800}>
+                annotation groups
+              </Text>
+              .
+            </Text>
+          </Center>
+        )}
+        {analysisType !== 'specificity' && selectedGenes.length === 0 && (
           <Center h="100%" w="100%">
             <Text c="dimmed">
               Please select gene(s) from the&nbsp;
@@ -427,7 +522,7 @@ function ExpressionAnalysis() {
         )}
       </Stack>
       <RightSidePanel>
-        <UserGeneStore multiple />
+        <UserGeneStore multiple={analysisType !== 'specificity'} />
       </RightSidePanel>
     </Group>
   );

@@ -32,7 +32,7 @@ export function UserGeneStore({ multiple = false, findCoexpressors = false }: { 
   const userGenes = useMemo(() => {
     return [...userGeneStore].reverse().map((omics) => {
       return (
-        <Group key={omics.omicsId} align="center" position="left">
+        <Group key={omics.omicsId} align="center" position="left" noWrap>
           <UserGene multiple={multiple} gene={omics} findCoexpressors={findCoexpressors} />
         </Group>
       );

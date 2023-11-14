@@ -14,6 +14,9 @@ const useStyles = createStyles((theme) => ({
       backgroundColor: theme.colors.blue[4],
     },
   },
+  noWrap: {
+    whiteSpace: 'nowrap',
+  },
 }));
 
 export function UserGene({ gene, multiple = false, findCoexpressors = false }: { gene: Omics; multiple?: boolean; findCoexpressors?: boolean }) {
@@ -98,7 +101,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
           </Grid.Col>
         )}
         <Grid.Col span={1}>
-          <Tooltip label={`${gene.displayName}`} opened={showInfo}>
+          <Tooltip label={`${gene.displayName}`} opened={showInfo} arrowPosition="center" withArrow>
             <ActionIcon variant="subtle" size="xs" onClick={onInfoClick} onMouseLeave={onInfoLeave}>
               <IconInfoCircle />
             </ActionIcon>
@@ -107,8 +110,12 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
 
         <Grid.Col span={4}>
           <Group noWrap spacing={1}>
-            <Text size="xs">{gene.displaySymbol}</Text>
-            <Text size={8}>({gene.omicsType})</Text>
+            <Text size="xs" className={classes.noWrap}>
+              {gene.displaySymbol}
+            </Text>
+            <Text size={8} className={classes.noWrap}>
+              ({gene.omicsType})
+            </Text>
           </Group>
         </Grid.Col>
       </Grid>

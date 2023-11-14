@@ -31,6 +31,14 @@ export type AnnotationGroup = Node & {
   h5AdColumn: Scalars['String'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudiesByCelltypeAnnotationGroupId: ReferenceStudiesConnection;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudiesByCelltypeAnnotationGroupIdList: Array<ReferenceStudy>;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudiesByTissueAnnotationGroupId: ReferenceStudiesConnection;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudiesByTissueAnnotationGroupIdList: Array<ReferenceStudy>;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUis: StudyAnnotationGroupUisConnection;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
@@ -60,6 +68,48 @@ export type AnnotationGroupAnnotationValuesListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValuesOrderBy>>;
+};
+
+
+export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdListArgs = {
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdListArgs = {
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
 
@@ -2916,6 +2966,47 @@ export type CreateOntologyPayloadOntologyEdgeArgs = {
   orderBy?: InputMaybe<Array<OntologiesOrderBy>>;
 };
 
+/** All input for the create `ReferenceStudy` mutation. */
+export type CreateReferenceStudyInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `ReferenceStudy` to be created by this mutation. */
+  referenceStudy: ReferenceStudyInput;
+};
+
+/** The output of our create `ReferenceStudy` mutation. */
+export type CreateReferenceStudyPayload = {
+  __typename?: 'CreateReferenceStudyPayload';
+  /** Reads a single `AnnotationGroup` that is related to this `ReferenceStudy`. */
+  celltypeAnnotationGroup: Maybe<AnnotationGroup>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+  /** Reads a single `ReferenceStudyOverview` that is related to this `ReferenceStudy`. */
+  refStudy: Maybe<ReferenceStudyOverview>;
+  /** The `ReferenceStudy` that was created by this mutation. */
+  referenceStudy: Maybe<ReferenceStudy>;
+  /** An edge for our `ReferenceStudy`. May be used by Relay 1. */
+  referenceStudyEdge: Maybe<ReferenceStudiesEdge>;
+  /** Reads a single `Study` that is related to this `ReferenceStudy`. */
+  study: Maybe<Study>;
+  /** Reads a single `AnnotationGroup` that is related to this `ReferenceStudy`. */
+  tissueAnnotationGroup: Maybe<AnnotationGroup>;
+};
+
+
+/** The output of our create `ReferenceStudy` mutation. */
+export type CreateReferenceStudyPayloadReferenceStudyEdgeArgs = {
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
 /** All input for the `createS3TempCredentials` mutation. */
 export type CreateS3TempCredentialsInput = {
   /**
@@ -4344,6 +4435,7 @@ export type ExpressionByTwoAnnotation = {
   annotationDisplayValue: Maybe<Scalars['String']>;
   annotationValueId: Maybe<Scalars['Int']>;
   boxplotParams: Maybe<BoxplotValue>;
+  color: Maybe<Scalars['String']>;
   exprSamplesFraction: Maybe<Scalars['Float']>;
   mean: Maybe<Scalars['Float']>;
   median: Maybe<Scalars['Float']>;
@@ -4366,6 +4458,8 @@ export type ExpressionByTwoAnnotationFilter = {
   annotationValueId: InputMaybe<IntFilter>;
   /** Filter by the object’s `boxplotParams` field. */
   boxplotParams: InputMaybe<BoxplotValueFilter>;
+  /** Filter by the object’s `color` field. */
+  color: InputMaybe<StringFilter>;
   /** Filter by the object’s `exprSamplesFraction` field. */
   exprSamplesFraction: InputMaybe<FloatFilter>;
   /** Filter by the object’s `mean` field. */
@@ -4677,6 +4771,8 @@ export type Mutation = {
   createOmicsTranscriptionFactorGene: Maybe<CreateOmicsTranscriptionFactorGenePayload>;
   /** Creates a single `Ontology`. */
   createOntology: Maybe<CreateOntologyPayload>;
+  /** Creates a single `ReferenceStudy`. */
+  createReferenceStudy: Maybe<CreateReferenceStudyPayload>;
   createS3TempCredentials: Maybe<CreateS3TempCredentialsPayload>;
   /** Creates a single `Study`. */
   createStudy: Maybe<CreateStudyPayload>;
@@ -4924,6 +5020,12 @@ export type MutationCreateOmicsTranscriptionFactorGeneArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOntologyArgs = {
   input: CreateOntologyInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateReferenceStudyArgs = {
+  input: CreateReferenceStudyInput;
 };
 
 
@@ -6905,6 +7007,14 @@ export type Query = Node & {
    * which can only query top level fields if they are in a particular form.
    */
   query: Query;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudies: Maybe<ReferenceStudiesConnection>;
+  /** Reads a set of `ReferenceStudy`. */
+  referenceStudiesList: Maybe<Array<ReferenceStudy>>;
+  /** Reads and enables pagination through a set of `ReferenceStudyOverview`. */
+  referenceStudyOverviews: Maybe<ReferenceStudyOverviewsConnection>;
+  /** Reads a set of `ReferenceStudyOverview`. */
+  referenceStudyOverviewsList: Maybe<Array<ReferenceStudyOverview>>;
   /** Reads and enables pagination through a set of `Study`. */
   studies: Maybe<StudiesConnection>;
   /** Reads a set of `Study`. */
@@ -8026,6 +8136,52 @@ export type QueryOntologyByNodeIdArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryReferenceStudiesArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryReferenceStudiesListArgs = {
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryReferenceStudyOverviewsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyOverviewCondition>;
+  filter: InputMaybe<ReferenceStudyOverviewFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudyOverviewsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryReferenceStudyOverviewsListArgs = {
+  condition: InputMaybe<ReferenceStudyOverviewCondition>;
+  filter: InputMaybe<ReferenceStudyOverviewFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudyOverviewsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryStudiesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8532,6 +8688,244 @@ export type QueryViolinPlotArgs = {
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
+/** A connection to a list of `ReferenceStudy` values. */
+export type ReferenceStudiesConnection = {
+  __typename?: 'ReferenceStudiesConnection';
+  /** A list of edges which contains the `ReferenceStudy` and cursor to aid in pagination. */
+  edges: Array<ReferenceStudiesEdge>;
+  /** A list of `ReferenceStudy` objects. */
+  nodes: Array<Maybe<ReferenceStudy>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ReferenceStudy` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ReferenceStudy` edge in the connection. */
+export type ReferenceStudiesEdge = {
+  __typename?: 'ReferenceStudiesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `ReferenceStudy` at the end of the edge. */
+  node: Maybe<ReferenceStudy>;
+};
+
+/** Methods to use when ordering `ReferenceStudy`. */
+export enum ReferenceStudiesOrderBy {
+  CelltypeAnnotationGroupIdAsc = 'CELLTYPE_ANNOTATION_GROUP_ID_ASC',
+  CelltypeAnnotationGroupIdDesc = 'CELLTYPE_ANNOTATION_GROUP_ID_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  TissueAnnotationGroupIdAsc = 'TISSUE_ANNOTATION_GROUP_ID_ASC',
+  TissueAnnotationGroupIdDesc = 'TISSUE_ANNOTATION_GROUP_ID_DESC'
+}
+
+export type ReferenceStudy = {
+  __typename?: 'ReferenceStudy';
+  /** Reads a single `AnnotationGroup` that is related to this `ReferenceStudy`. */
+  celltypeAnnotationGroup: Maybe<AnnotationGroup>;
+  celltypeAnnotationGroupId: Scalars['Int'];
+  /** Reads a single `ReferenceStudyOverview` that is related to this `ReferenceStudy`. */
+  refStudy: Maybe<ReferenceStudyOverview>;
+  /** Reads a single `Study` that is related to this `ReferenceStudy`. */
+  study: Maybe<Study>;
+  studyId: Scalars['Int'];
+  /** Reads a single `AnnotationGroup` that is related to this `ReferenceStudy`. */
+  tissueAnnotationGroup: Maybe<AnnotationGroup>;
+  tissueAnnotationGroupId: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `ReferenceStudy` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type ReferenceStudyCondition = {
+  /** Checks for equality with the object’s `celltypeAnnotationGroupId` field. */
+  celltypeAnnotationGroupId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `tissueAnnotationGroupId` field. */
+  tissueAnnotationGroupId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `ReferenceStudy` object types. All fields are combined with a logical ‘and.’ */
+export type ReferenceStudyFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ReferenceStudyFilter>>;
+  /** Filter by the object’s `celltypeAnnotationGroupId` field. */
+  celltypeAnnotationGroupId: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ReferenceStudyFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ReferenceStudyFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `tissueAnnotationGroupId` field. */
+  tissueAnnotationGroupId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `ReferenceStudy` */
+export type ReferenceStudyInput = {
+  celltypeAnnotationGroupId: Scalars['Int'];
+  studyId: Scalars['Int'];
+  tissueAnnotationGroupId: Scalars['Int'];
+};
+
+export type ReferenceStudyOverview = {
+  __typename?: 'ReferenceStudyOverview';
+  cellCount: Maybe<Scalars['Int']>;
+  defaultStudyLayerId: Maybe<Scalars['Int']>;
+  description: Maybe<Scalars['String']>;
+  externalWebsite: Maybe<Scalars['String']>;
+  metadata: Maybe<Scalars['JSON']>;
+  organismTaxId: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudyInfo: ReferenceStudiesConnection;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudyInfoList: Array<ReferenceStudy>;
+  studyId: Maybe<Scalars['Int']>;
+  studyName: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
+  studyOntology: StudyOverviewOntologiesConnection;
+  /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
+  studyOntologyList: Array<StudyOverviewOntology>;
+};
+
+
+export type ReferenceStudyOverviewReferenceStudyInfoArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type ReferenceStudyOverviewReferenceStudyInfoListArgs = {
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type ReferenceStudyOverviewStudyOntologyArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<StudyOverviewOntologyCondition>;
+  filter: InputMaybe<StudyOverviewOntologyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
+};
+
+
+export type ReferenceStudyOverviewStudyOntologyListArgs = {
+  condition: InputMaybe<StudyOverviewOntologyCondition>;
+  filter: InputMaybe<StudyOverviewOntologyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
+};
+
+/**
+ * A condition to be used against `ReferenceStudyOverview` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type ReferenceStudyOverviewCondition = {
+  /** Checks for equality with the object’s `cellCount` field. */
+  cellCount: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `defaultStudyLayerId` field. */
+  defaultStudyLayerId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `description` field. */
+  description: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `metadata` field. */
+  metadata: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `studyName` field. */
+  studyName: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `ReferenceStudyOverview` object types. All fields are combined with a logical ‘and.’ */
+export type ReferenceStudyOverviewFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<ReferenceStudyOverviewFilter>>;
+  /** Filter by the object’s `cellCount` field. */
+  cellCount: InputMaybe<IntFilter>;
+  /** Filter by the object’s `defaultStudyLayerId` field. */
+  defaultStudyLayerId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `description` field. */
+  description: InputMaybe<StringFilter>;
+  /** Filter by the object’s `externalWebsite` field. */
+  externalWebsite: InputMaybe<StringFilter>;
+  /** Filter by the object’s `metadata` field. */
+  metadata: InputMaybe<JsonFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<ReferenceStudyOverviewFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<ReferenceStudyOverviewFilter>>;
+  /** Filter by the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `studyName` field. */
+  studyName: InputMaybe<StringFilter>;
+};
+
+/** A connection to a list of `ReferenceStudyOverview` values. */
+export type ReferenceStudyOverviewsConnection = {
+  __typename?: 'ReferenceStudyOverviewsConnection';
+  /** A list of edges which contains the `ReferenceStudyOverview` and cursor to aid in pagination. */
+  edges: Array<ReferenceStudyOverviewsEdge>;
+  /** A list of `ReferenceStudyOverview` objects. */
+  nodes: Array<Maybe<ReferenceStudyOverview>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `ReferenceStudyOverview` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `ReferenceStudyOverview` edge in the connection. */
+export type ReferenceStudyOverviewsEdge = {
+  __typename?: 'ReferenceStudyOverviewsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `ReferenceStudyOverview` at the end of the edge. */
+  node: Maybe<ReferenceStudyOverview>;
+};
+
+/** Methods to use when ordering `ReferenceStudyOverview`. */
+export enum ReferenceStudyOverviewsOrderBy {
+  CellCountAsc = 'CELL_COUNT_ASC',
+  CellCountDesc = 'CELL_COUNT_DESC',
+  DefaultStudyLayerIdAsc = 'DEFAULT_STUDY_LAYER_ID_ASC',
+  DefaultStudyLayerIdDesc = 'DEFAULT_STUDY_LAYER_ID_DESC',
+  DescriptionAsc = 'DESCRIPTION_ASC',
+  DescriptionDesc = 'DESCRIPTION_DESC',
+  ExternalWebsiteAsc = 'EXTERNAL_WEBSITE_ASC',
+  ExternalWebsiteDesc = 'EXTERNAL_WEBSITE_DESC',
+  MetadataAsc = 'METADATA_ASC',
+  MetadataDesc = 'METADATA_DESC',
+  Natural = 'NATURAL',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyNameAsc = 'STUDY_NAME_ASC',
+  StudyNameDesc = 'STUDY_NAME_DESC'
+}
+
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -8746,6 +9140,10 @@ export type Study = Node & {
   organismTaxId: Maybe<Scalars['String']>;
   projections: Maybe<Array<Maybe<Scalars['String']>>>;
   readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudies: ReferenceStudiesConnection;
+  /** Reads and enables pagination through a set of `ReferenceStudy`. */
+  referenceStudiesList: Array<ReferenceStudy>;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
   studyAnnotationGroupUis: StudyAnnotationGroupUisConnection;
   /** Reads and enables pagination through a set of `StudyAnnotationGroupUi`. */
@@ -8795,6 +9193,27 @@ export type StudyDifferentialExpressionsListArgs = {
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
+};
+
+
+export type StudyReferenceStudiesArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
+};
+
+
+export type StudyReferenceStudiesListArgs = {
+  condition: InputMaybe<ReferenceStudyCondition>;
+  filter: InputMaybe<ReferenceStudyFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
 
@@ -9979,6 +10398,7 @@ export type StudyOverview = {
   description: Maybe<Scalars['String']>;
   externalWebsite: Maybe<Scalars['String']>;
   metadata: Maybe<Scalars['JSON']>;
+  organismTaxId: Maybe<Scalars['String']>;
   studyId: Maybe<Scalars['Int']>;
   studyName: Maybe<Scalars['String']>;
   /** Reads and enables pagination through a set of `StudyOverviewOntology`. */
@@ -10023,6 +10443,8 @@ export type StudyOverviewCondition = {
   externalWebsite: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `metadata` field. */
   metadata: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
@@ -10047,6 +10469,8 @@ export type StudyOverviewFilter = {
   not: InputMaybe<StudyOverviewFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<StudyOverviewFilter>>;
+  /** Filter by the object’s `organismTaxId` field. */
+  organismTaxId: InputMaybe<StringFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyName` field. */
@@ -10060,6 +10484,7 @@ export type StudyOverviewInput = {
   description: InputMaybe<Scalars['String']>;
   externalWebsite: InputMaybe<Scalars['String']>;
   metadata: InputMaybe<Scalars['JSON']>;
+  organismTaxId: InputMaybe<Scalars['String']>;
   studyId: InputMaybe<Scalars['Int']>;
   studyName: InputMaybe<Scalars['String']>;
 };
@@ -10110,6 +10535,8 @@ export type StudyOverviewOntology = {
   /** Reads a single `StudyOverview` that is related to this `StudyOverviewOntology`. */
   study: Maybe<StudyOverview>;
   studyId: Maybe<Scalars['Int']>;
+  /** Reads a single `ReferenceStudyOverview` that is related to this `StudyOverviewOntology`. */
+  studyOntology: Maybe<ReferenceStudyOverview>;
 };
 
 /**
@@ -10184,6 +10611,8 @@ export enum StudyOverviewsOrderBy {
   MetadataAsc = 'METADATA_ASC',
   MetadataDesc = 'METADATA_DESC',
   Natural = 'NATURAL',
+  OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
+  OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
@@ -11676,6 +12105,8 @@ export type CorrelatedgenesQuery = { __typename?: 'Query', getCorrelatedGenesLis
 
 export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, metadata: any, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
 
+export type ReferenceStudyInfoFragment = { __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> };
+
 export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
 export type DegQueryVariables = Exact<{
@@ -11703,6 +12134,20 @@ export type SingleStudyInfoQueryVariables = Exact<{
 
 export type SingleStudyInfoQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, metadata: any, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }> };
 
+export type ReferenceStudiesOverviewQueryVariables = Exact<{
+  organismTaxId: Scalars['String'];
+}>;
+
+
+export type ReferenceStudiesOverviewQuery = { __typename?: 'Query', referenceStudyOverviewsList: Array<{ __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> }> };
+
+export type GeneSpecificityStudyQueryVariables = Exact<{
+  studyId: Scalars['Int'];
+}>;
+
+
+export type GeneSpecificityStudyQuery = { __typename?: 'Query', referenceStudyOverviewsList: Array<{ __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> }>, studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }> };
+
 export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
 export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number, cellCount: number, description: string }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
@@ -11728,28 +12173,28 @@ export type StudyOmicsQueryVariables = Exact<{
 
 export type StudyOmicsQuery = { __typename?: 'Query', studyOmicsList: Array<{ __typename?: 'StudyOmic', omics: { __typename?: 'OmicsBase', omicsId: number, displayName: string, displaySymbol: string } }> };
 
-export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, organismTaxId: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
 
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string> }, studyLayersList: Array<{ __typename: 'StudyLayer', layer: string, studyLayerId: number }> };
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, organismTaxId: string }, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
 
 export type StudyBasics2QueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasics2Query = { __typename?: 'Query', studyAnnotationFrontendGroupsList: Array<{ __typename: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleProjectionSubsamplingTransposedsList: Array<{ __typename: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
+export type StudyBasics2Query = { __typename?: 'Query', studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleProjectionSubsamplingTransposedsList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
 
 export type StudyBasics3QueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
 
-export type StudyBasics3Query = { __typename?: 'Query', studySampleAnnotationSubsamplingsList: Array<{ __typename: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studyOmicsTransposedsList: Array<{ __typename: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }> };
+export type StudyBasics3Query = { __typename?: 'Query', studySampleAnnotationSubsamplingsList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studyOmicsTransposedsList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }> };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -11918,7 +12363,7 @@ export type GeneSpecificityQueryVariables = Exact<{
 }>;
 
 
-export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number }> };
+export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number, color: string }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -11968,6 +12413,28 @@ export const StudyInfoFragmentDoc = gql`
     labels
     ontology
     parentIds
+  }
+}
+    `;
+export const ReferenceStudyInfoFragmentDoc = gql`
+    fragment ReferenceStudyInfo on ReferenceStudyOverview {
+  organismTaxId
+  studyName
+  studyId
+  cellCount
+  defaultStudyLayerId
+  externalWebsite
+  description
+  metadata
+  studyOntologyList {
+    ontCodes
+    ontology
+    labels
+    parentIds
+  }
+  referenceStudyInfoList {
+    celltypeAnnotationGroupId
+    tissueAnnotationGroupId
   }
 }
     `;
@@ -12037,6 +12504,7 @@ export const StudyBasicsFragmentDoc = gql`
     fragment StudyBasics on Study {
   studyId
   studyName
+  organismTaxId
   studyLayersList {
     layer
     studyLayerId
@@ -12272,6 +12740,85 @@ export function useSingleStudyInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type SingleStudyInfoQueryHookResult = ReturnType<typeof useSingleStudyInfoQuery>;
 export type SingleStudyInfoLazyQueryHookResult = ReturnType<typeof useSingleStudyInfoLazyQuery>;
 export type SingleStudyInfoQueryResult = Apollo.QueryResult<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>;
+export const ReferenceStudiesOverviewDocument = gql`
+    query referenceStudiesOverview($organismTaxId: String!) {
+  referenceStudyOverviewsList(condition: {organismTaxId: $organismTaxId}) {
+    ...ReferenceStudyInfo
+  }
+}
+    ${ReferenceStudyInfoFragmentDoc}`;
+
+/**
+ * __useReferenceStudiesOverviewQuery__
+ *
+ * To run a query within a React component, call `useReferenceStudiesOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReferenceStudiesOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReferenceStudiesOverviewQuery({
+ *   variables: {
+ *      organismTaxId: // value for 'organismTaxId'
+ *   },
+ * });
+ */
+export function useReferenceStudiesOverviewQuery(baseOptions: Apollo.QueryHookOptions<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
+      }
+export function useReferenceStudiesOverviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
+        }
+export type ReferenceStudiesOverviewQueryHookResult = ReturnType<typeof useReferenceStudiesOverviewQuery>;
+export type ReferenceStudiesOverviewLazyQueryHookResult = ReturnType<typeof useReferenceStudiesOverviewLazyQuery>;
+export type ReferenceStudiesOverviewQueryResult = Apollo.QueryResult<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>;
+export const GeneSpecificityStudyDocument = gql`
+    query geneSpecificityStudy($studyId: Int!) {
+  referenceStudyOverviewsList(filter: {studyId: {equalTo: $studyId}}) {
+    ...ReferenceStudyInfo
+  }
+  studyAnnotationFrontendGroupsList(condition: {studyId: $studyId}) {
+    annotationGroupId
+    annotationValuesList {
+      annotationValueId
+      displayValue
+      color
+      sampleCount
+    }
+  }
+}
+    ${ReferenceStudyInfoFragmentDoc}`;
+
+/**
+ * __useGeneSpecificityStudyQuery__
+ *
+ * To run a query within a React component, call `useGeneSpecificityStudyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGeneSpecificityStudyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGeneSpecificityStudyQuery({
+ *   variables: {
+ *      studyId: // value for 'studyId'
+ *   },
+ * });
+ */
+export function useGeneSpecificityStudyQuery(baseOptions: Apollo.QueryHookOptions<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
+      }
+export function useGeneSpecificityStudyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
+        }
+export type GeneSpecificityStudyQueryHookResult = ReturnType<typeof useGeneSpecificityStudyQuery>;
+export type GeneSpecificityStudyLazyQueryHookResult = ReturnType<typeof useGeneSpecificityStudyLazyQuery>;
+export type GeneSpecificityStudyQueryResult = Apollo.QueryResult<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>;
 export const StudiesWithMarkerGenesDocument = gql`
     query studiesWithMarkerGenes($omicsIds: [Int!]!) {
   differentialExpressionsList(
@@ -12392,12 +12939,11 @@ export const StudyBasicsDocument = gql`
     studyName
     cellCount
     projections
-    __typename
+    organismTaxId
   }
   studyLayersList(condition: {studyId: $studyId}) {
     layer
     studyLayerId
-    __typename
   }
 }
     `;
@@ -12445,16 +12991,13 @@ export const StudyBasics2Document = gql`
       displayValue
       color
       sampleCount
-      __typename
     }
-    __typename
   }
   studySampleProjectionSubsamplingTransposedsList(condition: {studyId: $studyId}) {
     projectionType
     studySampleId
     projection
     modality
-    __typename
   }
 }
     `;
@@ -12491,14 +13034,12 @@ export const StudyBasics3Document = gql`
   studySampleAnnotationSubsamplingsList(condition: {studyId: $studyId}) {
     annotationValueId
     studySampleIds
-    __typename
   }
   studyOmicsTransposedsList(condition: {studyId: $studyId}) {
     displayName
     displaySymbol
     omicsId
     omicsType
-    __typename
   }
 }
     `;
@@ -13241,6 +13782,7 @@ export const GeneSpecificityDocument = gql`
     valueCount
     exprSamplesFraction
     mean
+    color
   }
 }
     `;

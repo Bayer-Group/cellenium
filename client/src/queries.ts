@@ -26,6 +26,27 @@ gql`
     }
   }
 
+  fragment ReferenceStudyInfo on ReferenceStudyOverview {
+    organismTaxId
+    studyName
+    studyId
+    cellCount
+    defaultStudyLayerId
+    externalWebsite
+    description
+    metadata
+    studyOntologyList {
+      ontCodes
+      ontology
+      labels
+      parentIds
+    }
+    referenceStudyInfoList {
+      celltypeAnnotationGroupId
+      tissueAnnotationGroupId
+    }
+  }
+
   fragment TreeOntologyOverview on TreeOntology {
     label
     ontCode
@@ -62,6 +83,27 @@ gql`
   query singleStudyInfo($studyId: Int!) {
     studyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
       ...StudyInfo
+    }
+  }
+
+  query referenceStudiesOverview($organismTaxId: String!) {
+    referenceStudyOverviewsList(condition: { organismTaxId: $organismTaxId }) {
+      ...ReferenceStudyInfo
+    }
+  }
+
+  query geneSpecificityStudy($studyId: Int!) {
+    referenceStudyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
+      ...ReferenceStudyInfo
+    }
+    studyAnnotationFrontendGroupsList(condition: { studyId: $studyId }) {
+      annotationGroupId
+      annotationValuesList {
+        annotationValueId
+        displayValue
+        color
+        sampleCount
+      }
     }
   }
 
@@ -143,6 +185,7 @@ gql`
   fragment StudyBasics on Study {
     studyId
     studyName
+    organismTaxId
     studyLayersList {
       layer
       studyLayerId
@@ -158,6 +201,7 @@ gql`
       studyName
       cellCount
       projections
+      organismTaxId
     }
     studyLayersList(condition: { studyId: $studyId }) {
       layer
@@ -443,6 +487,7 @@ gql`
       valueCount
       exprSamplesFraction
       mean
+      color
     }
   }
 

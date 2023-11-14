@@ -251,7 +251,7 @@ with expr as (select e.study_layer_id, sample_id, e.omics_id, value
                        cross join unnest(e.study_sample_ids, e.values) as x(sample_id, value)
               where omics_id = any (p_omics_ids)
                 and study_layer_id = any (p_study_layer_ids)
-                -- ordering both CTEs by sample_id is important for the join on "expr.sample_id = annot.sample_id" below
+              -- ordering both CTEs by sample_id is important for the join on "expr.sample_id = annot.sample_id" below
               order by 1, 2, 3),
      annot as (select sl.study_layer_id,
                       sample_id,
@@ -312,7 +312,8 @@ create type expression_by_two_annotations as
     mean                            real,
     value_count                     int,
     non_zero_value_count            int,
-    expr_samples_fraction           real
+    expr_samples_fraction           real,
+    color                           text
 );
 
 drop function if exists expression_by_two_annotations;
@@ -341,7 +342,7 @@ with expr as (select coalesce(data.sample_id, dropouts.study_sample_id) sample_i
                                           -- dismiss the whole outer join and just take existing expression values into account
                                           and p_dropouts_as_zero) dropouts
                                        on dropouts.study_sample_id = sample_id and dropouts.oid = data.omics_id
-                   -- all CTEs must be ordered for their join columns
+              -- all CTEs must be ordered for their join columns
               order by 1, 2),
      exclude_samples as (select exclude_sample_id
                          from study_sample_annotation exclude_ssa
@@ -349,7 +350,8 @@ with expr as (select coalesce(data.sample_id, dropouts.study_sample_id) sample_i
                          where exclude_ssa.annotation_value_id = any (p_exclude_annotation_value_ids)
                            and exclude_ssa.study_id = p_study_id),
      annot1 as (select sample_id,
-                       ssa.annotation_value_id
+                       ssa.annotation_value_id,
+                       ssa.color
                 from study_sample_annotation ssa
                          cross join unnest(ssa.study_sample_ids) sample_id
                 where ssa.study_id = p_study_id
@@ -370,6 +372,7 @@ with expr as (select coalesce(data.sample_id, dropouts.study_sample_id) sample_i
                 order by 1),
      annot_full as (select coalesce(annot1.sample_id, annot2.sample_id)                                sample_id,
                            annot1.annotation_value_id,
+                           annot1.color as                                                             color,
                            annot2.annotation_value_id                                                  second_annotation_value_id,
                            count(1)
                            over (partition by annot1.annotation_value_id, annot2.annotation_value_id ) sample_count
@@ -395,10 +398,11 @@ select expr.omics_id,
        -- will equal value_count if dropouts_as_zero is false
        count(1) filter ( where value != 0 )                                           non_zero_value_count,
        -- fraction of samples that have expression values available. Always 1 if dropouts_as_zero is true
-       count(1) :: real / annot_full.sample_count                                     expr_samples_fraction
+       count(1) :: real / annot_full.sample_count                                     expr_samples_fraction,
+       annot_full.color
 from expr
          join annot_full on expr.sample_id = annot_full.sample_id
-group by expr.omics_id, annot_full.annotation_value_id, annot_full.second_annotation_value_id, annot_full.sample_count
+group by expr.omics_id, annot_full.annotation_value_id, annot_full.second_annotation_value_id, annot_full.sample_count, annot_full.color
 $$;
 
 
