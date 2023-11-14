@@ -62,7 +62,7 @@ export function GeneSpecificityPlot({
     const t = annotationSet.map((cs) => {
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
       const tTooltips = d.map((e) => `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}`);
-      const tRadius = d.map((e) => e.valueCount);
+      const tRadius = d.map((e) => Math.max(e.valueCount, 5));
       const tX = d.map((e) => e.mean);
       const tY = d.map((e) => e.exprSamplesFraction);
       const colors = d.map((e) => e.color);
@@ -75,7 +75,7 @@ export function GeneSpecificityPlot({
         trace: {
           x: tX,
           y: tY,
-          hoverinfo: 'none',
+          hoverinfo: 'y+x+text',
           name: cs,
           text: tTooltips,
           mode: 'markers',
