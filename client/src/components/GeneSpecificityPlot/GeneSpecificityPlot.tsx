@@ -75,7 +75,8 @@ export function GeneSpecificityPlot({
         trace: {
           x: tX,
           y: tY,
-          name: '',
+          hoverinfo: 'none',
+          name: cs,
           text: tTooltips,
           mode: 'markers',
           type: 'scattergl',
