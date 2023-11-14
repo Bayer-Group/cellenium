@@ -59,6 +59,9 @@ const useStyles = createStyles(() => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
 export function StudyCard({ study, detailed, onClick }: { study: StudyInfoFragment; detailed?: boolean; onClick?: () => void }) {
@@ -107,7 +110,7 @@ export function StudyCard({ study, detailed, onClick }: { study: StudyInfoFragme
                 align="left"
                 lineClamp={detailed ? undefined : 1}
                 sx={detailed ? {} : {}}
-                className={detailed ? classes.detailed : undefined}
+                className={detailed ? classes.detailed : classes.clickable}
                 weight={800}
                 onClick={onClick}
               >
