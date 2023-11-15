@@ -1,9 +1,8 @@
 import Plot from 'react-plotly.js';
 import * as Plotly from 'plotly.js';
-import { Stack } from '@mantine/core';
+import { Loader, Stack } from '@mantine/core';
 import { useEffect, useMemo } from 'react';
 import { useGeneSpecificityQuery } from '../../generated/types';
-import { GlobalLoading } from '../../pages/GlobalLoading';
 
 const LAYOUT: Partial<Plotly.Layout> = {
   autosize: true,
@@ -61,8 +60,11 @@ export function GeneSpecificityPlot({
 
     const t = annotationSet.map((cs) => {
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
-      const tTooltips = d.map((e) => `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}`);
-      const tRadius = d.map((e) => e.valueCount);
+      const tTooltips = d.map(
+        (e) =>
+          `X:${e.annotationDisplayValue}(mean expression)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)</br></br>Size: ${e.valueCount} samples (log10)`,
+      );
+      const tRadius = d.map((e) => Math.max(e.valueCount, 5));
       const tX = d.map((e) => e.mean);
       const tY = d.map((e) => e.exprSamplesFraction);
       const colors = d.map((e) => e.color);
@@ -75,7 +77,8 @@ export function GeneSpecificityPlot({
         trace: {
           x: tX,
           y: tY,
-          name: '',
+          hoverinfo: 'text',
+          name: cs,
           text: tTooltips,
           mode: 'markers',
           type: 'scattergl',
@@ -120,17 +123,23 @@ export function GeneSpecificityPlot({
       ...layout,
       xaxis: {
         range: [minMaxXY.minX, minMaxXY.maxX],
+        title: {
+          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === annotationGroupId)?.displayGroup || '',
+        },
       },
       yaxis: {
         range: [minMaxXY.minY, minMaxXY.maxY],
+        title: {
+          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === secondAnnotationGroupId)?.displayGroup || '',
+        },
       },
     } as Partial<Plotly.Layout>;
-  }, [layout, minMaxXY]);
+  }, [annotationGroupId, data?.annotationGroupsList, layout, minMaxXY, secondAnnotationGroupId]);
 
   if (loading || !data) {
     return (
-      <Stack w="100%" h="100%">
-        <GlobalLoading />
+      <Stack w="100%" h="100%" justify="center" align="center">
+        <Loader color="blue" />
       </Stack>
     );
   }

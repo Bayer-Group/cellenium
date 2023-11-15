@@ -381,6 +381,7 @@ with expr as (select coalesce(data.sample_id, dropouts.study_sample_id) sample_i
                     order by 1)
 select expr.omics_id,
        annot_full.annotation_value_id,
+
        coalesce((select av.display_value
                  from annotation_value av
                  where av.annotation_value_id = annot_full.annotation_value_id), '-') annotation_display_value,
@@ -394,11 +395,11 @@ select expr.omics_id,
        percentile_cont(0.5) within group (order by value)  as                         median,
        percentile_cont(0.75) within group (order by value) as                         q3,
        avg(value)                                          as                         "mean",
-       count(1)                                                                       value_count,
+       log10(count(1))                                                                      value_count,
        -- will equal value_count if dropouts_as_zero is false
        count(1) filter ( where value != 0 )                                           non_zero_value_count,
        -- fraction of samples that have expression values available. Always 1 if dropouts_as_zero is true
-       count(1) :: real / annot_full.sample_count                                     expr_samples_fraction,
+       (count(1) :: real / annot_full.sample_count) * 100                             expr_samples_fraction,
        annot_full.color
 from expr
          join annot_full on expr.sample_id = annot_full.sample_id
