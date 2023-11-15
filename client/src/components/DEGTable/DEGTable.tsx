@@ -8,7 +8,7 @@ import { showNotification } from '@mantine/notifications';
 import { useCallback } from 'react';
 import { selectedGenesState, studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
 import { Omics } from '../../model';
-import {DifferentialExpressionV, DifferentialExpressionVFilter, useDegQuery} from '../../generated/types';
+import { DifferentialExpressionV, DifferentialExpressionVFilter, useDegQuery } from '../../generated/types';
 
 const customStyles = {
   table: {
@@ -203,9 +203,10 @@ export function DEGTable({ annotationId, selectedDEGComparisonAnnotationId }: { 
       filter: {
         annotationValueId: { equalTo: annotationId },
         studyId: { equalTo: study?.studyId || 0 },
-        otherAnnotationValueId: selectedDEGComparisonAnnotationId === 0 ? { isNull: true } : { equalTo: selectedDEGComparisonAnnotationId},
+        otherAnnotationValueId: selectedDEGComparisonAnnotationId === 0 ? { isNull: true } : { equalTo: selectedDEGComparisonAnnotationId },
       } as unknown as DifferentialExpressionVFilter,
     },
+    skip: annotationId === 0 || !study,
   });
 
   const handleColorClick = useCallback(
@@ -245,12 +246,15 @@ export function DEGTable({ annotationId, selectedDEGComparisonAnnotationId }: { 
 
   return (
     <Stack justify="flex-start" align="left" w="100%">
-      {selectedDEGComparisonAnnotationId ? (
+      {data && study && data.differentialExpressionVsList.length > 0 && selectedDEGComparisonAnnotationId ? (
         <Text size={'xs'} color={'dimmed'}>
-          DEG of two selected annotations
+          Showing differentially expressed genes of two selected annotations.
         </Text>
       ) : null}
       {/* TODO ExpandedComponent can also link from gene to protein, so for a multi-omics study all omics row types can be expanded */}
+      {data && study && data.differentialExpressionVsList.length === 0 && (
+        <Text size={'xs'}>No differentially expressed genes found for the current group selection.</Text>
+      )}
       {data && study && data.differentialExpressionVsList.length > 0 && study.omicsTypes.length > 1 && (
         <DataTable
           dense

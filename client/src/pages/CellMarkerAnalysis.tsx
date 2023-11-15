@@ -61,7 +61,9 @@ function DifferentialExpressionAnalysis() {
             No DEGs calculated for selected group.
           </Text>
         )}
-        {pairwiseDifferentialExpressionCalculated && <Text size="xs">Pairwise DEGs available, hold Shift to select a comparison annotation.</Text>}
+        {pairwiseDifferentialExpressionCalculated && (
+          <Text size="xs">Pairwise attributes differentially expressed genes available, hold Shift to select a second annotation.</Text>
+        )}
         {annotationGroupId && <AnnotationGroupDisplay enableDEGComparisonSelection={pairwiseDifferentialExpressionCalculated === true} />}
       </LeftSidePanel>
       <Stack w="100%" h="100%">

@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "esnext",
     "skipLibCheck": true,
     /* Bundler mode */
@@ -22,16 +18,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
   ],
   "jsxImportSource": "react",
-  "types": [
-    "react"
-  ]
+  "types": ["react"]
 }

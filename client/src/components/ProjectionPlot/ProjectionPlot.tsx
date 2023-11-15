@@ -11,7 +11,7 @@ import {
   selectedAnnotationState,
   selectedDEGComparisonAnnotationState,
   selectedProjectionState,
-  studyState
+  studyState,
 } from '../../atoms';
 import { ExpressionTable } from '../../model';
 
@@ -53,7 +53,9 @@ export function ProjectionPlot({
   const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
   const [selectedDEGComparison, setSelectedDEGComparison] = useRecoilState(selectedDEGComparisonAnnotationState);
   const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
-  const isDEGComparisonSelection = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.pairwiseDifferentialExpressionCalculated as boolean);
+  const isDEGComparisonSelection = disableSelection
+    ? false
+    : (study?.annotationGroupMap.get(annotationGroupId as number)?.pairwiseDifferentialExpressionCalculated as boolean);
 
   const annotationProjectionData = React.useMemo(() => {
     if (!study || !study.samplesProjectionTables.get(projection)) {
@@ -151,13 +153,13 @@ export function ProjectionPlot({
     // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
     // causes flickering and web browser halt for large datasets.
 
-    const getTrace = (annotationId:number) => {
+    const getTrace = (annotationId: number) => {
       if (!study || !annotationProjectionData || annotationId === 0 || colorBy !== 'annotation') {
         return undefined;
       }
       const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
-          .params({annotationId})
-          .filter((d: Struct, p: Params) => d.annotationValueId === p.annotationId);
+        .params({ annotationId })
+        .filter((d: Struct, p: Params) => d.annotationValueId === p.annotationId);
       return {
         type: 'scattergl',
         x: tableForAnnotation.array('projectionX', Float32Array),
@@ -172,9 +174,9 @@ export function ProjectionPlot({
         showlegend: false,
         hoverinfo: 'text',
       } as Partial<Plotly.PlotData>;
-    }
+    };
 
-    return [getTrace(selectedAnnotation), getTrace(selectedDEGComparison)].filter(t => t !== undefined);
+    return [getTrace(selectedAnnotation), getTrace(selectedDEGComparison)].filter((t) => t !== undefined);
   }, [study, annotationProjectionData, selectedAnnotation, selectedDEGComparison, colorBy]);
 
   // the cells colored according to gene expression for the expression analysis page, include 0 values
@@ -338,8 +340,8 @@ export function ProjectionPlot({
       }
       if (event.points.length > 0 && event.points[0].customdata) {
         const annotationValueId = event.points[0].customdata as number;
-        console.log('XX', event, annotationValueId, event.event.shiftKey, isDEGComparisonSelection, selectedAnnotation)
-        if(event.event.shiftKey && isDEGComparisonSelection && selectedAnnotation && selectedAnnotation !== annotationValueId) {
+        console.log('XX', event, annotationValueId, event.event.shiftKey, isDEGComparisonSelection, selectedAnnotation);
+        if (event.event.shiftKey && isDEGComparisonSelection && selectedAnnotation && selectedAnnotation !== annotationValueId) {
           setSelectedDEGComparison(annotationValueId);
         } else {
           setSelectedAnnotation(annotationValueId);
