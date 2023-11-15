@@ -1,12 +1,19 @@
 import Plot from 'react-plotly.js';
 import * as Plotly from 'plotly.js';
 import { Stack } from '@mantine/core';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useGeneSpecificityQuery } from '../../generated/types';
 import { GlobalLoading } from '../../pages/GlobalLoading';
 
-const LAYOUT = {
+const LAYOUT: Partial<Plotly.Layout> = {
   autosize: true,
+  legend: {
+    xanchor: 'left',
+    yanchor: 'top',
+    itemsizing: 'constant',
+    x: 1,
+    y: 0.8,
+  },
 };
 
 const CONFIG = {
@@ -21,6 +28,9 @@ export function GeneSpecificityPlot({
   annotationGroupId,
   secondAnnotationGroupId,
   excludeAnnotationValueIds,
+  reportMinMaxXY,
+  showAnnotationLegend = true,
+  minMaxXY,
 }: {
   studyName: string;
   study_id: number;
@@ -29,6 +39,9 @@ export function GeneSpecificityPlot({
   annotationGroupId: number;
   secondAnnotationGroupId: number;
   excludeAnnotationValueIds: number[] | number;
+  showAnnotationLegend?: boolean;
+  reportMinMaxXY?: (minX: number, maxX: number, minY: number, maxY: number) => void;
+  minMaxXY?: { minX: number; maxX: number; minY: number; maxY: number };
 }) {
   const { data, loading } = useGeneSpecificityQuery({
     variables: {
@@ -41,35 +54,79 @@ export function GeneSpecificityPlot({
     },
   });
 
-  const { trace, layout } = useMemo(() => {
+  const { traces, layout } = useMemo(() => {
     if (!data) return { trace: undefined, layout: undefined };
-    const colorSet = [...new Set(data.expressionByTwoAnnotationsList.map((e) => e.annotationDisplayValue))];
-    const tColors = data.expressionByTwoAnnotationsList.map((e) => colorSet.indexOf(e.annotationDisplayValue));
-    const tTooltips = data.expressionByTwoAnnotationsList.map((e) => `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}`);
-    const tRadius = data.expressionByTwoAnnotationsList.map((e) => e.valueCount);
-    const tX = data.expressionByTwoAnnotationsList.map((e) => e.mean);
-    const tY = data.expressionByTwoAnnotationsList.map((e) => e.exprSamplesFraction);
+
+    const annotationSet = [...new Set(data.expressionByTwoAnnotationsList.map((e) => e.annotationDisplayValue))];
+
+    const t = annotationSet.map((cs) => {
+      const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
+      const tTooltips = d.map((e) => `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}`);
+      const tRadius = d.map((e) => Math.max(e.valueCount, 5));
+      const tX = d.map((e) => e.mean);
+      const tY = d.map((e) => e.exprSamplesFraction);
+      const colors = d.map((e) => e.color);
+
+      return {
+        minX: Math.min(...tX),
+        maxX: Math.max(...tX),
+        minY: Math.min(...tY),
+        maxY: Math.max(...tY),
+        trace: {
+          x: tX,
+          y: tY,
+          hoverinfo: 'y+x+text',
+          name: cs,
+          text: tTooltips,
+          mode: 'markers',
+          type: 'scattergl',
+          marker: { size: tRadius, color: colors },
+        } as Partial<Plotly.Data>,
+      };
+    });
+
+    const minX = Math.min(...t.map((e) => e.minX));
+    const maxX = Math.max(...t.map((e) => e.maxX));
+    const minY = Math.min(...t.map((e) => e.minY));
+    const maxY = Math.max(...t.map((e) => e.maxY));
+
     return {
-      trace: {
-        x: tX,
-        y: tY,
-        text: tTooltips,
-        mode: 'markers',
-        type: 'scattergl',
-        marker: { size: tRadius, color: tColors },
-      } as Partial<Plotly.Data>,
+      traces: [...t.map((e) => e.trace)],
       layout: {
         ...LAYOUT,
+        showlegend: showAnnotationLegend,
         xaxis: {
-          range: [-1, Math.max(...tX) + 1],
+          range: [minX - 1, maxX + 1],
         },
         yaxis: {
-          range: [-0.2, Math.max(...tY) + 1],
+          range: [minY - 0.2, maxY + 1],
         },
-        title: studyName,
+        title: studyName.length > 70 ? `${studyName.slice(0, 70)}...` : studyName,
       },
     };
-  }, [data]);
+  }, [data, showAnnotationLegend, studyName]);
+
+  useEffect(() => {
+    if (layout && reportMinMaxXY && !minMaxXY && layout.xaxis?.range && layout.yaxis?.range) {
+      reportMinMaxXY(layout.xaxis?.range[0], layout.xaxis?.range[1], layout.yaxis?.range[0], layout.yaxis?.range[1]);
+    }
+  }, [minMaxXY, reportMinMaxXY, layout]);
+
+  const calcLayout: Partial<Plotly.Layout> = useMemo(() => {
+    if (!minMaxXY) {
+      return layout || ({} as Partial<Plotly.Layout>);
+    }
+
+    return {
+      ...layout,
+      xaxis: {
+        range: [minMaxXY.minX, minMaxXY.maxX],
+      },
+      yaxis: {
+        range: [minMaxXY.minY, minMaxXY.maxY],
+      },
+    } as Partial<Plotly.Layout>;
+  }, [layout, minMaxXY]);
 
   if (loading || !data) {
     return (
@@ -78,6 +135,9 @@ export function GeneSpecificityPlot({
       </Stack>
     );
   }
-
-  return <Plot data={trace ? [trace] : []} layout={layout || {}} config={CONFIG} style={{ width: '100%' }} />;
+  return (
+    <Stack w="100%" h="100%" mih="40rem">
+      <Plot data={traces || []} layout={calcLayout} config={CONFIG} style={{ width: '100%', height: '100%' }} />
+    </Stack>
+  );
 }

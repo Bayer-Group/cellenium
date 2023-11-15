@@ -59,9 +59,12 @@ const useStyles = createStyles(() => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
   },
+  clickable: {
+    cursor: 'pointer',
+  },
 }));
 
-export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detailed?: boolean }) {
+export function StudyCard({ study, detailed, onClick }: { study: StudyInfoFragment; detailed?: boolean; onClick?: () => void }) {
   const { classes } = useStyles();
   const newStudyUrl = `study/${study.studyId}`;
 
@@ -90,11 +93,30 @@ export function StudyCard({ study, detailed }: { study: StudyInfoFragment; detai
       <Card.Section withBorder inheritPadding py="xs">
         <Grid columns={12}>
           <Grid.Col span={8}>
-            <Anchor component={Link} to={detailed ? '' : newStudyUrl} color="dark">
-              <Text align="left" lineClamp={detailed ? undefined : 1} sx={detailed ? {} : {}} className={detailed ? classes.detailed : undefined} weight={800}>
+            {onClick === undefined ? (
+              <Anchor component={Link} to={detailed ? '' : newStudyUrl} color="dark">
+                <Text
+                  align="left"
+                  lineClamp={detailed ? undefined : 1}
+                  sx={detailed ? {} : {}}
+                  className={detailed ? classes.detailed : undefined}
+                  weight={800}
+                >
+                  {study.studyName}
+                </Text>
+              </Anchor>
+            ) : (
+              <Text
+                align="left"
+                lineClamp={detailed ? undefined : 1}
+                sx={detailed ? {} : {}}
+                className={detailed ? classes.detailed : classes.clickable}
+                weight={800}
+                onClick={onClick}
+              >
                 {study.studyName}
               </Text>
-            </Anchor>
+            )}
           </Grid.Col>
           <Grid.Col span={4}>
             <Group position="right">

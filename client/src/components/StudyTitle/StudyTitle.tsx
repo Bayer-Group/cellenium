@@ -5,10 +5,10 @@ import { StudyCard } from '../StudyCard/StudyCard';
 import { StudyInfoFragment, useSingleStudyInfoQuery } from '../../generated/types';
 import { studyState } from '../../atoms';
 
-function StudyInfoModal({ opened, onClose, study }: { opened: boolean; onClose: () => void; study: StudyInfoFragment }) {
+export function StudyInfoModal({ opened, onClose, study }: { opened: boolean; onClose: () => void; study?: StudyInfoFragment }) {
   return (
     <Modal opened={opened} onClose={onClose} size="xl">
-      <StudyCard study={study} detailed />
+      {study && <StudyCard study={study} detailed />}
     </Modal>
   );
 }

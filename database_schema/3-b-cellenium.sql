@@ -41,8 +41,18 @@ FROM study s
 WHERE s.reader_permissions IS NULL
    OR s.reader_permissions = ARRAY []::text[]
    OR s.reader_permissions && current_user_groups();
-
 GRANT SELECT ON study_visible_currentuser TO postgraphile;
+
+DROP TABLE IF EXISTS reference_study CASCADE;
+CREATE TABLE reference_study
+(
+    study_id                     int  not null references study (study_id),
+    celltype_annotation_group_id int  not null references annotation_group (annotation_group_id),
+    tissue_annotation_group_id int  not null references annotation_group (annotation_group_id)
+);
+
+comment on table reference_study is E'@foreignKey (study_id) references reference_study_overview (study_id)|@fieldName refStudy|@foreignFieldName referenceStudyInfo';
+GRANT SELECT ON reference_study TO postgraphile;
 
 CREATE OR REPLACE VIEW study_administrable_currentuser AS
 SELECT s.study_id
@@ -438,6 +448,7 @@ begin
     delete from study_annotation_group_ui where study_id = p_study_id;
     delete from study_sample_projection where study_id = p_study_id;
     delete from study_sample where study_id = p_study_id;
+    delete from reference_study where study_id = p_study_id;
     delete
     from annotation_value
     where annotation_group_id in
@@ -489,11 +500,14 @@ create function omics_autocomplete(search_query text, tax_id_filter integer, omi
     stable
 as
 $$
-with all_concepts_terms as (select ob.display_symbol, array_agg(DISTINCT ob.omics_id) omics_id, array_agg(DISTINCT ob.omics_type) omics_type, array_agg(DISTINCT ob.display_symbol_tsvector) display_symbol_tsvector
+with all_concepts_terms as (select ob.display_symbol,
+                                   array_agg(DISTINCT ob.omics_id)                omics_id,
+                                   array_agg(DISTINCT ob.omics_type)              omics_type,
+                                   array_agg(DISTINCT ob.display_symbol_tsvector) display_symbol_tsvector
                             from omics_base ob
-                            where ob.tax_id=tax_id_filter and ob.omics_type=omics_type_filter
-                            group by ob.display_symbol
-                            ),
+                            where ob.tax_id = tax_id_filter
+                              and ob.omics_type = omics_type_filter
+                            group by ob.display_symbol),
      as_tsquery as (
          -- users may double-quote words to find them exactly, otherwise we assume a prefix search
          -- it is also possible to double-quote a phrase of multiple words
