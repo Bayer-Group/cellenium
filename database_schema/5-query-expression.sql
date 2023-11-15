@@ -395,7 +395,7 @@ select expr.omics_id,
        percentile_cont(0.5) within group (order by value)  as                         median,
        percentile_cont(0.75) within group (order by value) as                         q3,
        avg(value)                                          as                         "mean",
-       count(1)                                                                       value_count,
+       log10(count(1))                                                                      value_count,
        -- will equal value_count if dropouts_as_zero is false
        count(1) filter ( where value != 0 )                                           non_zero_value_count,
        -- fraction of samples that have expression values available. Always 1 if dropouts_as_zero is true

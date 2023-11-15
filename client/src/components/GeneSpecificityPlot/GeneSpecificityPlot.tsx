@@ -1,9 +1,8 @@
 import Plot from 'react-plotly.js';
 import * as Plotly from 'plotly.js';
-import { Stack } from '@mantine/core';
+import { Loader, Stack } from '@mantine/core';
 import { useEffect, useMemo } from 'react';
 import { useGeneSpecificityQuery } from '../../generated/types';
-import { GlobalLoading } from '../../pages/GlobalLoading';
 
 const LAYOUT: Partial<Plotly.Layout> = {
   autosize: true,
@@ -63,7 +62,7 @@ export function GeneSpecificityPlot({
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
       const tTooltips = d.map(
         (e) =>
-          `X:${e.annotationDisplayValue}(mean expression log10 scaled)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)`,
+          `X:${e.annotationDisplayValue}(mean expression)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)</br></br>Size: ${e.valueCount} samples (log10)`,
       );
       const tRadius = d.map((e) => Math.max(e.valueCount, 5));
       const tX = d.map((e) => e.mean);
@@ -139,8 +138,8 @@ export function GeneSpecificityPlot({
 
   if (loading || !data) {
     return (
-      <Stack w="100%" h="100%">
-        <GlobalLoading />
+      <Stack w="100%" h="100%" justify="center" align="center">
+        <Loader color="blue" />
       </Stack>
     );
   }
