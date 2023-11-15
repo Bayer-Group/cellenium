@@ -43,16 +43,6 @@ WHERE s.reader_permissions IS NULL
    OR s.reader_permissions && current_user_groups();
 GRANT SELECT ON study_visible_currentuser TO postgraphile;
 
-DROP TABLE IF EXISTS reference_study CASCADE;
-CREATE TABLE reference_study
-(
-    study_id                     int  not null references study (study_id),
-    celltype_annotation_group_id int  not null references annotation_group (annotation_group_id),
-    tissue_annotation_group_id int  not null references annotation_group (annotation_group_id)
-);
-
-comment on table reference_study is E'@foreignKey (study_id) references reference_study_overview (study_id)|@fieldName refStudy|@foreignFieldName referenceStudyInfo';
-GRANT SELECT ON reference_study TO postgraphile;
 
 CREATE OR REPLACE VIEW study_administrable_currentuser AS
 SELECT s.study_id
@@ -248,6 +238,17 @@ CREATE TABLE annotation_group
 );
 grant select on annotation_group to postgraphile;
 create unique index annotation_group_1 on annotation_group (h5ad_column);
+
+DROP TABLE IF EXISTS reference_study CASCADE;
+CREATE TABLE reference_study
+(
+    study_id                     int  not null references study (study_id),
+    celltype_annotation_group_id int  not null references annotation_group (annotation_group_id),
+    tissue_annotation_group_id int  not null references annotation_group (annotation_group_id)
+);
+
+comment on table reference_study is E'@foreignKey (study_id) references reference_study_overview (study_id)|@fieldName refStudy|@foreignFieldName referenceStudyInfo';
+GRANT SELECT ON reference_study TO postgraphile;
 
 -- e.g. an annotation category value, like 'lymphocyte'
 CREATE TABLE annotation_value
