@@ -2850,7 +2850,7 @@ export type CreateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -3839,7 +3839,7 @@ export type DeleteOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -4086,6 +4086,7 @@ export type DifferentialExpression = {
   /** Reads a single `OmicsBase` that is related to this `DifferentialExpression`. */
   omics: Maybe<OmicsBase>;
   omicsId: Scalars['Int'];
+  otherAnnotationValueId: Maybe<Scalars['Int']>;
   pvalue: Maybe<Scalars['Float']>;
   pvalueAdj: Maybe<Scalars['Float']>;
   score: Maybe<Scalars['Float']>;
@@ -4105,6 +4106,8 @@ export type DifferentialExpressionCondition = {
   log2Foldchange: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `omicsId` field. */
   omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `pvalue` field. */
   pvalue: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `pvalueAdj` field. */
@@ -4129,6 +4132,8 @@ export type DifferentialExpressionFilter = {
   omicsId: InputMaybe<IntFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<DifferentialExpressionFilter>>;
+  /** Filter by the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<IntFilter>;
   /** Filter by the object’s `pvalue` field. */
   pvalue: InputMaybe<FloatFilter>;
   /** Filter by the object’s `pvalueAdj` field. */
@@ -4144,6 +4149,7 @@ export type DifferentialExpressionInput = {
   annotationValueId: Scalars['Int'];
   log2Foldchange: InputMaybe<Scalars['Float']>;
   omicsId: Scalars['Int'];
+  otherAnnotationValueId: InputMaybe<Scalars['Int']>;
   pvalue: InputMaybe<Scalars['Float']>;
   pvalueAdj: InputMaybe<Scalars['Float']>;
   score: InputMaybe<Scalars['Float']>;
@@ -4159,6 +4165,7 @@ export type DifferentialExpressionV = {
   log2Foldchange: Maybe<Scalars['Float']>;
   omicsId: Maybe<Scalars['Int']>;
   omicsType: Maybe<OmicsType>;
+  otherAnnotationValueId: Maybe<Scalars['Int']>;
   pvalue: Maybe<Scalars['Float']>;
   pvalueAdj: Maybe<Scalars['Float']>;
   score: Maybe<Scalars['Float']>;
@@ -4184,6 +4191,8 @@ export type DifferentialExpressionVCondition = {
   omicsId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `omicsType` field. */
   omicsType: InputMaybe<OmicsType>;
+  /** Checks for equality with the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `pvalue` field. */
   pvalue: InputMaybe<Scalars['Float']>;
   /** Checks for equality with the object’s `pvalueAdj` field. */
@@ -4216,6 +4225,8 @@ export type DifferentialExpressionVFilter = {
   omicsType: InputMaybe<OmicsTypeFilter>;
   /** Checks for any expressions in this list. */
   or: InputMaybe<Array<DifferentialExpressionVFilter>>;
+  /** Filter by the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<IntFilter>;
   /** Filter by the object’s `pvalue` field. */
   pvalue: InputMaybe<FloatFilter>;
   /** Filter by the object’s `pvalueAdj` field. */
@@ -4265,6 +4276,8 @@ export enum DifferentialExpressionVsOrderBy {
   OmicsIdDesc = 'OMICS_ID_DESC',
   OmicsTypeAsc = 'OMICS_TYPE_ASC',
   OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  OtherAnnotationValueIdAsc = 'OTHER_ANNOTATION_VALUE_ID_ASC',
+  OtherAnnotationValueIdDesc = 'OTHER_ANNOTATION_VALUE_ID_DESC',
   PvalueAdjAsc = 'PVALUE_ADJ_ASC',
   PvalueAdjDesc = 'PVALUE_ADJ_DESC',
   PvalueAsc = 'PVALUE_ASC',
@@ -4306,6 +4319,8 @@ export enum DifferentialExpressionsOrderBy {
   Natural = 'NATURAL',
   OmicsIdAsc = 'OMICS_ID_ASC',
   OmicsIdDesc = 'OMICS_ID_DESC',
+  OtherAnnotationValueIdAsc = 'OTHER_ANNOTATION_VALUE_ID_ASC',
+  OtherAnnotationValueIdDesc = 'OTHER_ANNOTATION_VALUE_ID_DESC',
   PvalueAdjAsc = 'PVALUE_ADJ_ASC',
   PvalueAdjDesc = 'PVALUE_ADJ_DESC',
   PvalueAsc = 'PVALUE_ASC',
@@ -5637,7 +5652,7 @@ export type OmicsBase = Node & {
   omicsProteinAntibodyTagsByProteinAntibodyTagId: OmicsProteinAntibodyTagsConnection;
   /**
    * Reads and enables pagination through a set of `OmicsRegion`.
-   * @deprecated Please use omics_region_newNameHere instead
+   * @deprecated Please use omics_region_gene_region instead
    */
   omicsRegionsByRegionId: OmicsRegionsConnection;
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsBase`. */
@@ -5649,7 +5664,7 @@ export type OmicsBase = Node & {
   omicsTranscriptionFactorsByOmicsId: OmicsTranscriptionFactorsConnection;
   omicsType: OmicsType;
   /** Reads a single `OmicsRegion` that is related to this `OmicsBase`. */
-  omics_region_newNameHere: Maybe<OmicsRegion>;
+  omics_region_gene_region: Maybe<OmicsRegion>;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsId: StudyOmicsConnection;
   /** Reads and enables pagination through a set of `StudyOmic`. */
@@ -6223,7 +6238,7 @@ export type OmicsRegion = Node & {
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
   omicsRegionGenesByRegionIdList: Array<OmicsRegionGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   region: Scalars['String'];
   regionId: Scalars['Int'];
   startPosition: Scalars['Int'];
@@ -9589,6 +9604,7 @@ export type StudyAnnotationFrontendGroup = {
   displayGroup: Maybe<Scalars['String']>;
   isPrimary: Maybe<Scalars['Boolean']>;
   ordering: Maybe<Scalars['Int']>;
+  pairwiseDifferentialExpressionCalculated: Maybe<Scalars['Boolean']>;
   privateToUser: Maybe<Scalars['Boolean']>;
   studyId: Maybe<Scalars['Int']>;
 };
@@ -9633,6 +9649,8 @@ export type StudyAnnotationFrontendGroupCondition = {
   isPrimary: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `ordering` field. */
   ordering: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `pairwiseDifferentialExpressionCalculated` field. */
+  pairwiseDifferentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `privateToUser` field. */
   privateToUser: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `studyId` field. */
@@ -9661,6 +9679,8 @@ export type StudyAnnotationFrontendGroupFilter = {
   or: InputMaybe<Array<StudyAnnotationFrontendGroupFilter>>;
   /** Filter by the object’s `ordering` field. */
   ordering: InputMaybe<IntFilter>;
+  /** Filter by the object’s `pairwiseDifferentialExpressionCalculated` field. */
+  pairwiseDifferentialExpressionCalculated: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `privateToUser` field. */
   privateToUser: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `studyId` field. */
@@ -9706,6 +9726,8 @@ export enum StudyAnnotationFrontendGroupsOrderBy {
   Natural = 'NATURAL',
   OrderingAsc = 'ORDERING_ASC',
   OrderingDesc = 'ORDERING_DESC',
+  PairwiseDifferentialExpressionCalculatedAsc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  PairwiseDifferentialExpressionCalculatedDesc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
   PrivateToUserAsc = 'PRIVATE_TO_USER_ASC',
   PrivateToUserDesc = 'PRIVATE_TO_USER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
@@ -9812,6 +9834,7 @@ export type StudyAnnotationGroupUi = {
   differentialExpressionCalculated: Scalars['Boolean'];
   isPrimary: Scalars['Boolean'];
   ordering: Scalars['Int'];
+  pairwiseDifferentialExpressionCalculated: Scalars['Boolean'];
   /** Reads a single `Study` that is related to this `StudyAnnotationGroupUi`. */
   study: Maybe<Study>;
   studyId: Scalars['Int'];
@@ -9830,6 +9853,8 @@ export type StudyAnnotationGroupUiCondition = {
   isPrimary: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `ordering` field. */
   ordering: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `pairwiseDifferentialExpressionCalculated` field. */
+  pairwiseDifferentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
 };
@@ -9850,6 +9875,8 @@ export type StudyAnnotationGroupUiFilter = {
   or: InputMaybe<Array<StudyAnnotationGroupUiFilter>>;
   /** Filter by the object’s `ordering` field. */
   ordering: InputMaybe<IntFilter>;
+  /** Filter by the object’s `pairwiseDifferentialExpressionCalculated` field. */
+  pairwiseDifferentialExpressionCalculated: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
 };
@@ -9857,9 +9884,10 @@ export type StudyAnnotationGroupUiFilter = {
 /** An input for mutations affecting `StudyAnnotationGroupUi` */
 export type StudyAnnotationGroupUiInput = {
   annotationGroupId: Scalars['Int'];
-  differentialExpressionCalculated: Scalars['Boolean'];
+  differentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   isPrimary: Scalars['Boolean'];
   ordering: Scalars['Int'];
+  pairwiseDifferentialExpressionCalculated: InputMaybe<Scalars['Boolean']>;
   studyId: Scalars['Int'];
 };
 
@@ -9896,6 +9924,8 @@ export enum StudyAnnotationGroupUisOrderBy {
   Natural = 'NATURAL',
   OrderingAsc = 'ORDERING_ASC',
   OrderingDesc = 'ORDERING_DESC',
+  PairwiseDifferentialExpressionCalculatedAsc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
+  PairwiseDifferentialExpressionCalculatedDesc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC'
 }
@@ -11608,7 +11638,7 @@ export type UpdateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_newNameHere: Maybe<OmicsBase>;
+  omics_region_gene_region: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
@@ -11995,8 +12025,8 @@ export type UserAnnotationGroupFilter = {
 export type UserAnnotationGroupInput = {
   calculateDifferentialExpression: Scalars['Boolean'];
   createdByUser: InputMaybe<Scalars['String']>;
-  creationTimestamp: InputMaybe<Scalars['Datetime']>;
-  privateToUser: InputMaybe<Scalars['Boolean']>;
+  creationTimestamp: Scalars['Datetime'];
+  privateToUser: Scalars['Boolean'];
   savedAsAnnotationGroupId: Scalars['Int'];
   studyId: Scalars['Int'];
 };
@@ -12117,12 +12147,11 @@ export type ReferenceStudyInfoFragment = { __typename?: 'ReferenceStudyOverview'
 export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
 export type DegQueryVariables = Exact<{
-  studyId: Scalars['Int'];
-  annotationValueId: Scalars['Int'];
+  filter: DifferentialExpressionVFilter;
 }>;
 
 
-export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, omicsType: OmicsType, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
+export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, otherAnnotationValueId: number, omicsType: OmicsType, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
 
 export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -12155,7 +12184,7 @@ export type GeneSpecificityStudyQueryVariables = Exact<{
 
 export type GeneSpecificityStudyQuery = { __typename?: 'Query', referenceStudyOverviewsList: Array<{ __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> }>, studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }> };
 
-export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
+export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, pairwiseDifferentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
 
 export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number, cellCount: number, description: string }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
@@ -12194,7 +12223,7 @@ export type StudyBasics2QueryVariables = Exact<{
 }>;
 
 
-export type StudyBasics2Query = { __typename?: 'Query', studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleProjectionSubsamplingTransposedsList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
+export type StudyBasics2Query = { __typename?: 'Query', studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, pairwiseDifferentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleProjectionSubsamplingTransposedsList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
 
 export type StudyBasics3QueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12460,6 +12489,7 @@ export const AnnotationGrpFragmentDoc = gql`
   ordering
   displayGroup
   differentialExpressionCalculated
+  pairwiseDifferentialExpressionCalculated
   createdByUser
   currentUserIsOwner
   privateToUser
@@ -12599,13 +12629,12 @@ export type CorrelatedgenesQueryHookResult = ReturnType<typeof useCorrelatedgene
 export type CorrelatedgenesLazyQueryHookResult = ReturnType<typeof useCorrelatedgenesLazyQuery>;
 export type CorrelatedgenesQueryResult = Apollo.QueryResult<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>;
 export const DegDocument = gql`
-    query deg($studyId: Int!, $annotationValueId: Int!) {
-  differentialExpressionVsList(
-    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}
-  ) {
+    query deg($filter: DifferentialExpressionVFilter!) {
+  differentialExpressionVsList(filter: $filter) {
     omicsId
     studyId
     annotationValueId
+    otherAnnotationValueId
     omicsType
     displayName
     displaySymbol
@@ -12628,8 +12657,7 @@ export const DegDocument = gql`
  * @example
  * const { data, loading, error } = useDegQuery({
  *   variables: {
- *      studyId: // value for 'studyId'
- *      annotationValueId: // value for 'annotationValueId'
+ *      filter: // value for 'filter'
  *   },
  * });
  */
@@ -12990,6 +13018,7 @@ export const StudyBasics2Document = gql`
     ordering
     displayGroup
     differentialExpressionCalculated
+    pairwiseDifferentialExpressionCalculated
     createdByUser
     currentUserIsOwner
     privateToUser
@@ -13511,7 +13540,7 @@ export type CellOAnnotationGroupIdQueryResult = Apollo.QueryResult<CellOAnnotati
 export const HalfAVolcanoDocument = gql`
     query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
   differentialExpressionsList(
-    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}}
+    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}, otherAnnotationValueId: {isNull: true}}
   ) {
     log2Foldchange
     pvalueAdj
