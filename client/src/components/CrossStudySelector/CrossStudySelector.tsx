@@ -13,7 +13,7 @@ export function CrossStudySelector({ selectStudy, taxId }: { selectStudy: (study
   }, [data, setReferenceStudies]);
 
   return (
-    <Stack w="100%" bg={loading ? 'lightgray' : 'transparent'} h="100%" style={{ overflowY: 'scroll' }} pos="relative" pt="xl">
+    <Stack w="100%" h="100%" style={{ overflowY: 'scroll' }} pos="relative" pt="xl">
       {loading && (
         <Stack w="100%" h="100%" align="center" justify="center">
           <Loader />

@@ -489,6 +489,10 @@ gql`
       mean
       color
     }
+    annotationGroupsList(filter: { annotationGroupId: { in: [$annotationGroupId, $secondAnnotationGroupId] } }) {
+      displayGroup
+      annotationGroupId
+    }
   }
 
   mutation studyUpdate(
