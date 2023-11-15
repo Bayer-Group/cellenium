@@ -1,7 +1,7 @@
 import { ColorSwatch, createStyles, Group, Text } from '@mantine/core';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useCallback } from 'react';
-import { highlightAnnotationState, selectedAnnotationState, selectedGenesState } from '../../atoms';
+import { highlightAnnotationState, selectedAnnotationState, selectedDEGComparisonAnnotationState, selectedGenesState } from '../../atoms';
 
 const useStyles = createStyles((theme) => ({
   hovered: {
@@ -14,6 +14,7 @@ const useStyles = createStyles((theme) => ({
   },
   cursor: {
     cursor: 'pointer',
+    userSelect: 'none',
   },
   border: {
     outline: '2px solid black',
@@ -33,6 +34,7 @@ export function Annotation({
   sampleCountPercentage,
   annotationId,
   isSelectable = false,
+  enableDEGComparisonSelection = false,
 }: {
   label: string;
   color: string;
@@ -40,23 +42,33 @@ export function Annotation({
   sampleCountPercentage: string;
   annotationId: number;
   isSelectable: boolean;
+  enableDEGComparisonSelection: boolean;
 }) {
   const { classes, cx } = useStyles();
   const [highlight, setHighlight] = useRecoilState(highlightAnnotationState);
   const [selected, setSelected] = useRecoilState(selectedAnnotationState);
-  const [, setSelectedGenes] = useRecoilState(selectedGenesState);
-  const annotationIsSelected = selected === annotationId && isSelectable;
+  const [selectedDEGComparison, setSelectedDEGComparison] = useRecoilState(selectedDEGComparisonAnnotationState);
+  const setSelectedGenes = useSetRecoilState(selectedGenesState);
+  const annotationIsSelected = (selected === annotationId || selectedDEGComparison === annotationId) && isSelectable;
   const showBold = annotationIsSelected ? 800 : 'md';
 
-  const onClick = useCallback(() => {
-    if (!isSelectable) return;
-    if (highlight === selected) {
-      setSelected(0);
-    } else {
-      setSelectedGenes([]);
-      setSelected(annotationId);
-    }
-  }, [annotationId, highlight, isSelectable, selected, setSelected, setSelectedGenes]);
+  const onClick = useCallback(
+    (event: MouseEvent) => {
+      if (!isSelectable) return;
+      if (highlight === selected) {
+        setSelected(0);
+      } else {
+        setSelectedGenes([]);
+        if (event.shiftKey && selected && enableDEGComparisonSelection) {
+          setSelectedDEGComparison(annotationId);
+        } else {
+          setSelected(annotationId);
+          setSelectedDEGComparison(0);
+        }
+      }
+    },
+    [annotationId, highlight, isSelectable, selected, setSelected, setSelectedDEGComparison, setSelectedGenes],
+  );
 
   return (
     <Group

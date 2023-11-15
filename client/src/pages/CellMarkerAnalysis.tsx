@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Divider, Group, Loader, Stack, Text } from '@mantine/core';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { annotationGroupIdState, selectedAnnotationState, selectedGenesState, studyState } from '../atoms';
+import { annotationGroupIdState, selectedAnnotationState, selectedDEGComparisonAnnotationState, selectedGenesState, studyState } from '../atoms';
 import { ProjectionPlot } from '../components/ProjectionPlot/ProjectionPlot';
 import { useExpressionValues } from '../hooks';
 import { ProjectionSelectBox } from '../components/ProjectionSelectBox/ProjectionSelectBox';
@@ -39,7 +39,10 @@ function DifferentialExpressionAnalysis() {
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
   const selectedAnnotation = useRecoilValue(selectedAnnotationState);
   const [selectedGenes, setSelectedGenes] = useRecoilState(selectedGenesState);
+  const selectedDEGComparison = useRecoilValue(selectedDEGComparisonAnnotationState);
   const study = useRecoilValue(studyState);
+  const pairwiseDifferentialExpressionCalculated =
+    annotationGroupId && study?.annotationGroupMap.get(annotationGroupId)?.pairwiseDifferentialExpressionCalculated;
 
   useEffect(() => {
     if (selectedGenes.length > 1) setSelectedGenes(selectedGenes.slice(0, 1));
@@ -58,7 +61,8 @@ function DifferentialExpressionAnalysis() {
             No DEGs calculated for selected group.
           </Text>
         )}
-        {annotationGroupId && <AnnotationGroupDisplay />}
+        {pairwiseDifferentialExpressionCalculated && <Text size="xs">Pairwise DEGs available, hold Shift to select a comparison annotation.</Text>}
+        {annotationGroupId && <AnnotationGroupDisplay enableDEGComparisonSelection={pairwiseDifferentialExpressionCalculated === true} />}
       </LeftSidePanel>
       <Stack w="100%" h="100%">
         <ProjectionPlotWithOptionalExpression />
@@ -77,7 +81,7 @@ function DifferentialExpressionAnalysis() {
               Select cells in the plot or via the selection panel on the left-hand side.
             </Text>
           )}
-          {selectedAnnotation !== undefined && <DEGTable annotationId={selectedAnnotation} />}
+          {selectedAnnotation !== undefined && <DEGTable annotationId={selectedAnnotation} selectedDEGComparisonAnnotationId={selectedDEGComparison} />}
         </Stack>
       </RightSidePanel>
     </Group>

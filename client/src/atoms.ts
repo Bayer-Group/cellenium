@@ -256,6 +256,11 @@ export const selectedAnnotationState = atom<number>({
   default: 0,
 });
 
+export const selectedDEGComparisonAnnotationState = atom<number>({
+  key: 'selectedDEGComparisonAnnotation',
+  default: 0,
+});
+
 export const highlightAnnotationState = atom<number>({
   key: 'highlightAnnotation',
   default: 0,

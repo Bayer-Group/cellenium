@@ -30,8 +30,7 @@ resource "aws_iam_role" "batch_execution_role" {
         {
           "Effect" = "Allow",
           "Action" = [
-            "s3:GetObject",
-            "s3:ListBucket"
+            "s3:*"
           ],
           "Resource" = [
             var.bucket_arn,

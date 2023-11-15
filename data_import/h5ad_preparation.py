@@ -4,7 +4,6 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import cello
 import Density_Sampling.density_sampling as density_sampling
 import numpy as np
 import pandas as pd
@@ -206,14 +205,6 @@ def _cellenium_uns_dictionary(adata: AnnData) -> dict:
     return d
 
 
-# add differential expression table to the anndata object
-# TODO detect automatically which attributes to do differential expression for by fuzzy matching (but optional, I'd say...)
-def add_differential_expression_tables(adata: AnnData, attributes: List[str], layer: str, ngenes=100):
-    diff_exp = calculate_differentially_expressed_genes(adata, attributes, layer, ngenes)
-    _cellenium_uns_dictionary(adata)["differentially_expressed_genes"] = diff_exp
-    return adata
-
-
 def set_cellenium_metadata(
     data: AnnData | MuData,
     title: str,
@@ -311,6 +302,10 @@ def set_cellenium_metadata(
     d["metadata"] = any_metadata
 
 
+def guess_attributes_for_differential_expression_calc(attributes: List[str]):
+    return [a for a in attributes if a.lower() not in ["batch", "patient", "donor", "sample", "lane"]]
+
+
 # calculate differentially expressed genes using rank_genes_groups from scanpy
 def calculate_differentially_expressed_genes(
     adata: AnnData,
@@ -320,16 +315,19 @@ def calculate_differentially_expressed_genes(
     diff_exp_min_group_expr=0.1,
     diff_exp_min_group_fc=0.5,
     diff_exp_max_notgroup_expr=1,
+    pairwise=True,
 ):
-    result_dataframes = []
-    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="diff.exp. genes"):
-        valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
-        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
+    for attribute in diffexp_attributes:
+        adata.obs[attribute] = adata.obs[attribute].astype(str)
 
+    result_dataframes = []
+
+    def _diffexp_run(diffexp_attribute, attr_values, reference_value="rest"):
         sc.tl.rank_genes_groups(
             adata,
             diffexp_attribute,
             groups=attr_values,
+            reference=reference_value,
             method="wilcoxon",
             use_raw=False,
             layer=layer,
@@ -344,14 +342,27 @@ def calculate_differentially_expressed_genes(
             key="rank_genes_groups",
             key_added="rank_genes_groups_filtered",
         )
-        for attr_value in attr_values:
-            df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups_filtered", group=attr_value)
-            # remove filtered elements
-            df = df[~df["names"].isnull()]
-            df["ref_attr_value"] = attr_value
-            df["cmp_attr_value"] = "_OTHERS_"
-            df["attribute_name"] = diffexp_attribute
-            result_dataframes.append(df)
+        df = sc.get.rank_genes_groups_df(adata, key="rank_genes_groups_filtered", group=None)
+        df = df[~df["names"].isnull()]
+        df.rename(columns={"group": "ref_attr_value"}, inplace=True)
+        df["cmp_attr_value"] = "_OTHERS_" if reference_value == "rest" else reference_value
+        df["attribute_name"] = diffexp_attribute
+        result_dataframes.append(df)
+
+    for diffexp_attribute in tqdm.tqdm(diffexp_attributes, desc="diff.exp. genes"):
+        valid_attribute_group_check = adata.obs[diffexp_attribute].value_counts() > 1
+        attr_values = valid_attribute_group_check.index[valid_attribute_group_check].tolist()
+
+        # calculate DEG for each annotation vs. the rest of the dataset
+        if len(attr_values) > 1:
+            _diffexp_run(diffexp_attribute, attr_values)
+
+        # calculate DEG for pairs of annotations - only if amount of combinations is feasible
+        # e.g. up to 15 groups for up to 100k cells, or up to 21 groups for 50k cells...
+        if pairwise and len(attr_values) > 2 and len(attr_values) * (len(attr_values) - 1) * len(adata.obs) <= 15 * 14 * 100000:
+            for reference_value in attr_values:
+                _diffexp_run(diffexp_attribute, attr_values, reference_value)
+
     adata.uns.pop("rank_genes_groups", None)
     adata.uns.pop("rank_genes_groups_filtered", None)
     result_dataframe = pd.concat(result_dataframes, axis=0).reset_index(drop=True)
@@ -399,6 +410,8 @@ def calculate_differential_peaks(adata: AnnData, diffexp_attributes: List[str], 
 
 
 def cello_classify_celltypes(adata: AnnData, cello_clustering_attribute: str):
+    import cello
+
     if adata.uns["cellenium"]["taxonomy_id"] != 9606:
         logging.info("skipping CellO classification, taxonomy_id is not human")
         return

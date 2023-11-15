@@ -152,14 +152,6 @@ COMMENT ON CONSTRAINT "omics_region_region_id_fkey" ON "public"."omics_region" I
 alter table omics_region_gene
     alter constraint omics_region_gene_gene_id_fkey DEFERRABLE INITIALLY IMMEDIATE;
 
-
--- insert into omics_base (omics_id,omics_type,tax_id,display_symbol,display_name) values (100000, 'region', 9606, 'chr1:120-125', 'chr1:120-125');
--- insert into omics_region (region_id, region) values (100000, 'chr1:120-125');
--- insert into omics_region_gene (region_id, gene_id) values (100000, 1);
--- insert into omics_region_gene (region_id, gene_id) values (100000, 2);
--- insert into omics_region_gene (region_id, gene_id) values (100000, 3);
-
-
 -- cite-seq
 CREATE TABLE omics_protein_antibody_tag
 (
@@ -200,35 +192,6 @@ alter table omics_transcription_factor_gene
 grant select on omics_transcription_factor_gene to postgraphile;
 create unique index omics_transcription_factor_gene_1 on omics_transcription_factor_gene (transcription_factor_id, gene_id);
 
--- insert into omics_base (omics_id, omics_type, tax_id, display_symbol) values (1000000, 'gene', 9606, 'ACP5');
--- insert into omics_gene (gene_id, ensembl_gene_id, hgnc_symbols) values (1000000, 'ENSG00000102575', ARRAY ['ACP5']);
-
-
-/*
--- TODO add omics_region... tables, same style
-
-    build            text,
-    region_chr       text,
-    region_start     int,
-    region_end       int
-);
---create unique index omics_element_uq_region on omics (tax_id, build, region_chr, region_start, region_end);
-CREATE TABLE omics_region_gene
-(
-    omics_id        int not null,
-    constraint fk_omics_element_region_index
-        FOREIGN KEY (omics_id)
-            REFERENCES omics (omics_id) ON DELETE CASCADE,
-    gene            text,
-    ensembl_gene_id text,
-    evidence        text,
-    evidence_score  real,
-    evidence_source text
-);
-create unique index omics_region_uq on omics_region_gene (omics_id, gene, evidence, evidence_source);
-
- */
-
 -- e.g. an annotation category, like 'cell ontology name'
 CREATE TABLE annotation_group
 (
@@ -255,16 +218,17 @@ create index annotation_value_3 on annotation_value (annotation_value_id) includ
 
 CREATE TABLE study_annotation_group_ui
 (
-    study_id                           int     not null,
+    study_id                                    int     not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
 
-    annotation_group_id                int     not null references annotation_group,
+    annotation_group_id                         int     not null references annotation_group,
 
-    is_primary                         boolean not null,
-    ordering                           int     not null,
-    differential_expression_calculated boolean not null
+    is_primary                                  boolean not null,
+    ordering                                    int     not null,
+    differential_expression_calculated          boolean not null default false,
+    pairwise_differential_expression_calculated boolean not null default false
 );
 grant select on study_annotation_group_ui to postgraphile;
 create unique index study_annotation_group_ui_1 on study_annotation_group_ui (study_id, annotation_group_id);
@@ -350,11 +314,11 @@ create unique index study_omics_i1 on study_omics (study_id, omics_id);
 
 CREATE TABLE differential_expression
 (
-    study_id            int not null,
+    study_id                  int not null,
     constraint fk_study_id
         FOREIGN KEY (study_id)
             REFERENCES study (study_id) ON DELETE CASCADE,
-    omics_id            int not null references omics_base,
+    omics_id                  int not null references omics_base,
 
     /* can add this, but its redundant
     annotation_id       int not null,
@@ -363,18 +327,24 @@ CREATE TABLE differential_expression
             REFERENCES annotation (annotation_id),
      */
 
-    -- differential expression of this group (sample's annotation_value_id) vs. all other groups
-    annotation_value_id int not null,
+    -- differential expression of this group (sample's annotation_value_id) vs. ...
+    annotation_value_id       int not null,
     constraint fk_sample_annotation_value
         FOREIGN KEY (annotation_value_id)
             REFERENCES annotation_value (annotation_value_id),
 
-    pvalue              float,
-    pvalue_adj          float,
-    score               float,
-    log2_foldchange     float
+    -- ... if null: vs. all other groups, or a specific group
+    other_annotation_value_id int,
+    constraint fk_sample_annotation_value_other
+        FOREIGN KEY (annotation_value_id)
+            REFERENCES annotation_value (annotation_value_id),
+
+    pvalue                    float,
+    pvalue_adj                float,
+    score                     float,
+    log2_foldchange           float
 );
-create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id);
+create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, other_annotation_value_id, omics_id) NULLS NOT DISTINCT;
 
 ALTER TABLE differential_expression
     ENABLE ROW LEVEL SECURITY;

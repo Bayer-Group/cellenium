@@ -33,11 +33,12 @@ gql`
     parentOntCodePath
   }
 
-  query deg($studyId: Int!, $annotationValueId: Int!) {
-    differentialExpressionVsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
+  query deg($filter: DifferentialExpressionVFilter!) {
+    differentialExpressionVsList(filter: $filter) {
       omicsId
       studyId
       annotationValueId
+      otherAnnotationValueId
       omicsType
       displayName
       displaySymbol
@@ -71,6 +72,7 @@ gql`
     ordering
     displayGroup
     differentialExpressionCalculated
+    pairwiseDifferentialExpressionCalculated
     createdByUser
     currentUserIsOwner
     privateToUser
@@ -172,6 +174,7 @@ gql`
       ordering
       displayGroup
       differentialExpressionCalculated
+      pairwiseDifferentialExpressionCalculated
       createdByUser
       currentUserIsOwner
       privateToUser
@@ -344,7 +347,9 @@ gql`
   }
 
   query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
-    differentialExpressionsList(filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId } }) {
+    differentialExpressionsList(
+      filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId }, otherAnnotationValueId: { isNull: true } }
+    ) {
       log2Foldchange
       pvalueAdj
     }

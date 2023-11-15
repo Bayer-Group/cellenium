@@ -6,11 +6,14 @@ import multiprocessing
 import os
 import pathlib
 import queue
+import shutil
 import sys
+import tempfile
 from multiprocessing import Process, Queue
 from typing import Dict, List, Union
 
 import h5ad_open
+import h5ad_preparation as prep
 import numpy as np
 import pandas as pd
 import scipy.sparse as sparse
@@ -234,6 +237,12 @@ def import_projection(data, data_samples_df, study_id, key, modality=None):
             "projection": data.obsm[f"X_{key}"][:, 0:2].tolist(),
         }
     )
+
+    if f"{key}_density_sampled_indices" not in data.uns["cellenium"] and key == "umap":
+        logging.info("running density_sample_umap...")
+        prep.density_sample_umap(data)
+        data.uns["cellenium"]["cellenium_import_modified_h5ad"] = True
+
     if f"{key}_density_sampled_indices" in data.uns["cellenium"]:
         projection_df["display_subsampling"] = False
         projection_df.loc[
@@ -245,7 +254,7 @@ def import_projection(data, data_samples_df, study_id, key, modality=None):
     import_df(projection_df, "study_sample_projection", engine)
 
 
-def _projection_list(data: AnnData | MuData, filetype="h5ad"):
+def _projection_list(data: AnnData | MuData):
     if isinstance(data, AnnData):
         return data.uns["cellenium"].get("import_projections", np.array(["umap"])).tolist()
     else:
@@ -541,6 +550,26 @@ def import_study_layer_expression(
         g_connection.execute(text(f"analyze expression_{study_layer_id}"))
 
 
+def add_missing_differential_expression(data: AnnData, metadata: Dict):
+    if "differentially_expressed_genes" in data.uns["cellenium"] and metadata.get("legacy_config") is None:
+        # supplied study file has diff.exp. genes already calculated, no need for recalculation during data import
+        return
+
+    if metadata.get("legacy_config") is None:
+        diff_exp_attributes = metadata.get(
+            "attributes_DEG_calculation", prep.guess_attributes_for_differential_expression_calc(metadata["main_sample_attributes"])
+        )
+    else:
+        # recalculation with some legacy cellenium settings
+        diff_exp_attributes = list(
+            set(metadata["main_sample_attributes"]).difference(metadata["legacy_config"].get("attributes_skip_DEG_calculation", []))
+        )
+
+    logging.info("running calculate_differentially_expressed_genes %s...", diff_exp_attributes)
+    prep.calculate_differentially_expressed_genes(data, diff_exp_attributes)
+    data.uns["cellenium"]["cellenium_import_modified_h5ad"] = True
+
+
 def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
     if "differentially_expressed_genes" not in data.uns["cellenium"]:
         return
@@ -548,16 +577,26 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
     df = data.uns["cellenium"]["differentially_expressed_genes"]
     df = df.merge(data_genes_df, left_on="names", right_on="h5ad_var_key")
 
+    # find annotation_value_id for cmp_attr_value / ref_attr_value annotation names
     annotation_definition_df = get_annotation_definition_df(df["attribute_name"].unique().tolist())
+    df = df.merge(
+        annotation_definition_df,
+        how="left",  # to handle the _OTHERS_ case, i.e. one attribute value vs. all others
+        left_on=["attribute_name", "cmp_attr_value"],
+        right_on=["h5ad_column", "h5ad_value"],
+    )
+    df = df.drop(columns=["annotation_group_id"])
+    df = df.rename(columns={"annotation_value_id": "other_annotation_value_id"})
     df = df.merge(
         annotation_definition_df,
         left_on=["attribute_name", "ref_attr_value"],
         right_on=["h5ad_column", "h5ad_value"],
     )
+
     df["study_id"] = study_id
     df.logfoldchanges = df.logfoldchanges.fillna(-1)  # muon puts logfoldchange to NaN
     df.replace(np.inf, 1000, inplace=True)
-    df.drop_duplicates(subset=["omics_id", "annotation_value_id"], inplace=True)
+    df.drop_duplicates(subset=["omics_id", "annotation_value_id", "other_annotation_value_id"], inplace=True)
     df.rename(
         columns={
             "pvals": "pvalue",
@@ -567,13 +606,14 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         },
         inplace=True,
     )
-
+    df = df.replace(np.nan, None)
     import_df(
         df[
             [
                 "study_id",
                 "omics_id",
                 "annotation_value_id",
+                "other_annotation_value_id",
                 "pvalue",
                 "pvalue_adj",
                 "score",
@@ -584,10 +624,20 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         engine,
     )
     with engine.connect() as connection:
+        # mark annotation group to have differentially expressed genes; detect if any pairwise calculations were done
         connection.execute(
             text(
                 """UPDATE study_annotation_group_ui SET differential_expression_calculated=True
-                   WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids)"""
+                   WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids);
+                   UPDATE study_annotation_group_ui set pairwise_differential_expression_calculated=false
+                   where study_id = :study_id;
+                   UPDATE study_annotation_group_ui set pairwise_differential_expression_calculated=true
+                   where study_id = :study_id and annotation_group_id in (
+                        select distinct av.annotation_group_id
+                        from differential_expression de
+                        join annotation_value av on de.other_annotation_value_id = av.annotation_value_id
+                        where study_id = :study_id);
+                   """
             ),
             {
                 "study_id": study_id,
@@ -685,7 +735,22 @@ def update_study_from_file(study_id: int, data: AnnData):
         )
 
 
-def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_database: bool) -> int:
+def save_modified_input(filename: str, data: AnnData | MuData):
+    # if additional data was calculated in study_import.py also add it in the S3 object (e.g. for later reuse)
+    from smart_open import open
+
+    if isinstance(data, AnnData) and data.uns["cellenium"].get("cellenium_import_modified_h5ad"):
+        del data.uns["cellenium"]["cellenium_import_modified_h5ad"]
+        if filename.startswith("s3:"):
+            fp = tempfile.NamedTemporaryFile()
+            data.write(fp.name)
+            s3_file_like_obj = open(filename, "wb")
+            shutil.copyfileobj(fp, s3_file_like_obj, 16 * 1024**2)
+            s3_file_like_obj.close()
+            fp.close()
+
+
+def import_study_safe(data: AnnData | MuData, study_id: int, filename: str, analyze_database: bool) -> int:
     def _generate_study_layer(study_id, layer_name, omics_type=None):
         with engine.connect() as connection:
             r = connection.execute(
@@ -720,6 +785,7 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
         meta_data = data.uns["cellenium"]
         if data_type == "gene":
             data_genes_df = import_study_omics_genes(study_id, cur_data, meta_data)
+            add_missing_differential_expression(cur_data, meta_data)
             import_differential_expression(study_id, data_genes_df, cur_data)
         elif data_type == "region":
             # since regions from study to study change we import those which are not yet in the database
@@ -728,6 +794,8 @@ def import_study_safe(data: AnnData, study_id: int, filename: str, analyze_datab
         elif data_type == "protein_antibody_tag":
             data_protein_df = import_study_protein_antibody_tag(study_id, cur_data, meta_data)
             import_differential_expression(study_id, data_protein_df, cur_data)
+
+    save_modified_input(filename, data)
 
     study_layer_id = _generate_study_layer(study_id, "default-layer", None)
     for modality in modalities.items():

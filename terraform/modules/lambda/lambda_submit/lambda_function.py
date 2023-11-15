@@ -58,10 +58,18 @@ def lambda_handler(event, context):
     engine = get_aws_db_engine()
     with engine.begin() as connection:
         rs = connection.execute(
-            text("SELECT study_id FROM public.study WHERE import_file=:key"), {"key": key}
-        )
-        study_ids = [r[0] for r in rs]
-        logging.info(f"Study ids: {study_ids}")
+            text("SELECT study_id, import_started, import_finished FROM public.study WHERE import_file=:key"), {"key": key}
+        ).fetchall()
+        study_ids = [r.study_id for r in rs]
+        import_started = [r.import_started for r in rs]
+        import_finished = [r.import_finished for r in rs]
+        if len(study_ids) != 1:
+            logging.error(f"Skipping S3 object {key}, filename mismatch")
+            return
+        logging.info(f"Study ID: {study_ids[0]}")
+        if import_started[0] and not import_finished[0]:
+            logging.error(f"Skipping S3 object {key}, it is currently being import")
+            return
 
     if pathlib.Path(key).suffix.lower() not in (".h5ad", ".h5mu") or len(study_ids) != 1:
         s3 = boto3.client("s3")

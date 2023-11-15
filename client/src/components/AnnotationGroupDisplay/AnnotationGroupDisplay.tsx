@@ -4,7 +4,13 @@ import { useCallback } from 'react';
 import { Annotation } from '../Annotation/Annotation';
 import { annotationGroupIdState, highlightAnnotationState, studyState } from '../../atoms';
 
-export function AnnotationGroupDisplay({ disableSelection }: { disableSelection?: boolean }) {
+export function AnnotationGroupDisplay({
+  disableSelection,
+  enableDEGComparisonSelection,
+}: {
+  disableSelection?: boolean;
+  enableDEGComparisonSelection?: boolean;
+}) {
   const [, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
   const annotationGroupId = useRecoilValue(annotationGroupIdState);
 
@@ -31,6 +37,7 @@ export function AnnotationGroupDisplay({ disableSelection }: { disableSelection?
               color={annot.color}
               annotationId={annot.annotationValueId}
               isSelectable={isSelectable}
+              enableDEGComparisonSelection={enableDEGComparisonSelection === true}
               sampleCountPercentage={((annot.sampleCount / study.cellCount) * 100).toFixed(2)}
             />
           );

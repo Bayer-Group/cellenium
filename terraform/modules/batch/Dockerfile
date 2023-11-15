@@ -7,12 +7,14 @@ RUN pip install --target=/opt/requirements -r ./study_import_requirements.txt
 
 FROM --platform=linux/amd64 python:3.10-slim AS runtime
 COPY --from=build /opt/requirements/  /opt/requirements/
-ENV PYTHONPATH="${PYTHONPATH}:/opt/requirements/"
+ENV PYTHONPATH="${PYTHONPATH}:/app:/opt/requirements/"
 
 WORKDIR /app
 COPY ./data_import/study_import.py .
 COPY ./data_import/h5ad_open.py .
+COPY ./data_import/h5ad_preparation.py .
 COPY ./data_import/postgres_utils.py .
+ADD ./data_import/Density_Sampling /app/Density_Sampling
 
 ENTRYPOINT ["python", "study_import.py"]
 

@@ -5,7 +5,14 @@ import * as aq from 'arquero';
 import * as Plotly from 'plotly.js';
 import { Params, Struct } from 'arquero/dist/types/table/transformable';
 import { Center, createStyles, Text } from '@mantine/core';
-import { annotationGroupIdState, highlightAnnotationState, selectedAnnotationState, selectedProjectionState, studyState } from '../../atoms';
+import {
+  annotationGroupIdState,
+  highlightAnnotationState,
+  selectedAnnotationState,
+  selectedDEGComparisonAnnotationState,
+  selectedProjectionState,
+  studyState
+} from '../../atoms';
 import { ExpressionTable } from '../../model';
 
 interface PreparedPlot {
@@ -44,7 +51,9 @@ export function ProjectionPlot({
   const projection = useRecoilValue(selectedProjectionState);
   const [highlightAnnotation, setHighlightAnnotation] = useRecoilState(highlightAnnotationState);
   const [selectedAnnotation, setSelectedAnnotation] = useRecoilState(selectedAnnotationState);
+  const [selectedDEGComparison, setSelectedDEGComparison] = useRecoilState(selectedDEGComparisonAnnotationState);
   const isSelectable = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.differentialExpressionCalculated as boolean);
+  const isDEGComparisonSelection = disableSelection ? false : (study?.annotationGroupMap.get(annotationGroupId as number)?.pairwiseDifferentialExpressionCalculated as boolean);
 
   const annotationProjectionData = React.useMemo(() => {
     if (!study || !study.samplesProjectionTables.get(projection)) {
@@ -141,27 +150,32 @@ export function ProjectionPlot({
     // Don't show the hovered cluster highlight in the expression view - the small expressionTrace points
     // get overlayed with the annotationHighlightTrace points a lot, causing an unHover event, which
     // causes flickering and web browser halt for large datasets.
-    if (!study || !annotationProjectionData || selectedAnnotation === 0 || colorBy !== 'annotation') {
-      return undefined;
+
+    const getTrace = (annotationId:number) => {
+      if (!study || !annotationProjectionData || annotationId === 0 || colorBy !== 'annotation') {
+        return undefined;
+      }
+      const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
+          .params({annotationId})
+          .filter((d: Struct, p: Params) => d.annotationValueId === p.annotationId);
+      return {
+        type: 'scattergl',
+        x: tableForAnnotation.array('projectionX', Float32Array),
+        y: tableForAnnotation.array('projectionY', Float32Array),
+        mode: 'markers',
+        text: study.annotationValueMap.get(annotationId as number)?.displayValue,
+        marker: {
+          size: 10,
+          opacity: 0.1,
+          color: colorBy === 'annotation' ? study.annotationValueMap.get(annotationId)?.color : '#dddddd',
+        },
+        showlegend: false,
+        hoverinfo: 'text',
+      } as Partial<Plotly.PlotData>;
     }
-    const tableForAnnotation = annotationProjectionData.samplesAnnotationProjectionTable
-      .params({ selectedAnnotation })
-      .filter((d: Struct, p: Params) => d.annotationValueId === p.selectedAnnotation);
-    return {
-      type: 'scattergl',
-      x: tableForAnnotation.array('projectionX', Float32Array),
-      y: tableForAnnotation.array('projectionY', Float32Array),
-      mode: 'markers',
-      text: study.annotationValueMap.get(selectedAnnotation as number)?.displayValue,
-      marker: {
-        size: 10,
-        opacity: 0.1,
-        color: colorBy === 'annotation' ? study.annotationValueMap.get(selectedAnnotation)?.color : '#dddddd',
-      },
-      showlegend: false,
-      hoverinfo: 'text',
-    } as Partial<Plotly.PlotData>;
-  }, [study, annotationProjectionData, selectedAnnotation, colorBy]);
+
+    return [getTrace(selectedAnnotation), getTrace(selectedDEGComparison)].filter(t => t !== undefined);
+  }, [study, annotationProjectionData, selectedAnnotation, selectedDEGComparison, colorBy]);
 
   // the cells colored according to gene expression for the expression analysis page, include 0 values
   const expressionTrace = React.useMemo(() => {
@@ -274,7 +288,7 @@ export function ProjectionPlot({
     const plotlyData = [
       ...(annotationTraces || []),
       ...(annotationHighlightTrace ? [annotationHighlightTrace] : []),
-      ...(selectedAnnotationHighlightTrace ? [selectedAnnotationHighlightTrace] : []),
+      ...selectedAnnotationHighlightTrace,
       ...(expressionTrace ? [expressionTrace] : []),
       ...(selectedGeneExpressionTrace ? [selectedGeneExpressionTrace] : []),
       ...(selectedSamplesTrace ? [selectedSamplesTrace] : []),
@@ -324,15 +338,22 @@ export function ProjectionPlot({
       }
       if (event.points.length > 0 && event.points[0].customdata) {
         const annotationValueId = event.points[0].customdata as number;
-        setSelectedAnnotation(annotationValueId);
+        console.log('XX', event, annotationValueId, event.event.shiftKey, isDEGComparisonSelection, selectedAnnotation)
+        if(event.event.shiftKey && isDEGComparisonSelection && selectedAnnotation && selectedAnnotation !== annotationValueId) {
+          setSelectedDEGComparison(annotationValueId);
+        } else {
+          setSelectedAnnotation(annotationValueId);
+          setSelectedDEGComparison(0);
+        }
       }
     },
-    [isSelectable, setSelectedAnnotation],
+    [isSelectable, selectedAnnotation, setSelectedAnnotation, setSelectedDEGComparison],
   );
 
   const onDoubleClick = useCallback(() => {
     setSelectedAnnotation(0);
-  }, [setSelectedAnnotation]);
+    setSelectedDEGComparison(0);
+  }, [setSelectedAnnotation, setSelectedDEGComparison]);
 
   const onUnHover = useCallback(() => {
     setHighlightAnnotation(0);

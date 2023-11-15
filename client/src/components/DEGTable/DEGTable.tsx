@@ -8,7 +8,7 @@ import { showNotification } from '@mantine/notifications';
 import { useCallback } from 'react';
 import { selectedGenesState, studyState, userGenesState, userGeneStoreCounterColor, userGeneStoreOpenState } from '../../atoms';
 import { Omics } from '../../model';
-import { DifferentialExpressionV, useDegQuery } from '../../generated/types';
+import {DifferentialExpressionV, DifferentialExpressionVFilter, useDegQuery} from '../../generated/types';
 
 const customStyles = {
   table: {
@@ -190,7 +190,7 @@ function ExpandedComponent({ data }: { data: DifferentialExpressionV }) {
   );
 }
 
-export function DEGTable({ annotationId }: { annotationId: number }) {
+export function DEGTable({ annotationId, selectedDEGComparisonAnnotationId }: { annotationId: number; selectedDEGComparisonAnnotationId: number }) {
   const [userGenes, setUserGenes] = useRecoilState(userGenesState);
   const [, setIndicatorColor] = useRecoilState(userGeneStoreCounterColor);
   const [selectedGenes, setSelectedGenesStore] = useRecoilState(selectedGenesState);
@@ -200,8 +200,11 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
 
   const { data, loading } = useDegQuery({
     variables: {
-      annotationValueId: annotationId,
-      studyId: study?.studyId || 0,
+      filter: {
+        annotationValueId: { equalTo: annotationId },
+        studyId: { equalTo: study?.studyId || 0 },
+        otherAnnotationValueId: selectedDEGComparisonAnnotationId === 0 ? { isNull: true } : { equalTo: selectedDEGComparisonAnnotationId},
+      } as unknown as DifferentialExpressionVFilter,
     },
   });
 
@@ -241,7 +244,12 @@ export function DEGTable({ annotationId }: { annotationId: number }) {
   );
 
   return (
-    <Stack justify="flex-start" align="center" w="100%">
+    <Stack justify="flex-start" align="left" w="100%">
+      {selectedDEGComparisonAnnotationId ? (
+        <Text size={'xs'} color={'dimmed'}>
+          DEG of two selected annotations
+        </Text>
+      ) : null}
       {/* TODO ExpandedComponent can also link from gene to protein, so for a multi-omics study all omics row types can be expanded */}
       {data && study && data.differentialExpressionVsList.length > 0 && study.omicsTypes.length > 1 && (
         <DataTable

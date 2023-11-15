@@ -2,7 +2,13 @@ import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { Group, Select, Text } from '@mantine/core';
 import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { IconCalculator } from '@tabler/icons-react';
-import { annotationGroupIdState, annotationSecondaryGroupIdState, selectedAnnotationState, studyState } from '../../atoms';
+import {
+  annotationGroupIdState,
+  annotationSecondaryGroupIdState,
+  selectedAnnotationState,
+  selectedDEGComparisonAnnotationState,
+  studyState,
+} from '../../atoms';
 
 interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   value: string;
@@ -97,12 +103,14 @@ function AnnotationGroupSelector({
 
 export function AnnotationGroupSelectBox() {
   const setSelectedAnnotation = useSetRecoilState(selectedAnnotationState);
+  const setSelectedDEGComparison = useSetRecoilState(selectedDEGComparisonAnnotationState);
   const [annotationSecondaryGroupId, setAnnotationSecondaryGroupId] = useRecoilState(annotationSecondaryGroupIdState);
   return (
     <AnnotationGroupSelector
       annotationGroupState={annotationGroupIdState}
       onSelect={(annotationGroupId) => {
         setSelectedAnnotation(0);
+        setSelectedDEGComparison(0);
         if (annotationGroupId === annotationSecondaryGroupId) {
           setAnnotationSecondaryGroupId(undefined);
         }
