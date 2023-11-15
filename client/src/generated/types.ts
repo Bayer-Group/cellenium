@@ -8780,6 +8780,7 @@ export type ReferenceStudyOverview = {
   externalWebsite: Maybe<Scalars['String']>;
   metadata: Maybe<Scalars['JSON']>;
   organismTaxId: Maybe<Scalars['String']>;
+  readerPermissions: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `ReferenceStudy`. */
   referenceStudyInfo: ReferenceStudiesConnection;
   /** Reads and enables pagination through a set of `ReferenceStudy`. */
@@ -8851,6 +8852,8 @@ export type ReferenceStudyOverviewCondition = {
   metadata: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `readerPermissions` field. */
+  readerPermissions: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   /** Checks for equality with the object’s `studyId` field. */
   studyId: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `studyName` field. */
@@ -8877,6 +8880,8 @@ export type ReferenceStudyOverviewFilter = {
   or: InputMaybe<Array<ReferenceStudyOverviewFilter>>;
   /** Filter by the object’s `organismTaxId` field. */
   organismTaxId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `readerPermissions` field. */
+  readerPermissions: InputMaybe<StringListFilter>;
   /** Filter by the object’s `studyId` field. */
   studyId: InputMaybe<IntFilter>;
   /** Filter by the object’s `studyName` field. */
@@ -8920,6 +8925,8 @@ export enum ReferenceStudyOverviewsOrderBy {
   Natural = 'NATURAL',
   OrganismTaxIdAsc = 'ORGANISM_TAX_ID_ASC',
   OrganismTaxIdDesc = 'ORGANISM_TAX_ID_DESC',
+  ReaderPermissionsAsc = 'READER_PERMISSIONS_ASC',
+  ReaderPermissionsDesc = 'READER_PERMISSIONS_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
@@ -12363,7 +12370,7 @@ export type GeneSpecificityQueryVariables = Exact<{
 }>;
 
 
-export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number, color: string }> };
+export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number, color: string }>, annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -13783,6 +13790,12 @@ export const GeneSpecificityDocument = gql`
     exprSamplesFraction
     mean
     color
+  }
+  annotationGroupsList(
+    filter: {annotationGroupId: {in: [$annotationGroupId, $secondAnnotationGroupId]}}
+  ) {
+    displayGroup
+    annotationGroupId
   }
 }
     `;

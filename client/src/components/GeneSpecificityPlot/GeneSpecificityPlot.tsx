@@ -61,7 +61,10 @@ export function GeneSpecificityPlot({
 
     const t = annotationSet.map((cs) => {
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
-      const tTooltips = d.map((e) => `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}`);
+      const tTooltips = d.map(
+        (e) =>
+          `X:${e.annotationDisplayValue}(mean expression log10 scaled)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)`,
+      );
       const tRadius = d.map((e) => Math.max(e.valueCount, 5));
       const tX = d.map((e) => e.mean);
       const tY = d.map((e) => e.exprSamplesFraction);
@@ -75,7 +78,7 @@ export function GeneSpecificityPlot({
         trace: {
           x: tX,
           y: tY,
-          hoverinfo: 'y+x+text',
+          hoverinfo: 'text',
           name: cs,
           text: tTooltips,
           mode: 'markers',
@@ -121,12 +124,18 @@ export function GeneSpecificityPlot({
       ...layout,
       xaxis: {
         range: [minMaxXY.minX, minMaxXY.maxX],
+        title: {
+          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === annotationGroupId)?.displayGroup || '',
+        },
       },
       yaxis: {
         range: [minMaxXY.minY, minMaxXY.maxY],
+        title: {
+          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === secondAnnotationGroupId)?.displayGroup || '',
+        },
       },
     } as Partial<Plotly.Layout>;
-  }, [layout, minMaxXY]);
+  }, [annotationGroupId, data?.annotationGroupsList, layout, minMaxXY, secondAnnotationGroupId]);
 
   if (loading || !data) {
     return (
