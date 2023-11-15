@@ -263,10 +263,10 @@ def generate_correlation_plot(study_id: int, study_layer_id: int, omics_ids: Lis
 
 def seaborn_to_base64() -> str:
     s = io.BytesIO()
-    plt.savefig(s, format='svg', bbox_inches="tight")
+    plt.savefig(s, format='png', bbox_inches="tight")
     plt.close()
     s = base64.b64encode(s.getvalue()).decode("utf-8").replace("\n", "")
-    return f"data:image/svg+xml;base64,{s}"
+    return f"data:image/png;base64,{s}"
 
 
 generate_correlation_plot(p_study_id, p_study_layer_id, p_omics_ids, p_exclude_annotation_value_ids)

@@ -21,7 +21,7 @@ const useStyles = createStyles(() => ({
   coexpressionPlotImg: {
     width: '100%',
     height: '75%',
-    objectFit: 'fill',
+    objectFit: 'contain',
     overflow: 'hidden',
   },
 }));
