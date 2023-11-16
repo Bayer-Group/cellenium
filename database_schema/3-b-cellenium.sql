@@ -543,3 +543,40 @@ select sro.omics_id,
 from search_results sro
 order by sro.rank desc
 $$;
+
+
+drop function if exists aws_batch_submit_cellenium_cli_job;
+create function aws_batch_submit_cellenium_cli_job(p_jobname text, p_command text[])
+    RETURNS text
+    LANGUAGE plpython3u
+AS
+$$
+
+import os
+import boto3
+import plpy
+from typing import List
+
+
+def submit(jobname: str, command: List[str]):
+    plpy.notice('aws_batch_submit_cellenium_cli_job, command: %s', command)
+    if os.environ.get("AWS_REGION") is None or os.environ.get("BATCH_JOB_DEFINITION") is None or os.environ.get(
+            "BATCH_JOB_QUEUE") is None:
+        plpy.warning('environment not configured for aws_batch_submit_cellenium_cli_job')
+        return None
+
+    batch_client = boto3.client("batch", region_name=os.environ.get("AWS_REGION"))
+    response = batch_client.submit_job(
+        jobDefinition=os.environ.get("BATCH_JOB_DEFINITION"),
+        jobName=jobname,
+        jobQueue=os.environ.get("BATCH_JOB_QUEUE"),
+        containerOverrides={'command': command}
+    )
+    return response['jobId']
+
+
+return submit(p_jobname, p_command)
+
+$$;
+
+-- select aws_batch_submit_cellenium_cli_job('postgres-test', ARRAY['differential-expression-calculation', '1', '2', '1'])

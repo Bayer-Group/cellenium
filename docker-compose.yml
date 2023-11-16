@@ -17,6 +17,9 @@ services:
       #- AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       #- AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       #- AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      # to launch AWS batch jobs through the postgraphile API, not necessary by default.
+      - BATCH_JOB_QUEUE
+      - BATCH_JOB_DEFINITION
     ports:
       - "5001:5001"
     restart: always

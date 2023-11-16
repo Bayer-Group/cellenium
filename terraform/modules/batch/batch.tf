@@ -12,6 +12,11 @@ resource "null_resource" "study_import_batch_docker_image" {
   triggers = {
     file_hash_postgres_utils            = filebase64sha256("${abspath(path.module)}/../../../data_import/postgres_utils.py")
     file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/study_import.py")
+    file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/h5ad_open.py")
+    file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/h5ad_preparation.py")
+    file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/common.py")
+    file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/cellenium_cli.py")
+    file_hash_study_import              = filebase64sha256("${abspath(path.module)}/../../../data_import/differential_expression_calculation.py")
     file_hash_study_import_requirements = filebase64sha256("${abspath(path.module)}/../../../data_import/study_import_requirements.txt")
     file_hash_dockerfile                = filebase64sha256("${abspath(path.module)}/Dockerfile")
   }
@@ -133,7 +138,7 @@ resource "aws_batch_job_definition" "cellenium_study_import_job_definition" {
 
   container_properties = jsonencode({
 
-    command    = ["Ref::filename"]
+    command    = ["study-import", "Ref::filename"]
     image      = "${aws_ecr_repository.study_import_batch_repository.repository_url}:latest"
     jobRoleArn = aws_iam_role.batch_execution_role.arn
 

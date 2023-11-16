@@ -1,4 +1,3 @@
-import argparse
 import io
 import json
 import logging
@@ -12,6 +11,7 @@ import tempfile
 from multiprocessing import Process, Queue
 from typing import Dict, List, Union
 
+import differential_expression_calculation as diffexp
 import h5ad_open
 import h5ad_preparation as prep
 import numpy as np
@@ -19,30 +19,16 @@ import pandas as pd
 import scipy.sparse as sparse
 from anndata import AnnData
 from anndata._core.views import ArrayView
+from common import IS_AWS_DEPLOYMENT, create_db_engine, engine
 from muon import MuData
 from postgres_utils import (
     NumpyEncoder,
-    get_aws_db_engine,
-    get_local_db_engine,
     import_df,
 )
 from psycopg2.extras import Json
 from scanpy.plotting._tools.scatterplots import _get_palette
 from sqlalchemy import text
 from upath import UPath
-
-# true if this code is running in AWS Batch instead of locally (e.g. make target). In AWS Batch mode, the user has
-# already registered a study in the web UI and the import code here is triggered by the S3 file upload.
-IS_AWS_DEPLOYMENT = os.environ.get("AWS") is not None
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s.%(msecs)03d %(process)d %(levelname)s %(name)s:%(lineno)d %(message)s",
-    datefmt="%Y%m%d-%H%M%S",
-    handlers=[logging.FileHandler("./study_import.log"), logging.StreamHandler()] if IS_AWS_DEPLOYMENT else [logging.StreamHandler()],
-)
-
-engine = get_aws_db_engine() if IS_AWS_DEPLOYMENT else get_local_db_engine(os.environ.get("ENGINE_URL"))
 
 
 def get_all_regions(tax_id):
@@ -408,7 +394,7 @@ def expression_import_task(
 ):
     localengine = None
     try:
-        localengine = get_aws_db_engine() if IS_AWS_DEPLOYMENT else get_local_db_engine(os.environ.get("ENGINE_URL"))
+        localengine = create_db_engine()
         with localengine.connect() as connection:
             cursor = connection.connection.cursor()
             buffer = io.StringIO()
@@ -551,7 +537,7 @@ def import_study_layer_expression(
 
 
 def add_missing_differential_expression(data: AnnData, metadata: Dict):
-    if "differentially_expressed_genes" in data.uns["cellenium"] and metadata.get("legacy_config") is None:
+    if "differentially_expressed_genes" in data.uns["cellenium"]:
         # supplied study file has diff.exp. genes already calculated, no need for recalculation during data import
         return
 
@@ -623,27 +609,7 @@ def import_differential_expression(study_id: int, data_genes_df, data: AnnData):
         "differential_expression",
         engine,
     )
-    with engine.connect() as connection:
-        # mark annotation group to have differentially expressed genes; detect if any pairwise calculations were done
-        connection.execute(
-            text(
-                """UPDATE study_annotation_group_ui SET differential_expression_calculated=True
-                   WHERE study_id = :study_id and annotation_group_id = any (:annotation_group_ids);
-                   UPDATE study_annotation_group_ui set pairwise_differential_expression_calculated=false
-                   where study_id = :study_id;
-                   UPDATE study_annotation_group_ui set pairwise_differential_expression_calculated=true
-                   where study_id = :study_id and annotation_group_id in (
-                        select distinct av.annotation_group_id
-                        from differential_expression de
-                        join annotation_value av on de.other_annotation_value_id = av.annotation_value_id
-                        where study_id = :study_id);
-                   """
-            ),
-            {
-                "study_id": study_id,
-                "annotation_group_ids": df["annotation_group_id"].unique().tolist(),
-            },
-        )
+    diffexp.save_annotation_group_diffexp_status(study_id, df["annotation_group_id"].unique().tolist())
 
 
 def get_or_create_study_id(stored_filename: UPath) -> int:
@@ -880,33 +846,17 @@ def import_study(filename: str, analyze_database: bool):
         data = h5ad_open.h5ad_h5mu_read(filename)
         update_study_from_file(study_id, data)
         import_study_safe(data, study_id, filename, analyze_database)
+        logging.info("done")
     except Exception:
         logging.exception("import failed for file %s", filename)
         if IS_AWS_DEPLOYMENT:
             with engine.connect() as connection:
                 log = ""
-                if pathlib.Path("./study_import.log").exists():
-                    with open("./study_import.log") as f:
+                if pathlib.Path("./cellenium_cli.log").exists():
+                    with open("./cellenium_cli.log") as f:
                         log = f.read()
                 connection.execute(
                     text("UPDATE study SET import_failed=True, import_finished=True, import_log=:log WHERE study_id=:study_id"),
                     {"study_id": study_id, "log": log},
                 )
         exit(1)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="cellenium study import tool")
-    parser.add_argument(
-        "filename",
-        help="h5ad/h5mu file created for cellenium (e.g. using a jupyter lab notebook).",
-        type=str,
-    )
-    parser.add_argument(
-        "--analyze-database",
-        help="analyses the database schema after insert of study",
-        action="store_true",
-    )
-    args = parser.parse_args()
-    import_study(args.filename, args.analyze_database)
-    logging.info("done")
