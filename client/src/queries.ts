@@ -154,7 +154,7 @@ gql`
   }
 
   query studiesWithMarkerGenes($omicsIds: [Int!]!) {
-    differentialExpressionsList(filter: { omicsId: { in: $omicsIds } }, orderBy: LOG2_FOLDCHANGE_DESC) {
+    differentialExpressionsList(filter: { omicsId: { in: $omicsIds }, otherAnnotationValueId: { isNull: true } }, orderBy: LOG2_FOLDCHANGE_DESC) {
       ...DifferentialMarker
     }
   }
