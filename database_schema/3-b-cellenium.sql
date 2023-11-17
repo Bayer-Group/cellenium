@@ -355,7 +355,17 @@ CREATE TABLE differential_expression
     score                     float,
     log2_foldchange           float
 );
-create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, other_annotation_value_id, omics_id) NULLS NOT DISTINCT;
+create unique index differential_expression_i1 on differential_expression (study_id, annotation_value_id, omics_id)
+    include (log2_foldchange, pvalue_adj, pvalue, score)
+    where other_annotation_value_id is null;
+
+create unique index differential_expression_i2 on differential_expression (study_id, annotation_value_id, other_annotation_value_id, omics_id)
+    include (log2_foldchange, pvalue_adj, pvalue, score)
+    where other_annotation_value_id is not null;
+
+create index differential_expression_i3 on differential_expression (omics_id, log2_foldchange desc)
+    include (study_id, annotation_value_id, pvalue_adj, pvalue, score)
+    where other_annotation_value_id is null;
 
 ALTER TABLE differential_expression
     ENABLE ROW LEVEL SECURITY;
