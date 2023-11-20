@@ -424,8 +424,8 @@ function GeneSpecificity() {
               omicsIds={selectedGenes.map((e) => e.omicsId)}
               studyName={secondStudyData?.referenceStudyOverviewsList[0].studyName || ''}
               studyLayerId={secondStudyData?.referenceStudyOverviewsList[0].defaultStudyLayerId || 0}
-              annotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].celltypeAnnotationGroupId}
-              secondAnnotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].tissueAnnotationGroupId}
+              annotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].tissueAnnotationGroupId}
+              secondAnnotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].celltypeAnnotationGroupId}
               excludeAnnotationValueIds={[]}
               reportMinMaxXY={setMinMaxTwoCallback}
               minMaxXY={minMaxXY}
