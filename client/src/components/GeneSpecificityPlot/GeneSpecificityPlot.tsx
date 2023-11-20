@@ -62,7 +62,7 @@ export function GeneSpecificityPlot({
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
       const tTooltips = d.map(
         (e) =>
-          `X:${e.annotationDisplayValue}(mean expression)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)</br></br>Size: ${e.valueCount} samples (log10)`,
+          `X:${e.annotationDisplayValue}(${e.mean} mean expression)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)</br></br>Size: ${e.valueCount} samples`,
       );
       const tRadius = d.map((e) => Math.max(e.valueCount, 5));
       const tX = d.map((e) => e.mean);
@@ -101,7 +101,7 @@ export function GeneSpecificityPlot({
           range: [minX - 1, maxX + 1],
         },
         yaxis: {
-          range: [minY - 0.2, maxY + 1],
+          range: [minY - 5, maxY + 1],
         },
         title: studyName.length > 70 ? `${studyName.slice(0, 70)}...` : studyName,
       },
@@ -124,13 +124,13 @@ export function GeneSpecificityPlot({
       xaxis: {
         range: [minMaxXY.minX, minMaxXY.maxX],
         title: {
-          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === annotationGroupId)?.displayGroup || '',
+          text: `${data?.annotationGroupsList.find((e) => e.annotationGroupId === annotationGroupId)?.displayGroup} (mean expression)` || '',
         },
       },
       yaxis: {
         range: [minMaxXY.minY, minMaxXY.maxY],
         title: {
-          text: data?.annotationGroupsList.find((e) => e.annotationGroupId === secondAnnotationGroupId)?.displayGroup || '',
+          text: `${data?.annotationGroupsList.find((e) => e.annotationGroupId === secondAnnotationGroupId)?.displayGroup} (percentage of cells)` || '',
         },
       },
     } as Partial<Plotly.Layout>;
