@@ -13588,7 +13588,7 @@ export type GeneSpecificityQueryVariables = Exact<{
 }>;
 
 
-export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number, color: string }>, annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number }> };
+export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, nonZeroValueCount: number, mean: number, color: string }>, annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -14997,7 +14997,7 @@ export const GeneSpecificityDocument = gql`
     pAnnotationGroupId: $annotationGroupId
     pExcludeAnnotationValueIds: $excludeAnnotationValueIds
     pSecondAnnotationGroupId: $secondAnnotationGroupId
-    pDropoutsAsZero: false
+    pDropoutsAsZero: true
   ) {
     omicsId
     annotationValueId
@@ -15005,7 +15005,7 @@ export const GeneSpecificityDocument = gql`
     secondAnnotationDisplayValue
     secondAnnotationValueId
     valueCount
-    exprSamplesFraction
+    nonZeroValueCount
     mean
     color
   }

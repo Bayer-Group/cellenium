@@ -482,7 +482,7 @@ gql`
       pAnnotationGroupId: $annotationGroupId
       pExcludeAnnotationValueIds: $excludeAnnotationValueIds
       pSecondAnnotationGroupId: $secondAnnotationGroupId
-      pDropoutsAsZero: false
+      pDropoutsAsZero: true
     ) {
       omicsId
       annotationValueId
@@ -490,7 +490,7 @@ gql`
       secondAnnotationDisplayValue
       secondAnnotationValueId
       valueCount
-      exprSamplesFraction
+      nonZeroValueCount
       mean
       color
     }

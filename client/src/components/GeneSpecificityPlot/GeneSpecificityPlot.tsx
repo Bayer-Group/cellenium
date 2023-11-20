@@ -1,6 +1,6 @@
 import Plot from 'react-plotly.js';
 import * as Plotly from 'plotly.js';
-import { Loader, Stack } from '@mantine/core';
+import { Loader, Stack, Text } from '@mantine/core';
 import { useEffect, useMemo } from 'react';
 import { useGeneSpecificityQuery } from '../../generated/types';
 
@@ -60,13 +60,16 @@ export function GeneSpecificityPlot({
 
     const t = annotationSet.map((cs) => {
       const d = data.expressionByTwoAnnotationsList.filter((e) => e.annotationDisplayValue === cs);
-      const tTooltips = d.map(
-        (e) =>
-          `X:${e.annotationDisplayValue}(${e.mean} mean expression)</br></br>Y:${e.secondAnnotationDisplayValue}(${e.exprSamplesFraction}% of samples have expression values)</br></br>Size: ${e.valueCount} samples`,
-      );
-      const tRadius = d.map((e) => Math.max(e.valueCount, 5));
+      const tTooltips = d.map((e) => {
+        return `${e.annotationDisplayValue}:${e.secondAnnotationDisplayValue}</br></br>X: ${
+          e.mean > 0.0099 ? e.mean.toFixed(2) : e.mean
+        } mean expression</br>Y: ${((e.nonZeroValueCount / e.valueCount) * 100).toFixed(2)}% of samples have expression values</br>Size: ${
+          e.nonZeroValueCount
+        } samples`;
+      });
+      const tRadius = d.map((e) => Math.max(e.nonZeroValueCount, 5));
       const tX = d.map((e) => e.mean);
-      const tY = d.map((e) => e.exprSamplesFraction);
+      const tY = d.map((e) => (e.nonZeroValueCount / e.valueCount) * 100);
       const colors = d.map((e) => e.color);
 
       return {
@@ -98,10 +101,10 @@ export function GeneSpecificityPlot({
         ...LAYOUT,
         showlegend: showAnnotationLegend,
         xaxis: {
-          range: [minX - 1, maxX + 1],
+          range: [minX - maxX * 0.05, maxX + 1],
         },
         yaxis: {
-          range: [minY - 5, maxY + 1],
+          range: [minY - maxY * 0.05, maxY + 1],
         },
         title: studyName.length > 70 ? `${studyName.slice(0, 70)}...` : studyName,
       },
@@ -124,17 +127,17 @@ export function GeneSpecificityPlot({
       xaxis: {
         range: [minMaxXY.minX, minMaxXY.maxX],
         title: {
-          text: `${data?.annotationGroupsList.find((e) => e.annotationGroupId === annotationGroupId)?.displayGroup} (mean expression)` || '',
+          text: 'Normalized Mean Gene Expression',
         },
       },
       yaxis: {
         range: [minMaxXY.minY, minMaxXY.maxY],
         title: {
-          text: `${data?.annotationGroupsList.find((e) => e.annotationGroupId === secondAnnotationGroupId)?.displayGroup} (percentage of cells)` || '',
+          text: 'The percentage of cells where the gene is detected (PCT %)',
         },
       },
     } as Partial<Plotly.Layout>;
-  }, [annotationGroupId, data?.annotationGroupsList, layout, minMaxXY, secondAnnotationGroupId]);
+  }, [layout, minMaxXY]);
 
   if (loading || !data) {
     return (
@@ -146,6 +149,13 @@ export function GeneSpecificityPlot({
   return (
     <Stack w="100%" h="100%" mih="40rem">
       <Plot data={traces || []} layout={calcLayout} config={CONFIG} style={{ width: '100%', height: '100%' }} />
+      {omicsIds.length == 0 && (
+        <Stack align="center" justify="center" mt="4rem" h="100%" w="100%" pos="absolute" bg="rgb(1,1,1, 0.25)" style={{ backdropFilter: 'blur(2px)' }}>
+          <Text color="white" weight="bold" size="lg">
+            No Gene Selected
+          </Text>
+        </Stack>
+      )}
     </Stack>
   );
 }

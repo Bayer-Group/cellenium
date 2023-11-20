@@ -386,53 +386,72 @@ function GeneSpecificity() {
   const setMinMaxTwoCallback = useCallback((minX: number, maxX: number, minY: number, maxY: number) => setMinMaxTwo([minX, maxX, minY, maxY]), [setMinMaxOne]);
 
   return (
-    selectedGenes.length > 0 &&
-    annotationSecondaryGroupId &&
     study && (
-      <SimpleGrid cols={1} h="100%" w="100%" breakpoints={[{ minWidth: '150rem', cols: 2 }]}>
-        {secondStudyData?.referenceStudyOverviewsList[0] && (
-          <StudyInfoModal opened={modalOpen} onClose={modalClick} study={secondStudyData?.referenceStudyOverviewsList[0] as StudyInfoFragment} />
-        )}
-        <GeneSpecificityPlot
-          studyName={study?.studyName || ''}
-          study_id={study?.studyId ?? 0}
-          studyLayerId={studyLayerId}
-          omicsIds={selectedGenes.map((e) => e.omicsId)}
-          annotationGroupId={annotationGroupId ?? 0}
-          secondAnnotationGroupId={annotationSecondaryGroupId ?? 0}
-          excludeAnnotationValueIds={annotationFilter}
-          showAnnotationLegend={false}
-          reportMinMaxXY={setMinMaxCallback}
-          minMaxXY={minMaxXY}
-        />
-        {secondSelectedStudy === undefined ? (
-          <CrossStudySelector selectStudy={setSelectedStudy} taxId={study.organismTaxId} />
-        ) : loading || !secondStudyData ? (
-          <GlobalLoading />
-        ) : (
-          <Stack pos="relative" w="100%" h="100%">
-            <Group spacing="xs" pos="absolute" top={20} right={20} style={{ zIndex: 190 }}>
-              <ActionIcon size="lg" onClick={modalClick}>
-                <IconInfoCircle height="100%" width="auto" />
-              </ActionIcon>
-              <ActionIcon size="lg" onClick={() => setSelectedStudy(undefined)}>
-                <IconX height="100%" width="auto" />
-              </ActionIcon>
-            </Group>
+      <Stack h="100%">
+        <Text align="center" color="gray">
+          The two studies can be compared qualitatively only. Mean gene expression includes the non-expressed cells
+        </Text>
+        <SimpleGrid cols={1} h="100%" w="100%" breakpoints={[{ minWidth: '150rem', cols: 2 }]}>
+          {secondStudyData?.referenceStudyOverviewsList[0] && (
+            <StudyInfoModal opened={modalOpen} onClose={modalClick} study={secondStudyData?.referenceStudyOverviewsList[0] as StudyInfoFragment} />
+          )}
+          {selectedGenes.length === 0 ? (
+            <Center h="100%" w="100%">
+              <Text c="dimmed">
+                Please select a gene from the&nbsp;
+                <Text span weight={800}>
+                  gene store
+                </Text>
+                &nbsp;and at least one&nbsp;
+                <Text span weight={800}>
+                  annotation group
+                </Text>
+                .
+              </Text>
+            </Center>
+          ) : (
             <GeneSpecificityPlot
-              study_id={secondSelectedStudy}
+              studyName={study?.studyName || ''}
+              study_id={study?.studyId ?? 0}
+              studyLayerId={studyLayerId}
               omicsIds={selectedGenes.map((e) => e.omicsId)}
-              studyName={secondStudyData?.referenceStudyOverviewsList[0].studyName || ''}
-              studyLayerId={secondStudyData?.referenceStudyOverviewsList[0].defaultStudyLayerId || 0}
-              annotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].tissueAnnotationGroupId}
-              secondAnnotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].celltypeAnnotationGroupId}
-              excludeAnnotationValueIds={[]}
-              reportMinMaxXY={setMinMaxTwoCallback}
+              annotationGroupId={annotationGroupId || 0}
+              secondAnnotationGroupId={annotationSecondaryGroupId || annotationGroupId || 0}
+              excludeAnnotationValueIds={annotationFilter}
+              showAnnotationLegend={false}
+              reportMinMaxXY={setMinMaxCallback}
               minMaxXY={minMaxXY}
             />
-          </Stack>
-        )}
-      </SimpleGrid>
+          )}
+          {secondSelectedStudy === undefined ? (
+            <CrossStudySelector selectStudy={setSelectedStudy} taxId={study.organismTaxId} />
+          ) : loading || !secondStudyData ? (
+            <GlobalLoading />
+          ) : (
+            <Stack pos="relative" w="100%" h="100%">
+              <Group spacing="xs" pos="absolute" top={20} right={20} style={{ zIndex: 190 }}>
+                <ActionIcon size="lg" onClick={modalClick}>
+                  <IconInfoCircle height="100%" width="auto" />
+                </ActionIcon>
+                <ActionIcon size="lg" onClick={() => setSelectedStudy(undefined)}>
+                  <IconX height="100%" width="auto" />
+                </ActionIcon>
+              </Group>
+              <GeneSpecificityPlot
+                study_id={secondSelectedStudy}
+                omicsIds={selectedGenes.map((e) => e.omicsId)}
+                studyName={secondStudyData?.referenceStudyOverviewsList[0].studyName || ''}
+                studyLayerId={secondStudyData?.referenceStudyOverviewsList[0].defaultStudyLayerId || 0}
+                annotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].tissueAnnotationGroupId}
+                secondAnnotationGroupId={secondStudyData?.referenceStudyOverviewsList[0].referenceStudyInfoList[0].celltypeAnnotationGroupId}
+                excludeAnnotationValueIds={[]}
+                reportMinMaxXY={setMinMaxTwoCallback}
+                minMaxXY={minMaxXY}
+              />
+            </Stack>
+          )}
+        </SimpleGrid>
+      </Stack>
     )
   );
 }
@@ -494,21 +513,6 @@ function ExpressionAnalysis() {
         {analysisType === 'projection' && <ProjectionPlots />}
         {analysisType === 'dotplot' && <DotPlots />}
         {analysisType === 'specificity' && <GeneSpecificity />}
-        {analysisType === 'specificity' && (selectedGenes.length === 0 || annotationSecondaryGroupId === undefined) && (
-          <Center h="100%" w="100%">
-            <Text c="dimmed">
-              Please select a gene from the&nbsp;
-              <Text span weight={800}>
-                gene store
-              </Text>
-              &nbsp;and both&nbsp;
-              <Text span weight={800}>
-                annotation groups
-              </Text>
-              .
-            </Text>
-          </Center>
-        )}
         {analysisType !== 'specificity' && selectedGenes.length === 0 && (
           <Center h="100%" w="100%">
             <Text c="dimmed">

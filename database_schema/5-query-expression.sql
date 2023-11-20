@@ -395,15 +395,16 @@ select expr.omics_id,
        percentile_cont(0.5) within group (order by value)  as                         median,
        percentile_cont(0.75) within group (order by value) as                         q3,
        avg(value)                                          as                         "mean",
-       count(1)                                                                      value_count,
+       count(1)                                                                       value_count,
        -- will equal value_count if dropouts_as_zero is false
        count(1) filter ( where value != 0 )                                           non_zero_value_count,
        -- fraction of samples that have expression values available. Always 1 if dropouts_as_zero is true
-       (count(1) :: real / annot_full.sample_count) * 100                             expr_samples_fraction,
+       (count(1) :: real / annot_full.sample_count)                                   expr_samples_fraction,
        annot_full.color
 from expr
          join annot_full on expr.sample_id = annot_full.sample_id
-group by expr.omics_id, annot_full.annotation_value_id, annot_full.second_annotation_value_id, annot_full.sample_count, annot_full.color
+group by expr.omics_id, annot_full.annotation_value_id, annot_full.second_annotation_value_id, annot_full.sample_count,
+         annot_full.color
 $$;
 
 
