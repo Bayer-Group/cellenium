@@ -1,26 +1,25 @@
 import { useForm } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Button, Checkbox, Group, Modal, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { Form } from 'react-router-dom';
-import { InputMaybe, StudyAdminDetailsFragment, useStudyDefinitionUpdateMutation, useStudyUpdateMutation } from '../../generated/types';
+import { InputMaybe, StudyAdminDetailsFragment, useStudyOntologyDefinitionUpdateMutation, useStudyUpdateMutation } from '../../generated/types';
 
 export function EditStudyModal({ opened, reset, study }: { opened: boolean; reset: () => void; study: StudyAdminDetailsFragment | undefined }) {
   const [studyUpdateMutation, { loading: studyUpdateLoading }] = useStudyUpdateMutation();
-  const [studyDefinitionUpdateMutation, { loading: studyUpdateLoading2 }] = useStudyDefinitionUpdateMutation();
+  const [studyDefinitionUpdateMutation, { loading: studyUpdateLoading2 }] = useStudyOntologyDefinitionUpdateMutation();
 
   const form = useForm({
     initialValues: {
-      studyName: '',
-      description: '',
-      readerPermissions: '',
-      adminPermissions: '',
-      tissueNcitIds: '',
-      diseaseMeshIds: '',
-      visible: false,
-      externalWebsite: '',
+      studyName: study?.studyName || '',
+      description: study?.description || '',
+      readerPermissions: (study?.readerPermissions || []).join('; '),
+      adminPermissions: (study?.adminPermissions || []).join('; '),
+      tissueNcitIds: (study?.tissueNcitIds || []).join('; '),
+      diseaseMeshIds: (study?.diseaseMeshIds || []).join('; '),
+      visible: study?.visible || false,
+      externalWebsite: study?.externalWebsite || '',
     },
-    validate: {},
   });
 
   const submit = useCallback(() => {
@@ -73,19 +72,6 @@ export function EditStudyModal({ opened, reset, study }: { opened: boolean; rese
     studyDefinitionUpdateMutation,
     studyUpdateMutation,
   ]);
-
-  useEffect(() => {
-    form.setValues({
-      studyName: study?.studyName || '',
-      description: study?.description || '',
-      readerPermissions: (study?.readerPermissions || []).join('; '),
-      adminPermissions: (study?.adminPermissions || []).join('; '),
-      tissueNcitIds: (study?.tissueNcitIds || []).join('; '),
-      diseaseMeshIds: (study?.diseaseMeshIds || []).join('; '),
-      visible: study?.visible || false,
-      externalWebsite: study?.externalWebsite || '',
-    });
-  }, [form, study]);
 
   return (
     <Modal opened={opened} onClose={reset} size="80vw">

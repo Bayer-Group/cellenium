@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { Group, Loader, Stack } from '@mantine/core';
 import { useRecoilState } from 'recoil';
 import { StudyInfoFragment, useStudiesQuery, useStudiesTreeOntologiesQuery } from '../../generated/types';
@@ -58,7 +58,9 @@ export function StudySearchBar({ initialFocus = false }: { initialFocus?: boolea
     return keepStudies;
   }, [allStudies, filters]);
 
-  useEffect(() => setGlobalStudies(filteredStudies || []), [filteredStudies, setGlobalStudies]);
+  const [pending, startTransition] = useTransition();
+
+  useEffect(() => startTransition(() => setGlobalStudies(filteredStudies || [])), [filteredStudies, setGlobalStudies]);
 
   return (
     <Stack>
@@ -69,7 +71,7 @@ export function StudySearchBar({ initialFocus = false }: { initialFocus?: boolea
         onSearchFiltersUpdate={setFilters}
         initialFocus={initialFocus}
       />
-      {loading && (
+      {(loading || pending) && (
         <Group position="center" align="center" w="100%">
           <Loader variant="dots" color="blue" />
         </Group>

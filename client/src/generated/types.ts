@@ -49,6 +49,7 @@ export type AnnotationGroup = Node & {
   userAnnotationGroupsBySavedAsAnnotationGroupIdList: Array<UserAnnotationGroup>;
 };
 
+
 export type AnnotationGroupAnnotationValuesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -60,6 +61,7 @@ export type AnnotationGroupAnnotationValuesArgs = {
   orderBy?: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
 
+
 export type AnnotationGroupAnnotationValuesListArgs = {
   condition: InputMaybe<AnnotationValueCondition>;
   filter: InputMaybe<AnnotationValueFilter>;
@@ -67,6 +69,7 @@ export type AnnotationGroupAnnotationValuesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
+
 
 export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -79,6 +82,7 @@ export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
+
 export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdListArgs = {
   condition: InputMaybe<ReferenceStudyCondition>;
   filter: InputMaybe<ReferenceStudyFilter>;
@@ -86,6 +90,7 @@ export type AnnotationGroupReferenceStudiesByCelltypeAnnotationGroupIdListArgs =
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
+
 
 export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -98,6 +103,7 @@ export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
+
 export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdListArgs = {
   condition: InputMaybe<ReferenceStudyCondition>;
   filter: InputMaybe<ReferenceStudyFilter>;
@@ -105,6 +111,7 @@ export type AnnotationGroupReferenceStudiesByTissueAnnotationGroupIdListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
+
 
 export type AnnotationGroupStudyAnnotationGroupUisArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -117,6 +124,7 @@ export type AnnotationGroupStudyAnnotationGroupUisArgs = {
   orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
+
 export type AnnotationGroupStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
@@ -124,6 +132,7 @@ export type AnnotationGroupStudyAnnotationGroupUisListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
+
 
 export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -135,6 +144,7 @@ export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdArgs = 
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
+
 
 export type AnnotationGroupUserAnnotationGroupsBySavedAsAnnotationGroupIdListArgs = {
   condition: InputMaybe<UserAnnotationGroupCondition>;
@@ -219,7 +229,7 @@ export enum AnnotationGroupsOrderBy {
   H5AdColumnDesc = 'H5AD_COLUMN_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 export type AnnotationValue = Node & {
@@ -242,6 +252,7 @@ export type AnnotationValue = Node & {
   studySampleAnnotationsList: Array<StudySampleAnnotation>;
 };
 
+
 export type AnnotationValueDifferentialExpressionsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -253,6 +264,7 @@ export type AnnotationValueDifferentialExpressionsArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
+
 export type AnnotationValueDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
@@ -260,6 +272,7 @@ export type AnnotationValueDifferentialExpressionsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
+
 
 export type AnnotationValueStudySampleAnnotationsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -271,6 +284,7 @@ export type AnnotationValueStudySampleAnnotationsArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
+
 
 export type AnnotationValueStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
@@ -407,7 +421,7 @@ export enum AnnotationValuesOrderBy {
   H5AdValueDesc = 'H5AD_VALUE_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 export type ApiDifferentialExpression = {
@@ -565,7 +579,7 @@ export enum ApiDifferentialExpressionsOrderBy {
   StudyNameAsc = 'STUDY_NAME_ASC',
   StudyNameDesc = 'STUDY_NAME_DESC',
   StudyTaxIdAsc = 'STUDY_TAX_ID_ASC',
-  StudyTaxIdDesc = 'STUDY_TAX_ID_DESC',
+  StudyTaxIdDesc = 'STUDY_TAX_ID_DESC'
 }
 
 export type ApiExpressionByAnnotation = {
@@ -778,7 +792,7 @@ export enum ApiOmicsOrderBy {
   RegionAsc = 'REGION_ASC',
   RegionDesc = 'REGION_DESC',
   TaxIdAsc = 'TAX_ID_ASC',
-  TaxIdDesc = 'TAX_ID_DESC',
+  TaxIdDesc = 'TAX_ID_DESC'
 }
 
 export type ApiStudiesBase = {
@@ -956,7 +970,7 @@ export enum ApiStudiesBasesOrderBy {
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
-  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC'
 }
 
 export type ApiStudiesBulkRna = {
@@ -1134,7 +1148,7 @@ export enum ApiStudiesBulkRnasOrderBy {
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
-  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC'
 }
 
 export type ApiStudiesSingleCell = {
@@ -1312,7 +1326,7 @@ export enum ApiStudiesSingleCellsOrderBy {
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   TissueNcitLabelsAsc = 'TISSUE_NCIT_LABELS_ASC',
-  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC',
+  TissueNcitLabelsDesc = 'TISSUE_NCIT_LABELS_DESC'
 }
 
 export type ApiStudyAnnotationOverview = {
@@ -1404,7 +1418,7 @@ export enum ApiStudyAnnotationOverviewsOrderBy {
   AnnotationValuesDesc = 'ANNOTATION_VALUES_DESC',
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type ApiStudyH5Download = {
@@ -1472,7 +1486,7 @@ export enum ApiStudyH5DownloadsOrderBy {
   PresignedUrlAsc = 'PRESIGNED_URL_ASC',
   PresignedUrlDesc = 'PRESIGNED_URL_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type AutocompleteResult = {
@@ -1524,30 +1538,6 @@ export type AutocompleteResultsEdge = {
   cursor: Maybe<Scalars['Cursor']>;
   /** The `AutocompleteResult` at the end of the edge. */
   node: Maybe<AutocompleteResult>;
-};
-
-/** All input for the `awsBatchSubmitCelleniumCliJob` mutation. */
-export type AwsBatchSubmitCelleniumCliJobInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId: InputMaybe<Scalars['String']>;
-  pCommand: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  pJobname: InputMaybe<Scalars['String']>;
-};
-
-/** The output of our `awsBatchSubmitCelleniumCliJob` mutation. */
-export type AwsBatchSubmitCelleniumCliJobPayload = {
-  __typename?: 'AwsBatchSubmitCelleniumCliJobPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId: Maybe<Scalars['String']>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query: Maybe<Query>;
-  string: Maybe<Scalars['String']>;
 };
 
 /** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
@@ -1690,6 +1680,7 @@ export type Concept = Node & {
   testPotentialChildrenList: Maybe<Array<Maybe<Concept>>>;
 };
 
+
 export type ConceptAllChildrenArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -1699,11 +1690,13 @@ export type ConceptAllChildrenArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptAllChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptAllParentsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1714,11 +1707,13 @@ export type ConceptAllParentsArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptAllParentsListArgs = {
   filter: InputMaybe<ConceptFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptAllParentsPathsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1729,11 +1724,13 @@ export type ConceptAllParentsPathsArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptAllParentsPathsListArgs = {
   filter: InputMaybe<ConceptAllParentsPathsRecordFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptChildrenDepthLimitArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1745,12 +1742,14 @@ export type ConceptChildrenDepthLimitArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptChildrenDepthLimitListArgs = {
   depthLimit: InputMaybe<Scalars['Int']>;
   filter: InputMaybe<ConceptFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptChildrenPathsDepthLimitArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1762,12 +1761,14 @@ export type ConceptChildrenPathsDepthLimitArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptChildrenPathsDepthLimitListArgs = {
   depthLimit: InputMaybe<Scalars['Int']>;
   filter: InputMaybe<ConceptChildrenPathsDepthLimitRecordFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptConceptHierarchiesByCidArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1780,6 +1781,7 @@ export type ConceptConceptHierarchiesByCidArgs = {
   orderBy?: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
+
 export type ConceptConceptHierarchiesByCidListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
   filter: InputMaybe<ConceptHierarchyFilter>;
@@ -1787,6 +1789,7 @@ export type ConceptConceptHierarchiesByCidListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
+
 
 export type ConceptConceptHierarchiesByParentCidArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1799,6 +1802,7 @@ export type ConceptConceptHierarchiesByParentCidArgs = {
   orderBy?: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
+
 export type ConceptConceptHierarchiesByParentCidListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
   filter: InputMaybe<ConceptHierarchyFilter>;
@@ -1806,6 +1810,7 @@ export type ConceptConceptHierarchiesByParentCidListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
+
 
 export type ConceptConceptSynonymsByCidArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1818,6 +1823,7 @@ export type ConceptConceptSynonymsByCidArgs = {
   orderBy?: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
 
+
 export type ConceptConceptSynonymsByCidListArgs = {
   condition: InputMaybe<ConceptSynonymCondition>;
   filter: InputMaybe<ConceptSynonymFilter>;
@@ -1825,6 +1831,7 @@ export type ConceptConceptSynonymsByCidListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
+
 
 export type ConceptDirectChildrenArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1835,11 +1842,13 @@ export type ConceptDirectChildrenArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptDirectChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptDirectParentsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1850,11 +1859,13 @@ export type ConceptDirectParentsArgs = {
   offset: InputMaybe<Scalars['Int']>;
 };
 
+
 export type ConceptDirectParentsListArgs = {
   filter: InputMaybe<ConceptFilter>;
   first: InputMaybe<Scalars['Int']>;
   offset: InputMaybe<Scalars['Int']>;
 };
+
 
 export type ConceptTestPotentialChildrenArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -1865,6 +1876,7 @@ export type ConceptTestPotentialChildrenArgs = {
   offset: InputMaybe<Scalars['Int']>;
   potentialChildrenCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type ConceptTestPotentialChildrenListArgs = {
   filter: InputMaybe<ConceptFilter>;
@@ -2045,7 +2057,7 @@ export enum ConceptHierarchiesOrderBy {
   CidDesc = 'CID_DESC',
   Natural = 'NATURAL',
   ParentCidAsc = 'PARENT_CID_ASC',
-  ParentCidDesc = 'PARENT_CID_DESC',
+  ParentCidDesc = 'PARENT_CID_DESC'
 }
 
 export type ConceptHierarchy = {
@@ -2236,7 +2248,7 @@ export enum ConceptSynonymsOrderBy {
   SynonymAsc = 'SYNONYM_ASC',
   SynonymDesc = 'SYNONYM_DESC',
   SynonymTsvectorAsc = 'SYNONYM_TSVECTOR_ASC',
-  SynonymTsvectorDesc = 'SYNONYM_TSVECTOR_DESC',
+  SynonymTsvectorDesc = 'SYNONYM_TSVECTOR_DESC'
 }
 
 export type ConceptTreeElement = {
@@ -2288,7 +2300,7 @@ export enum ConceptsOrderBy {
   OntCodeAsc = 'ONT_CODE_ASC',
   OntCodeDesc = 'ONT_CODE_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 /** All input for the create `AnnotationGroup` mutation. */
@@ -2317,6 +2329,7 @@ export type CreateAnnotationGroupPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `AnnotationGroup` mutation. */
 export type CreateAnnotationGroupPayloadAnnotationGroupEdgeArgs = {
@@ -2352,6 +2365,7 @@ export type CreateAnnotationValuePayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `AnnotationValue` mutation. */
 export type CreateAnnotationValuePayloadAnnotationValueEdgeArgs = {
   orderBy?: InputMaybe<Array<AnnotationValuesOrderBy>>;
@@ -2383,6 +2397,7 @@ export type CreateApiStudiesBasePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `ApiStudiesBase` mutation. */
 export type CreateApiStudiesBasePayloadApiStudiesBaseEdgeArgs = {
@@ -2416,6 +2431,7 @@ export type CreateApiStudiesBulkRnaPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `ApiStudiesBulkRna` mutation. */
 export type CreateApiStudiesBulkRnaPayloadApiStudiesBulkRnaEdgeArgs = {
   orderBy?: InputMaybe<Array<ApiStudiesBulkRnasOrderBy>>;
@@ -2448,6 +2464,7 @@ export type CreateApiStudiesSingleCellPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `ApiStudiesSingleCell` mutation. */
 export type CreateApiStudiesSingleCellPayloadApiStudiesSingleCellEdgeArgs = {
   orderBy?: InputMaybe<Array<ApiStudiesSingleCellsOrderBy>>;
@@ -2479,6 +2496,7 @@ export type CreateApiStudyH5DownloadPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `ApiStudyH5Download` mutation. */
 export type CreateApiStudyH5DownloadPayloadApiStudyH5DownloadEdgeArgs = {
@@ -2516,6 +2534,7 @@ export type CreateConceptHierarchyPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `ConceptHierarchy` mutation. */
 export type CreateConceptHierarchyPayloadConceptHierarchyEdgeArgs = {
   orderBy?: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
@@ -2549,6 +2568,7 @@ export type CreateConceptPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `Concept` mutation. */
 export type CreateConceptPayloadConceptEdgeArgs = {
@@ -2584,9 +2604,76 @@ export type CreateConceptSynonymPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `ConceptSynonym` mutation. */
 export type CreateConceptSynonymPayloadConceptSynonymEdgeArgs = {
   orderBy?: InputMaybe<Array<ConceptSynonymsOrderBy>>;
+};
+
+/** All input for the create `CustomAnnotationCellgroup` mutation. */
+export type CreateCustomAnnotationCellgroupInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `CustomAnnotationCellgroup` to be created by this mutation. */
+  customAnnotationCellgroup: CustomAnnotationCellgroupInput;
+};
+
+/** The output of our create `CustomAnnotationCellgroup` mutation. */
+export type CreateCustomAnnotationCellgroupPayload = {
+  __typename?: 'CreateCustomAnnotationCellgroupPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `CustomAnnotationCellgroup` that was created by this mutation. */
+  customAnnotationCellgroup: Maybe<CustomAnnotationCellgroup>;
+  /** An edge for our `CustomAnnotationCellgroup`. May be used by Relay 1. */
+  customAnnotationCellgroupEdge: Maybe<CustomAnnotationCellgroupsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `CustomAnnotationCellgroup` mutation. */
+export type CreateCustomAnnotationCellgroupPayloadCustomAnnotationCellgroupEdgeArgs = {
+  orderBy?: InputMaybe<Array<CustomAnnotationCellgroupsOrderBy>>;
+};
+
+/** All input for the create `DifferentialExpression20231117` mutation. */
+export type CreateDifferentialExpression20231117Input = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `DifferentialExpression20231117` to be created by this mutation. */
+  differentialExpression20231117: DifferentialExpression20231117Input;
+};
+
+/** The output of our create `DifferentialExpression20231117` mutation. */
+export type CreateDifferentialExpression20231117Payload = {
+  __typename?: 'CreateDifferentialExpression20231117Payload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `DifferentialExpression20231117` that was created by this mutation. */
+  differentialExpression20231117: Maybe<DifferentialExpression20231117>;
+  /** An edge for our `DifferentialExpression20231117`. May be used by Relay 1. */
+  differentialExpression20231117Edge: Maybe<DifferentialExpression20231117sEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `DifferentialExpression20231117` mutation. */
+export type CreateDifferentialExpression20231117PayloadDifferentialExpression20231117EdgeArgs = {
+  orderBy?: InputMaybe<Array<DifferentialExpression20231117sOrderBy>>;
 };
 
 /** All input for the create `DifferentialExpression` mutation. */
@@ -2622,9 +2709,76 @@ export type CreateDifferentialExpressionPayload = {
   study: Maybe<Study>;
 };
 
+
 /** The output of our create `DifferentialExpression` mutation. */
 export type CreateDifferentialExpressionPayloadDifferentialExpressionEdgeArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
+};
+
+/** All input for the create `DiffexpExport` mutation. */
+export type CreateDiffexpExportInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `DiffexpExport` to be created by this mutation. */
+  diffexpExport: DiffexpExportInput;
+};
+
+/** The output of our create `DiffexpExport` mutation. */
+export type CreateDiffexpExportPayload = {
+  __typename?: 'CreateDiffexpExportPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `DiffexpExport` that was created by this mutation. */
+  diffexpExport: Maybe<DiffexpExport>;
+  /** An edge for our `DiffexpExport`. May be used by Relay 1. */
+  diffexpExportEdge: Maybe<DiffexpExportsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `DiffexpExport` mutation. */
+export type CreateDiffexpExportPayloadDiffexpExportEdgeArgs = {
+  orderBy?: InputMaybe<Array<DiffexpExportsOrderBy>>;
+};
+
+/** All input for the create `DiffexpV1Subset` mutation. */
+export type CreateDiffexpV1SubsetInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `DiffexpV1Subset` to be created by this mutation. */
+  diffexpV1Subset: DiffexpV1SubsetInput;
+};
+
+/** The output of our create `DiffexpV1Subset` mutation. */
+export type CreateDiffexpV1SubsetPayload = {
+  __typename?: 'CreateDiffexpV1SubsetPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `DiffexpV1Subset` that was created by this mutation. */
+  diffexpV1Subset: Maybe<DiffexpV1Subset>;
+  /** An edge for our `DiffexpV1Subset`. May be used by Relay 1. */
+  diffexpV1SubsetEdge: Maybe<DiffexpV1SubsetsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `DiffexpV1Subset` mutation. */
+export type CreateDiffexpV1SubsetPayloadDiffexpV1SubsetEdgeArgs = {
+  orderBy?: InputMaybe<Array<DiffexpV1SubsetsOrderBy>>;
 };
 
 /** All input for the create `OmicsBase` mutation. */
@@ -2654,9 +2808,76 @@ export type CreateOmicsBasePayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `OmicsBase` mutation. */
 export type CreateOmicsBasePayloadOmicsBaseEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsBasesOrderBy>>;
+};
+
+/** All input for the create `OmicsElement` mutation. */
+export type CreateOmicsElementInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `OmicsElement` to be created by this mutation. */
+  omicsElement: OmicsElementInput;
+};
+
+/** The output of our create `OmicsElement` mutation. */
+export type CreateOmicsElementPayload = {
+  __typename?: 'CreateOmicsElementPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `OmicsElement` that was created by this mutation. */
+  omicsElement: Maybe<OmicsElement>;
+  /** An edge for our `OmicsElement`. May be used by Relay 1. */
+  omicsElementEdge: Maybe<OmicsElementsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `OmicsElement` mutation. */
+export type CreateOmicsElementPayloadOmicsElementEdgeArgs = {
+  orderBy?: InputMaybe<Array<OmicsElementsOrderBy>>;
+};
+
+/** All input for the create `OmicsElementRegionGene` mutation. */
+export type CreateOmicsElementRegionGeneInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+  /** The `OmicsElementRegionGene` to be created by this mutation. */
+  omicsElementRegionGene: OmicsElementRegionGeneInput;
+};
+
+/** The output of our create `OmicsElementRegionGene` mutation. */
+export type CreateOmicsElementRegionGenePayload = {
+  __typename?: 'CreateOmicsElementRegionGenePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** The `OmicsElementRegionGene` that was created by this mutation. */
+  omicsElementRegionGene: Maybe<OmicsElementRegionGene>;
+  /** An edge for our `OmicsElementRegionGene`. May be used by Relay 1. */
+  omicsElementRegionGeneEdge: Maybe<OmicsElementRegionGenesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
+
+
+/** The output of our create `OmicsElementRegionGene` mutation. */
+export type CreateOmicsElementRegionGenePayloadOmicsElementRegionGeneEdgeArgs = {
+  orderBy?: InputMaybe<Array<OmicsElementRegionGenesOrderBy>>;
 };
 
 /** All input for the create `OmicsGene` mutation. */
@@ -2687,6 +2908,7 @@ export type CreateOmicsGenePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `OmicsGene` mutation. */
 export type CreateOmicsGenePayloadOmicsGeneEdgeArgs = {
@@ -2724,6 +2946,7 @@ export type CreateOmicsProteinAntibodyTagGenePayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `OmicsProteinAntibodyTagGene` mutation. */
 export type CreateOmicsProteinAntibodyTagGenePayloadOmicsProteinAntibodyTagGeneEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
@@ -2757,6 +2980,7 @@ export type CreateOmicsProteinAntibodyTagPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `OmicsProteinAntibodyTag` mutation. */
 export type CreateOmicsProteinAntibodyTagPayloadOmicsProteinAntibodyTagEdgeArgs = {
@@ -2794,6 +3018,7 @@ export type CreateOmicsRegionGenePayload = {
   region: Maybe<OmicsRegion>;
 };
 
+
 /** The output of our create `OmicsRegionGene` mutation. */
 export type CreateOmicsRegionGenePayloadOmicsRegionGeneEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
@@ -2823,10 +3048,11 @@ export type CreateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `OmicsRegion` mutation. */
 export type CreateOmicsRegionPayloadOmicsRegionEdgeArgs = {
@@ -2864,6 +3090,7 @@ export type CreateOmicsTranscriptionFactorGenePayload = {
   transcriptionFactor: Maybe<OmicsTranscriptionFactor>;
 };
 
+
 /** The output of our create `OmicsTranscriptionFactorGene` mutation. */
 export type CreateOmicsTranscriptionFactorGenePayloadOmicsTranscriptionFactorGeneEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
@@ -2898,6 +3125,7 @@ export type CreateOmicsTranscriptionFactorPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our create `OmicsTranscriptionFactor` mutation. */
 export type CreateOmicsTranscriptionFactorPayloadOmicsTranscriptionFactorEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
@@ -2929,6 +3157,7 @@ export type CreateOntologyPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our create `Ontology` mutation. */
 export type CreateOntologyPayloadOntologyEdgeArgs = {
@@ -2969,6 +3198,7 @@ export type CreateReferenceStudyPayload = {
   /** Reads a single `AnnotationGroup` that is related to this `ReferenceStudy`. */
   tissueAnnotationGroup: Maybe<AnnotationGroup>;
 };
+
 
 /** The output of our create `ReferenceStudy` mutation. */
 export type CreateReferenceStudyPayloadReferenceStudyEdgeArgs = {
@@ -3024,6 +3254,7 @@ export type CreateStudyAdministrableCurrentuserPayload = {
   studyAdministrableCurrentuserEdge: Maybe<StudyAdministrableCurrentusersEdge>;
 };
 
+
 /** The output of our create `StudyAdministrableCurrentuser` mutation. */
 export type CreateStudyAdministrableCurrentuserPayloadStudyAdministrableCurrentuserEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyAdministrableCurrentusersOrderBy>>;
@@ -3059,6 +3290,7 @@ export type CreateStudyAnnotationGroupUiPayload = {
   /** An edge for our `StudyAnnotationGroupUi`. May be used by Relay 1. */
   studyAnnotationGroupUiEdge: Maybe<StudyAnnotationGroupUisEdge>;
 };
+
 
 /** The output of our create `StudyAnnotationGroupUi` mutation. */
 export type CreateStudyAnnotationGroupUiPayloadStudyAnnotationGroupUiEdgeArgs = {
@@ -3151,6 +3383,7 @@ export type CreateStudyLayerPayload = {
   studyLayerEdge: Maybe<StudyLayersEdge>;
 };
 
+
 /** The output of our create `StudyLayer` mutation. */
 export type CreateStudyLayerPayloadStudyLayerEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyLayersOrderBy>>;
@@ -3187,6 +3420,7 @@ export type CreateStudyOmicPayload = {
   studyOmicEdge: Maybe<StudyOmicsEdge>;
 };
 
+
 /** The output of our create `StudyOmic` mutation. */
 export type CreateStudyOmicPayloadStudyOmicEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyOmicsOrderBy>>;
@@ -3219,6 +3453,7 @@ export type CreateStudyOverviewPayload = {
   studyOverviewEdge: Maybe<StudyOverviewsEdge>;
 };
 
+
 /** The output of our create `StudyOverview` mutation. */
 export type CreateStudyOverviewPayloadStudyOverviewEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyOverviewsOrderBy>>;
@@ -3239,6 +3474,7 @@ export type CreateStudyPayload = {
   /** An edge for our `Study`. May be used by Relay 1. */
   studyEdge: Maybe<StudiesEdge>;
 };
+
 
 /** The output of our create `Study` mutation. */
 export type CreateStudyPayloadStudyEdgeArgs = {
@@ -3276,6 +3512,7 @@ export type CreateStudySampleAnnotationPayload = {
   studySampleAnnotationEdge: Maybe<StudySampleAnnotationsEdge>;
 };
 
+
 /** The output of our create `StudySampleAnnotation` mutation. */
 export type CreateStudySampleAnnotationPayloadStudySampleAnnotationEdgeArgs = {
   orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
@@ -3310,6 +3547,7 @@ export type CreateStudySamplePayload = {
   studySampleEdge: Maybe<StudySamplesEdge>;
 };
 
+
 /** The output of our create `StudySample` mutation. */
 export type CreateStudySamplePayloadStudySampleEdgeArgs = {
   orderBy?: InputMaybe<Array<StudySamplesOrderBy>>;
@@ -3343,6 +3581,7 @@ export type CreateStudySampleProjectionPayload = {
   /** Reads a single `StudySample` that is related to this `StudySampleProjection`. */
   studyStudySample: Maybe<StudySample>;
 };
+
 
 /** The output of our create `StudySampleProjection` mutation. */
 export type CreateStudySampleProjectionPayloadStudySampleProjectionEdgeArgs = {
@@ -3399,6 +3638,7 @@ export type CreateStudyVisibleCurrentuserPayload = {
   studyVisibleCurrentuserEdge: Maybe<StudyVisibleCurrentusersEdge>;
 };
 
+
 /** The output of our create `StudyVisibleCurrentuser` mutation. */
 export type CreateStudyVisibleCurrentuserPayloadStudyVisibleCurrentuserEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyVisibleCurrentusersOrderBy>>;
@@ -3435,10 +3675,87 @@ export type CreateUserAnnotationGroupPayload = {
   userAnnotationGroupEdge: Maybe<UserAnnotationGroupsEdge>;
 };
 
+
 /** The output of our create `UserAnnotationGroup` mutation. */
 export type CreateUserAnnotationGroupPayloadUserAnnotationGroupEdgeArgs = {
   orderBy?: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
+
+export type CustomAnnotationCellgroup = {
+  __typename?: 'CustomAnnotationCellgroup';
+  attributeCalc: Scalars['JSON'];
+  attributeInternal: Scalars['String'];
+  studyId: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `CustomAnnotationCellgroup` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
+export type CustomAnnotationCellgroupCondition = {
+  /** Checks for equality with the object’s `attributeCalc` field. */
+  attributeCalc: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `attributeInternal` field. */
+  attributeInternal: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `CustomAnnotationCellgroup` object types. All fields are combined with a logical ‘and.’ */
+export type CustomAnnotationCellgroupFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<CustomAnnotationCellgroupFilter>>;
+  /** Filter by the object’s `attributeCalc` field. */
+  attributeCalc: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `attributeInternal` field. */
+  attributeInternal: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<CustomAnnotationCellgroupFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<CustomAnnotationCellgroupFilter>>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `CustomAnnotationCellgroup` */
+export type CustomAnnotationCellgroupInput = {
+  attributeCalc: Scalars['JSON'];
+  attributeInternal: Scalars['String'];
+  studyId: Scalars['Int'];
+};
+
+/** A connection to a list of `CustomAnnotationCellgroup` values. */
+export type CustomAnnotationCellgroupsConnection = {
+  __typename?: 'CustomAnnotationCellgroupsConnection';
+  /** A list of edges which contains the `CustomAnnotationCellgroup` and cursor to aid in pagination. */
+  edges: Array<CustomAnnotationCellgroupsEdge>;
+  /** A list of `CustomAnnotationCellgroup` objects. */
+  nodes: Array<Maybe<CustomAnnotationCellgroup>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `CustomAnnotationCellgroup` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `CustomAnnotationCellgroup` edge in the connection. */
+export type CustomAnnotationCellgroupsEdge = {
+  __typename?: 'CustomAnnotationCellgroupsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `CustomAnnotationCellgroup` at the end of the edge. */
+  node: Maybe<CustomAnnotationCellgroup>;
+};
+
+/** Methods to use when ordering `CustomAnnotationCellgroup`. */
+export enum CustomAnnotationCellgroupsOrderBy {
+  AttributeCalcAsc = 'ATTRIBUTE_CALC_ASC',
+  AttributeCalcDesc = 'ATTRIBUTE_CALC_DESC',
+  AttributeInternalAsc = 'ATTRIBUTE_INTERNAL_ASC',
+  AttributeInternalDesc = 'ATTRIBUTE_INTERNAL_DESC',
+  Natural = 'NATURAL',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
 
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
@@ -3527,6 +3844,7 @@ export type DeleteAnnotationGroupPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our delete `AnnotationGroup` mutation. */
 export type DeleteAnnotationGroupPayloadAnnotationGroupEdgeArgs = {
   orderBy?: InputMaybe<Array<AnnotationGroupsOrderBy>>;
@@ -3571,6 +3889,7 @@ export type DeleteAnnotationValuePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our delete `AnnotationValue` mutation. */
 export type DeleteAnnotationValuePayloadAnnotationValueEdgeArgs = {
@@ -3617,6 +3936,7 @@ export type DeleteConceptPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our delete `Concept` mutation. */
 export type DeleteConceptPayloadConceptEdgeArgs = {
   orderBy?: InputMaybe<Array<ConceptsOrderBy>>;
@@ -3659,6 +3979,7 @@ export type DeleteOmicsBasePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our delete `OmicsBase` mutation. */
 export type DeleteOmicsBasePayloadOmicsBaseEdgeArgs = {
@@ -3705,6 +4026,7 @@ export type DeleteOmicsGenePayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our delete `OmicsGene` mutation. */
 export type DeleteOmicsGenePayloadOmicsGeneEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsGenesOrderBy>>;
@@ -3750,6 +4072,7 @@ export type DeleteOmicsProteinAntibodyTagPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our delete `OmicsProteinAntibodyTag` mutation. */
 export type DeleteOmicsProteinAntibodyTagPayloadOmicsProteinAntibodyTagEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
@@ -3790,10 +4113,11 @@ export type DeleteOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our delete `OmicsRegion` mutation. */
 export type DeleteOmicsRegionPayloadOmicsRegionEdgeArgs = {
@@ -3840,6 +4164,7 @@ export type DeleteOmicsTranscriptionFactorPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our delete `OmicsTranscriptionFactor` mutation. */
 export type DeleteOmicsTranscriptionFactorPayloadOmicsTranscriptionFactorEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
@@ -3882,6 +4207,7 @@ export type DeleteOntologyPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our delete `Ontology` mutation. */
 export type DeleteOntologyPayloadOntologyEdgeArgs = {
@@ -3949,6 +4275,7 @@ export type DeleteStudyLayerPayload = {
   studyLayerEdge: Maybe<StudyLayersEdge>;
 };
 
+
 /** The output of our delete `StudyLayer` mutation. */
 export type DeleteStudyLayerPayloadStudyLayerEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyLayersOrderBy>>;
@@ -3970,6 +4297,7 @@ export type DeleteStudyPayload = {
   /** An edge for our `Study`. May be used by Relay 1. */
   studyEdge: Maybe<StudiesEdge>;
 };
+
 
 /** The output of our delete `Study` mutation. */
 export type DeleteStudyPayloadStudyEdgeArgs = {
@@ -4017,6 +4345,7 @@ export type DeleteStudySamplePayload = {
   studySampleEdge: Maybe<StudySamplesEdge>;
 };
 
+
 /** The output of our delete `StudySample` mutation. */
 export type DeleteStudySamplePayloadStudySampleEdgeArgs = {
   orderBy?: InputMaybe<Array<StudySamplesOrderBy>>;
@@ -4039,6 +4368,122 @@ export type DifferentialExpression = {
   study: Maybe<Study>;
   studyId: Scalars['Int'];
 };
+
+export type DifferentialExpression20231117 = {
+  __typename?: 'DifferentialExpression20231117';
+  annotationValueId: Maybe<Scalars['Int']>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  omicsId: Maybe<Scalars['Int']>;
+  otherAnnotationValueId: Maybe<Scalars['Int']>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+};
+
+/**
+ * A condition to be used against `DifferentialExpression20231117` object types.
+ * All fields are tested for equality and combined with a logical ‘and.’
+ */
+export type DifferentialExpression20231117Condition = {
+  /** Checks for equality with the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `omicsId` field. */
+  omicsId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `pvalue` field. */
+  pvalue: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `score` field. */
+  score: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `DifferentialExpression20231117` object types. All fields are combined with a logical ‘and.’ */
+export type DifferentialExpression20231117Filter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<DifferentialExpression20231117Filter>>;
+  /** Filter by the object’s `annotationValueId` field. */
+  annotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<DifferentialExpression20231117Filter>;
+  /** Filter by the object’s `omicsId` field. */
+  omicsId: InputMaybe<IntFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<DifferentialExpression20231117Filter>>;
+  /** Filter by the object’s `otherAnnotationValueId` field. */
+  otherAnnotationValueId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `pvalue` field. */
+  pvalue: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `score` field. */
+  score: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `DifferentialExpression20231117` */
+export type DifferentialExpression20231117Input = {
+  annotationValueId: InputMaybe<Scalars['Int']>;
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  omicsId: InputMaybe<Scalars['Int']>;
+  otherAnnotationValueId: InputMaybe<Scalars['Int']>;
+  pvalue: InputMaybe<Scalars['Float']>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  score: InputMaybe<Scalars['Float']>;
+  studyId: InputMaybe<Scalars['Int']>;
+};
+
+/** A connection to a list of `DifferentialExpression20231117` values. */
+export type DifferentialExpression20231117sConnection = {
+  __typename?: 'DifferentialExpression20231117sConnection';
+  /** A list of edges which contains the `DifferentialExpression20231117` and cursor to aid in pagination. */
+  edges: Array<DifferentialExpression20231117sEdge>;
+  /** A list of `DifferentialExpression20231117` objects. */
+  nodes: Array<Maybe<DifferentialExpression20231117>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `DifferentialExpression20231117` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `DifferentialExpression20231117` edge in the connection. */
+export type DifferentialExpression20231117sEdge = {
+  __typename?: 'DifferentialExpression20231117sEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `DifferentialExpression20231117` at the end of the edge. */
+  node: Maybe<DifferentialExpression20231117>;
+};
+
+/** Methods to use when ordering `DifferentialExpression20231117`. */
+export enum DifferentialExpression20231117sOrderBy {
+  AnnotationValueIdAsc = 'ANNOTATION_VALUE_ID_ASC',
+  AnnotationValueIdDesc = 'ANNOTATION_VALUE_ID_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  OmicsIdAsc = 'OMICS_ID_ASC',
+  OmicsIdDesc = 'OMICS_ID_DESC',
+  OtherAnnotationValueIdAsc = 'OTHER_ANNOTATION_VALUE_ID_ASC',
+  OtherAnnotationValueIdDesc = 'OTHER_ANNOTATION_VALUE_ID_DESC',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
 
 /**
  * A condition to be used against `DifferentialExpression` object types. All fields
@@ -4230,7 +4675,7 @@ export enum DifferentialExpressionVsOrderBy {
   ScoreAsc = 'SCORE_ASC',
   ScoreDesc = 'SCORE_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 /** A connection to a list of `DifferentialExpression` values. */
@@ -4273,7 +4718,271 @@ export enum DifferentialExpressionsOrderBy {
   ScoreAsc = 'SCORE_ASC',
   ScoreDesc = 'SCORE_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC'
+}
+
+export type DiffexpExport = {
+  __typename?: 'DiffexpExport';
+  attributeName: Maybe<Scalars['String']>;
+  cmpAttrValue: Maybe<Scalars['String']>;
+  ensembl: Maybe<Scalars['String']>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  refAttrValue: Maybe<Scalars['String']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+  symbol: Maybe<Scalars['String']>;
+};
+
+/**
+ * A condition to be used against `DiffexpExport` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type DiffexpExportCondition = {
+  /** Checks for equality with the object’s `attributeName` field. */
+  attributeName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `cmpAttrValue` field. */
+  cmpAttrValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ensembl` field. */
+  ensembl: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalue` field. */
+  pvalue: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `refAttrValue` field. */
+  refAttrValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `score` field. */
+  score: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `symbol` field. */
+  symbol: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `DiffexpExport` object types. All fields are combined with a logical ‘and.’ */
+export type DiffexpExportFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<DiffexpExportFilter>>;
+  /** Filter by the object’s `attributeName` field. */
+  attributeName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `cmpAttrValue` field. */
+  cmpAttrValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ensembl` field. */
+  ensembl: InputMaybe<StringFilter>;
+  /** Filter by the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<DiffexpExportFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<DiffexpExportFilter>>;
+  /** Filter by the object’s `pvalue` field. */
+  pvalue: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `refAttrValue` field. */
+  refAttrValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `score` field. */
+  score: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `symbol` field. */
+  symbol: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `DiffexpExport` */
+export type DiffexpExportInput = {
+  attributeName: InputMaybe<Scalars['String']>;
+  cmpAttrValue: InputMaybe<Scalars['String']>;
+  ensembl: InputMaybe<Scalars['String']>;
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  pvalue: InputMaybe<Scalars['Float']>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  refAttrValue: InputMaybe<Scalars['String']>;
+  score: InputMaybe<Scalars['Float']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  symbol: InputMaybe<Scalars['String']>;
+};
+
+/** A connection to a list of `DiffexpExport` values. */
+export type DiffexpExportsConnection = {
+  __typename?: 'DiffexpExportsConnection';
+  /** A list of edges which contains the `DiffexpExport` and cursor to aid in pagination. */
+  edges: Array<DiffexpExportsEdge>;
+  /** A list of `DiffexpExport` objects. */
+  nodes: Array<Maybe<DiffexpExport>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `DiffexpExport` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `DiffexpExport` edge in the connection. */
+export type DiffexpExportsEdge = {
+  __typename?: 'DiffexpExportsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `DiffexpExport` at the end of the edge. */
+  node: Maybe<DiffexpExport>;
+};
+
+/** Methods to use when ordering `DiffexpExport`. */
+export enum DiffexpExportsOrderBy {
+  AttributeNameAsc = 'ATTRIBUTE_NAME_ASC',
+  AttributeNameDesc = 'ATTRIBUTE_NAME_DESC',
+  CmpAttrValueAsc = 'CMP_ATTR_VALUE_ASC',
+  CmpAttrValueDesc = 'CMP_ATTR_VALUE_DESC',
+  EnsemblAsc = 'ENSEMBL_ASC',
+  EnsemblDesc = 'ENSEMBL_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  RefAttrValueAsc = 'REF_ATTR_VALUE_ASC',
+  RefAttrValueDesc = 'REF_ATTR_VALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
+  SymbolAsc = 'SYMBOL_ASC',
+  SymbolDesc = 'SYMBOL_DESC'
+}
+
+export type DiffexpV1Subset = {
+  __typename?: 'DiffexpV1Subset';
+  attributeName: Maybe<Scalars['String']>;
+  cmpAttrValue: Maybe<Scalars['String']>;
+  ensembl: Maybe<Scalars['String']>;
+  log2Foldchange: Maybe<Scalars['Float']>;
+  pvalue: Maybe<Scalars['Float']>;
+  pvalueAdj: Maybe<Scalars['Float']>;
+  refAttrValue: Maybe<Scalars['String']>;
+  score: Maybe<Scalars['Float']>;
+  studyId: Maybe<Scalars['Int']>;
+  symbol: Maybe<Scalars['String']>;
+};
+
+/**
+ * A condition to be used against `DiffexpV1Subset` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type DiffexpV1SubsetCondition = {
+  /** Checks for equality with the object’s `attributeName` field. */
+  attributeName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `cmpAttrValue` field. */
+  cmpAttrValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ensembl` field. */
+  ensembl: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalue` field. */
+  pvalue: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `refAttrValue` field. */
+  refAttrValue: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `score` field. */
+  score: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `studyId` field. */
+  studyId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `symbol` field. */
+  symbol: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `DiffexpV1Subset` object types. All fields are combined with a logical ‘and.’ */
+export type DiffexpV1SubsetFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<DiffexpV1SubsetFilter>>;
+  /** Filter by the object’s `attributeName` field. */
+  attributeName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `cmpAttrValue` field. */
+  cmpAttrValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ensembl` field. */
+  ensembl: InputMaybe<StringFilter>;
+  /** Filter by the object’s `log2Foldchange` field. */
+  log2Foldchange: InputMaybe<FloatFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<DiffexpV1SubsetFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<DiffexpV1SubsetFilter>>;
+  /** Filter by the object’s `pvalue` field. */
+  pvalue: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `pvalueAdj` field. */
+  pvalueAdj: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `refAttrValue` field. */
+  refAttrValue: InputMaybe<StringFilter>;
+  /** Filter by the object’s `score` field. */
+  score: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `studyId` field. */
+  studyId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `symbol` field. */
+  symbol: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `DiffexpV1Subset` */
+export type DiffexpV1SubsetInput = {
+  attributeName: InputMaybe<Scalars['String']>;
+  cmpAttrValue: InputMaybe<Scalars['String']>;
+  ensembl: InputMaybe<Scalars['String']>;
+  log2Foldchange: InputMaybe<Scalars['Float']>;
+  pvalue: InputMaybe<Scalars['Float']>;
+  pvalueAdj: InputMaybe<Scalars['Float']>;
+  refAttrValue: InputMaybe<Scalars['String']>;
+  score: InputMaybe<Scalars['Float']>;
+  studyId: InputMaybe<Scalars['Int']>;
+  symbol: InputMaybe<Scalars['String']>;
+};
+
+/** A connection to a list of `DiffexpV1Subset` values. */
+export type DiffexpV1SubsetsConnection = {
+  __typename?: 'DiffexpV1SubsetsConnection';
+  /** A list of edges which contains the `DiffexpV1Subset` and cursor to aid in pagination. */
+  edges: Array<DiffexpV1SubsetsEdge>;
+  /** A list of `DiffexpV1Subset` objects. */
+  nodes: Array<Maybe<DiffexpV1Subset>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `DiffexpV1Subset` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `DiffexpV1Subset` edge in the connection. */
+export type DiffexpV1SubsetsEdge = {
+  __typename?: 'DiffexpV1SubsetsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `DiffexpV1Subset` at the end of the edge. */
+  node: Maybe<DiffexpV1Subset>;
+};
+
+/** Methods to use when ordering `DiffexpV1Subset`. */
+export enum DiffexpV1SubsetsOrderBy {
+  AttributeNameAsc = 'ATTRIBUTE_NAME_ASC',
+  AttributeNameDesc = 'ATTRIBUTE_NAME_DESC',
+  CmpAttrValueAsc = 'CMP_ATTR_VALUE_ASC',
+  CmpAttrValueDesc = 'CMP_ATTR_VALUE_DESC',
+  EnsemblAsc = 'ENSEMBL_ASC',
+  EnsemblDesc = 'ENSEMBL_DESC',
+  Log2FoldchangeAsc = 'LOG2_FOLDCHANGE_ASC',
+  Log2FoldchangeDesc = 'LOG2_FOLDCHANGE_DESC',
+  Natural = 'NATURAL',
+  PvalueAdjAsc = 'PVALUE_ADJ_ASC',
+  PvalueAdjDesc = 'PVALUE_ADJ_DESC',
+  PvalueAsc = 'PVALUE_ASC',
+  PvalueDesc = 'PVALUE_DESC',
+  RefAttrValueAsc = 'REF_ATTR_VALUE_ASC',
+  RefAttrValueDesc = 'REF_ATTR_VALUE_DESC',
+  ScoreAsc = 'SCORE_ASC',
+  ScoreDesc = 'SCORE_DESC',
+  StudyIdAsc = 'STUDY_ID_ASC',
+  StudyIdDesc = 'STUDY_ID_DESC',
+  SymbolAsc = 'SYMBOL_ASC',
+  SymbolDesc = 'SYMBOL_DESC'
 }
 
 export type ExpressionByAnnotation = {
@@ -4692,7 +5401,6 @@ export type MinimumTreesResult = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
-  awsBatchSubmitCelleniumCliJob: Maybe<AwsBatchSubmitCelleniumCliJobPayload>;
   conceptAllChildrenPaths: Maybe<ConceptAllChildrenPathsPayload>;
   /** Creates a single `AnnotationGroup`. */
   createAnnotationGroup: Maybe<CreateAnnotationGroupPayload>;
@@ -4712,10 +5420,22 @@ export type Mutation = {
   createConceptHierarchy: Maybe<CreateConceptHierarchyPayload>;
   /** Creates a single `ConceptSynonym`. */
   createConceptSynonym: Maybe<CreateConceptSynonymPayload>;
+  /** Creates a single `CustomAnnotationCellgroup`. */
+  createCustomAnnotationCellgroup: Maybe<CreateCustomAnnotationCellgroupPayload>;
   /** Creates a single `DifferentialExpression`. */
   createDifferentialExpression: Maybe<CreateDifferentialExpressionPayload>;
+  /** Creates a single `DifferentialExpression20231117`. */
+  createDifferentialExpression20231117: Maybe<CreateDifferentialExpression20231117Payload>;
+  /** Creates a single `DiffexpExport`. */
+  createDiffexpExport: Maybe<CreateDiffexpExportPayload>;
+  /** Creates a single `DiffexpV1Subset`. */
+  createDiffexpV1Subset: Maybe<CreateDiffexpV1SubsetPayload>;
   /** Creates a single `OmicsBase`. */
   createOmicsBase: Maybe<CreateOmicsBasePayload>;
+  /** Creates a single `OmicsElement`. */
+  createOmicsElement: Maybe<CreateOmicsElementPayload>;
+  /** Creates a single `OmicsElementRegionGene`. */
+  createOmicsElementRegionGene: Maybe<CreateOmicsElementRegionGenePayload>;
   /** Creates a single `OmicsGene`. */
   createOmicsGene: Maybe<CreateOmicsGenePayload>;
   /** Creates a single `OmicsProteinAntibodyTag`. */
@@ -4810,6 +5530,7 @@ export type Mutation = {
   /** Deletes a single `StudySample` using its globally unique id. */
   deleteStudySampleByNodeId: Maybe<DeleteStudySamplePayload>;
   studyDefinitionUpdate: Maybe<StudyDefinitionUpdatePayload>;
+  studyOntologyDefinitionUpdate: Maybe<StudyOntologyDefinitionUpdatePayload>;
   /** Updates a single `AnnotationGroup` using a unique key and a patch. */
   updateAnnotationGroup: Maybe<UpdateAnnotationGroupPayload>;
   /** Updates a single `AnnotationGroup` using its globally unique id and a patch. */
@@ -4863,450 +5584,576 @@ export type Mutation = {
   userAnnotationEdit: Maybe<UserAnnotationEditPayload>;
 };
 
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationAwsBatchSubmitCelleniumCliJobArgs = {
-  input: AwsBatchSubmitCelleniumCliJobInput;
-};
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationConceptAllChildrenPathsArgs = {
   input: ConceptAllChildrenPathsInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateAnnotationGroupArgs = {
   input: CreateAnnotationGroupInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateAnnotationValueArgs = {
   input: CreateAnnotationValueInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateApiStudiesBaseArgs = {
   input: CreateApiStudiesBaseInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateApiStudiesBulkRnaArgs = {
   input: CreateApiStudiesBulkRnaInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateApiStudiesSingleCellArgs = {
   input: CreateApiStudiesSingleCellInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateApiStudyH5DownloadArgs = {
   input: CreateApiStudyH5DownloadInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateConceptArgs = {
   input: CreateConceptInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateConceptHierarchyArgs = {
   input: CreateConceptHierarchyInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateConceptSynonymArgs = {
   input: CreateConceptSynonymInput;
 };
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateCustomAnnotationCellgroupArgs = {
+  input: CreateCustomAnnotationCellgroupInput;
+};
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDifferentialExpressionArgs = {
   input: CreateDifferentialExpressionInput;
 };
 
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateDifferentialExpression20231117Args = {
+  input: CreateDifferentialExpression20231117Input;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateDiffexpExportArgs = {
+  input: CreateDiffexpExportInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateDiffexpV1SubsetArgs = {
+  input: CreateDiffexpV1SubsetInput;
+};
+
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsBaseArgs = {
   input: CreateOmicsBaseInput;
 };
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateOmicsElementArgs = {
+  input: CreateOmicsElementInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateOmicsElementRegionGeneArgs = {
+  input: CreateOmicsElementRegionGeneInput;
+};
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsGeneArgs = {
   input: CreateOmicsGeneInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsProteinAntibodyTagArgs = {
   input: CreateOmicsProteinAntibodyTagInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsProteinAntibodyTagGeneArgs = {
   input: CreateOmicsProteinAntibodyTagGeneInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsRegionArgs = {
   input: CreateOmicsRegionInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsRegionGeneArgs = {
   input: CreateOmicsRegionGeneInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsTranscriptionFactorArgs = {
   input: CreateOmicsTranscriptionFactorInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOmicsTranscriptionFactorGeneArgs = {
   input: CreateOmicsTranscriptionFactorGeneInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateOntologyArgs = {
   input: CreateOntologyInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateReferenceStudyArgs = {
   input: CreateReferenceStudyInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateS3TempCredentialsArgs = {
   input: CreateS3TempCredentialsInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyArgs = {
   input: CreateStudyInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyAdministrableCurrentuserArgs = {
   input: CreateStudyAdministrableCurrentuserInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyAnnotationGroupUiArgs = {
   input: CreateStudyAnnotationGroupUiInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyForCurrentUserArgs = {
   input: CreateStudyForCurrentUserInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyH5AdPresignedUrlArgs = {
   input: CreateStudyH5AdPresignedUrlInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyLayerArgs = {
   input: CreateStudyLayerInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyOmicArgs = {
   input: CreateStudyOmicInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyOverviewArgs = {
   input: CreateStudyOverviewInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudySampleArgs = {
   input: CreateStudySampleInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudySampleAnnotationArgs = {
   input: CreateStudySampleAnnotationInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudySampleProjectionArgs = {
   input: CreateStudySampleProjectionInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyUploadArgs = {
   input: CreateStudyUploadInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateStudyVisibleCurrentuserArgs = {
   input: CreateStudyVisibleCurrentuserInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserAnnotationGroupArgs = {
   input: CreateUserAnnotationGroupInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAllStudyDataArgs = {
   input: DeleteAllStudyDataInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAnnotationGroupArgs = {
   input: DeleteAnnotationGroupInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAnnotationGroupByNodeIdArgs = {
   input: DeleteAnnotationGroupByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAnnotationValueArgs = {
   input: DeleteAnnotationValueInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAnnotationValueByNodeIdArgs = {
   input: DeleteAnnotationValueByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteConceptArgs = {
   input: DeleteConceptInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteConceptByNodeIdArgs = {
   input: DeleteConceptByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsBaseArgs = {
   input: DeleteOmicsBaseInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsBaseByNodeIdArgs = {
   input: DeleteOmicsBaseByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsGeneArgs = {
   input: DeleteOmicsGeneInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsGeneByNodeIdArgs = {
   input: DeleteOmicsGeneByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsProteinAntibodyTagArgs = {
   input: DeleteOmicsProteinAntibodyTagInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsProteinAntibodyTagByNodeIdArgs = {
   input: DeleteOmicsProteinAntibodyTagByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsRegionArgs = {
   input: DeleteOmicsRegionInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsRegionByNodeIdArgs = {
   input: DeleteOmicsRegionByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsTranscriptionFactorArgs = {
   input: DeleteOmicsTranscriptionFactorInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOmicsTranscriptionFactorByNodeIdArgs = {
   input: DeleteOmicsTranscriptionFactorByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOntologyArgs = {
   input: DeleteOntologyInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteOntologyByNodeIdArgs = {
   input: DeleteOntologyByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudyArgs = {
   input: DeleteStudyInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudyByNodeIdArgs = {
   input: DeleteStudyByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudyLayerArgs = {
   input: DeleteStudyLayerInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudyLayerByNodeIdArgs = {
   input: DeleteStudyLayerByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudySampleArgs = {
   input: DeleteStudySampleInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteStudySampleByNodeIdArgs = {
   input: DeleteStudySampleByNodeIdInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationStudyDefinitionUpdateArgs = {
   input: StudyDefinitionUpdateInput;
 };
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationStudyOntologyDefinitionUpdateArgs = {
+  input: StudyOntologyDefinitionUpdateInput;
+};
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateAnnotationGroupArgs = {
   input: UpdateAnnotationGroupInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateAnnotationGroupByNodeIdArgs = {
   input: UpdateAnnotationGroupByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateAnnotationValueArgs = {
   input: UpdateAnnotationValueInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateAnnotationValueByNodeIdArgs = {
   input: UpdateAnnotationValueByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateConceptArgs = {
   input: UpdateConceptInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateConceptByNodeIdArgs = {
   input: UpdateConceptByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsBaseArgs = {
   input: UpdateOmicsBaseInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsBaseByNodeIdArgs = {
   input: UpdateOmicsBaseByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsGeneArgs = {
   input: UpdateOmicsGeneInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsGeneByNodeIdArgs = {
   input: UpdateOmicsGeneByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsProteinAntibodyTagArgs = {
   input: UpdateOmicsProteinAntibodyTagInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsProteinAntibodyTagByNodeIdArgs = {
   input: UpdateOmicsProteinAntibodyTagByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsRegionArgs = {
   input: UpdateOmicsRegionInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsRegionByNodeIdArgs = {
   input: UpdateOmicsRegionByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsTranscriptionFactorArgs = {
   input: UpdateOmicsTranscriptionFactorInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOmicsTranscriptionFactorByNodeIdArgs = {
   input: UpdateOmicsTranscriptionFactorByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOntologyArgs = {
   input: UpdateOntologyInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateOntologyByNodeIdArgs = {
   input: UpdateOntologyByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudyArgs = {
   input: UpdateStudyInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudyByNodeIdArgs = {
   input: UpdateStudyByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudyLayerArgs = {
   input: UpdateStudyLayerInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudyLayerByNodeIdArgs = {
   input: UpdateStudyLayerByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudySampleArgs = {
   input: UpdateStudySampleInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateStudySampleByNodeIdArgs = {
   input: UpdateStudySampleByNodeIdInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUserAnnotationDefineArgs = {
   input: UserAnnotationDefineInput;
 };
 
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUserAnnotationDeleteArgs = {
   input: UserAnnotationDeleteInput;
 };
+
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUserAnnotationEditArgs = {
@@ -5434,7 +6281,7 @@ export enum OmicsAllsOrderBy {
   RegionAsc = 'REGION_ASC',
   RegionDesc = 'REGION_DESC',
   TaxIdAsc = 'TAX_ID_ASC',
-  TaxIdDesc = 'TAX_ID_DESC',
+  TaxIdDesc = 'TAX_ID_DESC'
 }
 
 export type OmicsAutocompleteResult = {
@@ -5514,7 +6361,7 @@ export type OmicsBase = Node & {
   omicsProteinAntibodyTagsByProteinAntibodyTagId: OmicsProteinAntibodyTagsConnection;
   /**
    * Reads and enables pagination through a set of `OmicsRegion`.
-   * @deprecated Please use omics_region_gene_region instead
+   * @deprecated Please use omics_region_newNameHere instead
    */
   omicsRegionsByRegionId: OmicsRegionsConnection;
   /** Reads a single `OmicsTranscriptionFactor` that is related to this `OmicsBase`. */
@@ -5526,13 +6373,14 @@ export type OmicsBase = Node & {
   omicsTranscriptionFactorsByOmicsId: OmicsTranscriptionFactorsConnection;
   omicsType: OmicsType;
   /** Reads a single `OmicsRegion` that is related to this `OmicsBase`. */
-  omics_region_gene_region: Maybe<OmicsRegion>;
+  omics_region_newNameHere: Maybe<OmicsRegion>;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsId: StudyOmicsConnection;
   /** Reads and enables pagination through a set of `StudyOmic`. */
   studyOmicsByOmicsIdList: Array<StudyOmic>;
   taxId: Scalars['Int'];
 };
+
 
 export type OmicsBaseDifferentialExpressionsByOmicsIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -5545,6 +6393,7 @@ export type OmicsBaseDifferentialExpressionsByOmicsIdArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
+
 export type OmicsBaseDifferentialExpressionsByOmicsIdListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
@@ -5552,6 +6401,7 @@ export type OmicsBaseDifferentialExpressionsByOmicsIdListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
+
 
 export type OmicsBaseOmicsGenesByGeneIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -5564,6 +6414,7 @@ export type OmicsBaseOmicsGenesByGeneIdArgs = {
   orderBy?: InputMaybe<Array<OmicsGenesOrderBy>>;
 };
 
+
 export type OmicsBaseOmicsProteinAntibodyTagsByProteinAntibodyTagIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -5574,6 +6425,7 @@ export type OmicsBaseOmicsProteinAntibodyTagsByProteinAntibodyTagIdArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
 };
+
 
 export type OmicsBaseOmicsRegionsByRegionIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -5586,6 +6438,7 @@ export type OmicsBaseOmicsRegionsByRegionIdArgs = {
   orderBy?: InputMaybe<Array<OmicsRegionsOrderBy>>;
 };
 
+
 export type OmicsBaseOmicsTranscriptionFactorsByOmicsIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -5597,6 +6450,7 @@ export type OmicsBaseOmicsTranscriptionFactorsByOmicsIdArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
 };
 
+
 export type OmicsBaseStudyOmicsByOmicsIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -5607,6 +6461,7 @@ export type OmicsBaseStudyOmicsByOmicsIdArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
+
 
 export type OmicsBaseStudyOmicsByOmicsIdListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
@@ -5719,7 +6574,303 @@ export enum OmicsBasesOrderBy {
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
   PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
   TaxIdAsc = 'TAX_ID_ASC',
+  TaxIdDesc = 'TAX_ID_DESC'
+}
+
+export type OmicsElement = {
+  __typename?: 'OmicsElement';
+  antibodySymbol: Maybe<Scalars['String']>;
+  build: Maybe<Scalars['String']>;
+  consensus: Maybe<Scalars['String']>;
+  degenerateConsensus: Maybe<Scalars['String']>;
+  ensemblGeneIds: Maybe<Array<Maybe<Scalars['String']>>>;
+  geneSymbols: Maybe<Array<Maybe<Scalars['String']>>>;
+  jasparMatrixId: Maybe<Scalars['String']>;
+  linkedGenes: Array<Maybe<Scalars['Int']>>;
+  name: Maybe<Scalars['String']>;
+  omicsType: Scalars['String'];
+  regionChr: Maybe<Scalars['String']>;
+  regionEnd: Maybe<Scalars['Int']>;
+  regionStart: Maybe<Scalars['Int']>;
+  taxId: Scalars['Int'];
+  tfClass: Maybe<Array<Maybe<Scalars['String']>>>;
+  tfFamily: Maybe<Array<Maybe<Scalars['String']>>>;
+  tfName: Maybe<Scalars['String']>;
+  tiledbOmicsIndex: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `OmicsElement` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type OmicsElementCondition = {
+  /** Checks for equality with the object’s `antibodySymbol` field. */
+  antibodySymbol: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `build` field. */
+  build: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `consensus` field. */
+  consensus: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `degenerateConsensus` field. */
+  degenerateConsensus: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ensemblGeneIds` field. */
+  ensemblGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `geneSymbols` field. */
+  geneSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `jasparMatrixId` field. */
+  jasparMatrixId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  /** Checks for equality with the object’s `name` field. */
+  name: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `omicsType` field. */
+  omicsType: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `regionChr` field. */
+  regionChr: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `regionEnd` field. */
+  regionEnd: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `regionStart` field. */
+  regionStart: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `taxId` field. */
+  taxId: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `tfClass` field. */
+  tfClass: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `tfFamily` field. */
+  tfFamily: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Checks for equality with the object’s `tfName` field. */
+  tfName: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tiledbOmicsIndex` field. */
+  tiledbOmicsIndex: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `OmicsElement` object types. All fields are combined with a logical ‘and.’ */
+export type OmicsElementFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<OmicsElementFilter>>;
+  /** Filter by the object’s `antibodySymbol` field. */
+  antibodySymbol: InputMaybe<StringFilter>;
+  /** Filter by the object’s `build` field. */
+  build: InputMaybe<StringFilter>;
+  /** Filter by the object’s `consensus` field. */
+  consensus: InputMaybe<StringFilter>;
+  /** Filter by the object’s `degenerateConsensus` field. */
+  degenerateConsensus: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ensemblGeneIds` field. */
+  ensemblGeneIds: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `geneSymbols` field. */
+  geneSymbols: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `jasparMatrixId` field. */
+  jasparMatrixId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `linkedGenes` field. */
+  linkedGenes: InputMaybe<IntListFilter>;
+  /** Filter by the object’s `name` field. */
+  name: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<OmicsElementFilter>;
+  /** Filter by the object’s `omicsType` field. */
+  omicsType: InputMaybe<StringFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<OmicsElementFilter>>;
+  /** Filter by the object’s `regionChr` field. */
+  regionChr: InputMaybe<StringFilter>;
+  /** Filter by the object’s `regionEnd` field. */
+  regionEnd: InputMaybe<IntFilter>;
+  /** Filter by the object’s `regionStart` field. */
+  regionStart: InputMaybe<IntFilter>;
+  /** Filter by the object’s `taxId` field. */
+  taxId: InputMaybe<IntFilter>;
+  /** Filter by the object’s `tfClass` field. */
+  tfClass: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `tfFamily` field. */
+  tfFamily: InputMaybe<StringListFilter>;
+  /** Filter by the object’s `tfName` field. */
+  tfName: InputMaybe<StringFilter>;
+  /** Filter by the object’s `tiledbOmicsIndex` field. */
+  tiledbOmicsIndex: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `OmicsElement` */
+export type OmicsElementInput = {
+  antibodySymbol: InputMaybe<Scalars['String']>;
+  build: InputMaybe<Scalars['String']>;
+  consensus: InputMaybe<Scalars['String']>;
+  degenerateConsensus: InputMaybe<Scalars['String']>;
+  ensemblGeneIds: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  geneSymbols: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  jasparMatrixId: InputMaybe<Scalars['String']>;
+  linkedGenes: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  name: InputMaybe<Scalars['String']>;
+  omicsType: Scalars['String'];
+  regionChr: InputMaybe<Scalars['String']>;
+  regionEnd: InputMaybe<Scalars['Int']>;
+  regionStart: InputMaybe<Scalars['Int']>;
+  taxId: Scalars['Int'];
+  tfClass: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tfFamily: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tfName: InputMaybe<Scalars['String']>;
+  tiledbOmicsIndex: InputMaybe<Scalars['Int']>;
+};
+
+export type OmicsElementRegionGene = {
+  __typename?: 'OmicsElementRegionGene';
+  ensemblGeneId: Maybe<Scalars['String']>;
+  evidence: Maybe<Scalars['String']>;
+  evidenceScore: Maybe<Scalars['Float']>;
+  evidenceSource: Maybe<Scalars['String']>;
+  gene: Maybe<Scalars['String']>;
+  tiledbOmicsIndex: Scalars['Int'];
+};
+
+/**
+ * A condition to be used against `OmicsElementRegionGene` object types. All fields
+ * are tested for equality and combined with a logical ‘and.’
+ */
+export type OmicsElementRegionGeneCondition = {
+  /** Checks for equality with the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `evidence` field. */
+  evidence: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `evidenceScore` field. */
+  evidenceScore: InputMaybe<Scalars['Float']>;
+  /** Checks for equality with the object’s `evidenceSource` field. */
+  evidenceSource: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `gene` field. */
+  gene: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tiledbOmicsIndex` field. */
+  tiledbOmicsIndex: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `OmicsElementRegionGene` object types. All fields are combined with a logical ‘and.’ */
+export type OmicsElementRegionGeneFilter = {
+  /** Checks for all expressions in this list. */
+  and: InputMaybe<Array<OmicsElementRegionGeneFilter>>;
+  /** Filter by the object’s `ensemblGeneId` field. */
+  ensemblGeneId: InputMaybe<StringFilter>;
+  /** Filter by the object’s `evidence` field. */
+  evidence: InputMaybe<StringFilter>;
+  /** Filter by the object’s `evidenceScore` field. */
+  evidenceScore: InputMaybe<FloatFilter>;
+  /** Filter by the object’s `evidenceSource` field. */
+  evidenceSource: InputMaybe<StringFilter>;
+  /** Filter by the object’s `gene` field. */
+  gene: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not: InputMaybe<OmicsElementRegionGeneFilter>;
+  /** Checks for any expressions in this list. */
+  or: InputMaybe<Array<OmicsElementRegionGeneFilter>>;
+  /** Filter by the object’s `tiledbOmicsIndex` field. */
+  tiledbOmicsIndex: InputMaybe<IntFilter>;
+};
+
+/** An input for mutations affecting `OmicsElementRegionGene` */
+export type OmicsElementRegionGeneInput = {
+  ensemblGeneId: InputMaybe<Scalars['String']>;
+  evidence: InputMaybe<Scalars['String']>;
+  evidenceScore: InputMaybe<Scalars['Float']>;
+  evidenceSource: InputMaybe<Scalars['String']>;
+  gene: InputMaybe<Scalars['String']>;
+  tiledbOmicsIndex: Scalars['Int'];
+};
+
+/** A connection to a list of `OmicsElementRegionGene` values. */
+export type OmicsElementRegionGenesConnection = {
+  __typename?: 'OmicsElementRegionGenesConnection';
+  /** A list of edges which contains the `OmicsElementRegionGene` and cursor to aid in pagination. */
+  edges: Array<OmicsElementRegionGenesEdge>;
+  /** A list of `OmicsElementRegionGene` objects. */
+  nodes: Array<Maybe<OmicsElementRegionGene>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `OmicsElementRegionGene` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `OmicsElementRegionGene` edge in the connection. */
+export type OmicsElementRegionGenesEdge = {
+  __typename?: 'OmicsElementRegionGenesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `OmicsElementRegionGene` at the end of the edge. */
+  node: Maybe<OmicsElementRegionGene>;
+};
+
+/** Methods to use when ordering `OmicsElementRegionGene`. */
+export enum OmicsElementRegionGenesOrderBy {
+  EnsemblGeneIdAsc = 'ENSEMBL_GENE_ID_ASC',
+  EnsemblGeneIdDesc = 'ENSEMBL_GENE_ID_DESC',
+  EvidenceAsc = 'EVIDENCE_ASC',
+  EvidenceDesc = 'EVIDENCE_DESC',
+  EvidenceScoreAsc = 'EVIDENCE_SCORE_ASC',
+  EvidenceScoreDesc = 'EVIDENCE_SCORE_DESC',
+  EvidenceSourceAsc = 'EVIDENCE_SOURCE_ASC',
+  EvidenceSourceDesc = 'EVIDENCE_SOURCE_DESC',
+  GeneAsc = 'GENE_ASC',
+  GeneDesc = 'GENE_DESC',
+  Natural = 'NATURAL',
+  TiledbOmicsIndexAsc = 'TILEDB_OMICS_INDEX_ASC',
+  TiledbOmicsIndexDesc = 'TILEDB_OMICS_INDEX_DESC'
+}
+
+/** A connection to a list of `OmicsElement` values. */
+export type OmicsElementsConnection = {
+  __typename?: 'OmicsElementsConnection';
+  /** A list of edges which contains the `OmicsElement` and cursor to aid in pagination. */
+  edges: Array<OmicsElementsEdge>;
+  /** A list of `OmicsElement` objects. */
+  nodes: Array<Maybe<OmicsElement>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `OmicsElement` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `OmicsElement` edge in the connection. */
+export type OmicsElementsEdge = {
+  __typename?: 'OmicsElementsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Maybe<Scalars['Cursor']>;
+  /** The `OmicsElement` at the end of the edge. */
+  node: Maybe<OmicsElement>;
+};
+
+/** Methods to use when ordering `OmicsElement`. */
+export enum OmicsElementsOrderBy {
+  AntibodySymbolAsc = 'ANTIBODY_SYMBOL_ASC',
+  AntibodySymbolDesc = 'ANTIBODY_SYMBOL_DESC',
+  BuildAsc = 'BUILD_ASC',
+  BuildDesc = 'BUILD_DESC',
+  ConsensusAsc = 'CONSENSUS_ASC',
+  ConsensusDesc = 'CONSENSUS_DESC',
+  DegenerateConsensusAsc = 'DEGENERATE_CONSENSUS_ASC',
+  DegenerateConsensusDesc = 'DEGENERATE_CONSENSUS_DESC',
+  EnsemblGeneIdsAsc = 'ENSEMBL_GENE_IDS_ASC',
+  EnsemblGeneIdsDesc = 'ENSEMBL_GENE_IDS_DESC',
+  GeneSymbolsAsc = 'GENE_SYMBOLS_ASC',
+  GeneSymbolsDesc = 'GENE_SYMBOLS_DESC',
+  JasparMatrixIdAsc = 'JASPAR_MATRIX_ID_ASC',
+  JasparMatrixIdDesc = 'JASPAR_MATRIX_ID_DESC',
+  LinkedGenesAsc = 'LINKED_GENES_ASC',
+  LinkedGenesDesc = 'LINKED_GENES_DESC',
+  NameAsc = 'NAME_ASC',
+  NameDesc = 'NAME_DESC',
+  Natural = 'NATURAL',
+  OmicsTypeAsc = 'OMICS_TYPE_ASC',
+  OmicsTypeDesc = 'OMICS_TYPE_DESC',
+  RegionChrAsc = 'REGION_CHR_ASC',
+  RegionChrDesc = 'REGION_CHR_DESC',
+  RegionEndAsc = 'REGION_END_ASC',
+  RegionEndDesc = 'REGION_END_DESC',
+  RegionStartAsc = 'REGION_START_ASC',
+  RegionStartDesc = 'REGION_START_DESC',
+  TaxIdAsc = 'TAX_ID_ASC',
   TaxIdDesc = 'TAX_ID_DESC',
+  TfClassAsc = 'TF_CLASS_ASC',
+  TfClassDesc = 'TF_CLASS_DESC',
+  TfFamilyAsc = 'TF_FAMILY_ASC',
+  TfFamilyDesc = 'TF_FAMILY_DESC',
+  TfNameAsc = 'TF_NAME_ASC',
+  TfNameDesc = 'TF_NAME_DESC',
+  TiledbOmicsIndexAsc = 'TILEDB_OMICS_INDEX_ASC',
+  TiledbOmicsIndexDesc = 'TILEDB_OMICS_INDEX_DESC'
 }
 
 export type OmicsGene = Node & {
@@ -5746,6 +6897,7 @@ export type OmicsGene = Node & {
   omicsTranscriptionFactorGenesByGeneIdList: Array<OmicsTranscriptionFactorGene>;
 };
 
+
 export type OmicsGeneOmicsProteinAntibodyTagGenesByGeneIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -5757,6 +6909,7 @@ export type OmicsGeneOmicsProteinAntibodyTagGenesByGeneIdArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
 
+
 export type OmicsGeneOmicsProteinAntibodyTagGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
   filter: InputMaybe<OmicsProteinAntibodyTagGeneFilter>;
@@ -5764,6 +6917,7 @@ export type OmicsGeneOmicsProteinAntibodyTagGenesByGeneIdListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
+
 
 export type OmicsGeneOmicsRegionGenesByGeneIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -5776,6 +6930,7 @@ export type OmicsGeneOmicsRegionGenesByGeneIdArgs = {
   orderBy?: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
 
+
 export type OmicsGeneOmicsRegionGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
   filter: InputMaybe<OmicsRegionGeneFilter>;
@@ -5783,6 +6938,7 @@ export type OmicsGeneOmicsRegionGenesByGeneIdListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
+
 
 export type OmicsGeneOmicsTranscriptionFactorGenesByGeneIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -5794,6 +6950,7 @@ export type OmicsGeneOmicsTranscriptionFactorGenesByGeneIdArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
+
 
 export type OmicsGeneOmicsTranscriptionFactorGenesByGeneIdListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
@@ -5886,7 +7043,7 @@ export enum OmicsGenesOrderBy {
   HgncSymbolsDesc = 'HGNC_SYMBOLS_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 export type OmicsProteinAntibodyTag = Node & {
@@ -5904,6 +7061,7 @@ export type OmicsProteinAntibodyTag = Node & {
   taxId: Scalars['Int'];
 };
 
+
 export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibodyTagIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -5914,6 +7072,7 @@ export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibody
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
+
 
 export type OmicsProteinAntibodyTagOmicsProteinAntibodyTagGenesByProteinAntibodyTagIdListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
@@ -6021,7 +7180,7 @@ export enum OmicsProteinAntibodyTagGenesOrderBy {
   GeneIdDesc = 'GENE_ID_DESC',
   Natural = 'NATURAL',
   ProteinAntibodyTagIdAsc = 'PROTEIN_ANTIBODY_TAG_ID_ASC',
-  ProteinAntibodyTagIdDesc = 'PROTEIN_ANTIBODY_TAG_ID_DESC',
+  ProteinAntibodyTagIdDesc = 'PROTEIN_ANTIBODY_TAG_ID_DESC'
 }
 
 /** An input for mutations affecting `OmicsProteinAntibodyTag` */
@@ -6070,7 +7229,7 @@ export enum OmicsProteinAntibodyTagsOrderBy {
   ProteinAntibodyTagIdAsc = 'PROTEIN_ANTIBODY_TAG_ID_ASC',
   ProteinAntibodyTagIdDesc = 'PROTEIN_ANTIBODY_TAG_ID_DESC',
   TaxIdAsc = 'TAX_ID_ASC',
-  TaxIdDesc = 'TAX_ID_DESC',
+  TaxIdDesc = 'TAX_ID_DESC'
 }
 
 export type OmicsRegion = Node & {
@@ -6084,11 +7243,12 @@ export type OmicsRegion = Node & {
   /** Reads and enables pagination through a set of `OmicsRegionGene`. */
   omicsRegionGenesByRegionIdList: Array<OmicsRegionGene>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   region: Scalars['String'];
   regionId: Scalars['Int'];
   startPosition: Scalars['Int'];
 };
+
 
 export type OmicsRegionOmicsRegionGenesByRegionIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -6100,6 +7260,7 @@ export type OmicsRegionOmicsRegionGenesByRegionIdArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
+
 
 export type OmicsRegionOmicsRegionGenesByRegionIdListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
@@ -6215,7 +7376,7 @@ export enum OmicsRegionGenesOrderBy {
   GeneIdDesc = 'GENE_ID_DESC',
   Natural = 'NATURAL',
   RegionIdAsc = 'REGION_ID_ASC',
-  RegionIdDesc = 'REGION_ID_DESC',
+  RegionIdDesc = 'REGION_ID_DESC'
 }
 
 /** An input for mutations affecting `OmicsRegion` */
@@ -6272,7 +7433,7 @@ export enum OmicsRegionsOrderBy {
   RegionIdAsc = 'REGION_ID_ASC',
   RegionIdDesc = 'REGION_ID_DESC',
   StartPositionAsc = 'START_POSITION_ASC',
-  StartPositionDesc = 'START_POSITION_DESC',
+  StartPositionDesc = 'START_POSITION_DESC'
 }
 
 export type OmicsTranscriptionFactor = Node & {
@@ -6289,6 +7450,7 @@ export type OmicsTranscriptionFactor = Node & {
   omicsTranscriptionFactorGenesByTranscriptionFactorIdList: Array<OmicsTranscriptionFactorGene>;
 };
 
+
 export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscriptionFactorIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -6299,6 +7461,7 @@ export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscription
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
+
 
 export type OmicsTranscriptionFactorOmicsTranscriptionFactorGenesByTranscriptionFactorIdListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
@@ -6402,7 +7565,7 @@ export enum OmicsTranscriptionFactorGenesOrderBy {
   GeneIdDesc = 'GENE_ID_DESC',
   Natural = 'NATURAL',
   TranscriptionFactorIdAsc = 'TRANSCRIPTION_FACTOR_ID_ASC',
-  TranscriptionFactorIdDesc = 'TRANSCRIPTION_FACTOR_ID_DESC',
+  TranscriptionFactorIdDesc = 'TRANSCRIPTION_FACTOR_ID_DESC'
 }
 
 /** An input for mutations affecting `OmicsTranscriptionFactor` */
@@ -6447,14 +7610,14 @@ export enum OmicsTranscriptionFactorsOrderBy {
   OmicsIdAsc = 'OMICS_ID_ASC',
   OmicsIdDesc = 'OMICS_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 export enum OmicsType {
   Gene = 'GENE',
   ProteinAntibodyTag = 'PROTEIN_ANTIBODY_TAG',
   Region = 'REGION',
-  TranscriptionFactor = 'TRANSCRIPTION_FACTOR',
+  TranscriptionFactor = 'TRANSCRIPTION_FACTOR'
 }
 
 /** A filter to be used against OmicsType fields. All fields are combined with a logical ‘and.’ */
@@ -6594,7 +7757,7 @@ export enum OntologiesOrderBy {
   OntidAsc = 'ONTID_ASC',
   OntidDesc = 'ONTID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
 }
 
 export type Ontology = Node & {
@@ -6609,6 +7772,7 @@ export type Ontology = Node & {
   ontid: Scalars['Int'];
 };
 
+
 export type OntologyConceptsByOntidArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -6619,6 +7783,7 @@ export type OntologyConceptsByOntidArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<ConceptsOrderBy>>;
 };
+
 
 export type OntologyConceptsByOntidListArgs = {
   condition: InputMaybe<ConceptCondition>;
@@ -6765,6 +7930,14 @@ export type Query = Node & {
   correlationTrianglePlot: Maybe<Scalars['String']>;
   currentUserEmail: Maybe<Scalars['String']>;
   currentUserGroups: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Reads and enables pagination through a set of `CustomAnnotationCellgroup`. */
+  customAnnotationCellgroups: Maybe<CustomAnnotationCellgroupsConnection>;
+  /** Reads a set of `CustomAnnotationCellgroup`. */
+  customAnnotationCellgroupsList: Maybe<Array<CustomAnnotationCellgroup>>;
+  /** Reads and enables pagination through a set of `DifferentialExpression20231117`. */
+  differentialExpression20231117s: Maybe<DifferentialExpression20231117sConnection>;
+  /** Reads a set of `DifferentialExpression20231117`. */
+  differentialExpression20231117sList: Maybe<Array<DifferentialExpression20231117>>;
   /** Reads and enables pagination through a set of `DifferentialExpressionV`. */
   differentialExpressionVs: Maybe<DifferentialExpressionVsConnection>;
   /** Reads a set of `DifferentialExpressionV`. */
@@ -6773,6 +7946,14 @@ export type Query = Node & {
   differentialExpressions: Maybe<DifferentialExpressionsConnection>;
   /** Reads a set of `DifferentialExpression`. */
   differentialExpressionsList: Maybe<Array<DifferentialExpression>>;
+  /** Reads and enables pagination through a set of `DiffexpExport`. */
+  diffexpExports: Maybe<DiffexpExportsConnection>;
+  /** Reads a set of `DiffexpExport`. */
+  diffexpExportsList: Maybe<Array<DiffexpExport>>;
+  /** Reads and enables pagination through a set of `DiffexpV1Subset`. */
+  diffexpV1Subsets: Maybe<DiffexpV1SubsetsConnection>;
+  /** Reads a set of `DiffexpV1Subset`. */
+  diffexpV1SubsetsList: Maybe<Array<DiffexpV1Subset>>;
   ensureTextArray: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Reads and enables pagination through a set of `ExpressionByAnnotation`. */
   expressionByAnnotation: Maybe<ExpressionByAnnotationsConnection>;
@@ -6808,6 +7989,14 @@ export type Query = Node & {
   omicsBases: Maybe<OmicsBasesConnection>;
   /** Reads a set of `OmicsBase`. */
   omicsBasesList: Maybe<Array<OmicsBase>>;
+  /** Reads and enables pagination through a set of `OmicsElementRegionGene`. */
+  omicsElementRegionGenes: Maybe<OmicsElementRegionGenesConnection>;
+  /** Reads a set of `OmicsElementRegionGene`. */
+  omicsElementRegionGenesList: Maybe<Array<OmicsElementRegionGene>>;
+  /** Reads and enables pagination through a set of `OmicsElement`. */
+  omicsElements: Maybe<OmicsElementsConnection>;
+  /** Reads a set of `OmicsElement`. */
+  omicsElementsList: Maybe<Array<OmicsElement>>;
   omicsGene: Maybe<OmicsGene>;
   /** Reads a single `OmicsGene` using its globally unique `ID`. */
   omicsGeneByNodeId: Maybe<OmicsGene>;
@@ -6963,6 +8152,7 @@ export type Query = Node & {
   violinPlot: Maybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type Query_AllUsedOntologyIdsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -6975,6 +8165,7 @@ export type Query_AllUsedOntologyIdsArgs = {
   orderBy?: InputMaybe<Array<_AllUsedOntologyIdsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type Query_AllUsedOntologyIdsListArgs = {
   condition: InputMaybe<_AllUsedOntologyIdCondition>;
@@ -6984,16 +8175,19 @@ export type Query_AllUsedOntologyIdsListArgs = {
   orderBy: InputMaybe<Array<_AllUsedOntologyIdsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type Query_ConceptHierarchyMinimumTreesImplArgs = {
   cidsLeaves: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   fullgraph: InputMaybe<Array<InputMaybe<ConceptWeightedParentInput>>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type Query_FinalBoxplotArgs = {
   a: InputMaybe<Array<InputMaybe<Scalars['Float']>>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type Query_SemanticOrderImplArgs = {
@@ -7001,15 +8195,18 @@ export type Query_SemanticOrderImplArgs = {
   fullgraph: InputMaybe<Array<InputMaybe<ConceptWeightedParentInput>>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupArgs = {
   annotationGroupId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupsArgs = {
@@ -7023,6 +8220,7 @@ export type QueryAnnotationGroupsArgs = {
   orderBy?: InputMaybe<Array<AnnotationGroupsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationGroupsListArgs = {
   condition: InputMaybe<AnnotationGroupCondition>;
@@ -7032,15 +8230,18 @@ export type QueryAnnotationGroupsListArgs = {
   orderBy: InputMaybe<Array<AnnotationGroupsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueArgs = {
   annotationValueId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueCoocurrenceArgs = {
@@ -7055,6 +8256,7 @@ export type QueryAnnotationValueCoocurrenceArgs = {
   studyId: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValueCoocurrenceListArgs = {
   annotationGroupId1: InputMaybe<Scalars['Int']>;
@@ -7064,6 +8266,7 @@ export type QueryAnnotationValueCoocurrenceListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   studyId: InputMaybe<Scalars['Int']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValuesArgs = {
@@ -7077,6 +8280,7 @@ export type QueryAnnotationValuesArgs = {
   orderBy?: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAnnotationValuesListArgs = {
   condition: InputMaybe<AnnotationValueCondition>;
@@ -7085,6 +8289,7 @@ export type QueryAnnotationValuesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<AnnotationValuesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiDifferentialExpressionsArgs = {
@@ -7098,6 +8303,7 @@ export type QueryApiDifferentialExpressionsArgs = {
   orderBy?: InputMaybe<Array<ApiDifferentialExpressionsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiDifferentialExpressionsListArgs = {
   condition: InputMaybe<ApiDifferentialExpressionCondition>;
@@ -7106,6 +8312,7 @@ export type QueryApiDifferentialExpressionsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiDifferentialExpressionsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiExpressionByAnnotationArgs = {
@@ -7124,6 +8331,7 @@ export type QueryApiExpressionByAnnotationArgs = {
   pStudyIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiExpressionByAnnotationListArgs = {
   filter: InputMaybe<ApiExpressionByAnnotationFilter>;
@@ -7138,6 +8346,7 @@ export type QueryApiExpressionByAnnotationListArgs = {
   pStudyIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiOmicsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -7150,6 +8359,7 @@ export type QueryApiOmicsArgs = {
   orderBy?: InputMaybe<Array<ApiOmicsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiOmicsListArgs = {
   condition: InputMaybe<ApiOmicCondition>;
@@ -7158,6 +8368,7 @@ export type QueryApiOmicsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiOmicsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesBasesArgs = {
@@ -7171,6 +8382,7 @@ export type QueryApiStudiesBasesArgs = {
   orderBy?: InputMaybe<Array<ApiStudiesBasesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesBasesListArgs = {
   condition: InputMaybe<ApiStudiesBaseCondition>;
@@ -7179,6 +8391,7 @@ export type QueryApiStudiesBasesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudiesBasesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesBulkRnasArgs = {
@@ -7192,6 +8405,7 @@ export type QueryApiStudiesBulkRnasArgs = {
   orderBy?: InputMaybe<Array<ApiStudiesBulkRnasOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesBulkRnasListArgs = {
   condition: InputMaybe<ApiStudiesBulkRnaCondition>;
@@ -7200,6 +8414,7 @@ export type QueryApiStudiesBulkRnasListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudiesBulkRnasOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesSingleCellsArgs = {
@@ -7213,6 +8428,7 @@ export type QueryApiStudiesSingleCellsArgs = {
   orderBy?: InputMaybe<Array<ApiStudiesSingleCellsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudiesSingleCellsListArgs = {
   condition: InputMaybe<ApiStudiesSingleCellCondition>;
@@ -7221,6 +8437,7 @@ export type QueryApiStudiesSingleCellsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudiesSingleCellsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudyAnnotationOverviewsArgs = {
@@ -7234,6 +8451,7 @@ export type QueryApiStudyAnnotationOverviewsArgs = {
   orderBy?: InputMaybe<Array<ApiStudyAnnotationOverviewsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudyAnnotationOverviewsListArgs = {
   condition: InputMaybe<ApiStudyAnnotationOverviewCondition>;
@@ -7242,6 +8460,7 @@ export type QueryApiStudyAnnotationOverviewsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudyAnnotationOverviewsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudyH5DownloadsArgs = {
@@ -7255,6 +8474,7 @@ export type QueryApiStudyH5DownloadsArgs = {
   orderBy?: InputMaybe<Array<ApiStudyH5DownloadsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryApiStudyH5DownloadsListArgs = {
   condition: InputMaybe<ApiStudyH5DownloadCondition>;
@@ -7263,6 +8483,7 @@ export type QueryApiStudyH5DownloadsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ApiStudyH5DownloadsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAutocompleteArgs = {
@@ -7275,6 +8496,7 @@ export type QueryAutocompleteArgs = {
   searchQuery: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryAutocompleteListArgs = {
   filter: InputMaybe<AutocompleteResultFilter>;
@@ -7283,20 +8505,24 @@ export type QueryAutocompleteListArgs = {
   searchQuery: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptArgs = {
   cid: Scalars['Int'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptCidArrayToCodesArgs = {
   arg0: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchiesArgs = {
@@ -7310,6 +8536,7 @@ export type QueryConceptHierarchiesArgs = {
   orderBy?: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchiesListArgs = {
   condition: InputMaybe<ConceptHierarchyCondition>;
@@ -7318,6 +8545,7 @@ export type QueryConceptHierarchiesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptHierarchiesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchyMinimumTreesParentsListsArgs = {
@@ -7331,6 +8559,7 @@ export type QueryConceptHierarchyMinimumTreesParentsListsArgs = {
   queryOntology: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptHierarchyMinimumTreesParentsListsListArgs = {
   filter: InputMaybe<ConceptHierarchyMinimumTreesParentsListsRecordFilter>;
@@ -7339,6 +8568,7 @@ export type QueryConceptHierarchyMinimumTreesParentsListsListArgs = {
   ontologyCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   queryOntology: InputMaybe<Scalars['String']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptSynonymsArgs = {
@@ -7352,6 +8582,7 @@ export type QueryConceptSynonymsArgs = {
   orderBy?: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptSynonymsListArgs = {
   condition: InputMaybe<ConceptSynonymCondition>;
@@ -7360,6 +8591,7 @@ export type QueryConceptSynonymsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ConceptSynonymsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsArgs = {
@@ -7373,6 +8605,7 @@ export type QueryConceptsArgs = {
   orderBy?: InputMaybe<Array<ConceptsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsInSemanticOrderArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -7385,6 +8618,7 @@ export type QueryConceptsInSemanticOrderArgs = {
   queryOntology: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsInSemanticOrderListArgs = {
   filter: InputMaybe<ConceptFilter>;
@@ -7393,6 +8627,7 @@ export type QueryConceptsInSemanticOrderListArgs = {
   ontologyCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   queryOntology: InputMaybe<Scalars['String']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryConceptsListArgs = {
@@ -7403,6 +8638,7 @@ export type QueryConceptsListArgs = {
   orderBy: InputMaybe<Array<ConceptsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryCorrelationTrianglePlotArgs = {
   pExcludeAnnotationValueIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
@@ -7410,6 +8646,53 @@ export type QueryCorrelationTrianglePlotArgs = {
   pStudyId: InputMaybe<Scalars['Int']>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCustomAnnotationCellgroupsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<CustomAnnotationCellgroupCondition>;
+  filter: InputMaybe<CustomAnnotationCellgroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CustomAnnotationCellgroupsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCustomAnnotationCellgroupsListArgs = {
+  condition: InputMaybe<CustomAnnotationCellgroupCondition>;
+  filter: InputMaybe<CustomAnnotationCellgroupFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<CustomAnnotationCellgroupsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDifferentialExpression20231117sArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<DifferentialExpression20231117Condition>;
+  filter: InputMaybe<DifferentialExpression20231117Filter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DifferentialExpression20231117sOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDifferentialExpression20231117sListArgs = {
+  condition: InputMaybe<DifferentialExpression20231117Condition>;
+  filter: InputMaybe<DifferentialExpression20231117Filter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<DifferentialExpression20231117sOrderBy>>;
+};
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryDifferentialExpressionVsArgs = {
@@ -7423,6 +8706,7 @@ export type QueryDifferentialExpressionVsArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionVsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryDifferentialExpressionVsListArgs = {
   condition: InputMaybe<DifferentialExpressionVCondition>;
@@ -7431,6 +8715,7 @@ export type QueryDifferentialExpressionVsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionVsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryDifferentialExpressionsArgs = {
@@ -7444,6 +8729,7 @@ export type QueryDifferentialExpressionsArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
@@ -7453,10 +8739,58 @@ export type QueryDifferentialExpressionsListArgs = {
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDiffexpExportsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<DiffexpExportCondition>;
+  filter: InputMaybe<DiffexpExportFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DiffexpExportsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDiffexpExportsListArgs = {
+  condition: InputMaybe<DiffexpExportCondition>;
+  filter: InputMaybe<DiffexpExportFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<DiffexpExportsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDiffexpV1SubsetsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<DiffexpV1SubsetCondition>;
+  filter: InputMaybe<DiffexpV1SubsetFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<DiffexpV1SubsetsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryDiffexpV1SubsetsListArgs = {
+  condition: InputMaybe<DiffexpV1SubsetCondition>;
+  filter: InputMaybe<DiffexpV1SubsetFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<DiffexpV1SubsetsOrderBy>>;
+};
+
+
 /** The root query type which gives access points into the data universe. */
 export type QueryEnsureTextArrayArgs = {
   a: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByAnnotationArgs = {
@@ -7472,6 +8806,7 @@ export type QueryExpressionByAnnotationArgs = {
   pStudyLayerIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByAnnotationListArgs = {
   filter: InputMaybe<ExpressionByAnnotationFilter>;
@@ -7482,6 +8817,7 @@ export type QueryExpressionByAnnotationListArgs = {
   pOmicsIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   pStudyLayerIds: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByOmicsIdsArgs = {
@@ -7496,6 +8832,7 @@ export type QueryExpressionByOmicsIdsArgs = {
   pSubsamplingProjection: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByOmicsIdsListArgs = {
   filter: InputMaybe<ExpressionByOmicFilter>;
@@ -7505,6 +8842,7 @@ export type QueryExpressionByOmicsIdsListArgs = {
   pStudyLayerId: InputMaybe<Scalars['Int']>;
   pSubsamplingProjection: InputMaybe<Scalars['String']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByTwoAnnotationsArgs = {
@@ -7523,6 +8861,7 @@ export type QueryExpressionByTwoAnnotationsArgs = {
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionByTwoAnnotationsListArgs = {
   filter: InputMaybe<ExpressionByTwoAnnotationFilter>;
@@ -7536,6 +8875,7 @@ export type QueryExpressionByTwoAnnotationsListArgs = {
   pStudyId: InputMaybe<Scalars['Int']>;
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryExpressionTtestArgs = {
@@ -7551,6 +8891,7 @@ export type QueryExpressionTtestArgs = {
   pStudyLayerId: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryGetCorrelatedGenesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -7563,6 +8904,7 @@ export type QueryGetCorrelatedGenesArgs = {
   studyId: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryGetCorrelatedGenesListArgs = {
   filter: InputMaybe<GetCorrelatedGenesRecordFilter>;
@@ -7572,10 +8914,12 @@ export type QueryGetCorrelatedGenesListArgs = {
   studyId: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsAllsArgs = {
@@ -7589,6 +8933,7 @@ export type QueryOmicsAllsArgs = {
   orderBy?: InputMaybe<Array<OmicsAllsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsAllsListArgs = {
   condition: InputMaybe<OmicsAllCondition>;
@@ -7597,6 +8942,7 @@ export type QueryOmicsAllsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsAllsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsAutocompleteArgs = {
@@ -7611,6 +8957,7 @@ export type QueryOmicsAutocompleteArgs = {
   taxIdFilter: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsAutocompleteListArgs = {
   filter: InputMaybe<OmicsAutocompleteResultFilter>;
@@ -7621,15 +8968,18 @@ export type QueryOmicsAutocompleteListArgs = {
   taxIdFilter: InputMaybe<Scalars['Int']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBaseArgs = {
   omicsId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBaseByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBasesArgs = {
@@ -7643,6 +8993,7 @@ export type QueryOmicsBasesArgs = {
   orderBy?: InputMaybe<Array<OmicsBasesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsBasesListArgs = {
   condition: InputMaybe<OmicsBaseCondition>;
@@ -7652,15 +9003,64 @@ export type QueryOmicsBasesListArgs = {
   orderBy: InputMaybe<Array<OmicsBasesOrderBy>>;
 };
 
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsElementRegionGenesArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<OmicsElementRegionGeneCondition>;
+  filter: InputMaybe<OmicsElementRegionGeneFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<OmicsElementRegionGenesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsElementRegionGenesListArgs = {
+  condition: InputMaybe<OmicsElementRegionGeneCondition>;
+  filter: InputMaybe<OmicsElementRegionGeneFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<OmicsElementRegionGenesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsElementsArgs = {
+  after: InputMaybe<Scalars['Cursor']>;
+  before: InputMaybe<Scalars['Cursor']>;
+  condition: InputMaybe<OmicsElementCondition>;
+  filter: InputMaybe<OmicsElementFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<OmicsElementsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryOmicsElementsListArgs = {
+  condition: InputMaybe<OmicsElementCondition>;
+  filter: InputMaybe<OmicsElementFilter>;
+  first: InputMaybe<Scalars['Int']>;
+  offset: InputMaybe<Scalars['Int']>;
+  orderBy: InputMaybe<Array<OmicsElementsOrderBy>>;
+};
+
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGeneArgs = {
   geneId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGeneByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGenesArgs = {
@@ -7674,6 +9074,7 @@ export type QueryOmicsGenesArgs = {
   orderBy?: InputMaybe<Array<OmicsGenesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsGenesListArgs = {
   condition: InputMaybe<OmicsGeneCondition>;
@@ -7683,15 +9084,18 @@ export type QueryOmicsGenesListArgs = {
   orderBy: InputMaybe<Array<OmicsGenesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagArgs = {
   proteinAntibodyTagId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagGenesArgs = {
@@ -7705,6 +9109,7 @@ export type QueryOmicsProteinAntibodyTagGenesArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagGenesListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagGeneCondition>;
@@ -7713,6 +9118,7 @@ export type QueryOmicsProteinAntibodyTagGenesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagGenesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagsArgs = {
@@ -7726,6 +9132,7 @@ export type QueryOmicsProteinAntibodyTagsArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsProteinAntibodyTagsListArgs = {
   condition: InputMaybe<OmicsProteinAntibodyTagCondition>;
@@ -7735,15 +9142,18 @@ export type QueryOmicsProteinAntibodyTagsListArgs = {
   orderBy: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionArgs = {
   regionId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionGenesArgs = {
@@ -7757,6 +9167,7 @@ export type QueryOmicsRegionGenesArgs = {
   orderBy?: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionGenesListArgs = {
   condition: InputMaybe<OmicsRegionGeneCondition>;
@@ -7765,6 +9176,7 @@ export type QueryOmicsRegionGenesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsRegionGenesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionsArgs = {
@@ -7778,6 +9190,7 @@ export type QueryOmicsRegionsArgs = {
   orderBy?: InputMaybe<Array<OmicsRegionsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsRegionsListArgs = {
   condition: InputMaybe<OmicsRegionCondition>;
@@ -7787,15 +9200,18 @@ export type QueryOmicsRegionsListArgs = {
   orderBy: InputMaybe<Array<OmicsRegionsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorArgs = {
   omicsId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorGenesArgs = {
@@ -7809,6 +9225,7 @@ export type QueryOmicsTranscriptionFactorGenesArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorGenesListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorGeneCondition>;
@@ -7817,6 +9234,7 @@ export type QueryOmicsTranscriptionFactorGenesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsTranscriptionFactorGenesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorsArgs = {
@@ -7830,6 +9248,7 @@ export type QueryOmicsTranscriptionFactorsArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOmicsTranscriptionFactorsListArgs = {
   condition: InputMaybe<OmicsTranscriptionFactorCondition>;
@@ -7838,6 +9257,7 @@ export type QueryOmicsTranscriptionFactorsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntCodesInfoArgs = {
@@ -7851,6 +9271,7 @@ export type QueryOntCodesInfoArgs = {
   pOntology: InputMaybe<Scalars['String']>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOntCodesInfoListArgs = {
   filter: InputMaybe<OntCodesInfoRecordFilter>;
@@ -7859,6 +9280,7 @@ export type QueryOntCodesInfoListArgs = {
   pOntCodes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   pOntology: InputMaybe<Scalars['String']>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologiesArgs = {
@@ -7872,6 +9294,7 @@ export type QueryOntologiesArgs = {
   orderBy?: InputMaybe<Array<OntologiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologiesListArgs = {
   condition: InputMaybe<OntologyCondition>;
@@ -7881,15 +9304,18 @@ export type QueryOntologiesListArgs = {
   orderBy: InputMaybe<Array<OntologiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologyArgs = {
   ontid: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryOntologyByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryReferenceStudiesArgs = {
@@ -7903,6 +9329,7 @@ export type QueryReferenceStudiesArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryReferenceStudiesListArgs = {
   condition: InputMaybe<ReferenceStudyCondition>;
@@ -7911,6 +9338,7 @@ export type QueryReferenceStudiesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryReferenceStudyOverviewsArgs = {
@@ -7924,6 +9352,7 @@ export type QueryReferenceStudyOverviewsArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudyOverviewsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryReferenceStudyOverviewsListArgs = {
   condition: InputMaybe<ReferenceStudyOverviewCondition>;
@@ -7932,6 +9361,7 @@ export type QueryReferenceStudyOverviewsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudyOverviewsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudiesArgs = {
@@ -7945,6 +9375,7 @@ export type QueryStudiesArgs = {
   orderBy?: InputMaybe<Array<StudiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudiesListArgs = {
   condition: InputMaybe<StudyCondition>;
@@ -7954,10 +9385,12 @@ export type QueryStudiesListArgs = {
   orderBy: InputMaybe<Array<StudiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyArgs = {
   studyId: Scalars['Int'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAdminDetailsArgs = {
@@ -7971,6 +9404,7 @@ export type QueryStudyAdminDetailsArgs = {
   orderBy?: InputMaybe<Array<StudyAdminDetailsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAdminDetailsListArgs = {
   condition: InputMaybe<StudyAdminDetailCondition>;
@@ -7979,6 +9413,7 @@ export type QueryStudyAdminDetailsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAdminDetailsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAdministrableCurrentusersArgs = {
@@ -7992,6 +9427,7 @@ export type QueryStudyAdministrableCurrentusersArgs = {
   orderBy?: InputMaybe<Array<StudyAdministrableCurrentusersOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAdministrableCurrentusersListArgs = {
   condition: InputMaybe<StudyAdministrableCurrentuserCondition>;
@@ -8000,6 +9436,7 @@ export type QueryStudyAdministrableCurrentusersListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAdministrableCurrentusersOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendGroupsArgs = {
@@ -8013,6 +9450,7 @@ export type QueryStudyAnnotationFrontendGroupsArgs = {
   orderBy?: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendGroupsListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendGroupCondition>;
@@ -8021,6 +9459,7 @@ export type QueryStudyAnnotationFrontendGroupsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendGroupsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendValuesArgs = {
@@ -8034,6 +9473,7 @@ export type QueryStudyAnnotationFrontendValuesArgs = {
   orderBy?: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationFrontendValuesListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
@@ -8042,6 +9482,7 @@ export type QueryStudyAnnotationFrontendValuesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationGroupUisArgs = {
@@ -8055,6 +9496,7 @@ export type QueryStudyAnnotationGroupUisArgs = {
   orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
@@ -8064,10 +9506,12 @@ export type QueryStudyAnnotationGroupUisListArgs = {
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyImportLogsArgs = {
@@ -8081,6 +9525,7 @@ export type QueryStudyImportLogsArgs = {
   orderBy?: InputMaybe<Array<StudyImportLogsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyImportLogsListArgs = {
   condition: InputMaybe<StudyImportLogCondition>;
@@ -8090,15 +9535,18 @@ export type QueryStudyImportLogsListArgs = {
   orderBy: InputMaybe<Array<StudyImportLogsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayerArgs = {
   studyLayerId: Scalars['Int'];
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayerByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayersArgs = {
@@ -8112,6 +9560,7 @@ export type QueryStudyLayersArgs = {
   orderBy?: InputMaybe<Array<StudyLayersOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyLayersListArgs = {
   condition: InputMaybe<StudyLayerCondition>;
@@ -8120,6 +9569,7 @@ export type QueryStudyLayersListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyLayersOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOmicsArgs = {
@@ -8133,6 +9583,7 @@ export type QueryStudyOmicsArgs = {
   orderBy?: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOmicsListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
@@ -8141,6 +9592,7 @@ export type QueryStudyOmicsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOmicsTransposedsArgs = {
@@ -8154,6 +9606,7 @@ export type QueryStudyOmicsTransposedsArgs = {
   orderBy?: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOmicsTransposedsListArgs = {
   condition: InputMaybe<StudyOmicsTransposedCondition>;
@@ -8162,6 +9615,7 @@ export type QueryStudyOmicsTransposedsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsTransposedsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewOntologiesArgs = {
@@ -8175,6 +9629,7 @@ export type QueryStudyOverviewOntologiesArgs = {
   orderBy?: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewOntologiesListArgs = {
   condition: InputMaybe<StudyOverviewOntologyCondition>;
@@ -8183,6 +9638,7 @@ export type QueryStudyOverviewOntologiesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewsArgs = {
@@ -8196,6 +9652,7 @@ export type QueryStudyOverviewsArgs = {
   orderBy?: InputMaybe<Array<StudyOverviewsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyOverviewsListArgs = {
   condition: InputMaybe<StudyOverviewCondition>;
@@ -8205,11 +9662,13 @@ export type QueryStudyOverviewsListArgs = {
   orderBy: InputMaybe<Array<StudyOverviewsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleArgs = {
   studyId: Scalars['Int'];
   studySampleId: Scalars['Int'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationSubsamplingsArgs = {
@@ -8223,6 +9682,7 @@ export type QueryStudySampleAnnotationSubsamplingsArgs = {
   orderBy?: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationSubsamplingsListArgs = {
   condition: InputMaybe<StudySampleAnnotationSubsamplingCondition>;
@@ -8231,6 +9691,7 @@ export type QueryStudySampleAnnotationSubsamplingsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationSubsamplingsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationsArgs = {
@@ -8244,6 +9705,7 @@ export type QueryStudySampleAnnotationsArgs = {
   orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
@@ -8253,10 +9715,12 @@ export type QueryStudySampleAnnotationsListArgs = {
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleByNodeIdArgs = {
   nodeId: Scalars['ID'];
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionSubsamplingTransposedsArgs = {
@@ -8270,6 +9734,7 @@ export type QueryStudySampleProjectionSubsamplingTransposedsArgs = {
   orderBy?: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionSubsamplingTransposedsListArgs = {
   condition: InputMaybe<StudySampleProjectionSubsamplingTransposedCondition>;
@@ -8278,6 +9743,7 @@ export type QueryStudySampleProjectionSubsamplingTransposedsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleProjectionSubsamplingTransposedsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionsArgs = {
@@ -8291,6 +9757,7 @@ export type QueryStudySampleProjectionsArgs = {
   orderBy?: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySampleProjectionsListArgs = {
   condition: InputMaybe<StudySampleProjectionCondition>;
@@ -8299,6 +9766,7 @@ export type QueryStudySampleProjectionsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySamplesArgs = {
@@ -8312,6 +9780,7 @@ export type QueryStudySamplesArgs = {
   orderBy?: InputMaybe<Array<StudySamplesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudySamplesListArgs = {
   condition: InputMaybe<StudySampleCondition>;
@@ -8320,6 +9789,7 @@ export type QueryStudySamplesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyVisibleCurrentusersArgs = {
@@ -8333,6 +9803,7 @@ export type QueryStudyVisibleCurrentusersArgs = {
   orderBy?: InputMaybe<Array<StudyVisibleCurrentusersOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryStudyVisibleCurrentusersListArgs = {
   condition: InputMaybe<StudyVisibleCurrentuserCondition>;
@@ -8341,6 +9812,7 @@ export type QueryStudyVisibleCurrentusersListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyVisibleCurrentusersOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTreeOntologiesArgs = {
@@ -8354,6 +9826,7 @@ export type QueryTreeOntologiesArgs = {
   orderBy?: InputMaybe<Array<TreeOntologiesOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryTreeOntologiesListArgs = {
   condition: InputMaybe<TreeOntologyCondition>;
@@ -8362,6 +9835,7 @@ export type QueryTreeOntologiesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<TreeOntologiesOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUserAnnotationGroupsArgs = {
@@ -8375,6 +9849,7 @@ export type QueryUserAnnotationGroupsArgs = {
   orderBy?: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
 
+
 /** The root query type which gives access points into the data universe. */
 export type QueryUserAnnotationGroupsListArgs = {
   condition: InputMaybe<UserAnnotationGroupCondition>;
@@ -8383,6 +9858,7 @@ export type QueryUserAnnotationGroupsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
+
 
 /** The root query type which gives access points into the data universe. */
 export type QueryViolinPlotArgs = {
@@ -8424,7 +9900,7 @@ export enum ReferenceStudiesOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   TissueAnnotationGroupIdAsc = 'TISSUE_ANNOTATION_GROUP_ID_ASC',
-  TissueAnnotationGroupIdDesc = 'TISSUE_ANNOTATION_GROUP_ID_DESC',
+  TissueAnnotationGroupIdDesc = 'TISSUE_ANNOTATION_GROUP_ID_DESC'
 }
 
 export type ReferenceStudy = {
@@ -8499,6 +9975,7 @@ export type ReferenceStudyOverview = {
   studyOntologyList: Array<StudyOverviewOntology>;
 };
 
+
 export type ReferenceStudyOverviewReferenceStudyInfoArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8510,6 +9987,7 @@ export type ReferenceStudyOverviewReferenceStudyInfoArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
+
 export type ReferenceStudyOverviewReferenceStudyInfoListArgs = {
   condition: InputMaybe<ReferenceStudyCondition>;
   filter: InputMaybe<ReferenceStudyFilter>;
@@ -8517,6 +9995,7 @@ export type ReferenceStudyOverviewReferenceStudyInfoListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
+
 
 export type ReferenceStudyOverviewStudyOntologyArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8528,6 +10007,7 @@ export type ReferenceStudyOverviewStudyOntologyArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
+
 
 export type ReferenceStudyOverviewStudyOntologyListArgs = {
   condition: InputMaybe<StudyOverviewOntologyCondition>;
@@ -8632,7 +10112,7 @@ export enum ReferenceStudyOverviewsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
-  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyNameDesc = 'STUDY_NAME_DESC'
 }
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
@@ -8821,7 +10301,7 @@ export enum StudiesOrderBy {
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   VisibleAsc = 'VISIBLE_ASC',
-  VisibleDesc = 'VISIBLE_DESC',
+  VisibleDesc = 'VISIBLE_DESC'
 }
 
 export type Study = Node & {
@@ -8883,6 +10363,7 @@ export type Study = Node & {
   visible: Maybe<Scalars['Boolean']>;
 };
 
+
 export type StudyDifferentialExpressionsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -8894,6 +10375,7 @@ export type StudyDifferentialExpressionsArgs = {
   orderBy?: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
 
+
 export type StudyDifferentialExpressionsListArgs = {
   condition: InputMaybe<DifferentialExpressionCondition>;
   filter: InputMaybe<DifferentialExpressionFilter>;
@@ -8901,6 +10383,7 @@ export type StudyDifferentialExpressionsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<DifferentialExpressionsOrderBy>>;
 };
+
 
 export type StudyReferenceStudiesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8913,6 +10396,7 @@ export type StudyReferenceStudiesArgs = {
   orderBy?: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
 
+
 export type StudyReferenceStudiesListArgs = {
   condition: InputMaybe<ReferenceStudyCondition>;
   filter: InputMaybe<ReferenceStudyFilter>;
@@ -8920,6 +10404,7 @@ export type StudyReferenceStudiesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<ReferenceStudiesOrderBy>>;
 };
+
 
 export type StudyStudyAnnotationGroupUisArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8932,6 +10417,7 @@ export type StudyStudyAnnotationGroupUisArgs = {
   orderBy?: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
 
+
 export type StudyStudyAnnotationGroupUisListArgs = {
   condition: InputMaybe<StudyAnnotationGroupUiCondition>;
   filter: InputMaybe<StudyAnnotationGroupUiFilter>;
@@ -8939,6 +10425,7 @@ export type StudyStudyAnnotationGroupUisListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyAnnotationGroupUisOrderBy>>;
 };
+
 
 export type StudyStudyLayersArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8951,6 +10438,7 @@ export type StudyStudyLayersArgs = {
   orderBy?: InputMaybe<Array<StudyLayersOrderBy>>;
 };
 
+
 export type StudyStudyLayersListArgs = {
   condition: InputMaybe<StudyLayerCondition>;
   filter: InputMaybe<StudyLayerFilter>;
@@ -8958,6 +10446,7 @@ export type StudyStudyLayersListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyLayersOrderBy>>;
 };
+
 
 export type StudyStudyOmicsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8970,6 +10459,7 @@ export type StudyStudyOmicsArgs = {
   orderBy?: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
 
+
 export type StudyStudyOmicsListArgs = {
   condition: InputMaybe<StudyOmicCondition>;
   filter: InputMaybe<StudyOmicFilter>;
@@ -8977,6 +10467,7 @@ export type StudyStudyOmicsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudyOmicsOrderBy>>;
 };
+
 
 export type StudyStudySampleAnnotationsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -8989,6 +10480,7 @@ export type StudyStudySampleAnnotationsArgs = {
   orderBy?: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
 
+
 export type StudyStudySampleAnnotationsListArgs = {
   condition: InputMaybe<StudySampleAnnotationCondition>;
   filter: InputMaybe<StudySampleAnnotationFilter>;
@@ -8996,6 +10488,7 @@ export type StudyStudySampleAnnotationsListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySampleAnnotationsOrderBy>>;
 };
+
 
 export type StudyStudySamplesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -9008,6 +10501,7 @@ export type StudyStudySamplesArgs = {
   orderBy?: InputMaybe<Array<StudySamplesOrderBy>>;
 };
 
+
 export type StudyStudySamplesListArgs = {
   condition: InputMaybe<StudySampleCondition>;
   filter: InputMaybe<StudySampleFilter>;
@@ -9015,6 +10509,7 @@ export type StudyStudySamplesListArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy: InputMaybe<Array<StudySamplesOrderBy>>;
 };
+
 
 export type StudyUserAnnotationGroupsArgs = {
   after: InputMaybe<Scalars['Cursor']>;
@@ -9026,6 +10521,7 @@ export type StudyUserAnnotationGroupsArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<UserAnnotationGroupsOrderBy>>;
 };
+
 
 export type StudyUserAnnotationGroupsListArgs = {
   condition: InputMaybe<UserAnnotationGroupCondition>;
@@ -9199,7 +10695,7 @@ export enum StudyAdminDetailsOrderBy {
   TissueNcitIdsAsc = 'TISSUE_NCIT_IDS_ASC',
   TissueNcitIdsDesc = 'TISSUE_NCIT_IDS_DESC',
   VisibleAsc = 'VISIBLE_ASC',
-  VisibleDesc = 'VISIBLE_DESC',
+  VisibleDesc = 'VISIBLE_DESC'
 }
 
 export type StudyAdministrableCurrentuser = {
@@ -9259,7 +10755,7 @@ export type StudyAdministrableCurrentusersEdge = {
 export enum StudyAdministrableCurrentusersOrderBy {
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type StudyAnnotationFrontendGroup = {
@@ -9280,6 +10776,7 @@ export type StudyAnnotationFrontendGroup = {
   studyId: Maybe<Scalars['Int']>;
 };
 
+
 export type StudyAnnotationFrontendGroupAnnotationValuesArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -9290,6 +10787,7 @@ export type StudyAnnotationFrontendGroupAnnotationValuesArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudyAnnotationFrontendValuesOrderBy>>;
 };
+
 
 export type StudyAnnotationFrontendGroupAnnotationValuesListArgs = {
   condition: InputMaybe<StudyAnnotationFrontendValueCondition>;
@@ -9400,7 +10898,7 @@ export enum StudyAnnotationFrontendGroupsOrderBy {
   PrivateToUserAsc = 'PRIVATE_TO_USER_ASC',
   PrivateToUserDesc = 'PRIVATE_TO_USER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type StudyAnnotationFrontendValue = {
@@ -9492,7 +10990,7 @@ export enum StudyAnnotationFrontendValuesOrderBy {
   SampleCountAsc = 'SAMPLE_COUNT_ASC',
   SampleCountDesc = 'SAMPLE_COUNT_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type StudyAnnotationGroupUi = {
@@ -9596,7 +11094,7 @@ export enum StudyAnnotationGroupUisOrderBy {
   PairwiseDifferentialExpressionCalculatedAsc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_ASC',
   PairwiseDifferentialExpressionCalculatedDesc = 'PAIRWISE_DIFFERENTIAL_EXPRESSION_CALCULATED_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 /** A condition to be used against `Study` object types. All fields are tested for equality and combined with a logical ‘and.’ */
@@ -9785,7 +11283,7 @@ export enum StudyImportLogsOrderBy {
   ImportLogDesc = 'IMPORT_LOG_DESC',
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 /** An input for mutations affecting `Study` */
@@ -9908,7 +11406,7 @@ export enum StudyLayersOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyLayerIdAsc = 'STUDY_LAYER_ID_ASC',
-  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC',
+  StudyLayerIdDesc = 'STUDY_LAYER_ID_DESC'
 }
 
 export type StudyOmic = {
@@ -10004,7 +11502,7 @@ export enum StudyOmicsOrderBy {
   RegionStartAsc = 'REGION_START_ASC',
   RegionStartDesc = 'REGION_START_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type StudyOmicsTransposed = {
@@ -10094,8 +11592,30 @@ export enum StudyOmicsTransposedsOrderBy {
   RowNumberAsc = 'ROW_NUMBER_ASC',
   RowNumberDesc = 'ROW_NUMBER_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
+
+/** All input for the `studyOntologyDefinitionUpdate` mutation. */
+export type StudyOntologyDefinitionUpdateInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `studyOntologyDefinitionUpdate` mutation. */
+export type StudyOntologyDefinitionUpdatePayload = {
+  __typename?: 'StudyOntologyDefinitionUpdatePayload';
+  boolean: Maybe<Scalars['Boolean']>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query: Maybe<Query>;
+};
 
 export type StudyOverview = {
   __typename?: 'StudyOverview';
@@ -10113,6 +11633,7 @@ export type StudyOverview = {
   studyOntologyList: Array<StudyOverviewOntology>;
 };
 
+
 export type StudyOverviewStudyOntologyArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -10123,6 +11644,7 @@ export type StudyOverviewStudyOntologyArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudyOverviewOntologiesOrderBy>>;
 };
+
 
 export type StudyOverviewStudyOntologyListArgs = {
   condition: InputMaybe<StudyOverviewOntologyCondition>;
@@ -10227,7 +11749,7 @@ export enum StudyOverviewOntologiesOrderBy {
   ParentIdsAsc = 'PARENT_IDS_ASC',
   ParentIdsDesc = 'PARENT_IDS_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type StudyOverviewOntology = {
@@ -10320,7 +11842,7 @@ export enum StudyOverviewsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudyNameAsc = 'STUDY_NAME_ASC',
-  StudyNameDesc = 'STUDY_NAME_DESC',
+  StudyNameDesc = 'STUDY_NAME_DESC'
 }
 
 /** Represents an update to a `Study`. Fields that are set will be updated. */
@@ -10364,6 +11886,7 @@ export type StudySample = Node & {
   studySampleProjectionsByStudyIdAndStudySampleIdList: Array<StudySampleProjection>;
 };
 
+
 export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdArgs = {
   after: InputMaybe<Scalars['Cursor']>;
   before: InputMaybe<Scalars['Cursor']>;
@@ -10374,6 +11897,7 @@ export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdArgs = {
   offset: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<StudySampleProjectionsOrderBy>>;
 };
+
 
 export type StudySampleStudySampleProjectionsByStudyIdAndStudySampleIdListArgs = {
   condition: InputMaybe<StudySampleProjectionCondition>;
@@ -10509,7 +12033,7 @@ export enum StudySampleAnnotationSubsamplingsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
-  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC'
 }
 
 /** A connection to a list of `StudySampleAnnotation` values. */
@@ -10544,7 +12068,7 @@ export enum StudySampleAnnotationsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdsAsc = 'STUDY_SAMPLE_IDS_ASC',
-  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC',
+  StudySampleIdsDesc = 'STUDY_SAMPLE_IDS_DESC'
 }
 
 /**
@@ -10746,7 +12270,7 @@ export enum StudySampleProjectionSubsamplingTransposedsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
-  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
 }
 
 /** A connection to a list of `StudySampleProjection` values. */
@@ -10785,7 +12309,7 @@ export enum StudySampleProjectionsOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
-  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
 }
 
 /** A connection to a list of `StudySample` values. */
@@ -10822,7 +12346,7 @@ export enum StudySamplesOrderBy {
   StudyIdAsc = 'STUDY_ID_ASC',
   StudyIdDesc = 'STUDY_ID_DESC',
   StudySampleIdAsc = 'STUDY_SAMPLE_ID_ASC',
-  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC',
+  StudySampleIdDesc = 'STUDY_SAMPLE_ID_DESC'
 }
 
 export type StudyVisibleCurrentuser = {
@@ -10882,7 +12406,7 @@ export type StudyVisibleCurrentusersEdge = {
 export enum StudyVisibleCurrentusersOrderBy {
   Natural = 'NATURAL',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 /** A connection to a list of `TreeOntology` values. */
@@ -10921,7 +12445,7 @@ export enum TreeOntologiesOrderBy {
   ParentCidsAsc = 'PARENT_CIDS_ASC',
   ParentCidsDesc = 'PARENT_CIDS_DESC',
   ParentOntCodePathAsc = 'PARENT_ONT_CODE_PATH_ASC',
-  ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC',
+  ParentOntCodePathDesc = 'PARENT_ONT_CODE_PATH_DESC'
 }
 
 export type TreeOntology = {
@@ -11016,6 +12540,7 @@ export type UpdateAnnotationGroupPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our update `AnnotationGroup` mutation. */
 export type UpdateAnnotationGroupPayloadAnnotationGroupEdgeArgs = {
   orderBy?: InputMaybe<Array<AnnotationGroupsOrderBy>>;
@@ -11063,6 +12588,7 @@ export type UpdateAnnotationValuePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our update `AnnotationValue` mutation. */
 export type UpdateAnnotationValuePayloadAnnotationValueEdgeArgs = {
@@ -11112,6 +12638,7 @@ export type UpdateConceptPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our update `Concept` mutation. */
 export type UpdateConceptPayloadConceptEdgeArgs = {
   orderBy?: InputMaybe<Array<ConceptsOrderBy>>;
@@ -11157,6 +12684,7 @@ export type UpdateOmicsBasePayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our update `OmicsBase` mutation. */
 export type UpdateOmicsBasePayloadOmicsBaseEdgeArgs = {
@@ -11206,6 +12734,7 @@ export type UpdateOmicsGenePayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our update `OmicsGene` mutation. */
 export type UpdateOmicsGenePayloadOmicsGeneEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsGenesOrderBy>>;
@@ -11254,6 +12783,7 @@ export type UpdateOmicsProteinAntibodyTagPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our update `OmicsProteinAntibodyTag` mutation. */
 export type UpdateOmicsProteinAntibodyTagPayloadOmicsProteinAntibodyTagEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsProteinAntibodyTagsOrderBy>>;
@@ -11297,10 +12827,11 @@ export type UpdateOmicsRegionPayload = {
   /** An edge for our `OmicsRegion`. May be used by Relay 1. */
   omicsRegionEdge: Maybe<OmicsRegionsEdge>;
   /** Reads a single `OmicsBase` that is related to this `OmicsRegion`. */
-  omics_region_gene_region: Maybe<OmicsBase>;
+  omics_region_newNameHere: Maybe<OmicsBase>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our update `OmicsRegion` mutation. */
 export type UpdateOmicsRegionPayloadOmicsRegionEdgeArgs = {
@@ -11350,6 +12881,7 @@ export type UpdateOmicsTranscriptionFactorPayload = {
   query: Maybe<Query>;
 };
 
+
 /** The output of our update `OmicsTranscriptionFactor` mutation. */
 export type UpdateOmicsTranscriptionFactorPayloadOmicsTranscriptionFactorEdgeArgs = {
   orderBy?: InputMaybe<Array<OmicsTranscriptionFactorsOrderBy>>;
@@ -11395,6 +12927,7 @@ export type UpdateOntologyPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query: Maybe<Query>;
 };
+
 
 /** The output of our update `Ontology` mutation. */
 export type UpdateOntologyPayloadOntologyEdgeArgs = {
@@ -11469,6 +13002,7 @@ export type UpdateStudyLayerPayload = {
   studyLayerEdge: Maybe<StudyLayersEdge>;
 };
 
+
 /** The output of our update `StudyLayer` mutation. */
 export type UpdateStudyLayerPayloadStudyLayerEdgeArgs = {
   orderBy?: InputMaybe<Array<StudyLayersOrderBy>>;
@@ -11489,6 +13023,7 @@ export type UpdateStudyPayload = {
   /** An edge for our `Study`. May be used by Relay 1. */
   studyEdge: Maybe<StudiesEdge>;
 };
+
 
 /** The output of our update `Study` mutation. */
 export type UpdateStudyPayloadStudyEdgeArgs = {
@@ -11538,6 +13073,7 @@ export type UpdateStudySamplePayload = {
   /** An edge for our `StudySample`. May be used by Relay 1. */
   studySampleEdge: Maybe<StudySamplesEdge>;
 };
+
 
 /** The output of our update `StudySample` mutation. */
 export type UpdateStudySamplePayloadStudySampleEdgeArgs = {
@@ -11678,8 +13214,8 @@ export type UserAnnotationGroupFilter = {
 export type UserAnnotationGroupInput = {
   calculateDifferentialExpression: Scalars['Boolean'];
   createdByUser: InputMaybe<Scalars['String']>;
-  creationTimestamp: Scalars['Datetime'];
-  privateToUser: Scalars['Boolean'];
+  creationTimestamp: InputMaybe<Scalars['Datetime']>;
+  privateToUser: InputMaybe<Scalars['Boolean']>;
   savedAsAnnotationGroupId: Scalars['Int'];
   studyId: Scalars['Int'];
 };
@@ -11720,7 +13256,7 @@ export enum UserAnnotationGroupsOrderBy {
   SavedAsAnnotationGroupIdAsc = 'SAVED_AS_ANNOTATION_GROUP_ID_ASC',
   SavedAsAnnotationGroupIdDesc = 'SAVED_AS_ANNOTATION_GROUP_ID_DESC',
   StudyIdAsc = 'STUDY_ID_ASC',
-  StudyIdDesc = 'STUDY_ID_DESC',
+  StudyIdDesc = 'STUDY_ID_DESC'
 }
 
 export type _AllUsedOntologyId = {
@@ -11782,7 +13318,7 @@ export enum _AllUsedOntologyIdsOrderBy {
   OntologyAsc = 'ONTOLOGY_ASC',
   OntologyDesc = 'ONTOLOGY_DESC',
   OntCodeAsc = 'ONT_CODE_ASC',
-  OntCodeDesc = 'ONT_CODE_DESC',
+  OntCodeDesc = 'ONT_CODE_DESC'
 }
 
 export type CorrelatedgenesQueryVariables = Exact<{
@@ -11790,344 +13326,100 @@ export type CorrelatedgenesQueryVariables = Exact<{
   omicsId: Scalars['Int'];
 }>;
 
-export type CorrelatedgenesQuery = {
-  __typename?: 'Query';
-  getCorrelatedGenesList: Array<{ __typename?: 'GetCorrelatedGenesRecord'; displayName: string; displaySymbol: string; omicsId: number; r: number }>;
-};
 
-export type StudyInfoFragment = {
-  __typename?: 'StudyOverview';
-  studyId: number;
-  studyName: string;
-  description: string;
-  cellCount: number;
-  externalWebsite: string;
-  metadata: any;
-  defaultStudyLayerId: number;
-  studyOntologyList: Array<{
-    __typename?: 'StudyOverviewOntology';
-    ontCodes: Array<string>;
-    labels: Array<string>;
-    ontology: string;
-    parentIds: Array<string>;
-  }>;
-};
+export type CorrelatedgenesQuery = { __typename?: 'Query', getCorrelatedGenesList: Array<{ __typename?: 'GetCorrelatedGenesRecord', displayName: string, displaySymbol: string, omicsId: number, r: number }> };
 
-export type ReferenceStudyInfoFragment = {
-  __typename?: 'ReferenceStudyOverview';
-  organismTaxId: string;
-  studyName: string;
-  studyId: number;
-  cellCount: number;
-  defaultStudyLayerId: number;
-  externalWebsite: string;
-  description: string;
-  metadata: any;
-  studyOntologyList: Array<{
-    __typename?: 'StudyOverviewOntology';
-    ontCodes: Array<string>;
-    ontology: string;
-    labels: Array<string>;
-    parentIds: Array<string>;
-  }>;
-  referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy'; celltypeAnnotationGroupId: number; tissueAnnotationGroupId: number }>;
-};
+export type StudyInfoFragment = { __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, metadata: any, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> };
 
-export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology'; label: string; ontCode: string; ontology: string; parentOntCodePath: Array<string> };
+export type ReferenceStudyInfoFragment = { __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> };
+
+export type TreeOntologyOverviewFragment = { __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> };
 
 export type DegQueryVariables = Exact<{
   filter: DifferentialExpressionVFilter;
 }>;
 
-export type DegQuery = {
-  __typename?: 'Query';
-  differentialExpressionVsList: Array<{
-    __typename?: 'DifferentialExpressionV';
-    omicsId: number;
-    studyId: number;
-    annotationValueId: number;
-    otherAnnotationValueId: number;
-    omicsType: OmicsType;
-    displayName: string;
-    displaySymbol: string;
-    pvalueAdj: number;
-    log2Foldchange: number;
-    linkedGenes: Array<number>;
-  }>;
-};
 
-export type StudiesQueryVariables = Exact<{ [key: string]: never }>;
+export type DegQuery = { __typename?: 'Query', differentialExpressionVsList: Array<{ __typename?: 'DifferentialExpressionV', omicsId: number, studyId: number, annotationValueId: number, otherAnnotationValueId: number, omicsType: OmicsType, displayName: string, displaySymbol: string, pvalueAdj: number, log2Foldchange: number, linkedGenes: Array<number> }> };
 
-export type StudiesQuery = {
-  __typename?: 'Query';
-  studyOverviewsList: Array<{
-    __typename?: 'StudyOverview';
-    studyId: number;
-    studyName: string;
-    description: string;
-    cellCount: number;
-    externalWebsite: string;
-    metadata: any;
-    defaultStudyLayerId: number;
-    studyOntologyList: Array<{
-      __typename?: 'StudyOverviewOntology';
-      ontCodes: Array<string>;
-      labels: Array<string>;
-      ontology: string;
-      parentIds: Array<string>;
-    }>;
-  }>;
-};
+export type StudiesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type StudiesTreeOntologiesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type StudiesTreeOntologiesQuery = {
-  __typename?: 'Query';
-  treeOntologiesList: Array<{ __typename?: 'TreeOntology'; label: string; ontCode: string; ontology: string; parentOntCodePath: Array<string> }>;
-};
+export type StudiesQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, metadata: any, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }> };
+
+export type StudiesTreeOntologiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudiesTreeOntologiesQuery = { __typename?: 'Query', treeOntologiesList: Array<{ __typename?: 'TreeOntology', label: string, ontCode: string, ontology: string, parentOntCodePath: Array<string> }> };
 
 export type SingleStudyInfoQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type SingleStudyInfoQuery = {
-  __typename?: 'Query';
-  studyOverviewsList: Array<{
-    __typename?: 'StudyOverview';
-    studyId: number;
-    studyName: string;
-    description: string;
-    cellCount: number;
-    externalWebsite: string;
-    metadata: any;
-    defaultStudyLayerId: number;
-    studyOntologyList: Array<{
-      __typename?: 'StudyOverviewOntology';
-      ontCodes: Array<string>;
-      labels: Array<string>;
-      ontology: string;
-      parentIds: Array<string>;
-    }>;
-  }>;
-};
+
+export type SingleStudyInfoQuery = { __typename?: 'Query', studyOverviewsList: Array<{ __typename?: 'StudyOverview', studyId: number, studyName: string, description: string, cellCount: number, externalWebsite: string, metadata: any, defaultStudyLayerId: number, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, labels: Array<string>, ontology: string, parentIds: Array<string> }> }> };
 
 export type ReferenceStudiesOverviewQueryVariables = Exact<{
   organismTaxId: Scalars['String'];
 }>;
 
-export type ReferenceStudiesOverviewQuery = {
-  __typename?: 'Query';
-  referenceStudyOverviewsList: Array<{
-    __typename?: 'ReferenceStudyOverview';
-    organismTaxId: string;
-    studyName: string;
-    studyId: number;
-    cellCount: number;
-    defaultStudyLayerId: number;
-    externalWebsite: string;
-    description: string;
-    metadata: any;
-    studyOntologyList: Array<{
-      __typename?: 'StudyOverviewOntology';
-      ontCodes: Array<string>;
-      ontology: string;
-      labels: Array<string>;
-      parentIds: Array<string>;
-    }>;
-    referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy'; celltypeAnnotationGroupId: number; tissueAnnotationGroupId: number }>;
-  }>;
-};
+
+export type ReferenceStudiesOverviewQuery = { __typename?: 'Query', referenceStudyOverviewsList: Array<{ __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> }> };
 
 export type GeneSpecificityStudyQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type GeneSpecificityStudyQuery = {
-  __typename?: 'Query';
-  referenceStudyOverviewsList: Array<{
-    __typename?: 'ReferenceStudyOverview';
-    organismTaxId: string;
-    studyName: string;
-    studyId: number;
-    cellCount: number;
-    defaultStudyLayerId: number;
-    externalWebsite: string;
-    description: string;
-    metadata: any;
-    studyOntologyList: Array<{
-      __typename?: 'StudyOverviewOntology';
-      ontCodes: Array<string>;
-      ontology: string;
-      labels: Array<string>;
-      parentIds: Array<string>;
-    }>;
-    referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy'; celltypeAnnotationGroupId: number; tissueAnnotationGroupId: number }>;
-  }>;
-  studyAnnotationFrontendGroupsList: Array<{
-    __typename?: 'StudyAnnotationFrontendGroup';
-    annotationGroupId: number;
-    annotationValuesList: Array<{
-      __typename?: 'StudyAnnotationFrontendValue';
-      annotationValueId: number;
-      displayValue: string;
-      color: string;
-      sampleCount: number;
-    }>;
-  }>;
-};
 
-export type AnnotationGrpFragment = {
-  __typename?: 'StudyAnnotationFrontendGroup';
-  annotationGroupId: number;
-  isPrimary: boolean;
-  ordering: number;
-  displayGroup: string;
-  differentialExpressionCalculated: boolean;
-  pairwiseDifferentialExpressionCalculated: boolean;
-  createdByUser: string;
-  currentUserIsOwner: boolean;
-  privateToUser: boolean;
-  annotationValuesList: Array<{
-    __typename?: 'StudyAnnotationFrontendValue';
-    annotationValueId: number;
-    displayValue: string;
-    color: string;
-    sampleCount: number;
-  }>;
-};
+export type GeneSpecificityStudyQuery = { __typename?: 'Query', referenceStudyOverviewsList: Array<{ __typename?: 'ReferenceStudyOverview', organismTaxId: string, studyName: string, studyId: number, cellCount: number, defaultStudyLayerId: number, externalWebsite: string, description: string, metadata: any, studyOntologyList: Array<{ __typename?: 'StudyOverviewOntology', ontCodes: Array<string>, ontology: string, labels: Array<string>, parentIds: Array<string> }>, referenceStudyInfoList: Array<{ __typename?: 'ReferenceStudy', celltypeAnnotationGroupId: number, tissueAnnotationGroupId: number }> }>, studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }> };
 
-export type DifferentialMarkerFragment = {
-  __typename?: 'DifferentialExpression';
-  annotationValueId: number;
-  log2Foldchange: number;
-  pvalueAdj: number;
-  score: number;
-  study: { __typename?: 'Study'; studyName: string; studyId: number; cellCount: number; description: string };
-  annotationValue: {
-    __typename?: 'AnnotationValue';
-    displayValue: string;
-    annotationGroup: { __typename?: 'AnnotationGroup'; displayGroup: string; annotationGroupId: number };
-  };
-  omics: { __typename?: 'OmicsBase'; displaySymbol: string; taxId: number; omicsId: number; omicsType: OmicsType; displayName: string };
-};
+export type AnnotationGrpFragment = { __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, pairwiseDifferentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> };
+
+export type DifferentialMarkerFragment = { __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number, cellCount: number, description: string }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } };
 
 export type StudiesWithMarkerGenesQueryVariables = Exact<{
   omicsIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
-export type StudiesWithMarkerGenesQuery = {
-  __typename?: 'Query';
-  differentialExpressionsList: Array<{
-    __typename?: 'DifferentialExpression';
-    annotationValueId: number;
-    log2Foldchange: number;
-    pvalueAdj: number;
-    score: number;
-    study: { __typename?: 'Study'; studyName: string; studyId: number; cellCount: number; description: string };
-    annotationValue: {
-      __typename?: 'AnnotationValue';
-      displayValue: string;
-      annotationGroup: { __typename?: 'AnnotationGroup'; displayGroup: string; annotationGroupId: number };
-    };
-    omics: { __typename?: 'OmicsBase'; displaySymbol: string; taxId: number; omicsId: number; omicsType: OmicsType; displayName: string };
-  }>;
-};
 
-export type OmicsGeneFragment = { __typename?: 'OmicsBase'; displayName: string; displaySymbol: string; omicsId: number; taxId: number };
+export type StudiesWithMarkerGenesQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', annotationValueId: number, log2Foldchange: number, pvalueAdj: number, score: number, study: { __typename?: 'Study', studyName: string, studyId: number, cellCount: number, description: string }, annotationValue: { __typename?: 'AnnotationValue', displayValue: string, annotationGroup: { __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number } }, omics: { __typename?: 'OmicsBase', displaySymbol: string, taxId: number, omicsId: number, omicsType: OmicsType, displayName: string } }> };
 
-export type AllGenesQueryVariables = Exact<{ [key: string]: never }>;
+export type OmicsGeneFragment = { __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsId: number, taxId: number };
 
-export type AllGenesQuery = {
-  __typename?: 'Query';
-  omicsBasesList: Array<{
-    __typename?: 'OmicsBase';
-    displayName: string;
-    displaySymbol: string;
-    omicsId: number;
-    taxId: number;
-    value: string;
-    ontology: OmicsType;
-  }>;
-};
+export type AllGenesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllGenesQuery = { __typename?: 'Query', omicsBasesList: Array<{ __typename?: 'OmicsBase', displayName: string, displaySymbol: string, omicsId: number, taxId: number, value: string, ontology: OmicsType }> };
 
 export type StudyOmicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyOmicsQuery = {
-  __typename?: 'Query';
-  studyOmicsList: Array<{ __typename?: 'StudyOmic'; omics: { __typename?: 'OmicsBase'; omicsId: number; displayName: string; displaySymbol: string } }>;
-};
 
-export type StudyBasicsFragment = {
-  __typename?: 'Study';
-  studyId: number;
-  studyName: string;
-  organismTaxId: string;
-  cellCount: number;
-  projections: Array<string>;
-  studyLayersList: Array<{ __typename?: 'StudyLayer'; layer: string; studyLayerId: number }>;
-};
+export type StudyOmicsQuery = { __typename?: 'Query', studyOmicsList: Array<{ __typename?: 'StudyOmic', omics: { __typename?: 'OmicsBase', omicsId: number, displayName: string, displaySymbol: string } }> };
+
+export type StudyBasicsFragment = { __typename?: 'Study', studyId: number, studyName: string, organismTaxId: string, cellCount: number, projections: Array<string>, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
 
 export type StudyBasicsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyBasicsQuery = {
-  __typename?: 'Query';
-  study: { __typename?: 'Study'; studyId: number; studyName: string; cellCount: number; projections: Array<string>; organismTaxId: string };
-  studyLayersList: Array<{ __typename?: 'StudyLayer'; layer: string; studyLayerId: number }>;
-};
+
+export type StudyBasicsQuery = { __typename?: 'Query', study: { __typename?: 'Study', studyId: number, studyName: string, cellCount: number, projections: Array<string>, organismTaxId: string }, studyLayersList: Array<{ __typename?: 'StudyLayer', layer: string, studyLayerId: number }> };
 
 export type StudyBasics2QueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyBasics2Query = {
-  __typename?: 'Query';
-  studyAnnotationFrontendGroupsList: Array<{
-    __typename?: 'StudyAnnotationFrontendGroup';
-    annotationGroupId: number;
-    isPrimary: boolean;
-    ordering: number;
-    displayGroup: string;
-    differentialExpressionCalculated: boolean;
-    pairwiseDifferentialExpressionCalculated: boolean;
-    createdByUser: string;
-    currentUserIsOwner: boolean;
-    privateToUser: boolean;
-    annotationValuesList: Array<{
-      __typename?: 'StudyAnnotationFrontendValue';
-      annotationValueId: number;
-      displayValue: string;
-      color: string;
-      sampleCount: number;
-    }>;
-  }>;
-  studySampleProjectionSubsamplingTransposedsList: Array<{
-    __typename?: 'StudySampleProjectionSubsamplingTransposed';
-    projectionType: string;
-    studySampleId: Array<number>;
-    projection: Array<number>;
-    modality: string;
-  }>;
-};
+
+export type StudyBasics2Query = { __typename?: 'Query', studyAnnotationFrontendGroupsList: Array<{ __typename?: 'StudyAnnotationFrontendGroup', annotationGroupId: number, isPrimary: boolean, ordering: number, displayGroup: string, differentialExpressionCalculated: boolean, pairwiseDifferentialExpressionCalculated: boolean, createdByUser: string, currentUserIsOwner: boolean, privateToUser: boolean, annotationValuesList: Array<{ __typename?: 'StudyAnnotationFrontendValue', annotationValueId: number, displayValue: string, color: string, sampleCount: number }> }>, studySampleProjectionSubsamplingTransposedsList: Array<{ __typename?: 'StudySampleProjectionSubsamplingTransposed', projectionType: string, studySampleId: Array<number>, projection: Array<number>, modality: string }> };
 
 export type StudyBasics3QueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyBasics3Query = {
-  __typename?: 'Query';
-  studySampleAnnotationSubsamplingsList: Array<{ __typename?: 'StudySampleAnnotationSubsampling'; annotationValueId: number; studySampleIds: Array<number> }>;
-  studyOmicsTransposedsList: Array<{
-    __typename?: 'StudyOmicsTransposed';
-    displayName: Array<string>;
-    displaySymbol: Array<string>;
-    omicsId: Array<number>;
-    omicsType: Array<OmicsType>;
-  }>;
-};
+
+export type StudyBasics3Query = { __typename?: 'Query', studySampleAnnotationSubsamplingsList: Array<{ __typename?: 'StudySampleAnnotationSubsampling', annotationValueId: number, studySampleIds: Array<number> }>, studyOmicsTransposedsList: Array<{ __typename?: 'StudyOmicsTransposed', displayName: Array<string>, displaySymbol: Array<string>, omicsId: Array<number>, omicsType: Array<OmicsType> }> };
 
 export type ExpressionByOmicsIdsQueryVariables = Exact<{
   studyLayerId: Scalars['Int'];
@@ -12135,10 +13427,8 @@ export type ExpressionByOmicsIdsQueryVariables = Exact<{
   subsamplingProjection: InputMaybe<Scalars['String']>;
 }>;
 
-export type ExpressionByOmicsIdsQuery = {
-  __typename?: 'Query';
-  expressionByOmicsIdsList: Array<{ __typename?: 'ExpressionByOmic'; omicsId: number; studySampleIds: Array<number>; values: Array<number> }>;
-};
+
+export type ExpressionByOmicsIdsQuery = { __typename?: 'Query', expressionByOmicsIdsList: Array<{ __typename?: 'ExpressionByOmic', omicsId: number, studySampleIds: Array<number>, values: Array<number> }> };
 
 export type ExpressionViolinPlotQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12149,7 +13439,8 @@ export type ExpressionViolinPlotQueryVariables = Exact<{
   annotationSecondaryGroupId: InputMaybe<Scalars['Int']>;
 }>;
 
-export type ExpressionViolinPlotQuery = { __typename?: 'Query'; violinPlot: string };
+
+export type ExpressionViolinPlotQuery = { __typename?: 'Query', violinPlot: string };
 
 export type ExpressionGroupTableQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12160,19 +13451,8 @@ export type ExpressionGroupTableQueryVariables = Exact<{
   annotationSecondaryGroupId: Scalars['Int'];
 }>;
 
-export type ExpressionGroupTableQuery = {
-  __typename?: 'Query';
-  expressionByTwoAnnotationsList: Array<{
-    __typename?: 'ExpressionByTwoAnnotation';
-    annotationValueId: number;
-    annotationDisplayValue: string;
-    secondAnnotationValueId: number;
-    secondAnnotationDisplayValue: string;
-    valueCount: number;
-    median: number;
-    nonZeroValueCount: number;
-  }>;
-};
+
+export type ExpressionGroupTableQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', annotationValueId: number, annotationDisplayValue: string, secondAnnotationValueId: number, secondAnnotationDisplayValue: string, valueCount: number, median: number, nonZeroValueCount: number }> };
 
 export type ExpressionTTestQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12187,7 +13467,8 @@ export type ExpressionTTestQueryVariables = Exact<{
   sample2SecondAnnotationValueId: InputMaybe<Scalars['Int']>;
 }>;
 
-export type ExpressionTTestQuery = { __typename?: 'Query'; expressionTtest: string };
+
+export type ExpressionTTestQuery = { __typename?: 'Query', expressionTtest: string };
 
 export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12196,23 +13477,15 @@ export type ExpressionCorrelationTrianglePlotQueryVariables = Exact<{
   excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
-export type ExpressionCorrelationTrianglePlotQuery = { __typename?: 'Query'; correlationTrianglePlot: string };
+
+export type ExpressionCorrelationTrianglePlotQuery = { __typename?: 'Query', correlationTrianglePlot: string };
 
 export type AutocompleteQueryVariables = Exact<{
   query: Scalars['String'];
 }>;
 
-export type AutocompleteQuery = {
-  __typename?: 'Query';
-  autocompleteList: Array<{
-    __typename?: 'AutocompleteResult';
-    isSynonymOfPreferredTerm: string;
-    label: string;
-    labelHighlight: string;
-    ontCode: string;
-    ontology: string;
-  }>;
-};
+
+export type AutocompleteQuery = { __typename?: 'Query', autocompleteList: Array<{ __typename?: 'AutocompleteResult', isSynonymOfPreferredTerm: string, label: string, labelHighlight: string, ontCode: string, ontology: string }> };
 
 export type OmicsAutocompleteQueryVariables = Exact<{
   searchQuery: Scalars['String'];
@@ -12220,33 +13493,17 @@ export type OmicsAutocompleteQueryVariables = Exact<{
   taxId: Scalars['Int'];
 }>;
 
-export type OmicsAutocompleteQuery = {
-  __typename?: 'Query';
-  omicsAutocompleteList: Array<{
-    __typename?: 'OmicsAutocompleteResult';
-    displaySymbol: string;
-    labelHighlight: string;
-    omicsId: Array<number>;
-    omicsType: Array<OmicsType>;
-  }>;
-};
 
-export type OntologyOverviewFragment = { __typename?: 'Ontology'; name: string; ontid: number; nodeId: string };
+export type OmicsAutocompleteQuery = { __typename?: 'Query', omicsAutocompleteList: Array<{ __typename?: 'OmicsAutocompleteResult', displaySymbol: string, labelHighlight: string, omicsId: Array<number>, omicsType: Array<OmicsType> }> };
 
-export type OntologiesQueryVariables = Exact<{ [key: string]: never }>;
+export type OntologyOverviewFragment = { __typename?: 'Ontology', name: string, ontid: number, nodeId: string };
 
-export type OntologiesQuery = { __typename?: 'Query'; ontologiesList: Array<{ __typename?: 'Ontology'; name: string; ontid: number; nodeId: string }> };
+export type OntologiesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type DotPlotElementFragment = {
-  __typename?: 'ExpressionByAnnotation';
-  studyLayerId: number;
-  omicsId: number;
-  annotationValueId: number;
-  annotationDisplayValue: string;
-  q3: number;
-  median: number;
-  exprSamplesFraction: number;
-};
+
+export type OntologiesQuery = { __typename?: 'Query', ontologiesList: Array<{ __typename?: 'Ontology', name: string, ontid: number, nodeId: string }> };
+
+export type DotPlotElementFragment = { __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, median: number, exprSamplesFraction: number };
 
 export type ExpressionByAnnotationQueryVariables = Exact<{
   studyLayerIds: Array<Scalars['Int']> | Scalars['Int'];
@@ -12255,33 +13512,21 @@ export type ExpressionByAnnotationQueryVariables = Exact<{
   excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
-export type ExpressionByAnnotationQuery = {
-  __typename?: 'Query';
-  expressionByAnnotationList: Array<{
-    __typename?: 'ExpressionByAnnotation';
-    studyLayerId: number;
-    omicsId: number;
-    annotationValueId: number;
-    annotationDisplayValue: string;
-    q3: number;
-    median: number;
-    exprSamplesFraction: number;
-  }>;
-};
 
-export type CellOAnnotationGroupIdQueryVariables = Exact<{ [key: string]: never }>;
+export type ExpressionByAnnotationQuery = { __typename?: 'Query', expressionByAnnotationList: Array<{ __typename?: 'ExpressionByAnnotation', studyLayerId: number, omicsId: number, annotationValueId: number, annotationDisplayValue: string, q3: number, median: number, exprSamplesFraction: number }> };
 
-export type CellOAnnotationGroupIdQuery = { __typename?: 'Query'; annotationGroupsList: Array<{ __typename?: 'AnnotationGroup'; annotationGroupId: number }> };
+export type CellOAnnotationGroupIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CellOAnnotationGroupIdQuery = { __typename?: 'Query', annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', annotationGroupId: number }> };
 
 export type HalfAVolcanoQueryVariables = Exact<{
   annotationValueId: Scalars['Int'];
   studyId: Scalars['Int'];
 }>;
 
-export type HalfAVolcanoQuery = {
-  __typename?: 'Query';
-  differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression'; log2Foldchange: number; pvalueAdj: number }>;
-};
+
+export type HalfAVolcanoQuery = { __typename?: 'Query', differentialExpressionsList: Array<{ __typename?: 'DifferentialExpression', log2Foldchange: number, pvalueAdj: number }> };
 
 export type AnnotationValueCoocurrenceQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12289,15 +13534,8 @@ export type AnnotationValueCoocurrenceQueryVariables = Exact<{
   annotationGroupId2: Scalars['Int'];
 }>;
 
-export type AnnotationValueCoocurrenceQuery = {
-  __typename?: 'Query';
-  annotationValueCoocurrenceList: Array<{
-    __typename?: 'AnnotationValueCoocurrenceRecord';
-    annotationValueId1: number;
-    annotationValueId2: number;
-    occurrence: number;
-  }>;
-};
+
+export type AnnotationValueCoocurrenceQuery = { __typename?: 'Query', annotationValueCoocurrenceList: Array<{ __typename?: 'AnnotationValueCoocurrenceRecord', annotationValueId1: number, annotationValueId2: number, occurrence: number }> };
 
 export type SaveUserAnnotationMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12306,10 +13544,8 @@ export type SaveUserAnnotationMutationVariables = Exact<{
   unexpressedSamplesOmicsIds: InputMaybe<Array<Scalars['Int']> | Scalars['Int']>;
 }>;
 
-export type SaveUserAnnotationMutation = {
-  __typename?: 'Mutation';
-  userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload'; clientMutationId: string; integer: number };
-};
+
+export type SaveUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationDefine: { __typename?: 'UserAnnotationDefinePayload', clientMutationId: string, integer: number } };
 
 export type EditUserAnnotationMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12317,68 +13553,30 @@ export type EditUserAnnotationMutationVariables = Exact<{
   privateToUser: Scalars['Boolean'];
 }>;
 
-export type EditUserAnnotationMutation = { __typename?: 'Mutation'; userAnnotationEdit: { __typename?: 'UserAnnotationEditPayload'; boolean: boolean } };
+
+export type EditUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationEdit: { __typename?: 'UserAnnotationEditPayload', boolean: boolean } };
 
 export type DeleteUserAnnotationMutationVariables = Exact<{
   studyId: Scalars['Int'];
   annotationGroupId: Scalars['Int'];
 }>;
 
-export type DeleteUserAnnotationMutation = { __typename?: 'Mutation'; userAnnotationDelete: { __typename?: 'UserAnnotationDeletePayload'; boolean: boolean } };
 
-export type StudyAdminDetailsFragment = {
-  __typename?: 'StudyAdminDetail';
-  studyId: number;
-  studyName: string;
-  description: string;
-  filename: string;
-  cellCount: number;
-  tissueNcitIds: Array<string>;
-  diseaseMeshIds: Array<string>;
-  visible: boolean;
-  externalWebsite: string;
-  readerPermissions: Array<string>;
-  readerPermissionGranted: boolean;
-  adminPermissions: Array<string>;
-  adminPermissionGranted: boolean;
-  importStarted: boolean;
-  importFailed: boolean;
-  importFinished: boolean;
-  hasImportLog: boolean;
-};
+export type DeleteUserAnnotationMutation = { __typename?: 'Mutation', userAnnotationDelete: { __typename?: 'UserAnnotationDeletePayload', boolean: boolean } };
 
-export type StudyAdminListQueryVariables = Exact<{ [key: string]: never }>;
+export type StudyAdminDetailsFragment = { __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean, importStarted: boolean, importFailed: boolean, importFinished: boolean, hasImportLog: boolean };
 
-export type StudyAdminListQuery = {
-  __typename?: 'Query';
-  userStudyUploadConfigured: boolean;
-  studyAdminDetailsList: Array<{
-    __typename?: 'StudyAdminDetail';
-    studyId: number;
-    studyName: string;
-    description: string;
-    filename: string;
-    cellCount: number;
-    tissueNcitIds: Array<string>;
-    diseaseMeshIds: Array<string>;
-    visible: boolean;
-    externalWebsite: string;
-    readerPermissions: Array<string>;
-    readerPermissionGranted: boolean;
-    adminPermissions: Array<string>;
-    adminPermissionGranted: boolean;
-    importStarted: boolean;
-    importFailed: boolean;
-    importFinished: boolean;
-    hasImportLog: boolean;
-  }>;
-};
+export type StudyAdminListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudyAdminListQuery = { __typename?: 'Query', userStudyUploadConfigured: boolean, studyAdminDetailsList: Array<{ __typename?: 'StudyAdminDetail', studyId: number, studyName: string, description: string, filename: string, cellCount: number, tissueNcitIds: Array<string>, diseaseMeshIds: Array<string>, visible: boolean, externalWebsite: string, readerPermissions: Array<string>, readerPermissionGranted: boolean, adminPermissions: Array<string>, adminPermissionGranted: boolean, importStarted: boolean, importFailed: boolean, importFinished: boolean, hasImportLog: boolean }> };
 
 export type StudyLogsQueryVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyLogsQuery = { __typename?: 'Query'; studyImportLogsList: Array<{ __typename?: 'StudyImportLog'; importFile: string; importLog: string }> };
+
+export type StudyLogsQuery = { __typename?: 'Query', studyImportLogsList: Array<{ __typename?: 'StudyImportLog', importFile: string, importLog: string }> };
 
 export type GeneSpecificityQueryVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12389,22 +13587,8 @@ export type GeneSpecificityQueryVariables = Exact<{
   excludeAnnotationValueIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
-export type GeneSpecificityQuery = {
-  __typename?: 'Query';
-  expressionByTwoAnnotationsList: Array<{
-    __typename?: 'ExpressionByTwoAnnotation';
-    omicsId: number;
-    annotationValueId: number;
-    annotationDisplayValue: string;
-    secondAnnotationDisplayValue: string;
-    secondAnnotationValueId: number;
-    valueCount: number;
-    exprSamplesFraction: number;
-    mean: number;
-    color: string;
-  }>;
-  annotationGroupsList: Array<{ __typename?: 'AnnotationGroup'; displayGroup: string; annotationGroupId: number }>;
-};
+
+export type GeneSpecificityQuery = { __typename?: 'Query', expressionByTwoAnnotationsList: Array<{ __typename?: 'ExpressionByTwoAnnotation', omicsId: number, annotationValueId: number, annotationDisplayValue: string, secondAnnotationDisplayValue: string, secondAnnotationValueId: number, valueCount: number, exprSamplesFraction: number, mean: number, color: string }>, annotationGroupsList: Array<{ __typename?: 'AnnotationGroup', displayGroup: string, annotationGroupId: number }> };
 
 export type StudyUpdateMutationVariables = Exact<{
   studyId: Scalars['Int'];
@@ -12418,191 +13602,192 @@ export type StudyUpdateMutationVariables = Exact<{
   externalWebsite: InputMaybe<Scalars['String']>;
 }>;
 
-export type StudyUpdateMutation = { __typename?: 'Mutation'; updateStudy: { __typename?: 'UpdateStudyPayload'; clientMutationId: string } };
+
+export type StudyUpdateMutation = { __typename?: 'Mutation', updateStudy: { __typename?: 'UpdateStudyPayload', clientMutationId: string } };
 
 export type StudyDeleteMutationVariables = Exact<{
   studyId: Scalars['Int'];
 }>;
 
-export type StudyDeleteMutation = { __typename?: 'Mutation'; deleteAllStudyData: { __typename?: 'DeleteAllStudyDataPayload'; boolean: boolean } };
+
+export type StudyDeleteMutation = { __typename?: 'Mutation', deleteAllStudyData: { __typename?: 'DeleteAllStudyDataPayload', boolean: boolean } };
 
 export type CreateStudyUploadMutationVariables = Exact<{
   filename: Scalars['String'];
 }>;
 
-export type CreateStudyUploadMutation = { __typename?: 'Mutation'; createStudyUpload: { __typename?: 'CreateStudyUploadPayload'; json: any } };
 
-export type StudyDefinitionUpdateMutationVariables = Exact<{ [key: string]: never }>;
+export type CreateStudyUploadMutation = { __typename?: 'Mutation', createStudyUpload: { __typename?: 'CreateStudyUploadPayload', json: any } };
 
-export type StudyDefinitionUpdateMutation = {
-  __typename?: 'Mutation';
-  studyDefinitionUpdate: { __typename?: 'StudyDefinitionUpdatePayload'; boolean: boolean };
-};
+export type StudyOntologyDefinitionUpdateMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudyOntologyDefinitionUpdateMutation = { __typename?: 'Mutation', studyOntologyDefinitionUpdate: { __typename?: 'StudyOntologyDefinitionUpdatePayload', boolean: boolean } };
 
 export const StudyInfoFragmentDoc = gql`
-  fragment StudyInfo on StudyOverview {
-    studyId
-    studyName
-    description
-    cellCount
-    externalWebsite
-    metadata
-    defaultStudyLayerId
-    studyOntologyList {
-      ontCodes
-      labels
-      ontology
-      parentIds
-    }
-  }
-`;
-export const ReferenceStudyInfoFragmentDoc = gql`
-  fragment ReferenceStudyInfo on ReferenceStudyOverview {
-    organismTaxId
-    studyName
-    studyId
-    cellCount
-    defaultStudyLayerId
-    externalWebsite
-    description
-    metadata
-    studyOntologyList {
-      ontCodes
-      ontology
-      labels
-      parentIds
-    }
-    referenceStudyInfoList {
-      celltypeAnnotationGroupId
-      tissueAnnotationGroupId
-    }
-  }
-`;
-export const TreeOntologyOverviewFragmentDoc = gql`
-  fragment TreeOntologyOverview on TreeOntology {
-    label
-    ontCode
+    fragment StudyInfo on StudyOverview {
+  studyId
+  studyName
+  description
+  cellCount
+  externalWebsite
+  metadata
+  defaultStudyLayerId
+  studyOntologyList {
+    ontCodes
+    labels
     ontology
-    parentOntCodePath
+    parentIds
   }
-`;
+}
+    `;
+export const ReferenceStudyInfoFragmentDoc = gql`
+    fragment ReferenceStudyInfo on ReferenceStudyOverview {
+  organismTaxId
+  studyName
+  studyId
+  cellCount
+  defaultStudyLayerId
+  externalWebsite
+  description
+  metadata
+  studyOntologyList {
+    ontCodes
+    ontology
+    labels
+    parentIds
+  }
+  referenceStudyInfoList {
+    celltypeAnnotationGroupId
+    tissueAnnotationGroupId
+  }
+}
+    `;
+export const TreeOntologyOverviewFragmentDoc = gql`
+    fragment TreeOntologyOverview on TreeOntology {
+  label
+  ontCode
+  ontology
+  parentOntCodePath
+}
+    `;
 export const AnnotationGrpFragmentDoc = gql`
-  fragment AnnotationGrp on StudyAnnotationFrontendGroup {
-    annotationGroupId
-    isPrimary
-    ordering
-    displayGroup
-    differentialExpressionCalculated
-    pairwiseDifferentialExpressionCalculated
-    createdByUser
-    currentUserIsOwner
-    privateToUser
-    annotationValuesList {
-      annotationValueId
-      displayValue
-      color
-      sampleCount
-    }
-  }
-`;
-export const DifferentialMarkerFragmentDoc = gql`
-  fragment DifferentialMarker on DifferentialExpression {
+    fragment AnnotationGrp on StudyAnnotationFrontendGroup {
+  annotationGroupId
+  isPrimary
+  ordering
+  displayGroup
+  differentialExpressionCalculated
+  pairwiseDifferentialExpressionCalculated
+  createdByUser
+  currentUserIsOwner
+  privateToUser
+  annotationValuesList {
     annotationValueId
-    log2Foldchange
-    pvalueAdj
-    score
-    study {
-      studyName
-      studyId
-      cellCount
-      description
-    }
-    annotationValue {
-      annotationGroup {
-        displayGroup
-        annotationGroupId
-      }
-      displayValue
-    }
-    omics {
-      displaySymbol
-      taxId
-      omicsId
-      omicsType
-      displayName
-    }
+    displayValue
+    color
+    sampleCount
   }
-`;
+}
+    `;
+export const DifferentialMarkerFragmentDoc = gql`
+    fragment DifferentialMarker on DifferentialExpression {
+  annotationValueId
+  log2Foldchange
+  pvalueAdj
+  score
+  study {
+    studyName
+    studyId
+    cellCount
+    description
+  }
+  annotationValue {
+    annotationGroup {
+      displayGroup
+      annotationGroupId
+    }
+    displayValue
+  }
+  omics {
+    displaySymbol
+    taxId
+    omicsId
+    omicsType
+    displayName
+  }
+}
+    `;
 export const OmicsGeneFragmentDoc = gql`
-  fragment OmicsGene on OmicsBase {
+    fragment OmicsGene on OmicsBase {
+  displayName
+  displaySymbol
+  omicsId
+  taxId
+}
+    `;
+export const StudyBasicsFragmentDoc = gql`
+    fragment StudyBasics on Study {
+  studyId
+  studyName
+  organismTaxId
+  studyLayersList {
+    layer
+    studyLayerId
+  }
+  cellCount
+  projections
+}
+    `;
+export const OntologyOverviewFragmentDoc = gql`
+    fragment ontologyOverview on Ontology {
+  name
+  ontid
+  nodeId
+}
+    `;
+export const DotPlotElementFragmentDoc = gql`
+    fragment DotPlotElement on ExpressionByAnnotation {
+  studyLayerId
+  omicsId
+  annotationValueId
+  annotationDisplayValue
+  q3
+  median
+  exprSamplesFraction
+}
+    `;
+export const StudyAdminDetailsFragmentDoc = gql`
+    fragment StudyAdminDetails on StudyAdminDetail {
+  studyId
+  studyName
+  description
+  filename
+  cellCount
+  tissueNcitIds
+  diseaseMeshIds
+  visible
+  externalWebsite
+  readerPermissions
+  readerPermissionGranted
+  adminPermissions
+  adminPermissionGranted
+  importStarted
+  importFailed
+  importFinished
+  hasImportLog
+}
+    `;
+export const CorrelatedgenesDocument = gql`
+    query correlatedgenes($studyId: Int!, $omicsId: Int!) {
+  getCorrelatedGenesList(studyId: $studyId, omicsId: $omicsId) {
     displayName
     displaySymbol
     omicsId
-    taxId
+    r
   }
-`;
-export const StudyBasicsFragmentDoc = gql`
-  fragment StudyBasics on Study {
-    studyId
-    studyName
-    organismTaxId
-    studyLayersList {
-      layer
-      studyLayerId
-    }
-    cellCount
-    projections
-  }
-`;
-export const OntologyOverviewFragmentDoc = gql`
-  fragment ontologyOverview on Ontology {
-    name
-    ontid
-    nodeId
-  }
-`;
-export const DotPlotElementFragmentDoc = gql`
-  fragment DotPlotElement on ExpressionByAnnotation {
-    studyLayerId
-    omicsId
-    annotationValueId
-    annotationDisplayValue
-    q3
-    median
-    exprSamplesFraction
-  }
-`;
-export const StudyAdminDetailsFragmentDoc = gql`
-  fragment StudyAdminDetails on StudyAdminDetail {
-    studyId
-    studyName
-    description
-    filename
-    cellCount
-    tissueNcitIds
-    diseaseMeshIds
-    visible
-    externalWebsite
-    readerPermissions
-    readerPermissionGranted
-    adminPermissions
-    adminPermissionGranted
-    importStarted
-    importFailed
-    importFinished
-    hasImportLog
-  }
-`;
-export const CorrelatedgenesDocument = gql`
-  query correlatedgenes($studyId: Int!, $omicsId: Int!) {
-    getCorrelatedGenesList(studyId: $studyId, omicsId: $omicsId) {
-      displayName
-      displaySymbol
-      omicsId
-      r
-    }
-  }
-`;
+}
+    `;
 
 /**
  * __useCorrelatedgenesQuery__
@@ -12622,32 +13807,32 @@ export const CorrelatedgenesDocument = gql`
  * });
  */
 export function useCorrelatedgenesQuery(baseOptions: Apollo.QueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
+      }
 export function useCorrelatedgenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>(CorrelatedgenesDocument, options);
+        }
 export type CorrelatedgenesQueryHookResult = ReturnType<typeof useCorrelatedgenesQuery>;
 export type CorrelatedgenesLazyQueryHookResult = ReturnType<typeof useCorrelatedgenesLazyQuery>;
 export type CorrelatedgenesQueryResult = Apollo.QueryResult<CorrelatedgenesQuery, CorrelatedgenesQueryVariables>;
 export const DegDocument = gql`
-  query deg($filter: DifferentialExpressionVFilter!) {
-    differentialExpressionVsList(filter: $filter) {
-      omicsId
-      studyId
-      annotationValueId
-      otherAnnotationValueId
-      omicsType
-      displayName
-      displaySymbol
-      pvalueAdj
-      log2Foldchange
-      linkedGenes
-    }
+    query deg($filter: DifferentialExpressionVFilter!) {
+  differentialExpressionVsList(filter: $filter) {
+    omicsId
+    studyId
+    annotationValueId
+    otherAnnotationValueId
+    omicsType
+    displayName
+    displaySymbol
+    pvalueAdj
+    log2Foldchange
+    linkedGenes
   }
-`;
+}
+    `;
 
 /**
  * __useDegQuery__
@@ -12666,24 +13851,23 @@ export const DegDocument = gql`
  * });
  */
 export function useDegQuery(baseOptions: Apollo.QueryHookOptions<DegQuery, DegQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<DegQuery, DegQueryVariables>(DegDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DegQuery, DegQueryVariables>(DegDocument, options);
+      }
 export function useDegLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DegQuery, DegQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<DegQuery, DegQueryVariables>(DegDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DegQuery, DegQueryVariables>(DegDocument, options);
+        }
 export type DegQueryHookResult = ReturnType<typeof useDegQuery>;
 export type DegLazyQueryHookResult = ReturnType<typeof useDegLazyQuery>;
 export type DegQueryResult = Apollo.QueryResult<DegQuery, DegQueryVariables>;
 export const StudiesDocument = gql`
-  query studies {
-    studyOverviewsList {
-      ...StudyInfo
-    }
+    query studies {
+  studyOverviewsList {
+    ...StudyInfo
   }
-  ${StudyInfoFragmentDoc}
-`;
+}
+    ${StudyInfoFragmentDoc}`;
 
 /**
  * __useStudiesQuery__
@@ -12701,24 +13885,23 @@ export const StudiesDocument = gql`
  * });
  */
 export function useStudiesQuery(baseOptions?: Apollo.QueryHookOptions<StudiesQuery, StudiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
+      }
 export function useStudiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudiesQuery, StudiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudiesQuery, StudiesQueryVariables>(StudiesDocument, options);
+        }
 export type StudiesQueryHookResult = ReturnType<typeof useStudiesQuery>;
 export type StudiesLazyQueryHookResult = ReturnType<typeof useStudiesLazyQuery>;
 export type StudiesQueryResult = Apollo.QueryResult<StudiesQuery, StudiesQueryVariables>;
 export const StudiesTreeOntologiesDocument = gql`
-  query studiesTreeOntologies {
-    treeOntologiesList {
-      ...TreeOntologyOverview
-    }
+    query studiesTreeOntologies {
+  treeOntologiesList {
+    ...TreeOntologyOverview
   }
-  ${TreeOntologyOverviewFragmentDoc}
-`;
+}
+    ${TreeOntologyOverviewFragmentDoc}`;
 
 /**
  * __useStudiesTreeOntologiesQuery__
@@ -12736,24 +13919,23 @@ export const StudiesTreeOntologiesDocument = gql`
  * });
  */
 export function useStudiesTreeOntologiesQuery(baseOptions?: Apollo.QueryHookOptions<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>(StudiesTreeOntologiesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>(StudiesTreeOntologiesDocument, options);
+      }
 export function useStudiesTreeOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>(StudiesTreeOntologiesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>(StudiesTreeOntologiesDocument, options);
+        }
 export type StudiesTreeOntologiesQueryHookResult = ReturnType<typeof useStudiesTreeOntologiesQuery>;
 export type StudiesTreeOntologiesLazyQueryHookResult = ReturnType<typeof useStudiesTreeOntologiesLazyQuery>;
 export type StudiesTreeOntologiesQueryResult = Apollo.QueryResult<StudiesTreeOntologiesQuery, StudiesTreeOntologiesQueryVariables>;
 export const SingleStudyInfoDocument = gql`
-  query singleStudyInfo($studyId: Int!) {
-    studyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
-      ...StudyInfo
-    }
+    query singleStudyInfo($studyId: Int!) {
+  studyOverviewsList(filter: {studyId: {equalTo: $studyId}}) {
+    ...StudyInfo
   }
-  ${StudyInfoFragmentDoc}
-`;
+}
+    ${StudyInfoFragmentDoc}`;
 
 /**
  * __useSingleStudyInfoQuery__
@@ -12772,24 +13954,23 @@ export const SingleStudyInfoDocument = gql`
  * });
  */
 export function useSingleStudyInfoQuery(baseOptions: Apollo.QueryHookOptions<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
+      }
 export function useSingleStudyInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>(SingleStudyInfoDocument, options);
+        }
 export type SingleStudyInfoQueryHookResult = ReturnType<typeof useSingleStudyInfoQuery>;
 export type SingleStudyInfoLazyQueryHookResult = ReturnType<typeof useSingleStudyInfoLazyQuery>;
 export type SingleStudyInfoQueryResult = Apollo.QueryResult<SingleStudyInfoQuery, SingleStudyInfoQueryVariables>;
 export const ReferenceStudiesOverviewDocument = gql`
-  query referenceStudiesOverview($organismTaxId: String!) {
-    referenceStudyOverviewsList(condition: { organismTaxId: $organismTaxId }) {
-      ...ReferenceStudyInfo
-    }
+    query referenceStudiesOverview($organismTaxId: String!) {
+  referenceStudyOverviewsList(condition: {organismTaxId: $organismTaxId}) {
+    ...ReferenceStudyInfo
   }
-  ${ReferenceStudyInfoFragmentDoc}
-`;
+}
+    ${ReferenceStudyInfoFragmentDoc}`;
 
 /**
  * __useReferenceStudiesOverviewQuery__
@@ -12808,35 +13989,32 @@ export const ReferenceStudiesOverviewDocument = gql`
  * });
  */
 export function useReferenceStudiesOverviewQuery(baseOptions: Apollo.QueryHookOptions<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
-}
-export function useReferenceStudiesOverviewLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
+      }
+export function useReferenceStudiesOverviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>(ReferenceStudiesOverviewDocument, options);
+        }
 export type ReferenceStudiesOverviewQueryHookResult = ReturnType<typeof useReferenceStudiesOverviewQuery>;
 export type ReferenceStudiesOverviewLazyQueryHookResult = ReturnType<typeof useReferenceStudiesOverviewLazyQuery>;
 export type ReferenceStudiesOverviewQueryResult = Apollo.QueryResult<ReferenceStudiesOverviewQuery, ReferenceStudiesOverviewQueryVariables>;
 export const GeneSpecificityStudyDocument = gql`
-  query geneSpecificityStudy($studyId: Int!) {
-    referenceStudyOverviewsList(filter: { studyId: { equalTo: $studyId } }) {
-      ...ReferenceStudyInfo
-    }
-    studyAnnotationFrontendGroupsList(condition: { studyId: $studyId }) {
-      annotationGroupId
-      annotationValuesList {
-        annotationValueId
-        displayValue
-        color
-        sampleCount
-      }
+    query geneSpecificityStudy($studyId: Int!) {
+  referenceStudyOverviewsList(filter: {studyId: {equalTo: $studyId}}) {
+    ...ReferenceStudyInfo
+  }
+  studyAnnotationFrontendGroupsList(condition: {studyId: $studyId}) {
+    annotationGroupId
+    annotationValuesList {
+      annotationValueId
+      displayValue
+      color
+      sampleCount
     }
   }
-  ${ReferenceStudyInfoFragmentDoc}
-`;
+}
+    ${ReferenceStudyInfoFragmentDoc}`;
 
 /**
  * __useGeneSpecificityStudyQuery__
@@ -12855,24 +14033,26 @@ export const GeneSpecificityStudyDocument = gql`
  * });
  */
 export function useGeneSpecificityStudyQuery(baseOptions: Apollo.QueryHookOptions<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
+      }
 export function useGeneSpecificityStudyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>(GeneSpecificityStudyDocument, options);
+        }
 export type GeneSpecificityStudyQueryHookResult = ReturnType<typeof useGeneSpecificityStudyQuery>;
 export type GeneSpecificityStudyLazyQueryHookResult = ReturnType<typeof useGeneSpecificityStudyLazyQuery>;
 export type GeneSpecificityStudyQueryResult = Apollo.QueryResult<GeneSpecificityStudyQuery, GeneSpecificityStudyQueryVariables>;
 export const StudiesWithMarkerGenesDocument = gql`
-  query studiesWithMarkerGenes($omicsIds: [Int!]!) {
-    differentialExpressionsList(filter: { omicsId: { in: $omicsIds }, otherAnnotationValueId: { isNull: true } }, orderBy: LOG2_FOLDCHANGE_DESC) {
-      ...DifferentialMarker
-    }
+    query studiesWithMarkerGenes($omicsIds: [Int!]!) {
+  differentialExpressionsList(
+    filter: {omicsId: {in: $omicsIds}, otherAnnotationValueId: {isNull: true}}
+    orderBy: LOG2_FOLDCHANGE_DESC
+  ) {
+    ...DifferentialMarker
   }
-  ${DifferentialMarkerFragmentDoc}
-`;
+}
+    ${DifferentialMarkerFragmentDoc}`;
 
 /**
  * __useStudiesWithMarkerGenesQuery__
@@ -12891,28 +14071,25 @@ export const StudiesWithMarkerGenesDocument = gql`
  * });
  */
 export function useStudiesWithMarkerGenesQuery(baseOptions: Apollo.QueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
-}
-export function useStudiesWithMarkerGenesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
+      }
+export function useStudiesWithMarkerGenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>(StudiesWithMarkerGenesDocument, options);
+        }
 export type StudiesWithMarkerGenesQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesQuery>;
 export type StudiesWithMarkerGenesLazyQueryHookResult = ReturnType<typeof useStudiesWithMarkerGenesLazyQuery>;
 export type StudiesWithMarkerGenesQueryResult = Apollo.QueryResult<StudiesWithMarkerGenesQuery, StudiesWithMarkerGenesQueryVariables>;
 export const AllGenesDocument = gql`
-  query allGenes {
-    omicsBasesList(filter: { omicsType: { equalTo: GENE } }) {
-      ...OmicsGene
-      value: displaySymbol
-      ontology: omicsType
-    }
+    query allGenes {
+  omicsBasesList(filter: {omicsType: {equalTo: GENE}}) {
+    ...OmicsGene
+    value: displaySymbol
+    ontology: omicsType
   }
-  ${OmicsGeneFragmentDoc}
-`;
+}
+    ${OmicsGeneFragmentDoc}`;
 
 /**
  * __useAllGenesQuery__
@@ -12930,27 +14107,27 @@ export const AllGenesDocument = gql`
  * });
  */
 export function useAllGenesQuery(baseOptions?: Apollo.QueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
+      }
 export function useAllGenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllGenesQuery, AllGenesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllGenesQuery, AllGenesQueryVariables>(AllGenesDocument, options);
+        }
 export type AllGenesQueryHookResult = ReturnType<typeof useAllGenesQuery>;
 export type AllGenesLazyQueryHookResult = ReturnType<typeof useAllGenesLazyQuery>;
 export type AllGenesQueryResult = Apollo.QueryResult<AllGenesQuery, AllGenesQueryVariables>;
 export const StudyOmicsDocument = gql`
-  query studyOmics($studyId: Int!) {
-    studyOmicsList(filter: { studyId: { equalTo: $studyId } }) {
-      omics {
-        omicsId
-        displayName
-        displaySymbol
-      }
+    query studyOmics($studyId: Int!) {
+  studyOmicsList(filter: {studyId: {equalTo: $studyId}}) {
+    omics {
+      omicsId
+      displayName
+      displaySymbol
     }
   }
-`;
+}
+    `;
 
 /**
  * __useStudyOmicsQuery__
@@ -12969,31 +14146,31 @@ export const StudyOmicsDocument = gql`
  * });
  */
 export function useStudyOmicsQuery(baseOptions: Apollo.QueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
+      }
 export function useStudyOmicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyOmicsQuery, StudyOmicsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyOmicsQuery, StudyOmicsQueryVariables>(StudyOmicsDocument, options);
+        }
 export type StudyOmicsQueryHookResult = ReturnType<typeof useStudyOmicsQuery>;
 export type StudyOmicsLazyQueryHookResult = ReturnType<typeof useStudyOmicsLazyQuery>;
 export type StudyOmicsQueryResult = Apollo.QueryResult<StudyOmicsQuery, StudyOmicsQueryVariables>;
 export const StudyBasicsDocument = gql`
-  query StudyBasics($studyId: Int!) {
-    study(studyId: $studyId) {
-      studyId
-      studyName
-      cellCount
-      projections
-      organismTaxId
-    }
-    studyLayersList(condition: { studyId: $studyId }) {
-      layer
-      studyLayerId
-    }
+    query StudyBasics($studyId: Int!) {
+  study(studyId: $studyId) {
+    studyId
+    studyName
+    cellCount
+    projections
+    organismTaxId
   }
-`;
+  studyLayersList(condition: {studyId: $studyId}) {
+    layer
+    studyLayerId
+  }
+}
+    `;
 
 /**
  * __useStudyBasicsQuery__
@@ -13012,43 +14189,43 @@ export const StudyBasicsDocument = gql`
  * });
  */
 export function useStudyBasicsQuery(baseOptions: Apollo.QueryHookOptions<StudyBasicsQuery, StudyBasicsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
+      }
 export function useStudyBasicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasicsQuery, StudyBasicsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyBasicsQuery, StudyBasicsQueryVariables>(StudyBasicsDocument, options);
+        }
 export type StudyBasicsQueryHookResult = ReturnType<typeof useStudyBasicsQuery>;
 export type StudyBasicsLazyQueryHookResult = ReturnType<typeof useStudyBasicsLazyQuery>;
 export type StudyBasicsQueryResult = Apollo.QueryResult<StudyBasicsQuery, StudyBasicsQueryVariables>;
 export const StudyBasics2Document = gql`
-  query StudyBasics2($studyId: Int!) {
-    studyAnnotationFrontendGroupsList(condition: { studyId: $studyId }) {
-      annotationGroupId
-      isPrimary
-      ordering
-      displayGroup
-      differentialExpressionCalculated
-      pairwiseDifferentialExpressionCalculated
-      createdByUser
-      currentUserIsOwner
-      privateToUser
-      annotationValuesList {
-        annotationValueId
-        displayValue
-        color
-        sampleCount
-      }
-    }
-    studySampleProjectionSubsamplingTransposedsList(condition: { studyId: $studyId }) {
-      projectionType
-      studySampleId
-      projection
-      modality
+    query StudyBasics2($studyId: Int!) {
+  studyAnnotationFrontendGroupsList(condition: {studyId: $studyId}) {
+    annotationGroupId
+    isPrimary
+    ordering
+    displayGroup
+    differentialExpressionCalculated
+    pairwiseDifferentialExpressionCalculated
+    createdByUser
+    currentUserIsOwner
+    privateToUser
+    annotationValuesList {
+      annotationValueId
+      displayValue
+      color
+      sampleCount
     }
   }
-`;
+  studySampleProjectionSubsamplingTransposedsList(condition: {studyId: $studyId}) {
+    projectionType
+    studySampleId
+    projection
+    modality
+  }
+}
+    `;
 
 /**
  * __useStudyBasics2Query__
@@ -13067,30 +14244,30 @@ export const StudyBasics2Document = gql`
  * });
  */
 export function useStudyBasics2Query(baseOptions: Apollo.QueryHookOptions<StudyBasics2Query, StudyBasics2QueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
+      }
 export function useStudyBasics2LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasics2Query, StudyBasics2QueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyBasics2Query, StudyBasics2QueryVariables>(StudyBasics2Document, options);
+        }
 export type StudyBasics2QueryHookResult = ReturnType<typeof useStudyBasics2Query>;
 export type StudyBasics2LazyQueryHookResult = ReturnType<typeof useStudyBasics2LazyQuery>;
 export type StudyBasics2QueryResult = Apollo.QueryResult<StudyBasics2Query, StudyBasics2QueryVariables>;
 export const StudyBasics3Document = gql`
-  query StudyBasics3($studyId: Int!) {
-    studySampleAnnotationSubsamplingsList(condition: { studyId: $studyId }) {
-      annotationValueId
-      studySampleIds
-    }
-    studyOmicsTransposedsList(condition: { studyId: $studyId }) {
-      displayName
-      displaySymbol
-      omicsId
-      omicsType
-    }
+    query StudyBasics3($studyId: Int!) {
+  studySampleAnnotationSubsamplingsList(condition: {studyId: $studyId}) {
+    annotationValueId
+    studySampleIds
   }
-`;
+  studyOmicsTransposedsList(condition: {studyId: $studyId}) {
+    displayName
+    displaySymbol
+    omicsId
+    omicsType
+  }
+}
+    `;
 
 /**
  * __useStudyBasics3Query__
@@ -13109,25 +14286,29 @@ export const StudyBasics3Document = gql`
  * });
  */
 export function useStudyBasics3Query(baseOptions: Apollo.QueryHookOptions<StudyBasics3Query, StudyBasics3QueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
+      }
 export function useStudyBasics3LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyBasics3Query, StudyBasics3QueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyBasics3Query, StudyBasics3QueryVariables>(StudyBasics3Document, options);
+        }
 export type StudyBasics3QueryHookResult = ReturnType<typeof useStudyBasics3Query>;
 export type StudyBasics3LazyQueryHookResult = ReturnType<typeof useStudyBasics3LazyQuery>;
 export type StudyBasics3QueryResult = Apollo.QueryResult<StudyBasics3Query, StudyBasics3QueryVariables>;
 export const ExpressionByOmicsIdsDocument = gql`
-  query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: String) {
-    expressionByOmicsIdsList(pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pSubsamplingProjection: $subsamplingProjection) {
-      omicsId
-      studySampleIds
-      values
-    }
+    query ExpressionByOmicsIds($studyLayerId: Int!, $omicsIds: [Int!]!, $subsamplingProjection: String) {
+  expressionByOmicsIdsList(
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: $omicsIds
+    pSubsamplingProjection: $subsamplingProjection
+  ) {
+    omicsId
+    studySampleIds
+    values
   }
-`;
+}
+    `;
 
 /**
  * __useExpressionByOmicsIdsQuery__
@@ -13148,35 +14329,28 @@ export const ExpressionByOmicsIdsDocument = gql`
  * });
  */
 export function useExpressionByOmicsIdsQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
+      }
 export function useExpressionByOmicsIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>(ExpressionByOmicsIdsDocument, options);
+        }
 export type ExpressionByOmicsIdsQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsQuery>;
 export type ExpressionByOmicsIdsLazyQueryHookResult = ReturnType<typeof useExpressionByOmicsIdsLazyQuery>;
 export type ExpressionByOmicsIdsQueryResult = Apollo.QueryResult<ExpressionByOmicsIdsQuery, ExpressionByOmicsIdsQueryVariables>;
 export const ExpressionViolinPlotDocument = gql`
-  query ExpressionViolinPlot(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsId: Int!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-    $annotationSecondaryGroupId: Int
-  ) {
-    violinPlot(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsId: $omicsId
-      pAnnotationGroupId: $annotationGroupId
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-      pSecondaryAnnotationGroupId: $annotationSecondaryGroupId
-    )
-  }
-`;
+    query ExpressionViolinPlot($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!, $annotationSecondaryGroupId: Int) {
+  violinPlot(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsId: $omicsId
+    pAnnotationGroupId: $annotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pSecondaryAnnotationGroupId: $annotationSecondaryGroupId
+  )
+}
+    `;
 
 /**
  * __useExpressionViolinPlotQuery__
@@ -13200,44 +14374,37 @@ export const ExpressionViolinPlotDocument = gql`
  * });
  */
 export function useExpressionViolinPlotQuery(baseOptions: Apollo.QueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
+      }
 export function useExpressionViolinPlotLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>(ExpressionViolinPlotDocument, options);
+        }
 export type ExpressionViolinPlotQueryHookResult = ReturnType<typeof useExpressionViolinPlotQuery>;
 export type ExpressionViolinPlotLazyQueryHookResult = ReturnType<typeof useExpressionViolinPlotLazyQuery>;
 export type ExpressionViolinPlotQueryResult = Apollo.QueryResult<ExpressionViolinPlotQuery, ExpressionViolinPlotQueryVariables>;
 export const ExpressionGroupTableDocument = gql`
-  query ExpressionGroupTable(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsId: Int!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-    $annotationSecondaryGroupId: Int!
+    query ExpressionGroupTable($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!, $annotationSecondaryGroupId: Int!) {
+  expressionByTwoAnnotationsList(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: [$omicsId]
+    pAnnotationGroupId: $annotationGroupId
+    pSecondAnnotationGroupId: $annotationSecondaryGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pDropoutsAsZero: true
   ) {
-    expressionByTwoAnnotationsList(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: [$omicsId]
-      pAnnotationGroupId: $annotationGroupId
-      pSecondAnnotationGroupId: $annotationSecondaryGroupId
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-      pDropoutsAsZero: true
-    ) {
-      annotationValueId
-      annotationDisplayValue
-      secondAnnotationValueId
-      secondAnnotationDisplayValue
-      valueCount
-      median
-      nonZeroValueCount
-    }
+    annotationValueId
+    annotationDisplayValue
+    secondAnnotationValueId
+    secondAnnotationDisplayValue
+    valueCount
+    median
+    nonZeroValueCount
   }
-`;
+}
+    `;
 
 /**
  * __useExpressionGroupTableQuery__
@@ -13261,43 +14428,32 @@ export const ExpressionGroupTableDocument = gql`
  * });
  */
 export function useExpressionGroupTableQuery(baseOptions: Apollo.QueryHookOptions<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
+      }
 export function useExpressionGroupTableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>(ExpressionGroupTableDocument, options);
+        }
 export type ExpressionGroupTableQueryHookResult = ReturnType<typeof useExpressionGroupTableQuery>;
 export type ExpressionGroupTableLazyQueryHookResult = ReturnType<typeof useExpressionGroupTableLazyQuery>;
 export type ExpressionGroupTableQueryResult = Apollo.QueryResult<ExpressionGroupTableQuery, ExpressionGroupTableQueryVariables>;
 export const ExpressionTTestDocument = gql`
-  query ExpressionTTest(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsId: Int!
-    $annotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
-    $secondAnnotationGroupId: Int
-    $sample1AnnotationValueId: Int!
-    $sample1SecondAnnotationValueId: Int
-    $sample2AnnotationValueId: Int!
-    $sample2SecondAnnotationValueId: Int
-  ) {
-    expressionTtest(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsId: $omicsId
-      pAnnotationGroupId: $annotationGroupId
-      pSecondaryAnnotationGroupId: $secondAnnotationGroupId
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-      pSample1AnnotationValueId: $sample1AnnotationValueId
-      pSample1SecondAnnotationValueId: $sample1SecondAnnotationValueId
-      pSample2AnnotationValueId: $sample2AnnotationValueId
-      pSample2SecondAnnotationValueId: $sample2SecondAnnotationValueId
-    )
-  }
-`;
+    query ExpressionTTest($studyId: Int!, $studyLayerId: Int!, $omicsId: Int!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!, $secondAnnotationGroupId: Int, $sample1AnnotationValueId: Int!, $sample1SecondAnnotationValueId: Int, $sample2AnnotationValueId: Int!, $sample2SecondAnnotationValueId: Int) {
+  expressionTtest(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsId: $omicsId
+    pAnnotationGroupId: $annotationGroupId
+    pSecondaryAnnotationGroupId: $secondAnnotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pSample1AnnotationValueId: $sample1AnnotationValueId
+    pSample1SecondAnnotationValueId: $sample1SecondAnnotationValueId
+    pSample2AnnotationValueId: $sample2AnnotationValueId
+    pSample2SecondAnnotationValueId: $sample2SecondAnnotationValueId
+  )
+}
+    `;
 
 /**
  * __useExpressionTTestQuery__
@@ -13325,21 +14481,26 @@ export const ExpressionTTestDocument = gql`
  * });
  */
 export function useExpressionTTestQuery(baseOptions: Apollo.QueryHookOptions<ExpressionTTestQuery, ExpressionTTestQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
+      }
 export function useExpressionTTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionTTestQuery, ExpressionTTestQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionTTestQuery, ExpressionTTestQueryVariables>(ExpressionTTestDocument, options);
+        }
 export type ExpressionTTestQueryHookResult = ReturnType<typeof useExpressionTTestQuery>;
 export type ExpressionTTestLazyQueryHookResult = ReturnType<typeof useExpressionTTestLazyQuery>;
 export type ExpressionTTestQueryResult = Apollo.QueryResult<ExpressionTTestQuery, ExpressionTTestQueryVariables>;
 export const ExpressionCorrelationTrianglePlotDocument = gql`
-  query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
-    correlationTrianglePlot(pStudyId: $studyId, pStudyLayerId: $studyLayerId, pOmicsIds: $omicsIds, pExcludeAnnotationValueIds: $excludeAnnotationValueIds)
-  }
-`;
+    query ExpressionCorrelationTrianglePlot($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $excludeAnnotationValueIds: [Int!]!) {
+  correlationTrianglePlot(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: $omicsIds
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+  )
+}
+    `;
 
 /**
  * __useExpressionCorrelationTrianglePlotQuery__
@@ -13360,41 +14521,28 @@ export const ExpressionCorrelationTrianglePlotDocument = gql`
  *   },
  * });
  */
-export function useExpressionCorrelationTrianglePlotQuery(
-  baseOptions: Apollo.QueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(
-    ExpressionCorrelationTrianglePlotDocument,
-    options,
-  );
-}
-export function useExpressionCorrelationTrianglePlotLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(
-    ExpressionCorrelationTrianglePlotDocument,
-    options,
-  );
-}
+export function useExpressionCorrelationTrianglePlotQuery(baseOptions: Apollo.QueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(ExpressionCorrelationTrianglePlotDocument, options);
+      }
+export function useExpressionCorrelationTrianglePlotLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>(ExpressionCorrelationTrianglePlotDocument, options);
+        }
 export type ExpressionCorrelationTrianglePlotQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotQuery>;
 export type ExpressionCorrelationTrianglePlotLazyQueryHookResult = ReturnType<typeof useExpressionCorrelationTrianglePlotLazyQuery>;
-export type ExpressionCorrelationTrianglePlotQueryResult = Apollo.QueryResult<
-  ExpressionCorrelationTrianglePlotQuery,
-  ExpressionCorrelationTrianglePlotQueryVariables
->;
+export type ExpressionCorrelationTrianglePlotQueryResult = Apollo.QueryResult<ExpressionCorrelationTrianglePlotQuery, ExpressionCorrelationTrianglePlotQueryVariables>;
 export const AutocompleteDocument = gql`
-  query autocomplete($query: String!) {
-    autocompleteList(searchQuery: $query, first: 20) {
-      isSynonymOfPreferredTerm
-      label
-      labelHighlight
-      ontCode
-      ontology
-    }
+    query autocomplete($query: String!) {
+  autocompleteList(searchQuery: $query, first: 20) {
+    isSynonymOfPreferredTerm
+    label
+    labelHighlight
+    ontCode
+    ontology
   }
-`;
+}
+    `;
 
 /**
  * __useAutocompleteQuery__
@@ -13413,26 +14561,30 @@ export const AutocompleteDocument = gql`
  * });
  */
 export function useAutocompleteQuery(baseOptions: Apollo.QueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
+      }
 export function useAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AutocompleteQuery, AutocompleteQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AutocompleteQuery, AutocompleteQueryVariables>(AutocompleteDocument, options);
+        }
 export type AutocompleteQueryHookResult = ReturnType<typeof useAutocompleteQuery>;
 export type AutocompleteLazyQueryHookResult = ReturnType<typeof useAutocompleteLazyQuery>;
 export type AutocompleteQueryResult = Apollo.QueryResult<AutocompleteQuery, AutocompleteQueryVariables>;
 export const OmicsAutocompleteDocument = gql`
-  query OmicsAutocomplete($searchQuery: String!, $omicsType: OmicsType!, $taxId: Int!) {
-    omicsAutocompleteList(searchQuery: $searchQuery, omicsTypeFilter: $omicsType, taxIdFilter: $taxId) {
-      displaySymbol
-      labelHighlight
-      omicsId
-      omicsType
-    }
+    query OmicsAutocomplete($searchQuery: String!, $omicsType: OmicsType!, $taxId: Int!) {
+  omicsAutocompleteList(
+    searchQuery: $searchQuery
+    omicsTypeFilter: $omicsType
+    taxIdFilter: $taxId
+  ) {
+    displaySymbol
+    labelHighlight
+    omicsId
+    omicsType
   }
-`;
+}
+    `;
 
 /**
  * __useOmicsAutocompleteQuery__
@@ -13453,24 +14605,23 @@ export const OmicsAutocompleteDocument = gql`
  * });
  */
 export function useOmicsAutocompleteQuery(baseOptions: Apollo.QueryHookOptions<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
+      }
 export function useOmicsAutocompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>(OmicsAutocompleteDocument, options);
+        }
 export type OmicsAutocompleteQueryHookResult = ReturnType<typeof useOmicsAutocompleteQuery>;
 export type OmicsAutocompleteLazyQueryHookResult = ReturnType<typeof useOmicsAutocompleteLazyQuery>;
 export type OmicsAutocompleteQueryResult = Apollo.QueryResult<OmicsAutocompleteQuery, OmicsAutocompleteQueryVariables>;
 export const OntologiesDocument = gql`
-  query ontologies {
-    ontologiesList {
-      ...ontologyOverview
-    }
+    query ontologies {
+  ontologiesList {
+    ...ontologyOverview
   }
-  ${OntologyOverviewFragmentDoc}
-`;
+}
+    ${OntologyOverviewFragmentDoc}`;
 
 /**
  * __useOntologiesQuery__
@@ -13488,29 +14639,28 @@ export const OntologiesDocument = gql`
  * });
  */
 export function useOntologiesQuery(baseOptions?: Apollo.QueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
+      }
 export function useOntologiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OntologiesQuery, OntologiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OntologiesQuery, OntologiesQueryVariables>(OntologiesDocument, options);
+        }
 export type OntologiesQueryHookResult = ReturnType<typeof useOntologiesQuery>;
 export type OntologiesLazyQueryHookResult = ReturnType<typeof useOntologiesLazyQuery>;
 export type OntologiesQueryResult = Apollo.QueryResult<OntologiesQuery, OntologiesQueryVariables>;
 export const ExpressionByAnnotationDocument = gql`
-  query expressionByAnnotation($studyLayerIds: [Int!]!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
-    expressionByAnnotationList(
-      pStudyLayerIds: $studyLayerIds
-      pOmicsIds: $omicsIds
-      pAnnotationGroupId: $annotationGroupId
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-    ) {
-      ...DotPlotElement
-    }
+    query expressionByAnnotation($studyLayerIds: [Int!]!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  expressionByAnnotationList(
+    pStudyLayerIds: $studyLayerIds
+    pOmicsIds: $omicsIds
+    pAnnotationGroupId: $annotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+  ) {
+    ...DotPlotElement
   }
-  ${DotPlotElementFragmentDoc}
-`;
+}
+    ${DotPlotElementFragmentDoc}`;
 
 /**
  * __useExpressionByAnnotationQuery__
@@ -13532,25 +14682,23 @@ export const ExpressionByAnnotationDocument = gql`
  * });
  */
 export function useExpressionByAnnotationQuery(baseOptions: Apollo.QueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
-}
-export function useExpressionByAnnotationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
+      }
+export function useExpressionByAnnotationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>(ExpressionByAnnotationDocument, options);
+        }
 export type ExpressionByAnnotationQueryHookResult = ReturnType<typeof useExpressionByAnnotationQuery>;
 export type ExpressionByAnnotationLazyQueryHookResult = ReturnType<typeof useExpressionByAnnotationLazyQuery>;
 export type ExpressionByAnnotationQueryResult = Apollo.QueryResult<ExpressionByAnnotationQuery, ExpressionByAnnotationQueryVariables>;
 export const CellOAnnotationGroupIdDocument = gql`
-  query CellOAnnotationGroupId {
-    annotationGroupsList(filter: { h5AdColumn: { equalTo: "CellO_celltype" } }) {
-      annotationGroupId
-    }
+    query CellOAnnotationGroupId {
+  annotationGroupsList(filter: {h5AdColumn: {equalTo: "CellO_celltype"}}) {
+    annotationGroupId
   }
-`;
+}
+    `;
 
 /**
  * __useCellOAnnotationGroupIdQuery__
@@ -13568,28 +14716,26 @@ export const CellOAnnotationGroupIdDocument = gql`
  * });
  */
 export function useCellOAnnotationGroupIdQuery(baseOptions?: Apollo.QueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
-}
-export function useCellOAnnotationGroupIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
+      }
+export function useCellOAnnotationGroupIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>(CellOAnnotationGroupIdDocument, options);
+        }
 export type CellOAnnotationGroupIdQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdQuery>;
 export type CellOAnnotationGroupIdLazyQueryHookResult = ReturnType<typeof useCellOAnnotationGroupIdLazyQuery>;
 export type CellOAnnotationGroupIdQueryResult = Apollo.QueryResult<CellOAnnotationGroupIdQuery, CellOAnnotationGroupIdQueryVariables>;
 export const HalfAVolcanoDocument = gql`
-  query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
-    differentialExpressionsList(
-      filter: { annotationValueId: { equalTo: $annotationValueId }, studyId: { equalTo: $studyId }, otherAnnotationValueId: { isNull: true } }
-    ) {
-      log2Foldchange
-      pvalueAdj
-    }
+    query halfAVolcano($annotationValueId: Int!, $studyId: Int!) {
+  differentialExpressionsList(
+    filter: {annotationValueId: {equalTo: $annotationValueId}, studyId: {equalTo: $studyId}, otherAnnotationValueId: {isNull: true}}
+  ) {
+    log2Foldchange
+    pvalueAdj
   }
-`;
+}
+    `;
 
 /**
  * __useHalfAVolcanoQuery__
@@ -13609,25 +14755,29 @@ export const HalfAVolcanoDocument = gql`
  * });
  */
 export function useHalfAVolcanoQuery(baseOptions: Apollo.QueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
+      }
 export function useHalfAVolcanoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>(HalfAVolcanoDocument, options);
+        }
 export type HalfAVolcanoQueryHookResult = ReturnType<typeof useHalfAVolcanoQuery>;
 export type HalfAVolcanoLazyQueryHookResult = ReturnType<typeof useHalfAVolcanoLazyQuery>;
 export type HalfAVolcanoQueryResult = Apollo.QueryResult<HalfAVolcanoQuery, HalfAVolcanoQueryVariables>;
 export const AnnotationValueCoocurrenceDocument = gql`
-  query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
-    annotationValueCoocurrenceList(studyId: $studyId, annotationGroupId1: $annotationGroupId1, annotationGroupId2: $annotationGroupId2) {
-      annotationValueId1
-      annotationValueId2
-      occurrence
-    }
+    query annotationValueCoocurrence($studyId: Int!, $annotationGroupId1: Int!, $annotationGroupId2: Int!) {
+  annotationValueCoocurrenceList(
+    studyId: $studyId
+    annotationGroupId1: $annotationGroupId1
+    annotationGroupId2: $annotationGroupId2
+  ) {
+    annotationValueId1
+    annotationValueId2
+    occurrence
   }
-`;
+}
+    `;
 
 /**
  * __useAnnotationValueCoocurrenceQuery__
@@ -13647,36 +14797,27 @@ export const AnnotationValueCoocurrenceDocument = gql`
  *   },
  * });
  */
-export function useAnnotationValueCoocurrenceQuery(
-  baseOptions: Apollo.QueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
-}
-export function useAnnotationValueCoocurrenceLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
-}
+export function useAnnotationValueCoocurrenceQuery(baseOptions: Apollo.QueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
+      }
+export function useAnnotationValueCoocurrenceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>(AnnotationValueCoocurrenceDocument, options);
+        }
 export type AnnotationValueCoocurrenceQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceQuery>;
 export type AnnotationValueCoocurrenceLazyQueryHookResult = ReturnType<typeof useAnnotationValueCoocurrenceLazyQuery>;
 export type AnnotationValueCoocurrenceQueryResult = Apollo.QueryResult<AnnotationValueCoocurrenceQuery, AnnotationValueCoocurrenceQueryVariables>;
 export const SaveUserAnnotationDocument = gql`
-  mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
-    userAnnotationDefine(
-      input: {
-        pStudyId: $studyId
-        pAnnotationGroupName: $annotationGroupName
-        pSelectedSampleIds: $selectedSampleIds
-        pUnexpressedSamplesOmicsIds: $unexpressedSamplesOmicsIds
-      }
-    ) {
-      clientMutationId
-      integer
-    }
+    mutation SaveUserAnnotation($studyId: Int!, $annotationGroupName: String!, $selectedSampleIds: String!, $unexpressedSamplesOmicsIds: [Int!]) {
+  userAnnotationDefine(
+    input: {pStudyId: $studyId, pAnnotationGroupName: $annotationGroupName, pSelectedSampleIds: $selectedSampleIds, pUnexpressedSamplesOmicsIds: $unexpressedSamplesOmicsIds}
+  ) {
+    clientMutationId
+    integer
   }
-`;
+}
+    `;
 
 /**
  * __useSaveUserAnnotationMutation__
@@ -13699,19 +14840,21 @@ export const SaveUserAnnotationDocument = gql`
  * });
  */
 export function useSaveUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>(SaveUserAnnotationDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>(SaveUserAnnotationDocument, options);
+      }
 export type SaveUserAnnotationMutationHookResult = ReturnType<typeof useSaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationResult = Apollo.MutationResult<SaveUserAnnotationMutation>;
 export type SaveUserAnnotationMutationOptions = Apollo.BaseMutationOptions<SaveUserAnnotationMutation, SaveUserAnnotationMutationVariables>;
 export const EditUserAnnotationDocument = gql`
-  mutation EditUserAnnotation($studyId: Int!, $annotationGroupId: Int!, $privateToUser: Boolean!) {
-    userAnnotationEdit(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId, pPrivateToUser: $privateToUser }) {
-      boolean
-    }
+    mutation EditUserAnnotation($studyId: Int!, $annotationGroupId: Int!, $privateToUser: Boolean!) {
+  userAnnotationEdit(
+    input: {pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId, pPrivateToUser: $privateToUser}
+  ) {
+    boolean
   }
-`;
+}
+    `;
 
 /**
  * __useEditUserAnnotationMutation__
@@ -13733,19 +14876,21 @@ export const EditUserAnnotationDocument = gql`
  * });
  */
 export function useEditUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>(EditUserAnnotationDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>(EditUserAnnotationDocument, options);
+      }
 export type EditUserAnnotationMutationHookResult = ReturnType<typeof useEditUserAnnotationMutation>;
 export type EditUserAnnotationMutationResult = Apollo.MutationResult<EditUserAnnotationMutation>;
 export type EditUserAnnotationMutationOptions = Apollo.BaseMutationOptions<EditUserAnnotationMutation, EditUserAnnotationMutationVariables>;
 export const DeleteUserAnnotationDocument = gql`
-  mutation DeleteUserAnnotation($studyId: Int!, $annotationGroupId: Int!) {
-    userAnnotationDelete(input: { pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId }) {
-      boolean
-    }
+    mutation DeleteUserAnnotation($studyId: Int!, $annotationGroupId: Int!) {
+  userAnnotationDelete(
+    input: {pStudyId: $studyId, pAnnotationGroupId: $annotationGroupId}
+  ) {
+    boolean
   }
-`;
+}
+    `;
 
 /**
  * __useDeleteUserAnnotationMutation__
@@ -13766,21 +14911,20 @@ export const DeleteUserAnnotationDocument = gql`
  * });
  */
 export function useDeleteUserAnnotationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>(DeleteUserAnnotationDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>(DeleteUserAnnotationDocument, options);
+      }
 export type DeleteUserAnnotationMutationHookResult = ReturnType<typeof useDeleteUserAnnotationMutation>;
 export type DeleteUserAnnotationMutationResult = Apollo.MutationResult<DeleteUserAnnotationMutation>;
 export type DeleteUserAnnotationMutationOptions = Apollo.BaseMutationOptions<DeleteUserAnnotationMutation, DeleteUserAnnotationMutationVariables>;
 export const StudyAdminListDocument = gql`
-  query studyAdminList {
-    studyAdminDetailsList {
-      ...StudyAdminDetails
-    }
-    userStudyUploadConfigured
+    query studyAdminList {
+  studyAdminDetailsList {
+    ...StudyAdminDetails
   }
-  ${StudyAdminDetailsFragmentDoc}
-`;
+  userStudyUploadConfigured
+}
+    ${StudyAdminDetailsFragmentDoc}`;
 
 /**
  * __useStudyAdminListQuery__
@@ -13798,24 +14942,24 @@ export const StudyAdminListDocument = gql`
  * });
  */
 export function useStudyAdminListQuery(baseOptions?: Apollo.QueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
+      }
 export function useStudyAdminListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyAdminListQuery, StudyAdminListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyAdminListQuery, StudyAdminListQueryVariables>(StudyAdminListDocument, options);
+        }
 export type StudyAdminListQueryHookResult = ReturnType<typeof useStudyAdminListQuery>;
 export type StudyAdminListLazyQueryHookResult = ReturnType<typeof useStudyAdminListLazyQuery>;
 export type StudyAdminListQueryResult = Apollo.QueryResult<StudyAdminListQuery, StudyAdminListQueryVariables>;
 export const StudyLogsDocument = gql`
-  query studyLogs($studyId: Int!) {
-    studyImportLogsList(condition: { studyId: $studyId }) {
-      importFile
-      importLog
-    }
+    query studyLogs($studyId: Int!) {
+  studyImportLogsList(condition: {studyId: $studyId}) {
+    importFile
+    importLog
   }
-`;
+}
+    `;
 
 /**
  * __useStudyLogsQuery__
@@ -13834,50 +14978,45 @@ export const StudyLogsDocument = gql`
  * });
  */
 export function useStudyLogsQuery(baseOptions: Apollo.QueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
+      }
 export function useStudyLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudyLogsQuery, StudyLogsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StudyLogsQuery, StudyLogsQueryVariables>(StudyLogsDocument, options);
+        }
 export type StudyLogsQueryHookResult = ReturnType<typeof useStudyLogsQuery>;
 export type StudyLogsLazyQueryHookResult = ReturnType<typeof useStudyLogsLazyQuery>;
 export type StudyLogsQueryResult = Apollo.QueryResult<StudyLogsQuery, StudyLogsQueryVariables>;
 export const GeneSpecificityDocument = gql`
-  query GeneSpecificity(
-    $studyId: Int!
-    $studyLayerId: Int!
-    $omicsIds: [Int!]!
-    $annotationGroupId: Int!
-    $secondAnnotationGroupId: Int!
-    $excludeAnnotationValueIds: [Int!]!
+    query GeneSpecificity($studyId: Int!, $studyLayerId: Int!, $omicsIds: [Int!]!, $annotationGroupId: Int!, $secondAnnotationGroupId: Int!, $excludeAnnotationValueIds: [Int!]!) {
+  expressionByTwoAnnotationsList(
+    pStudyId: $studyId
+    pStudyLayerId: $studyLayerId
+    pOmicsIds: $omicsIds
+    pAnnotationGroupId: $annotationGroupId
+    pExcludeAnnotationValueIds: $excludeAnnotationValueIds
+    pSecondAnnotationGroupId: $secondAnnotationGroupId
+    pDropoutsAsZero: false
   ) {
-    expressionByTwoAnnotationsList(
-      pStudyId: $studyId
-      pStudyLayerId: $studyLayerId
-      pOmicsIds: $omicsIds
-      pAnnotationGroupId: $annotationGroupId
-      pExcludeAnnotationValueIds: $excludeAnnotationValueIds
-      pSecondAnnotationGroupId: $secondAnnotationGroupId
-      pDropoutsAsZero: false
-    ) {
-      omicsId
-      annotationValueId
-      annotationDisplayValue
-      secondAnnotationDisplayValue
-      secondAnnotationValueId
-      valueCount
-      exprSamplesFraction
-      mean
-      color
-    }
-    annotationGroupsList(filter: { annotationGroupId: { in: [$annotationGroupId, $secondAnnotationGroupId] } }) {
-      displayGroup
-      annotationGroupId
-    }
+    omicsId
+    annotationValueId
+    annotationDisplayValue
+    secondAnnotationDisplayValue
+    secondAnnotationValueId
+    valueCount
+    exprSamplesFraction
+    mean
+    color
   }
-`;
+  annotationGroupsList(
+    filter: {annotationGroupId: {in: [$annotationGroupId, $secondAnnotationGroupId]}}
+  ) {
+    displayGroup
+    annotationGroupId
+  }
+}
+    `;
 
 /**
  * __useGeneSpecificityQuery__
@@ -13901,47 +15040,25 @@ export const GeneSpecificityDocument = gql`
  * });
  */
 export function useGeneSpecificityQuery(baseOptions: Apollo.QueryHookOptions<GeneSpecificityQuery, GeneSpecificityQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
+      }
 export function useGeneSpecificityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeneSpecificityQuery, GeneSpecificityQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GeneSpecificityQuery, GeneSpecificityQueryVariables>(GeneSpecificityDocument, options);
+        }
 export type GeneSpecificityQueryHookResult = ReturnType<typeof useGeneSpecificityQuery>;
 export type GeneSpecificityLazyQueryHookResult = ReturnType<typeof useGeneSpecificityLazyQuery>;
 export type GeneSpecificityQueryResult = Apollo.QueryResult<GeneSpecificityQuery, GeneSpecificityQueryVariables>;
 export const StudyUpdateDocument = gql`
-  mutation studyUpdate(
-    $studyId: Int!
-    $studyName: String!
-    $description: String
-    $readerPermissions: [String!]
-    $adminPermissions: [String!]
-    $tissueNcitIds: [String!]
-    $diseaseMeshIds: [String!]
-    $visible: Boolean!
-    $externalWebsite: String
+    mutation studyUpdate($studyId: Int!, $studyName: String!, $description: String, $readerPermissions: [String!], $adminPermissions: [String!], $tissueNcitIds: [String!], $diseaseMeshIds: [String!], $visible: Boolean!, $externalWebsite: String) {
+  updateStudy(
+    input: {studyId: $studyId, patch: {studyName: $studyName, description: $description, readerPermissions: $readerPermissions, adminPermissions: $adminPermissions, tissueNcitIds: $tissueNcitIds, diseaseMeshIds: $diseaseMeshIds, visible: $visible, externalWebsite: $externalWebsite}}
   ) {
-    updateStudy(
-      input: {
-        studyId: $studyId
-        patch: {
-          studyName: $studyName
-          description: $description
-          readerPermissions: $readerPermissions
-          adminPermissions: $adminPermissions
-          tissueNcitIds: $tissueNcitIds
-          diseaseMeshIds: $diseaseMeshIds
-          visible: $visible
-          externalWebsite: $externalWebsite
-        }
-      }
-    ) {
-      clientMutationId
-    }
+    clientMutationId
   }
-`;
+}
+    `;
 
 /**
  * __useStudyUpdateMutation__
@@ -13969,19 +15086,19 @@ export const StudyUpdateDocument = gql`
  * });
  */
 export function useStudyUpdateMutation(baseOptions?: Apollo.MutationHookOptions<StudyUpdateMutation, StudyUpdateMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<StudyUpdateMutation, StudyUpdateMutationVariables>(StudyUpdateDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyUpdateMutation, StudyUpdateMutationVariables>(StudyUpdateDocument, options);
+      }
 export type StudyUpdateMutationHookResult = ReturnType<typeof useStudyUpdateMutation>;
 export type StudyUpdateMutationResult = Apollo.MutationResult<StudyUpdateMutation>;
 export type StudyUpdateMutationOptions = Apollo.BaseMutationOptions<StudyUpdateMutation, StudyUpdateMutationVariables>;
 export const StudyDeleteDocument = gql`
-  mutation studyDelete($studyId: Int!) {
-    deleteAllStudyData(input: { pStudyId: $studyId }) {
-      boolean
-    }
+    mutation studyDelete($studyId: Int!) {
+  deleteAllStudyData(input: {pStudyId: $studyId}) {
+    boolean
   }
-`;
+}
+    `;
 
 /**
  * __useStudyDeleteMutation__
@@ -14001,19 +15118,19 @@ export const StudyDeleteDocument = gql`
  * });
  */
 export function useStudyDeleteMutation(baseOptions?: Apollo.MutationHookOptions<StudyDeleteMutation, StudyDeleteMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<StudyDeleteMutation, StudyDeleteMutationVariables>(StudyDeleteDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyDeleteMutation, StudyDeleteMutationVariables>(StudyDeleteDocument, options);
+      }
 export type StudyDeleteMutationHookResult = ReturnType<typeof useStudyDeleteMutation>;
 export type StudyDeleteMutationResult = Apollo.MutationResult<StudyDeleteMutation>;
 export type StudyDeleteMutationOptions = Apollo.BaseMutationOptions<StudyDeleteMutation, StudyDeleteMutationVariables>;
 export const CreateStudyUploadDocument = gql`
-  mutation createStudyUpload($filename: String!) {
-    createStudyUpload(input: { filename: $filename }) {
-      json
-    }
+    mutation createStudyUpload($filename: String!) {
+  createStudyUpload(input: {filename: $filename}) {
+    json
   }
-`;
+}
+    `;
 
 /**
  * __useCreateStudyUploadMutation__
@@ -14033,42 +15150,40 @@ export const CreateStudyUploadDocument = gql`
  * });
  */
 export function useCreateStudyUploadMutation(baseOptions?: Apollo.MutationHookOptions<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>(CreateStudyUploadDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>(CreateStudyUploadDocument, options);
+      }
 export type CreateStudyUploadMutationHookResult = ReturnType<typeof useCreateStudyUploadMutation>;
 export type CreateStudyUploadMutationResult = Apollo.MutationResult<CreateStudyUploadMutation>;
 export type CreateStudyUploadMutationOptions = Apollo.BaseMutationOptions<CreateStudyUploadMutation, CreateStudyUploadMutationVariables>;
-export const StudyDefinitionUpdateDocument = gql`
-  mutation studyDefinitionUpdate {
-    studyDefinitionUpdate(input: {}) {
-      boolean
-    }
+export const StudyOntologyDefinitionUpdateDocument = gql`
+    mutation studyOntologyDefinitionUpdate {
+  studyOntologyDefinitionUpdate(input: {}) {
+    boolean
   }
-`;
+}
+    `;
 
 /**
- * __useStudyDefinitionUpdateMutation__
+ * __useStudyOntologyDefinitionUpdateMutation__
  *
- * To run a mutation, you first call `useStudyDefinitionUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStudyDefinitionUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useStudyOntologyDefinitionUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudyOntologyDefinitionUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [studyDefinitionUpdateMutation, { data, loading, error }] = useStudyDefinitionUpdateMutation({
+ * const [studyOntologyDefinitionUpdateMutation, { data, loading, error }] = useStudyOntologyDefinitionUpdateMutation({
  *   variables: {
  *   },
  * });
  */
-export function useStudyDefinitionUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>(StudyDefinitionUpdateDocument, options);
-}
-export type StudyDefinitionUpdateMutationHookResult = ReturnType<typeof useStudyDefinitionUpdateMutation>;
-export type StudyDefinitionUpdateMutationResult = Apollo.MutationResult<StudyDefinitionUpdateMutation>;
-export type StudyDefinitionUpdateMutationOptions = Apollo.BaseMutationOptions<StudyDefinitionUpdateMutation, StudyDefinitionUpdateMutationVariables>;
+export function useStudyOntologyDefinitionUpdateMutation(baseOptions?: Apollo.MutationHookOptions<StudyOntologyDefinitionUpdateMutation, StudyOntologyDefinitionUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StudyOntologyDefinitionUpdateMutation, StudyOntologyDefinitionUpdateMutationVariables>(StudyOntologyDefinitionUpdateDocument, options);
+      }
+export type StudyOntologyDefinitionUpdateMutationHookResult = ReturnType<typeof useStudyOntologyDefinitionUpdateMutation>;
+export type StudyOntologyDefinitionUpdateMutationResult = Apollo.MutationResult<StudyOntologyDefinitionUpdateMutation>;
+export type StudyOntologyDefinitionUpdateMutationOptions = Apollo.BaseMutationOptions<StudyOntologyDefinitionUpdateMutation, StudyOntologyDefinitionUpdateMutationVariables>;

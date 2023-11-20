@@ -68,3 +68,16 @@ begin
     return true;
 end;
 $$;
+
+create or replace function study_ontology_definition_update()
+    returns boolean
+    language plpgsql
+    security definer
+    volatile
+as
+$$
+begin
+    refresh materialized view concurrently study_overview_ontology;
+    return true;
+end;
+$$;

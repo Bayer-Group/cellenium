@@ -123,13 +123,13 @@ export default function StudyAdmin() {
             ? row.importFailed
               ? 'Failed'
               : row.importFinished
-              ? 'Imported'
-              : 'Importing...'
+                ? 'Imported'
+                : 'Importing...'
             : row.importFailed
-            ? 'Failed'
-            : row.importFinished
-            ? 'Imported'
-            : 'Not Started',
+              ? 'Failed'
+              : row.importFinished
+                ? 'Imported'
+                : 'Not Started',
         sortable: true,
         width: '130px',
       },
@@ -160,8 +160,8 @@ export default function StudyAdmin() {
   }, []);
 
   return (
-    <>
-      <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} />
+    <Stack style={{ overflow: 'auto' }}>
+      <EditStudyModal opened={selectedEditStudy !== undefined} reset={resetEditModal} study={selectedEditStudy} key={selectedEditStudy?.studyId} />
       <CreateStudyModal opened={newStudyModalOpen} reset={resetNewStudyModal} />
       <DeleteStudyModal study={selectedDeleteStudy} reset={resetDeleteModal} opened={selectedDeleteStudy !== undefined} />
       <StudyLogModal opened={selectedLogStudy !== undefined} study={selectedLogStudy} reset={resetStudyLogModal} />
@@ -192,6 +192,6 @@ export default function StudyAdmin() {
           </Group>
         )}
       </Stack>
-    </>
+    </Stack>
   );
 }

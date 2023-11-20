@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { ActionIcon, createStyles, Grid, Group, Text, Tooltip } from '@mantine/core';
 import { IconCalculator, IconEye, IconInfoCircle, IconX } from '@tabler/icons-react';
 import { useRecoilState } from 'recoil';
+import { uniqBy } from 'lodash';
 import { Omics } from '../../model';
 import { correlationOmicsIdState, selectedGenesState, userGenesState } from '../../atoms';
 
@@ -39,7 +40,7 @@ export function UserGene({ gene, multiple = false, findCoexpressors = false }: {
 
   const searchCoexpressors = useCallback(() => {
     setCorrelationOmicsId(gene.omicsId);
-    setSelectedGenesStore([...selectedGenes, gene]);
+    setSelectedGenesStore(uniqBy([...selectedGenes, gene], (g) => g.omicsId));
   }, [gene, selectedGenes, setCorrelationOmicsId, setSelectedGenesStore]);
 
   const handleColorClick = useCallback(() => {

@@ -542,8 +542,8 @@ gql`
     }
   }
 
-  mutation studyDefinitionUpdate {
-    studyDefinitionUpdate(input: {}) {
+  mutation studyOntologyDefinitionUpdate {
+    studyOntologyDefinitionUpdate(input: {}) {
       boolean
     }
   }
