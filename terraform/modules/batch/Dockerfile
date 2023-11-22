@@ -15,6 +15,7 @@ COPY ./data_import/postgres_utils.py .
 COPY ./data_import/h5ad_open.py .
 COPY ./data_import/h5ad_preparation.py .
 COPY ./data_import/study_import.py .
+COPY ./data_import/huge_palette.py .
 COPY ./data_import/differential_expression_calculation.py .
 COPY ./data_import/cellenium_cli.py .
 ADD ./data_import/Density_Sampling /app/Density_Sampling
