@@ -20,6 +20,7 @@ import scipy.sparse as sparse
 from anndata import AnnData
 from anndata._core.views import ArrayView
 from common import IS_AWS_DEPLOYMENT, create_db_engine, engine
+from huge_palette import huge_palette
 from muon import MuData
 from postgres_utils import (
     NumpyEncoder,
@@ -365,7 +366,8 @@ def import_study_sample_annotation(study_id: int, data_samples_df, data: AnnData
     data_sample_annotations = data.obs.copy()
     data_sample_annotations = data_sample_annotations.merge(data_samples_df, left_index=True, right_on="h5ad_obs_key")
     for h5ad_column in import_sample_annotations:
-        palette = _get_palette(data, h5ad_column)
+        # prefer scanpy palette unless we have more categorical colors than what scanpy provides
+        palette = _get_palette(data, h5ad_column, huge_palette if len(data.obs[h5ad_column].unique()) > 100 else None)
 
         h5ad_one_annotation_df = data_sample_annotations[[h5ad_column, "study_sample_id"]].copy()
         one_annotation_definition_df = annotation_definition_df[annotation_definition_df.h5ad_column == h5ad_column]
